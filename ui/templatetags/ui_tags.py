@@ -148,3 +148,32 @@ def ago(moment):
     if seconds < 86400:
         return _("%(n)s h ago") % {"n": int(seconds // 3600)}
     return date_format(timezone.localtime(moment), "j E, H:i")
+
+
+@register.filter
+def seconds(ms):
+    """Milliseconds from the start → «1:05.3» (m:ss.s) for the lab log."""
+    try:
+        total = int(ms) / 1000
+    except (TypeError, ValueError):
+        return ""
+    minutes, secs = divmod(total, 60)
+    return f"{int(minutes)}:{secs:04.1f}"
+
+
+@register.filter
+def duration_s(value):
+    """Seconds → «4:05» (m:ss) or «1:02:05»."""
+    try:
+        total = int(value)
+    except (TypeError, ValueError):
+        return ""
+    hours, rest = divmod(total, 3600)
+    minutes, secs = divmod(rest, 60)
+    return f"{hours}:{minutes:02d}:{secs:02d}" if hours else f"{minutes}:{secs:02d}"
+
+
+@register.filter
+def lab_variant(status):
+    """Lab attempt status → badge variant."""
+    return {"analysed": "success", "finished": "info", "in_progress": "neutral"}.get(str(status), "neutral")

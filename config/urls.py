@@ -16,6 +16,7 @@ urlpatterns = [
     path("notifications/", include("apps.feedback.urls")),
     path("quiz/", include("apps.assessments.urls")),
     path("research/", include("apps.research.urls")),
+    path("teacher/", include("apps.teacher.urls")),
     path("ui/", include("ui.urls")),
     path("ckeditor5/image_upload/", ckeditor_upload, name="ckeditor_upload"),
     path("", include("apps.student.urls")),

@@ -1,0 +1,33 @@
+{% extends "layouts/teacher.html" %}
+{% load i18n %}
+{% block title %}{% translate "Students" %} · ChemEduTech{% endblock %}
+{% block content %}
+<p class="text-sm text-ink-soft"><a href="{% url 'teacher:groups' %}">{% translate "Groups" %}</a> / {% translate "Students" %}</p>
+<h1 class="text-h1">{% translate "Students" %}</h1>
+<form method="get" class="flex flex-wrap items-end gap-2" role="search">
+  <label class="sr-only" for="q">{% translate "Search for a student" %}</label>
+  <input id="q" type="search" name="q" value="{{ q }}" class="input h-10 w-72" placeholder="{% translate 'Name, username or email' %}">
+  <label class="flex items-center gap-2 text-sm text-ink-soft"><input type="checkbox" name="no_group" value="1" class="size-4"{% if no_group %} checked{% endif %}>{% translate "Without a group" %}</label>
+  <button type="submit" class="btn btn-secondary">{% translate "Find" %}</button>
+</form>
+<div class="overflow-x-auto rounded-lg border border-line bg-surface">
+  <table class="table">
+    <thead><tr>
+      <th scope="col">{% translate "Student" %}</th><th scope="col">{% translate "Username" %}</th>
+      <th scope="col">{% translate "Email" %}</th><th scope="col">{% translate "Group" %}</th>
+    </tr></thead>
+    <tbody>
+      {% for s in students %}
+        <tr>
+          <td><a class="flex items-center gap-2.5 font-medium text-ink hover:text-primary-700" href="{% url 'teacher:student' s.pk %}">{% include "components/avatar.html" with person=s size="sm" %}{{ s.full_name }}</a></td>
+          <td class="text-sm text-ink-soft">{{ s.username }}</td>
+          <td class="text-sm text-ink-soft">{{ s.email }}</td>
+          <td class="text-sm">{% with g=s.student_profile.group %}{% if g %}<a href="{% url 'teacher:group' g.pk %}">{{ g }}</a>{% else %}<span class="text-ink-faint">—</span>{% endif %}{% endwith %}</td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="4" class="py-8 text-center text-sm text-ink-soft">{% translate "No students found." %}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

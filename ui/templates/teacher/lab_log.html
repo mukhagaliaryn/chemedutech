@@ -1,0 +1,46 @@
+{% extends "layouts/teacher.html" %}
+{% load i18n %}
+{% block title %}{{ attempt.title }} · ChemEduTech{% endblock %}
+{% block content %}
+<p class="text-sm text-ink-soft">
+  <a href="{% url 'teacher:student' student.pk %}{% if attempt.enrollment_id %}?course={{ attempt.enrollment.course.slug }}{% endif %}#lab">{{ student.full_name }}</a> / {% translate "Lab log" %}
+</p>
+<header>
+  <h1 class="text-h1">{{ attempt.title }}</h1>
+  <p class="mt-1 text-ink-soft">
+    {{ attempt.started_at|date:"j E Y, H:i" }} · {{ attempt.get_status_display }}
+    {% if attempt.duration_s %} · {{ attempt.duration_s|duration_s }}{% endif %}
+    {% if attempt.score_percent is not None %} · {% translate "score" %} {{ attempt.score_percent|floatformat:1 }}{% endif %}
+    {% if attempt.research_cohort %} · {% include "teacher/partials/cohort.html" with cohort=attempt.research_cohort %}{% endif %}
+  </p>
+</header>
+<section aria-label="{% translate 'Summary' %}" class="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(160px,1fr))]">
+  {% translate "Order errors" as l1 %}{% include "components/stat_card.html" with label=l1 value=attempt.order_errors %}
+  {% translate "Safety warnings" as l2 %}{% include "components/stat_card.html" with label=l2 value=attempt.safety_warnings %}
+  {% translate "Wrong equipment or reagent" as l3 %}{% include "components/stat_card.html" with label=l3 value=attempt.wrong_items %}
+  {% translate "Wrong choices" as l4 %}{% include "components/stat_card.html" with label=l4 value=attempt.wrong_choices %}
+  {% translate "Analysis" as l5 %}{% blocktranslate with a=attempt.analysis_correct b=attempt.analysis_total asvar v5 %}{{ a }} / {{ b }}{% endblocktranslate %}{% include "components/stat_card.html" with label=l5 value=v5 %}
+</section>
+<div class="overflow-x-auto rounded-lg border border-line bg-surface">
+  <table class="table">
+    <caption class="sr-only">{% translate "Lab log" %}</caption>
+    <thead><tr>
+      <th scope="col" class="text-right">#</th><th scope="col" class="text-right">{% translate "Time" %}</th>
+      <th scope="col">{% translate "Event" %}</th><th scope="col">{% translate "Step" %}</th><th scope="col">{% translate "Details" %}</th>
+    </tr></thead>
+    <tbody>
+      {% for e in events %}
+        <tr{% if e.type == "safety_warning" %} class="bg-danger-50"{% elif e.type == "order_error" or e.type == "wrong_item" or e.type == "wrong_choice" %} class="bg-warning-50"{% endif %}>
+          <td class="num text-right text-ink-soft">{{ e.seq }}</td>
+          <td class="num text-right">{{ e.t_ms|seconds }}</td>
+          <td class="text-sm font-medium">{{ e.get_type_display }}</td>
+          <td class="text-sm text-ink-soft">{{ e.step|default:"—" }}</td>
+          <td class="max-w-md text-caption text-ink-soft"><code class="break-all">{% if e.payload %}{{ e.payload }}{% endif %}</code></td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="5" class="py-8 text-center text-sm text-ink-soft">{% translate "No events were logged." %}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

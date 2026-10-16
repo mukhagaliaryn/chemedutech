@@ -1,0 +1,5 @@
+{# Small bar + "passed/total": row (overview.student_rows row). #}
+<span class="flex min-w-32 items-center gap-2">
+  <span class="progress progress-sm flex-1" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ row.share|floatformat:0 }}"><span style="width: {{ row.share|default:0|stringformat:'s' }}%"></span></span>
+  <span class="num text-caption text-ink-soft">{{ row.passed }}/{{ row.total }}</span>
+</span>

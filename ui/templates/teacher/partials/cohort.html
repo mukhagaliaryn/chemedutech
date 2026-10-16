@@ -1,0 +1,4 @@
+{% load i18n %}{# Research group badge: cohort ("" / control / experimental). Info/neutral only — never good/bad colours. #}
+{% if cohort == "experimental" %}{% translate "Experimental" as l %}{% include "components/badge.html" with variant="info" label=l %}
+{% elif cohort == "control" %}{% translate "Control" as l %}{% include "components/badge.html" with variant="neutral" label=l %}
+{% else %}<span class="text-caption text-ink-faint">{% translate "Not assigned" %}</span>{% endif %}

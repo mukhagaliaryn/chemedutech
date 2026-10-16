@@ -29,3 +29,31 @@ def teacher_comments(enrollment, limit=3):
         .select_related("stage__topic__module__course", "graded_by")
         .order_by("-updated_at", "-pk")[:limit]
     )
+
+
+def awaiting_review(enrollment_ids):
+    """The teacher's queue: works the AI could not grade with confidence, oldest first."""
+    return (
+        PracticeSubmission.objects.filter(enrollment_id__in=enrollment_ids, status=S.NEEDS_REVIEW)
+        .select_related("enrollment__student", "enrollment__group", "stage__topic__module__course")
+        .order_by("submitted_at", "pk")
+    )
+
+
+def submissions_of(enrollment):
+    return (
+        PracticeSubmission.objects.filter(enrollment=enrollment)
+        .select_related("stage__topic")
+        .order_by("-submitted_at", "-pk")
+    )
+
+
+def last_submission_times(enrollment_ids) -> dict[int, object]:
+    from django.db.models import Max
+
+    rows = (
+        PracticeSubmission.objects.filter(enrollment_id__in=enrollment_ids)
+        .values("enrollment_id")
+        .annotate(at=Max("submitted_at"))
+    )
+    return {r["enrollment_id"]: r["at"] for r in rows}

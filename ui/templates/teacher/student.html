@@ -1,0 +1,196 @@
+{% extends "layouts/teacher.html" %}
+{% load i18n %}
+{% block title %}{{ student.full_name }} · ChemEduTech{% endblock %}
+{% block content %}
+{% with g=student.student_profile.group %}
+<p class="text-sm text-ink-soft">
+  <a href="{% url 'teacher:groups' %}">{% translate "Groups" %}</a> /
+  {% if g %}<a href="{% url 'teacher:group' g.pk %}">{{ g }}</a> / {% endif %}{{ student.full_name }}
+</p>
+<header class="flex flex-wrap items-center gap-4">
+  {% include "components/avatar.html" with person=student size="lg" %}
+  <div class="min-w-0 flex-1">
+    <h1 class="text-h1">{{ student.full_name }}</h1>
+    <p class="mt-1 text-ink-soft">
+      {{ student.username }} · <a href="mailto:{{ student.email }}">{{ student.email }}</a>{% if g %} · {{ g }}{% endif %}
+      {% if enrollment %} · {% include "teacher/partials/cohort.html" with cohort=enrollment.research_cohort %}{% endif %}
+    </p>
+  </div>
+</header>
+{% endwith %}
+
+{% if enrollments|length > 1 %}
+<nav class="flex flex-wrap gap-2" aria-label="{% translate 'Courses' %}">
+  {% for e in enrollments %}<a href="?course={{ e.course.slug }}" class="btn btn-sm {% if e == enrollment %}btn-primary{% else %}btn-secondary{% endif %}">{{ e.course.title }}</a>{% endfor %}
+</nav>
+{% endif %}
+
+{% if not enrollment %}
+  {% translate "Not enrolled in your courses" as l_title %}{% translate "Attach the student's group to a course to see the progress here." as l_text %}
+  {% include "components/empty_state.html" with title=l_title text=l_text icon="book" %}
+{% else %}
+
+<section aria-label="{% translate 'Key figures' %}" class="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(180px,1fr))]">
+  {% translate "Current course score" as l1 %}
+  {% if result.current_percent is not None %}{% include "components/stat_card.html" with label=l1 value=result.current_percent|floatformat:1 %}
+  {% else %}{% translate "after the first completed topic" as n1 %}{% include "components/stat_card.html" with label=l1 value="—" note=n1 %}{% endif %}
+  {% translate "Stages passed" as l2 %}{% blocktranslate with a=row.passed b=row.total asvar v2 %}{{ a }} / {{ b }}{% endblocktranslate %}
+  {% include "components/stat_card.html" with label=l2 value=v2 note=row.position.text %}
+  {% translate "Time spent learning" as l3 %}{% include "components/stat_card.html" with label=l3 value=time_spent %}
+  {% translate "Last activity" as l4 %}
+  {% if row.last %}{% include "components/stat_card.html" with label=l4 value=row.last|ago %}{% else %}{% include "components/stat_card.html" with label=l4 value="—" %}{% endif %}
+</section>
+
+{% if row.attention or row.position.awaiting %}
+<section class="flex flex-col gap-1 rounded-lg border border-warning-500/40 bg-warning-50 px-5 py-4 text-sm text-warning-700" aria-label="{% translate 'Needs attention' %}">
+  {% if row.position.awaiting %}<p class="font-semibold">{% translate "A practice work awaits your check." %}</p>{% endif %}
+  {% for reason in row.attention %}<p>{{ reason }}</p>{% endfor %}
+</section>
+{% endif %}
+
+<section id="stages" aria-labelledby="stages-title" class="flex flex-col gap-3">
+  <h2 id="stages-title" class="text-h2">{% translate "Stages and scores" %}</h2>
+  {% for t in topics %}
+    <div class="overflow-hidden rounded-lg border border-line bg-surface">
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-3">
+        <h3 class="text-h3">{% blocktranslate with n=t.topic.number %}Topic {{ n }}{% endblocktranslate %} · {{ t.topic.title }}</h3>
+        {% if t.status == "completed" %}{% blocktranslate with s=t.result.score_percent|floatformat:1 asvar l_t %}Completed · {{ s }}{% endblocktranslate %}{% include "components/badge.html" with variant="success" label=l_t class="num" %}
+        {% elif t.status == "locked" %}{% translate "Locked" as l_t %}{% include "components/badge.html" with variant="neutral" label=l_t %}
+        {% else %}{% blocktranslate with a=t.passed b=t.required asvar l_t %}In progress · {{ a }} / {{ b }}{% endblocktranslate %}{% include "components/badge.html" with variant="info" label=l_t class="num" %}{% endif %}
+      </div>
+      <div class="overflow-x-auto">
+        <table class="table">
+          <thead><tr>
+            <th scope="col">{% translate "Stage" %}</th>
+            <th scope="col">{% translate "Attempts" %}</th>
+            <th scope="col" class="text-right">{% translate "Score" %}</th>
+            <th scope="col">{% translate "Status" %}</th>
+            <th scope="col"><span class="sr-only">{% translate "Actions" %}</span></th>
+          </tr></thead>
+          <tbody>
+            {% for r in t.table %}
+              <tr>
+                <td><span class="inline-flex items-center gap-2.5">
+                  <span class="grid size-6 shrink-0 place-items-center rounded-sm text-white stage-{{ r.stage.kind }}">{% include "components/icons.html#"|add:r.stage.kind with size=12 %}</span>
+                  <span class="text-sm">{{ r.stage.title }}</span>
+                </span></td>
+                <td class="num text-sm">{{ r.attempts }}</td>
+                <td class="num text-right font-semibold">{% if r.score is not None %}{{ r.score|floatformat:1 }}{% else %}—{% endif %}</td>
+                <td>
+                  {% if r.status == "passed" %}{% translate "Passed" as l_s %}{% elif r.status == "awaiting_check" %}{% translate "Awaiting check" as l_s %}{% elif r.status == "in_progress" %}{% translate "In progress" as l_s %}{% elif r.status == "locked" %}{% translate "Locked" as l_s %}{% else %}{% translate "Open" as l_s %}{% endif %}
+                  {% include "components/badge.html" with status=r.status label=l_s %}
+                  {% if r.needs_attention %}<span class="ml-1 text-caption text-warning-700">{% translate "attempts ran out" %}</span>{% endif %}
+                </td>
+                <td class="text-right">
+                  {% if r.status == "locked" and t.topic.is_published %}
+                  <form method="post" action="{% url 'teacher:unlock_stage' student.pk r.stage.pk %}">{% csrf_token %}
+                    <input type="hidden" name="course" value="{{ enrollment.course.slug }}">
+                    <button type="submit" class="btn btn-secondary btn-sm">{% translate "Open for the student" %}</button>
+                  </form>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  {% empty %}
+    <p class="text-sm text-ink-soft">{% translate "The course has no published topics yet" %}</p>
+  {% endfor %}
+</section>
+
+<section id="lab" aria-labelledby="lab-title" class="flex flex-col gap-3">
+  <h2 id="lab-title" class="text-h2">{% translate "Lab attempts" %}</h2>
+  <div class="overflow-x-auto rounded-lg border border-line bg-surface">
+    <table class="table">
+      <thead><tr>
+        <th scope="col">{% translate "Experiment" %}</th><th scope="col">{% translate "Started" %}</th>
+        <th scope="col" class="text-right">{% translate "Duration" %}</th><th scope="col">{% translate "Status" %}</th>
+        <th scope="col" class="text-right">{% translate "Score" %}</th>
+        <th scope="col" class="text-right" title="{% translate 'order errors · safety warnings · wrong equipment or choice' %}">{% translate "Errors" %}</th>
+        <th scope="col"><span class="sr-only">{% translate "Actions" %}</span></th>
+      </tr></thead>
+      <tbody>
+        {% for a in lab_attempts %}
+          <tr>
+            <td class="text-sm font-medium">{{ a.title }}</td>
+            <td class="text-sm text-ink-soft">{{ a.started_at|date:"j E, H:i" }}</td>
+            <td class="num text-right text-sm">{% if a.duration_s %}{{ a.duration_s|duration_s }}{% else %}—{% endif %}</td>
+            <td>{% include "components/badge.html" with variant=a.status|lab_variant label=a.get_status_display %}</td>
+            <td class="num text-right">{% if a.score_percent is not None %}{{ a.score_percent|floatformat:1 }}{% else %}—{% endif %}</td>
+            <td class="num text-right {% if a.safety_warnings %}text-danger-700{% endif %}">{{ a.order_errors }} · {{ a.safety_warnings }} · {{ a.wrong_items|add:a.wrong_choices }}</td>
+            <td class="text-right"><a class="text-sm font-semibold" href="{% url 'teacher:lab_log' student.pk a.pk %}">{% translate "Log" %}</a></td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="7" class="py-6 text-center text-sm text-ink-soft">{% translate "No lab attempts yet." %}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="grid items-start gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(440px,100%),1fr))]">
+  <section aria-labelledby="quiz-title" class="flex flex-col gap-3">
+    <h2 id="quiz-title" class="text-h2">{% translate "Quiz attempts" %}</h2>
+    <div class="overflow-x-auto rounded-lg border border-line bg-surface">
+      <table class="table">
+        <thead><tr><th scope="col">{% translate "Quiz" %}</th><th scope="col" class="text-right">№</th><th scope="col">{% translate "Finished" %}</th><th scope="col" class="text-right">%</th></tr></thead>
+        <tbody>
+          {% for a in quiz_attempts %}
+            <tr>
+              <td class="text-sm">{{ a.quiz.title }}</td>
+              <td class="num text-right text-sm">{{ a.attempt_no }}</td>
+              <td class="text-sm text-ink-soft">{{ a.finished_at|date:"j E, H:i" }}</td>
+              <td class="num text-right"><span class="{% if a.passed %}text-success-700{% else %}text-danger-700{% endif %} font-semibold">{{ a.percent|floatformat:0 }}</span></td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="4" class="py-6 text-center text-sm text-ink-soft">{% translate "No quiz attempts yet." %}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="works" aria-labelledby="works-title" class="flex flex-col gap-3">
+    <h2 id="works-title" class="text-h2">{% translate "Practice works" %}</h2>
+    <div class="overflow-x-auto rounded-lg border border-line bg-surface">
+      <table class="table">
+        <thead><tr><th scope="col">{% translate "Work" %}</th><th scope="col" class="text-right">№</th><th scope="col">{% translate "Status" %}</th><th scope="col" class="text-right">%</th></tr></thead>
+        <tbody>
+          {% for s in submissions %}
+            <tr>
+              <td class="text-sm">{{ s.stage.title }}{% if s.teacher_comment %}<p class="mt-0.5 text-caption text-ink-soft">«{{ s.teacher_comment|truncatechars:120 }}»</p>{% endif %}</td>
+              <td class="num text-right text-sm">{{ s.attempt_no }}</td>
+              <td>{% include "components/badge.html" with status=s.status label=s.get_status_display %}</td>
+              <td class="num text-right">{% if s.percent is not None %}{{ s.percent|floatformat:0 }}{% else %}—{% endif %}</td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="4" class="py-6 text-center text-sm text-ink-soft">{% translate "No practice works yet." %}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<section aria-labelledby="tl-title" class="card flex flex-col gap-3">
+  <h2 id="tl-title" class="text-h3">{% translate "Timeline" %}</h2>
+  <ol class="flex flex-col">
+    {% for e in events %}
+      <li class="flex flex-wrap items-baseline gap-x-3 border-surface-sunken py-2 text-sm not-last:border-b">
+        <time class="num w-28 shrink-0 text-caption text-ink-soft" datetime="{{ e.created_at|date:'c' }}">{{ e.created_at|date:"j E, H:i" }}</time>
+        <span class="font-medium">{{ e.get_action_display }}</span>
+        <span class="min-w-0 flex-1 text-ink-soft">
+          {% if e.stage %}{{ e.stage.title }}{% elif e.topic %}{% blocktranslate with n=e.topic.number %}Topic {{ n }}{% endblocktranslate %}{% endif %}
+          {% if e.score_percent is not None %} · <span class="num">{{ e.score_percent|floatformat:1 }}</span>{% endif %}
+          {% if e.actor %} · {{ e.actor.full_name }}{% endif %}
+        </span>
+      </li>
+    {% empty %}
+      <li class="text-sm text-ink-soft">{% translate "Nothing has happened yet." %}</li>
+    {% endfor %}
+  </ol>
+</section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "layouts/teacher.html" %}
+{% load i18n %}
+{% block title %}{% translate "Groups" %} · ChemEduTech{% endblock %}
+{% block content %}
+<header class="flex flex-wrap items-end justify-between gap-4">
+  <div>
+    <h1 class="text-h1">{% translate "Groups" %}</h1>
+    <p class="mt-1 text-ink-soft">{% translate "Groups you curate and groups attached to your courses." %}</p>
+  </div>
+  <div class="flex flex-wrap gap-2">
+    <a class="btn btn-secondary" href="{% url 'teacher:students' %}">{% include "components/icons.html#search" %}{% translate "Find a student" %}</a>
+    <a class="btn btn-primary" href="{% url 'teacher:group_new' %}">{% include "components/icons.html#plus" %}{% translate "Create a group" %}</a>
+  </div>
+</header>
+<nav class="flex gap-2 text-sm" aria-label="{% translate 'Filter' %}">
+  <a class="btn btn-sm {% if not show_all %}btn-primary{% else %}btn-secondary{% endif %}" href="?">{% translate "Active" %}</a>
+  <a class="btn btn-sm {% if show_all %}btn-primary{% else %}btn-secondary{% endif %}" href="?all=1">{% translate "All, inactive too" %}</a>
+</nav>
+{% include "teacher/partials/groups_table.html" %}
+{% if no_group %}
+  <p class="text-sm text-ink-soft">
+    {% blocktranslate count n=no_group %}{{ n }} student of your courses has no group.{% plural %}{{ n }} students of your courses have no group.{% endblocktranslate %}
+    <a class="font-semibold" href="{% url 'teacher:students' %}?no_group=1">{% translate "Show" %}</a>
+  </p>
+{% endif %}
+{% endblock %}

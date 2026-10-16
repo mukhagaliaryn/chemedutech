@@ -1,0 +1,76 @@
+{% extends "layouts/teacher.html" %}
+{% load i18n %}
+{% block title %}{% translate "Home" %} · ChemEduTech{% endblock %}
+{% block content %}
+<header class="flex flex-wrap items-end justify-between gap-4">
+  <div>
+    <h1 class="text-h1">{% blocktranslate with name=user.first_name|default:user.get_username %}Hello, {{ name }}{% endblocktranslate %}</h1>
+    <p class="mt-1 text-ink-soft">
+      {% for c in courses %}{{ c.title }}{% if not forloop.last %}, {% endif %}{% empty %}{% translate "You are not assigned to a course yet." %}{% endfor %}
+      · {% blocktranslate count n=groups|length %}{{ n }} group{% plural %}{{ n }} groups{% endblocktranslate %}
+    </p>
+  </div>
+  <div class="flex flex-wrap gap-2">
+    <a class="btn btn-secondary" href="{% url 'teacher:group_new' %}">{% include "components/icons.html#plus" %}{% translate "Create a group" %}</a>
+    {% url_or_empty "teacher:grading" as grading_url %}
+    {% if grading_url %}<a class="btn btn-primary" href="{{ grading_url }}">{% blocktranslate with n=queue_count %}Check works · {{ n }}{% endblocktranslate %}</a>{% endif %}
+  </div>
+</header>
+
+<section aria-label="{% translate 'Key figures' %}" class="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(200px,1fr))]">
+  {% translate "Active students" as l1 %}{% blocktranslate with n=active_week asvar n1 %}{{ n }} were active in the last 7 days{% endblocktranslate %}
+  {% include "components/stat_card.html" with label=l1 value=students note=n1 %}
+  {% translate "Average progress" as l2 %}
+  {% if avg_progress is not None %}{% with v=avg_progress|floatformat:0|add:"%" %}
+    {% if first_topic %}{% blocktranslate with t=first_topic.number p=first_topic_share|floatformat:0 asvar n2 %}Topic {{ t }}: {{ p }}% completed it{% endblocktranslate %}{% endif %}
+    {% include "components/stat_card.html" with label=l2 value=v note=n2 %}
+  {% endwith %}{% else %}{% include "components/stat_card.html" with label=l2 value="—" %}{% endif %}
+  {% translate "Average score" as l3 %}{% translate "by completed topics" as n3 %}
+  {% if avg_score is not None %}{% include "components/stat_card.html" with label=l3 value=avg_score|floatformat:1 note=n3 %}{% else %}{% include "components/stat_card.html" with label=l3 value="—" note=n3 %}{% endif %}
+  {% translate "Awaiting check" as l4 %}
+  {% if queue_oldest_days is not None %}{% blocktranslate count n=queue_oldest_days asvar n4 %}practice works · the oldest {{ n }} day{% plural %}practice works · the oldest {{ n }} days{% endblocktranslate %}{% else %}{% translate "practice works" as n4 %}{% endif %}
+  {% include "components/stat_card.html" with label=l4 value=queue_count note=n4 %}
+</section>
+
+<div class="grid items-start gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(420px,100%),1fr))]">
+  <section aria-labelledby="queue" class="card flex flex-col gap-1">
+    <h2 id="queue" class="mb-2 text-h3">{% translate "Check queue" %}</h2>
+    {% for s in queue %}
+      <div class="flex items-center gap-3 border-surface-sunken py-2.5 not-last:border-b">
+        {% include "components/avatar.html" with person=s.enrollment.student size="sm" %}
+        <span class="flex min-w-0 flex-1 flex-col leading-5">
+          <span class="truncate text-sm font-medium">{{ s.enrollment.student.full_name }}{% if s.enrollment.group %} · {{ s.enrollment.group }}{% endif %}</span>
+          <span class="truncate text-caption text-ink-soft">{% blocktranslate with t=s.stage.topic.number %}Topic {{ t }}{% endblocktranslate %} · {{ s.stage.title }} · {{ s.submitted_at|ago }}</span>
+        </span>
+        <a class="text-sm font-semibold" href="{% url 'teacher:student' s.enrollment.student_id %}?course={{ s.stage.topic.module.course.slug }}#works">{% translate "Open" %}</a>
+      </div>
+    {% empty %}
+      <p class="text-sm text-ink-soft">{% translate "Nothing to check. Works the AI could not grade with confidence will appear here." %}</p>
+    {% endfor %}
+  </section>
+
+  <section aria-labelledby="attn" class="card flex flex-col gap-1">
+    <h2 id="attn" class="mb-2 text-h3">{% translate "Needs attention" %}{% if attention_count > attention|length %} <span class="num font-normal text-ink-soft">· {{ attention_count }}</span>{% endif %}</h2>
+    {% for row, reason in attention %}
+      <div class="flex items-center gap-3 border-surface-sunken py-2.5 not-last:border-b">
+        <span class="size-2 shrink-0 rounded-full bg-warning-500" aria-hidden="true"></span>
+        <span class="flex min-w-0 flex-1 flex-col leading-5">
+          <span class="truncate text-sm font-medium">{{ row.student.full_name }}{% if row.student.student_profile.group %} · {{ row.student.student_profile.group }}{% endif %}</span>
+          <span class="text-caption text-ink-soft">{{ reason }}</span>
+        </span>
+        <a class="text-sm font-semibold" href="{% url 'teacher:student' row.student.pk %}?course={{ row.enrollment.course.slug }}">{% translate "Open" %}</a>
+      </div>
+    {% empty %}
+      <p class="text-sm text-ink-soft">{% translate "No one is stuck: no repeated fails, risky lab attempts or long breaks." %}</p>
+    {% endfor %}
+  </section>
+</div>
+
+<section aria-labelledby="groups" class="flex flex-col gap-3">
+  <div class="flex items-center justify-between gap-3">
+    <h2 id="groups" class="text-h2">{% translate "My groups" %}</h2>
+    <a class="text-sm font-semibold" href="{% url 'teacher:groups' %}">{% translate "All groups" %}</a>
+  </div>
+  {% include "teacher/partials/groups_table.html" %}
+</section>
+{% endblock %}

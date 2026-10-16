@@ -75,7 +75,7 @@ class LoginTests(TestCase):
 
     def test_login_redirects_by_role(self):
         r = self.client.post(reverse("accounts:login"), {"username": "teacher", "password": "secret-pass-1"})
-        self.assertRedirects(r, reverse("research:dashboard"), fetch_redirect_response=False)
+        self.assertRedirects(r, reverse("teacher:dashboard"), fetch_redirect_response=False)
         self.client.logout()
         User.objects.create_superuser("root", "root@example.kz", "secret-pass-1")
         r = self.client.post(reverse("accounts:login"), {"username": "root", "password": "secret-pass-1"})

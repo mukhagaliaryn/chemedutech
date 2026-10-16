@@ -75,3 +75,28 @@ def attempt_counts(enrollment) -> dict[int, int]:
     for quiz_id in finished_attempts(enrollment).values_list("quiz_id", flat=True):
         counts[quiz_id] = counts.get(quiz_id, 0) + 1
     return counts
+
+
+def repeated_failures(enrollment_ids, min_failures=3) -> list[dict]:
+    """[{enrollment_id, quiz_id, quiz__title, n}] — quizzes failed at least ``min_failures`` times and never passed."""
+    from django.db.models import Count, Q
+
+    rows = (
+        QuizAttempt.objects.filter(enrollment_id__in=enrollment_ids)
+        .exclude(finished_at=None)
+        .values("enrollment_id", "quiz_id", "quiz__title")
+        .annotate(n=Count("id", filter=Q(passed=False)), passed=Count("id", filter=Q(passed=True)))
+        .filter(n__gte=min_failures, passed=0)
+    )
+    return list(rows)
+
+
+def last_attempt_times(enrollment_ids) -> dict[int, object]:
+    from django.db.models import Max
+
+    rows = (
+        QuizAttempt.objects.filter(enrollment_id__in=enrollment_ids)
+        .values("enrollment_id")
+        .annotate(at=Max("started_at"))
+    )
+    return {r["enrollment_id"]: r["at"] for r in rows}

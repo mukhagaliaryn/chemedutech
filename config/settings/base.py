@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     "apps.feedback",
     # product layer: views and URLs only
     "apps.student",
+    "apps.teacher",
     "apps.research",
     # presentation: every template and static file lives here (django-tailwind theme app)
     "ui",

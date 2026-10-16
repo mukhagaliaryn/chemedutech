@@ -5,6 +5,8 @@ from .attempts import (
     enrollment_for,
     finished_attempts,
     last_attempt,
+    last_attempt_times,
+    repeated_failures,
     review_rows,
     stage_of_quiz,
 )
@@ -16,6 +18,8 @@ __all__ = [
     "enrollment_for",
     "finished_attempts",
     "last_attempt",
+    "last_attempt_times",
+    "repeated_failures",
     "review_rows",
     "stage_of_quiz",
 ]
