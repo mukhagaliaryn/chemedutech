@@ -31,7 +31,7 @@ class CourseForm(forms.ModelForm):
         model = Course
         fields = (
             "title", "short_description", "description", "cover", "status", "enrollment_mode", "enroll_code",
-            "is_sequential", "passing_score", "certificate_enabled",
+            "is_sequential", "passing_score", "certificate_enabled", "review_sample_percent",
         )  # fmt: skip
 
     def __init__(self, *args, **kwargs):

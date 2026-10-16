@@ -116,10 +116,10 @@
 - [x] `/teacher/gradebook/<course>/` матрица + CSV/XLSX экспорт.
 
 ## STEP-12 · Статистика және зерттеу
-- [ ] `/teacher/analytics/<course>/`: аяқтау воронкасы, тақырып бойынша орташа ұпай, зертханадағы жиі қателер (қадам бойынша), қадамдағы орташа уақыт,
+- [x] `/teacher/analytics/<course>/`: аяқтау воронкасы, тақырып бойынша орташа ұпай, зертханадағы жиі қателер (қадам бойынша), қадамдағы орташа уақыт,
       **control vs experimental** салыстыру (орташа, медиана, n);
       **AI ↔ мұғалім бағасының сәйкестігі** (Cohen's kappa, корреляция, орташа айырма) және кездейсоқ 10–15% жұмысты тексеруге белгілеу.
-- [ ] `/teacher/research/` — қазіргі research апп осында көшеді; экспорт: attempts, events, quiz answers (CSV, UTF-8 BOM).
+- [x] `/teacher/research/` — қазіргі research апп осында көшеді; экспорт: attempts, events, quiz answers (CSV, UTF-8 BOM).
 
 ## STEP-13 · Сертификаттар
 - [ ] CertificateTemplate, Certificate (§7), WeasyPrint PDF, QR, `/certificates/verify/<uuid>/`.

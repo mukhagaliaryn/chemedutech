@@ -1,15 +1,29 @@
-"""Researcher / teacher views: attempt overview by research group and CSV export."""
+"""Researcher / teacher views (/teacher/research/, /teacher/analytics/): lab attempts by research group,
+course analytics and CSV exports (UTF-8 BOM). A teacher sees the data of their own courses, the admin — all.
+"""
 
 import csv
 
+from django.contrib import messages
 from django.db.models import Avg, Count
-from django.http import StreamingHttpResponse
-from django.shortcuts import render
+from django.http import HttpResponse, StreamingHttpResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
+from django.utils.translation import gettext as _
+from django.utils.translation import ngettext
+from django.views.decorators.http import require_POST
 
-from apps.core.permissions import ADMIN, TEACHER, role_required
+from apps.assessments.models import AttemptAnswer
+from apps.core.permissions import ADMIN, TEACHER, has_role, role_required
+from apps.courses import selectors as course_selectors
+from apps.courses.models import Topic
 from apps.labs.engine import all_labs
 from apps.labs.models import LabAttempt, LabEvent
 from apps.organizations.models import ResearchCohort
+from apps.practice.models import TeacherReview
+from apps.practice.services import sampling
+
+from . import analytics
 
 
 def _group_name(user):
@@ -17,8 +31,15 @@ def _group_name(user):
     return profile.group.name if profile and profile.group else ""
 
 
+def _scope(request, qs, field="enrollment"):
+    """A teacher sees the work done in their courses; the admin — everything (previews included)."""
+    if has_role(request.user, ADMIN):
+        return qs
+    return qs.filter(**{f"{field}__in": course_selectors.teacher_enrollments(request.user)})
+
+
 def _filtered(request):
-    qs = LabAttempt.objects.select_related("user__student_profile__group")
+    qs = _scope(request, LabAttempt.objects.select_related("user__student_profile__group"))
     # ?cohort= keeps its old name in links; the field is LabAttempt.research_cohort
     for param, field in (("lab_key", "lab_key"), ("experiment_key", "experiment_key"), ("cohort", "research_cohort")):
         value = request.GET.get(param)
@@ -162,3 +183,138 @@ def export_events(request):
         for e in qs.iterator()
     )
     return _csv_response("events.csv", header, rows)
+
+
+@role_required(TEACHER, ADMIN)
+def export_quiz_answers(request):
+    qs = (
+        _scope(request, AttemptAnswer.objects.all(), "attempt__enrollment")
+        .select_related(
+            "attempt__user__student_profile__group", "attempt__enrollment__course", "attempt__quiz", "question"
+        )
+        .prefetch_related("choices")
+        .order_by("attempt_id", "question_id")
+    )
+    header = [
+        "answer_id", "attempt_id", "username", "study_group", "cohort", "course", "quiz_id", "quiz_kind",
+        "attempt_no", "started_at", "finished_at", "attempt_percent", "question_id", "question_kind",
+        "chosen_ids", "text_value", "numeric_value", "is_correct", "points",
+    ]  # fmt: skip
+    rows = (
+        [
+            a.pk,
+            a.attempt_id,
+            a.attempt.user.username,
+            _group_name(a.attempt.user),
+            a.attempt.enrollment.research_cohort if a.attempt.enrollment_id else "",
+            a.attempt.enrollment.course.slug if a.attempt.enrollment_id else "",
+            a.attempt.quiz_id,
+            a.attempt.quiz.kind,
+            a.attempt.attempt_no,
+            a.attempt.started_at.isoformat(),
+            a.attempt.finished_at.isoformat() if a.attempt.finished_at else "",
+            a.attempt.percent if a.attempt.percent is not None else "",
+            a.question_id,
+            a.question.kind,
+            ";".join(str(c.pk) for c in a.choices.all()),
+            a.text_value,
+            a.numeric_value if a.numeric_value is not None else "",
+            int(a.is_correct),
+            a.points,
+        ]  # fmt: skip
+        for a in qs.iterator(chunk_size=500)
+    )
+    return _csv_response("quiz_answers.csv", header, rows)
+
+
+@role_required(TEACHER, ADMIN)
+def export_ai_reviews(request):
+    """Every teacher review of an AI grade — the raw data of the AI ↔ teacher agreement (§5.6)."""
+    qs = (
+        _scope(request, TeacherReview.objects.all(), "answer__submission__enrollment")
+        .select_related("answer__item", "answer__ai_grade", "answer__submission__enrollment__course", "teacher")
+        .order_by("answer_id", "created_at")
+    )
+    header = [
+        "review_id", "answer_id", "submission_id", "course", "cohort", "item_id", "item_points", "ai_model",
+        "ai_confidence", "ai_points", "teacher_points", "teacher", "reason", "sampled", "ai_criteria",
+        "teacher_criteria", "created_at",
+    ]  # fmt: skip
+
+    def row(r):
+        grade = getattr(r.answer, "ai_grade", None)
+        sub = r.answer.submission
+        return [
+            r.pk, r.answer_id, sub.pk, sub.enrollment.course.slug, sub.enrollment.research_cohort, r.answer.item_id,
+            r.answer.item.points, grade.model if grade else "", grade.confidence if grade else "",
+            r.ai_points if r.ai_points is not None else "", r.teacher_points, r.teacher.username, r.reason,
+            int(sub.sampled_at is not None), grade.criteria_scores if grade else "", r.criteria_scores,
+            r.created_at.isoformat(),
+        ]  # fmt: skip
+
+    return _csv_response("ai_reviews.csv", header, (row(r) for r in qs.iterator(chunk_size=500)))
+
+
+# --- course analytics ----------------------------------------------------------------------------
+
+
+def _analytics_scope(request, slug):
+    course = get_object_or_404(course_selectors.teacher_courses(request.user), slug=slug)
+    groups = (
+        course_selectors.teacher_groups(request.user)
+        .filter(pk__in=course_selectors.teacher_enrollments(request.user, course).exclude(group=None).values("group"))
+        .order_by("name")
+    )
+    group = next((g for g in groups if str(g.pk) == request.GET.get("group")), None)
+    topics = list(Topic.objects.filter(module__course=course, is_published=True).order_by("number"))
+    topic = next((t for t in topics if str(t.number) == request.GET.get("topic")), None)
+    return course, groups, group, topics, topic
+
+
+@role_required(TEACHER, ADMIN)
+def analytics_page(request, slug=None):
+    if slug is None:
+        first = course_selectors.teacher_courses(request.user).first()
+        if first is None:
+            return render(request, "research/analytics.html", {"course": None})
+        return redirect("research:analytics_course", first.slug)
+    course, groups, group, topics, topic = _analytics_scope(request, slug)
+    data = analytics.page(request.user, course, group, topic)
+    if request.GET.get("format") == "csv":
+        response = HttpResponse(content_type="text/csv; charset=utf-8")
+        stamp = timezone.localdate().isoformat()
+        response["Content-Disposition"] = f'attachment; filename="analytics_{course.slug}_{stamp}.csv"'
+        response.write("\ufeff")
+        csv.writer(response).writerows(analytics.csv_rows(data))
+        return response
+    return render(
+        request,
+        "research/analytics.html",
+        {
+            "course": course,
+            "courses": course_selectors.teacher_courses(request.user),
+            "groups": groups,
+            "group": group,
+            "all_topics": topics,
+            "topic": topic,
+            "query": request.GET.urlencode(),
+            **data,
+        },
+    )
+
+
+@require_POST
+@role_required(TEACHER, ADMIN)
+def draw_sample(request, slug):
+    course = get_object_or_404(course_selectors.teacher_courses(request.user), slug=slug)
+    ids = list(course_selectors.teacher_enrollments(request.user, course).values_list("pk", flat=True))
+    added = sampling.draw_review_sample(ids, course.review_sample_percent)
+    if added:
+        messages.success(
+            request,
+            ngettext("%(n)s work is drawn for your check.", "%(n)s works are drawn for your check.", added)
+            % {"n": added},
+        )
+    else:
+        messages.info(request, _("The sample is already complete; nothing new was drawn."))
+    return redirect("research:analytics_course", course.slug)

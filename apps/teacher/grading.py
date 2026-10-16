@@ -24,6 +24,7 @@ from .views import teacher_only
 S = PracticeSubmission.Status
 TABS = (
     (S.NEEDS_REVIEW, gettext_lazy("To check")),
+    (practice_selectors.SAMPLE, gettext_lazy("Spot-check")),
     (S.GRADED, gettext_lazy("Graded by AI")),
     (S.RETURNED, gettext_lazy("Returned")),
 )

@@ -10,7 +10,8 @@ not exist yet are hidden by components/nav_item.html.
   {% translate "Groups and students" as l_groups %}{% include "components/nav_item.html" with url_name="teacher:groups" match="teacher:groups teacher:group teacher:group_new teacher:group_edit teacher:students teacher:student teacher:lab_log" icon="users" label=l_groups %}
   {% translate "Checking works" as l_grading %}{% include "components/nav_item.html" with url_name="teacher:grading" match="teacher:grading teacher:grading_detail" icon="check" label=l_grading %}
   {% translate "Grade register" as l_gradebook %}{% include "components/nav_item.html" with url_name="teacher:gradebook" match="teacher:gradebook teacher:gradebook_course" icon="table" label=l_gradebook %}
+  {% translate "Statistics" as l_stats %}{% include "components/nav_item.html" with url_name="research:analytics" match="research:analytics research:analytics_course" icon="chart" label=l_stats %}
   {% translate "Course" as l_course %}{% include "components/nav_item.html" with url_name="student:courses" match="student:" icon="book" label=l_course %}
-  {% translate "Research data" as l_research %}{% include "components/nav_item.html" with url_name="research:dashboard" match="research:" icon="search" label=l_research %}
+  {% translate "Research data" as l_research %}{% include "components/nav_item.html" with url_name="research:dashboard" match="research:dashboard" icon="search" label=l_research %}
 {% endblock %}
 {% block user_meta %}{% translate "teacher" %}{% endblock %}

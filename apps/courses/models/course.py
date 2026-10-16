@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import Q
 from django.urls import reverse
@@ -44,6 +45,12 @@ class Course(TimeStampedModel):
     )
     passing_score = models.PositiveSmallIntegerField(_("passing score, %"), default=50)
     certificate_enabled = models.BooleanField(_("certificate"), default=True)
+    review_sample_percent = models.PositiveSmallIntegerField(
+        _("AI grades to spot-check, %"),
+        default=10,
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        help_text=_("Share of AI-graded practice works drawn at random for the teacher's check (research reliability)"),
+    )
     stage_kind_weights = models.JSONField(
         _("stage kind weights"),
         default=default_stage_kind_weights,

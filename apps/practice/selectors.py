@@ -59,12 +59,20 @@ def last_submission_times(enrollment_ids) -> dict[int, object]:
     return {r["enrollment_id"]: r["at"] for r in rows}
 
 
-QUEUE_STATUSES = (S.NEEDS_REVIEW, S.GRADED, S.RETURNED)
+SAMPLE = "sample"
+QUEUE_STATUSES = (S.NEEDS_REVIEW, SAMPLE, S.GRADED, S.RETURNED)
 
 
 def grading_queue(enrollment_ids, status=S.NEEDS_REVIEW):
     """needs_review — the queue (oldest first); graded — AI-graded works not yet seen by a teacher (spot check);
     returned — works sent back."""
+    if status == SAMPLE:  # drawn for the spot-check and not confirmed yet
+        return (
+            PracticeSubmission.objects.filter(enrollment_id__in=enrollment_ids, status=S.GRADED, teacher_override=False)
+            .exclude(sampled_at=None)
+            .select_related("enrollment__student", "enrollment__group", "stage__topic__module__course")
+            .order_by("sampled_at", "pk")
+        )
     qs = PracticeSubmission.objects.filter(enrollment_id__in=enrollment_ids, status=status).select_related(
         "enrollment__student", "enrollment__group", "stage__topic__module__course", "graded_by"
     )

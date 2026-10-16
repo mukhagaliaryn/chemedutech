@@ -99,7 +99,7 @@ class StructureTests(ContentBase):
         data = {
             "title": self.course.title, "status": "published", "enrollment_mode": self.course.enrollment_mode,
             "enroll_code": self.course.enroll_code, "is_sequential": "on", "passing_score": 55,
-            "certificate_enabled": "on", "weight_theory": 10, "weight_video": 10, "weight_lab": 50,
+            "certificate_enabled": "on", "review_sample_percent": 15, "weight_theory": 10, "weight_video": 10, "weight_lab": 50,
             "weight_practice": 15, "weight_test": 15,
         }  # fmt: skip
         r = self.client.post(self.url("teacher:course_settings"), data)

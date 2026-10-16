@@ -1,7 +1,8 @@
+from decimal import Decimal
 from types import SimpleNamespace
 
 from django.conf import settings
-from django.test import RequestFactory, TestCase
+from django.test import RequestFactory, SimpleTestCase, TestCase
 
 from apps.core.middleware import KazakhFirstLocaleMiddleware
 
@@ -44,3 +45,29 @@ class KazakhFirstLocaleTests(TestCase):
         request.COOKIES[settings.LANGUAGE_COOKIE_NAME] = "ru"
         request.user = SimpleNamespace(is_authenticated=True, language="xx")
         self.assertEqual(KazakhFirstLocaleMiddleware.get_language(request), "ru")
+
+
+class StatsTests(SimpleTestCase):
+    def test_describe_and_share(self):
+        from apps.core import stats
+
+        self.assertEqual(stats.describe([1, 2, 3, 10, None]), {"n": 4, "mean": 4.0, "median": 2.5})
+        self.assertEqual(stats.describe([]), {"n": 0, "mean": None, "median": None})
+        self.assertEqual(stats.share([True, False, True, True])["rate"], 75.0)
+
+    def test_pearson(self):
+        from apps.core import stats
+
+        self.assertAlmostEqual(stats.pearson([1, 2, 3, 4], [2, 4, 6, 8]), 1.0)
+        self.assertIsNone(stats.pearson([1, 2], [1, 2]))
+        self.assertIsNone(stats.pearson([1, 1, 1], [1, 2, 3]))
+
+    def test_cohen_kappa(self):
+        from apps.core import stats
+
+        # textbook example: 50 items, agree 20 yes + 15 no → p_o = .7, p_e = .5 → κ = .4
+        pairs = [("y", "y")] * 20 + [("y", "n")] * 5 + [("n", "y")] * 10 + [("n", "n")] * 15
+        self.assertAlmostEqual(stats.cohen_kappa(pairs), 0.4)
+        self.assertEqual(stats.cohen_kappa([("1", "1"), ("1", "1")]), 1.0)
+        self.assertIsNone(stats.cohen_kappa([]))
+        self.assertEqual(stats.label(Decimal("1.50")), "1.5")

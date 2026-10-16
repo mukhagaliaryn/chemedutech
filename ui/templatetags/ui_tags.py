@@ -186,3 +186,18 @@ def lab_variant(status):
 def grade_variant(letter):
     """KZ letter grade → badge variant (A success, B info, C neutral, D warning, F danger)."""
     return {"A": "success", "B": "info", "C": "neutral", "D": "warning", "F": "danger"}.get(str(letter)[:1], "neutral")
+
+
+@register.filter
+def get_item(mapping, key):
+    """{{ dict|get_item:key }} — a dictionary value by a variable key."""
+    try:
+        return mapping.get(key)
+    except AttributeError:
+        return None
+
+
+@register.filter
+def error_variant(event_type):
+    """Lab error type → badge variant (safety is the serious one)."""
+    return {"safety_warning": "danger", "order_error": "warning"}.get(str(event_type), "neutral")

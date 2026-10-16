@@ -41,6 +41,9 @@ class PracticeSubmission(TimeStampedModel):
         verbose_name=_("checked by"),
     )
     teacher_comment = models.TextField(_("teacher's comment"), blank=True)
+    sampled_at = models.DateTimeField(
+        _("drawn for a check at"), null=True, blank=True, help_text=_("Random spot-check of AI grades (§5.6)")
+    )
 
     class Meta:
         ordering = ("-submitted_at",)

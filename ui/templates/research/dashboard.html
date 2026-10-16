@@ -7,9 +7,11 @@
       <h1 class="text-h1">{% translate "Research data" %}</h1>
       <p class="mt-1 text-ink-soft">{% blocktranslate %}Attempts: {{ total }}, unfinished: {{ unfinished }}.{% endblocktranslate %}</p>
     </div>
-    <div class="ml-auto flex gap-2">
+    <div class="ml-auto flex flex-wrap gap-2">
       <a class="btn btn-secondary btn-sm" href="{% url 'research:export_attempts' %}?{{ query }}">{% translate "Download attempts (CSV)" %}</a>
       <a class="btn btn-secondary btn-sm" href="{% url 'research:export_events' %}?{{ query }}">{% translate "Download action log (CSV)" %}</a>
+      <a class="btn btn-secondary btn-sm" href="{% url 'research:export_quiz_answers' %}">{% translate "Quiz answers (CSV)" %}</a>
+      <a class="btn btn-secondary btn-sm" href="{% url 'research:export_ai_reviews' %}">{% translate "AI ↔ teacher grades (CSV)" %}</a>
     </div>
   </div>
 
