@@ -1,16 +1,18 @@
-"""ChemEduTech — Django settings.
+"""ChemEduTech — settings shared by every environment.
 
 Secrets and environment-specific values come from environment variables
-(see .env.example). Nothing secret is hardcoded here.
+(see .env.example). Nothing secret is hardcoded here. Environment modules:
+``config.settings.dev`` (default for manage.py) and ``config.settings.prod``.
 """
+
 import os
 from pathlib import Path
 
 from django.utils.translation import gettext_lazy as _
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-try:  # optional .env support for local development
+try:  # optional .env support
     from dotenv import load_dotenv
 
     load_dotenv(BASE_DIR / ".env")
@@ -22,10 +24,14 @@ def env_bool(name, default=False):
     return os.environ.get(name, str(default)).lower() in {"1", "true", "yes", "on"}
 
 
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-insecure-change-me")
-DEBUG = env_bool("DJANGO_DEBUG", True)
-ALLOWED_HOSTS = [h for h in os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",") if h]
-CSRF_TRUSTED_ORIGINS = [o for o in os.environ.get("DJANGO_CSRF_TRUSTED_ORIGINS", "").split(",") if o]
+def env_list(name, default=""):
+    return [v.strip() for v in os.environ.get(name, default).split(",") if v.strip()]
+
+
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "")
+DEBUG = False
+ALLOWED_HOSTS = env_list("DJANGO_ALLOWED_HOSTS")
+CSRF_TRUSTED_ORIGINS = env_list("DJANGO_CSRF_TRUSTED_ORIGINS")
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -45,10 +51,12 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    # Replaces django.middleware.locale.LocaleMiddleware: needs request.user,
+    # ignores Accept-Language (ARCHITECTURE §9.5).
+    "apps.core.middleware.KazakhFirstLocaleMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -73,20 +81,18 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "config.wsgi.application"
+ASGI_APPLICATION = "config.asgi.application"
 
-if env_bool("USE_SQLITE", False):
-    DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": BASE_DIR / "db.sqlite3"}}
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.environ.get("POSTGRES_DB", "chemedutech"),
-            "USER": os.environ.get("POSTGRES_USER", "chem"),
-            "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "chem"),
-            "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
-            "PORT": os.environ.get("POSTGRES_PORT", "5432"),
-        }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get("POSTGRES_DB", "chemedutech"),
+        "USER": os.environ.get("POSTGRES_USER", "chem"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "chem"),
+        "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
+        "PORT": os.environ.get("POSTGRES_PORT", "5432"),
     }
+}
 
 AUTH_USER_MODEL = "accounts.User"
 LOGIN_URL = "accounts:login"
@@ -100,7 +106,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # --- Internationalisation -------------------------------------------------
 # Source strings are written in English; kk (default) and ru come from
-# locale/*.po via `compilemessages`.
+# locale/*.po via `compilemessages`. The interface language is chosen by
+# apps.core.middleware.KazakhFirstLocaleMiddleware, never by Accept-Language.
 LANGUAGE_CODE = "kk"
 LANGUAGES = [
     ("kk", _("Kazakh")),
@@ -119,3 +126,9 @@ MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# --- AI grading of open practice answers (ARCHITECTURE §5.6) ---------------
+ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
+AI_GRADING_MODEL = os.environ.get("AI_GRADING_MODEL", "claude-sonnet-5-5")
+AI_GRADING_ENABLED = env_bool("AI_GRADING_ENABLED", False)
+AI_GRADING_TIMEOUT_S = int(os.environ.get("AI_GRADING_TIMEOUT_S", "30"))

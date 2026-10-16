@@ -11,7 +11,7 @@
 ## Іске қосу
 
 ```bash
-pip install -r requirements.txt
+pip install -r requirements/dev.txt                  # prod: requirements/base.txt
 npm install && npm run build:css && npm run vendor   # Tailwind + Alpine
 cp .env.example .env                                  # дерекқор параметрлері
 python manage.py migrate

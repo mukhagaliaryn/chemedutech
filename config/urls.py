@@ -3,9 +3,11 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
+from apps.core import views as core_views
+
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("i18n/", include("django.conf.urls.i18n")),  # set_language
+    path("i18n/setlang/", core_views.set_language, name="set_language"),
     path("accounts/", include("apps.accounts.urls")),
     path("courses/", include("apps.courses.urls")),
     path("labs/", include("apps.labs.urls")),

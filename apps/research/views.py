@@ -3,13 +3,12 @@ import csv
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
-from django.db.models import Avg, Count, Q
+from django.db.models import Avg, Count
 from django.http import StreamingHttpResponse
 from django.shortcuts import render
-from django.utils.translation import gettext as _
 
-from apps.labs.engine import all_labs
 from apps.accounts.models import User
+from apps.labs.engine import all_labs
 from apps.labs.models import LabAttempt, LabEvent
 
 
