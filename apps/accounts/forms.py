@@ -1,4 +1,5 @@
 from django import forms
+from django.conf import settings
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.utils.translation import gettext_lazy as _
 
@@ -120,3 +121,25 @@ class SignUpForm(UserCreationForm):
                 self.add_error("group", _("Choose your group."))
         cleaned["resolved_group"] = group
         return cleaned
+
+
+class ProfileForm(forms.Form):
+    """Personal data the user edits in the cabinet; the role, username and group are not editable here."""
+
+    last_name = forms.CharField(label=_("Last name"), max_length=150)
+    first_name = forms.CharField(label=_("First name"), max_length=150)
+    middle_name = forms.CharField(label=_("Middle name"), max_length=150, required=False)
+    email = forms.EmailField(label=_("Email"))
+    phone = forms.CharField(label=_("Phone"), max_length=32, required=False)
+    language = forms.ChoiceField(label=_("Interface language"), choices=settings.LANGUAGES)
+
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        kwargs.setdefault("initial", {name: getattr(user, name) for name in self.base_fields})
+        super().__init__(*args, **kwargs)
+
+    def clean_email(self):
+        email = self.cleaned_data["email"]
+        if User.objects.filter(email__iexact=email).exclude(pk=self.user.pk).exists():
+            raise forms.ValidationError(_("A user with this email already exists."))
+        return email

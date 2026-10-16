@@ -6,20 +6,26 @@ Teachers and admins see the same pages in preview mode (everything open, nothing
 
 import json
 
+from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils import translation
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
+from apps.accounts import services as account_services
+from apps.accounts.forms import ProfileForm
 from apps.assessments import selectors as quiz_selectors
 from apps.assessments import services as quiz_services
 from apps.assessments.forms import collect_answers
 from apps.assessments.models import QuizAttempt
 from apps.assessments.views import result_context, take_context
-from apps.core.permissions import STUDENT, has_role, role_required
+from apps.core.permissions import ADMIN, STUDENT, TEACHER, has_role, home_url_for, role_required
 from apps.courses import selectors as course_selectors
 from apps.courses import services as course_services
 from apps.courses.models import Course, Stage
@@ -34,10 +40,84 @@ from apps.progress import selectors as progress_selectors
 from apps.progress import services as progress
 from apps.progress.grading import grade_for
 
-from . import learning
+from . import cabinet, learning
 from .learning import S
 
 LEARN = "layouts/learn.html"
+
+
+# --- cabinet: dashboard, gradebook, certificates, profile ---------------------------
+
+
+def _student_enrollments(request):
+    course_services.sync_student_enrollments(request.user)
+    enrollments = cabinet.enrollments_of(request.user)
+    enrollment = cabinet.pick(enrollments, request.GET.get("course"))
+    if enrollment:
+        progress.recalculate(enrollment)
+    return enrollments, enrollment
+
+
+@login_required
+def dashboard(request):
+    if not has_role(request.user, STUDENT):
+        return redirect(home_url_for(request.user))
+    enrollments, enrollment = _student_enrollments(request)
+    context = {"enrollments": enrollments}
+    if enrollment:
+        context.update(cabinet.dashboard(request.user, enrollment))
+    return render(request, "student/dashboard.html", context)
+
+
+@role_required(STUDENT)
+def results(request):
+    enrollments, enrollment = _student_enrollments(request)
+    context = {"enrollments": enrollments}
+    if enrollment:
+        context.update(cabinet.gradebook(enrollment))
+    return render(request, "student/results.html", context)
+
+
+@role_required(STUDENT)
+def certificates(request):
+    course_services.sync_student_enrollments(request.user)
+    enrollments = cabinet.enrollments_of(request.user)
+    for e in enrollments:
+        progress.recalculate(e)
+    return render(request, "student/certificates.html", {"rows": cabinet.certificate_rows(enrollments)})
+
+
+@login_required
+def profile(request):
+    """Personal data, interface language and password — for every role (the layout follows the role)."""
+    user = request.user
+    which = request.POST.get("form") if request.method == "POST" else None
+    profile_form = ProfileForm(user, request.POST if which == "profile" else None)
+    password_form = PasswordChangeForm(user, request.POST if which == "password" else None)
+    password_form.fields["old_password"].widget.attrs.pop("autofocus", None)
+    if which == "profile" and profile_form.is_valid():
+        changed = account_services.update_profile(user, profile_form.cleaned_data)
+        response = redirect("student:profile")
+        if "language" in changed:
+            response.set_cookie(settings.LANGUAGE_COOKIE_NAME, user.language, max_age=settings.LANGUAGE_COOKIE_AGE)
+        with translation.override(user.language):
+            messages.success(request, _("Profile saved."))
+        return response
+    if which == "password" and password_form.is_valid():
+        password_form.save()
+        update_session_auth_hash(request, user)
+        messages.success(request, _("Password changed."))
+        return redirect("student:profile")
+    return render(
+        request,
+        "student/profile.html",
+        {
+            "layout": "layouts/teacher.html" if has_role(user, TEACHER, ADMIN) else "layouts/student.html",
+            "profile_form": profile_form,
+            "password_form": password_form,
+            "student_profile": getattr(user, "student_profile", None),
+        },
+    )
 
 
 # --- courses ------------------------------------------------------------------------

@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     "apps.labs",
     "apps.progress",
     "apps.practice",
+    "apps.feedback",
     # product layer: views and URLs only
     "apps.student",
     "apps.research",

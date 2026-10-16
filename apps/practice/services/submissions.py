@@ -9,6 +9,8 @@ from django.db import transaction
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
+from apps.courses.selectors import stage_url
+from apps.feedback import services as feedback
 from apps.progress import services as progress
 
 from .. import checkers
@@ -101,7 +103,16 @@ def grade_open_answers(submission: PracticeSubmission, client=None) -> None:
             answer.points = q2(grade.points)
             answer.feedback = grade.feedback_kk
             answer.save(update_fields=["points", "feedback", "updated_at"])
-    finalize(submission)
+    submission = finalize(submission)
+    if submission.status == S.GRADED:  # graded in the background: the student may have left the page
+        _notify(submission, feedback.Kind.GRADED)
+
+
+def _notify(submission: PracticeSubmission, kind) -> None:
+    stage = submission.stage
+    transaction.on_commit(
+        lambda: feedback.notify(submission.enrollment.student, kind, stage.title, stage_url(stage))
+    )
 
 
 def _needs_review(submission) -> bool:
@@ -193,6 +204,7 @@ def confirm_submission(submission: PracticeSubmission, teacher, comment: str = "
     task = submission.stage.practice_task
     counted = counted_submission(submission.enrollment, task)
     progress.confirm_stage(submission.enrollment, submission.stage, counted.percent, by=teacher)
+    _notify(submission, feedback.Kind.GRADED)
     return submission
 
 
@@ -203,4 +215,5 @@ def return_submission(submission: PracticeSubmission, teacher, comment: str = ""
     submission.teacher_comment = comment
     submission.save(update_fields=["status", "graded_by", "teacher_comment", "updated_at"])
     progress.return_stage(submission.enrollment, submission.stage, by=teacher)
+    _notify(submission, feedback.Kind.RETURNED)
     return submission

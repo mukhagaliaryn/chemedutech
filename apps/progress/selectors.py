@@ -1,4 +1,6 @@
-from .models import CourseResult, StageProgress, TopicResult
+from django.db.models import Sum
+
+from .models import CourseResult, ModuleResult, StageProgress, TopicResult
 
 
 def stage_progress_map(enrollment) -> dict[int, StageProgress]:
@@ -7,6 +9,14 @@ def stage_progress_map(enrollment) -> dict[int, StageProgress]:
 
 def topic_results_map(enrollment) -> dict[int, TopicResult]:
     return {r.topic_id: r for r in TopicResult.objects.filter(enrollment=enrollment)}
+
+
+def module_results_map(enrollment) -> dict[int, ModuleResult]:
+    return {r.module_id: r for r in ModuleResult.objects.filter(enrollment=enrollment)}
+
+
+def time_spent_s(enrollment) -> int:
+    return StageProgress.objects.filter(enrollment=enrollment).aggregate(t=Sum("time_spent_s"))["t"] or 0
 
 
 def course_result(enrollment) -> CourseResult | None:

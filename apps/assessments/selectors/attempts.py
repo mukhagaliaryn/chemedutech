@@ -57,3 +57,21 @@ def review_rows(attempt: QuizAttempt) -> list[dict]:
             }
         )
     return rows
+
+
+def finished_attempts(enrollment):
+    """Finished quiz attempts of one enrolment, newest first."""
+    return (
+        QuizAttempt.objects.filter(enrollment=enrollment)
+        .exclude(finished_at=None)
+        .select_related("quiz")
+        .order_by("-finished_at", "-pk")
+    )
+
+
+def attempt_counts(enrollment) -> dict[int, int]:
+    """{quiz_id: finished attempts} of one enrolment."""
+    counts = {}
+    for quiz_id in finished_attempts(enrollment).values_list("quiz_id", flat=True):
+        counts[quiz_id] = counts.get(quiz_id, 0) + 1
+    return counts

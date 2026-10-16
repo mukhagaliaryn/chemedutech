@@ -1,0 +1,7 @@
+{% load i18n %}{% comment %}
+Unread notifications counter. The sidebar copy polls every 60 s and swaps itself (outerHTML);
+the top-bar copy (phones) is refreshed out of band in the same response.
+{% endcomment %}<span id="notif-badge" hx-get="{% url 'feedback:badge' %}" hx-trigger="every 60s" hx-swap="outerHTML"
+      class="num ml-auto grid h-5 min-w-5 place-items-center rounded-full bg-primary-600 px-1.5 text-caption font-semibold text-on-primary{% if not unread %} hidden{% endif %}"
+      aria-label="{% blocktranslate count n=unread %}{{ n }} unread{% plural %}{{ n }} unread{% endblocktranslate %}">{{ unread }}</span>
+{% if request.htmx %}<span id="notif-badge-top" hx-swap-oob="true" class="num absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-primary-600 px-1 text-[11px] font-semibold text-on-primary{% if not unread %} hidden{% endif %}">{{ unread }}</span>{% endif %}

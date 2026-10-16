@@ -1,0 +1,148 @@
+{% extends "layouts/student.html" %}
+{% load i18n %}
+{% block title %}{% translate "Home" %} · ChemEduTech{% endblock %}
+{% block content %}
+<header class="flex flex-wrap items-end justify-between gap-4">
+  <div>
+    <h1 class="text-h1">{% blocktranslate with name=user.first_name|default:user.get_username %}Hello, {{ name }}{% endblocktranslate %}</h1>
+    {% if course %}<p class="mt-1 text-ink-soft">{{ course.title }}{% if enrollment.group %} · {{ enrollment.group }}{% endif %}</p>{% endif %}
+  </div>
+  {% if course %}<a class="btn btn-secondary" href="{% url 'student:course' course.slug %}">{% translate "Course map" %}</a>{% endif %}
+</header>
+
+{% include "student/partials/course_switch.html" %}
+
+{% if not enrollment %}
+  {% translate "You are not enrolled in a course yet" as l_title %}{% translate "Choose a course in the catalogue or ask your teacher to add your group." as l_text %}{% translate "My courses" as l_action %}{% url 'student:courses' as courses_url %}
+  {% include "components/empty_state.html" with title=l_title text=l_text action_url=courses_url action_label=l_action %}
+{% else %}
+
+{% if card %}
+<section aria-labelledby="continue-title" class="relative flex flex-col gap-5 overflow-hidden rounded-lg bg-primary-900 p-7 text-white">
+  <svg width="220" height="180" viewBox="0 0 220 180" aria-hidden="true" class="pointer-events-none absolute right-0 top-0 text-primary-600 opacity-40"><g fill="currentColor"><circle cx="190" cy="150" r="14"/><circle cx="160" cy="112" r="10"/><circle cx="196" cy="84" r="8"/><circle cx="168" cy="54" r="6"/><circle cx="200" cy="30" r="4"/></g></svg>
+  <div class="relative flex flex-wrap items-center justify-between gap-4">
+    <div class="min-w-0">
+      <p class="text-body-sm font-medium text-primary-200">
+        {% blocktranslate with m=card.module.order t=card.topic.number %}Continue learning · Module {{ m }} · Topic {{ t }}{% endblocktranslate %}
+      </p>
+      <h2 id="continue-title" class="mt-1 text-h2">{{ card.topic.title }}</h2>
+    </div>
+    <a href="{{ card.url }}" class="btn h-11 max-w-full bg-white px-5 text-primary-900 hover:bg-primary-50" title="{{ card.stage.title }}">
+      <span class="truncate">{% blocktranslate with k=card.stage.get_kind_display %}Continue: {{ k }}{% endblocktranslate %}</span>{% include "components/icons.html#arrow-right" %}
+    </a>
+  </div>
+  <ol class="relative grid gap-2 [grid-template-columns:repeat(auto-fit,minmax(130px,1fr))]">
+    {% for t in card.tiles %}
+      <li class="flex flex-col gap-1.5 rounded-md p-3 {% if t.current %}bg-white text-ink{% elif t.status == 'locked' %}border border-dashed border-white/25{% else %}bg-white/10{% endif %}">
+        <span class="flex items-center gap-2 text-body-sm font-semibold {% if t.status == 'locked' and not t.current %}text-primary-200{% endif %}">
+          {% if t.status == "locked" %}{% include "components/icons.html#lock" %}
+          {% else %}<span class="grid size-[22px] place-items-center rounded-full text-white {% if t.status == 'passed' %}bg-success-600{% else %}stage-{{ t.stage.kind }}{% endif %}">
+            {% if t.status == "passed" %}{% include "components/icons.html#check" with size=12 %}{% else %}{% include "components/icons.html#"|add:t.stage.kind with size=12 %}{% endif %}
+          </span>{% endif %}
+          <span class="truncate">{{ t.stage.title }}</span>
+        </span>
+        <span class="num text-caption {% if t.current %}font-semibold{% elif t.status == 'locked' %}text-primary-300{% else %}text-primary-200{% endif %}"
+              {% if t.current %}style="color: var(--color-stage-{{ t.stage.kind }})"{% endif %}>{{ t.meta }}</span>
+      </li>
+    {% endfor %}
+  </ol>
+</section>
+{% elif result.passed %}
+  {% translate "Course completed" as l_title %}{% translate "Every topic is done. Your grades are in the gradebook." as l_text %}{% translate "Grades" as l_action %}{% url 'student:results' as results_url %}
+  {% include "components/empty_state.html" with title=l_title text=l_text icon="award" action_url=results_url action_label=l_action %}
+{% else %}
+  {% translate "Waiting for the next step" as l_title %}{% translate "Your works are being checked or the next topic is not published yet." as l_text %}
+  {% include "components/empty_state.html" with title=l_title text=l_text icon="info" %}
+{% endif %}
+
+<section aria-label="{% translate 'Key figures' %}" class="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(200px,1fr))]">
+  {% translate "Current course score" as l1 %}
+  {% if result.current_percent is not None %}
+    {% blocktranslate with g=grade.letter asvar n1 %}{{ g }} · by completed topics{% endblocktranslate %}
+    {% include "components/stat_card.html" with label=l1 value=result.current_percent|floatformat:1 note=n1 tone="success" %}
+  {% else %}
+    {% translate "Shown after the first topic is completed" as n1 %}{% include "components/stat_card.html" with label=l1 value="—" note=n1 %}
+  {% endif %}
+  {% translate "Completed topics" as l2 %}
+  {% blocktranslate with a=result.topics_completed|default:0 b=result.topics_total|default:0 asvar v2 %}{{ a }} / {{ b }}{% endblocktranslate %}
+  {% if current_topic %}{% blocktranslate with t=current_topic.topic.number a=current_topic.passed b=current_topic.required asvar n2 %}Topic {{ t }}: {{ a }} / {{ b }} stages{% endblocktranslate %}{% else %}{% firstof "" as n2 %}{% endif %}
+  {% include "components/stat_card.html" with label=l2 value=v2 note=n2 %}
+  {% translate "Lab experiments" as l3 %}
+  {% blocktranslate with a=labs_done b=labs_total asvar v3 %}{{ a }} / {{ b }}{% endblocktranslate %}
+  {% translate "With the analysis sent" as n3 %}
+  {% include "components/stat_card.html" with label=l3 value=v3 note=n3 %}
+  {% translate "Time spent learning" as l4 %}{% translate "In total" as n4 %}
+  {% include "components/stat_card.html" with label=l4 value=time_spent note=n4 %}
+</section>
+
+<div class="grid items-start gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr))]">
+  <section aria-labelledby="mod-title" class="card flex flex-col gap-5">
+    <h2 id="mod-title" class="text-h3">{% translate "Progress by module" %}</h2>
+    {% for m in modules %}
+      <div class="flex flex-col gap-2 {% if m.locked %}text-ink-faint{% endif %}">
+        <div class="flex justify-between gap-3 text-sm">
+          <span class="font-semibold">{% blocktranslate with n=m.module.order %}Module {{ n }}{% endblocktranslate %}</span>
+          <span class="num {% if m.locked %}text-ink-faint{% else %}text-ink-soft{% endif %}">
+            {% blocktranslate with a=m.passed b=m.required %}{{ a }} / {{ b }} stages{% endblocktranslate %}{% if m.result.current_percent is not None %} · {{ m.result.current_percent|floatformat:1 }}{% endif %}
+          </span>
+        </div>
+        {% include "components/progress_bar.html" with value=m.passed max=m.required %}
+        <span class="text-body-sm {% if m.locked %}text-ink-faint{% else %}text-ink-soft{% endif %}">
+          {% if m.locked and m.previous %}{% blocktranslate with n=m.previous.order %}Opens after module {{ n }} is completed{% endblocktranslate %}
+          {% elif m.first == m.last %}{% blocktranslate with a=m.first %}Topic {{ a }}{% endblocktranslate %}
+          {% else %}{% blocktranslate with a=m.first b=m.last %}Topics {{ a }}–{{ b }}{% endblocktranslate %}{% endif %}
+        </span>
+      </div>
+    {% empty %}
+      <p class="text-sm text-ink-soft">{% translate "The course has no published topics yet" %}</p>
+    {% endfor %}
+  </section>
+
+  <section aria-labelledby="res-title" class="card flex flex-col gap-1">
+    <div class="mb-2 flex items-center justify-between gap-3">
+      <h2 id="res-title" class="text-h3">{% translate "Latest results" %}</h2>
+      <a class="text-sm font-semibold" href="{% url 'student:results' %}{% if enrollments|length > 1 %}?course={{ course.slug }}{% endif %}">{% translate "All" %}</a>
+    </div>
+    {% for r in recent %}
+      <div class="flex items-center gap-3 border-surface-sunken py-2.5 not-last:border-b">
+        <span class="grid size-8 shrink-0 place-items-center rounded-sm text-white stage-{% if r.icon == 'test' %}test{% else %}{{ r.icon }}{% endif %}">{% include "components/icons.html#"|add:r.icon %}</span>
+        <span class="flex min-w-0 flex-1 flex-col leading-5">
+          <span class="truncate text-sm font-medium">{{ r.title }}</span>
+          <span class="text-caption text-ink-soft">{{ r.meta }} · {{ r.at|date:"j E, H:i" }}</span>
+        </span>
+        {% if r.note %}{% include "components/badge.html" with variant=r.variant label=r.note %}
+        {% elif r.percent is not None %}{% with p=r.percent|floatformat:0|add:"%" %}{% include "components/badge.html" with variant=r.variant label=p class="num" %}{% endwith %}{% endif %}
+      </div>
+    {% empty %}
+      <p class="py-2 text-sm text-ink-soft">{% translate "Results of quizzes, experiments and practice works will appear here." %}</p>
+    {% endfor %}
+  </section>
+
+  <section aria-labelledby="fb-title" class="card flex flex-col gap-4">
+    <h2 id="fb-title" class="text-h3">{% translate "Teacher's comments" %}</h2>
+    {% for c in comments %}
+      <div class="flex gap-3">
+        {% if c.graded_by %}{% include "components/avatar.html" with person=c.graded_by %}{% endif %}
+        <div class="flex min-w-0 flex-col gap-1">
+          <span class="text-body-sm text-ink-soft">{% if c.graded_by %}<span class="font-semibold text-ink">{{ c.graded_by.get_full_name|default:c.graded_by }}</span> · {% endif %}{% blocktranslate with s=c.stage.title %}about «{{ s }}»{% endblocktranslate %}</span>
+          <p class="text-sm">{{ c.teacher_comment|linebreaksbr }}</p>
+          <a class="text-sm font-semibold" href="{% url 'student:stage' c.stage.topic.module.course.slug c.stage.topic.number c.stage.pk %}">{% translate "Open the work" %}</a>
+        </div>
+      </div>
+    {% empty %}
+      <p class="text-sm text-ink-soft">{% translate "No comments yet. The teacher's comments on your works will appear here." %}</p>
+    {% endfor %}
+  </section>
+
+  {% if notifications %}
+  <section aria-labelledby="notif-title" class="card flex flex-col gap-1 p-0">
+    <div class="flex items-center justify-between gap-3 px-6 pt-5 pb-2">
+      <h2 id="notif-title" class="text-h3">{% translate "New notifications" %}</h2>
+      <a class="text-sm font-semibold" href="{% url 'feedback:notifications' %}">{% translate "All" %}</a>
+    </div>
+    <ul>{% for n in notifications %}<li class="border-line not-last:border-b">{% include "feedback/partials/item.html" %}</li>{% endfor %}</ul>
+  </section>
+  {% endif %}
+</div>
+{% endif %}
+{% endblock %}

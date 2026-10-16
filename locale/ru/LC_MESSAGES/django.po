@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 19:20+0500\n"
+"POT-Creation-Date: 2026-10-16 19:40+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,67 +46,68 @@ msgstr "группа"
 msgid "Accounts"
 msgstr "Аккаунты"
 
-#: apps/accounts/forms.py:21
+#: apps/accounts/forms.py:22
 msgid "Username or email"
 msgstr "Логин или email"
 
-#: apps/accounts/forms.py:25
+#: apps/accounts/forms.py:26
 msgid "Remember me"
 msgstr "Запомнить меня"
 
-#: apps/accounts/forms.py:29
+#: apps/accounts/forms.py:30
 msgid "Wrong username, email or password."
 msgstr "Неверный логин, email или пароль."
 
-#: apps/accounts/forms.py:40
+#: apps/accounts/forms.py:41 apps/accounts/forms.py:130
 msgid "First name"
 msgstr "Имя"
 
-#: apps/accounts/forms.py:41
+#: apps/accounts/forms.py:42 apps/accounts/forms.py:129
 msgid "Last name"
 msgstr "Фамилия"
 
-#: apps/accounts/forms.py:42
+#: apps/accounts/forms.py:43 apps/accounts/forms.py:132
 msgid "Email"
 msgstr "Email"
 
-#: apps/accounts/forms.py:45 ui/templates/accounts/signup.html:35
+#: apps/accounts/forms.py:46 ui/templates/accounts/signup.html:35
 msgid "Choose from the list"
 msgstr "Выбрать из списка"
 
-#: apps/accounts/forms.py:45 ui/templates/accounts/signup.html:36
+#: apps/accounts/forms.py:46 ui/templates/accounts/signup.html:36
 msgid "I have a group code"
 msgstr "Есть код группы"
 
-#: apps/accounts/forms.py:50
+#: apps/accounts/forms.py:51
 msgid "University"
 msgstr "Университет"
 
-#: apps/accounts/forms.py:51
+#: apps/accounts/forms.py:52
 msgid "Faculty"
 msgstr "Факультет"
 
-#: apps/accounts/forms.py:52
+#: apps/accounts/forms.py:53 ui/templates/student/profile.html:41
 msgid "Department"
 msgstr "Кафедра"
 
-#: apps/accounts/forms.py:55 ui/views.py:21
+#: apps/accounts/forms.py:56 ui/templates/student/profile.html:40
+#: ui/views.py:21
 msgid "Group"
 msgstr "Группа"
 
-#: apps/accounts/forms.py:57
+#: apps/accounts/forms.py:58
 msgid "Each list is loaded from the previous choice"
 msgstr "Каждый список загружается по предыдущему выбору"
 
-#: apps/accounts/forms.py:60
+#: apps/accounts/forms.py:61
 msgid "Group code"
 msgstr "Код группы"
 
-#: apps/accounts/forms.py:63
+#: apps/accounts/forms.py:64
 msgid "Ask your teacher for the 8-character code"
 msgstr "Спросите 8-значный код у преподавателя"
 
-#: apps/accounts/forms.py:67
+#: apps/accounts/forms.py:68
 msgid ""
 "I agree that anonymised data about my learning activity may be used in "
 "pedagogical research."
@@ -114,22 +115,35 @@ msgstr ""
 "Я согласен(на), что обезличенные данные о моей учебной деятельности могут "
 "использоваться в педагогическом исследовании."
 
-#: apps/accounts/forms.py:80
+#: apps/accounts/forms.py:81
 msgid "Latin letters, digits and . _ - characters"
 msgstr "Латинские буквы, цифры и символы . _ -"
 
-#: apps/accounts/forms.py:108 apps/accounts/models/user.py:61
+#: apps/accounts/forms.py:109 apps/accounts/forms.py:144
+#: apps/accounts/models/user.py:61
 msgid "A user with this email already exists."
 msgstr "Пользователь с таким email уже существует."
 
-#: apps/accounts/forms.py:116
+#: apps/accounts/forms.py:117
 msgid "No active group has this code. Check it with your teacher."
 msgstr ""
 "Активная группа с таким кодом не найдена. Уточните код у преподавателя."
 
-#: apps/accounts/forms.py:120
+#: apps/accounts/forms.py:121
 msgid "Choose your group."
 msgstr "Выберите свою группу."
+
+#: apps/accounts/forms.py:131
+msgid "Middle name"
+msgstr "Отчество"
+
+#: apps/accounts/forms.py:133
+msgid "Phone"
+msgstr "Телефон"
+
+#: apps/accounts/forms.py:134 ui/templates/partials/lang_switch.html:2
+msgid "Interface language"
+msgstr "Язык интерфейса"
 
 #: apps/accounts/models/user.py:14
 msgid "Use Latin letters, digits and the characters . _ - only."
@@ -189,6 +203,7 @@ msgid "interface language"
 msgstr "язык интерфейса"
 
 #: apps/accounts/models/user.py:55 apps/assessments/models/attempt.py:21
+#: apps/feedback/models/notification.py:21
 #: apps/organizations/models/profiles.py:11
 #: apps/organizations/models/profiles.py:42
 msgid "user"
@@ -206,7 +221,7 @@ msgid "question"
 msgstr "вопрос"
 
 #: apps/assessments/admin.py:38 ui/templates/assessments/result.html:81
-#: ui/templates/research/dashboard.html:47
+#: ui/templates/research/dashboard.html:47 ui/templates/student/results.html:61
 msgid "Attempts"
 msgstr "Попытки"
 
@@ -369,7 +384,8 @@ msgid "title"
 msgstr "название"
 
 #: apps/assessments/models/quiz.py:23 apps/assessments/models/quiz.py:65
-#: apps/courses/models/structure.py:75 apps/practice/models/task.py:58
+#: apps/courses/models/structure.py:75 apps/feedback/models/notification.py:23
+#: apps/practice/models/task.py:58
 msgid "kind"
 msgstr "вид"
 
@@ -547,7 +563,8 @@ msgstr "Эта попытка уже отправлена."
 msgid "Core"
 msgstr "Основное"
 
-#: apps/core/models.py:8 apps/practice/models/submission.py:104
+#: apps/core/models.py:8 apps/feedback/models/notification.py:27
+#: apps/practice/models/submission.py:104
 #: apps/practice/models/submission.py:135
 msgid "created at"
 msgstr "создано"
@@ -601,7 +618,7 @@ msgstr "На курс можно записать только студенто�
 msgid "This student is already enrolled in the course."
 msgstr "Этот студент уже записан на курс."
 
-#: apps/courses/apps.py:8
+#: apps/courses/apps.py:8 ui/templates/student/partials/course_switch.html:3
 msgid "Courses"
 msgstr "Курсы"
 
@@ -638,7 +655,7 @@ msgstr "Загруженный файл"
 msgid "source"
 msgstr "источник"
 
-#: apps/courses/models/content.py:56
+#: apps/courses/models/content.py:56 apps/feedback/models/notification.py:25
 msgid "link"
 msgstr "ссылка"
 
@@ -1011,35 +1028,76 @@ msgstr "Запись на этот курс закрыта."
 msgid "No course has this code. Check it with your teacher."
 msgstr "Курс с таким кодом не найден. Уточните код у преподавателя."
 
+#: apps/feedback/apps.py:8 ui/templates/admin/practice/practiceitem/try.html:21
+#: ui/templates/admin/practice/practiceitem/try.html:30
+msgid "Feedback"
+msgstr "Обратная связь"
+
+#: apps/feedback/models/notification.py:14
+msgid "Your work is graded"
+msgstr "Ваша работа оценена"
+
+#: apps/feedback/models/notification.py:15
+msgid "The teacher returned your work"
+msgstr "Преподаватель вернул вашу работу"
+
+#: apps/feedback/models/notification.py:16
+msgid "New comment"
+msgstr "Новый комментарий"
+
+#: apps/feedback/models/notification.py:17
+msgid "The teacher opened a stage for you"
+msgstr "Преподаватель открыл вам этап"
+
+#: apps/feedback/models/notification.py:18
+msgid "Certificate issued"
+msgstr "Сертификат выдан"
+
+#: apps/feedback/models/notification.py:24
+msgid "subject"
+msgstr "тема"
+
+#: apps/feedback/models/notification.py:26
+msgid "read"
+msgstr "прочитано"
+
+#: apps/feedback/models/notification.py:31
+msgid "notification"
+msgstr "уведомление"
+
+#: apps/feedback/models/notification.py:32
+msgid "notifications"
+msgstr "уведомления"
+
 #: apps/labs/apps.py:8 ui/templates/student/stages/lab.html:6
 msgid "Virtual lab"
 msgstr "Виртуальная лаборатория"
 
-#: apps/labs/experiments/t01/__init__.py:12
+#: apps/labs/experiments/t01/__init__.py:11
 msgid "Hydrogen and oxygen: obtaining and properties"
 msgstr "Водород и кислород: получение и свойства"
 
-#: apps/labs/experiments/t01/common.py:9 apps/labs/experiments/t01/rate.py:31
+#: apps/labs/experiments/t01/common.py:8 apps/labs/experiments/t01/rate.py:30
 msgid "Spirit lamp"
 msgstr "Спиртовка"
 
-#: apps/labs/experiments/t01/common.py:13
+#: apps/labs/experiments/t01/common.py:12
 msgid "Heating is not needed here: the reaction goes at room temperature."
 msgstr "Нагревание здесь не нужно: реакция идёт при комнатной температуре."
 
-#: apps/labs/experiments/t01/common.py:16
+#: apps/labs/experiments/t01/common.py:15
 msgid "Hydrogen peroxide solution, 3%"
 msgstr "Раствор пероксида водорода, 3%"
 
-#: apps/labs/experiments/t01/common.py:17
+#: apps/labs/experiments/t01/common.py:16
 msgid "Manganese(IV) oxide"
 msgstr "Оксид марганца(IV)"
 
-#: apps/labs/experiments/t01/electrolysis.py:19
+#: apps/labs/experiments/t01/electrolysis.py:18
 msgid "Electrolysis of water"
 msgstr "Электролиз воды"
 
-#: apps/labs/experiments/t01/electrolysis.py:20
+#: apps/labs/experiments/t01/electrolysis.py:19
 msgid ""
 "Decompose water by direct current and determine the volume ratio of hydrogen "
 "and oxygen."
@@ -1047,7 +1105,7 @@ msgstr ""
 "Разложить воду постоянным током и определить объёмное отношение водорода и "
 "кислорода."
 
-#: apps/labs/experiments/t01/electrolysis.py:24
+#: apps/labs/experiments/t01/electrolysis.py:23
 msgid ""
 "Water is reduced at the cathode and hydroxide ions are oxidised at the "
 "anode. Twice as many hydrogen molecules are formed as oxygen molecules, so "
@@ -1057,27 +1115,27 @@ msgstr ""
 "Молекул водорода образуется вдвое больше, чем молекул кислорода, поэтому "
 "V(H₂) : V(O₂) = 2 : 1."
 
-#: apps/labs/experiments/t01/electrolysis.py:28
+#: apps/labs/experiments/t01/electrolysis.py:27
 msgid "Cathode (−), alkaline medium"
 msgstr "Катод (−), щелочная среда"
 
-#: apps/labs/experiments/t01/electrolysis.py:29
+#: apps/labs/experiments/t01/electrolysis.py:28
 msgid "Anode (+), alkaline medium"
 msgstr "Анод (+), щелочная среда"
 
-#: apps/labs/experiments/t01/electrolysis.py:32
+#: apps/labs/experiments/t01/electrolysis.py:31
 msgid "Electrolyzer with two gas tubes"
 msgstr "Электролизёр с двумя газовыми трубками"
 
-#: apps/labs/experiments/t01/electrolysis.py:33
+#: apps/labs/experiments/t01/electrolysis.py:32
 msgid "DC power supply"
 msgstr "Источник постоянного тока"
 
-#: apps/labs/experiments/t01/electrolysis.py:36
+#: apps/labs/experiments/t01/electrolysis.py:35
 msgid "AC power supply"
 msgstr "Источник переменного тока"
 
-#: apps/labs/experiments/t01/electrolysis.py:41
+#: apps/labs/experiments/t01/electrolysis.py:39
 msgid ""
 "Alternating current keeps swapping the electrodes, so the gases would mix in "
 "both tubes. Electrolysis needs direct current."
@@ -1085,162 +1143,162 @@ msgstr ""
 "Переменный ток постоянно меняет полярность электродов, и газы смешались бы в "
 "обеих трубках. Для электролиза нужен постоянный ток."
 
-#: apps/labs/experiments/t01/electrolysis.py:48
+#: apps/labs/experiments/t01/electrolysis.py:45
 msgid "Select the electrolyzer"
 msgstr "Выбрать электролизёр"
 
-#: apps/labs/experiments/t01/electrolysis.py:49
+#: apps/labs/experiments/t01/electrolysis.py:46
 msgid "An electrolyzer with two gas collecting tubes appears."
 msgstr "Появляется электролизёр с двумя газосборными трубками."
 
-#: apps/labs/experiments/t01/electrolysis.py:55
+#: apps/labs/experiments/t01/electrolysis.py:52
 msgid "Select the electrolyte"
 msgstr "Выбрать электролит"
 
-#: apps/labs/experiments/t01/electrolysis.py:56
+#: apps/labs/experiments/t01/electrolysis.py:53
 msgid "A suitable electrolyte solution is added."
 msgstr "Добавляется подходящий раствор электролита."
 
-#: apps/labs/experiments/t01/electrolysis.py:61
+#: apps/labs/experiments/t01/electrolysis.py:58
 msgid "Sodium hydroxide solution, 5% (NaOH)"
 msgstr "Раствор гидроксида натрия, 5% (NaOH)"
 
-#: apps/labs/experiments/t01/electrolysis.py:63
+#: apps/labs/experiments/t01/electrolysis.py:60
 msgid "NaOH makes the solution conductive; it is water that is decomposed."
 msgstr "NaOH делает раствор электропроводным; разлагается именно вода."
 
-#: apps/labs/experiments/t01/electrolysis.py:67
+#: apps/labs/experiments/t01/electrolysis.py:64
 msgid "Distilled water"
 msgstr "Дистиллированная вода"
 
-#: apps/labs/experiments/t01/electrolysis.py:68
+#: apps/labs/experiments/t01/electrolysis.py:65
 msgid ""
 "Pure water hardly conducts current: electrolysis would be extremely slow."
 msgstr "Чистая вода почти не проводит ток: электролиз шёл бы крайне медленно."
 
-#: apps/labs/experiments/t01/electrolysis.py:72
+#: apps/labs/experiments/t01/electrolysis.py:69
 msgid "Sodium chloride solution (NaCl)"
 msgstr "Раствор хлорида натрия (NaCl)"
 
-#: apps/labs/experiments/t01/electrolysis.py:73
+#: apps/labs/experiments/t01/electrolysis.py:70
 msgid "Chlorine, not oxygen, would be released at the anode."
 msgstr "На аноде выделялся бы хлор, а не кислород."
 
-#: apps/labs/experiments/t01/electrolysis.py:76
+#: apps/labs/experiments/t01/electrolysis.py:73
 msgid "Select the electrolyzer first."
 msgstr "Сначала выберите электролизёр."
 
-#: apps/labs/experiments/t01/electrolysis.py:80
+#: apps/labs/experiments/t01/electrolysis.py:77
 msgid "Connect the electrodes"
 msgstr "Подключить электроды"
 
-#: apps/labs/experiments/t01/electrolysis.py:81
+#: apps/labs/experiments/t01/electrolysis.py:78
 msgid "The cathode (−) and the anode (+) are marked."
 msgstr "Отмечены катод (−) и анод (+)."
 
-#: apps/labs/experiments/t01/electrolysis.py:83
+#: apps/labs/experiments/t01/electrolysis.py:80
 msgid "Fill the electrolyzer with the electrolyte first."
 msgstr "Сначала заполните электролизёр электролитом."
 
-#: apps/labs/experiments/t01/electrolysis.py:87
+#: apps/labs/experiments/t01/electrolysis.py:84
 msgid "Switch on the DC source"
 msgstr "Включить источник постоянного тока"
 
-#: apps/labs/experiments/t01/electrolysis.py:88
+#: apps/labs/experiments/t01/electrolysis.py:85
 msgid "Electrolysis starts: bubbles form on both electrodes."
 msgstr "Начинается электролиз: на обоих электродах образуются пузырьки."
 
-#: apps/labs/experiments/t01/electrolysis.py:91
+#: apps/labs/experiments/t01/electrolysis.py:88
 msgid "Connect the electrodes first."
 msgstr "Сначала подключите электроды."
 
-#: apps/labs/experiments/t01/electrolysis.py:95
+#: apps/labs/experiments/t01/electrolysis.py:92
 msgid "Run the time"
 msgstr "Запустить время"
 
-#: apps/labs/experiments/t01/electrolysis.py:96
+#: apps/labs/experiments/t01/electrolysis.py:93
 msgid "The gas volumes change; the V(t) graph is drawn."
 msgstr "Объёмы газов меняются; строится график V(t)."
 
-#: apps/labs/experiments/t01/electrolysis.py:98
+#: apps/labs/experiments/t01/electrolysis.py:95
 msgid "Switch on the power supply first."
 msgstr "Сначала включите источник тока."
 
-#: apps/labs/experiments/t01/electrolysis.py:102
+#: apps/labs/experiments/t01/electrolysis.py:99
 msgid "Compare the gas volumes"
 msgstr "Сравнить объёмы газов"
 
-#: apps/labs/experiments/t01/electrolysis.py:103
+#: apps/labs/experiments/t01/electrolysis.py:100
 msgid "The ratio H₂ : O₂ = 2 : 1 is determined."
 msgstr "Определено отношение H₂ : O₂ = 2 : 1."
 
-#: apps/labs/experiments/t01/electrolysis.py:105
+#: apps/labs/experiments/t01/electrolysis.py:102
 msgid "Let the electrolysis run first."
 msgstr "Сначала проведите электролиз."
 
-#: apps/labs/experiments/t01/electrolysis.py:107
+#: apps/labs/experiments/t01/electrolysis.py:104
 msgid "Draw a conclusion"
 msgstr "Сделать вывод"
 
-#: apps/labs/experiments/t01/electrolysis.py:107
+#: apps/labs/experiments/t01/electrolysis.py:104
 msgid "Write the electrode reactions."
 msgstr "Запишите электродные реакции."
 
-#: apps/labs/experiments/t01/electrolysis.py:110
-#: apps/labs/experiments/t01/hydrogen.py:90
-#: apps/labs/experiments/t01/oxygen.py:109 apps/labs/experiments/t01/rate.py:87
+#: apps/labs/experiments/t01/electrolysis.py:107
+#: apps/labs/experiments/t01/hydrogen.py:89
+#: apps/labs/experiments/t01/oxygen.py:102 apps/labs/experiments/t01/rate.py:84
 msgid "Finish the experiment"
 msgstr "Завершить опыт"
 
-#: apps/labs/experiments/t01/electrolysis.py:111
-#: apps/labs/experiments/t01/hydrogen.py:91
-#: apps/labs/experiments/t01/oxygen.py:110 apps/labs/experiments/t01/rate.py:88
+#: apps/labs/experiments/t01/electrolysis.py:108
+#: apps/labs/experiments/t01/hydrogen.py:90
+#: apps/labs/experiments/t01/oxygen.py:103 apps/labs/experiments/t01/rate.py:85
 msgid "The results are saved and the analysis task opens."
 msgstr "Результаты сохраняются, открывается задание на анализ."
 
-#: apps/labs/experiments/t01/electrolysis.py:113
-#: apps/labs/experiments/t01/hydrogen.py:93
-#: apps/labs/experiments/t01/oxygen.py:112 apps/labs/experiments/t01/rate.py:90
+#: apps/labs/experiments/t01/electrolysis.py:110
+#: apps/labs/experiments/t01/hydrogen.py:92
+#: apps/labs/experiments/t01/oxygen.py:105 apps/labs/experiments/t01/rate.py:87
 msgid "Fill in the lab journal first."
 msgstr "Сначала заполните лабораторный журнал."
 
-#: apps/labs/experiments/t01/electrolysis.py:117
+#: apps/labs/experiments/t01/electrolysis.py:114
 msgid "Volume of gas at the cathode"
 msgstr "Объём газа на катоде"
 
-#: apps/labs/experiments/t01/electrolysis.py:117
-#: apps/labs/experiments/t01/electrolysis.py:118
-#: apps/labs/experiments/t01/hydrogen.py:98
-#: apps/labs/experiments/t01/rate.py:94 apps/labs/experiments/t01/rate.py:95
+#: apps/labs/experiments/t01/electrolysis.py:114
+#: apps/labs/experiments/t01/electrolysis.py:115
+#: apps/labs/experiments/t01/hydrogen.py:97
+#: apps/labs/experiments/t01/rate.py:91 apps/labs/experiments/t01/rate.py:92
 #: apps/labs/views.py:62
 msgid "mL"
 msgstr "мл"
 
-#: apps/labs/experiments/t01/electrolysis.py:118
+#: apps/labs/experiments/t01/electrolysis.py:115
 msgid "Volume of gas at the anode"
 msgstr "Объём газа на аноде"
 
-#: apps/labs/experiments/t01/electrolysis.py:119
+#: apps/labs/experiments/t01/electrolysis.py:116
 msgid "Gas at the cathode"
 msgstr "Газ на катоде"
 
-#: apps/labs/experiments/t01/electrolysis.py:120
+#: apps/labs/experiments/t01/electrolysis.py:117
 msgid "Gas at the anode"
 msgstr "Газ на аноде"
 
-#: apps/labs/experiments/t01/electrolysis.py:121
+#: apps/labs/experiments/t01/electrolysis.py:118
 msgid "Cathode reaction"
 msgstr "Реакция на катоде"
 
-#: apps/labs/experiments/t01/electrolysis.py:122
+#: apps/labs/experiments/t01/electrolysis.py:119
 msgid "Anode reaction"
 msgstr "Реакция на аноде"
 
-#: apps/labs/experiments/t01/electrolysis.py:127
+#: apps/labs/experiments/t01/electrolysis.py:124
 msgid "Why is the volume of hydrogen twice the volume of oxygen?"
 msgstr "Почему объём водорода вдвое больше объёма кислорода?"
 
-#: apps/labs/experiments/t01/electrolysis.py:131
+#: apps/labs/experiments/t01/electrolysis.py:128
 msgid ""
 "Two H₂ molecules form per O₂ molecule, and equal amounts of gases occupy "
 "equal volumes"
@@ -1248,59 +1306,59 @@ msgstr ""
 "На одну молекулу O₂ образуются две молекулы H₂, а равные количества газов "
 "занимают равные объёмы"
 
-#: apps/labs/experiments/t01/electrolysis.py:134
+#: apps/labs/experiments/t01/electrolysis.py:131
 msgid "Hydrogen is lighter than oxygen"
 msgstr "Водород легче кислорода"
 
-#: apps/labs/experiments/t01/electrolysis.py:135
+#: apps/labs/experiments/t01/electrolysis.py:132
 msgid "Hydrogen reacts faster"
 msgstr "Водород реагирует быстрее"
 
-#: apps/labs/experiments/t01/electrolysis.py:140
+#: apps/labs/experiments/t01/electrolysis.py:137
 msgid "Which process takes place at the cathode?"
 msgstr "Какой процесс идёт на катоде?"
 
-#: apps/labs/experiments/t01/electrolysis.py:142
-#: apps/labs/experiments/t01/hydrogen.py:22
+#: apps/labs/experiments/t01/electrolysis.py:139
+#: apps/labs/experiments/t01/hydrogen.py:21
 msgid "Reduction"
 msgstr "Восстановление"
 
-#: apps/labs/experiments/t01/electrolysis.py:143
-#: apps/labs/experiments/t01/hydrogen.py:21
+#: apps/labs/experiments/t01/electrolysis.py:140
+#: apps/labs/experiments/t01/hydrogen.py:20
 msgid "Oxidation"
 msgstr "Окисление"
 
-#: apps/labs/experiments/t01/electrolysis.py:144
+#: apps/labs/experiments/t01/electrolysis.py:141
 msgid "Neither"
 msgstr "Ни один"
 
-#: apps/labs/experiments/t01/electrolysis.py:149
+#: apps/labs/experiments/t01/electrolysis.py:146
 msgid "Why is NaOH added to the water?"
 msgstr "Зачем в воду добавляют NaOH?"
 
-#: apps/labs/experiments/t01/electrolysis.py:151
+#: apps/labs/experiments/t01/electrolysis.py:148
 msgid "To make the solution conduct current"
 msgstr "Чтобы раствор проводил ток"
 
-#: apps/labs/experiments/t01/electrolysis.py:152
+#: apps/labs/experiments/t01/electrolysis.py:149
 msgid "NaOH itself is decomposed"
 msgstr "Разлагается сам NaOH"
 
-#: apps/labs/experiments/t01/electrolysis.py:153
+#: apps/labs/experiments/t01/electrolysis.py:150
 msgid "To obtain more hydrogen from NaOH"
 msgstr "Чтобы получить больше водорода из NaOH"
 
-#: apps/labs/experiments/t01/electrolysis.py:157
+#: apps/labs/experiments/t01/electrolysis.py:153
 msgid ""
 "How would you show the class which tube contains hydrogen and which contains "
 "oxygen?"
 msgstr "Как бы вы показали классу, в какой трубке водород, а в какой кислород?"
 
-#: apps/labs/experiments/t01/hydrogen.py:15
+#: apps/labs/experiments/t01/hydrogen.py:14
 msgid "Obtaining and collecting hydrogen"
 msgstr "Получение и собирание водорода"
 
-#: apps/labs/experiments/t01/hydrogen.py:16
+#: apps/labs/experiments/t01/hydrogen.py:15
 msgid ""
 "Obtain hydrogen from zinc and hydrochloric acid and collect it by "
 "displacement of water."
@@ -1308,7 +1366,7 @@ msgstr ""
 "Получить водород из цинка и соляной кислоты и собрать его методом вытеснения "
 "воды."
 
-#: apps/labs/experiments/t01/hydrogen.py:19
+#: apps/labs/experiments/t01/hydrogen.py:18
 msgid ""
 "Zinc gives up electrons and is oxidised, while hydrogen ions accept "
 "electrons and are reduced."
@@ -1316,35 +1374,35 @@ msgstr ""
 "Цинк отдаёт электроны и окисляется, а ионы водорода принимают электроны и "
 "восстанавливаются."
 
-#: apps/labs/experiments/t01/hydrogen.py:25
+#: apps/labs/experiments/t01/hydrogen.py:24
 msgid "Flask"
 msgstr "Колба"
 
-#: apps/labs/experiments/t01/hydrogen.py:26
+#: apps/labs/experiments/t01/hydrogen.py:25
 msgid "Stopper with gas delivery tube"
 msgstr "Пробка с газоотводной трубкой"
 
-#: apps/labs/experiments/t01/hydrogen.py:27
+#: apps/labs/experiments/t01/hydrogen.py:26
 msgid "Trough with water"
 msgstr "Ванночка с водой"
 
-#: apps/labs/experiments/t01/hydrogen.py:28
+#: apps/labs/experiments/t01/hydrogen.py:27
 msgid "Gas collecting cylinder"
 msgstr "Газосборный цилиндр"
 
-#: apps/labs/experiments/t01/hydrogen.py:29
+#: apps/labs/experiments/t01/hydrogen.py:28
 msgid "Zinc granules"
 msgstr "Гранулы цинка"
 
-#: apps/labs/experiments/t01/hydrogen.py:30
+#: apps/labs/experiments/t01/hydrogen.py:29
 msgid "Hydrochloric acid, 10%"
 msgstr "Соляная кислота, 10%"
 
-#: apps/labs/experiments/t01/hydrogen.py:33
+#: apps/labs/experiments/t01/hydrogen.py:32
 msgid "Copper turnings"
 msgstr "Медная стружка"
 
-#: apps/labs/experiments/t01/hydrogen.py:38
+#: apps/labs/experiments/t01/hydrogen.py:37
 msgid ""
 "Copper does not displace hydrogen from acids: it stands after hydrogen in "
 "the activity series."
@@ -1352,53 +1410,53 @@ msgstr ""
 "Медь не вытесняет водород из кислот: в ряду активности она стоит после "
 "водорода."
 
-#: apps/labs/experiments/t01/hydrogen.py:43
+#: apps/labs/experiments/t01/hydrogen.py:42
 msgid "Select the flask"
 msgstr "Выбрать колбу"
 
-#: apps/labs/experiments/t01/hydrogen.py:43
+#: apps/labs/experiments/t01/hydrogen.py:42
 msgid "The flask appears on the bench."
 msgstr "Колба появляется на рабочем столе."
 
-#: apps/labs/experiments/t01/hydrogen.py:46
+#: apps/labs/experiments/t01/hydrogen.py:45
 msgid "Add zinc"
 msgstr "Добавить цинк"
 
-#: apps/labs/experiments/t01/hydrogen.py:47
+#: apps/labs/experiments/t01/hydrogen.py:46
 msgid "Zinc granules are placed in the flask."
 msgstr "В колбу помещаются гранулы цинка."
 
-#: apps/labs/experiments/t01/hydrogen.py:50
+#: apps/labs/experiments/t01/hydrogen.py:49
 msgid "Put the flask on the bench first."
 msgstr "Сначала поставьте колбу на стол."
 
-#: apps/labs/experiments/t01/hydrogen.py:54
+#: apps/labs/experiments/t01/hydrogen.py:53
 msgid "Assemble the gas delivery system"
 msgstr "Собрать газоотводную систему"
 
-#: apps/labs/experiments/t01/hydrogen.py:55
+#: apps/labs/experiments/t01/hydrogen.py:54
 msgid "The stopper, the tube and the water-filled gas collector are attached."
 msgstr "Присоединены пробка, трубка и система собирания газа с водой."
 
-#: apps/labs/experiments/t01/hydrogen.py:58
+#: apps/labs/experiments/t01/hydrogen.py:57
 msgid "Put zinc into the flask before closing it with the stopper."
 msgstr "Положите цинк в колбу до того, как закрыть её пробкой."
 
-#: apps/labs/experiments/t01/hydrogen.py:59
+#: apps/labs/experiments/t01/hydrogen.py:58
 msgid ""
 "You need three items: the stopper with the tube, the trough with water and "
 "the cylinder."
 msgstr "Нужны три предмета: пробка с трубкой, ванночка с водой и цилиндр."
 
-#: apps/labs/experiments/t01/hydrogen.py:63
+#: apps/labs/experiments/t01/hydrogen.py:62
 msgid "Add the acid"
 msgstr "Добавить кислоту"
 
-#: apps/labs/experiments/t01/hydrogen.py:64
+#: apps/labs/experiments/t01/hydrogen.py:63
 msgid "The reaction starts and bubbles appear."
 msgstr "Реакция начинается, появляются пузырьки."
 
-#: apps/labs/experiments/t01/hydrogen.py:68
+#: apps/labs/experiments/t01/hydrogen.py:67
 msgid ""
 "Assemble the gas delivery system first: otherwise hydrogen escapes into the "
 "room, and a mixture of hydrogen with air is explosive."
@@ -1406,126 +1464,126 @@ msgstr ""
 "Сначала соберите газоотводную систему: иначе водород уйдёт в помещение, а "
 "смесь водорода с воздухом взрывоопасна."
 
-#: apps/labs/experiments/t01/hydrogen.py:75
+#: apps/labs/experiments/t01/hydrogen.py:74
 msgid "Collect the gas"
 msgstr "Собрать газ"
 
-#: apps/labs/experiments/t01/hydrogen.py:76
+#: apps/labs/experiments/t01/hydrogen.py:75
 msgid "Hydrogen displaces water from the cylinder."
 msgstr "Водород вытесняет воду из цилиндра."
 
-#: apps/labs/experiments/t01/hydrogen.py:78
+#: apps/labs/experiments/t01/hydrogen.py:77
 msgid "There is no gas to collect yet: start the reaction first."
 msgstr "Собирать пока нечего: сначала начните реакцию."
 
-#: apps/labs/experiments/t01/hydrogen.py:82
+#: apps/labs/experiments/t01/hydrogen.py:81
 msgid "Observe the result"
 msgstr "Наблюдать результат"
 
-#: apps/labs/experiments/t01/hydrogen.py:83
+#: apps/labs/experiments/t01/hydrogen.py:82
 msgid "The gas volume and the reaction equation are shown."
 msgstr "Показаны объём газа и уравнение реакции."
 
-#: apps/labs/experiments/t01/hydrogen.py:85
+#: apps/labs/experiments/t01/hydrogen.py:84
 msgid "Wait until the gas has been collected."
 msgstr "Дождитесь, пока газ соберётся."
 
-#: apps/labs/experiments/t01/hydrogen.py:87
+#: apps/labs/experiments/t01/hydrogen.py:86
 msgid "Write to the lab journal"
 msgstr "Записать в лабораторный журнал"
 
-#: apps/labs/experiments/t01/hydrogen.py:87
+#: apps/labs/experiments/t01/hydrogen.py:86
 msgid "Record your observations."
 msgstr "Запишите свои наблюдения."
 
-#: apps/labs/experiments/t01/hydrogen.py:97
+#: apps/labs/experiments/t01/hydrogen.py:96
 msgid "What did you observe in the flask after adding the acid?"
 msgstr "Что вы наблюдали в колбе после добавления кислоты?"
 
-#: apps/labs/experiments/t01/hydrogen.py:98
+#: apps/labs/experiments/t01/hydrogen.py:97
 msgid "Volume of hydrogen collected"
 msgstr "Объём собранного водорода"
 
-#: apps/labs/experiments/t01/hydrogen.py:99
+#: apps/labs/experiments/t01/hydrogen.py:98
 msgid "What happened when the gas was tested with a flame?"
 msgstr "Что произошло при проверке газа пламенем?"
 
-#: apps/labs/experiments/t01/hydrogen.py:102
+#: apps/labs/experiments/t01/hydrogen.py:101
 msgid "Why can hydrogen be collected by displacing water?"
 msgstr "Почему водород можно собирать вытеснением воды?"
 
-#: apps/labs/experiments/t01/hydrogen.py:105
+#: apps/labs/experiments/t01/hydrogen.py:104
 msgid "It is practically insoluble in water"
 msgstr "Он практически не растворяется в воде"
 
-#: apps/labs/experiments/t01/hydrogen.py:106
+#: apps/labs/experiments/t01/hydrogen.py:105
 msgid "It is heavier than water"
 msgstr "Он тяжелее воды"
 
-#: apps/labs/experiments/t01/hydrogen.py:107
+#: apps/labs/experiments/t01/hydrogen.py:106
 msgid "It reacts with water"
 msgstr "Он реагирует с водой"
 
-#: apps/labs/experiments/t01/hydrogen.py:114
+#: apps/labs/experiments/t01/hydrogen.py:113
 msgid ""
 "Which particle is the oxidising agent in the reaction Zn + 2HCl → ZnCl₂ + H₂?"
 msgstr "Какая частица является окислителем в реакции Zn + 2HCl → ZnCl₂ + H₂?"
 
-#: apps/labs/experiments/t01/hydrogen.py:116
+#: apps/labs/experiments/t01/hydrogen.py:115
 msgid "H⁺ ions of the acid"
 msgstr "Ионы H⁺ кислоты"
 
-#: apps/labs/experiments/t01/hydrogen.py:117
+#: apps/labs/experiments/t01/hydrogen.py:116
 msgid "Zinc atoms"
 msgstr "Атомы цинка"
 
-#: apps/labs/experiments/t01/hydrogen.py:118
+#: apps/labs/experiments/t01/hydrogen.py:117
 msgid "Cl⁻ ions"
 msgstr "Ионы Cl⁻"
 
-#: apps/labs/experiments/t01/hydrogen.py:119
+#: apps/labs/experiments/t01/hydrogen.py:118
 msgid "H₂ molecules"
 msgstr "Молекулы H₂"
 
-#: apps/labs/experiments/t01/hydrogen.py:124
+#: apps/labs/experiments/t01/hydrogen.py:123
 msgid ""
 "Hydrogen can also be collected by displacing air. How should the vessel be "
 "held?"
 msgstr "Водород можно собрать и вытеснением воздуха. Как нужно держать сосуд?"
 
-#: apps/labs/experiments/t01/hydrogen.py:126
+#: apps/labs/experiments/t01/hydrogen.py:125
 msgid "Upside down: hydrogen is lighter than air"
 msgstr "Вверх дном: водород легче воздуха"
 
-#: apps/labs/experiments/t01/hydrogen.py:127
+#: apps/labs/experiments/t01/hydrogen.py:126
 msgid "Mouth up: hydrogen is heavier than air"
 msgstr "Горлышком вверх: водород тяжелее воздуха"
 
-#: apps/labs/experiments/t01/hydrogen.py:128
+#: apps/labs/experiments/t01/hydrogen.py:127
 msgid "It does not matter"
 msgstr "Не имеет значения"
 
-#: apps/labs/experiments/t01/hydrogen.py:133
+#: apps/labs/experiments/t01/hydrogen.py:132
 msgid "Which metal does not displace hydrogen from hydrochloric acid?"
 msgstr "Какой металл не вытесняет водород из соляной кислоты?"
 
-#: apps/labs/experiments/t01/hydrogen.py:135
+#: apps/labs/experiments/t01/hydrogen.py:134
 msgid "Copper"
 msgstr "Медь"
 
-#: apps/labs/experiments/t01/hydrogen.py:136
+#: apps/labs/experiments/t01/hydrogen.py:135
 msgid "Zinc"
 msgstr "Цинк"
 
-#: apps/labs/experiments/t01/hydrogen.py:137
+#: apps/labs/experiments/t01/hydrogen.py:136
 msgid "Iron"
 msgstr "Железо"
 
-#: apps/labs/experiments/t01/hydrogen.py:138
+#: apps/labs/experiments/t01/hydrogen.py:137
 msgid "Magnesium"
 msgstr "Магний"
 
-#: apps/labs/experiments/t01/hydrogen.py:143
+#: apps/labs/experiments/t01/hydrogen.py:142
 msgid ""
 "How would you explain to school students why hydrogen must be tested for "
 "purity before it is ignited?"
@@ -1533,11 +1591,11 @@ msgstr ""
 "Как бы вы объяснили школьникам, почему водород перед поджиганием нужно "
 "проверять на чистоту?"
 
-#: apps/labs/experiments/t01/oxygen.py:29
+#: apps/labs/experiments/t01/oxygen.py:28
 msgid "Obtaining oxygen"
 msgstr "Получение кислорода"
 
-#: apps/labs/experiments/t01/oxygen.py:30
+#: apps/labs/experiments/t01/oxygen.py:29
 msgid ""
 "Obtain oxygen by decomposing hydrogen peroxide and compare the rate with and "
 "without a catalyst."
@@ -1545,7 +1603,7 @@ msgstr ""
 "Получить кислород разложением пероксида водорода и сравнить скорость с "
 "катализатором и без него."
 
-#: apps/labs/experiments/t01/oxygen.py:34
+#: apps/labs/experiments/t01/oxygen.py:33
 msgid ""
 "Manganese(IV) oxide is a catalyst: it speeds up the decomposition of "
 "hydrogen peroxide and remains unchanged at the end of the reaction."
@@ -1553,19 +1611,19 @@ msgstr ""
 "Оксид марганца(IV) — катализатор: он ускоряет разложение пероксида водорода "
 "и в конце реакции остаётся неизменным."
 
-#: apps/labs/experiments/t01/oxygen.py:38
+#: apps/labs/experiments/t01/oxygen.py:37
 msgid "Test tube"
 msgstr "Пробирка"
 
-#: apps/labs/experiments/t01/oxygen.py:41
+#: apps/labs/experiments/t01/oxygen.py:40
 msgid "Gas collector with water"
 msgstr "Газосборник с водой"
 
-#: apps/labs/experiments/t01/oxygen.py:44
+#: apps/labs/experiments/t01/oxygen.py:43
 msgid "Potassium permanganate"
 msgstr "Перманганат калия"
 
-#: apps/labs/experiments/t01/oxygen.py:50
+#: apps/labs/experiments/t01/oxygen.py:48
 msgid ""
 "KMnO₄ also gives oxygen, but only when heated. This experiment studies the "
 "catalytic decomposition of H₂O₂."
@@ -1573,43 +1631,43 @@ msgstr ""
 "KMnO₄ тоже даёт кислород, но только при нагревании. В этом опыте изучается "
 "каталитическое разложение H₂O₂."
 
-#: apps/labs/experiments/t01/oxygen.py:57
+#: apps/labs/experiments/t01/oxygen.py:53
 msgid "Take a test tube"
 msgstr "Взять пробирку"
 
-#: apps/labs/experiments/t01/oxygen.py:57
+#: apps/labs/experiments/t01/oxygen.py:53
 msgid "A test tube is placed on the bench."
 msgstr "На стол ставится пробирка."
 
-#: apps/labs/experiments/t01/oxygen.py:61
+#: apps/labs/experiments/t01/oxygen.py:56
 msgid "Select the H₂O₂ solution"
 msgstr "Выбрать раствор H₂O₂"
 
-#: apps/labs/experiments/t01/oxygen.py:62
+#: apps/labs/experiments/t01/oxygen.py:57
 msgid "10 mL of the solution is poured into the test tube."
 msgstr "В пробирку наливается 10 мл раствора."
 
-#: apps/labs/experiments/t01/oxygen.py:65
+#: apps/labs/experiments/t01/oxygen.py:60
 msgid "Put the test tube on the bench first."
 msgstr "Сначала поставьте пробирку на стол."
 
-#: apps/labs/experiments/t01/oxygen.py:69
+#: apps/labs/experiments/t01/oxygen.py:64
 msgid "Attach the gas collector"
 msgstr "Присоединить газосборник"
 
-#: apps/labs/experiments/t01/oxygen.py:70
+#: apps/labs/experiments/t01/oxygen.py:65
 msgid "The delivery tube leads to the collector filled with water."
 msgstr "Газоотводная трубка подведена к газосборнику с водой."
 
-#: apps/labs/experiments/t01/oxygen.py:73
+#: apps/labs/experiments/t01/oxygen.py:68
 msgid "Pour the solution into the test tube first."
 msgstr "Сначала налейте раствор в пробирку."
 
-#: apps/labs/experiments/t01/oxygen.py:77
+#: apps/labs/experiments/t01/oxygen.py:72
 msgid "Start the reaction without a catalyst"
 msgstr "Начать реакцию без катализатора"
 
-#: apps/labs/experiments/t01/oxygen.py:78
+#: apps/labs/experiments/t01/oxygen.py:73
 msgid ""
 "Only single bubbles appear: without a catalyst the decomposition is very "
 "slow."
@@ -1617,19 +1675,19 @@ msgstr ""
 "Появляются лишь единичные пузырьки: без катализатора разложение идёт очень "
 "медленно."
 
-#: apps/labs/experiments/t01/oxygen.py:80
+#: apps/labs/experiments/t01/oxygen.py:75
 msgid "Attach the gas collector first, otherwise the gas will be lost."
 msgstr "Сначала присоедините газосборник, иначе газ будет потерян."
 
-#: apps/labs/experiments/t01/oxygen.py:84
+#: apps/labs/experiments/t01/oxygen.py:79
 msgid "Add the MnO₂ catalyst"
 msgstr "Добавить катализатор MnO₂"
 
-#: apps/labs/experiments/t01/oxygen.py:85
+#: apps/labs/experiments/t01/oxygen.py:80
 msgid "Black catalyst powder is added to the solution."
 msgstr "В раствор добавлен чёрный порошок катализатора."
 
-#: apps/labs/experiments/t01/oxygen.py:89
+#: apps/labs/experiments/t01/oxygen.py:83
 msgid ""
 "First observe the reaction without a catalyst, otherwise you will have "
 "nothing to compare with."
@@ -1637,90 +1695,90 @@ msgstr ""
 "Сначала понаблюдайте реакцию без катализатора, иначе не с чем будет "
 "сравнивать."
 
-#: apps/labs/experiments/t01/oxygen.py:94
+#: apps/labs/experiments/t01/oxygen.py:87
 msgid "Start the reaction"
 msgstr "Начать реакцию"
 
-#: apps/labs/experiments/t01/oxygen.py:95
+#: apps/labs/experiments/t01/oxygen.py:88
 msgid "Gas bubbles are released intensively and oxygen collects."
 msgstr "Интенсивно выделяются пузырьки газа, собирается кислород."
 
-#: apps/labs/experiments/t01/oxygen.py:97
+#: apps/labs/experiments/t01/oxygen.py:90
 msgid "Add the catalyst first."
 msgstr "Сначала добавьте катализатор."
 
-#: apps/labs/experiments/t01/oxygen.py:101
+#: apps/labs/experiments/t01/oxygen.py:94
 msgid "Observe"
 msgstr "Наблюдение"
 
-#: apps/labs/experiments/t01/oxygen.py:102
+#: apps/labs/experiments/t01/oxygen.py:95
 msgid ""
 "A glowing splint flares up in oxygen. The rates of the two runs are compared."
 msgstr ""
 "Тлеющая лучинка вспыхивает в кислороде. Скорости двух опытов сравниваются."
 
-#: apps/labs/experiments/t01/oxygen.py:104
+#: apps/labs/experiments/t01/oxygen.py:97
 msgid "Wait until the oxygen has been collected."
 msgstr "Дождитесь, пока соберётся кислород."
 
-#: apps/labs/experiments/t01/oxygen.py:106
+#: apps/labs/experiments/t01/oxygen.py:99
 msgid "Record the result"
 msgstr "Зафиксировать результат"
 
-#: apps/labs/experiments/t01/oxygen.py:106
+#: apps/labs/experiments/t01/oxygen.py:99
 msgid "Fill in the observation journal."
 msgstr "Заполните журнал наблюдений."
 
-#: apps/labs/experiments/t01/oxygen.py:116
+#: apps/labs/experiments/t01/oxygen.py:109
 msgid "Average rate without a catalyst"
 msgstr "Средняя скорость без катализатора"
 
-#: apps/labs/experiments/t01/oxygen.py:116
-#: apps/labs/experiments/t01/oxygen.py:117 apps/labs/views.py:64
+#: apps/labs/experiments/t01/oxygen.py:109
+#: apps/labs/experiments/t01/oxygen.py:110 apps/labs/views.py:64
 msgid "mL/min"
 msgstr "мл/мин"
 
-#: apps/labs/experiments/t01/oxygen.py:117
+#: apps/labs/experiments/t01/oxygen.py:110
 msgid "Average rate with MnO₂"
 msgstr "Средняя скорость с MnO₂"
 
-#: apps/labs/experiments/t01/oxygen.py:118
+#: apps/labs/experiments/t01/oxygen.py:111
 msgid "What happened to the glowing splint?"
 msgstr "Что произошло с тлеющей лучинкой?"
 
-#: apps/labs/experiments/t01/oxygen.py:121
+#: apps/labs/experiments/t01/oxygen.py:114
 msgid "What is the role of MnO₂?"
 msgstr "Какова роль MnO₂?"
 
-#: apps/labs/experiments/t01/oxygen.py:124
+#: apps/labs/experiments/t01/oxygen.py:117
 msgid "A catalyst: speeds up the reaction and is not consumed"
 msgstr "Катализатор: ускоряет реакцию и не расходуется"
 
-#: apps/labs/experiments/t01/oxygen.py:125
+#: apps/labs/experiments/t01/oxygen.py:118
 msgid "A reactant: it is consumed"
 msgstr "Реагент: он расходуется"
 
-#: apps/labs/experiments/t01/oxygen.py:126
+#: apps/labs/experiments/t01/oxygen.py:119
 msgid "A product of the reaction"
 msgstr "Продукт реакции"
 
-#: apps/labs/experiments/t01/oxygen.py:133
+#: apps/labs/experiments/t01/oxygen.py:126
 msgid "Is MnO₂ consumed in the reaction?"
 msgstr "Расходуется ли MnO₂ в реакции?"
 
-#: apps/labs/experiments/t01/oxygen.py:135
+#: apps/labs/experiments/t01/oxygen.py:128
 msgid "No, its mass stays the same at the end"
 msgstr "Нет, в конце его масса остаётся прежней"
 
-#: apps/labs/experiments/t01/oxygen.py:136
+#: apps/labs/experiments/t01/oxygen.py:129
 msgid "Yes, it is completely consumed"
 msgstr "Да, расходуется полностью"
 
-#: apps/labs/experiments/t01/oxygen.py:137
+#: apps/labs/experiments/t01/oxygen.py:130
 msgid "Partly"
 msgstr "Частично"
 
-#: apps/labs/experiments/t01/oxygen.py:142
+#: apps/labs/experiments/t01/oxygen.py:135
 msgid ""
 "What happens to the total volume of O₂ if more MnO₂ is added to the same "
 "amount of H₂O₂?"
@@ -1728,35 +1786,35 @@ msgstr ""
 "Что произойдёт с общим объёмом O₂, если к тому же количеству H₂O₂ добавить "
 "больше MnO₂?"
 
-#: apps/labs/experiments/t01/oxygen.py:144
+#: apps/labs/experiments/t01/oxygen.py:137
 msgid "It stays the same; only the rate changes"
 msgstr "Не изменится; меняется только скорость"
 
-#: apps/labs/experiments/t01/oxygen.py:145
+#: apps/labs/experiments/t01/oxygen.py:138
 msgid "It increases"
 msgstr "Увеличится"
 
-#: apps/labs/experiments/t01/oxygen.py:146
+#: apps/labs/experiments/t01/oxygen.py:139
 msgid "It decreases"
 msgstr "Уменьшится"
 
-#: apps/labs/experiments/t01/oxygen.py:151
+#: apps/labs/experiments/t01/oxygen.py:144
 msgid "How is oxygen detected?"
 msgstr "Как обнаруживают кислород?"
 
-#: apps/labs/experiments/t01/oxygen.py:153
+#: apps/labs/experiments/t01/oxygen.py:146
 msgid "A glowing splint flares up"
 msgstr "Тлеющая лучинка вспыхивает"
 
-#: apps/labs/experiments/t01/oxygen.py:154
+#: apps/labs/experiments/t01/oxygen.py:147
 msgid "A burning splint goes out with a pop"
 msgstr "Горящая лучинка гаснет с хлопком"
 
-#: apps/labs/experiments/t01/oxygen.py:155
+#: apps/labs/experiments/t01/oxygen.py:148
 msgid "Limewater turns cloudy"
 msgstr "Известковая вода мутнеет"
 
-#: apps/labs/experiments/t01/oxygen.py:159
+#: apps/labs/experiments/t01/oxygen.py:151
 msgid ""
 "Suggest a way to show students that the catalyst is not consumed in the "
 "reaction."
@@ -1764,11 +1822,11 @@ msgstr ""
 "Предложите способ показать ученикам, что катализатор не расходуется в "
 "реакции."
 
-#: apps/labs/experiments/t01/rate.py:15
+#: apps/labs/experiments/t01/rate.py:14
 msgid "Rate of hydrogen peroxide decomposition"
 msgstr "Скорость разложения пероксида водорода"
 
-#: apps/labs/experiments/t01/rate.py:16
+#: apps/labs/experiments/t01/rate.py:15
 msgid ""
 "Compare how fast oxygen is released in two test tubes: without a catalyst "
 "(A) and with MnO₂ (B)."
@@ -1776,7 +1834,7 @@ msgstr ""
 "Сравнить скорость выделения кислорода в двух пробирках: без катализатора (A) "
 "и с MnO₂ (B)."
 
-#: apps/labs/experiments/t01/rate.py:20
+#: apps/labs/experiments/t01/rate.py:19
 msgid ""
 "A catalyst changes the rate of the reaction, but it does not increase the "
 "theoretical total amount of oxygen formed when the same initial amount of "
@@ -1786,19 +1844,19 @@ msgstr ""
 "количество кислорода, образующегося при полном разложении одинакового "
 "исходного количества пероксида водорода."
 
-#: apps/labs/experiments/t01/rate.py:24
+#: apps/labs/experiments/t01/rate.py:23
 msgid "Test tube A"
 msgstr "Пробирка A"
 
-#: apps/labs/experiments/t01/rate.py:25
+#: apps/labs/experiments/t01/rate.py:24
 msgid "Test tube B"
 msgstr "Пробирка B"
 
-#: apps/labs/experiments/t01/rate.py:26
+#: apps/labs/experiments/t01/rate.py:25
 msgid "Gas syringes"
 msgstr "Газовые шприцы"
 
-#: apps/labs/experiments/t01/rate.py:36
+#: apps/labs/experiments/t01/rate.py:34
 msgid ""
 "Heating would also speed up the reaction and mix two factors. Change only "
 "one variable: the catalyst."
@@ -1806,105 +1864,105 @@ msgstr ""
 "Нагревание тоже ускорит реакцию, и два фактора смешаются. Меняйте только "
 "одну переменную — катализатор."
 
-#: apps/labs/experiments/t01/rate.py:43
+#: apps/labs/experiments/t01/rate.py:40
 msgid "Select two test tubes"
 msgstr "Выбрать две пробирки"
 
-#: apps/labs/experiments/t01/rate.py:44
+#: apps/labs/experiments/t01/rate.py:41
 msgid "Tubes A and B are placed and connected to gas syringes."
 msgstr "Пробирки A и B установлены и подключены к газовым шприцам."
 
-#: apps/labs/experiments/t01/rate.py:47
+#: apps/labs/experiments/t01/rate.py:44
 msgid "You need tube A, tube B and the gas syringes."
 msgstr "Нужны пробирка A, пробирка B и газовые шприцы."
 
-#: apps/labs/experiments/t01/rate.py:51
+#: apps/labs/experiments/t01/rate.py:48
 msgid "Add H₂O₂"
 msgstr "Добавить H₂O₂"
 
-#: apps/labs/experiments/t01/rate.py:52
+#: apps/labs/experiments/t01/rate.py:49
 msgid "The same initial amount (5 mL) is poured into both tubes."
 msgstr "В обе пробирки наливается одинаковое исходное количество (5 мл)."
 
-#: apps/labs/experiments/t01/rate.py:55
+#: apps/labs/experiments/t01/rate.py:52
 msgid "Place both test tubes first."
 msgstr "Сначала установите обе пробирки."
 
-#: apps/labs/experiments/t01/rate.py:59
+#: apps/labs/experiments/t01/rate.py:56
 msgid "Add MnO₂"
 msgstr "Добавить MnO₂"
 
-#: apps/labs/experiments/t01/rate.py:60
+#: apps/labs/experiments/t01/rate.py:57
 msgid "The catalyst is added to tube B only."
 msgstr "Катализатор добавлен только в пробирку B."
 
-#: apps/labs/experiments/t01/rate.py:63
+#: apps/labs/experiments/t01/rate.py:60
 msgid "Pour H₂O₂ into both tubes first."
 msgstr "Сначала налейте H₂O₂ в обе пробирки."
 
-#: apps/labs/experiments/t01/rate.py:67
+#: apps/labs/experiments/t01/rate.py:64
 msgid "Start the timer"
 msgstr "Запустить таймер"
 
-#: apps/labs/experiments/t01/rate.py:68
+#: apps/labs/experiments/t01/rate.py:65
 msgid "The comparison of the two reactions begins."
 msgstr "Начинается сравнение двух реакций."
 
-#: apps/labs/experiments/t01/rate.py:70
+#: apps/labs/experiments/t01/rate.py:67
 msgid "Prepare both tubes first."
 msgstr "Сначала подготовьте обе пробирки."
 
-#: apps/labs/experiments/t01/rate.py:74
+#: apps/labs/experiments/t01/rate.py:71
 msgid "Open the graph"
 msgstr "Открыть график"
 
-#: apps/labs/experiments/t01/rate.py:75
+#: apps/labs/experiments/t01/rate.py:72
 msgid "The volume of O₂ released is plotted against time."
 msgstr "Построена зависимость объёма выделившегося O₂ от времени."
 
-#: apps/labs/experiments/t01/rate.py:77
+#: apps/labs/experiments/t01/rate.py:74
 msgid "Start the timer first."
 msgstr "Сначала запустите таймер."
 
-#: apps/labs/experiments/t01/rate.py:81
+#: apps/labs/experiments/t01/rate.py:78
 msgid "Write a conclusion"
 msgstr "Записать вывод"
 
-#: apps/labs/experiments/t01/rate.py:82
+#: apps/labs/experiments/t01/rate.py:79
 msgid "Explain the effect of the catalyst on the reaction rate."
 msgstr "Объясните влияние катализатора на скорость реакции."
 
-#: apps/labs/experiments/t01/rate.py:94
+#: apps/labs/experiments/t01/rate.py:91
 msgid "V(O₂) in tube A after 2 min"
 msgstr "V(O₂) в пробирке A через 2 мин"
 
-#: apps/labs/experiments/t01/rate.py:95
+#: apps/labs/experiments/t01/rate.py:92
 msgid "V(O₂) in tube B after 2 min"
 msgstr "V(O₂) в пробирке B через 2 мин"
 
-#: apps/labs/experiments/t01/rate.py:98
+#: apps/labs/experiments/t01/rate.py:95
 msgid "Conclusion"
 msgstr "Вывод"
 
-#: apps/labs/experiments/t01/rate.py:103
+#: apps/labs/experiments/t01/rate.py:98
 msgid ""
 "The catalyst speeds up the reaction but does not change the total volume of "
 "O₂"
 msgstr "Катализатор ускоряет реакцию, но не меняет общий объём O₂"
 
-#: apps/labs/experiments/t01/rate.py:106
+#: apps/labs/experiments/t01/rate.py:99
 msgid "The catalyst increases the amount of O₂"
 msgstr "Катализатор увеличивает количество O₂"
 
-#: apps/labs/experiments/t01/rate.py:107
+#: apps/labs/experiments/t01/rate.py:100
 msgid "The catalyst slows the reaction down"
 msgstr "Катализатор замедляет реакцию"
 
-#: apps/labs/experiments/t01/rate.py:110
+#: apps/labs/experiments/t01/rate.py:103
 msgid "Explain the effect of the catalyst in your own words"
 msgstr "Объясните действие катализатора своими словами"
 
-#: apps/labs/experiments/t01/rate.py:115
+#: apps/labs/experiments/t01/rate.py:108
 msgid ""
 "How much oxygen will be formed in each tube when H₂O₂ decomposes completely "
 "(5 mL, 3%)?"
@@ -1912,35 +1970,35 @@ msgstr ""
 "Сколько кислорода образуется в каждой пробирке при полном разложении H₂O₂ (5 "
 "мл, 3%)?"
 
-#: apps/labs/experiments/t01/rate.py:117
+#: apps/labs/experiments/t01/rate.py:110
 msgid "About 49 mL in both tubes"
 msgstr "Около 49 мл в обеих пробирках"
 
-#: apps/labs/experiments/t01/rate.py:118
+#: apps/labs/experiments/t01/rate.py:111
 msgid "More in tube B"
 msgstr "Больше в пробирке B"
 
-#: apps/labs/experiments/t01/rate.py:119
+#: apps/labs/experiments/t01/rate.py:112
 msgid "More in tube A"
 msgstr "Больше в пробирке A"
 
-#: apps/labs/experiments/t01/rate.py:124
+#: apps/labs/experiments/t01/rate.py:117
 msgid "Which variable was changed in this experiment?"
 msgstr "Какая переменная менялась в этом опыте?"
 
-#: apps/labs/experiments/t01/rate.py:126
+#: apps/labs/experiments/t01/rate.py:119
 msgid "Only the presence of the catalyst"
 msgstr "Только наличие катализатора"
 
-#: apps/labs/experiments/t01/rate.py:127
+#: apps/labs/experiments/t01/rate.py:120
 msgid "The temperature"
 msgstr "Температура"
 
-#: apps/labs/experiments/t01/rate.py:128
+#: apps/labs/experiments/t01/rate.py:121
 msgid "The concentration of H₂O₂"
 msgstr "Концентрация H₂O₂"
 
-#: apps/labs/experiments/t01/rate.py:131
+#: apps/labs/experiments/t01/rate.py:124
 msgid ""
 "Using the idea of activation energy, explain why MnO₂ speeds up the "
 "decomposition."
@@ -1949,9 +2007,9 @@ msgstr ""
 "разложение."
 
 #: apps/labs/models/attempt.py:10 apps/progress/models/progress.py:17
-#: apps/progress/models/progress.py:72 apps/student/learning.py:97
-#: ui/templates/components/stage_stepper.html:23
-#: ui/templates/student/topic.html:30
+#: apps/progress/models/progress.py:72 apps/student/cabinet.py:91
+#: apps/student/learning.py:97 ui/templates/components/stage_stepper.html:23
+#: ui/templates/student/results.html:80 ui/templates/student/topic.html:30
 msgid "In progress"
 msgstr "В процессе"
 
@@ -1967,7 +2025,9 @@ msgstr "Анализ отправлен"
 msgid ""
 "Empty for a teacher's preview and for attempts made before the course "
 "structure"
-msgstr "Пусто для предпросмотра преподавателя и для попыток до появления структуры курса"
+msgstr ""
+"Пусто для предпросмотра преподавателя и для попыток до появления структуры "
+"курса"
 
 #: apps/labs/models/attempt.py:35
 msgid "experiment"
@@ -2034,7 +2094,9 @@ msgstr "балл, %"
 msgid ""
 "Process, journal and analysis by the lab's scoring formula; set when the "
 "analysis is sent"
-msgstr "Процесс, журнал и анализ по формуле оценивания лаборатории; ставится при отправке анализа"
+msgstr ""
+"Процесс, журнал и анализ по формуле оценивания лаборатории; ставится при "
+"отправке анализа"
 
 #: apps/labs/models/attempt.py:70
 msgid "lab attempt"
@@ -2668,7 +2730,7 @@ msgid "Cannot read the chemistry: %(error)s"
 msgstr "Не удалось прочитать химическую запись: %(error)s"
 
 #: apps/practice/checkers.py:132 apps/practice/checkers.py:193
-#: apps/practice/services/submissions.py:64
+#: apps/practice/services/submissions.py:66
 msgid "The answer is empty."
 msgstr "Ответ пустой."
 
@@ -3027,11 +3089,11 @@ msgstr "рубрика"
 msgid "criterion"
 msgstr "критерий"
 
-#: apps/practice/services/submissions.py:48
+#: apps/practice/services/submissions.py:50
 msgid "Your previous answer is still being graded."
 msgstr "Ваш предыдущий ответ ещё оценивается."
 
-#: apps/practice/services/submissions.py:50
+#: apps/practice/services/submissions.py:52
 #: ui/templates/student/stages/practice.html:75
 msgid "You have used all attempts for this work."
 msgstr "Вы использовали все попытки этой работы."
@@ -3074,8 +3136,9 @@ msgid "Unsatisfactory"
 msgstr "Неудовлетворительно"
 
 #: apps/progress/models/progress.py:15 apps/progress/models/progress.py:70
-#: apps/student/learning.py:95 ui/templates/components/stage_stepper.html:22
-#: ui/templates/student/course_map.html:44
+#: apps/student/cabinet.py:79 apps/student/learning.py:95
+#: ui/templates/components/stage_stepper.html:22
+#: ui/templates/student/course_map.html:44 ui/templates/student/results.html:80
 #: ui/templates/student/stages/lab.html:23 ui/templates/student/topic.html:30
 msgid "Locked"
 msgstr "Закрыто"
@@ -3086,15 +3149,15 @@ msgstr "Закрыто"
 msgid "Available"
 msgstr "Доступно"
 
-#: apps/progress/models/progress.py:18
-#: ui/templates/components/stage_stepper.html:19
-#: ui/templates/student/topic.html:30
+#: apps/progress/models/progress.py:18 apps/student/cabinet.py:81
+#: apps/student/cabinet.py:209 ui/templates/components/stage_stepper.html:19
+#: ui/templates/student/results.html:80 ui/templates/student/topic.html:30
 msgid "Awaiting check"
 msgstr "Ожидает проверки"
 
 #: apps/progress/models/progress.py:19 apps/progress/models/progress.py:143
-#: ui/templates/components/stage_stepper.html:21
-#: ui/templates/student/topic.html:30
+#: apps/student/cabinet.py:77 ui/templates/components/stage_stepper.html:21
+#: ui/templates/student/results.html:80 ui/templates/student/topic.html:30
 msgid "Passed"
 msgstr "Пройдено"
 
@@ -3102,7 +3165,7 @@ msgstr "Пройдено"
 msgid "needs the teacher's attention"
 msgstr "требует внимания преподавателя"
 
-#: apps/progress/models/progress.py:30
+#: apps/progress/models/progress.py:30 ui/templates/student/results.html:82
 msgid "Passed only because the attempts ran out"
 msgstr "Засчитан только потому, что закончились попытки"
 
@@ -3227,7 +3290,7 @@ msgstr "Открыто преподавателем"
 msgid "Topic completed"
 msgstr "Тема завершена"
 
-#: apps/progress/models/progress.py:150
+#: apps/progress/models/progress.py:150 ui/templates/student/dashboard.html:51
 msgid "Course completed"
 msgstr "Курс завершён"
 
@@ -3263,42 +3326,128 @@ msgstr "Исследование"
 msgid "Student cabinet"
 msgstr "Кабинет студента"
 
-#: apps/student/learning.py:93
+#: apps/student/cabinet.py:53
+#, python-format
+msgid "%(h)s h %(m)s min"
+msgstr "%(h)s ч %(m)s мин"
+
+#: apps/student/cabinet.py:54
+#, python-format
+msgid "%(m)s min"
+msgstr "%(m)s мин"
+
+#: apps/student/cabinet.py:76 apps/student/learning.py:93
 #, python-format
 msgid "Passed · %(score)s%%"
 msgstr "Пройдено · %(score)s%%"
 
-#: apps/student/views.py:264 ui/templates/student/stages/practice.html:71
+#: apps/student/cabinet.py:86 apps/student/cabinet.py:249
+#, python-format
+msgid "%(a)s / %(b)s experiment"
+msgid_plural "%(a)s / %(b)s experiments"
+msgstr[0] "%(a)s / %(b)s опыт"
+msgstr[1] "%(a)s / %(b)s опыта"
+msgstr[2] "%(a)s / %(b)s опытов"
+msgstr[3] "%(a)s / %(b)s опытов"
+
+#: apps/student/cabinet.py:92 ui/templates/student/results.html:80
+#: ui/templates/student/topic.html:36
+msgid "Open"
+msgstr "Открыть"
+
+#: apps/student/cabinet.py:99
+msgid "Reading the material"
+msgstr "Чтение материала"
+
+#: apps/student/cabinet.py:99
+msgid "Watching the video"
+msgstr "Просмотр видео"
+
+#: apps/student/cabinet.py:101
+#, python-format
+msgid "Checkpoint quiz (%(n)s question)"
+msgid_plural "Checkpoint quiz (%(n)s questions)"
+msgstr[0] "Контрольный тест (%(n)s вопрос)"
+msgstr[1] "Контрольный тест (%(n)s вопроса)"
+msgstr[2] "Контрольный тест (%(n)s вопросов)"
+msgstr[3] "Контрольный тест (%(n)s вопросов)"
+
+#: apps/student/cabinet.py:106 apps/student/cabinet.py:115
+msgid "Automatic"
+msgstr "Автоматически"
+
+#: apps/student/cabinet.py:108
+#, python-format
+msgid "Automatic: process %(p)s%% · journal %(j)s%% · analysis %(a)s%%"
+msgstr "Автоматически: процесс %(p)s%% · журнал %(j)s%% · анализ %(a)s%%"
+
+#: apps/student/cabinet.py:114
+msgid "Automatic checks and AI, confirmed by the teacher"
+msgstr "Автопроверка и ИИ, подтверждает преподаватель"
+
+#: apps/student/cabinet.py:175
+#, python-format
+msgid "Quiz · attempt %(n)s"
+msgstr "Тест · попытка %(n)s"
+
+#: apps/student/cabinet.py:184
+msgid "Lab"
+msgstr "Лаборатория"
+
+#: apps/student/cabinet.py:186
+#, python-format
+msgid "%(n)s safety warning"
+msgid_plural "%(n)s safety warnings"
+msgstr[0] "%(n)s предупреждение о безопасности"
+msgstr[1] "%(n)s предупреждения о безопасности"
+msgstr[2] "%(n)s предупреждений о безопасности"
+msgstr[3] "%(n)s предупреждений о безопасности"
+
+#: apps/student/cabinet.py:205
+#, python-format
+msgid "Practice · attempt %(n)s"
+msgstr "Практика · попытка %(n)s"
+
+#: apps/student/views.py:104
+msgid "Profile saved."
+msgstr "Профиль сохранён."
+
+#: apps/student/views.py:109
+msgid "Password changed."
+msgstr "Пароль изменён."
+
+#: apps/student/views.py:344 ui/templates/student/stages/practice.html:71
 msgid "Preview: answers are not saved."
 msgstr "Предпросмотр: ответы не сохраняются."
 
-#: apps/student/views.py:360
+#: apps/student/views.py:440
 msgid ""
 "Experiments open one after another: finish the previous one and send its "
 "analysis."
-msgstr "Опыты открываются по очереди: завершите предыдущий и отправьте его анализ."
+msgstr ""
+"Опыты открываются по очереди: завершите предыдущий и отправьте его анализ."
 
-#: apps/student/views.py:435
+#: apps/student/views.py:515
 msgid "Finish the material first — the test opens after it."
 msgstr "Сначала завершите материал — тест откроется после него."
 
-#: apps/student/views.py:514 ui/templates/student/stage.html:19
+#: apps/student/views.py:594 ui/templates/student/stage.html:19
 msgid "Go to the next stage"
 msgstr "Перейти к следующему этапу"
 
-#: apps/student/views.py:516
+#: apps/student/views.py:596
 msgid "Back to the stage"
 msgstr "Вернуться к этапу"
 
-#: config/settings/base.py:143
+#: config/settings/base.py:144
 msgid "Kazakh"
 msgstr "Казахский"
 
-#: config/settings/base.py:144
+#: config/settings/base.py:145
 msgid "Russian"
 msgstr "Русский"
 
-#: config/settings/base.py:145
+#: config/settings/base.py:146
 msgid "English"
 msgstr "Английский"
 
@@ -3479,11 +3628,6 @@ msgstr "Проверить"
 msgid "Share of points"
 msgstr "Доля баллов"
 
-#: ui/templates/admin/practice/practiceitem/try.html:21
-#: ui/templates/admin/practice/practiceitem/try.html:30
-msgid "Feedback"
-msgstr "Обратная связь"
-
 #: ui/templates/admin/practice/practiceitem/try.html:28
 msgid "Confidence"
 msgstr "Уверенность"
@@ -3662,7 +3806,51 @@ msgstr ""
 msgid "Create an account"
 msgstr "Зарегистрироваться"
 
-#: ui/templates/labs/run.html:22
+#: ui/templates/feedback/notifications.html:3
+#: ui/templates/feedback/notifications.html:7
+#: ui/templates/layouts/cabinet.html:16 ui/templates/layouts/cabinet.html:44
+msgid "Notifications"
+msgstr "Уведомления"
+
+#: ui/templates/feedback/notifications.html:8
+#: ui/templates/feedback/partials/badge.html:6
+#, python-format
+msgid "%(n)s unread"
+msgid_plural "%(n)s unread"
+msgstr[0] "%(n)s непрочитанное"
+msgstr[1] "%(n)s непрочитанных"
+msgstr[2] "%(n)s непрочитанных"
+msgstr[3] "%(n)s непрочитанных"
+
+#: ui/templates/feedback/notifications.html:12
+msgid "Mark all as read"
+msgstr "Отметить все как прочитанные"
+
+#: ui/templates/feedback/notifications.html:25
+msgid "Pages"
+msgstr "Страницы"
+
+#: ui/templates/feedback/notifications.html:26
+msgid "Newer"
+msgstr "Новее"
+
+#: ui/templates/feedback/notifications.html:28
+msgid "Older"
+msgstr "Старее"
+
+#: ui/templates/feedback/notifications.html:32
+msgid "No notifications yet"
+msgstr "Уведомлений пока нет"
+
+#: ui/templates/feedback/notifications.html:32
+msgid "Grades, returned works and opened stages will appear here."
+msgstr "Здесь появятся оценки, возвращённые работы и открытые этапы."
+
+#: ui/templates/feedback/partials/item.html:13
+msgid "unread"
+msgstr "непрочитанное"
+
+#: ui/templates/labs/run.html:22 ui/templates/student/results.html:44
 #, python-format
 msgid "Topic %(n)s"
 msgstr "Тема %(n)s"
@@ -3693,23 +3881,28 @@ msgstr ""
 msgid "Skip to content"
 msgstr "Перейти к содержимому"
 
-#: ui/templates/layouts/cabinet.html:17
+#: ui/templates/layouts/cabinet.html:22
 msgid "Menu"
 msgstr "Меню"
 
-#: ui/templates/layouts/cabinet.html:22
+#: ui/templates/layouts/cabinet.html:27
 msgid "Main menu"
 msgstr "Главное меню"
 
-#: ui/templates/layouts/cabinet.html:31
+#: ui/templates/layouts/cabinet.html:36
 msgid "Close menu"
 msgstr "Закрыть меню"
 
-#: ui/templates/layouts/cabinet.html:48
+#: ui/templates/layouts/cabinet.html:52 ui/templates/student/profile.html:3
+msgid "Profile"
+msgstr "Профиль"
+
+#: ui/templates/layouts/cabinet.html:61
 msgid "Log out"
 msgstr "Выйти"
 
-#: ui/templates/layouts/learn.html:13 ui/templates/student/courses.html:24
+#: ui/templates/layouts/learn.html:13 ui/templates/student/certificates.html:32
+#: ui/templates/student/courses.html:24 ui/templates/student/dashboard.html:10
 #: ui/templates/student/locked.html:18
 msgid "Course map"
 msgstr "Карта курса"
@@ -3737,19 +3930,23 @@ msgid "My cabinet"
 msgstr "Личный кабинет"
 
 #: ui/templates/layouts/student.html:8 ui/templates/layouts/teacher.html:8
+#: ui/templates/student/dashboard.html:3
 msgid "Home"
 msgstr "Главная"
 
 #: ui/templates/layouts/student.html:9 ui/templates/student/courses.html:3
-#: ui/templates/student/courses.html:6
+#: ui/templates/student/courses.html:6 ui/templates/student/dashboard.html:16
+#: ui/templates/student/results.html:13
 msgid "My courses"
 msgstr "Мои курсы"
 
-#: ui/templates/layouts/student.html:10
+#: ui/templates/layouts/student.html:10 ui/templates/student/dashboard.html:51
 msgid "Grades"
 msgstr "Оценки"
 
 #: ui/templates/layouts/student.html:11
+#: ui/templates/student/certificates.html:3
+#: ui/templates/student/certificates.html:6
 msgid "Certificates"
 msgstr "Сертификаты"
 
@@ -3769,10 +3966,6 @@ msgstr "Группы и студенты"
 #: ui/templates/layouts/teacher.html:11 ui/templates/student/courses.html:11
 msgid "Course"
 msgstr "Курс"
-
-#: ui/templates/partials/lang_switch.html:2
-msgid "Interface language"
-msgstr "Язык интерфейса"
 
 #: ui/templates/research/dashboard.html:8
 #, python-format
@@ -3837,13 +4030,61 @@ msgstr "Завершённых попыток пока нет."
 msgid "Latest attempts"
 msgstr "Последние попытки"
 
-#: ui/templates/research/dashboard.html:82
+#: ui/templates/research/dashboard.html:82 ui/templates/student/results.html:63
 msgid "Status"
 msgstr "Статус"
 
 #: ui/templates/research/dashboard.html:84
 msgid "Errors"
 msgstr "Ошибки"
+
+#: ui/templates/student/certificates.html:7
+msgid ""
+"A certificate is issued automatically when the course is completed with a "
+"passing score."
+msgstr ""
+"Сертификат выдаётся автоматически, когда курс завершён с проходным баллом."
+
+#: ui/templates/student/certificates.html:17
+#, python-format
+msgid ""
+"Course completed: %(s)s (%(g)s). The certificate is being prepared — the PDF "
+"will appear here."
+msgstr ""
+"Курс завершён: %(s)s (%(g)s). Сертификат готовится — PDF появится здесь."
+
+#: ui/templates/student/certificates.html:20
+#: ui/templates/student/courses.html:17
+#, python-format
+msgid "%(a)s / %(b)s topics"
+msgstr "%(a)s / %(b)s тем"
+
+#: ui/templates/student/certificates.html:21
+#: ui/templates/student/dashboard.html:66
+msgid "Completed topics"
+msgstr "Завершённые темы"
+
+#: ui/templates/student/certificates.html:24
+#, python-format
+msgid "Current score %(c)s; at least %(p)s is needed for the certificate."
+msgstr "Текущий балл %(c)s; для сертификата нужно не менее %(p)s."
+
+#: ui/templates/student/certificates.html:25
+#, python-format
+msgid "Complete every topic with a course score of at least %(p)s."
+msgstr "Завершите все темы с баллом по курсу не ниже %(p)s."
+
+#: ui/templates/student/certificates.html:30
+msgid "Issued soon"
+msgstr "Скоро будет выдан"
+
+#: ui/templates/student/certificates.html:36
+msgid "No certificates yet"
+msgstr "Сертификатов пока нет"
+
+#: ui/templates/student/certificates.html:36
+msgid "Complete a course and its certificate will appear here."
+msgstr "Завершите курс — его сертификат появится здесь."
 
 #: ui/templates/student/course_map.html:9
 #, python-format
@@ -3864,6 +4105,7 @@ msgid "Stages open in order: finish one to open the next."
 msgstr "Этапы открываются по порядку: завершите один, чтобы открыть следующий."
 
 #: ui/templates/student/course_map.html:18
+#: ui/templates/student/dashboard.html:86
 #, python-format
 msgid "%(a)s / %(b)s stages"
 msgstr "%(a)s / %(b)s этапов"
@@ -3881,6 +4123,7 @@ msgid "Continue learning"
 msgstr "Продолжить обучение"
 
 #: ui/templates/student/course_map.html:31
+#: ui/templates/student/dashboard.html:84 ui/templates/student/results.html:30
 #, python-format
 msgid "Module %(n)s"
 msgstr "Модуль %(n)s"
@@ -3899,17 +4142,18 @@ msgstr[1] "%(n)s этапа"
 msgstr[2] "%(n)s этапов"
 msgstr[3] "%(n)s этапов"
 
-#: ui/templates/student/course_map.html:59
+#: ui/templates/student/course_map.html:59 ui/templates/student/results.html:47
 #, python-format
 msgid "Completed · %(s)s"
 msgstr "Завершено · %(s)s"
 
-#: ui/templates/student/course_map.html:62
+#: ui/templates/student/course_map.html:62 ui/templates/student/results.html:50
 #, python-format
 msgid "In progress · %(a)s / %(b)s"
 msgstr "В процессе · %(a)s / %(b)s"
 
 #: ui/templates/student/course_map.html:72
+#: ui/templates/student/dashboard.html:97
 msgid "The course has no published topics yet"
 msgstr "В курсе пока нет опубликованных тем"
 
@@ -3929,11 +4173,6 @@ msgstr ""
 #: ui/templates/student/courses.html:11
 msgid "preview"
 msgstr "предпросмотр"
-
-#: ui/templates/student/courses.html:17
-#, python-format
-msgid "%(a)s / %(b)s topics"
-msgstr "%(a)s / %(b)s тем"
 
 #: ui/templates/student/courses.html:23 ui/templates/student/topic.html:12
 #: ui/templates/student/topic.html:36
@@ -3955,6 +4194,141 @@ msgstr "Курсы, открытые для записи"
 #: ui/templates/student/courses.html:44
 msgid "Enrol"
 msgstr "Записаться"
+
+#: ui/templates/student/dashboard.html:7
+#, python-format
+msgid "Hello, %(name)s"
+msgstr "Здравствуйте, %(name)s"
+
+#: ui/templates/student/dashboard.html:16
+msgid "You are not enrolled in a course yet"
+msgstr "Вы ещё не записаны ни на один курс"
+
+#: ui/templates/student/dashboard.html:16
+msgid "Choose a course in the catalogue or ask your teacher to add your group."
+msgstr ""
+"Выберите курс в каталоге или попросите преподавателя добавить вашу группу."
+
+#: ui/templates/student/dashboard.html:26
+#, python-format
+msgid "Continue learning · Module %(m)s · Topic %(t)s"
+msgstr "Продолжить обучение · Модуль %(m)s · Тема %(t)s"
+
+#: ui/templates/student/dashboard.html:31
+#, python-format
+msgid "Continue: %(k)s"
+msgstr "Продолжить: %(k)s"
+
+#: ui/templates/student/dashboard.html:51
+msgid "Every topic is done. Your grades are in the gradebook."
+msgstr "Все темы пройдены. Оценки — в зачётной книжке."
+
+#: ui/templates/student/dashboard.html:54
+msgid "Waiting for the next step"
+msgstr "Ожидание следующего шага"
+
+#: ui/templates/student/dashboard.html:54
+msgid "Your works are being checked or the next topic is not published yet."
+msgstr "Ваши работы проверяются или следующая тема ещё не опубликована."
+
+#: ui/templates/student/dashboard.html:58
+msgid "Key figures"
+msgstr "Показатели"
+
+#: ui/templates/student/dashboard.html:59 ui/templates/student/results.html:19
+msgid "Current course score"
+msgstr "Текущий балл по курсу"
+
+#: ui/templates/student/dashboard.html:61
+#, python-format
+msgid "%(g)s · by completed topics"
+msgstr "%(g)s · по завершённым темам"
+
+#: ui/templates/student/dashboard.html:64 ui/templates/student/results.html:25
+msgid "Shown after the first topic is completed"
+msgstr "Появится после завершения первой темы"
+
+#: ui/templates/student/dashboard.html:67
+#: ui/templates/student/dashboard.html:71
+#, python-format
+msgid "%(a)s / %(b)s"
+msgstr "%(a)s / %(b)s"
+
+#: ui/templates/student/dashboard.html:68
+#, python-format
+msgid "Topic %(t)s: %(a)s / %(b)s stages"
+msgstr "Тема %(t)s: %(a)s / %(b)s этапов"
+
+#: ui/templates/student/dashboard.html:70
+msgid "Lab experiments"
+msgstr "Лабораторные опыты"
+
+#: ui/templates/student/dashboard.html:72
+msgid "With the analysis sent"
+msgstr "С отправленным анализом"
+
+#: ui/templates/student/dashboard.html:74
+msgid "Time spent learning"
+msgstr "Время обучения"
+
+#: ui/templates/student/dashboard.html:74
+msgid "In total"
+msgstr "Всего"
+
+#: ui/templates/student/dashboard.html:80
+msgid "Progress by module"
+msgstr "Прогресс по модулям"
+
+#: ui/templates/student/dashboard.html:91
+#, python-format
+msgid "Opens after module %(n)s is completed"
+msgstr "Откроется после завершения модуля %(n)s"
+
+#: ui/templates/student/dashboard.html:92
+#, python-format
+msgid "Topic %(a)s"
+msgstr "Тема %(a)s"
+
+#: ui/templates/student/dashboard.html:93
+#, python-format
+msgid "Topics %(a)s–%(b)s"
+msgstr "Темы %(a)s–%(b)s"
+
+#: ui/templates/student/dashboard.html:103
+msgid "Latest results"
+msgstr "Последние результаты"
+
+#: ui/templates/student/dashboard.html:104
+#: ui/templates/student/dashboard.html:141
+msgid "All"
+msgstr "Все"
+
+#: ui/templates/student/dashboard.html:117
+msgid "Results of quizzes, experiments and practice works will appear here."
+msgstr "Здесь появятся результаты тестов, опытов и практических работ."
+
+#: ui/templates/student/dashboard.html:122
+msgid "Teacher's comments"
+msgstr "Комментарии преподавателя"
+
+#: ui/templates/student/dashboard.html:127
+#, python-format
+msgid "about «%(s)s»"
+msgstr "о «%(s)s»"
+
+#: ui/templates/student/dashboard.html:129
+msgid "Open the work"
+msgstr "Открыть работу"
+
+#: ui/templates/student/dashboard.html:133
+msgid "No comments yet. The teacher's comments on your works will appear here."
+msgstr ""
+"Комментариев пока нет. Здесь появятся комментарии преподавателя к вашим "
+"работам."
+
+#: ui/templates/student/dashboard.html:140
+msgid "New notifications"
+msgstr "Новые уведомления"
 
 #: ui/templates/student/locked.html:3
 msgid "Not open yet"
@@ -4143,9 +4517,112 @@ msgstr "ожидает проверки"
 msgid "open"
 msgstr "открыт"
 
-#: ui/templates/student/stage.html:6 ui/templates/student/topic.html:28
+#: ui/templates/student/profile.html:15
+msgid "Personal data"
+msgstr "Личные данные"
+
+#: ui/templates/student/profile.html:29
+msgid "Save"
+msgstr "Сохранить"
+
+#: ui/templates/student/profile.html:36
+msgid "Study"
+msgstr "Учёба"
+
+#: ui/templates/student/profile.html:44
+msgid "Year of study"
+msgstr "Курс обучения"
+
+#: ui/templates/student/profile.html:45
+msgid "Student ID"
+msgstr "Номер зачётной книжки"
+
+#: ui/templates/student/profile.html:47
+msgid "The group is changed by your teacher."
+msgstr "Группу меняет ваш преподаватель."
+
+#: ui/templates/student/profile.html:52
+msgid "Password"
+msgstr "Пароль"
+
+#: ui/templates/student/profile.html:58
+msgid "Change the password"
+msgstr "Сменить пароль"
+
+#: ui/templates/student/results.html:3 ui/templates/student/results.html:6
+msgid "Gradebook"
+msgstr "Зачётная книжка"
+
+#: ui/templates/student/results.html:7
+msgid "stage → topic → module → course"
+msgstr "этап → тема → модуль → курс"
+
+#: ui/templates/student/results.html:13
+msgid "No grades yet"
+msgstr "Оценок пока нет"
+
+#: ui/templates/student/results.html:13
+msgid "Enrol in a course and your grades will appear here."
+msgstr "Запишитесь на курс — здесь появятся ваши оценки."
+
+#: ui/templates/student/results.html:17
+msgid "Course summary"
+msgstr "Итог по курсу"
+
+#: ui/templates/student/results.html:22
+#, python-format
+msgid "GPA %(g)s · by completed topics"
+msgstr "GPA %(g)s · по завершённым темам"
+
+#: ui/templates/student/results.html:33
+msgid "Not opened yet"
+msgstr "Ещё не открыт"
+
+#: ui/templates/student/results.html:34
+#, python-format
+msgid "%(a)s / %(b)s topics started"
+msgstr "Начато тем: %(a)s / %(b)s"
+
+#: ui/templates/student/results.html:58
+msgid "Stage"
+msgstr "Этап"
+
+#: ui/templates/student/results.html:59
+msgid "How it is graded"
+msgstr "Способ оценивания"
+
+#: ui/templates/student/results.html:60
+msgid "Weight"
+msgstr "Вес"
+
+#: ui/templates/student/results.html:62 ui/views.py:21
+msgid "Score"
+msgstr "Балл"
+
+#: ui/templates/student/results.html:72 ui/templates/student/stage.html:6
+#: ui/templates/student/topic.html:28
 msgid "optional"
 msgstr "необязательный"
+
+#: ui/templates/student/results.html:94
+#, python-format
+msgid "%(n)s more topic is not opened yet."
+msgid_plural "%(n)s more topics are not opened yet."
+msgstr[0] "Ещё %(n)s тема пока не открыта."
+msgstr[1] "Ещё %(n)s темы пока не открыты."
+msgstr[2] "Ещё %(n)s тем пока не открыты."
+msgstr[3] "Ещё %(n)s тем пока не открыты."
+
+#: ui/templates/student/results.html:99
+msgid "Grading scale"
+msgstr "Шкала оценивания"
+
+#: ui/templates/student/results.html:105
+msgid ""
+"A topic score is the weighted average of its stages; a module — of its "
+"topics, the course — of its modules."
+msgstr ""
+"Балл темы — взвешенное среднее её этапов; модуля — тем, курса — модулей."
 
 #: ui/templates/student/stages/lab.html:7
 msgid ""
@@ -4165,7 +4642,9 @@ msgstr "Лаборатория ещё не настроена."
 msgid ""
 "The stage score is the average of your best attempt in every experiment: "
 "actions in the right order, the journal and the analysis."
-msgstr "Балл этапа — среднее лучших попыток по каждому опыту: правильный порядок действий, журнал и анализ."
+msgstr ""
+"Балл этапа — среднее лучших попыток по каждому опыту: правильный порядок "
+"действий, журнал и анализ."
 
 #: ui/templates/student/stages/practice.html:3
 msgid "The practice task is being prepared"
@@ -4300,10 +4779,6 @@ msgstr "Почему закрыто?"
 msgid "Review"
 msgstr "Просмотр"
 
-#: ui/templates/student/topic.html:36
-msgid "Open"
-msgstr "Открыть"
-
 #: ui/templates/ui/styleguide.html:7
 msgid "Every component of ui/templates/components with sample data."
 msgstr "Все компоненты ui/templates/components с примерами данных."
@@ -4311,6 +4786,20 @@ msgstr "Все компоненты ui/templates/components с примерам�
 #: ui/templates/ui/styleguide.html:29
 msgid "Open dialog"
 msgstr "Открыть диалог"
+
+#: ui/templatetags/ui_tags.py:145
+msgid "just now"
+msgstr "только что"
+
+#: ui/templatetags/ui_tags.py:147
+#, python-format
+msgid "%(n)s min ago"
+msgstr "%(n)s мин назад"
+
+#: ui/templatetags/ui_tags.py:149
+#, python-format
+msgid "%(n)s h ago"
+msgstr "%(n)s ч назад"
 
 #: ui/views.py:13
 msgid "Practice 1"
@@ -4324,9 +4813,14 @@ msgstr "Практическая работа 2"
 msgid "Practice 3"
 msgstr "Практическая работа 3"
 
-#: ui/views.py:21
-msgid "Score"
-msgstr "Балл"
+#, python-format
+#~ msgid "%(time)s ago"
+#~ msgstr "%(time)s назад"
+
+#, fuzzy, python-format
+#~| msgid "weight"
+#~ msgid "Weight, %%"
+#~ msgstr "вес"
 
 #~ msgid "analysis"
 #~ msgstr "анализ"

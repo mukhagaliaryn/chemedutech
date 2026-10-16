@@ -1,0 +1,63 @@
+{% extends layout %}
+{% load i18n %}
+{% block title %}{% translate "Profile" %} · ChemEduTech{% endblock %}
+{% block content %}
+<header class="flex flex-wrap items-center gap-4">
+  {% include "components/avatar.html" with person=user size="lg" %}
+  <div class="min-w-0">
+    <h1 class="text-h1">{{ user.full_name }}</h1>
+    <p class="mt-1 text-ink-soft">{{ user.get_username }} · {{ user.get_role_display }}</p>
+  </div>
+</header>
+
+<div class="grid items-start gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(380px,100%),1fr))]">
+  <section class="card flex flex-col gap-5" aria-labelledby="p-title">
+    <h2 id="p-title" class="text-h3">{% translate "Personal data" %}</h2>
+    <form method="post" class="flex flex-col gap-4" novalidate>
+      {% csrf_token %}<input type="hidden" name="form" value="profile">
+      {% if profile_form.non_field_errors %}<p class="error-text" role="alert">{{ profile_form.non_field_errors|join:" " }}</p>{% endif %}
+      <div class="grid gap-4 sm:grid-cols-2">
+        {% include "components/input.html" with field=profile_form.last_name %}
+        {% include "components/input.html" with field=profile_form.first_name %}
+      </div>
+      {% include "components/input.html" with field=profile_form.middle_name %}
+      <div class="grid gap-4 sm:grid-cols-2">
+        {% include "components/input.html" with field=profile_form.email %}
+        {% include "components/input.html" with field=profile_form.phone %}
+      </div>
+      {% include "components/input.html" with field=profile_form.language %}
+      <button type="submit" class="btn btn-primary self-start">{% translate "Save" %}</button>
+    </form>
+  </section>
+
+  <div class="flex flex-col gap-4">
+    {% if student_profile %}
+    <section class="card flex flex-col gap-3" aria-labelledby="g-title">
+      <h2 id="g-title" class="text-h3">{% translate "Study" %}</h2>
+      <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">
+        {% with g=student_profile.group %}
+          {% if g %}
+            <dt class="text-ink-soft">{% translate "Group" %}</dt><dd class="font-medium">{{ g }}</dd>
+            {% if g.department %}<dt class="text-ink-soft">{% translate "Department" %}</dt><dd>{{ g.department }}</dd>{% endif %}
+          {% endif %}
+        {% endwith %}
+        {% if student_profile.study_year %}<dt class="text-ink-soft">{% translate "Year of study" %}</dt><dd class="num">{{ student_profile.study_year }}</dd>{% endif %}
+        {% if student_profile.student_id %}<dt class="text-ink-soft">{% translate "Student ID" %}</dt><dd class="num">{{ student_profile.student_id }}</dd>{% endif %}
+      </dl>
+      <p class="text-body-sm text-ink-soft">{% translate "The group is changed by your teacher." %}</p>
+    </section>
+    {% endif %}
+
+    <section class="card flex flex-col gap-5" aria-labelledby="pw-title">
+      <h2 id="pw-title" class="text-h3">{% translate "Password" %}</h2>
+      <form method="post" class="flex flex-col gap-4" novalidate>
+        {% csrf_token %}<input type="hidden" name="form" value="password">
+        {% include "components/input.html" with field=password_form.old_password %}
+        {% include "components/input.html" with field=password_form.new_password1 %}
+        {% include "components/input.html" with field=password_form.new_password2 %}
+        <button type="submit" class="btn btn-secondary self-start">{% translate "Change the password" %}</button>
+      </form>
+    </section>
+  </div>
+</div>
+{% endblock %}

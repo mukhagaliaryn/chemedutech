@@ -64,7 +64,7 @@ class PermissionTests(TestCase):
         self.assertTrue(has_role(self.teacher, TEACHER, ADMIN))
 
     def test_home_url_by_role(self):
-        self.assertEqual(home_url_for(self.student), reverse("student:courses"))
+        self.assertEqual(home_url_for(self.student), reverse("student:dashboard"))
         self.assertEqual(home_url_for(self.teacher), reverse("research:dashboard"))
         self.assertEqual(home_url_for(self.admin), reverse("admin:index"))
 

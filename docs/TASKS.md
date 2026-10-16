@@ -102,8 +102,8 @@
 - [x] Бар тесттер өтуі + жаңа: зертхана кезеңін аяқтау.
 
 ## STEP-09 · Студент кабинеті
-- [ ] `/me/` dashboard, `/me/results/` бағалар кітапшасы, `/me/certificates/`, `/me/profile/` (дизайн — артефакттағы макеттер).
-- [ ] Хабарламалар (Notification) навбарда.
+- [x] `/me/` dashboard, `/me/results/` бағалар кітапшасы, `/me/certificates/`, `/me/profile/` (дизайн — артефакттағы макеттер).
+- [x] Хабарламалар (Notification) навбарда.
 
 ## STEP-10 · Мұғалім кабинеті: топтар мен студенттер
 - [ ] `/teacher/` dashboard, `/teacher/groups/` (CRUD, қосылу коды, студенттерді қосу/шығару, курсқа бекіту, research_cohort),

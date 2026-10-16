@@ -1,4 +1,5 @@
 from django.db.models import Prefetch, QuerySet
+from django.urls import reverse
 
 from ..models import Course, Module, Stage, Topic
 
@@ -17,3 +18,8 @@ def course_tree(courses: QuerySet[Course]) -> QuerySet[Course]:
         Prefetch("modules__topics", queryset=Topic.objects.order_by("number")),
         Prefetch("modules__topics__stages", queryset=Stage.objects.order_by("order", "pk")),
     )
+
+
+def stage_url(stage) -> str:
+    """The student's page of a stage (by url name — the student app sits above this layer)."""
+    return reverse("student:stage", args=[stage.topic.module.course.slug, stage.topic.number, stage.pk])

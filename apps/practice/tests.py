@@ -13,6 +13,7 @@ from django.utils import translation
 from apps.accounts.models import User
 from apps.courses.models import Course, Stage
 from apps.courses.services import enroll
+from apps.feedback.models import Notification
 from apps.organizations.testing import make_student
 from apps.progress import services as progress
 from apps.progress.models import StageProgress
@@ -471,3 +472,37 @@ class AdminTests(PracticeBase):
         with self.settings(AI_GRADING_ENABLED=False):
             r = self.client.post(reverse("admin:practice_practiceitem_try", args=[self.open_item.pk]), {"answer": "x"})
         self.assertContains(r, "AI grading is disabled")
+
+
+class NotificationTests(PracticeBase):
+    """STEP-09: the student hears about grades made after leaving the page."""
+
+    def kinds(self):
+        return list(Notification.objects.filter(user=self.student).values_list("kind", flat=True))
+
+    def test_background_ai_grade_notifies(self):
+        with self.captureOnCommitCallbacks(execute=True):
+            submission = self.submit_with_ai(FakeClient(self.grade()))
+        self.assertEqual(submission.status, "graded")
+        note = Notification.objects.get(user=self.student, kind="graded")
+        self.assertEqual(note.title, self.p1.title)
+        self.assertEqual(note.url, f"/learn/chemistry/1/{self.p1.pk}/")
+
+    def test_needs_review_waits_for_the_teacher(self):
+        with self.captureOnCommitCallbacks(execute=True):
+            submission = self.submit_with_ai(FakeClient(self.grade(points=(1, 0), confidence="low")))
+        self.assertNotIn("graded", self.kinds())
+        with self.captureOnCommitCallbacks(execute=True):
+            services.confirm_submission(submission, self.teacher)
+        self.assertEqual(self.kinds().count("graded"), 1)
+
+    def test_exact_only_task_does_not_notify(self):
+        with self.captureOnCommitCallbacks(execute=True):
+            services.submit(self.enrollment, self.task2, self.correct_answers(self.task2))
+        self.assertEqual(self.kinds(), [])
+
+    def test_return_notifies(self):
+        submission = services.submit(self.enrollment, self.task2, self.correct_answers(self.task2))
+        with self.captureOnCommitCallbacks(execute=True):
+            services.return_submission(submission, self.teacher, "Қайта қараңыз")
+        self.assertEqual(self.kinds(), ["returned"])

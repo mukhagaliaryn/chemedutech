@@ -8,6 +8,8 @@ from django.db.models import F
 from django.utils import timezone
 
 from apps.courses.models import Enrollment, Module, Stage, Topic
+from apps.courses.selectors import stage_url
+from apps.feedback import services as feedback
 
 from ..grading import grade_for
 from ..models import CourseResult, ModuleResult, ProgressEvent, StageProgress, TopicResult
@@ -323,6 +325,9 @@ def unlock_stage(enrollment, stage, by_teacher) -> StageProgress:
     sp.save()
     _log(enrollment, stage, "unlocked", actor=by_teacher)
     recalculate(enrollment)
+    transaction.on_commit(
+        lambda: feedback.notify(enrollment.student, feedback.Kind.UNLOCKED, stage.title, stage_url(stage))
+    )
     return sp
 
 

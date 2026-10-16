@@ -1,0 +1,14 @@
+{% load i18n %}{% comment %}One notification row: n (Notification). The link marks it read.{% endcomment %}
+<a href="{% url 'feedback:open' n.pk %}" class="flex items-start gap-3 px-4 py-3 hover:bg-canvas sm:px-6 {% if not n.is_read %}bg-primary-50{% endif %}">
+  <span class="mt-0.5 grid size-8 shrink-0 place-items-center rounded-md {% if n.kind == 'returned' %}bg-warning-50 text-warning-700{% elif n.kind == 'graded' or n.kind == 'certificate' %}bg-success-50 text-success-700{% else %}bg-primary-50 text-primary-600{% endif %}">
+    {% if n.kind == "certificate" %}{% include "components/icons.html#award" with size=16 %}{% elif n.kind == "unlocked" %}{% include "components/icons.html#lock" %}{% elif n.kind == "graded" %}{% include "components/icons.html#check" %}{% else %}{% include "components/icons.html#bell" with size=16 %}{% endif %}
+  </span>
+  <span class="flex min-w-0 flex-1 flex-col leading-5">
+    <span class="text-sm {% if n.is_read %}font-medium{% else %}font-semibold{% endif %}">{{ n.get_kind_display }}</span>
+    {% if n.title %}<span class="truncate text-sm text-ink-soft">{{ n.title }}</span>{% endif %}
+  </span>
+  <span class="flex shrink-0 items-center gap-2 text-caption text-ink-soft">
+    <time datetime="{{ n.created_at|date:'c' }}" title="{{ n.created_at|date:'j E Y, H:i' }}">{{ n.created_at|ago }}</time>
+    {% if not n.is_read %}<span class="size-2 rounded-full bg-primary-600" aria-label="{% translate 'unread' %}"></span>{% endif %}
+  </span>
+</a>

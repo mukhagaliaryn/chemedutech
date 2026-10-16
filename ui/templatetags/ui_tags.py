@@ -2,9 +2,13 @@
 
 from django import template
 from django.urls import NoReverseMatch, reverse
+from django.utils import timezone
+from django.utils.formats import date_format
 from django.utils.safestring import mark_safe
+from django.utils.translation import gettext as _
 
 from apps.core.html import clean_html
+from apps.feedback import selectors as notification_selectors
 
 register = template.Library()
 
@@ -122,3 +126,25 @@ def chem(text):
         return pretty_formula(text)
     except ChemError:
         return text
+
+
+@register.simple_tag(takes_context=True)
+def unread_notifications(context):
+    """{% unread_notifications as n %} — the signed-in user's unread count for the nav badge."""
+    request = context.get("request")
+    return notification_selectors.unread_count(request.user) if request else 0
+
+
+@register.filter
+def ago(moment):
+    """«just now», «5 min ago», «3 h ago», then the date (Django's timesince has no full kk translation)."""
+    if not moment:
+        return ""
+    seconds = (timezone.now() - moment).total_seconds()
+    if seconds < 60:
+        return _("just now")
+    if seconds < 3600:
+        return _("%(n)s min ago") % {"n": int(seconds // 60)}
+    if seconds < 86400:
+        return _("%(n)s h ago") % {"n": int(seconds // 3600)}
+    return date_format(timezone.localtime(moment), "j E, H:i")

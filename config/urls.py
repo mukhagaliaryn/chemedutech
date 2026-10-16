@@ -13,6 +13,7 @@ urlpatterns = [
     path("accounts/", include("apps.accounts.urls")),
     path("courses/", RedirectView.as_view(pattern_name="student:courses", permanent=False)),
     path("labs/", include("apps.labs.urls")),
+    path("notifications/", include("apps.feedback.urls")),
     path("quiz/", include("apps.assessments.urls")),
     path("research/", include("apps.research.urls")),
     path("ui/", include("ui.urls")),

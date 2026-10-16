@@ -12,7 +12,12 @@ Children: layouts/student.html, layouts/teacher.html — they fill {% block nav 
     <a href="{% url 'core:home' %}" class="flex items-center gap-2.5 font-bold">
       {% include "partials/logo.html" %}ChemEduTech
     </a>
-    <button type="button" class="btn btn-secondary btn-sm ml-auto" @click="nav = true"
+    {% unread_notifications as unread %}
+    <a href="{% url 'feedback:notifications' %}" class="btn btn-ghost btn-sm relative ml-auto px-2" aria-label="{% translate 'Notifications' %}">
+      {% include "components/icons.html#bell" %}
+      <span id="notif-badge-top" class="num absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-primary-600 px-1 text-[11px] font-semibold text-on-primary{% if not unread %} hidden{% endif %}">{{ unread }}</span>
+    </a>
+    <button type="button" class="btn btn-secondary btn-sm" @click="nav = true"
             aria-controls="cabinet-nav" :aria-expanded="nav.toString()">
       {% include "components/icons.html#menu" with size=16 %}{% translate "Menu" %}
     </button>
@@ -33,16 +38,24 @@ Children: layouts/student.html, layouts/teacher.html — they fill {% block nav 
       </button>
     </div>
 
-    <div class="flex flex-col gap-0.5">{% block nav %}{% endblock %}</div>
+    <div class="flex flex-col gap-0.5">
+      {% block nav %}{% endblock %}
+      <a href="{% url 'feedback:notifications' %}" class="nav-item" {% nav_current "feedback:" %}>
+        {% include "components/icons.html#bell" %}<span class="min-w-0 truncate">{% translate "Notifications" %}</span>
+        {% include "feedback/partials/badge.html" %}
+      </a>
+    </div>
 
     <div class="mt-auto flex flex-col gap-3">
       {% include "partials/lang_switch.html" %}
       <div class="flex items-center gap-2.5 p-2">
-        {% include "components/avatar.html" with person=user %}
-        <span class="flex min-w-0 flex-1 flex-col leading-[18px]">
-          <span class="truncate text-sm font-semibold">{{ user.get_full_name|default:user.get_username }}</span>
-          <span class="truncate text-caption font-normal text-ink-soft">{% block user_meta %}{% endblock %}</span>
-        </span>
+        <a href="{% url 'student:profile' %}" class="flex min-w-0 flex-1 items-center gap-2.5 rounded-sm text-ink hover:text-primary-700" title="{% translate 'Profile' %}" {% nav_current "student:profile" %}>
+          {% include "components/avatar.html" with person=user %}
+          <span class="flex min-w-0 flex-1 flex-col leading-[18px]">
+            <span class="truncate text-sm font-semibold">{{ user.get_full_name|default:user.get_username }}</span>
+            <span class="truncate text-caption font-normal text-ink-soft">{% block user_meta %}{% endblock %}</span>
+          </span>
+        </a>
         <form method="post" action="{% url 'accounts:logout' %}">
           {% csrf_token %}
           <button type="submit" class="btn btn-ghost btn-sm px-2 text-ink-soft" title="{% translate 'Log out' %}" aria-label="{% translate 'Log out' %}">

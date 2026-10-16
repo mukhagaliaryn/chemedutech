@@ -1,0 +1,35 @@
+{% extends layout %}
+{% load i18n %}
+{% block title %}{% translate "Notifications" %} · ChemEduTech{% endblock %}
+{% block content %}
+<header class="flex flex-wrap items-end justify-between gap-4">
+  <div>
+    <h1 class="text-h1">{% translate "Notifications" %}</h1>
+    <p class="mt-1 text-ink-soft">{% blocktranslate count n=unread %}{{ n }} unread{% plural %}{{ n }} unread{% endblocktranslate %}</p>
+  </div>
+  {% if unread %}
+    <form method="post" action="{% url 'feedback:read_all' %}">{% csrf_token %}
+      <button type="submit" class="btn btn-secondary">{% translate "Mark all as read" %}</button>
+    </form>
+  {% endif %}
+</header>
+{% if page.object_list %}
+  <ul class="overflow-hidden rounded-lg border border-line bg-surface">
+    {% for n in page %}
+      <li class="border-line not-last:border-b">
+        {% include "feedback/partials/item.html" %}
+      </li>
+    {% endfor %}
+  </ul>
+  {% if page.has_other_pages %}
+    <nav class="flex items-center justify-between gap-3 text-sm" aria-label="{% translate 'Pages' %}">
+      {% if page.has_previous %}<a class="btn btn-secondary btn-sm" href="?page={{ page.previous_page_number }}">{% include "components/icons.html#arrow-left" %}{% translate "Newer" %}</a>{% else %}<span></span>{% endif %}
+      <span class="num text-ink-soft">{{ page.number }} / {{ page.paginator.num_pages }}</span>
+      {% if page.has_next %}<a class="btn btn-secondary btn-sm" href="?page={{ page.next_page_number }}">{% translate "Older" %}{% include "components/icons.html#arrow-right" %}</a>{% else %}<span></span>{% endif %}
+    </nav>
+  {% endif %}
+{% else %}
+  {% translate "No notifications yet" as l_title %}{% translate "Grades, returned works and opened stages will appear here." as l_text %}
+  {% include "components/empty_state.html" with title=l_title text=l_text icon="bell" %}
+{% endif %}
+{% endblock %}

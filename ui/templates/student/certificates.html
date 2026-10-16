@@ -1,0 +1,39 @@
+{% extends "layouts/student.html" %}
+{% load i18n %}
+{% block title %}{% translate "Certificates" %} · ChemEduTech{% endblock %}
+{% block content %}
+<header>
+  <h1 class="text-h1">{% translate "Certificates" %}</h1>
+  <p class="mt-1 text-ink-soft">{% translate "A certificate is issued automatically when the course is completed with a passing score." %}</p>
+</header>
+
+{% for row in rows %}
+  <section class="card flex flex-wrap items-center gap-5" aria-labelledby="c{{ row.course.pk }}">
+    <span class="grid size-12 shrink-0 place-items-center rounded-md {% if row.passed %}bg-success-50 text-success-700{% else %}bg-primary-50 text-primary-600{% endif %}">{% include "components/icons.html#award" with size=24 %}</span>
+    <div class="flex min-w-0 flex-[1_1_320px] flex-col gap-2">
+      <h2 id="c{{ row.course.pk }}" class="text-h3">{{ row.course.title }}</h2>
+      {% if row.passed %}
+        <p class="text-sm text-ink-soft">
+          {% blocktranslate with s=row.result.score_percent|floatformat:1 g=row.grade.letter %}Course completed: {{ s }} ({{ g }}). The certificate is being prepared — the PDF will appear here.{% endblocktranslate %}
+        </p>
+      {% else %}
+        {% blocktranslate with a=row.topics_completed b=row.topics_total asvar l_topics %}{{ a }} / {{ b }} topics{% endblocktranslate %}
+        {% translate "Completed topics" as l_label %}
+        {% include "components/progress_bar.html" with label=l_label value=row.topics_completed max=row.topics_total value_text=l_topics size="sm" %}
+        <p class="text-body-sm {% if row.below_pass %}text-warning-700{% else %}text-ink-soft{% endif %}">
+          {% if row.current is not None %}{% blocktranslate with c=row.current|floatformat:1 p=row.course.passing_score %}Current score {{ c }}; at least {{ p }} is needed for the certificate.{% endblocktranslate %}
+          {% else %}{% blocktranslate with p=row.course.passing_score %}Complete every topic with a course score of at least {{ p }}.{% endblocktranslate %}{% endif %}
+        </p>
+      {% endif %}
+    </div>
+    {% if row.passed %}
+      {% translate "Issued soon" as l_b %}{% include "components/badge.html" with variant="success" label=l_b %}
+    {% else %}
+      <a class="btn btn-secondary" href="{% url 'student:course' row.course.slug %}">{% translate "Course map" %}</a>
+    {% endif %}
+  </section>
+{% empty %}
+  {% translate "No certificates yet" as l_title %}{% translate "Complete a course and its certificate will appear here." as l_text %}
+  {% include "components/empty_state.html" with title=l_title text=l_text icon="award" %}
+{% endfor %}
+{% endblock %}
