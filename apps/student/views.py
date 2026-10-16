@@ -24,6 +24,9 @@ from apps.courses import selectors as course_selectors
 from apps.courses import services as course_services
 from apps.courses.models import Course, Stage
 from apps.labs.selectors import best_attempts_by_experiment
+from apps.practice import forms as practice_forms
+from apps.practice import services as practice
+from apps.practice.models import PracticeSubmission
 from apps.progress import selectors as progress_selectors
 from apps.progress import services as progress
 from apps.progress.grading import grade_for
@@ -197,10 +200,79 @@ def stage(request, course_slug, topic_number, stage_pk):
     )
     if quiz:
         context.update(_quiz_panel(request, place, stage, quiz, sp))
+    if stage.kind == Stage.Kind.PRACTICE and stage.content:
+        context.update(_practice_context(place, stage))
     if stage.kind == Stage.Kind.LAB and stage.content:
         done = best_attempts_by_experiment(request.user, stage.content.lab_key)
         context["experiments"] = [{"spec": e, "attempt": done.get(e.key)} for e in stage.content.experiment_specs()]
     return render(request, "student/stage.html", context)
+
+
+def _practice_context(place, stage):
+    task = stage.content
+    submissions = (
+        list(PracticeSubmission.objects.filter(enrollment=place.enrollment, stage=stage).order_by("-attempt_no"))
+        if place.enrollment
+        else []
+    )
+    latest = submissions[0] if submissions else None
+    left = practice.attempts_left(place.enrollment, task) if place.enrollment else task.max_attempts
+    grading = latest is not None and latest.status == PracticeSubmission.Status.GRADING
+    return {
+        "task": task,
+        "rows": practice_forms.widget_rows(task, latest),
+        "latest": latest,
+        "latest_answers": latest.answers.select_related("item", "ai_grade").order_by("item__order") if latest else [],
+        "practice_left": left,
+        "grading": grading,
+        "can_submit": not place.preview and not grading and left > 0,
+        "counted": practice.counted_submission(place.enrollment, task) if place.enrollment else None,
+        "practice_urls": {
+            "submit": learning.stage_url(stage, "student:practice_submit"),
+            "status": reverse(
+                "student:practice_status",
+                args=[place.course.slug, place.topic.number, stage.pk, latest.pk],
+            )
+            if latest
+            else "",
+        },
+    }
+
+
+@require_POST
+@login_required
+def practice_submit(request, course_slug, topic_number, stage_pk):
+    place, _stages, denied = _open_stage(request, course_slug, topic_number, stage_pk)
+    if denied:
+        return denied
+    task = place.stage.content
+    if place.stage.kind != Stage.Kind.PRACTICE or task is None:
+        raise Http404
+    stage_page = learning.stage_url(place.stage)
+    if place.preview:
+        messages.info(request, _("Preview: answers are not saved."))
+        return redirect(stage_page)
+    try:
+        practice.submit(
+            place.enrollment, task, practice_forms.collect_answers(task, request.POST), request.FILES.get("file")
+        )
+    except practice.SubmissionError as exc:
+        messages.error(request, str(exc))
+    return redirect(f"{stage_page}#result")
+
+
+@login_required
+def practice_status(request, course_slug, topic_number, stage_pk, submission_id):
+    """HTMX polling while the AI grades: the «grading» note again, or a page refresh when it is done."""
+    place, _stages, denied = _open_stage(request, course_slug, topic_number, stage_pk)
+    if denied:
+        return denied
+    submission = get_object_or_404(PracticeSubmission, pk=submission_id, enrollment=place.enrollment, stage=place.stage)
+    if submission.status == PracticeSubmission.Status.GRADING:
+        return render(request, "student/partials/practice_grading.html", {"status_url": request.path})
+    response = render(request, "student/partials/practice_grading.html", {"status_url": "", "done": True})
+    response["HX-Refresh"] = "true"
+    return response
 
 
 def _quiz_panel(request, place, stage, quiz, sp):

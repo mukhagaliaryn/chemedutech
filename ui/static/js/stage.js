@@ -29,6 +29,47 @@
       },
     }));
 
+    // Formula / equation input with the chemistry keyboard and a live preview (H2O2 → H₂O₂).
+    Alpine.data("chemInput", () => ({
+      value: "",
+      insert(ch) {
+        const input = this.$refs.input;
+        const start = input.selectionStart ?? input.value.length;
+        const end = input.selectionEnd ?? input.value.length;
+        input.setRangeText(ch, start, end, "end");
+        this.value = input.value;
+        input.focus();
+      },
+      // Same charge rules as apps/assessments/chem.py: one digit is the charge of a one-element ion
+      // (Zn2+) or after "]", a count in a polyatomic ion (NH4+); with two digits the last is the charge.
+      get preview() {
+        const sub = (d) => [...d].map((c) => "₀₁₂₃₄₅₆₇₈₉"[c]).join("");
+        const sup = (d) => [...d].map((c) => "⁰¹²³⁴⁵⁶⁷⁸⁹"[c]).join("");
+        const token = (t) => {
+          let body = t, charge = "";
+          const m = t.match(/^(.*?)(\^?)(\d*)([+-]+)$/);
+          if (m && m[1]) {
+            let [, b, caret, digits, signs] = m;
+            if (caret) {
+              // explicit: SO4^2- → the digits are the charge
+            } else if (digits.length >= 2) [b, digits] = [b + digits.slice(0, -1), digits.slice(-1)];
+            else if (digits.length === 1 && !(/^[A-Z][a-z]?$/.test(b) || b.endsWith("]"))) [b, digits] = [b + digits, ""];
+            body = b;
+            charge = sup(digits) + signs.replace(/\+/g, "⁺").replace(/-/g, "⁻");
+          }
+          return body.replace(/([A-Za-z)\]])(\d+)/g, (_, a, d) => a + sub(d)) + charge;
+        };
+        return this.value
+          .replace(/<=>|<->/g, " ⇌ ")
+          .replace(/->|=>/g, " → ")
+          .split(/(\s+)/)
+          .map((part) => (/^\s+$/.test(part) || part === "+" || /^[→⇌=]$/.test(part) ? part : token(part)))
+          .join("")
+          .replace(/\s{2,}/g, " ")
+          .trim();
+      },
+    }));
+
     // Counts the seconds actually played (a jump forward is not counted) and reports the percentage.
     Alpine.data("videoTracker", (opts) => ({
       percent: opts.start || 0,

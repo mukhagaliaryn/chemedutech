@@ -1,0 +1,8 @@
+{% load i18n %}{# Shown while the AI grades the open answers; polls every 3 s and refreshes the page when done. #}
+<div {% if status_url %}hx-get="{{ status_url }}" hx-trigger="every 3s" hx-swap="outerHTML"{% endif %}
+     class="flex items-center gap-3 rounded-md bg-primary-50 px-4 py-3 text-sm text-primary-700" role="status" aria-live="polite">
+  {% if done %}{% translate "Graded — refreshing…" %}{% else %}
+    <svg class="size-4 animate-spin" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-opacity=".25" stroke-width="2"/><path d="M14 8a6 6 0 0 0-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    {% translate "Being graded… The open answers are checked by AI, usually in under a minute." %}
+  {% endif %}
+</div>

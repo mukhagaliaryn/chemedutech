@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "tailwind",
     "django_htmx",
     "django_ckeditor_5",
+    "django_tasks_db",
     # project apps (layered: core → accounts/courses → labs → research)
     "apps.core",
     "apps.accounts",
@@ -57,6 +58,7 @@ INSTALLED_APPS = [
     "apps.assessments",
     "apps.labs",
     "apps.progress",
+    "apps.practice",
     # product layer: views and URLs only
     "apps.student",
     "apps.research",
@@ -233,3 +235,10 @@ ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 AI_GRADING_MODEL = os.environ.get("AI_GRADING_MODEL", "claude-sonnet-5-5")
 AI_GRADING_ENABLED = env_bool("AI_GRADING_ENABLED", False)
 AI_GRADING_TIMEOUT_S = int(os.environ.get("AI_GRADING_TIMEOUT_S", "30"))
+AI_GRADING_EFFORT = os.environ.get("AI_GRADING_EFFORT", "medium")  # low | medium | high
+# Server-side refusal fallback (beta) on models that support it; turn off if the API rejects it.
+AI_GRADING_FALLBACKS = env_bool("AI_GRADING_FALLBACKS", True)
+
+# --- Background tasks (Django 6 django.tasks; ARCHITECTURE §9.6) -----------------
+# Production: the database backend + `python manage.py db_worker` (systemd). Dev/tests run inline.
+TASKS = {"default": {"BACKEND": "django_tasks_db.DatabaseBackend"}}

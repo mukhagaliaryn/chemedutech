@@ -86,13 +86,13 @@
 - [x] Құлыпталған кезеңге кірсе — «алдымен … аяқтаңыз» беті (келесі әрекетке сілтемемен).
 
 ## STEP-07a · Практикалық жұмыстар: автоматты және AI бағалау
-- [ ] Модельдер: PracticeTask, PracticeItem, PracticeSubmission, PracticeAnswer, GradingRubric, RubricCriterion, AIGrade, TeacherReview (§3.6, §5.5, §5.6).
-- [ ] Тексергіштер: `numeric` (ауытқу, бірлік түрлендіру), `formula`/`equation` (STEP-05a), `text_short` (қалыпқа келтіру + Левенштейн), `choice`/`blank`, `matching`/`ordering` (жартылай ұпай).
-- [ ] AI бағалау: `practice/services/ai_grading.py` — Anthropic SDK, structured output (JSON schema), промпт нұсқасы, студент жауабын бөлек блокта беру (prompt injection-ға қарсы), 2 рет қайталау, `needs_review`.
+- [x] Модельдер: PracticeTask, PracticeItem, PracticeSubmission, PracticeAnswer, GradingRubric, RubricCriterion, AIGrade, TeacherReview (§3.6, §5.5, §5.6).
+- [x] Тексергіштер: `numeric` (ауытқу, бірлік түрлендіру), `formula`/`equation` (STEP-05a), `text_short` (қалыпқа келтіру + Левенштейн), `choice`/`blank`, `matching`/`ordering` (жартылай ұпай).
+- [x] AI бағалау: `practice/services/ai_grading.py` — Anthropic SDK, structured output (JSON schema), промпт нұсқасы, студент жауабын бөлек блокта беру (prompt injection-ға қарсы), 2 рет қайталау, `needs_review`.
       Фондық тапсырма: `django.tasks` (`django-tasks` DatabaseBackend; dev — ImmediateBackend).
-- [ ] Студент беті: есептің шарты + өрістер, химиялық пернетақта (`₂ ₃ ⁺ ⁻ → ↑ ↓ ⇌`) + жанды көрініс, «Бағалануда…» күйі (HTMX polling), нәтиже: әр өріс бойынша ✓/✗, AI кері байланысы, қайта жіберу (`max_attempts`).
-- [ ] Unfold админ + мұғалім редакторы: өрістер мен критерийлерді қосу (inline), «Тексеріп көру» батырмасы — автор үлгі жауапты енгізіп, бағалауды сынайды.
-- [ ] Тесттер: әр тексергіш, AI клиенті mock-пен (сәтті, тайм-аут, low confidence, жарамсыз JSON), injection мәтіні ұпайды өзгертпейтіні.
+- [x] Студент беті: есептің шарты + өрістер, химиялық пернетақта (`₂ ₃ ⁺ ⁻ → ↑ ↓ ⇌`) + жанды көрініс, «Бағалануда…» күйі (HTMX polling), нәтиже: әр өріс бойынша ✓/✗, AI кері байланысы, қайта жіберу (`max_attempts`).
+- [x] Unfold админ + мұғалім редакторы: өрістер мен критерийлерді қосу (inline), «Тексеріп көру» батырмасы — автор үлгі жауапты енгізіп, бағалауды сынайды.
+- [x] Тесттер: әр тексергіш, AI клиенті mock-пен (сәтті, тайм-аут, low confidence, жарамсыз JSON), injection мәтіні ұпайды өзгертпейтіні.
 
 ## STEP-08 · Зертхананы оқу ағынына қосу
 - [ ] `LabContent` кезеңінен зертхана ашылады; `LabAttempt.enrollment/stage` толтырылады; `research_cohort` Enrollment-тен.

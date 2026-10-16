@@ -1,0 +1,88 @@
+{% load i18n %}{# One answer field of a practice task. row: see apps/practice/forms.py widget_rows. #}
+{% with item=row.item name=row.name %}
+<fieldset class="flex flex-col gap-2 border-t border-line pt-5 first:border-t-0 first:pt-0">
+  <legend class="flex w-full flex-wrap items-baseline justify-between gap-2 p-0">
+    <span class="font-semibold">{{ forloop.counter }}. {{ item.label }}</span>
+    <span class="num text-caption text-ink-soft">{{ item.points|floatformat:"-2" }} {% translate "pts" %}</span>
+  </legend>
+  {% if item.prompt %}<p class="text-sm text-ink-soft">{{ item.prompt }}</p>{% endif %}
+
+  {% if item.kind == "numeric" %}
+    <div class="flex flex-wrap items-center gap-2">
+      <label class="sr-only" for="{{ name }}_value">{{ item.label }}</label>
+      <input id="{{ name }}_value" class="input num w-40" name="{{ name }}_value" value="{{ row.value }}" inputmode="decimal" autocomplete="off" placeholder="0,0">
+      {% if row.units|length > 1 %}
+        <label class="sr-only" for="{{ name }}_unit">{% translate "Unit" %}</label>
+        <select id="{{ name }}_unit" class="input w-28" name="{{ name }}_unit">
+          {% for u in row.units %}<option value="{{ u }}"{% if u == row.unit %} selected{% endif %}>{{ u }}</option>{% endfor %}
+        </select>
+      {% elif row.units %}<span class="text-sm text-ink-soft">{{ row.units.0 }}</span><input type="hidden" name="{{ name }}_unit" value="{{ row.units.0 }}">{% endif %}
+    </div>
+
+  {% elif item.kind == "formula" or item.kind == "equation" %}
+    <div x-data="chemInput()" class="flex flex-col gap-2">
+      <label class="sr-only" for="{{ name }}">{{ item.label }}</label>
+      <input id="{{ name }}" x-ref="input" x-model="value" x-init="value = $el.value" class="input font-medium" name="{{ name }}" value="{{ row.value }}"
+             autocomplete="off" autocapitalize="none" spellcheck="false"
+             placeholder="{% if item.kind == 'formula' %}AB2{% else %}A + 2B -> AB2{% endif %}">
+      <div class="flex flex-wrap gap-1" role="group" aria-label="{% translate 'Chemistry keyboard' %}">
+        {% for ch in "₂ ₃ ₄ ⁺ ⁻ ² ³ → ↑ ↓ ⇌ ( ) ·"|split %}
+          <button type="button" class="btn btn-secondary btn-sm h-8 min-w-8 px-2 text-base" @click="insert('{{ ch }}')" title="{{ ch }}">{{ ch }}</button>
+        {% endfor %}
+      </div>
+      <p class="text-body-sm text-ink-soft" x-show="value" x-cloak>{% translate "Preview:" %} <span class="font-semibold text-ink" x-text="preview"></span></p>
+    </div>
+
+  {% elif item.kind == "text_short" or item.kind == "blank" and not row.options %}
+    <label class="sr-only" for="{{ name }}">{{ item.label }}</label>
+    <input id="{{ name }}" class="input max-w-md" name="{{ name }}" value="{{ row.value }}" autocomplete="off">
+
+  {% elif item.kind == "blank" %}
+    <label class="sr-only" for="{{ name }}">{{ item.label }}</label>
+    <select id="{{ name }}" class="input max-w-md" name="{{ name }}">
+      <option value="">—</option>
+      {% for o in row.options %}<option value="{{ o }}"{% if o in row.chosen %} selected{% endif %}>{{ o }}</option>{% endfor %}
+    </select>
+
+  {% elif item.kind == "choice" %}
+    {% if row.multiple %}<p class="text-body-sm text-ink-soft">{% translate "Choose all correct options." %}</p>{% endif %}
+    {% for o in row.options %}
+      <label class="flex cursor-pointer items-center gap-3 rounded-md border border-line px-4 py-3 has-checked:border-primary-600 has-checked:bg-primary-50">
+        <input type="{% if row.multiple %}checkbox{% else %}radio{% endif %}" name="{{ name }}" value="{{ o }}"{% if o in row.chosen %} checked{% endif %} class="size-[18px]">
+        <span>{{ o }}</span>
+      </label>
+    {% endfor %}
+
+  {% elif item.kind == "matching" %}
+    <div class="grid gap-2 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] sm:items-center">
+      {% for p in row.pairs %}
+        <label class="font-medium" for="{{ name }}_m{{ p.index }}">{{ p.left }}</label>
+        <select id="{{ name }}_m{{ p.index }}" class="input" name="{{ name }}_m{{ p.index }}">
+          <option value="">—</option>
+          {% for r in p.rights %}<option value="{{ r }}"{% if r == p.chosen %} selected{% endif %}>{{ r }}</option>{% endfor %}
+        </select>
+      {% endfor %}
+    </div>
+
+  {% elif item.kind == "ordering" %}
+    <p class="text-body-sm text-ink-soft">{% translate "Put a number next to each step: 1 is the first." %}</p>
+    {% for s in row.steps %}
+      <div class="flex items-center gap-3">
+        <label class="sr-only" for="{{ name }}_o{{ s.index }}">{% translate "Position" %}</label>
+        <select id="{{ name }}_o{{ s.index }}" class="input num w-20" name="{{ name }}_o{{ s.index }}">
+          <option value="">—</option>
+          {% for n in row.positions %}<option value="{{ n }}"{% if n == s.position %} selected{% endif %}>{{ n }}</option>{% endfor %}
+        </select>
+        <span>{{ s.text }}</span>
+      </div>
+    {% endfor %}
+
+  {% else %}{# open #}
+    <label class="sr-only" for="{{ name }}">{{ item.label }}</label>
+    <textarea id="{{ name }}" class="input" name="{{ name }}" rows="5" maxlength="4000">{{ row.value }}</textarea>
+    <p class="help">{% translate "Write in your own words — the answer is graded by its meaning against the criteria." %}</p>
+  {% endif %}
+
+  {% if item.hint %}<details class="text-body-sm text-ink-soft"><summary class="cursor-pointer text-primary-700">{% translate "Hint" %}</summary><p class="mt-1">{{ item.hint }}</p></details>{% endif %}
+</fieldset>
+{% endwith %}

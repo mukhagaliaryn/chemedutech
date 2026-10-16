@@ -1,9 +1,11 @@
 """Create the course skeleton: 2 modules, 15 topics; topic 1 with its stages.
 
 Course/module/topic texts are content (stored in the DB, in Kazakh) and are
-placeholders until the author provides the final wording. Practice tasks are added in STEP-07a.
+placeholders until the author provides the final wording. Practice works: apps.practice seed_practice.
 """
 
+from django.apps import apps
+from django.core.management import call_command
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
@@ -92,6 +94,8 @@ class Command(BaseCommand):
                     ensure_stage_content(stage, **content)
                 self._seed_t1_quizzes(topic)
 
+        if apps.is_installed("apps.practice"):  # a higher layer: called by name, not imported
+            call_command("seed_practice", verbosity=0)
         self.stdout.write(
             self.style.SUCCESS(
                 "Course skeleton is ready: 2 modules, 15 topics (topic 1 published, 6 stages, 3 quizzes)."

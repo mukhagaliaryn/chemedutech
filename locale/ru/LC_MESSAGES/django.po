@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 18:28+0500\n"
+"POT-Creation-Date: 2026-10-16 18:54+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -201,6 +201,7 @@ msgstr "пользователи"
 #: apps/assessments/admin.py:24 apps/assessments/admin.py:80
 #: apps/assessments/models/attempt.py:56 apps/assessments/models/quiz.py:66
 #: apps/assessments/models/quiz.py:94 apps/assessments/models/quiz.py:125
+#: apps/practice/models/task.py:57
 msgid "question"
 msgstr "вопрос"
 
@@ -230,9 +231,10 @@ msgid "Assessments"
 msgstr "Оценивание"
 
 #: apps/assessments/models/attempt.py:17 apps/courses/models/course.py:37
-#: apps/courses/models/enrollment.py:52 apps/progress/models/progress.py:22
-#: apps/progress/models/progress.py:76 apps/progress/models/progress.py:98
-#: apps/progress/models/progress.py:118 apps/progress/models/progress.py:153
+#: apps/courses/models/enrollment.py:52 apps/practice/models/submission.py:21
+#: apps/progress/models/progress.py:22 apps/progress/models/progress.py:76
+#: apps/progress/models/progress.py:98 apps/progress/models/progress.py:118
+#: apps/progress/models/progress.py:153
 msgid "enrolment"
 msgstr "способ записи"
 
@@ -245,7 +247,7 @@ msgstr "Пусто при предпросмотре преподавателе�
 msgid "quiz"
 msgstr "тест"
 
-#: apps/assessments/models/attempt.py:26
+#: apps/assessments/models/attempt.py:26 apps/practice/models/submission.py:26
 msgid "attempt number"
 msgstr "номер попытки"
 
@@ -270,15 +272,15 @@ msgstr "В порядке показа"
 msgid "option order"
 msgstr "порядок вариантов"
 
-#: apps/assessments/models/attempt.py:31
+#: apps/assessments/models/attempt.py:31 apps/practice/models/submission.py:29
 msgid "score"
 msgstr "баллы"
 
-#: apps/assessments/models/attempt.py:32
+#: apps/assessments/models/attempt.py:32 apps/practice/models/submission.py:30
 msgid "max score"
 msgstr "максимум баллов"
 
-#: apps/assessments/models/attempt.py:33
+#: apps/assessments/models/attempt.py:33 apps/practice/models/submission.py:31
 msgid "percent"
 msgstr "процент"
 
@@ -308,15 +310,21 @@ msgid "number answer"
 msgstr "числовой ответ"
 
 #: apps/assessments/models/attempt.py:63 apps/assessments/models/quiz.py:128
+#: apps/practice/models/submission.py:70
 #: ui/templates/assessments/result.html:61
 msgid "correct"
 msgstr "верно"
 
 #: apps/assessments/models/attempt.py:64 apps/assessments/models/quiz.py:68
+#: apps/practice/admin.py:135 apps/practice/admin.py:192
+#: apps/practice/models/submission.py:71 apps/practice/models/task.py:60
+#: apps/practice/models/task.py:117
+#: ui/templates/admin/practice/practiceitem/try.html:6
 msgid "points"
 msgstr "баллы"
 
-#: apps/assessments/models/attempt.py:67
+#: apps/assessments/models/attempt.py:67 apps/practice/models/submission.py:91
+#: apps/practice/models/submission.py:126
 msgid "answer"
 msgstr "ответ"
 
@@ -341,11 +349,11 @@ msgstr "Тест по модулю"
 msgid "Final test"
 msgstr "Итоговый тест"
 
-#: apps/assessments/models/quiz.py:18
+#: apps/assessments/models/quiz.py:18 apps/practice/models/task.py:14
 msgid "Best attempt"
 msgstr "Лучшая попытка"
 
-#: apps/assessments/models/quiz.py:19
+#: apps/assessments/models/quiz.py:19 apps/practice/models/task.py:15
 msgid "Last attempt"
 msgstr "Последняя попытка"
 
@@ -356,11 +364,12 @@ msgstr "Первая попытка"
 #: apps/assessments/models/quiz.py:22 apps/courses/models/content.py:34
 #: apps/courses/models/course.py:30 apps/courses/models/structure.py:17
 #: apps/courses/models/structure.py:36 apps/courses/models/structure.py:76
+#: apps/practice/models/task.py:24
 msgid "title"
 msgstr "название"
 
 #: apps/assessments/models/quiz.py:23 apps/assessments/models/quiz.py:65
-#: apps/courses/models/structure.py:75
+#: apps/courses/models/structure.py:75 apps/practice/models/task.py:58
 msgid "kind"
 msgstr "вид"
 
@@ -376,7 +385,7 @@ msgstr "лимит времени, мин"
 msgid "Empty = no limit"
 msgstr "Пусто = без ограничения"
 
-#: apps/assessments/models/quiz.py:31
+#: apps/assessments/models/quiz.py:31 apps/practice/models/task.py:26
 msgid "attempts allowed"
 msgstr "число попыток"
 
@@ -400,7 +409,7 @@ msgstr "перемешивать вопросы"
 msgid "shuffle answer options"
 msgstr "перемешивать варианты ответов"
 
-#: apps/assessments/models/quiz.py:41
+#: apps/assessments/models/quiz.py:41 apps/practice/models/task.py:27
 msgid "attempt that counts"
 msgstr "засчитываемая попытка"
 
@@ -432,18 +441,19 @@ msgstr "Число"
 msgid "Short text"
 msgstr "Краткий текст"
 
-#: apps/assessments/models/quiz.py:60
+#: apps/assessments/models/quiz.py:60 apps/practice/models/task.py:45
 msgid "Chemical formula"
 msgstr "Химическая формула"
 
 #: apps/assessments/models/quiz.py:61 apps/labs/views.py:53
-#: ui/templates/assessments/take.html:64
+#: apps/practice/models/task.py:46 ui/templates/assessments/take.html:64
 msgid "Reaction equation"
 msgstr "Уравнение реакции"
 
 #: apps/assessments/models/quiz.py:64 apps/assessments/models/quiz.py:126
 #: apps/courses/models/content.py:33 apps/courses/models/structure.py:16
 #: apps/courses/models/structure.py:34 apps/courses/models/structure.py:74
+#: apps/practice/models/task.py:55 apps/practice/models/task.py:114
 msgid "order"
 msgstr "порядок"
 
@@ -537,7 +547,8 @@ msgstr "Эта попытка уже отправлена."
 msgid "Core"
 msgstr "Основное"
 
-#: apps/core/models.py:8
+#: apps/core/models.py:8 apps/practice/models/submission.py:104
+#: apps/practice/models/submission.py:135
 msgid "created at"
 msgstr "создано"
 
@@ -596,7 +607,8 @@ msgstr "Курсы"
 
 #: apps/courses/models/content.py:17 apps/courses/models/content.py:53
 #: apps/courses/models/content.py:107 apps/courses/models/content.py:151
-#: apps/courses/models/structure.py:112 apps/progress/models/progress.py:25
+#: apps/courses/models/structure.py:112 apps/practice/models/submission.py:24
+#: apps/practice/models/task.py:22 apps/progress/models/progress.py:25
 #: apps/progress/models/progress.py:156
 msgid "stage"
 msgstr "этап"
@@ -745,8 +757,8 @@ msgid "cover"
 msgstr "обложка"
 
 #: apps/courses/models/course.py:35 apps/courses/models/enrollment.py:46
-#: apps/labs/models/attempt.py:20 apps/progress/models/progress.py:27
-#: apps/progress/models/progress.py:81
+#: apps/labs/models/attempt.py:20 apps/practice/models/submission.py:28
+#: apps/progress/models/progress.py:27 apps/progress/models/progress.py:81
 msgid "status"
 msgstr "статус"
 
@@ -809,7 +821,7 @@ msgid "Assistant"
 msgstr "Ассистент"
 
 #: apps/courses/models/course.py:92 apps/courses/models/course.py:119
-#: ui/templates/layouts/teacher.html:14
+#: apps/practice/models/submission.py:129 ui/templates/layouts/teacher.html:14
 msgid "teacher"
 msgstr "преподаватель"
 
@@ -965,7 +977,7 @@ msgstr "Видеоурок"
 msgid "Lab work"
 msgstr "Лабораторная работа"
 
-#: apps/courses/models/structure.py:70
+#: apps/courses/models/structure.py:70 apps/practice/apps.py:8
 msgid "Practice work"
 msgstr "Практическая работа"
 
@@ -2048,6 +2060,7 @@ msgid "Wrong choice"
 msgstr "Неверный выбор"
 
 #: apps/labs/models/attempt.py:62 apps/labs/views.py:44
+#: ui/templates/student/partials/practice_field.html:86
 msgid "Hint"
 msgstr "Подсказка"
 
@@ -2543,6 +2556,469 @@ msgstr "например, 6B01501"
 msgid "specialties"
 msgstr "образовательные программы"
 
+#: apps/practice/admin.py:51 apps/practice/models/task.py:73
+msgid "answer fields"
+msgstr "поля ответа"
+
+#: apps/practice/admin.py:74
+msgid "check"
+msgstr "проверка"
+
+#: apps/practice/admin.py:77
+msgid "Try it"
+msgstr "Проверить"
+
+#: apps/practice/admin.py:95
+msgid "Add a grading rubric with criteria first."
+msgstr "Сначала добавьте рубрику с критериями."
+
+#: apps/practice/admin.py:109
+#, python-format
+msgid "Try it: %(label)s"
+msgstr "Проверка: %(label)s"
+
+#: apps/practice/admin.py:158
+msgid "Confirm the grades"
+msgstr "Подтвердить оценки"
+
+#: apps/practice/admin.py:164
+#, python-format
+msgid "Confirmed: %(n)d"
+msgstr "Подтверждено: %(n)d"
+
+#: apps/practice/admin.py:166
+msgid "Return to the student"
+msgstr "Вернуть студенту"
+
+#: apps/practice/admin.py:174
+#, python-format
+msgid "Returned: %(n)d"
+msgstr "Возвращено: %(n)d"
+
+#: apps/practice/checkers.py:87
+msgid "The correct answer must be a JSON object."
+msgstr "Правильный ответ должен быть JSON-объектом."
+
+#: apps/practice/checkers.py:91
+msgid "Give the correct number: {\"value\": 2.24}"
+msgstr "Укажите правильное число: {\"value\": 2.24}"
+
+#: apps/practice/checkers.py:94
+#, python-format
+msgid "Unknown unit: %(unit)s"
+msgstr "Неизвестная единица: %(unit)s"
+
+#: apps/practice/checkers.py:96
+msgid "The answer's unit must be one of «units»."
+msgstr "Единица ответа должна входить в «units»."
+
+#: apps/practice/checkers.py:102
+msgid "The correct equation is not balanced."
+msgstr "Правильное уравнение не уравнено."
+
+#: apps/practice/checkers.py:105
+msgid "List the accepted answers: {\"accepted\": [\"…\"]}"
+msgstr "Перечислите принимаемые ответы: {\"accepted\": [\"…\"]}"
+
+#: apps/practice/checkers.py:109
+msgid "List the correct answers: {\"correct\": [\"…\"]}"
+msgstr "Перечислите правильные ответы: {\"correct\": [\"…\"]}"
+
+#: apps/practice/checkers.py:112
+msgid "Every correct answer must be one of the options."
+msgstr "Каждый правильный ответ должен быть среди вариантов."
+
+#: apps/practice/checkers.py:114
+msgid "A choice needs options: {\"options\": [\"…\"]}"
+msgstr "Для выбора нужны варианты: {\"options\": [\"…\"]}"
+
+#: apps/practice/checkers.py:118
+msgid "Give at least two pairs: {\"pairs\": {\"left\": \"right\"}}"
+msgstr "Укажите не менее двух пар: {\"pairs\": {\"left\": \"right\"}}"
+
+#: apps/practice/checkers.py:122
+msgid "Give at least two different steps: {\"order\": [\"…\", \"…\"]}"
+msgstr "Укажите не менее двух разных шагов: {\"order\": [\"…\", \"…\"]}"
+
+#: apps/practice/checkers.py:124
+#, python-format
+msgid "Unknown kind: %(kind)s"
+msgstr "Неизвестный вид: %(kind)s"
+
+#: apps/practice/checkers.py:126
+#, python-format
+msgid "Cannot read the chemistry: %(error)s"
+msgstr "Не удалось прочитать химическую запись: %(error)s"
+
+#: apps/practice/checkers.py:132 apps/practice/checkers.py:193
+#: apps/practice/services/submissions.py:64
+msgid "The answer is empty."
+msgstr "Ответ пустой."
+
+#: apps/practice/checkers.py:133
+#, python-format
+msgid "There is no element «%(el)s». Check the letters and their case."
+msgstr "Элемента «%(el)s» нет. Проверьте буквы и регистр."
+
+#: apps/practice/checkers.py:134
+msgid "An element symbol starts with a capital letter."
+msgstr "Символ элемента начинается с заглавной буквы."
+
+#: apps/practice/checkers.py:135
+msgid "Check the brackets."
+msgstr "Проверьте скобки."
+
+#: apps/practice/checkers.py:136
+msgid "Write the arrow between the sides: -> or =."
+msgstr "Поставьте стрелку между частями: -> или =."
+
+#: apps/practice/checkers.py:137
+msgid "An equation has one arrow."
+msgstr "В уравнении одна стрелка."
+
+#: apps/practice/checkers.py:143
+msgid "The answer could not be read. Check how it is written."
+msgstr "Ответ не удалось прочитать. Проверьте запись."
+
+#: apps/practice/checkers.py:150
+msgid "Write a number, e.g. 2,24."
+msgstr "Напишите число, например 2,24."
+
+#: apps/practice/checkers.py:156
+msgid "Check the unit."
+msgstr "Проверьте единицу измерения."
+
+#: apps/practice/checkers.py:162
+msgid "The number is not right. Check the calculation."
+msgstr "Число неверное. Проверьте расчёт."
+
+#: apps/practice/checkers.py:171
+msgid "This is not the right substance."
+msgstr "Это другое вещество."
+
+#: apps/practice/checkers.py:182
+msgid "Check the substances on both sides."
+msgstr "Проверьте вещества в обеих частях."
+
+#: apps/practice/checkers.py:186
+msgid "Balanced, but the coefficients can be reduced."
+msgstr "Уравнено, но коэффициенты можно сократить."
+
+#: apps/practice/checkers.py:187
+msgid "The equation is not balanced."
+msgstr "Уравнение не уравнено."
+
+#: apps/practice/checkers.py:197 apps/practice/checkers.py:212
+msgid "This is not the expected word."
+msgstr "Это не то слово."
+
+#: apps/practice/checkers.py:204
+msgid "Not the right choice."
+msgstr "Выбор неверный."
+
+#: apps/practice/checkers.py:220
+#, python-format
+msgid "%(n)s of %(total)s pairs are right."
+msgstr "Верно %(n)s пар из %(total)s."
+
+#: apps/practice/checkers.py:232
+#, python-format
+msgid "%(n)s of %(total)s steps are in the right place."
+msgstr "%(n)s из %(total)s шагов на своём месте."
+
+#: apps/practice/models/submission.py:14
+msgid "Submitted"
+msgstr "Отправлено"
+
+#: apps/practice/models/submission.py:15
+msgid "Being graded"
+msgstr "Оценивается"
+
+#: apps/practice/models/submission.py:16
+msgid "Graded"
+msgstr "Оценено"
+
+#: apps/practice/models/submission.py:17
+msgid "Waiting for the teacher"
+msgstr "Ожидает преподавателя"
+
+#: apps/practice/models/submission.py:18
+msgid "Returned"
+msgstr "Возвращено"
+
+#: apps/practice/models/submission.py:27
+msgid "submitted at"
+msgstr "отправлено"
+
+#: apps/practice/models/submission.py:32
+msgid "attached file"
+msgstr "прикреплённый файл"
+
+#: apps/practice/models/submission.py:33
+msgid "graded at"
+msgstr "оценено"
+
+#: apps/practice/models/submission.py:34
+msgid "changed by the teacher"
+msgstr "изменено преподавателем"
+
+#: apps/practice/models/submission.py:41
+msgid "checked by"
+msgstr "проверил"
+
+#: apps/practice/models/submission.py:43
+msgid "teacher's comment"
+msgstr "комментарий преподавателя"
+
+#: apps/practice/models/submission.py:47
+msgid "practice submission"
+msgstr "отправка практической работы"
+
+#: apps/practice/models/submission.py:48
+msgid "practice submissions"
+msgstr "отправки практических работ"
+
+#: apps/practice/models/submission.py:63
+msgid "submission"
+msgstr "отправка"
+
+#: apps/practice/models/submission.py:66 apps/practice/models/task.py:72
+#: apps/practice/models/task.py:97
+msgid "answer field"
+msgstr "поле ответа"
+
+#: apps/practice/models/submission.py:68
+msgid "answer as typed"
+msgstr "ответ как введён"
+
+#: apps/practice/models/submission.py:68
+msgid "Stored unchanged"
+msgstr "Хранится без изменений"
+
+#: apps/practice/models/submission.py:69
+msgid "normalised answer"
+msgstr "нормализованный ответ"
+
+#: apps/practice/models/submission.py:70
+msgid "Empty until graded"
+msgstr "Пусто до оценки"
+
+#: apps/practice/models/submission.py:72
+msgid "feedback"
+msgstr "обратная связь"
+
+#: apps/practice/models/submission.py:72
+msgid "Shown to the student"
+msgstr "Показывается студенту"
+
+#: apps/practice/models/submission.py:75
+msgid "practice answer"
+msgstr "ответ практики"
+
+#: apps/practice/models/submission.py:76
+msgid "practice answers"
+msgstr "ответы практики"
+
+#: apps/practice/models/submission.py:87
+msgid "High"
+msgstr "Высокая"
+
+#: apps/practice/models/submission.py:88
+msgid "Low"
+msgstr "Низкая"
+
+#: apps/practice/models/submission.py:93
+msgid "model"
+msgstr "модель"
+
+#: apps/practice/models/submission.py:94
+msgid "prompt version"
+msgstr "версия промпта"
+
+#: apps/practice/models/submission.py:95 apps/practice/models/submission.py:133
+#: apps/practice/models/task.py:123
+msgid "criteria"
+msgstr "критерии"
+
+#: apps/practice/models/submission.py:95
+msgid "[{criterion_id, points, reason}]"
+msgstr "[{criterion_id, points, reason}]"
+
+#: apps/practice/models/submission.py:96
+msgid "feedback for the student"
+msgstr "обратная связь студенту"
+
+#: apps/practice/models/submission.py:97
+msgid "confidence"
+msgstr "уверенность"
+
+#: apps/practice/models/submission.py:98
+msgid "raw response"
+msgstr "сырой ответ"
+
+#: apps/practice/models/submission.py:99
+msgid "input tokens"
+msgstr "входные токены"
+
+#: apps/practice/models/submission.py:100
+msgid "output tokens"
+msgstr "выходные токены"
+
+#: apps/practice/models/submission.py:101
+msgid "latency, ms"
+msgstr "задержка, мс"
+
+#: apps/practice/models/submission.py:102
+msgid "API calls"
+msgstr "вызовы API"
+
+#: apps/practice/models/submission.py:102
+msgid "Including retries"
+msgstr "С учётом повторов"
+
+#: apps/practice/models/submission.py:103
+msgid "error"
+msgstr "ошибка"
+
+#: apps/practice/models/submission.py:107
+msgid "AI grade"
+msgstr "оценка AI"
+
+#: apps/practice/models/submission.py:108
+msgid "AI grades"
+msgstr "оценки AI"
+
+#: apps/practice/models/submission.py:131
+msgid "AI points"
+msgstr "баллы AI"
+
+#: apps/practice/models/submission.py:132
+msgid "teacher's points"
+msgstr "баллы преподавателя"
+
+#: apps/practice/models/submission.py:134
+msgid "reason"
+msgstr "причина"
+
+#: apps/practice/models/submission.py:139
+msgid "teacher review"
+msgstr "решение преподавателя"
+
+#: apps/practice/models/submission.py:140
+msgid "teacher reviews"
+msgstr "решения преподавателя"
+
+#: apps/practice/models/task.py:25
+msgid "problem statement"
+msgstr "условие задачи"
+
+#: apps/practice/models/task.py:29
+msgid "allow a file"
+msgstr "разрешить файл"
+
+#: apps/practice/models/task.py:29
+msgid "The student may attach a photo or file (not graded)"
+msgstr "Студент может прикрепить фото или файл (не оценивается)"
+
+#: apps/practice/models/task.py:33
+msgid "practice task"
+msgstr "практическая работа"
+
+#: apps/practice/models/task.py:34
+msgid "practice tasks"
+msgstr "практические работы"
+
+#: apps/practice/models/task.py:44
+msgid "Number with a unit"
+msgstr "Число с единицей"
+
+#: apps/practice/models/task.py:47
+msgid "One or two words"
+msgstr "Одно-два слова"
+
+#: apps/practice/models/task.py:48
+msgid "Choice from a list"
+msgstr "Выбор из списка"
+
+#: apps/practice/models/task.py:49
+msgid "Fill in the blank"
+msgstr "Заполнить пропуск"
+
+#: apps/practice/models/task.py:50
+msgid "Matching"
+msgstr "Сопоставление"
+
+#: apps/practice/models/task.py:51
+msgid "Ordering"
+msgstr "Упорядочивание"
+
+#: apps/practice/models/task.py:52
+msgid "Open answer (graded by AI)"
+msgstr "Открытый ответ (оценивает AI)"
+
+#: apps/practice/models/task.py:54
+msgid "task"
+msgstr "задание"
+
+#: apps/practice/models/task.py:56
+msgid "label"
+msgstr "метка"
+
+#: apps/practice/models/task.py:56
+msgid "e.g. V(H₂) or «Reaction equation»"
+msgstr "например, V(H₂) или «Уравнение реакции»"
+
+#: apps/practice/models/task.py:63
+msgid "correct answer"
+msgstr "правильный ответ"
+
+#: apps/practice/models/task.py:66
+msgid ""
+"Depends on the kind — see the examples in the documentation (ARCHITECTURE "
+"§3.6)"
+msgstr "Зависит от вида — см. примеры в документации (ARCHITECTURE §3.6)"
+
+#: apps/practice/models/task.py:68
+msgid "hint"
+msgstr "подсказка"
+
+#: apps/practice/models/task.py:99
+msgid "model answer"
+msgstr "эталонный ответ"
+
+#: apps/practice/models/task.py:99
+msgid "A reference, not a word-for-word requirement"
+msgstr "Ориентир, не дословное требование"
+
+#: apps/practice/models/task.py:100
+msgid "notes for the grader"
+msgstr "заметки для оценщика"
+
+#: apps/practice/models/task.py:103
+msgid "grading rubric"
+msgstr "рубрика оценивания"
+
+#: apps/practice/models/task.py:104
+msgid "grading rubrics"
+msgstr "рубрики оценивания"
+
+#: apps/practice/models/task.py:112
+msgid "rubric"
+msgstr "рубрика"
+
+#: apps/practice/models/task.py:115 apps/practice/models/task.py:122
+msgid "criterion"
+msgstr "критерий"
+
+#: apps/practice/services/submissions.py:48
+msgid "Your previous answer is still being graded."
+msgstr "Ваш предыдущий ответ ещё оценивается."
+
+#: apps/practice/services/submissions.py:50
+#: ui/templates/student/stages/practice.html:75
+msgid "You have used all attempts for this work."
+msgstr "Вы использовали все попытки этой работы."
+
 #: apps/progress/admin.py:30
 msgid "Open the selected stages for the student"
 msgstr "Открыть выбранные этапы студенту"
@@ -2726,6 +3202,7 @@ msgid "Confirmed by the teacher"
 msgstr "Подтверждено преподавателем"
 
 #: apps/progress/models/progress.py:147
+#: ui/templates/student/stages/practice.html:22
 msgid "Returned by the teacher"
 msgstr "Возвращено преподавателем"
 
@@ -2778,27 +3255,31 @@ msgstr "Кабинет студента"
 msgid "Passed · %(score)s%%"
 msgstr "Пройдено · %(score)s%%"
 
-#: apps/student/views.py:275
+#: apps/student/views.py:253 ui/templates/student/stages/practice.html:71
+msgid "Preview: answers are not saved."
+msgstr "Предпросмотр: ответы не сохраняются."
+
+#: apps/student/views.py:347
 msgid "Finish the material first — the test opens after it."
 msgstr "Сначала завершите материал — тест откроется после него."
 
-#: apps/student/views.py:354 ui/templates/student/stage.html:19
+#: apps/student/views.py:426 ui/templates/student/stage.html:19
 msgid "Go to the next stage"
 msgstr "Перейти к следующему этапу"
 
-#: apps/student/views.py:356
+#: apps/student/views.py:428
 msgid "Back to the stage"
 msgstr "Вернуться к этапу"
 
-#: config/settings/base.py:141
+#: config/settings/base.py:143
 msgid "Kazakh"
 msgstr "Казахский"
 
-#: config/settings/base.py:142
+#: config/settings/base.py:144
 msgid "Russian"
 msgstr "Русский"
 
-#: config/settings/base.py:143
+#: config/settings/base.py:145
 msgid "English"
 msgstr "Английский"
 
@@ -2959,6 +3440,37 @@ msgstr "Зарегистрироваться"
 msgid "Teachers do not sign up themselves — the administrator adds them."
 msgstr "Преподаватели не регистрируются сами — их добавляет администратор."
 
+#: ui/templates/admin/practice/practiceitem/try.html:12
+msgid "Answer"
+msgstr "Ответ"
+
+#: ui/templates/admin/practice/practiceitem/try.html:14
+msgid ""
+"Numeric: {\"value\": \"2,24\", \"unit\": \"L\"}; choice and ordering: a JSON "
+"list; matching: a JSON object. Other kinds: plain text."
+msgstr "Число: {\"value\": \"2,24\", \"unit\": \"L\"}; выбор и порядок: JSON-список; сопоставление: JSON-объект. Остальное: обычный текст."
+
+#: ui/templates/admin/practice/practiceitem/try.html:15
+msgid "Check"
+msgstr "Проверить"
+
+#: ui/templates/admin/practice/practiceitem/try.html:20
+msgid "Share of points"
+msgstr "Доля баллов"
+
+#: ui/templates/admin/practice/practiceitem/try.html:21
+#: ui/templates/admin/practice/practiceitem/try.html:30
+msgid "Feedback"
+msgstr "Обратная связь"
+
+#: ui/templates/admin/practice/practiceitem/try.html:28
+msgid "Confidence"
+msgstr "Уверенность"
+
+#: ui/templates/admin/practice/practiceitem/try.html:28
+msgid "calls"
+msgstr "вызовов"
+
 #: ui/templates/assessments/result.html:6 ui/templates/assessments/take.html:6
 msgid "Breadcrumbs"
 msgstr "Навигационная цепочка"
@@ -2976,16 +3488,20 @@ msgstr "Тест сдан"
 
 #: ui/templates/assessments/result.html:21
 #: ui/templates/student/partials/quiz_panel.html:30
+#: ui/templates/student/stages/practice.html:24
 #, python-format
 msgid "Below the pass mark (%(p)s%%)"
 msgstr "Ниже проходного порога (%(p)s%%)"
 
 #: ui/templates/assessments/result.html:24
+#: ui/templates/student/stages/practice.html:25
 #, python-format
 msgid "%(s)s of %(m)s points."
 msgstr "%(s)s из %(m)s баллов."
 
 #: ui/templates/assessments/result.html:25
+#: ui/templates/student/stages/practice.html:25
+#: ui/templates/student/stages/practice.html:66
 #, python-format
 msgid "Attempts left: %(n)s."
 msgstr "Осталось попыток: %(n)s."
@@ -3001,6 +3517,7 @@ msgid "Retake the test"
 msgstr "Пересдать тест"
 
 #: ui/templates/assessments/result.html:40
+#: ui/templates/student/stages/practice.html:56
 msgid "Your answers"
 msgstr "Ваши ответы"
 
@@ -3049,6 +3566,7 @@ msgid "Question %(n)s"
 msgstr "Вопрос %(n)s"
 
 #: ui/templates/assessments/take.html:49
+#: ui/templates/student/partials/practice_field.html:48
 msgid "Choose all correct options."
 msgstr "Выберите все правильные варианты."
 
@@ -3311,6 +3829,7 @@ msgstr[2] "Курс · %(n)s модулей"
 msgstr[3] "Курс · %(n)s модулей"
 
 #: ui/templates/student/course_map.html:13
+#: ui/templates/student/stages/practice.html:28
 msgid "Teacher:"
 msgstr "Преподаватель:"
 
@@ -3377,7 +3896,9 @@ msgstr "Сертификат курса"
 msgid ""
 "Complete every topic with a course score of at least %(p)s and the "
 "certificate is issued automatically."
-msgstr "Завершите все темы с баллом курса не ниже %(p)s — сертификат выдаётся автоматически."
+msgstr ""
+"Завершите все темы с баллом курса не ниже %(p)s — сертификат выдаётся "
+"автоматически."
 
 #: ui/templates/student/courses.html:11
 msgid "preview"
@@ -3427,7 +3948,9 @@ msgstr "Этот этап пока закрыт"
 msgid ""
 "«%(t)s» is waiting for the teacher's check. The next topic opens after the "
 "check."
-msgstr "«%(t)s» ожидает проверки преподавателем. Следующая тема откроется после проверки."
+msgstr ""
+"«%(t)s» ожидает проверки преподавателем. Следующая тема откроется после "
+"проверки."
 
 #: ui/templates/student/locked.html:12
 #, python-format
@@ -3495,6 +4018,45 @@ msgstr "Ожидает проверки преподавателем. Можно
 msgid "Then «%(t)s» opens."
 msgstr "Затем откроется «%(t)s»."
 
+#: ui/templates/student/partials/practice_field.html:6
+msgid "pts"
+msgstr "б."
+
+#: ui/templates/student/partials/practice_field.html:15
+msgid "Unit"
+msgstr "Единица"
+
+#: ui/templates/student/partials/practice_field.html:28
+msgid "Chemistry keyboard"
+msgstr "Химическая клавиатура"
+
+#: ui/templates/student/partials/practice_field.html:33
+msgid "Preview:"
+msgstr "Вид:"
+
+#: ui/templates/student/partials/practice_field.html:68
+msgid "Put a number next to each step: 1 is the first."
+msgstr "Поставьте номер у каждого шага: 1 — первый."
+
+#: ui/templates/student/partials/practice_field.html:71
+msgid "Position"
+msgstr "Место"
+
+#: ui/templates/student/partials/practice_field.html:83
+msgid ""
+"Write in your own words — the answer is graded by its meaning against the "
+"criteria."
+msgstr "Пишите своими словами — ответ оценивается по смыслу по критериям."
+
+#: ui/templates/student/partials/practice_grading.html:4
+msgid "Graded — refreshing…"
+msgstr "Оценено — обновляем…"
+
+#: ui/templates/student/partials/practice_grading.html:6
+msgid ""
+"Being graded… The open answers are checked by AI, usually in under a minute."
+msgstr "Оценивается… Открытые ответы проверяет AI, обычно меньше минуты."
+
 #: ui/templates/student/partials/quiz_panel.html:6
 #: ui/templates/student/stages/test.html:7
 #, python-format
@@ -3540,7 +4102,8 @@ msgstr "Посмотреть ответы"
 #, python-format
 msgid ""
 "You will have %(m)s min; the test is sent automatically when the time is up."
-msgstr "У вас будет %(m)s мин; по истечении времени тест отправится автоматически."
+msgstr ""
+"У вас будет %(m)s мин; по истечении времени тест отправится автоматически."
 
 #: ui/templates/student/partials/quiz_panel.html:47
 msgid "Start the test"
@@ -3565,7 +4128,8 @@ msgstr "необязательный"
 #: ui/templates/student/stages/lab.html:7
 msgid ""
 "Do the experiments in order, fill in the lab journal and send the analysis."
-msgstr "Выполните опыты по порядку, заполните лабораторный журнал и отправьте анализ."
+msgstr ""
+"Выполните опыты по порядку, заполните лабораторный журнал и отправьте анализ."
 
 #: ui/templates/student/stages/lab.html:16
 msgid "analysis"
@@ -3575,13 +4139,56 @@ msgstr "анализ"
 msgid "The lab is not set up yet."
 msgstr "Лаборатория ещё не настроена."
 
-#: ui/templates/student/stages/practice.html:2
+#: ui/templates/student/stages/practice.html:3
 msgid "The practice task is being prepared"
 msgstr "Практическая работа готовится"
 
-#: ui/templates/student/stages/practice.html:2
+#: ui/templates/student/stages/practice.html:3
 msgid "The task with its answer fields appears here soon."
 msgstr "Задание с полями ответа скоро появится здесь."
+
+#: ui/templates/student/stages/practice.html:14
+#, python-format
+msgid "Attempt %(n)s"
+msgstr "Попытка %(n)s"
+
+#: ui/templates/student/stages/practice.html:21
+msgid "Waiting for the teacher's check"
+msgstr "Ожидает проверки преподавателем"
+
+#: ui/templates/student/stages/practice.html:21
+msgid ""
+"Part of the answer is checked by the teacher. You can go on to the next "
+"stage."
+msgstr "Часть ответа проверит преподаватель. Можно переходить к следующему этапу."
+
+#: ui/templates/student/stages/practice.html:23
+msgid "Work accepted"
+msgstr "Работа принята"
+
+#: ui/templates/student/stages/practice.html:43
+msgid "Graded by AI"
+msgstr "Оценено AI"
+
+#: ui/templates/student/stages/practice.html:43
+msgid "Checked by the teacher"
+msgstr "Проверено преподавателем"
+
+#: ui/templates/student/stages/practice.html:43
+msgid "Preliminary AI grade — the teacher will check it"
+msgstr "Предварительная оценка AI — проверит преподаватель"
+
+#: ui/templates/student/stages/practice.html:56
+msgid "Send again"
+msgstr "Отправить снова"
+
+#: ui/templates/student/stages/practice.html:60
+msgid "Photo or file of your solution (not graded)"
+msgstr "Фото или файл решения (не оценивается)"
+
+#: ui/templates/student/stages/practice.html:65
+msgid "Send the work"
+msgstr "Отправить работу"
 
 #: ui/templates/student/stages/test.html:8
 #, python-format
@@ -3698,9 +4305,6 @@ msgstr "Балл"
 #~ msgid "Your group has no assigned course yet. You can join an open course."
 #~ msgstr ""
 #~ "Вашей группе ещё не назначен курс. Можно записаться на открытый курс."
-
-#~ msgid "This topic has no theory yet."
-#~ msgstr "В этой теме пока нет теории."
 
 #~ msgid "Tests"
 #~ msgstr "Тесты"
