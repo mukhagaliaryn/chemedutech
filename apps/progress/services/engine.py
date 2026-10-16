@@ -7,6 +7,7 @@ from django.db import transaction
 from django.db.models import F
 from django.utils import timezone
 
+from apps.certificates import services as certificates
 from apps.courses.models import Enrollment, Module, Stage, Topic
 from apps.courses.selectors import stage_url
 from apps.feedback import services as feedback
@@ -176,6 +177,8 @@ def _refresh_totals(enrollment, order, topic_scores, completed_topics, now) -> N
         ProgressEvent.objects.create(
             enrollment=enrollment, action="course_completed", score_percent=result.score_percent
         )
+    if result.passed and course.certificate_enabled:  # issue_for does nothing when it is already issued
+        transaction.on_commit(lambda: certificates.issue_for(enrollment))
     target = Enrollment.Status.COMPLETED if all_done else Enrollment.Status.ACTIVE
     if enrollment.status != Enrollment.Status.DROPPED and enrollment.status != target:
         enrollment.status = target

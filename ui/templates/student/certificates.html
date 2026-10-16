@@ -9,13 +9,19 @@
 
 {% for row in rows %}
   <section class="card flex flex-wrap items-center gap-5" aria-labelledby="c{{ row.course.pk }}">
-    <span class="grid size-12 shrink-0 place-items-center rounded-md {% if row.passed %}bg-success-50 text-success-700{% else %}bg-primary-50 text-primary-600{% endif %}">{% include "components/icons.html#award" with size=24 %}</span>
+    <span class="grid size-12 shrink-0 place-items-center rounded-md {% if row.certificate or row.passed %}bg-success-50 text-success-700{% else %}bg-primary-50 text-primary-600{% endif %}">{% include "components/icons.html#award" with size=24 %}</span>
     <div class="flex min-w-0 flex-[1_1_320px] flex-col gap-2">
       <h2 id="c{{ row.course.pk }}" class="text-h3">{{ row.course.title }}</h2>
-      {% if row.passed %}
-        <p class="text-sm text-ink-soft">
-          {% blocktranslate with s=row.result.score_percent|floatformat:1 g=row.grade.letter %}Course completed: {{ s }} ({{ g }}). The certificate is being prepared — the PDF will appear here.{% endblocktranslate %}
+      {% if row.certificate %}
+        <p class="num text-sm text-ink-soft">
+          {% blocktranslate with n=row.certificate.number d=row.certificate.issued_at|date:"j E Y" s=row.certificate.score_percent|floatformat:1 g=row.certificate.letter %}№ {{ n }} · issued {{ d }} · {{ s }} ({{ g }}){% endblocktranslate %}
         </p>
+        <p class="flex flex-wrap items-center gap-2 text-body-sm text-ink-soft" x-data="{ copied: false }">
+          {% translate "Verification link:" %} <a class="truncate" href="{{ row.verify_url }}" x-ref="link">{{ row.verify_url }}</a>
+          <button type="button" class="btn btn-ghost btn-sm" @click="navigator.clipboard.writeText($refs.link.href); copied = true; setTimeout(() => copied = false, 2000)"><span x-show="!copied">{% translate "Copy" %}</span><span x-show="copied" x-cloak>{% translate "Copied" %}</span></button>
+        </p>
+      {% elif row.passed %}
+        <p class="text-sm text-ink-soft">{% translate "The course is completed. The certificate is being issued — refresh the page in a minute." %}</p>
       {% else %}
         {% blocktranslate with a=row.topics_completed b=row.topics_total asvar l_topics %}{{ a }} / {{ b }} topics{% endblocktranslate %}
         {% translate "Completed topics" as l_label %}
@@ -26,7 +32,9 @@
         </p>
       {% endif %}
     </div>
-    {% if row.passed %}
+    {% if row.certificate %}
+      <a class="btn btn-primary" href="{% url 'certificates:pdf' row.certificate.verification_code %}">{% translate "Download the PDF" %}</a>
+    {% elif row.passed %}
       {% translate "Issued soon" as l_b %}{% include "components/badge.html" with variant="success" label=l_b %}
     {% else %}
       <a class="btn btn-secondary" href="{% url 'student:course' row.course.slug %}">{% translate "Course map" %}</a>

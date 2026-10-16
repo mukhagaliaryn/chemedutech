@@ -122,8 +122,8 @@
 - [x] `/teacher/research/` — қазіргі research апп осында көшеді; экспорт: attempts, events, quiz answers (CSV, UTF-8 BOM).
 
 ## STEP-13 · Сертификаттар
-- [ ] CertificateTemplate, Certificate (§7), WeasyPrint PDF, QR, `/certificates/verify/<uuid>/`.
-- [ ] CourseResult.passed → автоматты шығару + Notification.
+- [x] CertificateTemplate, Certificate (§7), WeasyPrint PDF, QR, `/certificates/verify/<uuid>/`.
+- [x] CourseResult.passed → автоматты шығару + Notification.
 
 ## STEP-14 · Админ және жылтырату
 - [ ] Unfold: `UNFOLD` баптаулары (түстер — дизайн жүйесінен), бүйір навигация, `DASHBOARD_CALLBACK` (жалпы сандар).

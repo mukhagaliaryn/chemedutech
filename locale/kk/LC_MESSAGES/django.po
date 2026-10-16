@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 20:45+0500\n"
+"POT-Creation-Date: 2026-10-16 21:01+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -249,7 +249,8 @@ msgstr "таңдалған нұсқалар"
 msgid "Assessments"
 msgstr "Бағалау"
 
-#: apps/assessments/models/attempt.py:17 apps/courses/models/course.py:38
+#: apps/assessments/models/attempt.py:17
+#: apps/certificates/models/certificate.py:40 apps/courses/models/course.py:38
 #: apps/courses/models/enrollment.py:52 apps/feedback/models/comment.py:19
 #: apps/labs/models/attempt.py:23 apps/practice/models/submission.py:21
 #: apps/progress/models/progress.py:22 apps/progress/models/progress.py:76
@@ -386,7 +387,8 @@ msgstr "Соңғы талпыныс"
 msgid "First attempt"
 msgstr "Бірінші талпыныс"
 
-#: apps/assessments/models/quiz.py:22 apps/courses/models/content.py:34
+#: apps/assessments/models/quiz.py:22
+#: apps/certificates/models/certificate.py:17 apps/courses/models/content.py:34
 #: apps/courses/models/course.py:31 apps/courses/models/structure.py:17
 #: apps/courses/models/structure.py:36 apps/courses/models/structure.py:76
 #: apps/practice/models/task.py:24
@@ -459,7 +461,8 @@ msgstr "Бір дұрыс нұсқа"
 msgid "Several correct options"
 msgstr "Бірнеше дұрыс нұсқа"
 
-#: apps/assessments/models/quiz.py:58
+#: apps/assessments/models/quiz.py:58 ui/templates/certificates/pdf.html:43
+#: ui/templates/certificates/verify.html:17
 msgid "Number"
 msgstr "Сан"
 
@@ -542,7 +545,8 @@ msgstr "%(eq)s теңдеуі теңестірілмеген."
 msgid "Cannot read %(answer)s: %(error)s"
 msgstr "%(answer)s оқылмады: %(error)s"
 
-#: apps/assessments/models/quiz.py:127 apps/courses/models/content.py:19
+#: apps/assessments/models/quiz.py:127
+#: apps/certificates/models/certificate.py:19 apps/courses/models/content.py:19
 #: apps/feedback/models/comment.py:30
 msgid "text"
 msgstr "мәтін"
@@ -595,6 +599,107 @@ msgstr ""
 #: apps/courses/services/authoring.py:26 apps/practice/services/authoring.py:77
 msgid "The list has changed. Reload the page and try again."
 msgstr "Тізім өзгерген. Бетті жаңартып, қайталаңыз."
+
+#: apps/certificates/admin.py:32
+msgid "Make the PDF again"
+msgstr "PDF-ті қайта жасау"
+
+#: apps/certificates/admin.py:36
+#, python-format
+msgid "PDF made: %(n)d"
+msgstr "PDF жасалды: %(n)d"
+
+#: apps/certificates/apps.py:8 ui/templates/layouts/student.html:11
+#: ui/templates/student/certificates.html:3
+#: ui/templates/student/certificates.html:6
+msgid "Certificates"
+msgstr "Сертификаттар"
+
+#: apps/certificates/models/certificate.py:12
+#: apps/certificates/models/certificate.py:45 apps/courses/models/course.py:69
+#: apps/courses/models/course.py:92 apps/courses/models/course.py:115
+#: apps/courses/models/enrollment.py:27 apps/courses/models/structure.py:14
+msgid "course"
+msgstr "курс"
+
+#: apps/certificates/models/certificate.py:15
+msgid "background"
+msgstr "фон"
+
+#: apps/certificates/models/certificate.py:15
+msgid "A4 landscape, 297 × 210 mm"
+msgstr "A4 альбомдық, 297 × 210 мм"
+
+#: apps/certificates/models/certificate.py:21
+#, python-brace-format
+msgid ""
+"Shown under the holder's name. Placeholders: {full_name}, {course}, {score}, "
+"{letter}, {date}, {number}"
+msgstr "Иесінің аты-жөнінің астында көрсетіледі. Орын толтырғыштар: {full_name}, {course}, {score}, {letter}, {date}, {number}"
+
+#: apps/certificates/models/certificate.py:23
+msgid "signatory"
+msgstr "қол қоюшы"
+
+#: apps/certificates/models/certificate.py:24
+msgid "signatory's position"
+msgstr "қол қоюшының лауазымы"
+
+#: apps/certificates/models/certificate.py:25
+msgid "signature"
+msgstr "қолы"
+
+#: apps/certificates/models/certificate.py:28
+msgid "certificate template"
+msgstr "сертификат үлгісі"
+
+#: apps/certificates/models/certificate.py:29
+msgid "certificate templates"
+msgstr "сертификат үлгілері"
+
+#: apps/certificates/models/certificate.py:42
+#: apps/courses/models/structure.py:35
+msgid "number"
+msgstr "нөмірі"
+
+#: apps/certificates/models/certificate.py:42
+msgid "e.g. CET-2026-000123"
+msgstr "мысалы, CET-2026-000123"
+
+#: apps/certificates/models/certificate.py:43
+msgid "issued at"
+msgstr "берілген уақыты"
+
+#: apps/certificates/models/certificate.py:44
+msgid "holder"
+msgstr "иесі"
+
+#: apps/certificates/models/certificate.py:46 apps/labs/models/attempt.py:59
+#: apps/progress/models/progress.py:28 apps/progress/models/progress.py:83
+#: apps/progress/models/progress.py:171
+msgid "score, %"
+msgstr "ұпай, %"
+
+#: apps/certificates/models/certificate.py:47
+#: apps/progress/models/progress.py:122
+msgid "letter grade"
+msgstr "әріптік баға"
+
+#: apps/certificates/models/certificate.py:48
+msgid "PDF"
+msgstr "PDF"
+
+#: apps/certificates/models/certificate.py:49
+msgid "verification code"
+msgstr "тексеру коды"
+
+#: apps/certificates/models/certificate.py:53 apps/courses/models/course.py:47
+msgid "certificate"
+msgstr "сертификат"
+
+#: apps/certificates/models/certificate.py:54
+msgid "certificates"
+msgstr "сертификаттар"
 
 #: apps/core/apps.py:8
 msgid "Core"
@@ -838,10 +943,6 @@ msgstr "Кезеңдер мен тақырыптар бірінен кейін �
 msgid "passing score, %"
 msgstr "өту шегі, %"
 
-#: apps/courses/models/course.py:47
-msgid "certificate"
-msgstr "сертификат"
-
 #: apps/courses/models/course.py:49
 msgid "AI grades to spot-check, %"
 msgstr "Іріктеп тексерілетін AI бағалары, %"
@@ -850,7 +951,9 @@ msgstr "Іріктеп тексерілетін AI бағалары, %"
 msgid ""
 "Share of AI-graded practice works drawn at random for the teacher's check "
 "(research reliability)"
-msgstr "AI бағалаған практикалық жұмыстардың мұғалім тексеруі үшін кездейсоқ таңдалатын үлесі (зерттеу сенімділігі)"
+msgstr ""
+"AI бағалаған практикалық жұмыстардың мұғалім тексеруі үшін кездейсоқ "
+"таңдалатын үлесі (зерттеу сенімділігі)"
 
 #: apps/courses/models/course.py:55
 msgid "stage kind weights"
@@ -867,12 +970,6 @@ msgstr ""
 #: apps/courses/models/course.py:64
 msgid "teachers"
 msgstr "мұғалімдер"
-
-#: apps/courses/models/course.py:69 apps/courses/models/course.py:92
-#: apps/courses/models/course.py:115 apps/courses/models/enrollment.py:27
-#: apps/courses/models/structure.py:14
-msgid "course"
-msgstr "курс"
 
 #: apps/courses/models/course.py:70
 msgid "courses"
@@ -994,10 +1091,6 @@ msgstr "модульдер"
 #: apps/courses/models/structure.py:34
 msgid "Order within the module"
 msgstr "Модуль ішіндегі реті"
-
-#: apps/courses/models/structure.py:35
-msgid "number"
-msgstr "нөмірі"
 
 #: apps/courses/models/structure.py:35
 msgid "Number within the whole course (1–15)"
@@ -2222,11 +2315,6 @@ msgstr "талдау: дұрыс"
 msgid "analysis: closed questions"
 msgstr "талдау: жабық сұрақтар"
 
-#: apps/labs/models/attempt.py:59 apps/progress/models/progress.py:28
-#: apps/progress/models/progress.py:83 apps/progress/models/progress.py:171
-msgid "score, %"
-msgstr "ұпай, %"
-
 #: apps/labs/models/attempt.py:64
 msgid ""
 "Process, journal and analysis by the lab's scoring formula; set when the "
@@ -3403,10 +3491,6 @@ msgstr "модуль нәтижесі"
 msgid "module results"
 msgstr "модуль нәтижелері"
 
-#: apps/progress/models/progress.py:122
-msgid "letter grade"
-msgstr "әріптік баға"
-
 #: apps/progress/models/progress.py:123
 msgid "GPA points"
 msgstr "GPA ұпайы"
@@ -3767,9 +3851,9 @@ msgstr "Зерттеу тобы"
 msgid "The student signs up first; then add the account here."
 msgstr "Алдымен студент тіркеледі, содан кейін оның аккаунтын осында қосыңыз."
 
-#: apps/teacher/forms.py:41 ui/templates/layouts/teacher.html:14
-#: ui/templates/student/courses.html:11 ui/templates/teacher/gradebook.html:36
-#: ui/templates/teacher/grading.html:20
+#: apps/teacher/forms.py:41 ui/templates/certificates/verify.html:15
+#: ui/templates/layouts/teacher.html:14 ui/templates/student/courses.html:11
+#: ui/templates/teacher/gradebook.html:36 ui/templates/teacher/grading.html:20
 msgid "Course"
 msgstr "Курс"
 
@@ -3939,15 +4023,15 @@ msgstr "Бұл кезеңді ашу мүмкін емес: оның тақыр�
 msgid "«%(stage)s» is open for the student."
 msgstr "«%(stage)s» студентке ашылды."
 
-#: config/settings/base.py:145
+#: config/settings/base.py:146
 msgid "Kazakh"
 msgstr "Қазақша"
 
-#: config/settings/base.py:146
+#: config/settings/base.py:147
 msgid "Russian"
 msgstr "Орысша"
 
-#: config/settings/base.py:147
+#: config/settings/base.py:148
 msgid "English"
 msgstr "Ағылшынша"
 
@@ -4281,6 +4365,52 @@ msgstr "Келесі сұрақ"
 msgid "Submit the test"
 msgstr "Тестті жіберу"
 
+#: ui/templates/certificates/pdf.html:37
+msgid "This certificate is presented to"
+msgstr "Бұл сертификат берілді"
+
+#: ui/templates/certificates/pdf.html:44
+#: ui/templates/certificates/verify.html:18
+msgid "Date of issue"
+msgstr "Берілген күні"
+
+#: ui/templates/certificates/pdf.html:45
+#: ui/templates/certificates/verify.html:16
+#: ui/templates/student/results.html:62 ui/templates/teacher/group.html:86
+#: ui/templates/teacher/student.html:66 ui/templates/teacher/student.html:110
+#: ui/views.py:21
+msgid "Score"
+msgstr "Ұпай"
+
+#: ui/templates/certificates/pdf.html:53
+msgid "Check the certificate"
+msgstr "Сертификатты тексеру"
+
+#: ui/templates/certificates/verify.html:3
+#: ui/templates/certificates/verify.html:6
+msgid "Certificate check"
+msgstr "Сертификатты тексеру"
+
+#: ui/templates/certificates/verify.html:11
+msgid "The certificate is real: it was issued by ChemEduTech."
+msgstr "Сертификат түпнұсқа: оны ChemEduTech берген."
+
+#: ui/templates/certificates/verify.html:14
+msgid "Holder"
+msgstr "Иесі"
+
+#: ui/templates/certificates/verify.html:25
+msgid "No certificate with this code."
+msgstr "Мұндай кодпен сертификат жоқ."
+
+#: ui/templates/certificates/verify.html:26
+msgid ""
+"Check the link or the QR code. A real certificate always opens this page "
+"with its holder's name."
+msgstr ""
+"Сілтемені немесе QR-кодты тексеріңіз. Түпнұсқа сертификат бұл бетті әрқашан "
+"иесінің аты-жөнімен ашады."
+
 #: ui/templates/components/modal.html:15
 #: ui/templates/feedback/partials/thread.html:18
 #: ui/templates/teacher/content/course_form.html:38
@@ -4428,7 +4558,7 @@ msgstr "Профиль"
 msgid "Log out"
 msgstr "Шығу"
 
-#: ui/templates/layouts/learn.html:13 ui/templates/student/certificates.html:32
+#: ui/templates/layouts/learn.html:13 ui/templates/student/certificates.html:40
 #: ui/templates/student/courses.html:24 ui/templates/student/dashboard.html:10
 #: ui/templates/student/locked.html:18
 msgid "Course map"
@@ -4470,12 +4600,6 @@ msgstr "Менің курстарым"
 #: ui/templates/layouts/student.html:10 ui/templates/student/dashboard.html:51
 msgid "Grades"
 msgstr "Бағалар"
-
-#: ui/templates/layouts/student.html:11
-#: ui/templates/student/certificates.html:3
-#: ui/templates/student/certificates.html:6
-msgid "Certificates"
-msgstr "Сертификаттар"
 
 #: ui/templates/layouts/student.html:13 ui/templates/layouts/teacher.html:15
 #: ui/templates/research/dashboard.html:7
@@ -4588,7 +4712,10 @@ msgid ""
 "Descriptive statistics only. Test significance (t-test, Mann–Whitney) on the "
 "downloaded data. The research group of an enrolment is the value at "
 "enrolment."
-msgstr "Тек сипаттамалы статистика. Статистикалық маңыздылықты (t-тест, Манн–Уитни) жүктелген деректер бойынша есептеңіз. Жазылудың зерттеу тобы — жазылу сәтіндегі мән."
+msgstr ""
+"Тек сипаттамалы статистика. Статистикалық маңыздылықты (t-тест, Манн–Уитни) "
+"жүктелген деректер бойынша есептеңіз. Жазылудың зерттеу тобы — жазылу "
+"сәтіндегі мән."
 
 #: ui/templates/research/analytics.html:70
 msgid "Average score by stage"
@@ -4622,7 +4749,9 @@ msgstr "Зертханадағы жиі қателер"
 #: ui/templates/research/analytics.html:104
 msgid ""
 "At which step students go wrong — a hint for what to explain again in class."
-msgstr "Студенттер қай қадамда жиі қателеседі — сабақта қайта түсіндіруге арналған белгі."
+msgstr ""
+"Студенттер қай қадамда жиі қателеседі — сабақта қайта түсіндіруге арналған "
+"белгі."
 
 #: ui/templates/research/analytics.html:109
 msgid "Experiment · step"
@@ -4697,12 +4826,15 @@ msgstr "Орташа абсолют айырма"
 msgid ""
 "Points as %% of the field's points. Only grades a teacher checked count; the "
 "latest check of an answer is used."
-msgstr "Ұпайлар өріс ұпайының %%-ымен. Тек мұғалім тексерген бағалар есептеледі; жауаптың соңғы тексерісі алынады."
+msgstr ""
+"Ұпайлар өріс ұпайының %%-ымен. Тек мұғалім тексерген бағалар есептеледі; "
+"жауаптың соңғы тексерісі алынады."
 
 #: ui/templates/research/analytics.html:155
 msgid ""
 "No AI grade has been checked by a teacher yet. Draw a sample and check it."
-msgstr "Мұғалім әлі бірде-бір AI бағасын тексермеген. Іріктеме алып, оны тексеріңіз."
+msgstr ""
+"Мұғалім әлі бірде-бір AI бағасын тексермеген. Іріктеме алып, оны тексеріңіз."
 
 #: ui/templates/research/analytics.html:157
 #: ui/templates/research/dashboard.html:14
@@ -4719,7 +4851,9 @@ msgid ""
 "%(p)s%% of AI-graded works are drawn at random for your check, so the "
 "agreement is measured on an unbiased sample (the share is set in the course "
 "settings)."
-msgstr "AI бағалаған жұмыстардың %(p)s%%-ы тексеруіңізге кездейсоқ таңдалады, сондықтан сәйкестік бейтарап іріктемеде өлшенеді (үлесі курс баптауларында)."
+msgstr ""
+"AI бағалаған жұмыстардың %(p)s%%-ы тексеруіңізге кездейсоқ таңдалады, "
+"сондықтан сәйкестік бейтарап іріктемеде өлшенеді (үлесі курс баптауларында)."
 
 #: ui/templates/research/analytics.html:165
 msgid "Drawn"
@@ -4815,42 +4949,62 @@ msgstr "Курс өту ұпайымен аяқталғанда сертифик
 
 #: ui/templates/student/certificates.html:17
 #, python-format
-msgid ""
-"Course completed: %(s)s (%(g)s). The certificate is being prepared — the PDF "
-"will appear here."
-msgstr ""
-"Курс аяқталды: %(s)s (%(g)s). Сертификат дайындалуда — PDF осында шығады."
+msgid "№ %(n)s · issued %(d)s · %(s)s (%(g)s)"
+msgstr "№ %(n)s · берілді %(d)s · %(s)s (%(g)s)"
 
 #: ui/templates/student/certificates.html:20
+msgid "Verification link:"
+msgstr "Тексеру сілтемесі:"
+
+#: ui/templates/student/certificates.html:21 ui/templates/teacher/group.html:29
+msgid "Copy"
+msgstr "Көшіру"
+
+#: ui/templates/student/certificates.html:21 ui/templates/teacher/group.html:29
+msgid "Copied"
+msgstr "Көшірілді"
+
+#: ui/templates/student/certificates.html:24
+msgid ""
+"The course is completed. The certificate is being issued — refresh the page "
+"in a minute."
+msgstr ""
+"Курс аяқталды. Сертификат шығарылуда — бір минуттан кейін бетті жаңартыңыз."
+
+#: ui/templates/student/certificates.html:26
 #: ui/templates/student/courses.html:17
 #, python-format
 msgid "%(a)s / %(b)s topics"
 msgstr "%(a)s / %(b)s тақырып"
 
-#: ui/templates/student/certificates.html:21
+#: ui/templates/student/certificates.html:27
 #: ui/templates/student/dashboard.html:66
 msgid "Completed topics"
 msgstr "Аяқталған тақырыптар"
 
-#: ui/templates/student/certificates.html:24
+#: ui/templates/student/certificates.html:30
 #, python-format
 msgid "Current score %(c)s; at least %(p)s is needed for the certificate."
 msgstr "Ағымдағы ұпай %(c)s; сертификат үшін кемінде %(p)s керек."
 
-#: ui/templates/student/certificates.html:25
+#: ui/templates/student/certificates.html:31
 #, python-format
 msgid "Complete every topic with a course score of at least %(p)s."
 msgstr "Барлық тақырыпты курс бойынша кемінде %(p)s ұпаймен аяқтаңыз."
 
-#: ui/templates/student/certificates.html:30
+#: ui/templates/student/certificates.html:36
+msgid "Download the PDF"
+msgstr "PDF жүктеу"
+
+#: ui/templates/student/certificates.html:38
 msgid "Issued soon"
 msgstr "Жақында беріледі"
 
-#: ui/templates/student/certificates.html:36
+#: ui/templates/student/certificates.html:44
 msgid "No certificates yet"
 msgstr "Әзірге сертификат жоқ"
 
-#: ui/templates/student/certificates.html:36
+#: ui/templates/student/certificates.html:44
 msgid "Complete a course and its certificate will appear here."
 msgstr "Курсты аяқтаңыз — оның сертификаты осында шығады."
 
@@ -5371,12 +5525,6 @@ msgstr "Бағалау тәсілі"
 #: ui/templates/student/results.html:60
 msgid "Weight"
 msgstr "Салмақ"
-
-#: ui/templates/student/results.html:62 ui/templates/teacher/group.html:86
-#: ui/templates/teacher/student.html:66 ui/templates/teacher/student.html:110
-#: ui/views.py:21
-msgid "Score"
-msgstr "Ұпай"
 
 #: ui/templates/student/results.html:72 ui/templates/student/stage.html:6
 #: ui/templates/student/topic.html:28
@@ -6218,14 +6366,6 @@ msgstr "Топты өңдеу"
 #: ui/templates/teacher/group.html:25
 msgid "Join code"
 msgstr "Қосылу коды"
-
-#: ui/templates/teacher/group.html:29
-msgid "Copy"
-msgstr "Көшіру"
-
-#: ui/templates/teacher/group.html:29
-msgid "Copied"
-msgstr "Көшірілді"
 
 #: ui/templates/teacher/group.html:32
 msgid "Make a new code; the old one stops working"

@@ -343,7 +343,11 @@ def gradebook(enrollment) -> dict:
 
 
 def certificate_rows(enrollments) -> list[dict]:
-    """Every course with a certificate: issued (STEP-13 adds the PDF) or how far the student is from it."""
+    """Every course with a certificate: issued (PDF, verification link) or how far the student is from it."""
+    from apps.certificates.models import Certificate
+    from apps.certificates.services import verification_url
+
+    issued = {c.enrollment_id: c for c in Certificate.objects.filter(enrollment__in=enrollments)}
     rows = []
     for e in enrollments:
         if not e.course.certificate_enabled:
@@ -361,6 +365,8 @@ def certificate_rows(enrollments) -> list[dict]:
                 "current": current,
                 "grade": grade_for(result.score_percent) if result and result.score_percent is not None else None,
                 "below_pass": current is not None and current < Decimal(e.course.passing_score),
+                "certificate": issued.get(e.pk),
+                "verify_url": verification_url(issued[e.pk]) if e.pk in issued else "",
             }
         )
     return rows

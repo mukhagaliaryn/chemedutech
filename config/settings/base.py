@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     "apps.progress",
     "apps.practice",
     "apps.feedback",
+    "apps.certificates",
     # product layer: views and URLs only
     "apps.student",
     "apps.teacher",
@@ -244,3 +245,6 @@ AI_GRADING_FALLBACKS = env_bool("AI_GRADING_FALLBACKS", True)
 # --- Background tasks (Django 6 django.tasks; ARCHITECTURE §9.6) -----------------
 # Production: the database backend + `python manage.py db_worker` (systemd). Dev/tests run inline.
 TASKS = {"default": {"BACKEND": "django_tasks_db.DatabaseBackend"}}
+
+# Absolute address of the site — the QR code of a certificate points to its verification page.
+SITE_URL = os.environ.get("SITE_URL", "http://localhost:8000").rstrip("/")

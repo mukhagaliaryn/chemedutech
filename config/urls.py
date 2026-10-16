@@ -14,6 +14,7 @@ urlpatterns = [
     path("courses/", RedirectView.as_view(pattern_name="student:courses", permanent=False)),
     path("labs/", include("apps.labs.urls")),
     path("notifications/", include("apps.feedback.urls")),
+    path("certificates/", include("apps.certificates.urls")),
     path("quiz/", include("apps.assessments.urls")),
     path("research/", RedirectView.as_view(pattern_name="research:dashboard", permanent=False, query_string=True)),
     path("teacher/", include("apps.research.urls")),

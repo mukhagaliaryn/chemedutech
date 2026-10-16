@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 20:45+0500\n"
+"POT-Creation-Date: 2026-10-16 21:01+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -252,7 +252,8 @@ msgstr "выбранные варианты"
 msgid "Assessments"
 msgstr "Оценивание"
 
-#: apps/assessments/models/attempt.py:17 apps/courses/models/course.py:38
+#: apps/assessments/models/attempt.py:17
+#: apps/certificates/models/certificate.py:40 apps/courses/models/course.py:38
 #: apps/courses/models/enrollment.py:52 apps/feedback/models/comment.py:19
 #: apps/labs/models/attempt.py:23 apps/practice/models/submission.py:21
 #: apps/progress/models/progress.py:22 apps/progress/models/progress.py:76
@@ -389,7 +390,8 @@ msgstr "Последняя попытка"
 msgid "First attempt"
 msgstr "Первая попытка"
 
-#: apps/assessments/models/quiz.py:22 apps/courses/models/content.py:34
+#: apps/assessments/models/quiz.py:22
+#: apps/certificates/models/certificate.py:17 apps/courses/models/content.py:34
 #: apps/courses/models/course.py:31 apps/courses/models/structure.py:17
 #: apps/courses/models/structure.py:36 apps/courses/models/structure.py:76
 #: apps/practice/models/task.py:24
@@ -462,7 +464,8 @@ msgstr "Один правильный вариант"
 msgid "Several correct options"
 msgstr "Несколько правильных вариантов"
 
-#: apps/assessments/models/quiz.py:58
+#: apps/assessments/models/quiz.py:58 ui/templates/certificates/pdf.html:43
+#: ui/templates/certificates/verify.html:17
 msgid "Number"
 msgstr "Число"
 
@@ -544,7 +547,8 @@ msgstr "Уравнение %(eq)s не уравнено."
 msgid "Cannot read %(answer)s: %(error)s"
 msgstr "Не удалось прочитать %(answer)s: %(error)s"
 
-#: apps/assessments/models/quiz.py:127 apps/courses/models/content.py:19
+#: apps/assessments/models/quiz.py:127
+#: apps/certificates/models/certificate.py:19 apps/courses/models/content.py:19
 #: apps/feedback/models/comment.py:30
 msgid "text"
 msgstr "текст"
@@ -597,6 +601,107 @@ msgstr ""
 #: apps/courses/services/authoring.py:26 apps/practice/services/authoring.py:77
 msgid "The list has changed. Reload the page and try again."
 msgstr "Список изменился. Обновите страницу и повторите."
+
+#: apps/certificates/admin.py:32
+msgid "Make the PDF again"
+msgstr "Создать PDF заново"
+
+#: apps/certificates/admin.py:36
+#, python-format
+msgid "PDF made: %(n)d"
+msgstr "PDF создано: %(n)d"
+
+#: apps/certificates/apps.py:8 ui/templates/layouts/student.html:11
+#: ui/templates/student/certificates.html:3
+#: ui/templates/student/certificates.html:6
+msgid "Certificates"
+msgstr "Сертификаты"
+
+#: apps/certificates/models/certificate.py:12
+#: apps/certificates/models/certificate.py:45 apps/courses/models/course.py:69
+#: apps/courses/models/course.py:92 apps/courses/models/course.py:115
+#: apps/courses/models/enrollment.py:27 apps/courses/models/structure.py:14
+msgid "course"
+msgstr "курс"
+
+#: apps/certificates/models/certificate.py:15
+msgid "background"
+msgstr "фон"
+
+#: apps/certificates/models/certificate.py:15
+msgid "A4 landscape, 297 × 210 mm"
+msgstr "A4 альбомная, 297 × 210 мм"
+
+#: apps/certificates/models/certificate.py:21
+#, python-brace-format
+msgid ""
+"Shown under the holder's name. Placeholders: {full_name}, {course}, {score}, "
+"{letter}, {date}, {number}"
+msgstr "Показывается под именем владельца. Подстановки: {full_name}, {course}, {score}, {letter}, {date}, {number}"
+
+#: apps/certificates/models/certificate.py:23
+msgid "signatory"
+msgstr "подписант"
+
+#: apps/certificates/models/certificate.py:24
+msgid "signatory's position"
+msgstr "должность подписанта"
+
+#: apps/certificates/models/certificate.py:25
+msgid "signature"
+msgstr "подпись"
+
+#: apps/certificates/models/certificate.py:28
+msgid "certificate template"
+msgstr "шаблон сертификата"
+
+#: apps/certificates/models/certificate.py:29
+msgid "certificate templates"
+msgstr "шаблоны сертификатов"
+
+#: apps/certificates/models/certificate.py:42
+#: apps/courses/models/structure.py:35
+msgid "number"
+msgstr "номер"
+
+#: apps/certificates/models/certificate.py:42
+msgid "e.g. CET-2026-000123"
+msgstr "например, CET-2026-000123"
+
+#: apps/certificates/models/certificate.py:43
+msgid "issued at"
+msgstr "выдан"
+
+#: apps/certificates/models/certificate.py:44
+msgid "holder"
+msgstr "владелец"
+
+#: apps/certificates/models/certificate.py:46 apps/labs/models/attempt.py:59
+#: apps/progress/models/progress.py:28 apps/progress/models/progress.py:83
+#: apps/progress/models/progress.py:171
+msgid "score, %"
+msgstr "балл, %"
+
+#: apps/certificates/models/certificate.py:47
+#: apps/progress/models/progress.py:122
+msgid "letter grade"
+msgstr "буквенная оценка"
+
+#: apps/certificates/models/certificate.py:48
+msgid "PDF"
+msgstr "PDF"
+
+#: apps/certificates/models/certificate.py:49
+msgid "verification code"
+msgstr "код проверки"
+
+#: apps/certificates/models/certificate.py:53 apps/courses/models/course.py:47
+msgid "certificate"
+msgstr "сертификат"
+
+#: apps/certificates/models/certificate.py:54
+msgid "certificates"
+msgstr "сертификаты"
 
 #: apps/core/apps.py:8
 msgid "Core"
@@ -841,10 +946,6 @@ msgstr "Этапы и темы открываются по очереди"
 msgid "passing score, %"
 msgstr "проходной балл, %"
 
-#: apps/courses/models/course.py:47
-msgid "certificate"
-msgstr "сертификат"
-
 #: apps/courses/models/course.py:49
 msgid "AI grades to spot-check, %"
 msgstr "Оценки ИИ для выборочной проверки, %"
@@ -853,7 +954,9 @@ msgstr "Оценки ИИ для выборочной проверки, %"
 msgid ""
 "Share of AI-graded practice works drawn at random for the teacher's check "
 "(research reliability)"
-msgstr "Доля практических работ, оценённых ИИ, которые случайно выбираются для проверки преподавателем (надёжность исследования)"
+msgstr ""
+"Доля практических работ, оценённых ИИ, которые случайно выбираются для "
+"проверки преподавателем (надёжность исследования)"
 
 #: apps/courses/models/course.py:55
 msgid "stage kind weights"
@@ -870,12 +973,6 @@ msgstr ""
 #: apps/courses/models/course.py:64
 msgid "teachers"
 msgstr "преподаватели"
-
-#: apps/courses/models/course.py:69 apps/courses/models/course.py:92
-#: apps/courses/models/course.py:115 apps/courses/models/enrollment.py:27
-#: apps/courses/models/structure.py:14
-msgid "course"
-msgstr "курс"
 
 #: apps/courses/models/course.py:70
 msgid "courses"
@@ -997,10 +1094,6 @@ msgstr "модули"
 #: apps/courses/models/structure.py:34
 msgid "Order within the module"
 msgstr "Порядок внутри модуля"
-
-#: apps/courses/models/structure.py:35
-msgid "number"
-msgstr "номер"
 
 #: apps/courses/models/structure.py:35
 msgid "Number within the whole course (1–15)"
@@ -2224,11 +2317,6 @@ msgstr "анализ: верно"
 msgid "analysis: closed questions"
 msgstr "анализ: закрытые вопросы"
 
-#: apps/labs/models/attempt.py:59 apps/progress/models/progress.py:28
-#: apps/progress/models/progress.py:83 apps/progress/models/progress.py:171
-msgid "score, %"
-msgstr "балл, %"
-
 #: apps/labs/models/attempt.py:64
 msgid ""
 "Process, journal and analysis by the lab's scoring formula; set when the "
@@ -3407,10 +3495,6 @@ msgstr "результат модуля"
 msgid "module results"
 msgstr "результаты модулей"
 
-#: apps/progress/models/progress.py:122
-msgid "letter grade"
-msgstr "буквенная оценка"
-
 #: apps/progress/models/progress.py:123
 msgid "GPA points"
 msgstr "баллы GPA"
@@ -3778,9 +3862,9 @@ msgstr "Исследовательская группа"
 msgid "The student signs up first; then add the account here."
 msgstr "Сначала студент регистрируется, затем добавьте его аккаунт здесь."
 
-#: apps/teacher/forms.py:41 ui/templates/layouts/teacher.html:14
-#: ui/templates/student/courses.html:11 ui/templates/teacher/gradebook.html:36
-#: ui/templates/teacher/grading.html:20
+#: apps/teacher/forms.py:41 ui/templates/certificates/verify.html:15
+#: ui/templates/layouts/teacher.html:14 ui/templates/student/courses.html:11
+#: ui/templates/teacher/gradebook.html:36 ui/templates/teacher/grading.html:20
 msgid "Course"
 msgstr "Курс"
 
@@ -3967,15 +4051,15 @@ msgstr "Этот этап нельзя открыть: его тема не оп
 msgid "«%(stage)s» is open for the student."
 msgstr "«%(stage)s» открыт для студента."
 
-#: config/settings/base.py:145
+#: config/settings/base.py:146
 msgid "Kazakh"
 msgstr "Казахский"
 
-#: config/settings/base.py:146
+#: config/settings/base.py:147
 msgid "Russian"
 msgstr "Русский"
 
-#: config/settings/base.py:147
+#: config/settings/base.py:148
 msgid "English"
 msgstr "Английский"
 
@@ -4308,6 +4392,52 @@ msgstr "Следующий вопрос"
 msgid "Submit the test"
 msgstr "Отправить тест"
 
+#: ui/templates/certificates/pdf.html:37
+msgid "This certificate is presented to"
+msgstr "Настоящий сертификат выдан"
+
+#: ui/templates/certificates/pdf.html:44
+#: ui/templates/certificates/verify.html:18
+msgid "Date of issue"
+msgstr "Дата выдачи"
+
+#: ui/templates/certificates/pdf.html:45
+#: ui/templates/certificates/verify.html:16
+#: ui/templates/student/results.html:62 ui/templates/teacher/group.html:86
+#: ui/templates/teacher/student.html:66 ui/templates/teacher/student.html:110
+#: ui/views.py:21
+msgid "Score"
+msgstr "Балл"
+
+#: ui/templates/certificates/pdf.html:53
+msgid "Check the certificate"
+msgstr "Проверить сертификат"
+
+#: ui/templates/certificates/verify.html:3
+#: ui/templates/certificates/verify.html:6
+msgid "Certificate check"
+msgstr "Проверка сертификата"
+
+#: ui/templates/certificates/verify.html:11
+msgid "The certificate is real: it was issued by ChemEduTech."
+msgstr "Сертификат подлинный: он выдан ChemEduTech."
+
+#: ui/templates/certificates/verify.html:14
+msgid "Holder"
+msgstr "Владелец"
+
+#: ui/templates/certificates/verify.html:25
+msgid "No certificate with this code."
+msgstr "Сертификата с таким кодом нет."
+
+#: ui/templates/certificates/verify.html:26
+msgid ""
+"Check the link or the QR code. A real certificate always opens this page "
+"with its holder's name."
+msgstr ""
+"Проверьте ссылку или QR-код. Подлинный сертификат всегда открывает эту "
+"страницу с именем владельца."
+
 #: ui/templates/components/modal.html:15
 #: ui/templates/feedback/partials/thread.html:18
 #: ui/templates/teacher/content/course_form.html:38
@@ -4457,7 +4587,7 @@ msgstr "Профиль"
 msgid "Log out"
 msgstr "Выйти"
 
-#: ui/templates/layouts/learn.html:13 ui/templates/student/certificates.html:32
+#: ui/templates/layouts/learn.html:13 ui/templates/student/certificates.html:40
 #: ui/templates/student/courses.html:24 ui/templates/student/dashboard.html:10
 #: ui/templates/student/locked.html:18
 msgid "Course map"
@@ -4499,12 +4629,6 @@ msgstr "Мои курсы"
 #: ui/templates/layouts/student.html:10 ui/templates/student/dashboard.html:51
 msgid "Grades"
 msgstr "Оценки"
-
-#: ui/templates/layouts/student.html:11
-#: ui/templates/student/certificates.html:3
-#: ui/templates/student/certificates.html:6
-msgid "Certificates"
-msgstr "Сертификаты"
 
 #: ui/templates/layouts/student.html:13 ui/templates/layouts/teacher.html:15
 #: ui/templates/research/dashboard.html:7
@@ -4617,7 +4741,10 @@ msgid ""
 "Descriptive statistics only. Test significance (t-test, Mann–Whitney) on the "
 "downloaded data. The research group of an enrolment is the value at "
 "enrolment."
-msgstr "Только описательная статистика. Значимость (t-тест, Манна–Уитни) проверяйте по скачанным данным. Исследовательская группа записи — значение на момент записи."
+msgstr ""
+"Только описательная статистика. Значимость (t-тест, Манна–Уитни) проверяйте "
+"по скачанным данным. Исследовательская группа записи — значение на момент "
+"записи."
 
 #: ui/templates/research/analytics.html:70
 msgid "Average score by stage"
@@ -4653,7 +4780,9 @@ msgstr "Частые ошибки в лаборатории"
 #: ui/templates/research/analytics.html:104
 msgid ""
 "At which step students go wrong — a hint for what to explain again in class."
-msgstr "На каком шаге студенты ошибаются — подсказка, что объяснить ещё раз на занятии."
+msgstr ""
+"На каком шаге студенты ошибаются — подсказка, что объяснить ещё раз на "
+"занятии."
 
 #: ui/templates/research/analytics.html:109
 msgid "Experiment · step"
@@ -4730,12 +4859,16 @@ msgstr "Средняя абсолютная разница"
 msgid ""
 "Points as %% of the field's points. Only grades a teacher checked count; the "
 "latest check of an answer is used."
-msgstr "Баллы в %% от баллов поля. Учитываются только проверенные преподавателем оценки; берётся последняя проверка ответа."
+msgstr ""
+"Баллы в %% от баллов поля. Учитываются только проверенные преподавателем "
+"оценки; берётся последняя проверка ответа."
 
 #: ui/templates/research/analytics.html:155
 msgid ""
 "No AI grade has been checked by a teacher yet. Draw a sample and check it."
-msgstr "Преподаватель ещё не проверил ни одной оценки ИИ. Сделайте выборку и проверьте её."
+msgstr ""
+"Преподаватель ещё не проверил ни одной оценки ИИ. Сделайте выборку и "
+"проверьте её."
 
 #: ui/templates/research/analytics.html:157
 #: ui/templates/research/dashboard.html:14
@@ -4752,7 +4885,10 @@ msgid ""
 "%(p)s%% of AI-graded works are drawn at random for your check, so the "
 "agreement is measured on an unbiased sample (the share is set in the course "
 "settings)."
-msgstr "%(p)s%% работ, оценённых ИИ, случайно выбираются для вашей проверки, чтобы согласие измерялось на несмещённой выборке (доля задаётся в настройках курса)."
+msgstr ""
+"%(p)s%% работ, оценённых ИИ, случайно выбираются для вашей проверки, чтобы "
+"согласие измерялось на несмещённой выборке (доля задаётся в настройках "
+"курса)."
 
 #: ui/templates/research/analytics.html:165
 msgid "Drawn"
@@ -4849,42 +4985,62 @@ msgstr ""
 
 #: ui/templates/student/certificates.html:17
 #, python-format
-msgid ""
-"Course completed: %(s)s (%(g)s). The certificate is being prepared — the PDF "
-"will appear here."
-msgstr ""
-"Курс завершён: %(s)s (%(g)s). Сертификат готовится — PDF появится здесь."
+msgid "№ %(n)s · issued %(d)s · %(s)s (%(g)s)"
+msgstr "№ %(n)s · выдан %(d)s · %(s)s (%(g)s)"
 
 #: ui/templates/student/certificates.html:20
+msgid "Verification link:"
+msgstr "Ссылка для проверки:"
+
+#: ui/templates/student/certificates.html:21 ui/templates/teacher/group.html:29
+msgid "Copy"
+msgstr "Копировать"
+
+#: ui/templates/student/certificates.html:21 ui/templates/teacher/group.html:29
+msgid "Copied"
+msgstr "Скопировано"
+
+#: ui/templates/student/certificates.html:24
+msgid ""
+"The course is completed. The certificate is being issued — refresh the page "
+"in a minute."
+msgstr ""
+"Курс завершён. Сертификат выпускается — обновите страницу через минуту."
+
+#: ui/templates/student/certificates.html:26
 #: ui/templates/student/courses.html:17
 #, python-format
 msgid "%(a)s / %(b)s topics"
 msgstr "%(a)s / %(b)s тем"
 
-#: ui/templates/student/certificates.html:21
+#: ui/templates/student/certificates.html:27
 #: ui/templates/student/dashboard.html:66
 msgid "Completed topics"
 msgstr "Завершённые темы"
 
-#: ui/templates/student/certificates.html:24
+#: ui/templates/student/certificates.html:30
 #, python-format
 msgid "Current score %(c)s; at least %(p)s is needed for the certificate."
 msgstr "Текущий балл %(c)s; для сертификата нужно не менее %(p)s."
 
-#: ui/templates/student/certificates.html:25
+#: ui/templates/student/certificates.html:31
 #, python-format
 msgid "Complete every topic with a course score of at least %(p)s."
 msgstr "Завершите все темы с баллом по курсу не ниже %(p)s."
 
-#: ui/templates/student/certificates.html:30
+#: ui/templates/student/certificates.html:36
+msgid "Download the PDF"
+msgstr "Скачать PDF"
+
+#: ui/templates/student/certificates.html:38
 msgid "Issued soon"
 msgstr "Скоро будет выдан"
 
-#: ui/templates/student/certificates.html:36
+#: ui/templates/student/certificates.html:44
 msgid "No certificates yet"
 msgstr "Сертификатов пока нет"
 
-#: ui/templates/student/certificates.html:36
+#: ui/templates/student/certificates.html:44
 msgid "Complete a course and its certificate will appear here."
 msgstr "Завершите курс — его сертификат появится здесь."
 
@@ -5409,12 +5565,6 @@ msgstr "Способ оценивания"
 #: ui/templates/student/results.html:60
 msgid "Weight"
 msgstr "Вес"
-
-#: ui/templates/student/results.html:62 ui/templates/teacher/group.html:86
-#: ui/templates/teacher/student.html:66 ui/templates/teacher/student.html:110
-#: ui/views.py:21
-msgid "Score"
-msgstr "Балл"
 
 #: ui/templates/student/results.html:72 ui/templates/student/stage.html:6
 #: ui/templates/student/topic.html:28
@@ -6258,14 +6408,6 @@ msgstr "Редактировать группу"
 #: ui/templates/teacher/group.html:25
 msgid "Join code"
 msgstr "Код для вступления"
-
-#: ui/templates/teacher/group.html:29
-msgid "Copy"
-msgstr "Копировать"
-
-#: ui/templates/teacher/group.html:29
-msgid "Copied"
-msgstr "Скопировано"
 
 #: ui/templates/teacher/group.html:32
 msgid "Make a new code; the old one stops working"

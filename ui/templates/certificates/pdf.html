@@ -1,0 +1,57 @@
+{% load i18n %}<!doctype html>{% comment %}
+Certificate PDF (WeasyPrint, A4 landscape). Rendered in Kazakh. Colours are the design tokens written out
+(WeasyPrint does not load the Tailwind build). Fonts: Inter if installed, else DejaVu Sans (has Kazakh letters).
+{% endcomment %}
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<title>{{ certificate.number }}</title>
+<style>
+  @page { size: A4 landscape; margin: 0; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Inter", "DejaVu Sans", sans-serif; color: #14213d; }
+  .sheet { position: relative; width: 297mm; height: 210mm; padding: 14mm;
+           {% if template.background %}background: url("file://{{ template.background.path }}") center / cover no-repeat;{% else %}background: #ffffff;{% endif %} }
+  .frame { height: 100%; border: 1.2mm solid #15336b; border-radius: 4mm; padding: 13mm 18mm; display: flex; flex-direction: column; position: relative; }
+  .frame::after { content: ""; position: absolute; inset: 2.5mm; border: 0.4mm solid #b7ceff; border-radius: 2.5mm; }
+  .brand { display: flex; align-items: center; gap: 4mm; font-size: 14pt; font-weight: 700; color: #15336b; }
+  .logo { width: 11mm; height: 11mm; border-radius: 3mm; background: #15336b; }
+  h1 { margin: 12mm 0 0; font-size: 40pt; letter-spacing: 0.08em; text-align: center; color: #15336b; }
+  .presented { margin-top: 8mm; text-align: center; font-size: 12pt; color: #4b5873; letter-spacing: 0.04em; }
+  .holder { margin-top: 3mm; text-align: center; font-size: 28pt; font-weight: 700; }
+  .rule { width: 120mm; margin: 4mm auto 0; border-top: 0.4mm solid #b7ceff; }
+  .body { margin: 6mm auto 0; max-width: 200mm; text-align: center; font-size: 17pt; line-height: 1.55; white-space: pre-line; }
+  .meta { margin-top: auto; display: flex; align-items: flex-end; justify-content: space-between; gap: 10mm; font-size: 10.5pt; color: #4b5873; }
+  .meta b { color: #14213d; }
+  .sign { text-align: left; }
+  .sign img { height: 16mm; display: block; }
+  .line { width: 60mm; border-top: 0.3mm solid #14213d; margin: 2mm 0 1.5mm; }
+  .qr { text-align: center; font-size: 8pt; }
+  .qr img { width: 28mm; height: 28mm; display: block; margin: 0 auto 1.5mm; }
+</style>
+</head>
+<body>
+<div class="sheet"><div class="frame">
+  <div class="brand"><span class="logo"></span>ChemEduTech</div>
+  <h1>{{ title }}</h1>
+  <div class="presented">{% translate "This certificate is presented to" %}</div>
+  <div class="holder">{{ certificate.holder_name }}</div>
+  <div class="rule"></div>
+  <div class="body">{{ body }}</div>
+  <div class="meta">
+    <div>
+      <div>{% translate "Number" %}: <b>{{ certificate.number }}</b></div>
+      <div>{% translate "Date of issue" %}: <b>{{ issued }}</b></div>
+      <div>{% translate "Score" %}: <b>{{ certificate.score_percent|floatformat:1 }} ({{ certificate.letter }})</b></div>
+    </div>
+    <div class="sign"{% if not template.signatory_name and not template.signature_image %} style="visibility: hidden"{% endif %}>
+      {% if template.signature_image %}<img src="file://{{ template.signature_image.path }}" alt="">{% endif %}
+      <div class="line"></div>
+      <div><b>{{ template.signatory_name }}</b></div>
+      <div>{{ template.signatory_position }}</div>
+    </div>
+    <div class="qr"><img src="{{ qr }}" alt="">{% translate "Check the certificate" %}<br>{{ verify_url|truncatechars:70 }}</div>
+  </div>
+</div></div>
+</body>
+</html>

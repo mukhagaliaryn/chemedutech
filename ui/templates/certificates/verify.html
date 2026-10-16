@@ -1,0 +1,31 @@
+{% extends "layouts/public.html" %}
+{% load i18n %}
+{% block title %}{% translate "Certificate check" %} · ChemEduTech{% endblock %}
+{% block content %}
+<div class="mx-auto flex max-w-2xl flex-col gap-6 py-12">
+  <h1 class="text-h1">{% translate "Certificate check" %}</h1>
+  {% if certificate %}
+    <section class="card flex flex-col gap-5" aria-labelledby="valid">
+      <div class="flex items-center gap-3 rounded-md bg-success-50 px-4 py-3 text-success-700">
+        {% include "components/icons.html#check" with size=20 %}
+        <p id="valid" class="font-semibold">{% translate "The certificate is real: it was issued by ChemEduTech." %}</p>
+      </div>
+      <dl class="grid grid-cols-[auto_1fr] gap-x-6 gap-y-3 text-sm">
+        <dt class="text-ink-soft">{% translate "Holder" %}</dt><dd class="font-semibold">{{ certificate.holder_name }}</dd>
+        <dt class="text-ink-soft">{% translate "Course" %}</dt><dd>{{ certificate.course_title }}</dd>
+        <dt class="text-ink-soft">{% translate "Score" %}</dt><dd class="num">{{ certificate.score_percent|floatformat:1 }} ({{ certificate.letter }})</dd>
+        <dt class="text-ink-soft">{% translate "Number" %}</dt><dd class="num">{{ certificate.number }}</dd>
+        <dt class="text-ink-soft">{% translate "Date of issue" %}</dt><dd>{{ certificate.issued_at|date:"j E Y" }}</dd>
+      </dl>
+    </section>
+  {% else %}
+    <section class="card flex items-start gap-3 text-danger-700" role="alert">
+      {% include "components/icons.html#alert" with size=20 %}
+      <div>
+        <p class="font-semibold">{% translate "No certificate with this code." %}</p>
+        <p class="mt-1 text-sm text-ink-soft">{% translate "Check the link or the QR code. A real certificate always opens this page with its holder's name." %}</p>
+      </div>
+    </section>
+  {% endif %}
+</div>
+{% endblock %}
