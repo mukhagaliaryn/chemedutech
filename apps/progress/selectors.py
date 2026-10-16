@@ -66,3 +66,17 @@ def last_progress_times(enrollment_ids) -> dict[int, object]:
         .annotate(at=Max("updated_at"))
     )
     return {r["enrollment_id"]: r["at"] for r in rows}
+
+
+def topic_results_by_enrollment(enrollment_ids) -> dict[int, dict[int, TopicResult]]:
+    result = {pk: {} for pk in enrollment_ids}
+    for r in TopicResult.objects.filter(enrollment_id__in=enrollment_ids):
+        result[r.enrollment_id][r.topic_id] = r
+    return result
+
+
+def module_results_by_enrollment(enrollment_ids) -> dict[int, dict[int, ModuleResult]]:
+    result = {pk: {} for pk in enrollment_ids}
+    for r in ModuleResult.objects.filter(enrollment_id__in=enrollment_ids):
+        result[r.enrollment_id][r.module_id] = r
+    return result

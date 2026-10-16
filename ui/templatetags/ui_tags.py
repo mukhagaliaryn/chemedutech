@@ -177,3 +177,9 @@ def duration_s(value):
 def lab_variant(status):
     """Lab attempt status → badge variant."""
     return {"analysed": "success", "finished": "info", "in_progress": "neutral"}.get(str(status), "neutral")
+
+
+@register.filter
+def grade_variant(letter):
+    """KZ letter grade → badge variant (A success, B info, C neutral, D warning, F danger)."""
+    return {"A": "success", "B": "info", "C": "neutral", "D": "warning", "F": "danger"}.get(str(letter)[:1], "neutral")

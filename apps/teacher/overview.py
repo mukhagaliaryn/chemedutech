@@ -271,3 +271,64 @@ def student_page(enrollment) -> dict:
         "quiz_attempts": quiz_selectors.finished_attempts(enrollment),
         "submissions": practice_selectors.submissions_of(enrollment),
     }
+
+
+# --- gradebook ---------------------------------------------------------------------------
+
+
+def gradebook(course, enrollments) -> dict:
+    """Students × topics matrix: topic score and status, module and course scores, letter (ARCHITECTURE §8)."""
+    from apps.courses.models import Module, Topic
+    from apps.progress.grading import grade_for
+
+    enrollments = sorted(enrollments, key=lambda e: (e.student.last_name, e.student.first_name, e.student.username))
+    ids = [e.pk for e in enrollments]
+    modules = list(Module.objects.filter(course=course).order_by("order", "pk"))
+    topics = list(
+        Topic.objects.filter(module__course=course, is_published=True).select_related("module").order_by("number")
+    )
+    modules = [m for m in modules if any(t.module_id == m.pk for t in topics)]
+    topic_results = progress_selectors.topic_results_by_enrollment(ids)
+    module_results = progress_selectors.module_results_by_enrollment(ids)
+    course_results = progress_selectors.course_results_by_enrollment(ids)
+    rows = []
+    for e in enrollments:
+        result = course_results.get(e.pk)
+        current = result.current_percent if result else None
+        rows.append(
+            {
+                "enrollment": e,
+                "student": e.student,
+                "topics": [{"topic": t, "result": topic_results[e.pk].get(t.pk)} for t in topics],
+                "modules": [module_results[e.pk].get(m.pk) for m in modules],
+                "result": result,
+                "current": current,
+                "grade": grade_for(current) if current is not None else None,
+            }
+        )
+    return {"modules": modules, "topics": topics, "rows": rows}
+
+
+def gradebook_table(book, labels) -> list[list]:
+    """The matrix as plain rows for CSV / XLSX (numbers stay numbers)."""
+    header = [labels["student"], labels["username"], labels["group"], labels["cohort"]]
+    header += [f"{labels['topic']} {t.number}" for t in book["topics"]]
+    header += [f"{labels['module']} {m.order}" for m in book["modules"]]
+    header += [labels["current"], labels["final"], labels["letter"], labels["topics_completed"]]
+    table = [header]
+    for r in book["rows"]:
+        e = r["enrollment"]
+        line = [r["student"].full_name, r["student"].username, e.group.name if e.group else "", e.research_cohort]
+        for cell in r["topics"]:
+            res = cell["result"]
+            line.append(res.score_percent if res and res.status == "completed" else "")
+        line += [m.current_percent if m and m.current_percent is not None else "" for m in r["modules"]]
+        result = r["result"]
+        line += [
+            r["current"] if r["current"] is not None else "",
+            result.score_percent if result and result.score_percent is not None else "",
+            r["grade"].letter if r["grade"] else "",
+            f"{result.topics_completed}/{result.topics_total}" if result else "",
+        ]
+        table.append(line)
+    return table

@@ -336,6 +336,9 @@
   .bottom-4 {
     bottom: calc(var(--spacing) * 4);
   }
+  .left-0 {
+    left: 0px;
+  }
   .z-0 {
     z-index: 0;
   }
@@ -365,6 +368,9 @@
   }
   .m-auto {
     margin: auto;
+  }
+  .mx-1 {
+    margin-inline: var(--spacing);
   }
   .mx-auto {
     margin-inline: auto;
@@ -639,6 +645,9 @@
   }
   .w-full {
     width: 100%;
+  }
+  .w-px {
+    width: 1px;
   }
   .max-w-2xl {
     max-width: var(--container-2xl);

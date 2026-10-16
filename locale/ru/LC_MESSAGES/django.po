@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 20:13+0500\n"
+"POT-Creation-Date: 2026-10-16 20:18+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -91,7 +91,8 @@ msgstr "Факультет"
 msgid "Department"
 msgstr "Кафедра"
 
-#: apps/accounts/forms.py:56 ui/templates/student/profile.html:40
+#: apps/accounts/forms.py:56 apps/teacher/gradebook.py:21
+#: ui/templates/student/profile.html:40
 #: ui/templates/teacher/partials/groups_table.html:6
 #: ui/templates/teacher/students.html:17 ui/views.py:21
 msgid "Group"
@@ -159,9 +160,11 @@ msgstr "Администратор"
 msgid "Teacher"
 msgstr "Преподаватель"
 
-#: apps/accounts/models/user.py:33 ui/templates/research/dashboard.html:80
-#: ui/templates/teacher/grading.html:31 ui/templates/teacher/group.html:83
-#: ui/templates/teacher/students.html:16 ui/views.py:21
+#: apps/accounts/models/user.py:33 apps/teacher/gradebook.py:19
+#: ui/templates/research/dashboard.html:80
+#: ui/templates/teacher/gradebook.html:33 ui/templates/teacher/grading.html:31
+#: ui/templates/teacher/group.html:83 ui/templates/teacher/students.html:16
+#: ui/views.py:21
 msgid "Student"
 msgstr "Студент"
 
@@ -850,7 +853,7 @@ msgstr "Ассистент"
 #: apps/courses/models/course.py:92 apps/courses/models/course.py:119
 #: apps/practice/models/submission.py:129
 #: ui/templates/feedback/partials/comment.html:7
-#: ui/templates/layouts/teacher.html:15
+#: ui/templates/layouts/teacher.html:16
 msgid "teacher"
 msgstr "преподаватель"
 
@@ -2089,7 +2092,7 @@ msgstr ""
 #: apps/progress/models/progress.py:72 apps/student/cabinet.py:91
 #: apps/student/learning.py:97 ui/templates/components/stage_stepper.html:23
 #: ui/templates/student/results.html:80 ui/templates/student/topic.html:30
-#: ui/templates/teacher/student.html:80
+#: ui/templates/teacher/gradebook.html:50 ui/templates/teacher/student.html:80
 msgid "In progress"
 msgstr "В процессе"
 
@@ -3543,7 +3546,8 @@ msgstr ""
 "Новые записи получают это значение; записям без исследовательской группы оно "
 "присваивается сейчас. Запись, у которой группа уже есть, сохраняет её."
 
-#: apps/teacher/forms.py:29 ui/templates/research/dashboard.html:25
+#: apps/teacher/forms.py:29 apps/teacher/gradebook.py:22
+#: ui/templates/research/dashboard.html:25
 #: ui/templates/research/dashboard.html:45 ui/templates/teacher/group.html:39
 #: ui/templates/teacher/partials/groups_table.html:7
 msgid "Research group"
@@ -3553,8 +3557,9 @@ msgstr "Исследовательская группа"
 msgid "The student signs up first; then add the account here."
 msgstr "Сначала студент регистрируется, затем добавьте его аккаунт здесь."
 
-#: apps/teacher/forms.py:41 ui/templates/layouts/teacher.html:12
-#: ui/templates/student/courses.html:11 ui/templates/teacher/grading.html:20
+#: apps/teacher/forms.py:41 ui/templates/layouts/teacher.html:13
+#: ui/templates/student/courses.html:11 ui/templates/teacher/gradebook.html:36
+#: ui/templates/teacher/grading.html:20
 msgid "Course"
 msgstr "Курс"
 
@@ -3569,6 +3574,35 @@ msgstr "Окончание"
 #: apps/teacher/forms.py:53
 msgid "The end is before the start."
 msgstr "Дата окончания раньше даты начала."
+
+#: apps/teacher/gradebook.py:20 ui/templates/teacher/students.html:16
+msgid "Username"
+msgstr "Логин"
+
+#: apps/teacher/gradebook.py:23
+msgid "Topic"
+msgstr "Тема"
+
+#: apps/teacher/gradebook.py:24
+msgid "Module"
+msgstr "Модуль"
+
+#: apps/teacher/gradebook.py:25 ui/templates/student/course_map.html:22
+#: ui/templates/student/courses.html:20
+msgid "Current score"
+msgstr "Текущий балл"
+
+#: apps/teacher/gradebook.py:26
+msgid "Final score"
+msgstr "Итоговый балл"
+
+#: apps/teacher/gradebook.py:27 ui/templates/teacher/gradebook.html:37
+msgid "Letter"
+msgstr "Буква"
+
+#: apps/teacher/gradebook.py:28
+msgid "Topics completed"
+msgstr "Завершено тем"
 
 #: apps/teacher/grading.py:26
 msgid "To check"
@@ -3658,10 +3692,18 @@ msgid ""
 "%(n)s enrolment keeps its earlier research group (the research snapshot)."
 msgid_plural ""
 "%(n)s enrolments keep their earlier research group (the research snapshot)."
-msgstr[0] "%(n)s запись сохраняет прежнюю исследовательскую группу (зафиксированное значение)."
-msgstr[1] "%(n)s записи сохраняют прежнюю исследовательскую группу (зафиксированное значение)."
-msgstr[2] "%(n)s записей сохраняют прежнюю исследовательскую группу (зафиксированное значение)."
-msgstr[3] "%(n)s записей сохраняют прежнюю исследовательскую группу (зафиксированное значение)."
+msgstr[0] ""
+"%(n)s запись сохраняет прежнюю исследовательскую группу (зафиксированное "
+"значение)."
+msgstr[1] ""
+"%(n)s записи сохраняют прежнюю исследовательскую группу (зафиксированное "
+"значение)."
+msgstr[2] ""
+"%(n)s записей сохраняют прежнюю исследовательскую группу (зафиксированное "
+"значение)."
+msgstr[3] ""
+"%(n)s записей сохраняют прежнюю исследовательскую группу (зафиксированное "
+"значение)."
 
 #: apps/teacher/views.py:203
 msgid "No student account with this username or email."
@@ -4248,7 +4290,7 @@ msgstr "Оценки"
 msgid "Certificates"
 msgstr "Сертификаты"
 
-#: ui/templates/layouts/student.html:13 ui/templates/layouts/teacher.html:13
+#: ui/templates/layouts/student.html:13 ui/templates/layouts/teacher.html:14
 #: ui/templates/research/dashboard.html:7
 msgid "Research data"
 msgstr "Данные исследования"
@@ -4266,6 +4308,11 @@ msgstr "Группы и студенты"
 #: ui/templates/teacher/grading_detail.html:5
 msgid "Checking works"
 msgstr "Проверка работ"
+
+#: ui/templates/layouts/teacher.html:12 ui/templates/teacher/gradebook.html:3
+#: ui/templates/teacher/gradebook.html:7 ui/templates/teacher/gradebook.html:30
+msgid "Grade register"
+msgstr "Журнал оценок"
 
 #: ui/templates/research/dashboard.html:8
 #, python-format
@@ -4415,10 +4462,6 @@ msgstr "%(a)s / %(b)s этапов"
 #: ui/templates/student/course_map.html:19 ui/templates/student/courses.html:18
 msgid "Course progress"
 msgstr "Прогресс курса"
-
-#: ui/templates/student/course_map.html:22 ui/templates/student/courses.html:20
-msgid "Current score"
-msgstr "Текущий балл"
 
 #: ui/templates/student/course_map.html:24
 msgid "Continue learning"
@@ -5095,7 +5138,7 @@ msgstr "Почему закрыто?"
 msgid "Review"
 msgstr "Просмотр"
 
-#: ui/templates/teacher/dashboard.html:9
+#: ui/templates/teacher/dashboard.html:9 ui/templates/teacher/gradebook.html:19
 msgid "You are not assigned to a course yet."
 msgstr "Вы пока не назначены ни на один курс."
 
@@ -5194,14 +5237,42 @@ msgid "My groups"
 msgstr "Мои группы"
 
 #: ui/templates/teacher/dashboard.html:72
+#: ui/templates/teacher/gradebook.html:24
 msgid "All groups"
 msgstr "Все группы"
+
+#: ui/templates/teacher/gradebook.html:8
+msgid "topic scores of completed topics; in-progress topics are shown greyed"
+msgstr "баллы завершённых тем; темы в работе показаны серым"
+
+#: ui/templates/teacher/gradebook.html:34
+#, python-format
+msgid "T%(n)s"
+msgstr "Т%(n)s"
+
+#: ui/templates/teacher/gradebook.html:35
+#, python-format
+msgid "M%(n)s"
+msgstr "М%(n)s"
+
+#: ui/templates/teacher/gradebook.html:59
+msgid "No students in this course yet."
+msgstr "На этом курсе пока нет студентов."
+
+#: ui/templates/teacher/gradebook.html:64
+msgid ""
+"T — topic, M — module (current score over completed topics). The letter "
+"follows the current course score; the final grade is set when every topic is "
+"completed."
+msgstr "Т — тема, М — модуль (текущий балл по завершённым темам). Буква — по текущему баллу курса; итоговая оценка ставится, когда завершены все темы."
 
 #: ui/templates/teacher/grading.html:7
 msgid ""
 "Practice works the AI could not grade with confidence, AI grades to spot-"
 "check and returned works."
-msgstr "Практические работы, которые ИИ не смог уверенно оценить, оценки ИИ для выборочной проверки и возвращённые работы."
+msgstr ""
+"Практические работы, которые ИИ не смог уверенно оценить, оценки ИИ для "
+"выборочной проверки и возвращённые работы."
 
 #: ui/templates/teacher/grading.html:22
 msgid "All courses"
@@ -5304,7 +5375,9 @@ msgstr "Комментарий студенту"
 
 #: ui/templates/teacher/grading_detail.html:97
 msgid "Shown with the result. For a conversation use the comments below."
-msgstr "Показывается вместе с результатом. Для переписки используйте комментарии ниже."
+msgstr ""
+"Показывается вместе с результатом. Для переписки используйте комментарии "
+"ниже."
 
 #: ui/templates/teacher/grading_detail.html:101
 msgid "The AI is still grading this work."
@@ -5693,10 +5766,6 @@ msgstr "Имя, логин или email"
 #: ui/templates/teacher/students.html:10
 msgid "Without a group"
 msgstr "Без группы"
-
-#: ui/templates/teacher/students.html:16
-msgid "Username"
-msgstr "Логин"
 
 #: ui/templates/teacher/students.html:28
 msgid "No students found."

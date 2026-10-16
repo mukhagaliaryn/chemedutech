@@ -1,0 +1,66 @@
+{% extends "layouts/teacher.html" %}
+{% load i18n %}
+{% block title %}{% translate "Grade register" %} · ChemEduTech{% endblock %}
+{% block content %}
+<header class="flex flex-wrap items-end justify-between gap-4">
+  <div>
+    <h1 class="text-h1">{% translate "Grade register" %}</h1>
+    {% if course %}<p class="mt-1 text-ink-soft">{{ course.title }} · {% translate "topic scores of completed topics; in-progress topics are shown greyed" %}</p>{% endif %}
+  </div>
+  {% if course %}
+  <div class="flex flex-wrap gap-2">
+    <a class="btn btn-secondary" href="?{% if group %}group={{ group.pk }}&amp;{% endif %}format=csv">CSV</a>
+    <a class="btn btn-secondary" href="?{% if group %}group={{ group.pk }}&amp;{% endif %}format=xlsx">Excel (XLSX)</a>
+  </div>
+  {% endif %}
+</header>
+
+{% if not courses %}
+  {% translate "You are not assigned to a course yet." as l_title %}
+  {% include "components/empty_state.html" with title=l_title icon="table" %}
+{% else %}
+<div class="flex flex-wrap items-center gap-2">
+  {% if courses|length > 1 %}{% for c in courses %}<a href="{% url 'teacher:gradebook_course' c.slug %}" class="btn btn-sm {% if c == course %}btn-primary{% else %}btn-secondary{% endif %}">{{ c.title }}</a>{% endfor %}<span class="mx-1 h-6 w-px bg-line"></span>{% endif %}
+  <a href="?" class="btn btn-sm {% if not group %}btn-primary{% else %}btn-secondary{% endif %}">{% translate "All groups" %}</a>
+  {% for g in groups %}<a href="?group={{ g.pk }}" class="btn btn-sm {% if g == group %}btn-primary{% else %}btn-secondary{% endif %}">{{ g.name }}</a>{% endfor %}
+</div>
+
+<div class="overflow-x-auto rounded-lg border border-line bg-surface">
+  <table class="table">
+    <caption class="sr-only">{% translate "Grade register" %}</caption>
+    <thead>
+      <tr>
+        <th scope="col" class="sticky left-0 z-10 bg-surface-sunken">{% translate "Student" %}</th>
+        {% for t in topics %}<th scope="col" class="text-right" title="{{ t.title }}">{% blocktranslate with n=t.number %}T{{ n }}{% endblocktranslate %}</th>{% endfor %}
+        {% for m in modules %}<th scope="col" class="text-right" title="{{ m.title }}">{% blocktranslate with n=m.order %}M{{ n }}{% endblocktranslate %}</th>{% endfor %}
+        <th scope="col" class="text-right">{% translate "Course" %}</th>
+        <th scope="col">{% translate "Letter" %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in rows %}
+        <tr>
+          <th scope="row" class="sticky left-0 z-10 border-t border-line bg-surface text-left font-normal">
+            <a class="text-sm font-medium text-ink hover:text-primary-700" href="{% url 'teacher:student' r.student.pk %}?course={{ course.slug }}">{{ r.student.full_name }}</a>
+            {% if r.enrollment.group %}<span class="block text-caption text-ink-soft">{{ r.enrollment.group }}</span>{% endif %}
+          </th>
+          {% for cell in r.topics %}{% with res=cell.result %}
+            <td class="num text-right text-sm">
+              {% if res.status == "completed" %}<span class="font-semibold">{{ res.score_percent|floatformat:1 }}</span>
+              {% elif res.status == "in_progress" or res.status == "available" %}<span class="text-ink-faint" title="{% translate 'In progress' %}">{% if res.score_percent %}{{ res.score_percent|floatformat:1 }}{% else %}·{% endif %}</span>
+              {% else %}<span class="text-ink-faint">—</span>{% endif %}
+            </td>
+          {% endwith %}{% endfor %}
+          {% for m in r.modules %}<td class="num text-right text-sm">{% if m.current_percent is not None %}{{ m.current_percent|floatformat:1 }}{% else %}<span class="text-ink-faint">—</span>{% endif %}</td>{% endfor %}
+          <td class="num text-right font-semibold">{% if r.current is not None %}{{ r.current|floatformat:1 }}{% else %}<span class="font-normal text-ink-faint">—</span>{% endif %}</td>
+          <td>{% if r.grade %}{% include "components/badge.html" with variant=r.grade.letter|grade_variant label=r.grade.letter %}{% endif %}</td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="100" class="py-10 text-center text-sm text-ink-soft">{% translate "No students in this course yet." %}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<p class="text-caption text-ink-soft">{% translate "T — topic, M — module (current score over completed topics). The letter follows the current course score; the final grade is set when every topic is completed." %}</p>
+{% endif %}
+{% endblock %}
