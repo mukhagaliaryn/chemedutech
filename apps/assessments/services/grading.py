@@ -5,6 +5,7 @@ import unicodedata
 from dataclasses import dataclass, field
 from decimal import Decimal, InvalidOperation
 
+from .. import chem
 from ..models import Question
 
 ZERO = Decimal("0")
@@ -74,4 +75,9 @@ def grade(question: Question, raw) -> GradedAnswer:
         accepted = {normalize_text(a) for a in (question.accepted_answers or [])}
         ok = bool(given) and given in accepted
         return GradedAnswer(ok, full if ok else ZERO, text_value=str(raw or "")[:500])
+    if kind in (Question.Kind.FORMULA, Question.Kind.EQUATION):
+        given = str(raw or "").strip()
+        match = chem.formulas_equal if kind == Question.Kind.FORMULA else chem.equation_matches
+        ok = bool(given) and any(match(expected, given) for expected in question.accepted_answers or [])
+        return GradedAnswer(ok, full if ok else ZERO, text_value=given[:500])
     raise ValueError(f"Unknown question kind: {kind}")

@@ -73,7 +73,7 @@ class QuestionAdmin(ModelAdmin):
     fieldsets = (
         (None, {"fields": ("quiz", "order", "kind", "text", "points", "is_active")}),
         (_("Number answer"), {"fields": ("numeric_answer", "numeric_tolerance")}),
-        (_("Short text answer"), {"fields": ("accepted_answers",)}),
+        (_("Accepted answers (short text, formula, equation)"), {"fields": ("accepted_answers",)}),
         (None, {"fields": ("explanation",)}),
     )
 

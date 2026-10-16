@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 17:22+0500\n"
+"POT-Creation-Date: 2026-10-16 17:38+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -199,8 +199,8 @@ msgid "users"
 msgstr "пользователи"
 
 #: apps/assessments/admin.py:24 apps/assessments/admin.py:80
-#: apps/assessments/models/attempt.py:56 apps/assessments/models/quiz.py:63
-#: apps/assessments/models/quiz.py:85 apps/assessments/models/quiz.py:93
+#: apps/assessments/models/attempt.py:56 apps/assessments/models/quiz.py:66
+#: apps/assessments/models/quiz.py:94 apps/assessments/models/quiz.py:125
 msgid "question"
 msgstr "вопрос"
 
@@ -209,7 +209,7 @@ msgstr "вопрос"
 msgid "Attempts"
 msgstr "Попытки"
 
-#: apps/assessments/admin.py:53 apps/assessments/models/quiz.py:86
+#: apps/assessments/admin.py:53 apps/assessments/models/quiz.py:95
 msgid "questions"
 msgstr "вопросы"
 
@@ -218,8 +218,8 @@ msgid "Number answer"
 msgstr "Числовой ответ"
 
 #: apps/assessments/admin.py:76
-msgid "Short text answer"
-msgstr "Краткий текстовый ответ"
+msgid "Accepted answers (short text, formula, equation)"
+msgstr "Принимаемые ответы (краткий текст, формула, уравнение)"
 
 #: apps/assessments/admin.py:98 apps/assessments/models/attempt.py:59
 msgid "chosen options"
@@ -238,8 +238,8 @@ msgstr "способ записи"
 msgid "Empty for a teacher's preview"
 msgstr "Пусто при предпросмотре преподавателем"
 
-#: apps/assessments/models/attempt.py:24 apps/assessments/models/quiz.py:46
-#: apps/assessments/models/quiz.py:60 apps/courses/models/content.py:135
+#: apps/assessments/models/attempt.py:24 apps/assessments/models/quiz.py:47
+#: apps/assessments/models/quiz.py:63 apps/courses/models/content.py:135
 msgid "quiz"
 msgstr "тест"
 
@@ -303,12 +303,12 @@ msgstr "текстовый ответ"
 msgid "number answer"
 msgstr "числовой ответ"
 
-#: apps/assessments/models/attempt.py:63 apps/assessments/models/quiz.py:96
+#: apps/assessments/models/attempt.py:63 apps/assessments/models/quiz.py:128
 #: ui/templates/assessments/result.html:62
 msgid "correct"
 msgstr "верно"
 
-#: apps/assessments/models/attempt.py:64 apps/assessments/models/quiz.py:65
+#: apps/assessments/models/attempt.py:64 apps/assessments/models/quiz.py:68
 msgid "points"
 msgstr "баллы"
 
@@ -320,169 +320,198 @@ msgstr "ответ"
 msgid "answers"
 msgstr "ответы"
 
-#: apps/assessments/models/quiz.py:11
+#: apps/assessments/models/quiz.py:12
 msgid "Checkpoint quiz"
 msgstr "Закрепляющий тест"
 
-#: apps/assessments/models/quiz.py:12 apps/courses/models/structure.py:71
+#: apps/assessments/models/quiz.py:13 apps/courses/models/structure.py:71
 #: ui/views.py:16
 msgid "Topic test"
 msgstr "Тест по теме"
 
-#: apps/assessments/models/quiz.py:13
+#: apps/assessments/models/quiz.py:14
 msgid "Module test"
 msgstr "Тест по модулю"
 
-#: apps/assessments/models/quiz.py:14
+#: apps/assessments/models/quiz.py:15
 msgid "Final test"
 msgstr "Итоговый тест"
 
-#: apps/assessments/models/quiz.py:17
+#: apps/assessments/models/quiz.py:18
 msgid "Best attempt"
 msgstr "Лучшая попытка"
 
-#: apps/assessments/models/quiz.py:18
+#: apps/assessments/models/quiz.py:19
 msgid "Last attempt"
 msgstr "Последняя попытка"
 
-#: apps/assessments/models/quiz.py:19
+#: apps/assessments/models/quiz.py:20
 msgid "First attempt"
 msgstr "Первая попытка"
 
-#: apps/assessments/models/quiz.py:21 apps/courses/models/content.py:32
+#: apps/assessments/models/quiz.py:22 apps/courses/models/content.py:32
 #: apps/courses/models/course.py:30 apps/courses/models/structure.py:17
 #: apps/courses/models/structure.py:36 apps/courses/models/structure.py:76
 msgid "title"
 msgstr "название"
 
-#: apps/assessments/models/quiz.py:22 apps/assessments/models/quiz.py:62
+#: apps/assessments/models/quiz.py:23 apps/assessments/models/quiz.py:65
 #: apps/courses/models/structure.py:75
 msgid "kind"
 msgstr "вид"
 
-#: apps/assessments/models/quiz.py:24 apps/courses/models/structure.py:86
+#: apps/assessments/models/quiz.py:25 apps/courses/models/structure.py:86
 msgid "pass mark, %"
 msgstr "порог прохождения, %"
 
-#: apps/assessments/models/quiz.py:27
+#: apps/assessments/models/quiz.py:28
 msgid "time limit, min"
 msgstr "лимит времени, мин"
 
-#: apps/assessments/models/quiz.py:27
+#: apps/assessments/models/quiz.py:28
 msgid "Empty = no limit"
 msgstr "Пусто = без ограничения"
 
-#: apps/assessments/models/quiz.py:30
+#: apps/assessments/models/quiz.py:31
 msgid "attempts allowed"
 msgstr "число попыток"
 
-#: apps/assessments/models/quiz.py:30
+#: apps/assessments/models/quiz.py:31
 msgid "Empty = unlimited"
 msgstr "Пусто = без ограничения"
 
-#: apps/assessments/models/quiz.py:33
+#: apps/assessments/models/quiz.py:34
 msgid "questions per attempt"
 msgstr "вопросов в попытке"
 
-#: apps/assessments/models/quiz.py:36
+#: apps/assessments/models/quiz.py:37
 msgid "Empty = all questions; otherwise a random selection from the pool"
 msgstr "Пусто = все вопросы; иначе случайная выборка из банка"
 
-#: apps/assessments/models/quiz.py:38
+#: apps/assessments/models/quiz.py:39
 msgid "shuffle questions"
 msgstr "перемешивать вопросы"
 
-#: apps/assessments/models/quiz.py:39
+#: apps/assessments/models/quiz.py:40
 msgid "shuffle answer options"
 msgstr "перемешивать варианты ответов"
 
-#: apps/assessments/models/quiz.py:40
+#: apps/assessments/models/quiz.py:41
 msgid "attempt that counts"
 msgstr "засчитываемая попытка"
 
-#: apps/assessments/models/quiz.py:42
+#: apps/assessments/models/quiz.py:43
 msgid "show correct answers"
 msgstr "показывать правильные ответы"
 
-#: apps/assessments/models/quiz.py:42
+#: apps/assessments/models/quiz.py:43
 msgid "Show correct answers and explanations after an attempt"
 msgstr "Показывать правильные ответы и пояснения после попытки"
 
-#: apps/assessments/models/quiz.py:47
+#: apps/assessments/models/quiz.py:48
 msgid "quizzes"
 msgstr "тесты"
 
-#: apps/assessments/models/quiz.py:55
+#: apps/assessments/models/quiz.py:56
 msgid "One correct option"
 msgstr "Один правильный вариант"
 
-#: apps/assessments/models/quiz.py:56
+#: apps/assessments/models/quiz.py:57
 msgid "Several correct options"
 msgstr "Несколько правильных вариантов"
 
-#: apps/assessments/models/quiz.py:57
+#: apps/assessments/models/quiz.py:58
 msgid "Number"
 msgstr "Число"
 
-#: apps/assessments/models/quiz.py:58
+#: apps/assessments/models/quiz.py:59
 msgid "Short text"
 msgstr "Краткий текст"
 
-#: apps/assessments/models/quiz.py:61 apps/assessments/models/quiz.py:94
+#: apps/assessments/models/quiz.py:60
+msgid "Chemical formula"
+msgstr "Химическая формула"
+
+#: apps/assessments/models/quiz.py:61 apps/labs/views.py:53
+#: ui/templates/assessments/take.html:65
+msgid "Reaction equation"
+msgstr "Уравнение реакции"
+
+#: apps/assessments/models/quiz.py:64 apps/assessments/models/quiz.py:126
 #: apps/courses/models/content.py:31 apps/courses/models/structure.py:16
 #: apps/courses/models/structure.py:34 apps/courses/models/structure.py:74
 msgid "order"
 msgstr "порядок"
 
-#: apps/assessments/models/quiz.py:67
+#: apps/assessments/models/quiz.py:70
 msgid "explanation"
 msgstr "пояснение"
 
-#: apps/assessments/models/quiz.py:67
+#: apps/assessments/models/quiz.py:70
 msgid "Shown after the attempt"
 msgstr "Показывается после попытки"
 
-#: apps/assessments/models/quiz.py:68
+#: apps/assessments/models/quiz.py:71
 msgid "correct number"
 msgstr "правильное число"
 
-#: apps/assessments/models/quiz.py:70
+#: apps/assessments/models/quiz.py:73
 msgid "allowed deviation"
 msgstr "допустимое отклонение"
 
-#: apps/assessments/models/quiz.py:74
+#: apps/assessments/models/quiz.py:77
 msgid "Absolute, in the units of the answer (0 = exact)"
 msgstr "Абсолютное, в единицах ответа (0 = точно)"
 
-#: apps/assessments/models/quiz.py:77
+#: apps/assessments/models/quiz.py:80
 msgid "accepted answers"
 msgstr "принимаемые ответы"
 
-#: apps/assessments/models/quiz.py:77
-msgid "Short text: list of accepted spellings"
-msgstr "Краткий текст: список принимаемых написаний"
+#: apps/assessments/models/quiz.py:84
+msgid ""
+"Short text: accepted spellings; formula or equation: correct answers, e.g. "
+"[\"ZnCl2\"] or [\"Zn + 2HCl -> ZnCl2 + H2\"]"
+msgstr "Краткий текст: принимаемые написания; формула или уравнение: правильные ответы, например [\"ZnCl2\"] или [\"Zn + 2HCl -> ZnCl2 + H2\"]"
 
-#: apps/assessments/models/quiz.py:80
+#: apps/assessments/models/quiz.py:89
 msgid "in use"
 msgstr "используется"
 
-#: apps/assessments/models/quiz.py:80
+#: apps/assessments/models/quiz.py:89
 msgid "Retired questions stay in old attempts but are not asked again"
 msgstr "Выведенные вопросы остаются в старых попытках, но больше не задаются"
 
-#: apps/assessments/models/quiz.py:95 apps/courses/models/content.py:17
+#: apps/assessments/models/quiz.py:104
+msgid "Enter the correct number."
+msgstr "Введите правильное число."
+
+#: apps/assessments/models/quiz.py:109
+msgid "Enter a list of correct answers, e.g. [\"H2O\"]."
+msgstr "Введите список правильных ответов, например [\"H2O\"]."
+
+#: apps/assessments/models/quiz.py:116
+#, python-format
+msgid "The equation %(eq)s is not balanced."
+msgstr "Уравнение %(eq)s не уравнено."
+
+#: apps/assessments/models/quiz.py:120
+#, python-format
+msgid "Cannot read %(answer)s: %(error)s"
+msgstr "Не удалось прочитать %(answer)s: %(error)s"
+
+#: apps/assessments/models/quiz.py:127 apps/courses/models/content.py:17
 msgid "text"
 msgstr "текст"
 
-#: apps/assessments/models/quiz.py:95
+#: apps/assessments/models/quiz.py:127
 msgid "<sub> and <sup> are allowed: H<sub>2</sub>O"
 msgstr "Можно использовать <sub> и <sup>: H<sub>2</sub>O"
 
-#: apps/assessments/models/quiz.py:100
+#: apps/assessments/models/quiz.py:132
 msgid "answer option"
 msgstr "вариант ответа"
 
-#: apps/assessments/models/quiz.py:101
+#: apps/assessments/models/quiz.py:133
 msgid "answer options"
 msgstr "варианты ответа"
 
@@ -2131,10 +2160,6 @@ msgstr "Этот предмет уже на столе."
 msgid "Choose"
 msgstr "Выбрать"
 
-#: apps/labs/views.py:53
-msgid "Reaction equation"
-msgstr "Уравнение реакции"
-
 #: apps/labs/views.py:54
 msgid "Scientific explanation"
 msgstr "Научное объяснение"
@@ -2179,7 +2204,7 @@ msgstr "Задание на анализ"
 msgid "Submit answers"
 msgstr "Отправить ответы"
 
-#: apps/labs/views.py:67 ui/templates/assessments/take.html:65
+#: apps/labs/views.py:67 ui/templates/assessments/take.html:75
 msgid "Your answer"
 msgstr "Ваш ответ"
 
@@ -2760,19 +2785,34 @@ msgstr "Ваш ответ (число)"
 msgid "A comma or a dot may be used: 2,24"
 msgstr "Можно через запятую или точку: 2,24"
 
-#: ui/templates/assessments/take.html:73
+#: ui/templates/assessments/take.html:65
+msgid "Formula"
+msgstr "Формула"
+
+#: ui/templates/assessments/take.html:69
+msgid ""
+"Indices as plain digits: H2SO4, Ca(OH)2, CuSO4·5H2O; ions: Zn2+, SO4^2-."
+msgstr "Индексы обычными цифрами: H2SO4, Ca(OH)2, CuSO4·5H2O; ионы: Zn2+, SO4^2-."
+
+#: ui/templates/assessments/take.html:70
+msgid ""
+"Arrow: -> or =; write the coefficients: 2H2 + O2 -> 2H2O. ↑ and ↓ may be "
+"left out."
+msgstr "Стрелка: -> или =; пишите коэффициенты: 2H2 + O2 -> 2H2O. ↑ и ↓ можно не писать."
+
+#: ui/templates/assessments/take.html:83
 msgid "Previous question"
 msgstr "Предыдущий вопрос"
 
-#: ui/templates/assessments/take.html:76
+#: ui/templates/assessments/take.html:86
 msgid "Unanswered questions:"
 msgstr "Вопросов без ответа:"
 
-#: ui/templates/assessments/take.html:79
+#: ui/templates/assessments/take.html:89
 msgid "Next question"
 msgstr "Следующий вопрос"
 
-#: ui/templates/assessments/take.html:80
+#: ui/templates/assessments/take.html:90
 msgid "Submit the test"
 msgstr "Отправить тест"
 
@@ -3061,6 +3101,12 @@ msgstr "Практическая работа 3"
 #: ui/views.py:21
 msgid "Score"
 msgstr "Балл"
+
+#~ msgid "Short text answer"
+#~ msgstr "Краткий текстовый ответ"
+
+#~ msgid "Short text: list of accepted spellings"
+#~ msgstr "Краткий текст: список принимаемых написаний"
 
 #~ msgid "HTML content of the theory section"
 #~ msgstr "HTML-содержимое раздела теории"

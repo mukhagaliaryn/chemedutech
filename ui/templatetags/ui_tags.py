@@ -106,3 +106,19 @@ def get_field(form, name):
 def sanitize(html):
     """{{ content.body|sanitize }} — CKEditor HTML made safe for students (nh3 allow-list)."""
     return mark_safe(clean_html(str(html or "")))  # cleaned by nh3 above
+
+
+@register.filter
+def chem(text):
+    """{{ "Zn + 2HCl -> ZnCl2 + H2"|chem }} → "Zn + 2HCl → ZnCl₂ + H₂" (unreadable input is shown as typed)."""
+    from apps.assessments.chem import ChemError, parse_equation, pretty_formula
+
+    text = str(text or "")
+    try:
+        return parse_equation(text).pretty()
+    except ChemError:
+        pass
+    try:
+        return pretty_formula(text)
+    except ChemError:
+        return text

@@ -223,6 +223,8 @@ class QuizViewTests(TestCase):
                 data[f"q{qid}"] = correct[0]
             elif q.kind == "numeric":
                 data[f"q{qid}"] = str(q.numeric_answer).replace(".", ",")
+            elif q.kind in ("formula", "equation"):
+                data[f"q{qid}"] = q.accepted_answers[0]
             else:
                 data[f"q{qid}"] = q.accepted_answers[0].upper()
         return data
@@ -232,11 +234,12 @@ class QuizViewTests(TestCase):
         self.assertEqual(Stage.objects.get(topic__number=1, kind="video").checkpoint_quiz.questions.count(), 3)
         test = Stage.objects.get(topic__number=1, kind="test").test_content.quiz
         self.assertEqual(
-            set(test.questions.values_list("kind", flat=True)), {"single", "multiple", "numeric", "short_text"}
+            set(test.questions.values_list("kind", flat=True)),
+            {"single", "multiple", "numeric", "short_text", "formula", "equation"},
         )
         call_command("seed_course", verbosity=0)
         self.assertEqual(Quiz.objects.count(), 3)
-        self.assertEqual(test.questions.count(), 8)
+        self.assertEqual(test.questions.count(), 10)
 
     def test_not_enrolled_student_gets_404(self):
         self.client.force_login(self.student)

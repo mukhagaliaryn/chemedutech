@@ -60,6 +60,16 @@
             <input class="input num" name="q{{ q.pk }}" inputmode="decimal" autocomplete="off">
             <span class="help">{% translate "A comma or a dot may be used: 2,24" %}</span>
           </label>
+        {% elif q.kind == "formula" or q.kind == "equation" %}
+          <label class="field max-w-xl">
+            <span class="label">{% if q.kind == "formula" %}{% translate "Formula" %}{% else %}{% translate "Reaction equation" %}{% endif %}</span>
+            <input class="input font-medium" name="q{{ q.pk }}" autocomplete="off" autocapitalize="none" spellcheck="false"
+                   placeholder="{% if q.kind == 'formula' %}Ca(OH)2{% else %}Zn + 2HCl -> ZnCl2 + H2{% endif %}">
+            <span class="help">
+              {% if q.kind == "formula" %}{% translate "Indices as plain digits: H2SO4, Ca(OH)2, CuSO4·5H2O; ions: Zn2+, SO4^2-." %}
+              {% else %}{% translate "Arrow: -> or =; write the coefficients: 2H2 + O2 -> 2H2O. ↑ and ↓ may be left out." %}{% endif %}
+            </span>
+          </label>
         {% else %}
           <label class="field max-w-md">
             <span class="label">{% translate "Your answer" %}</span>

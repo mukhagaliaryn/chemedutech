@@ -64,9 +64,9 @@
           {% endfor %}
         </ul>
       {% else %}
-        <p class="pl-9 text-sm">{% translate "Your answer:" %} <span class="num font-semibold">{{ a.text_value|default:"—" }}</span>
+        <p class="pl-9 text-sm">{% translate "Your answer:" %} <span class="num font-semibold">{% if q.kind == "formula" or q.kind == "equation" %}{{ a.text_value|chem|default:"—" }}{% else %}{{ a.text_value|default:"—" }}{% endif %}</span>
           {% if quiz.show_answers_after and not a.is_correct %}
-            · {% translate "correct:" %} <span class="num font-semibold text-success-700">{% if q.kind == "numeric" %}{{ q.numeric_answer.normalize }}{% else %}{{ q.accepted_answers.0 }}{% endif %}</span>
+            · {% translate "correct:" %} <span class="num font-semibold text-success-700">{% if q.kind == "numeric" %}{{ q.numeric_answer.normalize }}{% elif q.kind == "formula" or q.kind == "equation" %}{{ q.accepted_answers.0|chem }}{% else %}{{ q.accepted_answers.0 }}{% endif %}</span>
           {% endif %}
         </p>
       {% endif %}

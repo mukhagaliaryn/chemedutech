@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -56,6 +57,8 @@ class Question(TimeStampedModel):
         MULTIPLE = "multiple", _("Several correct options")
         NUMERIC = "numeric", _("Number")
         SHORT_TEXT = "short_text", _("Short text")
+        FORMULA = "formula", _("Chemical formula")
+        EQUATION = "equation", _("Reaction equation")
 
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name="questions", verbose_name=_("quiz"))
     order = models.PositiveSmallIntegerField(_("order"), default=1)
@@ -74,7 +77,13 @@ class Question(TimeStampedModel):
         help_text=_("Absolute, in the units of the answer (0 = exact)"),
     )
     accepted_answers = models.JSONField(
-        _("accepted answers"), default=list, blank=True, help_text=_("Short text: list of accepted spellings")
+        _("accepted answers"),
+        default=list,
+        blank=True,
+        help_text=_(
+            'Short text: accepted spellings; formula or equation: correct answers, e.g. ["ZnCl2"] or '
+            '["Zn + 2HCl -> ZnCl2 + H2"]'
+        ),
     )
     is_active = models.BooleanField(
         _("in use"), default=True, help_text=_("Retired questions stay in old attempts but are not asked again")
@@ -87,6 +96,29 @@ class Question(TimeStampedModel):
 
     def __str__(self):
         return f"{self.quiz} · {self.order}"
+
+    def clean(self):
+        from ..chem import ChemError, parse_equation, parse_formula
+
+        if self.kind == self.Kind.NUMERIC and self.numeric_answer is None:
+            raise ValidationError({"numeric_answer": _("Enter the correct number.")})
+        if self.kind not in (self.Kind.SHORT_TEXT, self.Kind.FORMULA, self.Kind.EQUATION):
+            return
+        answers = self.accepted_answers
+        if not isinstance(answers, list) or not answers or not all(isinstance(a, str) and a.strip() for a in answers):
+            raise ValidationError({"accepted_answers": _('Enter a list of correct answers, e.g. ["H2O"].')})
+        for answer in answers:
+            try:
+                if self.kind == self.Kind.FORMULA:
+                    parse_formula(answer)
+                elif self.kind == self.Kind.EQUATION and not parse_equation(answer).is_balanced:
+                    raise ValidationError(
+                        {"accepted_answers": _("The equation %(eq)s is not balanced.") % {"eq": answer}}
+                    )
+            except ChemError as exc:
+                raise ValidationError(
+                    {"accepted_answers": _("Cannot read %(answer)s: %(error)s") % {"answer": answer, "error": exc}}
+                ) from exc
 
 
 class Choice(TimeStampedModel):
