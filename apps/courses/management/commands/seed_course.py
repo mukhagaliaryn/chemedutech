@@ -1,8 +1,7 @@
 """Create the course skeleton: 2 modules, 15 topics; topic 1 with its stages.
 
 Course/module/topic texts are content (stored in the DB, in Kazakh) and are
-placeholders until the author provides the final wording. Checkpoint quizzes and the
-topic test questions are added in STEP-05, practice tasks in STEP-07a.
+placeholders until the author provides the final wording. Practice tasks are added in STEP-07a.
 """
 
 from django.core.management.base import BaseCommand
@@ -10,6 +9,8 @@ from django.db import transaction
 
 from apps.courses.models import Course, Module, Stage, Topic
 from apps.courses.services import ensure_stage_content
+
+from ._seed_quizzes import THEORY_CHECKPOINT, TOPIC_TEST, VIDEO_CHECKPOINT, checkpoint, topic_test
 
 THEORY_T1 = """
 <h2>Сутегі</h2>
@@ -89,7 +90,27 @@ class Command(BaseCommand):
                         topic=topic, order=order, defaults={"kind": kind, "title": title}
                     )
                     ensure_stage_content(stage, **content)
+                self._seed_t1_quizzes(topic)
 
         self.stdout.write(
-            self.style.SUCCESS("Course skeleton is ready: 2 modules, 15 topics (topic 1 published, 6 stages).")
+            self.style.SUCCESS(
+                "Course skeleton is ready: 2 modules, 15 topics (topic 1 published, 6 stages, 3 quizzes)."
+            )
         )
+
+    def _seed_t1_quizzes(self, topic):
+        stages = {}
+        for s in topic.stages.order_by("order"):
+            stages.setdefault(s.kind, s)  # the first stage of each kind
+        for kind, title, questions in (
+            (Stage.Kind.THEORY, "1-тақырып. Теорияның бекіту тесті", THEORY_CHECKPOINT),
+            (Stage.Kind.VIDEO, "1-тақырып. Видеосабақтың бекіту тесті", VIDEO_CHECKPOINT),
+        ):
+            stage = stages[kind]
+            if stage.checkpoint_quiz_id is None:
+                stage.checkpoint_quiz = checkpoint(title, questions)
+                stage.save(update_fields=["checkpoint_quiz", "updated_at"])
+        test = stages[Stage.Kind.TEST].test_content
+        if test.quiz_id is None:
+            test.quiz = topic_test("1-тақырып тесті", TOPIC_TEST)
+            test.save(update_fields=["quiz", "updated_at"])

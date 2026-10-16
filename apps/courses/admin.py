@@ -168,6 +168,7 @@ class TestContentInline(StackedInline):
     model = TestContent
     can_delete = False
     max_num = 1
+    autocomplete_fields = ("quiz",)
 
 
 CONTENT_INLINES = {
@@ -183,7 +184,8 @@ class StageAdmin(ModelAdmin):
     list_display = ("title", "topic", "kind", "order", "is_required", "pass_percent")
     list_filter = ("topic__module__course", "kind", "is_required")
     search_fields = ("title", "topic__title")
-    fields = ("topic", "order", "kind", "title", "is_required", "weight", "pass_percent")
+    fields = ("topic", "order", "kind", "title", "is_required", "weight", "pass_percent", "checkpoint_quiz")
+    autocomplete_fields = ("checkpoint_quiz",)
 
     def get_readonly_fields(self, request, obj=None):
         return ("kind",) if obj else ()  # content is tied to the kind

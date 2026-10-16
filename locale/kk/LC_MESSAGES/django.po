@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 16:44+0500\n"
+"POT-Creation-Date: 2026-10-16 17:22+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -185,7 +185,8 @@ msgstr "аватар"
 msgid "interface language"
 msgstr "интерфейс тілі"
 
-#: apps/accounts/models/user.py:55 apps/organizations/models/profiles.py:11
+#: apps/accounts/models/user.py:55 apps/assessments/models/attempt.py:21
+#: apps/organizations/models/profiles.py:11
 #: apps/organizations/models/profiles.py:42
 msgid "user"
 msgstr "пайдаланушы"
@@ -193,6 +194,306 @@ msgstr "пайдаланушы"
 #: apps/accounts/models/user.py:56
 msgid "users"
 msgstr "пайдаланушылар"
+
+#: apps/assessments/admin.py:24 apps/assessments/admin.py:80
+#: apps/assessments/models/attempt.py:56 apps/assessments/models/quiz.py:63
+#: apps/assessments/models/quiz.py:85 apps/assessments/models/quiz.py:93
+msgid "question"
+msgstr "сұрақ"
+
+#: apps/assessments/admin.py:38 ui/templates/assessments/result.html:82
+#: ui/templates/research/dashboard.html:47
+msgid "Attempts"
+msgstr "Талпыныстар"
+
+#: apps/assessments/admin.py:53 apps/assessments/models/quiz.py:86
+msgid "questions"
+msgstr "сұрақтар"
+
+#: apps/assessments/admin.py:75
+msgid "Number answer"
+msgstr "Сандық жауап"
+
+#: apps/assessments/admin.py:76
+msgid "Short text answer"
+msgstr "Қысқа мәтіндік жауап"
+
+#: apps/assessments/admin.py:98 apps/assessments/models/attempt.py:59
+msgid "chosen options"
+msgstr "таңдалған нұсқалар"
+
+#: apps/assessments/apps.py:8
+msgid "Assessments"
+msgstr "Бағалау"
+
+#: apps/assessments/models/attempt.py:17 apps/courses/models/course.py:37
+#: apps/courses/models/enrollment.py:52
+msgid "enrolment"
+msgstr "жазылу тәсілі"
+
+#: apps/assessments/models/attempt.py:18
+msgid "Empty for a teacher's preview"
+msgstr "Мұғалім алдын ала қарағанда бос"
+
+#: apps/assessments/models/attempt.py:24 apps/assessments/models/quiz.py:46
+#: apps/assessments/models/quiz.py:60 apps/courses/models/content.py:135
+msgid "quiz"
+msgstr "тест"
+
+#: apps/assessments/models/attempt.py:26
+msgid "attempt number"
+msgstr "талпыныс нөмірі"
+
+#: apps/assessments/models/attempt.py:27 apps/labs/models/attempt.py:21
+msgid "started at"
+msgstr "басталған уақыты"
+
+#: apps/assessments/models/attempt.py:28 apps/labs/models/attempt.py:22
+msgid "finished at"
+msgstr "аяқталған уақыты"
+
+#: apps/assessments/models/attempt.py:29
+msgid "questions asked"
+msgstr "берілген сұрақтар"
+
+#: apps/assessments/models/attempt.py:29
+msgid "In the order shown"
+msgstr "Көрсетілген ретпен"
+
+#: apps/assessments/models/attempt.py:30
+msgid "option order"
+msgstr "нұсқалар реті"
+
+#: apps/assessments/models/attempt.py:31
+msgid "score"
+msgstr "ұпай"
+
+#: apps/assessments/models/attempt.py:32
+msgid "max score"
+msgstr "ең жоғары ұпай"
+
+#: apps/assessments/models/attempt.py:33
+msgid "percent"
+msgstr "пайыз"
+
+#: apps/assessments/models/attempt.py:34
+msgid "passed"
+msgstr "өтті"
+
+#: apps/assessments/models/attempt.py:38
+msgid "quiz attempt"
+msgstr "тест талпынысы"
+
+#: apps/assessments/models/attempt.py:39
+msgid "quiz attempts"
+msgstr "тест талпыныстары"
+
+#: apps/assessments/models/attempt.py:53 apps/labs/models/attempt.py:67
+msgid "attempt"
+msgstr "талпыныс"
+
+#: apps/assessments/models/attempt.py:61
+msgid "text answer"
+msgstr "мәтіндік жауап"
+
+#: apps/assessments/models/attempt.py:62
+msgid "number answer"
+msgstr "сандық жауап"
+
+#: apps/assessments/models/attempt.py:63 apps/assessments/models/quiz.py:96
+#: ui/templates/assessments/result.html:62
+msgid "correct"
+msgstr "дұрыс"
+
+#: apps/assessments/models/attempt.py:64 apps/assessments/models/quiz.py:65
+msgid "points"
+msgstr "ұпай"
+
+#: apps/assessments/models/attempt.py:67
+msgid "answer"
+msgstr "жауап"
+
+#: apps/assessments/models/attempt.py:68
+msgid "answers"
+msgstr "жауаптар"
+
+#: apps/assessments/models/quiz.py:11
+msgid "Checkpoint quiz"
+msgstr "Бекіту тесті"
+
+#: apps/assessments/models/quiz.py:12 apps/courses/models/structure.py:71
+#: ui/views.py:16
+msgid "Topic test"
+msgstr "Тақырып тесті"
+
+#: apps/assessments/models/quiz.py:13
+msgid "Module test"
+msgstr "Модуль тесті"
+
+#: apps/assessments/models/quiz.py:14
+msgid "Final test"
+msgstr "Қорытынды тест"
+
+#: apps/assessments/models/quiz.py:17
+msgid "Best attempt"
+msgstr "Ең жақсы талпыныс"
+
+#: apps/assessments/models/quiz.py:18
+msgid "Last attempt"
+msgstr "Соңғы талпыныс"
+
+#: apps/assessments/models/quiz.py:19
+msgid "First attempt"
+msgstr "Бірінші талпыныс"
+
+#: apps/assessments/models/quiz.py:21 apps/courses/models/content.py:32
+#: apps/courses/models/course.py:30 apps/courses/models/structure.py:17
+#: apps/courses/models/structure.py:36 apps/courses/models/structure.py:76
+msgid "title"
+msgstr "атауы"
+
+#: apps/assessments/models/quiz.py:22 apps/assessments/models/quiz.py:62
+#: apps/courses/models/structure.py:75
+msgid "kind"
+msgstr "түрі"
+
+#: apps/assessments/models/quiz.py:24 apps/courses/models/structure.py:86
+msgid "pass mark, %"
+msgstr "өту шегі, %"
+
+#: apps/assessments/models/quiz.py:27
+msgid "time limit, min"
+msgstr "уақыт шегі, мин"
+
+#: apps/assessments/models/quiz.py:27
+msgid "Empty = no limit"
+msgstr "Бос = шектеусіз"
+
+#: apps/assessments/models/quiz.py:30
+msgid "attempts allowed"
+msgstr "талпыныс саны"
+
+#: apps/assessments/models/quiz.py:30
+msgid "Empty = unlimited"
+msgstr "Бос = шексіз"
+
+#: apps/assessments/models/quiz.py:33
+msgid "questions per attempt"
+msgstr "бір талпыныстағы сұрақтар"
+
+#: apps/assessments/models/quiz.py:36
+msgid "Empty = all questions; otherwise a random selection from the pool"
+msgstr "Бос = барлық сұрақ; әйтпесе пулдан кездейсоқ таңдалады"
+
+#: apps/assessments/models/quiz.py:38
+msgid "shuffle questions"
+msgstr "сұрақтарды араластыру"
+
+#: apps/assessments/models/quiz.py:39
+msgid "shuffle answer options"
+msgstr "жауап нұсқаларын араластыру"
+
+#: apps/assessments/models/quiz.py:40
+msgid "attempt that counts"
+msgstr "есепке алынатын талпыныс"
+
+#: apps/assessments/models/quiz.py:42
+msgid "show correct answers"
+msgstr "дұрыс жауаптарды көрсету"
+
+#: apps/assessments/models/quiz.py:42
+msgid "Show correct answers and explanations after an attempt"
+msgstr "Талпыныстан кейін дұрыс жауаптар мен түсіндірмелерді көрсету"
+
+#: apps/assessments/models/quiz.py:47
+msgid "quizzes"
+msgstr "тесттер"
+
+#: apps/assessments/models/quiz.py:55
+msgid "One correct option"
+msgstr "Бір дұрыс нұсқа"
+
+#: apps/assessments/models/quiz.py:56
+msgid "Several correct options"
+msgstr "Бірнеше дұрыс нұсқа"
+
+#: apps/assessments/models/quiz.py:57
+msgid "Number"
+msgstr "Сан"
+
+#: apps/assessments/models/quiz.py:58
+msgid "Short text"
+msgstr "Қысқа мәтін"
+
+#: apps/assessments/models/quiz.py:61 apps/assessments/models/quiz.py:94
+#: apps/courses/models/content.py:31 apps/courses/models/structure.py:16
+#: apps/courses/models/structure.py:34 apps/courses/models/structure.py:74
+msgid "order"
+msgstr "реті"
+
+#: apps/assessments/models/quiz.py:67
+msgid "explanation"
+msgstr "түсіндірме"
+
+#: apps/assessments/models/quiz.py:67
+msgid "Shown after the attempt"
+msgstr "Талпыныстан кейін көрсетіледі"
+
+#: apps/assessments/models/quiz.py:68
+msgid "correct number"
+msgstr "дұрыс сан"
+
+#: apps/assessments/models/quiz.py:70
+msgid "allowed deviation"
+msgstr "рұқсат етілген ауытқу"
+
+#: apps/assessments/models/quiz.py:74
+msgid "Absolute, in the units of the answer (0 = exact)"
+msgstr "Абсолютті, жауаптың бірлігімен (0 = дәл)"
+
+#: apps/assessments/models/quiz.py:77
+msgid "accepted answers"
+msgstr "қабылданатын жауаптар"
+
+#: apps/assessments/models/quiz.py:77
+msgid "Short text: list of accepted spellings"
+msgstr "Қысқа мәтін: қабылданатын жазылу нұсқаларының тізімі"
+
+#: apps/assessments/models/quiz.py:80
+msgid "in use"
+msgstr "қолданыста"
+
+#: apps/assessments/models/quiz.py:80
+msgid "Retired questions stay in old attempts but are not asked again"
+msgstr "Қолданыстан шыққан сұрақтар ескі талпыныстарда қалады, бірақ қайта қойылмайды"
+
+#: apps/assessments/models/quiz.py:95 apps/courses/models/content.py:17
+msgid "text"
+msgstr "мәтін"
+
+#: apps/assessments/models/quiz.py:95
+msgid "<sub> and <sup> are allowed: H<sub>2</sub>O"
+msgstr "<sub> және <sup> рұқсат етіледі: H<sub>2</sub>O"
+
+#: apps/assessments/models/quiz.py:100
+msgid "answer option"
+msgstr "жауап нұсқасы"
+
+#: apps/assessments/models/quiz.py:101
+msgid "answer options"
+msgstr "жауап нұсқалары"
+
+#: apps/assessments/services/attempts.py:75
+msgid "You have used all attempts for this test."
+msgstr "Бұл тесттің барлық талпынысын пайдаландыңыз."
+
+#: apps/assessments/services/attempts.py:78
+msgid "This test has no questions yet."
+msgstr "Бұл тестте әзірге сұрақ жоқ."
+
+#: apps/assessments/services/attempts.py:102
+msgid "This attempt has already been submitted."
+msgstr "Бұл талпыныс жіберіліп қойған."
 
 #: apps/core/apps.py:8
 msgid "Core"
@@ -222,7 +523,7 @@ msgstr "Оқу және бағалау"
 msgid "students"
 msgstr "студенттер"
 
-#: apps/courses/admin.py:77 apps/courses/admin.py:236
+#: apps/courses/admin.py:77 apps/courses/admin.py:238
 #, python-format
 msgid "%(n)d student enrolled."
 msgid_plural "%(n)d students enrolled."
@@ -233,19 +534,19 @@ msgstr[1] "%(n)d студент жазылды."
 msgid "A published topic needs at least one required stage."
 msgstr "Жарияланған тақырыпта кемінде бір міндетті кезең болуы керек."
 
-#: apps/courses/admin.py:136 apps/courses/models/structure.py:100
+#: apps/courses/admin.py:136 apps/courses/models/structure.py:110
 msgid "stages"
 msgstr "кезеңдер"
 
-#: apps/courses/admin.py:232
+#: apps/courses/admin.py:234
 msgid "Enrol all students of the selected groups"
 msgstr "Таңдалған топтардың барлық студенттерін жазу"
 
-#: apps/courses/admin.py:249 apps/courses/services/enrollment.py:20
+#: apps/courses/admin.py:251 apps/courses/services/enrollment.py:20
 msgid "Only students can be enrolled in a course."
 msgstr "Курсқа тек студенттерді жазуға болады."
 
-#: apps/courses/admin.py:251
+#: apps/courses/admin.py:253
 msgid "This student is already enrolled in the course."
 msgstr "Бұл студент курсқа жазылып қойған."
 
@@ -255,29 +556,14 @@ msgstr "Курстар"
 
 #: apps/courses/models/content.py:15 apps/courses/models/content.py:51
 #: apps/courses/models/content.py:83 apps/courses/models/content.py:127
-#: apps/courses/models/structure.py:99
+#: apps/courses/models/structure.py:109
 msgid "stage"
 msgstr "кезең"
-
-#: apps/courses/models/content.py:17
-msgid "text"
-msgstr "мәтін"
 
 #: apps/courses/models/content.py:20 apps/courses/models/content.py:21
 #: apps/courses/models/content.py:29
 msgid "theory"
 msgstr "теория"
-
-#: apps/courses/models/content.py:31 apps/courses/models/structure.py:16
-#: apps/courses/models/structure.py:34 apps/courses/models/structure.py:74
-msgid "order"
-msgstr "реті"
-
-#: apps/courses/models/content.py:32 apps/courses/models/course.py:30
-#: apps/courses/models/structure.py:17 apps/courses/models/structure.py:36
-#: apps/courses/models/structure.py:76
-msgid "title"
-msgstr "атауы"
 
 #: apps/courses/models/content.py:33
 msgid "file"
@@ -342,7 +628,8 @@ msgstr "тәжірибелер"
 #: apps/courses/models/content.py:90
 msgid ""
 "Experiment keys in the order they open; empty = all experiments of the lab"
-msgstr "Тәжірибе кілттері ашылу ретімен; бос болса — зертхананың барлық тәжірибесі"
+msgstr ""
+"Тәжірибе кілттері ашылу ретімен; бос болса — зертхананың барлық тәжірибесі"
 
 #: apps/courses/models/content.py:94
 msgid "lab work"
@@ -357,15 +644,15 @@ msgstr "зертханалық жұмыстар"
 msgid "Use experiment keys of this lab: %(keys)s"
 msgstr "Осы зертхананың тәжірибе кілттерін қолданыңыз: %(keys)s"
 
-#: apps/courses/models/content.py:129
+#: apps/courses/models/content.py:137
 msgid "instructions"
 msgstr "нұсқаулық"
 
-#: apps/courses/models/content.py:132
+#: apps/courses/models/content.py:140
 msgid "topic test"
 msgstr "тақырып тесті"
 
-#: apps/courses/models/content.py:133
+#: apps/courses/models/content.py:141
 msgid "topic tests"
 msgstr "тақырып тесттері"
 
@@ -414,10 +701,6 @@ msgstr "мұқаба"
 msgid "status"
 msgstr "күйі"
 
-#: apps/courses/models/course.py:37 apps/courses/models/enrollment.py:52
-msgid "enrolment"
-msgstr "жазылу тәсілі"
-
 #: apps/courses/models/course.py:40
 msgid "course code"
 msgstr "курс коды"
@@ -450,7 +733,9 @@ msgstr "кезең түрлерінің үлесі"
 msgid ""
 "Share of each stage kind in a topic score, e.g. {\"lab\": 40, \"practice\": "
 "20, …}"
-msgstr "Тақырып бағасындағы әр кезең түрінің үлесі, мысалы {\"lab\": 40, \"practice\": 20, …}"
+msgstr ""
+"Тақырып бағасындағы әр кезең түрінің үлесі, мысалы {\"lab\": 40, "
+"\"practice\": 20, …}"
 
 #: apps/courses/models/course.py:57
 msgid "teachers"
@@ -631,14 +916,6 @@ msgstr "Зертханалық жұмыс"
 msgid "Practice work"
 msgstr "Практикалық жұмыс"
 
-#: apps/courses/models/structure.py:71 ui/views.py:16
-msgid "Topic test"
-msgstr "Тақырып тесті"
-
-#: apps/courses/models/structure.py:75
-msgid "kind"
-msgstr "түрі"
-
 #: apps/courses/models/structure.py:77
 msgid "required"
 msgstr "міндетті"
@@ -647,9 +924,13 @@ msgstr "міндетті"
 msgid "Leave empty to use the course share of this stage kind"
 msgstr "Бос қалдырсаңыз, курстағы осы кезең түрінің үлесі қолданылады"
 
-#: apps/courses/models/structure.py:86
-msgid "pass mark, %"
-msgstr "өту шегі, %"
+#: apps/courses/models/structure.py:95
+msgid "checkpoint quiz"
+msgstr "бекіту тесті"
+
+#: apps/courses/models/structure.py:96
+msgid "3–4 questions after a theory or video stage"
+msgstr "Теория немесе видео кезеңінен кейінгі 3–4 сұрақ"
 
 #: apps/courses/services/enrollment.py:36
 msgid "This course is not open for enrolment."
@@ -1601,7 +1882,7 @@ msgstr ""
 msgid "In progress"
 msgstr "Орындалуда"
 
-#: apps/labs/models/attempt.py:11
+#: apps/labs/models/attempt.py:11 ui/templates/assessments/result.html:85
 msgid "Finished"
 msgstr "Аяқталды"
 
@@ -1616,14 +1897,6 @@ msgstr "тәжірибе"
 #: apps/labs/models/attempt.py:19
 msgid "Snapshot at start"
 msgstr "Басталған сәттегі мәні"
-
-#: apps/labs/models/attempt.py:21
-msgid "started at"
-msgstr "басталған уақыты"
-
-#: apps/labs/models/attempt.py:22
-msgid "finished at"
-msgstr "аяқталған уақыты"
 
 #: apps/labs/models/attempt.py:26
 msgid "order errors"
@@ -1728,10 +2001,6 @@ msgstr "Аяқтау"
 #: apps/labs/models/attempt.py:65
 msgid "Restart"
 msgstr "Қайта бастау"
-
-#: apps/labs/models/attempt.py:67
-msgid "attempt"
-msgstr "талпыныс"
 
 #: apps/labs/models/attempt.py:68
 msgid "sequence"
@@ -1908,7 +2177,7 @@ msgstr "Талдау тапсырмасы"
 msgid "Submit answers"
 msgstr "Жауаптарды жіберу"
 
-#: apps/labs/views.py:67
+#: apps/labs/views.py:67 ui/templates/assessments/take.html:65
 msgid "Your answer"
 msgstr "Сіздің жауабыңыз"
 
@@ -1934,11 +2203,12 @@ msgstr "Қате құрал не таңдау"
 msgid "Time spent"
 msgstr "Жұмсалған уақыт"
 
-#: apps/labs/views.py:73 ui/templates/courses/topic.html:39
+#: apps/labs/views.py:73 ui/templates/courses/topic.html:57
 msgid "Analysis: correct answers"
 msgstr "Талдау: дұрыс жауаптар"
 
-#: apps/labs/views.py:74 ui/templates/labs/run.html:17
+#: apps/labs/views.py:74 ui/templates/assessments/result.html:36
+#: ui/templates/labs/run.html:17
 msgid "Back to the topic"
 msgstr "Тақырыпқа оралу"
 
@@ -2219,15 +2489,15 @@ msgstr "білім беру бағдарламалары"
 msgid "Research"
 msgstr "Зерттеу"
 
-#: config/settings/base.py:137
+#: config/settings/base.py:138
 msgid "Kazakh"
 msgstr "Қазақша"
 
-#: config/settings/base.py:138
+#: config/settings/base.py:139
 msgid "Russian"
 msgstr "Орысша"
 
-#: config/settings/base.py:139
+#: config/settings/base.py:140
 msgid "English"
 msgstr "Ағылшынша"
 
@@ -2388,6 +2658,119 @@ msgstr "Тіркелу"
 msgid "Teachers do not sign up themselves — the administrator adds them."
 msgstr "Мұғалімдер өздігінен тіркелмейді — оларды әкімші қосады."
 
+#: ui/templates/assessments/result.html:6 ui/templates/assessments/take.html:6
+#: ui/templates/courses/topic.html:5
+msgid "Breadcrumbs"
+msgstr "Навигация жолы"
+
+#: ui/templates/assessments/result.html:12
+#: ui/templates/assessments/take.html:20
+#, python-format
+msgid "attempt %(n)s"
+msgstr "%(n)s-талпыныс"
+
+#: ui/templates/assessments/result.html:20
+msgid "Test passed"
+msgstr "Тесттен өттіңіз"
+
+#: ui/templates/assessments/result.html:22
+#, python-format
+msgid "Below the pass mark (%(p)s%%)"
+msgstr "Өту шегіне жетпеді (%(p)s%%)"
+
+#: ui/templates/assessments/result.html:25
+#, python-format
+msgid "%(s)s of %(m)s points."
+msgstr "%(m)s ұпайдан %(s)s."
+
+#: ui/templates/assessments/result.html:26
+#, python-format
+msgid "Attempts left: %(n)s."
+msgstr "Қалған талпыныс: %(n)s."
+
+#: ui/templates/assessments/result.html:27
+msgid "Read the material again and retake the test."
+msgstr "Материалды қайта оқып, тестті қайта тапсырыңыз."
+
+#: ui/templates/assessments/result.html:33
+msgid "Retake the test"
+msgstr "Тестті қайта тапсыру"
+
+#: ui/templates/assessments/result.html:41
+msgid "Your answers"
+msgstr "Сіздің жауаптарыңыз"
+
+#: ui/templates/assessments/result.html:49
+msgid "Correct"
+msgstr "Дұрыс"
+
+#: ui/templates/assessments/result.html:49
+msgid "Wrong"
+msgstr "Қате"
+
+#: ui/templates/assessments/result.html:51
+#, python-format
+msgid "%(p)s of %(m)s points"
+msgstr "%(m)s ұпайдан %(p)s"
+
+#: ui/templates/assessments/result.html:61
+msgid "your answer"
+msgstr "сіздің жауабыңыз"
+
+#: ui/templates/assessments/result.html:67
+msgid "Your answer:"
+msgstr "Сіздің жауабыңыз:"
+
+#: ui/templates/assessments/result.html:69
+msgid "correct:"
+msgstr "дұрысы:"
+
+#: ui/templates/assessments/result.html:92
+msgid "Counts for the grade"
+msgstr "Бағаға есептеледі"
+
+#: ui/templates/assessments/take.html:21
+#, python-format
+msgid "pass mark %(p)s%%"
+msgstr "өту шегі %(p)s%%"
+
+#: ui/templates/assessments/take.html:29
+msgid "Time left"
+msgstr "Қалған уақыт"
+
+#: ui/templates/assessments/take.html:46
+#, python-format
+msgid "Question %(n)s"
+msgstr "%(n)s-сұрақ"
+
+#: ui/templates/assessments/take.html:50
+msgid "Choose all correct options."
+msgstr "Барлық дұрыс нұсқаны таңдаңыз."
+
+#: ui/templates/assessments/take.html:59
+msgid "Your answer (a number)"
+msgstr "Жауабыңыз (сан)"
+
+#: ui/templates/assessments/take.html:61
+msgid "A comma or a dot may be used: 2,24"
+msgstr "Үтір де, нүкте де болады: 2,24"
+
+#: ui/templates/assessments/take.html:73
+msgid "Previous question"
+msgstr "Алдыңғы сұрақ"
+
+#: ui/templates/assessments/take.html:76
+msgid "Unanswered questions:"
+msgstr "Жауап берілмеген сұрақтар:"
+
+#: ui/templates/assessments/take.html:79
+msgid "Next question"
+msgstr "Келесі сұрақ"
+
+#: ui/templates/assessments/take.html:80
+msgid "Submit the test"
+msgstr "Тестті жіберу"
+
 #: ui/templates/components/modal.html:15
 msgid "Cancel"
 msgstr "Болдырмау"
@@ -2474,10 +2857,6 @@ msgstr "Әзірге курс жоқ"
 msgid "The course appears here when your teacher assigns it to your group."
 msgstr "Мұғалім курсты тобыңызға бекіткенде, ол осында пайда болады."
 
-#: ui/templates/courses/topic.html:5
-msgid "Breadcrumbs"
-msgstr "Навигация жолы"
-
 #: ui/templates/courses/topic.html:8 ui/templates/labs/run.html:22
 #, python-format
 msgid "Topic %(n)s"
@@ -2491,7 +2870,11 @@ msgstr "Тақырып кезеңдері"
 msgid "This topic has no theory yet."
 msgstr "Бұл тақырыпта әзірге теория жоқ."
 
-#: ui/templates/courses/topic.html:46
+#: ui/templates/courses/topic.html:26
+msgid "Tests"
+msgstr "Тесттер"
+
+#: ui/templates/courses/topic.html:64
 msgid "Open the virtual lab"
 msgstr "Виртуалды зертхананы ашу"
 
@@ -2612,10 +2995,6 @@ msgstr "Тәжірибе мен топ бойынша орташа мәндер 
 #: ui/templates/research/dashboard.html:46
 msgid "Students"
 msgstr "Студенттер"
-
-#: ui/templates/research/dashboard.html:47
-msgid "Attempts"
-msgstr "Талпыныстар"
 
 #: ui/templates/research/dashboard.html:48
 #: ui/templates/research/dashboard.html:83

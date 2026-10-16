@@ -57,10 +57,10 @@
       Практикалық жұмыс 1, Практикалық жұмыс 2, Тақырып тесті (практикалардың мазмұны STEP-07a-да толтырылады).
 
 ## STEP-05 · assessments: тесттер
-- [ ] Quiz, Question, Choice, QuizAttempt, AttemptAnswer (§3.4).
-- [ ] Сервистер: `start_attempt` (сұрақ пулынан таңдау, араластыру), `submit_attempt` (автобағалау: single/multiple/numeric/short_text), `max_attempts`, `grading=best|last|first`.
-- [ ] Тест тапсыру UI (Alpine): бір бетте немесе сұрақ-сұрақпен, таймер (`time_limit_min`), нәтиже + түсіндірмелер.
-- [ ] Тесттер: әр сұрақ түрін бағалау, талпыныс шегі, пул таңдау.
+- [x] Quiz, Question, Choice, QuizAttempt, AttemptAnswer (§3.4).
+- [x] Сервистер: `start_attempt` (сұрақ пулынан таңдау, араластыру), `submit_attempt` (автобағалау: single/multiple/numeric/short_text), `max_attempts`, `grading=best|last|first`.
+- [x] Тест тапсыру UI (Alpine): бір бетте немесе сұрақ-сұрақпен, таймер (`time_limit_min`), нәтиже + түсіндірмелер.
+- [x] Тесттер: әр сұрақ түрін бағалау, талпыныс шегі, пул таңдау.
 
 ## STEP-05a · `assessments/chem.py`: химиялық формула мен теңдеу талдағышы
 - [ ] Формуланы талдау (жақшалар, гидраттар `·`, иондар мен заряд, unicode `₂ ⁺`), теңдеуді талдау (`=`, `->`, `→`, `⇌`, `↑↓`), теңестірілуін тексеру.

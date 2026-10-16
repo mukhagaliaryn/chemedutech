@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 16:44+0500\n"
+"POT-Creation-Date: 2026-10-16 17:22+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -188,7 +188,8 @@ msgstr "аватар"
 msgid "interface language"
 msgstr "язык интерфейса"
 
-#: apps/accounts/models/user.py:55 apps/organizations/models/profiles.py:11
+#: apps/accounts/models/user.py:55 apps/assessments/models/attempt.py:21
+#: apps/organizations/models/profiles.py:11
 #: apps/organizations/models/profiles.py:42
 msgid "user"
 msgstr "пользователь"
@@ -196,6 +197,306 @@ msgstr "пользователь"
 #: apps/accounts/models/user.py:56
 msgid "users"
 msgstr "пользователи"
+
+#: apps/assessments/admin.py:24 apps/assessments/admin.py:80
+#: apps/assessments/models/attempt.py:56 apps/assessments/models/quiz.py:63
+#: apps/assessments/models/quiz.py:85 apps/assessments/models/quiz.py:93
+msgid "question"
+msgstr "вопрос"
+
+#: apps/assessments/admin.py:38 ui/templates/assessments/result.html:82
+#: ui/templates/research/dashboard.html:47
+msgid "Attempts"
+msgstr "Попытки"
+
+#: apps/assessments/admin.py:53 apps/assessments/models/quiz.py:86
+msgid "questions"
+msgstr "вопросы"
+
+#: apps/assessments/admin.py:75
+msgid "Number answer"
+msgstr "Числовой ответ"
+
+#: apps/assessments/admin.py:76
+msgid "Short text answer"
+msgstr "Краткий текстовый ответ"
+
+#: apps/assessments/admin.py:98 apps/assessments/models/attempt.py:59
+msgid "chosen options"
+msgstr "выбранные варианты"
+
+#: apps/assessments/apps.py:8
+msgid "Assessments"
+msgstr "Оценивание"
+
+#: apps/assessments/models/attempt.py:17 apps/courses/models/course.py:37
+#: apps/courses/models/enrollment.py:52
+msgid "enrolment"
+msgstr "способ записи"
+
+#: apps/assessments/models/attempt.py:18
+msgid "Empty for a teacher's preview"
+msgstr "Пусто при предпросмотре преподавателем"
+
+#: apps/assessments/models/attempt.py:24 apps/assessments/models/quiz.py:46
+#: apps/assessments/models/quiz.py:60 apps/courses/models/content.py:135
+msgid "quiz"
+msgstr "тест"
+
+#: apps/assessments/models/attempt.py:26
+msgid "attempt number"
+msgstr "номер попытки"
+
+#: apps/assessments/models/attempt.py:27 apps/labs/models/attempt.py:21
+msgid "started at"
+msgstr "начато"
+
+#: apps/assessments/models/attempt.py:28 apps/labs/models/attempt.py:22
+msgid "finished at"
+msgstr "завершено"
+
+#: apps/assessments/models/attempt.py:29
+msgid "questions asked"
+msgstr "заданные вопросы"
+
+#: apps/assessments/models/attempt.py:29
+msgid "In the order shown"
+msgstr "В порядке показа"
+
+#: apps/assessments/models/attempt.py:30
+msgid "option order"
+msgstr "порядок вариантов"
+
+#: apps/assessments/models/attempt.py:31
+msgid "score"
+msgstr "баллы"
+
+#: apps/assessments/models/attempt.py:32
+msgid "max score"
+msgstr "максимум баллов"
+
+#: apps/assessments/models/attempt.py:33
+msgid "percent"
+msgstr "процент"
+
+#: apps/assessments/models/attempt.py:34
+msgid "passed"
+msgstr "сдан"
+
+#: apps/assessments/models/attempt.py:38
+msgid "quiz attempt"
+msgstr "попытка теста"
+
+#: apps/assessments/models/attempt.py:39
+msgid "quiz attempts"
+msgstr "попытки тестов"
+
+#: apps/assessments/models/attempt.py:53 apps/labs/models/attempt.py:67
+msgid "attempt"
+msgstr "попытка"
+
+#: apps/assessments/models/attempt.py:61
+msgid "text answer"
+msgstr "текстовый ответ"
+
+#: apps/assessments/models/attempt.py:62
+msgid "number answer"
+msgstr "числовой ответ"
+
+#: apps/assessments/models/attempt.py:63 apps/assessments/models/quiz.py:96
+#: ui/templates/assessments/result.html:62
+msgid "correct"
+msgstr "верно"
+
+#: apps/assessments/models/attempt.py:64 apps/assessments/models/quiz.py:65
+msgid "points"
+msgstr "баллы"
+
+#: apps/assessments/models/attempt.py:67
+msgid "answer"
+msgstr "ответ"
+
+#: apps/assessments/models/attempt.py:68
+msgid "answers"
+msgstr "ответы"
+
+#: apps/assessments/models/quiz.py:11
+msgid "Checkpoint quiz"
+msgstr "Закрепляющий тест"
+
+#: apps/assessments/models/quiz.py:12 apps/courses/models/structure.py:71
+#: ui/views.py:16
+msgid "Topic test"
+msgstr "Тест по теме"
+
+#: apps/assessments/models/quiz.py:13
+msgid "Module test"
+msgstr "Тест по модулю"
+
+#: apps/assessments/models/quiz.py:14
+msgid "Final test"
+msgstr "Итоговый тест"
+
+#: apps/assessments/models/quiz.py:17
+msgid "Best attempt"
+msgstr "Лучшая попытка"
+
+#: apps/assessments/models/quiz.py:18
+msgid "Last attempt"
+msgstr "Последняя попытка"
+
+#: apps/assessments/models/quiz.py:19
+msgid "First attempt"
+msgstr "Первая попытка"
+
+#: apps/assessments/models/quiz.py:21 apps/courses/models/content.py:32
+#: apps/courses/models/course.py:30 apps/courses/models/structure.py:17
+#: apps/courses/models/structure.py:36 apps/courses/models/structure.py:76
+msgid "title"
+msgstr "название"
+
+#: apps/assessments/models/quiz.py:22 apps/assessments/models/quiz.py:62
+#: apps/courses/models/structure.py:75
+msgid "kind"
+msgstr "вид"
+
+#: apps/assessments/models/quiz.py:24 apps/courses/models/structure.py:86
+msgid "pass mark, %"
+msgstr "порог прохождения, %"
+
+#: apps/assessments/models/quiz.py:27
+msgid "time limit, min"
+msgstr "лимит времени, мин"
+
+#: apps/assessments/models/quiz.py:27
+msgid "Empty = no limit"
+msgstr "Пусто = без ограничения"
+
+#: apps/assessments/models/quiz.py:30
+msgid "attempts allowed"
+msgstr "число попыток"
+
+#: apps/assessments/models/quiz.py:30
+msgid "Empty = unlimited"
+msgstr "Пусто = без ограничения"
+
+#: apps/assessments/models/quiz.py:33
+msgid "questions per attempt"
+msgstr "вопросов в попытке"
+
+#: apps/assessments/models/quiz.py:36
+msgid "Empty = all questions; otherwise a random selection from the pool"
+msgstr "Пусто = все вопросы; иначе случайная выборка из банка"
+
+#: apps/assessments/models/quiz.py:38
+msgid "shuffle questions"
+msgstr "перемешивать вопросы"
+
+#: apps/assessments/models/quiz.py:39
+msgid "shuffle answer options"
+msgstr "перемешивать варианты ответов"
+
+#: apps/assessments/models/quiz.py:40
+msgid "attempt that counts"
+msgstr "засчитываемая попытка"
+
+#: apps/assessments/models/quiz.py:42
+msgid "show correct answers"
+msgstr "показывать правильные ответы"
+
+#: apps/assessments/models/quiz.py:42
+msgid "Show correct answers and explanations after an attempt"
+msgstr "Показывать правильные ответы и пояснения после попытки"
+
+#: apps/assessments/models/quiz.py:47
+msgid "quizzes"
+msgstr "тесты"
+
+#: apps/assessments/models/quiz.py:55
+msgid "One correct option"
+msgstr "Один правильный вариант"
+
+#: apps/assessments/models/quiz.py:56
+msgid "Several correct options"
+msgstr "Несколько правильных вариантов"
+
+#: apps/assessments/models/quiz.py:57
+msgid "Number"
+msgstr "Число"
+
+#: apps/assessments/models/quiz.py:58
+msgid "Short text"
+msgstr "Краткий текст"
+
+#: apps/assessments/models/quiz.py:61 apps/assessments/models/quiz.py:94
+#: apps/courses/models/content.py:31 apps/courses/models/structure.py:16
+#: apps/courses/models/structure.py:34 apps/courses/models/structure.py:74
+msgid "order"
+msgstr "порядок"
+
+#: apps/assessments/models/quiz.py:67
+msgid "explanation"
+msgstr "пояснение"
+
+#: apps/assessments/models/quiz.py:67
+msgid "Shown after the attempt"
+msgstr "Показывается после попытки"
+
+#: apps/assessments/models/quiz.py:68
+msgid "correct number"
+msgstr "правильное число"
+
+#: apps/assessments/models/quiz.py:70
+msgid "allowed deviation"
+msgstr "допустимое отклонение"
+
+#: apps/assessments/models/quiz.py:74
+msgid "Absolute, in the units of the answer (0 = exact)"
+msgstr "Абсолютное, в единицах ответа (0 = точно)"
+
+#: apps/assessments/models/quiz.py:77
+msgid "accepted answers"
+msgstr "принимаемые ответы"
+
+#: apps/assessments/models/quiz.py:77
+msgid "Short text: list of accepted spellings"
+msgstr "Краткий текст: список принимаемых написаний"
+
+#: apps/assessments/models/quiz.py:80
+msgid "in use"
+msgstr "используется"
+
+#: apps/assessments/models/quiz.py:80
+msgid "Retired questions stay in old attempts but are not asked again"
+msgstr "Выведенные вопросы остаются в старых попытках, но больше не задаются"
+
+#: apps/assessments/models/quiz.py:95 apps/courses/models/content.py:17
+msgid "text"
+msgstr "текст"
+
+#: apps/assessments/models/quiz.py:95
+msgid "<sub> and <sup> are allowed: H<sub>2</sub>O"
+msgstr "Можно использовать <sub> и <sup>: H<sub>2</sub>O"
+
+#: apps/assessments/models/quiz.py:100
+msgid "answer option"
+msgstr "вариант ответа"
+
+#: apps/assessments/models/quiz.py:101
+msgid "answer options"
+msgstr "варианты ответа"
+
+#: apps/assessments/services/attempts.py:75
+msgid "You have used all attempts for this test."
+msgstr "Вы использовали все попытки этого теста."
+
+#: apps/assessments/services/attempts.py:78
+msgid "This test has no questions yet."
+msgstr "В этом тесте пока нет вопросов."
+
+#: apps/assessments/services/attempts.py:102
+msgid "This attempt has already been submitted."
+msgstr "Эта попытка уже отправлена."
 
 #: apps/core/apps.py:8
 msgid "Core"
@@ -225,7 +526,7 @@ msgstr "Обучение и оценивание"
 msgid "students"
 msgstr "студенты"
 
-#: apps/courses/admin.py:77 apps/courses/admin.py:236
+#: apps/courses/admin.py:77 apps/courses/admin.py:238
 #, python-format
 msgid "%(n)d student enrolled."
 msgid_plural "%(n)d students enrolled."
@@ -238,19 +539,19 @@ msgstr[3] "%(n)d студентов записано."
 msgid "A published topic needs at least one required stage."
 msgstr "В опубликованной теме должен быть хотя бы один обязательный этап."
 
-#: apps/courses/admin.py:136 apps/courses/models/structure.py:100
+#: apps/courses/admin.py:136 apps/courses/models/structure.py:110
 msgid "stages"
 msgstr "этапы"
 
-#: apps/courses/admin.py:232
+#: apps/courses/admin.py:234
 msgid "Enrol all students of the selected groups"
 msgstr "Записать всех студентов выбранных групп"
 
-#: apps/courses/admin.py:249 apps/courses/services/enrollment.py:20
+#: apps/courses/admin.py:251 apps/courses/services/enrollment.py:20
 msgid "Only students can be enrolled in a course."
 msgstr "На курс можно записать только студентов."
 
-#: apps/courses/admin.py:251
+#: apps/courses/admin.py:253
 msgid "This student is already enrolled in the course."
 msgstr "Этот студент уже записан на курс."
 
@@ -260,29 +561,14 @@ msgstr "Курсы"
 
 #: apps/courses/models/content.py:15 apps/courses/models/content.py:51
 #: apps/courses/models/content.py:83 apps/courses/models/content.py:127
-#: apps/courses/models/structure.py:99
+#: apps/courses/models/structure.py:109
 msgid "stage"
 msgstr "этап"
-
-#: apps/courses/models/content.py:17
-msgid "text"
-msgstr "текст"
 
 #: apps/courses/models/content.py:20 apps/courses/models/content.py:21
 #: apps/courses/models/content.py:29
 msgid "theory"
 msgstr "теория"
-
-#: apps/courses/models/content.py:31 apps/courses/models/structure.py:16
-#: apps/courses/models/structure.py:34 apps/courses/models/structure.py:74
-msgid "order"
-msgstr "порядок"
-
-#: apps/courses/models/content.py:32 apps/courses/models/course.py:30
-#: apps/courses/models/structure.py:17 apps/courses/models/structure.py:36
-#: apps/courses/models/structure.py:76
-msgid "title"
-msgstr "название"
 
 #: apps/courses/models/content.py:33
 msgid "file"
@@ -362,15 +648,15 @@ msgstr "лабораторные работы"
 msgid "Use experiment keys of this lab: %(keys)s"
 msgstr "Используйте ключи опытов этой лаборатории: %(keys)s"
 
-#: apps/courses/models/content.py:129
+#: apps/courses/models/content.py:137
 msgid "instructions"
 msgstr "инструкция"
 
-#: apps/courses/models/content.py:132
+#: apps/courses/models/content.py:140
 msgid "topic test"
 msgstr "тест по теме"
 
-#: apps/courses/models/content.py:133
+#: apps/courses/models/content.py:141
 msgid "topic tests"
 msgstr "тесты по темам"
 
@@ -419,10 +705,6 @@ msgstr "обложка"
 msgid "status"
 msgstr "статус"
 
-#: apps/courses/models/course.py:37 apps/courses/models/enrollment.py:52
-msgid "enrolment"
-msgstr "способ записи"
-
 #: apps/courses/models/course.py:40
 msgid "course code"
 msgstr "код курса"
@@ -455,7 +737,9 @@ msgstr "доли видов этапов"
 msgid ""
 "Share of each stage kind in a topic score, e.g. {\"lab\": 40, \"practice\": "
 "20, …}"
-msgstr "Доля каждого вида этапа в оценке темы, например {\"lab\": 40, \"practice\": 20, …}"
+msgstr ""
+"Доля каждого вида этапа в оценке темы, например {\"lab\": 40, \"practice\": "
+"20, …}"
 
 #: apps/courses/models/course.py:57
 msgid "teachers"
@@ -636,14 +920,6 @@ msgstr "Лабораторная работа"
 msgid "Practice work"
 msgstr "Практическая работа"
 
-#: apps/courses/models/structure.py:71 ui/views.py:16
-msgid "Topic test"
-msgstr "Тест по теме"
-
-#: apps/courses/models/structure.py:75
-msgid "kind"
-msgstr "вид"
-
 #: apps/courses/models/structure.py:77
 msgid "required"
 msgstr "обязательный"
@@ -652,9 +928,13 @@ msgstr "обязательный"
 msgid "Leave empty to use the course share of this stage kind"
 msgstr "Оставьте пустым, чтобы использовать долю этого вида этапа в курсе"
 
-#: apps/courses/models/structure.py:86
-msgid "pass mark, %"
-msgstr "порог прохождения, %"
+#: apps/courses/models/structure.py:95
+msgid "checkpoint quiz"
+msgstr "закрепляющий тест"
+
+#: apps/courses/models/structure.py:96
+msgid "3–4 questions after a theory or video stage"
+msgstr "3–4 вопроса после этапа теории или видео"
 
 #: apps/courses/services/enrollment.py:36
 msgid "This course is not open for enrolment."
@@ -1605,7 +1885,7 @@ msgstr ""
 msgid "In progress"
 msgstr "В процессе"
 
-#: apps/labs/models/attempt.py:11
+#: apps/labs/models/attempt.py:11 ui/templates/assessments/result.html:85
 msgid "Finished"
 msgstr "Завершено"
 
@@ -1620,14 +1900,6 @@ msgstr "опыт"
 #: apps/labs/models/attempt.py:19
 msgid "Snapshot at start"
 msgstr "Значение на момент начала"
-
-#: apps/labs/models/attempt.py:21
-msgid "started at"
-msgstr "начато"
-
-#: apps/labs/models/attempt.py:22
-msgid "finished at"
-msgstr "завершено"
 
 #: apps/labs/models/attempt.py:26
 msgid "order errors"
@@ -1732,10 +2004,6 @@ msgstr "Завершение"
 #: apps/labs/models/attempt.py:65
 msgid "Restart"
 msgstr "Перезапуск"
-
-#: apps/labs/models/attempt.py:67
-msgid "attempt"
-msgstr "попытка"
 
 #: apps/labs/models/attempt.py:68
 msgid "sequence"
@@ -1911,7 +2179,7 @@ msgstr "Задание на анализ"
 msgid "Submit answers"
 msgstr "Отправить ответы"
 
-#: apps/labs/views.py:67
+#: apps/labs/views.py:67 ui/templates/assessments/take.html:65
 msgid "Your answer"
 msgstr "Ваш ответ"
 
@@ -1937,11 +2205,12 @@ msgstr "Неверное оборудование или выбор"
 msgid "Time spent"
 msgstr "Затрачено времени"
 
-#: apps/labs/views.py:73 ui/templates/courses/topic.html:39
+#: apps/labs/views.py:73 ui/templates/courses/topic.html:57
 msgid "Analysis: correct answers"
 msgstr "Анализ: верные ответы"
 
-#: apps/labs/views.py:74 ui/templates/labs/run.html:17
+#: apps/labs/views.py:74 ui/templates/assessments/result.html:36
+#: ui/templates/labs/run.html:17
 msgid "Back to the topic"
 msgstr "Вернуться к теме"
 
@@ -2225,15 +2494,15 @@ msgstr "образовательные программы"
 msgid "Research"
 msgstr "Исследование"
 
-#: config/settings/base.py:137
+#: config/settings/base.py:138
 msgid "Kazakh"
 msgstr "Казахский"
 
-#: config/settings/base.py:138
+#: config/settings/base.py:139
 msgid "Russian"
 msgstr "Русский"
 
-#: config/settings/base.py:139
+#: config/settings/base.py:140
 msgid "English"
 msgstr "Английский"
 
@@ -2394,6 +2663,119 @@ msgstr "Зарегистрироваться"
 msgid "Teachers do not sign up themselves — the administrator adds them."
 msgstr "Преподаватели не регистрируются сами — их добавляет администратор."
 
+#: ui/templates/assessments/result.html:6 ui/templates/assessments/take.html:6
+#: ui/templates/courses/topic.html:5
+msgid "Breadcrumbs"
+msgstr "Навигационная цепочка"
+
+#: ui/templates/assessments/result.html:12
+#: ui/templates/assessments/take.html:20
+#, python-format
+msgid "attempt %(n)s"
+msgstr "попытка %(n)s"
+
+#: ui/templates/assessments/result.html:20
+msgid "Test passed"
+msgstr "Тест сдан"
+
+#: ui/templates/assessments/result.html:22
+#, python-format
+msgid "Below the pass mark (%(p)s%%)"
+msgstr "Ниже проходного порога (%(p)s%%)"
+
+#: ui/templates/assessments/result.html:25
+#, python-format
+msgid "%(s)s of %(m)s points."
+msgstr "%(s)s из %(m)s баллов."
+
+#: ui/templates/assessments/result.html:26
+#, python-format
+msgid "Attempts left: %(n)s."
+msgstr "Осталось попыток: %(n)s."
+
+#: ui/templates/assessments/result.html:27
+msgid "Read the material again and retake the test."
+msgstr "Перечитайте материал и пересдайте тест."
+
+#: ui/templates/assessments/result.html:33
+msgid "Retake the test"
+msgstr "Пересдать тест"
+
+#: ui/templates/assessments/result.html:41
+msgid "Your answers"
+msgstr "Ваши ответы"
+
+#: ui/templates/assessments/result.html:49
+msgid "Correct"
+msgstr "Верно"
+
+#: ui/templates/assessments/result.html:49
+msgid "Wrong"
+msgstr "Неверно"
+
+#: ui/templates/assessments/result.html:51
+#, python-format
+msgid "%(p)s of %(m)s points"
+msgstr "%(p)s из %(m)s баллов"
+
+#: ui/templates/assessments/result.html:61
+msgid "your answer"
+msgstr "ваш ответ"
+
+#: ui/templates/assessments/result.html:67
+msgid "Your answer:"
+msgstr "Ваш ответ:"
+
+#: ui/templates/assessments/result.html:69
+msgid "correct:"
+msgstr "правильно:"
+
+#: ui/templates/assessments/result.html:92
+msgid "Counts for the grade"
+msgstr "Идёт в оценку"
+
+#: ui/templates/assessments/take.html:21
+#, python-format
+msgid "pass mark %(p)s%%"
+msgstr "порог %(p)s%%"
+
+#: ui/templates/assessments/take.html:29
+msgid "Time left"
+msgstr "Осталось времени"
+
+#: ui/templates/assessments/take.html:46
+#, python-format
+msgid "Question %(n)s"
+msgstr "Вопрос %(n)s"
+
+#: ui/templates/assessments/take.html:50
+msgid "Choose all correct options."
+msgstr "Выберите все правильные варианты."
+
+#: ui/templates/assessments/take.html:59
+msgid "Your answer (a number)"
+msgstr "Ваш ответ (число)"
+
+#: ui/templates/assessments/take.html:61
+msgid "A comma or a dot may be used: 2,24"
+msgstr "Можно через запятую или точку: 2,24"
+
+#: ui/templates/assessments/take.html:73
+msgid "Previous question"
+msgstr "Предыдущий вопрос"
+
+#: ui/templates/assessments/take.html:76
+msgid "Unanswered questions:"
+msgstr "Вопросов без ответа:"
+
+#: ui/templates/assessments/take.html:79
+msgid "Next question"
+msgstr "Следующий вопрос"
+
+#: ui/templates/assessments/take.html:80
+msgid "Submit the test"
+msgstr "Отправить тест"
+
 #: ui/templates/components/modal.html:15
 msgid "Cancel"
 msgstr "Отмена"
@@ -2482,10 +2864,6 @@ msgstr "Курсов пока нет"
 msgid "The course appears here when your teacher assigns it to your group."
 msgstr "Курс появится здесь, когда преподаватель назначит его вашей группе."
 
-#: ui/templates/courses/topic.html:5
-msgid "Breadcrumbs"
-msgstr "Навигационная цепочка"
-
 #: ui/templates/courses/topic.html:8 ui/templates/labs/run.html:22
 #, python-format
 msgid "Topic %(n)s"
@@ -2499,7 +2877,11 @@ msgstr "Этапы темы"
 msgid "This topic has no theory yet."
 msgstr "В этой теме пока нет теории."
 
-#: ui/templates/courses/topic.html:46
+#: ui/templates/courses/topic.html:26
+msgid "Tests"
+msgstr "Тесты"
+
+#: ui/templates/courses/topic.html:64
 msgid "Open the virtual lab"
 msgstr "Открыть виртуальную лабораторию"
 
@@ -2620,10 +3002,6 @@ msgstr "Средние по опыту и группе (завершённые �
 #: ui/templates/research/dashboard.html:46
 msgid "Students"
 msgstr "Студенты"
-
-#: ui/templates/research/dashboard.html:47
-msgid "Attempts"
-msgstr "Попытки"
 
 #: ui/templates/research/dashboard.html:48
 #: ui/templates/research/dashboard.html:83

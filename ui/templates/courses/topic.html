@@ -20,8 +20,26 @@
     {% endfor %}
   </article>
 
-  {% for item in labs %}{% with lab_key=item.stage.content.lab_key %}
   <aside class="flex min-w-0 flex-[1_1_300px] flex-col gap-4 lg:sticky lg:top-6">
+  {% if quizzes %}
+    <div class="card flex flex-col gap-3 p-5">
+      <h2 class="text-h3">{% translate "Tests" %}</h2>
+      <ul class="flex flex-col gap-2">
+        {% for item in quizzes %}
+          <li>
+            <a href="{% url 'assessments:take' item.quiz.pk %}" class="flex items-center gap-3 rounded-md border border-line px-3 py-2.5 hover:border-line-strong">
+              <span class="stage-{% if item.stage.kind == 'test' %}test{% else %}{{ item.stage.kind }}{% endif %} grid size-7 shrink-0 place-items-center rounded-sm text-white">{% include "components/icons.html#test" %}</span>
+              <span class="flex min-w-0 flex-1 flex-col">
+                <span class="text-sm font-medium">{{ item.quiz.title }}</span>
+                <span class="text-caption text-ink-soft">{{ item.quiz.get_kind_display }} · {{ item.stage.title }}</span>
+              </span>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+  {% for item in labs %}{% with lab_key=item.stage.content.lab_key %}
     <div class="card flex flex-col gap-4 p-5">
       <div class="flex items-center gap-3">
         <span class="stage-lab grid size-7 place-items-center rounded-sm text-white">{% include "components/icons.html#lab" %}</span>
@@ -46,7 +64,7 @@
         <a class="btn btn-primary w-full" href="{% url 'labs:run' lab_key first.key %}">{% translate "Open the virtual lab" %}</a>
       {% endif %}{% endwith %}
     </div>
-  </aside>
   {% endwith %}{% endfor %}
+  </aside>
 </div>
 {% endblock %}

@@ -59,5 +59,10 @@ def topic_detail(request, course_slug, number):
             ],
             "theory_stages": [s for s in stages if s.kind == Stage.Kind.THEORY and s.content],
             "labs": labs,
+            "quizzes": [
+                {"stage": s, "quiz": q}
+                for s in stages
+                if (q := s.checkpoint_quiz or (s.content.quiz if s.kind == Stage.Kind.TEST and s.content else None))
+            ],
         },
     )

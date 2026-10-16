@@ -119,12 +119,20 @@ class LabContent(TimeStampedModel):
 
 
 class TestContent(TimeStampedModel):
-    """Topic test. The quiz link (assessments.Quiz) is added in STEP-05."""
+    """Topic test: the stage is passed when the quiz is passed."""
 
     __test__ = False  # not a pytest test class
 
     stage = models.OneToOneField(
         "courses.Stage", on_delete=models.CASCADE, related_name="test_content", verbose_name=_("stage")
+    )
+    quiz = models.ForeignKey(
+        "assessments.Quiz",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="test_contents",
+        verbose_name=_("quiz"),
     )
     instructions = models.TextField(_("instructions"), blank=True)
 

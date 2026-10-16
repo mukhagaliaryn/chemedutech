@@ -1,0 +1,100 @@
+{% extends "layouts/student.html" %}
+{% load i18n %}
+{% block title %}{{ quiz.title }} · ChemEduTech{% endblock %}
+{% block content %}
+{% if stage %}
+<nav class="flex flex-wrap items-center gap-2 text-sm" aria-label="{% translate 'Breadcrumbs' %}">
+  <a class="link inline-flex items-center gap-1.5 font-semibold" href="{{ stage.topic.get_absolute_url }}">{% include "components/icons.html#arrow-left" %}{{ stage.topic.title }}</a>
+  <span class="text-line-strong">/</span><span class="text-ink-soft">{{ stage.title }}</span>
+</nav>
+{% endif %}
+<header>
+  <p class="text-body-sm font-medium text-ink-soft">{{ quiz.get_kind_display }} · {% blocktranslate with n=attempt.attempt_no %}attempt {{ n }}{% endblocktranslate %}</p>
+  <h1 class="text-h1">{{ quiz.title }}</h1>
+</header>
+
+<section class="flex max-w-[840px] flex-wrap items-center gap-4 rounded-lg px-6 py-5 {% if attempt.passed %}bg-success-50{% else %}bg-danger-50{% endif %}" aria-live="polite">
+  <span class="num text-stat {% if attempt.passed %}text-success-700{% else %}text-danger-700{% endif %}">{{ attempt.percent|floatformat:0 }}%</span>
+  <div class="min-w-0 flex-[1_1_280px]">
+    {% if attempt.passed %}
+      <p class="font-semibold text-success-700">{% translate "Test passed" %}</p>
+    {% else %}
+      <p class="font-semibold text-danger-700">{% blocktranslate with p=quiz.pass_percent %}Below the pass mark ({{ p }}%){% endblocktranslate %}</p>
+    {% endif %}
+    <p class="num text-sm">
+      {% blocktranslate with s=attempt.score|floatformat:"-2" m=attempt.max_score|floatformat:"-2" %}{{ s }} of {{ m }} points.{% endblocktranslate %}
+      {% if attempts_left is not None %}{% blocktranslate with n=attempts_left %}Attempts left: {{ n }}.{% endblocktranslate %}{% endif %}
+      {% if not attempt.passed and stage %}{% translate "Read the material again and retake the test." %}{% endif %}
+    </p>
+  </div>
+  <div class="flex flex-wrap gap-2">
+    {% if can_retry %}
+      <form method="post" action="{% url 'assessments:retry' quiz.pk %}">{% csrf_token %}
+        <button type="submit" class="btn {% if attempt.passed %}btn-secondary{% else %}btn-primary{% endif %}">{% translate "Retake the test" %}</button>
+      </form>
+    {% endif %}
+    {% if stage %}<a class="btn {% if attempt.passed %}btn-primary{% else %}btn-secondary{% endif %}" href="{{ stage.topic.get_absolute_url }}">{% translate "Back to the topic" %}</a>{% endif %}
+  </div>
+</section>
+
+<section class="flex max-w-[840px] flex-col gap-3" aria-labelledby="review-title">
+  <h2 id="review-title" class="text-h2">{% translate "Your answers" %}</h2>
+  {% for row in rows %}{% with q=row.question a=row.answer %}
+    <article class="card card-compact flex flex-col gap-3">
+      <div class="flex items-start gap-3">
+        <span class="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full text-white {% if a.is_correct %}bg-success-600{% else %}bg-danger-600{% endif %}">
+          {% if a.is_correct %}{% include "components/icons.html#check" with size=14 %}{% else %}{% include "components/icons.html#x" with size=14 %}{% endif %}
+        </span>
+        <div class="min-w-0 flex-1">
+          <p class="sr-only">{% if a.is_correct %}{% translate "Correct" %}{% else %}{% translate "Wrong" %}{% endif %}.</p>
+          <div class="font-semibold">{{ q.text|sanitize }}</div>
+          <p class="num text-caption text-ink-soft">{% blocktranslate with p=a.points|floatformat:"-2" m=q.points|floatformat:"-2" %}{{ p }} of {{ m }} points{% endblocktranslate %}</p>
+        </div>
+      </div>
+      {% if row.choices %}
+        <ul class="flex flex-col gap-1.5 pl-9">
+          {% for opt in row.choices %}
+            <li class="flex items-center gap-2 rounded-md px-3 py-2 text-sm
+                       {% if quiz.show_answers_after and opt.choice.is_correct %}bg-success-50{% elif opt.chosen and not a.is_correct %}bg-danger-50{% elif opt.chosen %}bg-primary-50{% endif %}">
+              <span class="w-4 shrink-0 text-center" aria-hidden="true">{% if opt.chosen %}●{% else %}○{% endif %}</span>
+              <span class="flex-1">{{ opt.choice.text|sanitize }}</span>
+              {% if opt.chosen %}<span class="text-caption text-ink-soft">{% translate "your answer" %}</span>{% endif %}
+              {% if quiz.show_answers_after and opt.choice.is_correct %}<span class="text-caption text-success-700">{% translate "correct" %}</span>{% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="pl-9 text-sm">{% translate "Your answer:" %} <span class="num font-semibold">{{ a.text_value|default:"—" }}</span>
+          {% if quiz.show_answers_after and not a.is_correct %}
+            · {% translate "correct:" %} <span class="num font-semibold text-success-700">{% if q.kind == "numeric" %}{{ q.numeric_answer.normalize }}{% else %}{{ q.accepted_answers.0 }}{% endif %}</span>
+          {% endif %}
+        </p>
+      {% endif %}
+      {% if quiz.show_answers_after and q.explanation %}
+        <p class="ml-9 rounded-md bg-canvas px-3 py-2 text-sm text-ink-soft">{{ q.explanation }}</p>
+      {% endif %}
+    </article>
+  {% endwith %}{% endfor %}
+</section>
+
+{% if history|length > 1 %}
+<section class="flex max-w-[840px] flex-col gap-3" aria-labelledby="history-title">
+  <h2 id="history-title" class="text-h3">{% translate "Attempts" %}</h2>
+  <div class="overflow-x-auto rounded-lg border border-line bg-surface">
+    <table class="table num">
+      <thead><tr><th scope="col">№</th><th scope="col">{% translate "Finished" %}</th><th scope="col" class="text-right">%</th><th scope="col"></th></tr></thead>
+      <tbody>
+        {% for h in history %}
+          <tr>
+            <td>{{ h.attempt_no }}</td>
+            <td>{{ h.finished_at|date:"d.m.Y H:i"|default:"—" }}</td>
+            <td class="text-right">{{ h.percent|floatformat:0|default:"—" }}</td>
+            <td>{% if counted and h.pk == counted.pk %}{% translate "Counts for the grade" as l_counts %}{% include "components/badge.html" with variant="info" label=l_counts %}{% endif %}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

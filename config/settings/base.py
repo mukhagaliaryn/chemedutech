@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     "apps.accounts",
     "apps.organizations",
     "apps.courses",
+    "apps.assessments",
     "apps.labs",
     "apps.research",
     # presentation: every template and static file lives here (django-tailwind theme app)

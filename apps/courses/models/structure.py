@@ -85,6 +85,16 @@ class Stage(TimeStampedModel):
     pass_percent = models.PositiveSmallIntegerField(
         _("pass mark, %"), default=60, validators=[MinValueValidator(0), MaxValueValidator(100)]
     )
+    checkpoint_quiz = models.OneToOneField(
+        "assessments.Quiz",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="checkpoint_for",
+        limit_choices_to={"kind": "checkpoint"},
+        verbose_name=_("checkpoint quiz"),
+        help_text=_("3–4 questions after a theory or video stage"),
+    )
 
     CONTENT_RELATIONS = {
         Kind.THEORY: "theory_content",

@@ -1,0 +1,86 @@
+{% extends "layouts/student.html" %}
+{% load i18n static %}
+{% block title %}{{ quiz.title }} · ChemEduTech{% endblock %}
+{% block content %}
+{% if stage %}
+<nav class="flex flex-wrap items-center gap-2 text-sm" aria-label="{% translate 'Breadcrumbs' %}">
+  <a class="link inline-flex items-center gap-1.5 font-semibold" href="{{ stage.topic.get_absolute_url }}">{% include "components/icons.html#arrow-left" %}{{ stage.topic.title }}</a>
+  <span class="text-line-strong">/</span><span class="text-ink-soft">{{ stage.title }}</span>
+</nav>
+{% endif %}
+
+<section class="card flex max-w-[840px] flex-col gap-5 p-[clamp(20px,4vw,32px)]" aria-labelledby="quiz-title">
+  <form method="post" action="{% url 'assessments:submit' attempt.pk %}" x-ref="form" class="flex flex-col gap-5"
+        x-data="quizPlayer({ total: {{ rows|length }}, deadline: '{{ deadline }}' })" @submit="submitting = true">
+    {% csrf_token %}
+    <div class="flex flex-wrap items-center justify-between gap-3" x-ref="top">
+      <div>
+        <p class="text-body-sm font-medium text-ink-soft">
+          {{ quiz.get_kind_display }} ·
+          {% blocktranslate with n=attempt.attempt_no %}attempt {{ n }}{% endblocktranslate %} ·
+          {% blocktranslate with p=quiz.pass_percent %}pass mark {{ p }}%{% endblocktranslate %}
+        </p>
+        <h1 id="quiz-title" class="mt-0.5 text-h2">{{ quiz.title }}</h1>
+      </div>
+      <div class="flex items-center gap-3">
+        {% if deadline %}
+          <span class="num inline-flex h-9 items-center rounded-md border px-3 text-sm font-semibold"
+                :class="left !== null && left < 60 ? 'border-danger-600 text-danger-700' : 'border-line'"
+                aria-live="off" title="{% translate 'Time left' %}" x-text="clock">{{ quiz.time_limit_min }}:00</span>
+        {% endif %}
+        <span class="num text-sm font-semibold text-ink-soft" x-cloak x-text="(current + 1) + ' / ' + total"></span>
+      </div>
+    </div>
+
+    <div class="grid gap-1.5" style="grid-template-columns: repeat({{ rows|length }}, minmax(0, 1fr))" aria-hidden="true" x-cloak>
+      {% for row in rows %}
+        <button type="button" tabindex="-1" class="h-1.5 rounded-full"
+                :class="current === {{ forloop.counter0 }} ? 'bg-primary-600' : (answered[{{ forloop.counter0 }}] ? 'bg-success-600' : 'bg-line')"
+                @click="go({{ forloop.counter0 }})"></button>
+      {% endfor %}
+    </div>
+
+    {% for row in rows %}{% with q=row.question %}
+      <fieldset class="flex flex-col gap-2.5" x-show="current === {{ forloop.counter0 }}" @change="mark({{ forloop.counter0 }}, $event)" @input="mark({{ forloop.counter0 }}, $event)">
+        <legend class="mb-3 p-0 text-[17px] leading-[26px] font-semibold">
+          <span class="sr-only">{% blocktranslate with n=forloop.counter %}Question {{ n }}{% endblocktranslate %}. </span>
+          {{ q.text|sanitize }}
+        </legend>
+        {% if q.kind == "single" or q.kind == "multiple" %}
+          {% if q.kind == "multiple" %}<p class="-mt-2 text-body-sm text-ink-soft">{% translate "Choose all correct options." %}</p>{% endif %}
+          {% for opt in row.choices %}
+            <label class="flex cursor-pointer items-center gap-3 rounded-md border border-line px-4 py-3.5 has-checked:border-2 has-checked:border-primary-600 has-checked:bg-primary-50 has-checked:px-[15px] has-checked:py-[13px]">
+              <input type="{% if q.kind == 'single' %}radio{% else %}checkbox{% endif %}" name="q{{ q.pk }}" value="{{ opt.choice.pk }}" class="size-[18px] shrink-0">
+              <span>{{ opt.choice.text|sanitize }}</span>
+            </label>
+          {% endfor %}
+        {% elif q.kind == "numeric" %}
+          <label class="field max-w-xs">
+            <span class="label">{% translate "Your answer (a number)" %}</span>
+            <input class="input num" name="q{{ q.pk }}" inputmode="decimal" autocomplete="off">
+            <span class="help">{% translate "A comma or a dot may be used: 2,24" %}</span>
+          </label>
+        {% else %}
+          <label class="field max-w-md">
+            <span class="label">{% translate "Your answer" %}</span>
+            <input class="input" name="q{{ q.pk }}" autocomplete="off">
+          </label>
+        {% endif %}
+      </fieldset>
+    {% endwith %}{% endfor %}
+
+    <div class="flex flex-wrap items-center justify-between gap-3 border-t border-line pt-5">
+      <button type="button" class="btn btn-secondary" x-cloak x-show="current > 0" @click="go(current - 1)">{% translate "Previous question" %}</button>
+      <span x-cloak x-show="current === 0"></span>
+      <div class="flex flex-wrap items-center gap-3">
+        {% translate "Unanswered questions:" as l_unanswered %}
+        <span class="text-body-sm text-warning-700" x-cloak x-show="current === total - 1 && unanswered > 0"
+              x-text="'{{ l_unanswered|escapejs }} ' + unanswered"></span>
+        <button type="button" class="btn btn-primary" x-cloak x-show="current < total - 1" @click="go(current + 1)">{% translate "Next question" %}</button>
+        <button type="submit" class="btn btn-primary" x-show="current === total - 1" :disabled="submitting">{% translate "Submit the test" %}</button>
+      </div>
+    </div>
+  </form>
+</section>
+{% endblock %}
+{% block scripts %}<script defer src="{% static 'js/quiz.js' %}"></script>{% endblock %}
