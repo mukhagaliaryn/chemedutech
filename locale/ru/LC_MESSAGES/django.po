@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 17:38+0500\n"
+"POT-Creation-Date: 2026-10-16 18:13+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -230,7 +230,9 @@ msgid "Assessments"
 msgstr "Оценивание"
 
 #: apps/assessments/models/attempt.py:17 apps/courses/models/course.py:37
-#: apps/courses/models/enrollment.py:52
+#: apps/courses/models/enrollment.py:52 apps/progress/models/progress.py:22
+#: apps/progress/models/progress.py:72 apps/progress/models/progress.py:94
+#: apps/progress/models/progress.py:114 apps/progress/models/progress.py:148
 msgid "enrolment"
 msgstr "способ записи"
 
@@ -248,6 +250,7 @@ msgid "attempt number"
 msgstr "номер попытки"
 
 #: apps/assessments/models/attempt.py:27 apps/labs/models/attempt.py:21
+#: apps/progress/models/progress.py:32
 msgid "started at"
 msgstr "начато"
 
@@ -279,7 +282,7 @@ msgstr "максимум баллов"
 msgid "percent"
 msgstr "процент"
 
-#: apps/assessments/models/attempt.py:34
+#: apps/assessments/models/attempt.py:34 apps/progress/models/progress.py:120
 msgid "passed"
 msgstr "сдан"
 
@@ -471,7 +474,9 @@ msgstr "принимаемые ответы"
 msgid ""
 "Short text: accepted spellings; formula or equation: correct answers, e.g. "
 "[\"ZnCl2\"] or [\"Zn + 2HCl -> ZnCl2 + H2\"]"
-msgstr "Краткий текст: принимаемые написания; формула или уравнение: правильные ответы, например [\"ZnCl2\"] или [\"Zn + 2HCl -> ZnCl2 + H2\"]"
+msgstr ""
+"Краткий текст: принимаемые написания; формула или уравнение: правильные "
+"ответы, например [\"ZnCl2\"] или [\"Zn + 2HCl -> ZnCl2 + H2\"]"
 
 #: apps/assessments/models/quiz.py:89
 msgid "in use"
@@ -568,7 +573,7 @@ msgstr[3] "%(n)d студентов записано."
 msgid "A published topic needs at least one required stage."
 msgstr "В опубликованной теме должен быть хотя бы один обязательный этап."
 
-#: apps/courses/admin.py:136 apps/courses/models/structure.py:110
+#: apps/courses/admin.py:136 apps/courses/models/structure.py:113
 msgid "stages"
 msgstr "этапы"
 
@@ -590,7 +595,8 @@ msgstr "Курсы"
 
 #: apps/courses/models/content.py:15 apps/courses/models/content.py:51
 #: apps/courses/models/content.py:83 apps/courses/models/content.py:127
-#: apps/courses/models/structure.py:109
+#: apps/courses/models/structure.py:112 apps/progress/models/progress.py:25
+#: apps/progress/models/progress.py:151
 msgid "stage"
 msgstr "этап"
 
@@ -730,7 +736,8 @@ msgid "cover"
 msgstr "обложка"
 
 #: apps/courses/models/course.py:35 apps/courses/models/enrollment.py:46
-#: apps/labs/models/attempt.py:20
+#: apps/labs/models/attempt.py:20 apps/progress/models/progress.py:27
+#: apps/progress/models/progress.py:77
 msgid "status"
 msgstr "статус"
 
@@ -837,7 +844,7 @@ msgstr "Добавлен администратором"
 msgid "Active"
 msgstr "Активна"
 
-#: apps/courses/models/enrollment.py:20
+#: apps/courses/models/enrollment.py:20 apps/progress/models/progress.py:69
 msgid "Completed"
 msgstr "Завершена"
 
@@ -867,7 +874,9 @@ msgstr "Копируется из группы при записи и не ме�
 msgid "enrolled at"
 msgstr "дата записи"
 
-#: apps/courses/models/enrollment.py:48
+#: apps/courses/models/enrollment.py:48 apps/progress/models/progress.py:33
+#: apps/progress/models/progress.py:81 apps/progress/models/progress.py:101
+#: apps/progress/models/progress.py:121
 msgid "completed at"
 msgstr "дата завершения"
 
@@ -885,6 +894,7 @@ msgid "Weight in the course score"
 msgstr "Вес в оценке курса"
 
 #: apps/courses/models/structure.py:23 apps/courses/models/structure.py:33
+#: apps/progress/models/progress.py:97
 msgid "module"
 msgstr "модуль"
 
@@ -921,10 +931,11 @@ msgid "published"
 msgstr "опубликовано"
 
 #: apps/courses/models/structure.py:45 apps/courses/models/structure.py:73
+#: apps/progress/models/progress.py:75 apps/progress/models/progress.py:154
 msgid "topic"
 msgstr "тема"
 
-#: apps/courses/models/structure.py:46
+#: apps/courses/models/structure.py:46 apps/progress/models/progress.py:122
 msgid "topics"
 msgstr "темы"
 
@@ -957,11 +968,16 @@ msgstr "обязательный"
 msgid "Leave empty to use the course share of this stage kind"
 msgstr "Оставьте пустым, чтобы использовать долю этого вида этапа в курсе"
 
-#: apps/courses/models/structure.py:95
+#: apps/courses/models/structure.py:89
+msgid ""
+"Lab and practice stages; stages graded by a quiz use the quiz's pass mark"
+msgstr "Для лабораторных и практических этапов; этапы с тестом используют порог теста"
+
+#: apps/courses/models/structure.py:98
 msgid "checkpoint quiz"
 msgstr "закрепляющий тест"
 
-#: apps/courses/models/structure.py:96
+#: apps/courses/models/structure.py:99
 msgid "3–4 questions after a theory or video stage"
 msgstr "3–4 вопроса после этапа теории или видео"
 
@@ -1910,7 +1926,9 @@ msgstr ""
 "Используя понятие энергии активации, объясните, почему MnO₂ ускоряет "
 "разложение."
 
-#: apps/labs/models/attempt.py:10 ui/templates/components/stage_stepper.html:23
+#: apps/labs/models/attempt.py:10 apps/progress/models/progress.py:17
+#: apps/progress/models/progress.py:68
+#: ui/templates/components/stage_stepper.html:23
 msgid "In progress"
 msgstr "В процессе"
 
@@ -2515,19 +2533,221 @@ msgstr "например, 6B01501"
 msgid "specialties"
 msgstr "образовательные программы"
 
+#: apps/progress/admin.py:30
+msgid "Open the selected stages for the student"
+msgstr "Открыть выбранные этапы студенту"
+
+#: apps/progress/admin.py:39
+#, python-format
+msgid "Opened: %(n)d"
+msgstr "Открыто: %(n)d"
+
+#: apps/progress/admin.py:64
+msgid "Recalculate"
+msgstr "Пересчитать"
+
+#: apps/progress/admin.py:68
+msgid "Recalculated."
+msgstr "Пересчитано."
+
+#: apps/progress/apps.py:8
+msgid "Progress"
+msgstr "Прогресс"
+
+#: apps/progress/grading.py:19
+msgid "Excellent"
+msgstr "Отлично"
+
+#: apps/progress/grading.py:19
+msgid "Good"
+msgstr "Хорошо"
+
+#: apps/progress/grading.py:19
+msgid "Satisfactory"
+msgstr "Удовлетворительно"
+
+#: apps/progress/grading.py:19
+msgid "Unsatisfactory"
+msgstr "Неудовлетворительно"
+
+#: apps/progress/models/progress.py:15 apps/progress/models/progress.py:66
+#: ui/templates/components/stage_stepper.html:22
+msgid "Locked"
+msgstr "Закрыто"
+
+#: apps/progress/models/progress.py:16 apps/progress/models/progress.py:67
+#: ui/templates/components/stage_stepper.html:24
+msgid "Available"
+msgstr "Доступно"
+
+#: apps/progress/models/progress.py:18
+#: ui/templates/components/stage_stepper.html:19
+msgid "Awaiting check"
+msgstr "Ожидает проверки"
+
+#: apps/progress/models/progress.py:19 apps/progress/models/progress.py:138
+#: ui/templates/components/stage_stepper.html:21
+msgid "Passed"
+msgstr "Пройдено"
+
+#: apps/progress/models/progress.py:28 apps/progress/models/progress.py:79
+#: apps/progress/models/progress.py:166
+msgid "score, %"
+msgstr "балл, %"
+
+#: apps/progress/models/progress.py:30
+msgid "needs the teacher's attention"
+msgstr "требует внимания преподавателя"
+
+#: apps/progress/models/progress.py:30
+msgid "Passed only because the attempts ran out"
+msgstr "Засчитан только потому, что закончились попытки"
+
+#: apps/progress/models/progress.py:34
+msgid "time spent, s"
+msgstr "затрачено времени, с"
+
+#: apps/progress/models/progress.py:41
+msgid "opened by"
+msgstr "открыл"
+
+#: apps/progress/models/progress.py:42
+msgid "A teacher who opened the stage by hand"
+msgstr "Преподаватель, открывший этап вручную"
+
+#: apps/progress/models/progress.py:44
+msgid "opened at"
+msgstr "открыт"
+
+#: apps/progress/models/progress.py:47 apps/progress/models/progress.py:48
+msgid "stage progress"
+msgstr "прогресс этапа"
+
+#: apps/progress/models/progress.py:79
+msgid "Weighted over the required stages; missing stages count as 0"
+msgstr "Взвешенно по обязательным этапам; невыполненные считаются как 0"
+
+#: apps/progress/models/progress.py:84
+msgid "topic result"
+msgstr "результат темы"
+
+#: apps/progress/models/progress.py:85
+msgid "topic results"
+msgstr "результаты тем"
+
+#: apps/progress/models/progress.py:99 apps/progress/models/progress.py:116
+msgid "current score, %"
+msgstr "текущий балл, %"
+
+#: apps/progress/models/progress.py:99 apps/progress/models/progress.py:116
+msgid "Completed topics only"
+msgstr "Только завершённые темы"
+
+#: apps/progress/models/progress.py:100 apps/progress/models/progress.py:117
+msgid "final score, %"
+msgstr "итоговый балл, %"
+
+#: apps/progress/models/progress.py:100 apps/progress/models/progress.py:117
+msgid "When every topic is completed"
+msgstr "Когда завершены все темы"
+
+#: apps/progress/models/progress.py:104
+msgid "module result"
+msgstr "результат модуля"
+
+#: apps/progress/models/progress.py:105
+msgid "module results"
+msgstr "результаты модулей"
+
+#: apps/progress/models/progress.py:118
+msgid "letter grade"
+msgstr "буквенная оценка"
+
+#: apps/progress/models/progress.py:119
+msgid "GPA points"
+msgstr "баллы GPA"
+
+#: apps/progress/models/progress.py:123
+msgid "topics completed"
+msgstr "завершено тем"
+
+#: apps/progress/models/progress.py:126
+msgid "course result"
+msgstr "результат курса"
+
+#: apps/progress/models/progress.py:127
+msgid "course results"
+msgstr "результаты курсов"
+
+#: apps/progress/models/progress.py:137 ui/templates/research/dashboard.html:86
+msgid "Started"
+msgstr "Начато"
+
+#: apps/progress/models/progress.py:139
+msgid "Not passed"
+msgstr "Не пройдено"
+
+#: apps/progress/models/progress.py:140
+msgid "Sent for checking"
+msgstr "Отправлено на проверку"
+
+#: apps/progress/models/progress.py:141
+msgid "Confirmed by the teacher"
+msgstr "Подтверждено преподавателем"
+
+#: apps/progress/models/progress.py:142
+msgid "Returned by the teacher"
+msgstr "Возвращено преподавателем"
+
+#: apps/progress/models/progress.py:143
+msgid "Opened by the teacher"
+msgstr "Открыто преподавателем"
+
+#: apps/progress/models/progress.py:144
+msgid "Topic completed"
+msgstr "Тема завершена"
+
+#: apps/progress/models/progress.py:145
+msgid "Course completed"
+msgstr "Курс завершён"
+
+#: apps/progress/models/progress.py:156
+msgid "action"
+msgstr "действие"
+
+#: apps/progress/models/progress.py:163
+msgid "by"
+msgstr "кем"
+
+#: apps/progress/models/progress.py:164
+msgid "Empty when the student did it"
+msgstr "Пусто, если действие студента"
+
+#: apps/progress/models/progress.py:167
+msgid "at"
+msgstr "время"
+
+#: apps/progress/models/progress.py:171
+msgid "progress event"
+msgstr "событие прогресса"
+
+#: apps/progress/models/progress.py:172
+msgid "progress events"
+msgstr "события прогресса"
+
 #: apps/research/apps.py:8 ui/templates/research/dashboard.html:3
 msgid "Research"
 msgstr "Исследование"
 
-#: config/settings/base.py:138
+#: config/settings/base.py:139
 msgid "Kazakh"
 msgstr "Казахский"
 
-#: config/settings/base.py:139
+#: config/settings/base.py:140
 msgid "Russian"
 msgstr "Русский"
 
-#: config/settings/base.py:140
+#: config/settings/base.py:141
 msgid "English"
 msgstr "Английский"
 
@@ -2792,13 +3012,16 @@ msgstr "Формула"
 #: ui/templates/assessments/take.html:69
 msgid ""
 "Indices as plain digits: H2SO4, Ca(OH)2, CuSO4·5H2O; ions: Zn2+, SO4^2-."
-msgstr "Индексы обычными цифрами: H2SO4, Ca(OH)2, CuSO4·5H2O; ионы: Zn2+, SO4^2-."
+msgstr ""
+"Индексы обычными цифрами: H2SO4, Ca(OH)2, CuSO4·5H2O; ионы: Zn2+, SO4^2-."
 
 #: ui/templates/assessments/take.html:70
 msgid ""
 "Arrow: -> or =; write the coefficients: 2H2 + O2 -> 2H2O. ↑ and ↓ may be "
 "left out."
-msgstr "Стрелка: -> или =; пишите коэффициенты: 2H2 + O2 -> 2H2O. ↑ и ↓ можно не писать."
+msgstr ""
+"Стрелка: -> или =; пишите коэффициенты: 2H2 + O2 -> 2H2O. ↑ и ↓ можно не "
+"писать."
 
 #: ui/templates/assessments/take.html:83
 msgid "Previous question"
@@ -2823,22 +3046,6 @@ msgstr "Отмена"
 #: ui/templates/components/modal.html:16
 msgid "Confirm"
 msgstr "Подтвердить"
-
-#: ui/templates/components/stage_stepper.html:19
-msgid "Awaiting check"
-msgstr "Ожидает проверки"
-
-#: ui/templates/components/stage_stepper.html:21
-msgid "Passed"
-msgstr "Пройдено"
-
-#: ui/templates/components/stage_stepper.html:22
-msgid "Locked"
-msgstr "Закрыто"
-
-#: ui/templates/components/stage_stepper.html:24
-msgid "Available"
-msgstr "Доступно"
 
 #: ui/templates/components/toast.html:15
 msgid "Close"
@@ -3073,10 +3280,6 @@ msgstr "Статус"
 #: ui/templates/research/dashboard.html:84
 msgid "Errors"
 msgstr "Ошибки"
-
-#: ui/templates/research/dashboard.html:86
-msgid "Started"
-msgstr "Начато"
 
 #: ui/templates/ui/styleguide.html:7
 msgid "Every component of ui/templates/components with sample data."

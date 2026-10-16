@@ -83,7 +83,10 @@ class Stage(TimeStampedModel):
         **WEIGHT,
     )
     pass_percent = models.PositiveSmallIntegerField(
-        _("pass mark, %"), default=60, validators=[MinValueValidator(0), MaxValueValidator(100)]
+        _("pass mark, %"),
+        default=60,
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        help_text=_("Lab and practice stages; stages graded by a quiz use the quiz's pass mark"),
     )
     checkpoint_quiz = models.OneToOneField(
         "assessments.Quiz",

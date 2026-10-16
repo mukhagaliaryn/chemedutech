@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 17:38+0500\n"
+"POT-Creation-Date: 2026-10-16 18:13+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -227,7 +227,9 @@ msgid "Assessments"
 msgstr "Бағалау"
 
 #: apps/assessments/models/attempt.py:17 apps/courses/models/course.py:37
-#: apps/courses/models/enrollment.py:52
+#: apps/courses/models/enrollment.py:52 apps/progress/models/progress.py:22
+#: apps/progress/models/progress.py:72 apps/progress/models/progress.py:94
+#: apps/progress/models/progress.py:114 apps/progress/models/progress.py:148
 msgid "enrolment"
 msgstr "жазылу тәсілі"
 
@@ -245,6 +247,7 @@ msgid "attempt number"
 msgstr "талпыныс нөмірі"
 
 #: apps/assessments/models/attempt.py:27 apps/labs/models/attempt.py:21
+#: apps/progress/models/progress.py:32
 msgid "started at"
 msgstr "басталған уақыты"
 
@@ -276,7 +279,7 @@ msgstr "ең жоғары ұпай"
 msgid "percent"
 msgstr "пайыз"
 
-#: apps/assessments/models/attempt.py:34
+#: apps/assessments/models/attempt.py:34 apps/progress/models/progress.py:120
 msgid "passed"
 msgstr "өтті"
 
@@ -468,7 +471,9 @@ msgstr "қабылданатын жауаптар"
 msgid ""
 "Short text: accepted spellings; formula or equation: correct answers, e.g. "
 "[\"ZnCl2\"] or [\"Zn + 2HCl -> ZnCl2 + H2\"]"
-msgstr "Қысқа мәтін: қабылданатын жазылулар; формула немесе теңдеу: дұрыс жауаптар, мысалы [\"ZnCl2\"] немесе [\"Zn + 2HCl -> ZnCl2 + H2\"]"
+msgstr ""
+"Қысқа мәтін: қабылданатын жазылулар; формула немесе теңдеу: дұрыс жауаптар, "
+"мысалы [\"ZnCl2\"] немесе [\"Zn + 2HCl -> ZnCl2 + H2\"]"
 
 #: apps/assessments/models/quiz.py:89
 msgid "in use"
@@ -564,7 +569,7 @@ msgstr[1] "%(n)d студент жазылды."
 msgid "A published topic needs at least one required stage."
 msgstr "Жарияланған тақырыпта кемінде бір міндетті кезең болуы керек."
 
-#: apps/courses/admin.py:136 apps/courses/models/structure.py:110
+#: apps/courses/admin.py:136 apps/courses/models/structure.py:113
 msgid "stages"
 msgstr "кезеңдер"
 
@@ -586,7 +591,8 @@ msgstr "Курстар"
 
 #: apps/courses/models/content.py:15 apps/courses/models/content.py:51
 #: apps/courses/models/content.py:83 apps/courses/models/content.py:127
-#: apps/courses/models/structure.py:109
+#: apps/courses/models/structure.py:112 apps/progress/models/progress.py:25
+#: apps/progress/models/progress.py:151
 msgid "stage"
 msgstr "кезең"
 
@@ -727,7 +733,8 @@ msgid "cover"
 msgstr "мұқаба"
 
 #: apps/courses/models/course.py:35 apps/courses/models/enrollment.py:46
-#: apps/labs/models/attempt.py:20
+#: apps/labs/models/attempt.py:20 apps/progress/models/progress.py:27
+#: apps/progress/models/progress.py:77
 msgid "status"
 msgstr "күйі"
 
@@ -834,7 +841,7 @@ msgstr "Әкімші қосты"
 msgid "Active"
 msgstr "Белсенді"
 
-#: apps/courses/models/enrollment.py:20
+#: apps/courses/models/enrollment.py:20 apps/progress/models/progress.py:69
 msgid "Completed"
 msgstr "Аяқталды"
 
@@ -864,7 +871,9 @@ msgstr "Жазылғанда топтан көшіріледі және өзге
 msgid "enrolled at"
 msgstr "жазылған уақыты"
 
-#: apps/courses/models/enrollment.py:48
+#: apps/courses/models/enrollment.py:48 apps/progress/models/progress.py:33
+#: apps/progress/models/progress.py:81 apps/progress/models/progress.py:101
+#: apps/progress/models/progress.py:121
 msgid "completed at"
 msgstr "аяқталған уақыты"
 
@@ -882,6 +891,7 @@ msgid "Weight in the course score"
 msgstr "Курс бағасындағы салмағы"
 
 #: apps/courses/models/structure.py:23 apps/courses/models/structure.py:33
+#: apps/progress/models/progress.py:97
 msgid "module"
 msgstr "модуль"
 
@@ -918,10 +928,11 @@ msgid "published"
 msgstr "жарияланған"
 
 #: apps/courses/models/structure.py:45 apps/courses/models/structure.py:73
+#: apps/progress/models/progress.py:75 apps/progress/models/progress.py:154
 msgid "topic"
 msgstr "тақырып"
 
-#: apps/courses/models/structure.py:46
+#: apps/courses/models/structure.py:46 apps/progress/models/progress.py:122
 msgid "topics"
 msgstr "тақырыптар"
 
@@ -954,11 +965,16 @@ msgstr "міндетті"
 msgid "Leave empty to use the course share of this stage kind"
 msgstr "Бос қалдырсаңыз, курстағы осы кезең түрінің үлесі қолданылады"
 
-#: apps/courses/models/structure.py:95
+#: apps/courses/models/structure.py:89
+msgid ""
+"Lab and practice stages; stages graded by a quiz use the quiz's pass mark"
+msgstr "Зертхана мен практика кезеңдері үшін; тестпен бағаланатын кезеңдерде тесттің өту шегі қолданылады"
+
+#: apps/courses/models/structure.py:98
 msgid "checkpoint quiz"
 msgstr "бекіту тесті"
 
-#: apps/courses/models/structure.py:96
+#: apps/courses/models/structure.py:99
 msgid "3–4 questions after a theory or video stage"
 msgstr "Теория немесе видео кезеңінен кейінгі 3–4 сұрақ"
 
@@ -1908,7 +1924,9 @@ msgstr ""
 "Активтендіру энергиясы ұғымын пайдаланып, MnO₂ ыдырауды неліктен "
 "жылдамдататынын түсіндіріңіз."
 
-#: apps/labs/models/attempt.py:10 ui/templates/components/stage_stepper.html:23
+#: apps/labs/models/attempt.py:10 apps/progress/models/progress.py:17
+#: apps/progress/models/progress.py:68
+#: ui/templates/components/stage_stepper.html:23
 msgid "In progress"
 msgstr "Орындалуда"
 
@@ -2511,19 +2529,221 @@ msgstr "мысалы, 6B01501"
 msgid "specialties"
 msgstr "білім беру бағдарламалары"
 
+#: apps/progress/admin.py:30
+msgid "Open the selected stages for the student"
+msgstr "Таңдалған кезеңдерді студентке ашу"
+
+#: apps/progress/admin.py:39
+#, python-format
+msgid "Opened: %(n)d"
+msgstr "Ашылды: %(n)d"
+
+#: apps/progress/admin.py:64
+msgid "Recalculate"
+msgstr "Қайта есептеу"
+
+#: apps/progress/admin.py:68
+msgid "Recalculated."
+msgstr "Қайта есептелді."
+
+#: apps/progress/apps.py:8
+msgid "Progress"
+msgstr "Прогресс"
+
+#: apps/progress/grading.py:19
+msgid "Excellent"
+msgstr "Өте жақсы"
+
+#: apps/progress/grading.py:19
+msgid "Good"
+msgstr "Жақсы"
+
+#: apps/progress/grading.py:19
+msgid "Satisfactory"
+msgstr "Қанағаттанарлық"
+
+#: apps/progress/grading.py:19
+msgid "Unsatisfactory"
+msgstr "Қанағаттанарлықсыз"
+
+#: apps/progress/models/progress.py:15 apps/progress/models/progress.py:66
+#: ui/templates/components/stage_stepper.html:22
+msgid "Locked"
+msgstr "Жабық"
+
+#: apps/progress/models/progress.py:16 apps/progress/models/progress.py:67
+#: ui/templates/components/stage_stepper.html:24
+msgid "Available"
+msgstr "Ашық"
+
+#: apps/progress/models/progress.py:18
+#: ui/templates/components/stage_stepper.html:19
+msgid "Awaiting check"
+msgstr "Тексеруді күтуде"
+
+#: apps/progress/models/progress.py:19 apps/progress/models/progress.py:138
+#: ui/templates/components/stage_stepper.html:21
+msgid "Passed"
+msgstr "Өтті"
+
+#: apps/progress/models/progress.py:28 apps/progress/models/progress.py:79
+#: apps/progress/models/progress.py:166
+msgid "score, %"
+msgstr "ұпай, %"
+
+#: apps/progress/models/progress.py:30
+msgid "needs the teacher's attention"
+msgstr "мұғалімнің назарын қажет етеді"
+
+#: apps/progress/models/progress.py:30
+msgid "Passed only because the attempts ran out"
+msgstr "Талпыныстар біткендіктен ғана өтті"
+
+#: apps/progress/models/progress.py:34
+msgid "time spent, s"
+msgstr "жұмсалған уақыт, с"
+
+#: apps/progress/models/progress.py:41
+msgid "opened by"
+msgstr "ашқан"
+
+#: apps/progress/models/progress.py:42
+msgid "A teacher who opened the stage by hand"
+msgstr "Кезеңді қолмен ашқан мұғалім"
+
+#: apps/progress/models/progress.py:44
+msgid "opened at"
+msgstr "ашылған уақыты"
+
+#: apps/progress/models/progress.py:47 apps/progress/models/progress.py:48
+msgid "stage progress"
+msgstr "кезең прогресі"
+
+#: apps/progress/models/progress.py:79
+msgid "Weighted over the required stages; missing stages count as 0"
+msgstr "Міндетті кезеңдер бойынша салмақты; орындалмағаны 0 болып саналады"
+
+#: apps/progress/models/progress.py:84
+msgid "topic result"
+msgstr "тақырып нәтижесі"
+
+#: apps/progress/models/progress.py:85
+msgid "topic results"
+msgstr "тақырып нәтижелері"
+
+#: apps/progress/models/progress.py:99 apps/progress/models/progress.py:116
+msgid "current score, %"
+msgstr "ағымдағы ұпай, %"
+
+#: apps/progress/models/progress.py:99 apps/progress/models/progress.py:116
+msgid "Completed topics only"
+msgstr "Тек аяқталған тақырыптар"
+
+#: apps/progress/models/progress.py:100 apps/progress/models/progress.py:117
+msgid "final score, %"
+msgstr "қорытынды ұпай, %"
+
+#: apps/progress/models/progress.py:100 apps/progress/models/progress.py:117
+msgid "When every topic is completed"
+msgstr "Барлық тақырып аяқталғанда"
+
+#: apps/progress/models/progress.py:104
+msgid "module result"
+msgstr "модуль нәтижесі"
+
+#: apps/progress/models/progress.py:105
+msgid "module results"
+msgstr "модуль нәтижелері"
+
+#: apps/progress/models/progress.py:118
+msgid "letter grade"
+msgstr "әріптік баға"
+
+#: apps/progress/models/progress.py:119
+msgid "GPA points"
+msgstr "GPA ұпайы"
+
+#: apps/progress/models/progress.py:123
+msgid "topics completed"
+msgstr "аяқталған тақырыптар"
+
+#: apps/progress/models/progress.py:126
+msgid "course result"
+msgstr "курс нәтижесі"
+
+#: apps/progress/models/progress.py:127
+msgid "course results"
+msgstr "курс нәтижелері"
+
+#: apps/progress/models/progress.py:137 ui/templates/research/dashboard.html:86
+msgid "Started"
+msgstr "Басталды"
+
+#: apps/progress/models/progress.py:139
+msgid "Not passed"
+msgstr "Өтпеді"
+
+#: apps/progress/models/progress.py:140
+msgid "Sent for checking"
+msgstr "Тексеруге жіберілді"
+
+#: apps/progress/models/progress.py:141
+msgid "Confirmed by the teacher"
+msgstr "Мұғалім растады"
+
+#: apps/progress/models/progress.py:142
+msgid "Returned by the teacher"
+msgstr "Мұғалім қайтарды"
+
+#: apps/progress/models/progress.py:143
+msgid "Opened by the teacher"
+msgstr "Мұғалім ашты"
+
+#: apps/progress/models/progress.py:144
+msgid "Topic completed"
+msgstr "Тақырып аяқталды"
+
+#: apps/progress/models/progress.py:145
+msgid "Course completed"
+msgstr "Курс аяқталды"
+
+#: apps/progress/models/progress.py:156
+msgid "action"
+msgstr "әрекет"
+
+#: apps/progress/models/progress.py:163
+msgid "by"
+msgstr "кім"
+
+#: apps/progress/models/progress.py:164
+msgid "Empty when the student did it"
+msgstr "Студенттің өзі жасаса — бос"
+
+#: apps/progress/models/progress.py:167
+msgid "at"
+msgstr "уақыты"
+
+#: apps/progress/models/progress.py:171
+msgid "progress event"
+msgstr "прогресс оқиғасы"
+
+#: apps/progress/models/progress.py:172
+msgid "progress events"
+msgstr "прогресс оқиғалары"
+
 #: apps/research/apps.py:8 ui/templates/research/dashboard.html:3
 msgid "Research"
 msgstr "Зерттеу"
 
-#: config/settings/base.py:138
+#: config/settings/base.py:139
 msgid "Kazakh"
 msgstr "Қазақша"
 
-#: config/settings/base.py:139
+#: config/settings/base.py:140
 msgid "Russian"
 msgstr "Орысша"
 
-#: config/settings/base.py:140
+#: config/settings/base.py:141
 msgid "English"
 msgstr "Ағылшынша"
 
@@ -2788,13 +3008,17 @@ msgstr "Формула"
 #: ui/templates/assessments/take.html:69
 msgid ""
 "Indices as plain digits: H2SO4, Ca(OH)2, CuSO4·5H2O; ions: Zn2+, SO4^2-."
-msgstr "Индекстерді кәдімгі цифрмен жазыңыз: H2SO4, Ca(OH)2, CuSO4·5H2O; иондар: Zn2+, SO4^2-."
+msgstr ""
+"Индекстерді кәдімгі цифрмен жазыңыз: H2SO4, Ca(OH)2, CuSO4·5H2O; иондар: "
+"Zn2+, SO4^2-."
 
 #: ui/templates/assessments/take.html:70
 msgid ""
 "Arrow: -> or =; write the coefficients: 2H2 + O2 -> 2H2O. ↑ and ↓ may be "
 "left out."
-msgstr "Бағыт: -> немесе =; коэффициенттерді жазыңыз: 2H2 + O2 -> 2H2O. ↑ пен ↓ міндетті емес."
+msgstr ""
+"Бағыт: -> немесе =; коэффициенттерді жазыңыз: 2H2 + O2 -> 2H2O. ↑ пен ↓ "
+"міндетті емес."
 
 #: ui/templates/assessments/take.html:83
 msgid "Previous question"
@@ -2819,22 +3043,6 @@ msgstr "Болдырмау"
 #: ui/templates/components/modal.html:16
 msgid "Confirm"
 msgstr "Растау"
-
-#: ui/templates/components/stage_stepper.html:19
-msgid "Awaiting check"
-msgstr "Тексеруді күтуде"
-
-#: ui/templates/components/stage_stepper.html:21
-msgid "Passed"
-msgstr "Өтті"
-
-#: ui/templates/components/stage_stepper.html:22
-msgid "Locked"
-msgstr "Жабық"
-
-#: ui/templates/components/stage_stepper.html:24
-msgid "Available"
-msgstr "Ашық"
 
 #: ui/templates/components/toast.html:15
 msgid "Close"
@@ -3067,10 +3275,6 @@ msgstr "Күйі"
 #: ui/templates/research/dashboard.html:84
 msgid "Errors"
 msgstr "Қателер"
-
-#: ui/templates/research/dashboard.html:86
-msgid "Started"
-msgstr "Басталды"
 
 #: ui/templates/ui/styleguide.html:7
 msgid "Every component of ui/templates/components with sample data."
