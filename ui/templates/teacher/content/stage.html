@@ -1,0 +1,105 @@
+{% extends "layouts/teacher.html" %}
+{% load i18n static %}
+{% block title %}{{ stage.title }} · ChemEduTech{% endblock %}
+{% block head %}{{ content_form.media }}{% endblock %}
+{% block content %}
+<p class="text-sm text-ink-soft"><a href="{% url 'teacher:course_content' course.slug %}">{{ course.title }}</a> / <a href="{% url 'teacher:course_content' course.slug %}#t{{ stage.topic_id }}">{{ stage.topic }}</a></p>
+<header class="flex flex-wrap items-center gap-3">
+  <span class="grid size-10 shrink-0 place-items-center rounded-md text-white stage-{{ stage.kind }}">{% include "components/icons.html#"|add:stage.kind with size=18 %}</span>
+  <div class="min-w-0 flex-1">
+    <h1 class="text-h1">{{ stage.title }}</h1>
+    <p class="text-ink-soft">{{ stage.get_kind_display }}{% if has_work %} · {% translate "students have started it" %}{% endif %}</p>
+  </div>
+  <a class="btn btn-secondary" href="{% url 'student:stage' course.slug stage.topic.number stage.pk %}">{% translate "Preview" %}</a>
+</header>
+
+<form method="post" enctype="multipart/form-data" class="flex flex-col gap-4" novalidate>
+  {% csrf_token %}
+  {% if form.non_field_errors or content_form.non_field_errors %}<p class="error-text" role="alert">{{ form.non_field_errors|join:" " }} {{ content_form.non_field_errors|join:" " }}</p>{% endif %}
+  <section class="card flex flex-col gap-4">
+    <h2 class="text-h3">{% translate "Stage" %}</h2>
+    {% include "components/input.html" with field=form.title %}
+    <div class="grid gap-4 sm:grid-cols-3">
+      {% include "components/input.html" with field=form.weight %}
+      {% include "components/input.html" with field=form.pass_percent %}
+      {% include "components/input.html" with field=form.is_required class="sm:pt-7" %}
+    </div>
+  </section>
+
+  <section class="card flex flex-col gap-4">
+    <h2 class="text-h3">{% translate "Content" %}</h2>
+    {% if stage.kind == "lab" %}
+      {% include "components/input.html" with field=content_form.lab_key %}
+      <fieldset class="flex flex-col gap-2">
+        <legend class="label">{{ content_form.experiments.label }}</legend>
+        {% for cb in content_form.experiments %}
+          <label class="flex items-center gap-2 text-sm">{{ cb.tag }}{{ cb.choice_label }}</label>
+        {% empty %}
+          <p class="text-sm text-ink-soft">{% translate "Choose a lab and save to pick its experiments." %}</p>
+        {% endfor %}
+        <p class="help">{{ content_form.experiments.help_text }}</p>
+        {% for e in content_form.experiments.errors %}<p class="error-text">{{ e }}</p>{% endfor %}
+      </fieldset>
+      <p class="text-body-sm text-ink-soft">{% translate "Labs are written in code (apps/labs/experiments); here you choose which one this stage uses." %}</p>
+    {% else %}
+      {% for field in content_form %}{% include "components/input.html" with field=field %}{% endfor %}
+    {% endif %}
+  </section>
+
+  <div class="flex gap-2">
+    <button type="submit" class="btn btn-primary">{% translate "Save" %}</button>
+    <a class="btn btn-ghost" href="{% url 'teacher:course_content' course.slug %}#t{{ stage.topic_id }}">{% translate "Back to the course" %}</a>
+  </div>
+</form>
+
+{% if stage.kind == "theory" or stage.kind == "video" or stage.kind == "test" %}
+<section class="card flex flex-wrap items-center gap-4" aria-labelledby="quiz-title">
+  <div class="min-w-0 flex-1">
+    <h2 id="quiz-title" class="text-h3">{% if stage.kind == "test" %}{% translate "Topic test" %}{% else %}{% translate "Checkpoint quiz" %}{% endif %}</h2>
+    {% if quiz %}
+      <p class="text-sm text-ink-soft">{{ quiz.title }} · {% blocktranslate count n=quiz.questions.count %}{{ n }} question{% plural %}{{ n }} questions{% endblocktranslate %}</p>
+    {% else %}
+      <p class="text-sm text-ink-soft">{% if stage.kind == "test" %}{% translate "The test has no questions yet." %}{% else %}{% translate "Theory and video stages end with a checkpoint quiz of 3–4 questions." %}{% endif %}</p>
+    {% endif %}
+  </div>
+  {% if quiz %}
+    <a class="btn btn-primary" href="{% url 'teacher:quiz' course.slug quiz.pk %}">{% translate "Edit the questions" %}</a>
+  {% else %}
+    <form method="post" action="{% url 'teacher:stage_quiz_create' course.slug stage.pk %}">{% csrf_token %}
+      <button type="submit" class="btn btn-primary">{% include "components/icons.html#plus" %}{% translate "Create the quiz" %}</button>
+    </form>
+  {% endif %}
+</section>
+{% endif %}
+
+{% if stage.kind == "practice" %}
+<section id="items" class="flex flex-col gap-3" aria-labelledby="items-title">
+  <div class="flex items-center justify-between gap-3">
+    <h2 id="items-title" class="text-h2">{% translate "Answer fields" %}</h2>
+    <a class="btn btn-primary" href="{% url 'teacher:item_new' course.slug stage.pk %}">{% include "components/icons.html#plus" %}{% translate "Field" %}</a>
+  </div>
+  {% url 'teacher:reorder' course.slug as reorder_url %}
+  <ol class="overflow-hidden rounded-lg border border-line bg-surface" data-sortable="items" data-parent="{{ stage.pk }}" data-url="{{ reorder_url }}">
+    {% for it in items %}
+      <li data-id="{{ it.pk }}" class="flex flex-wrap items-center gap-3 border-line px-4 py-3 not-last:border-b">
+        {% include "teacher/content/partials/move.html" %}
+        <a class="min-w-0 flex-1 text-sm font-medium text-ink hover:text-primary-700" href="{% url 'teacher:item' course.slug stage.pk it.pk %}">{{ it.label }}</a>
+        <span class="text-caption text-ink-soft">{{ it.get_kind_display }}</span>
+        <span class="num text-caption text-ink-soft">{{ it.points|floatformat:"-2" }}</span>
+      </li>
+    {% empty %}
+      <li class="px-4 py-6 text-center text-sm text-ink-soft">{% translate "No answer fields yet: add the numbers, formulas, equations and open answers the student fills in." %}</li>
+    {% endfor %}
+  </ol>
+</section>
+{% endif %}
+
+<section class="card flex flex-wrap items-center gap-4 border-danger-50">
+  <div class="min-w-0 flex-1">
+    <h2 class="text-h3">{% translate "Delete the stage" %}</h2>
+    <p class="text-sm text-ink-soft">{% if has_work %}{% translate "Students have already worked on this stage, so it cannot be deleted. Make it optional or unpublish the topic." %}{% else %}{% translate "No student has started it yet." %}{% endif %}</p>
+  </div>
+  {% if not has_work %}{% include "teacher/content/partials/delete.html" with what="stage" pk=stage.pk %}{% endif %}
+</section>
+{% endblock %}
+{% block scripts %}<script src="{% static 'js/sortable.js' %}" defer></script>{% endblock %}

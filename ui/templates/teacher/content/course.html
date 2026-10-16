@@ -1,0 +1,78 @@
+{% extends "layouts/teacher.html" %}
+{% load i18n static %}
+{% block title %}{{ course.title }} · ChemEduTech{% endblock %}
+{% block content %}
+<p class="text-sm text-ink-soft"><a href="{% url 'teacher:courses' %}">{% translate "Course content" %}</a> / {{ course.title }}</p>
+<header class="flex flex-wrap items-end justify-between gap-4">
+  <div class="min-w-0">
+    <h1 class="text-h1">{{ course.title }}</h1>
+    <p class="mt-1 text-ink-soft">{{ course.get_status_display }} · {% if course.is_sequential %}{% translate "stages open in order" %}{% else %}{% translate "everything is open" %}{% endif %}</p>
+  </div>
+  <div class="flex flex-wrap gap-2">
+    <a class="btn btn-secondary" href="{% url 'student:course' course.slug %}">{% translate "Preview" %}</a>
+    {% if course.can_edit %}
+      <a class="btn btn-secondary" href="{% url 'teacher:course_settings' course.slug %}">{% translate "Course settings" %}</a>
+      <a class="btn btn-primary" href="{% url 'teacher:module_new' course.slug %}">{% include "components/icons.html#plus" %}{% translate "Module" %}</a>
+    {% endif %}
+  </div>
+</header>
+{% if not course.can_edit %}<p class="rounded-md bg-surface-sunken px-4 py-2 text-sm text-ink-soft">{% translate "You are an assistant of this course: the content is read-only." %}</p>{% endif %}
+{% url 'teacher:reorder' course.slug as reorder_url %}
+
+<ol class="flex flex-col gap-4" {% if course.can_edit %}data-sortable="modules" data-url="{{ reorder_url }}"{% endif %}>
+  {% for m in modules %}
+    <li id="m{{ m.module.pk }}" data-id="{{ m.module.pk }}" class="overflow-hidden rounded-lg border border-line bg-surface">
+      <div class="flex flex-wrap items-center gap-3 border-b border-line bg-surface-sunken px-4 py-3">
+        {% if course.can_edit %}{% include "teacher/content/partials/move.html" %}{% endif %}
+        <h2 class="min-w-0 flex-1 text-h3">{% blocktranslate with n=m.module.order %}Module {{ n }}{% endblocktranslate %} · {{ m.module.title }}</h2>
+        {% if course.can_edit %}
+          <a class="btn btn-ghost btn-sm" href="{% url 'teacher:module' course.slug m.module.pk %}">{% translate "Edit" %}</a>
+          <a class="btn btn-secondary btn-sm" href="{% url 'teacher:topic_new' course.slug %}?module={{ m.module.pk }}">{% include "components/icons.html#plus" %}{% translate "Topic" %}</a>
+          {% if not m.topics %}{% include "teacher/content/partials/delete.html" with what="module" pk=m.module.pk %}{% endif %}
+        {% endif %}
+      </div>
+      <ol class="flex flex-col" {% if course.can_edit %}data-sortable="topics" data-parent="{{ m.module.pk }}" data-url="{{ reorder_url }}"{% endif %}>
+        {% for t in m.topics %}
+          <li id="t{{ t.topic.pk }}" data-id="{{ t.topic.pk }}" class="border-line px-4 py-3 not-last:border-b">
+            <div class="flex flex-wrap items-center gap-3">
+              {% if course.can_edit %}{% include "teacher/content/partials/move.html" %}{% endif %}
+              <span class="num grid size-8 shrink-0 place-items-center rounded-full {% if t.topic.is_published %}bg-primary-600 text-white{% else %}bg-surface-sunken text-ink-soft{% endif %} text-sm font-semibold">{{ t.topic.number }}</span>
+              <span class="min-w-0 flex-1 font-semibold">{{ t.topic.title }}</span>
+              {% if t.topic.is_published %}{% translate "Published" as l_p %}{% include "components/badge.html" with variant="success" label=l_p %}{% else %}{% translate "Draft" as l_p %}{% include "components/badge.html" with variant="neutral" label=l_p %}{% endif %}
+              {% if course.can_edit %}
+                <form method="post" action="{% url 'teacher:topic_publish' course.slug t.topic.pk %}">{% csrf_token %}
+                  <input type="hidden" name="published" value="{% if t.topic.is_published %}0{% else %}1{% endif %}">
+                  <button type="submit" class="btn btn-ghost btn-sm">{% if t.topic.is_published %}{% translate "Unpublish" %}{% else %}{% translate "Publish" %}{% endif %}</button>
+                </form>
+                <a class="btn btn-ghost btn-sm" href="{% url 'teacher:topic' course.slug t.topic.pk %}">{% translate "Edit" %}</a>
+                <a class="btn btn-secondary btn-sm" href="{% url 'teacher:stage_new' course.slug %}?topic={{ t.topic.pk }}">{% include "components/icons.html#plus" %}{% translate "Stage" %}</a>
+                {% if not t.stages %}{% include "teacher/content/partials/delete.html" with what="topic" pk=t.topic.pk %}{% endif %}
+              {% endif %}
+            </div>
+            <ol class="mt-2 flex flex-col gap-1 pl-4 sm:pl-12" {% if course.can_edit %}data-sortable="stages" data-parent="{{ t.topic.pk }}" data-url="{{ reorder_url }}"{% endif %}>
+              {% for s in t.stages %}
+                <li data-id="{{ s.pk }}" class="flex flex-wrap items-center gap-3 rounded-md px-2 py-1.5 hover:bg-canvas">
+                  {% if course.can_edit %}{% include "teacher/content/partials/move.html" %}{% endif %}
+                  <span class="grid size-6 shrink-0 place-items-center rounded-sm text-white stage-{{ s.kind }}">{% include "components/icons.html#"|add:s.kind with size=12 %}</span>
+                  {% if course.can_edit %}<a class="min-w-0 flex-1 text-sm font-medium text-ink hover:text-primary-700" href="{% url 'teacher:stage' course.slug s.pk %}">{{ s.title }}</a>{% else %}<span class="min-w-0 flex-1 text-sm">{{ s.title }}</span>{% endif %}
+                  {% if not s.is_required %}<span class="text-caption text-ink-faint">{% translate "optional" %}</span>{% endif %}
+                  {% if not s.ready %}{% translate "Not filled in" as l_r %}{% include "components/badge.html" with variant="warning" label=l_r %}{% endif %}
+                </li>
+              {% empty %}
+                <li class="text-sm text-ink-faint">{% translate "No stages yet." %}</li>
+              {% endfor %}
+            </ol>
+          </li>
+        {% empty %}
+          <li class="px-4 py-3 text-sm text-ink-faint">{% translate "No topics yet." %}</li>
+        {% endfor %}
+      </ol>
+    </li>
+  {% empty %}
+    {% translate "No modules yet" as l_title %}{% translate "Add a module, then topics and their stages." as l_text %}
+    <li>{% include "components/empty_state.html" with title=l_title text=l_text icon="book" %}</li>
+  {% endfor %}
+</ol>
+<p class="text-caption text-ink-soft">{% translate "Drag by ⋮⋮ or use the arrows. Topic numbers follow the order; students see published topics only." %}</p>
+{% endblock %}
+{% block scripts %}<script src="{% static 'js/sortable.js' %}" defer></script>{% endblock %}

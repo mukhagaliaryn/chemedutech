@@ -1,6 +1,7 @@
 from .catalog import courses_for, open_courses, topic_by_number, topic_for_lab
 from .structure import course_tree, stage_url, stages_of
 from .teaching import (
+    can_edit_course,
     can_manage_group,
     departments_for,
     group_courses,
@@ -13,6 +14,7 @@ from .teaching import (
 )
 
 __all__ = [
+    "can_edit_course",
     "can_manage_group",
     "course_tree",
     "courses_for",

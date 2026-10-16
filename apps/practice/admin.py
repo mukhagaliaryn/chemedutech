@@ -1,5 +1,3 @@
-import json
-
 from django.contrib import admin, messages
 from django.shortcuts import get_object_or_404, render
 from django.urls import path, reverse
@@ -7,7 +5,7 @@ from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from unfold.admin import ModelAdmin, StackedInline, TabularInline
 
-from . import checkers, services
+from . import services
 from .models import (
     AIGrade,
     GradingRubric,
@@ -18,7 +16,7 @@ from .models import (
     RubricCriterion,
     TeacherReview,
 )
-from .services.ai_grading import run_grading
+from .services import authoring
 
 
 class ReadOnlyMixin:
@@ -88,22 +86,8 @@ class PracticeItemAdmin(ModelAdmin):
         item = get_object_or_404(PracticeItem.objects.select_related("task"), pk=object_id)
         answer, result, ai, error = request.POST.get("answer", ""), None, None, ""
         if request.method == "POST":
-            if item.kind == PracticeItem.Kind.OPEN:
-                if hasattr(item, "rubric"):
-                    ai = run_grading(item, answer)
-                else:
-                    error = _("Add a grading rubric with criteria first.")
-            else:
-                raw = answer
-                if item.kind in ("numeric", "choice", "matching", "ordering"):
-                    try:
-                        raw = json.loads(answer)
-                    except json.JSONDecodeError:
-                        raw = answer if item.kind == "numeric" else [answer]
-                try:
-                    result = checkers.check(item.kind, item.answer_spec, raw)
-                except (KeyError, TypeError, ValueError) as exc:
-                    error = f"{type(exc).__name__}: {exc}"
+            outcome = authoring.try_answer(item, answer)
+            result, ai, error = outcome["result"], outcome["ai"], outcome["error"]
         context = {
             **self.admin_site.each_context(request),
             "title": _("Try it: %(label)s") % {"label": item.label},

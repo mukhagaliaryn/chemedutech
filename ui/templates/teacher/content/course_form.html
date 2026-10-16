@@ -1,0 +1,40 @@
+{% extends "layouts/teacher.html" %}
+{% load i18n %}
+{% block title %}{% translate "Course settings" %} · ChemEduTech{% endblock %}
+{% block head %}{{ form.media }}{% endblock %}
+{% block content %}
+<p class="text-sm text-ink-soft"><a href="{% url 'teacher:courses' %}">{% translate "Course content" %}</a> / <a href="{% url 'teacher:course_content' course.slug %}">{{ course.title }}</a> / {% translate "Settings" %}</p>
+<h1 class="text-h1">{% translate "Course settings" %}</h1>
+<form method="post" enctype="multipart/form-data" class="flex flex-col gap-4" novalidate>
+  {% csrf_token %}
+  {% if form.non_field_errors %}<p class="error-text" role="alert">{{ form.non_field_errors|join:" " }}</p>{% endif %}
+  <section class="card flex flex-col gap-4">
+    {% include "components/input.html" with field=form.title %}
+    {% include "components/input.html" with field=form.short_description %}
+    {% include "components/input.html" with field=form.description %}
+    {% include "components/input.html" with field=form.cover %}
+  </section>
+  <section class="card flex flex-col gap-4">
+    <h2 class="text-h3">{% translate "Enrolment and order" %}</h2>
+    <div class="grid gap-4 sm:grid-cols-3">
+      {% include "components/input.html" with field=form.status %}
+      {% include "components/input.html" with field=form.enrollment_mode %}
+      {% include "components/input.html" with field=form.enroll_code %}
+    </div>
+    {% include "components/input.html" with field=form.is_sequential %}
+  </section>
+  <section class="card flex flex-col gap-4">
+    <h2 class="text-h3">{% translate "Grading" %}</h2>
+    <div class="grid gap-4 sm:grid-cols-2">
+      {% include "components/input.html" with field=form.passing_score %}
+      {% include "components/input.html" with field=form.certificate_enabled %}
+    </div>
+    <p class="text-sm text-ink-soft">{% translate "Share of each stage kind in a topic score. Kinds missing from a topic drop out and the rest are rescaled; several stages of one kind split its share." %}</p>
+    <div class="grid gap-4 sm:grid-cols-5">{% for f in form.weight_fields %}{% include "components/input.html" with field=f %}{% endfor %}</div>
+  </section>
+  <div class="flex gap-2">
+    <button type="submit" class="btn btn-primary">{% translate "Save" %}</button>
+    <a class="btn btn-ghost" href="{% url 'teacher:course_content' course.slug %}">{% translate "Cancel" %}</a>
+  </div>
+</form>
+{% endblock %}

@@ -1,3 +1,4 @@
+from . import authoring
 from .attempts import (
     GRACE_SECONDS,
     AttemptError,
@@ -12,6 +13,7 @@ from .attempts import (
 from .grading import GradedAnswer, grade, normalize_text, parse_number
 
 __all__ = [
+    "authoring",
     "GRACE_SECONDS",
     "AttemptError",
     "GradedAnswer",

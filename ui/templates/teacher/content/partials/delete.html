@@ -1,0 +1,6 @@
+{% load i18n %}{# Two-step delete button: what (module|topic|stage|question|item), pk. Refusals come back as messages. #}
+<form method="post" action="{% url 'teacher:delete' course.slug what pk %}" x-data="{ sure: false }" class="inline-flex">
+  {% csrf_token %}
+  <button type="button" class="btn btn-ghost btn-sm text-ink-soft hover:text-danger-600" x-show="!sure" @click="sure = true">{% translate "Delete" %}</button>
+  <button type="submit" class="btn btn-danger btn-sm" x-show="sure" x-cloak>{% translate "Yes, delete" %}</button>
+</form>

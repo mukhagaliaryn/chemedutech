@@ -1,0 +1,6 @@
+{% load i18n %}{# Drag handle + ↑ ↓ buttons of a sortable row (static/js/sortable.js). #}
+<span class="flex shrink-0 items-center gap-0.5 text-ink-faint">
+  <button type="button" data-handle class="cursor-grab rounded-sm px-1 hover:bg-surface-sunken" title="{% translate 'Drag to move' %}" aria-hidden="true" tabindex="-1">⋮⋮</button>
+  <button type="button" data-move="up" class="rounded-sm px-1 hover:bg-surface-sunken hover:text-ink" aria-label="{% translate 'Move up' %}">↑</button>
+  <button type="button" data-move="down" class="rounded-sm px-1 hover:bg-surface-sunken hover:text-ink" aria-label="{% translate 'Move down' %}">↓</button>
+</span>

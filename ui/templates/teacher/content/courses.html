@@ -1,0 +1,28 @@
+{% extends "layouts/teacher.html" %}
+{% load i18n %}
+{% block title %}{% translate "Course content" %} · ChemEduTech{% endblock %}
+{% block content %}
+<header>
+  <h1 class="text-h1">{% translate "Course content" %}</h1>
+  <p class="mt-1 text-ink-soft">{% translate "Modules, topics and stages; theory, video, lab, practice fields and quizzes." %}</p>
+</header>
+{% for r in rows %}
+  <section class="card flex flex-wrap items-center gap-5">
+    <span class="grid size-12 shrink-0 place-items-center rounded-md bg-primary-50 text-primary-600">{% include "components/icons.html#book" with size=24 %}</span>
+    <div class="min-w-0 flex-[1_1_320px]">
+      <h2 class="text-h3">{{ r.course.title }}</h2>
+      <p class="num text-sm text-ink-soft">
+        {{ r.course.get_status_display }} ·
+        {% blocktranslate with m=r.modules t=r.topics p=r.published s=r.stages %}{{ m }} modules · {{ t }} topics ({{ p }} published) · {{ s }} stages{% endblocktranslate %}
+      </p>
+    </div>
+    <div class="flex flex-wrap gap-2">
+      <a class="btn btn-secondary" href="{% url 'student:course' r.course.slug %}">{% translate "Preview" %}</a>
+      <a class="btn btn-primary" href="{% url 'teacher:course_content' r.course.slug %}">{% if r.can_edit %}{% translate "Edit" %}{% else %}{% translate "Open" %}{% endif %}</a>
+    </div>
+  </section>
+{% empty %}
+  {% translate "You are not assigned to a course yet." as l_title %}{% translate "The administrator adds teachers to courses." as l_text %}
+  {% include "components/empty_state.html" with title=l_title text=l_text icon="book" %}
+{% endfor %}
+{% endblock %}

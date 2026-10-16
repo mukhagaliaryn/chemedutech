@@ -1,3 +1,4 @@
+from . import authoring
 from .submissions import (
     SubmissionError,
     attempts_left,
@@ -14,6 +15,7 @@ from .submissions import (
 )
 
 __all__ = [
+    "authoring",
     "SubmissionError",
     "attempts_left",
     "attempts_used",

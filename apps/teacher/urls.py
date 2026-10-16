@@ -1,8 +1,10 @@
 from django.urls import path
 
-from . import gradebook, grading, views
+from . import content, gradebook, grading, views
 
 app_name = "teacher"
+
+C = "courses/<slug:slug>/"
 
 urlpatterns = [
     path("", views.dashboard, name="dashboard"),
@@ -20,6 +22,24 @@ urlpatterns = [
     path("grading/", grading.queue, name="grading"),
     path("grading/<int:pk>/", grading.detail, name="grading_detail"),
     path("comments/", grading.comment, name="comment"),
+    path("courses/", content.courses, name="courses"),
+    path(C, content.course_content, name="course_content"),
+    path(C + "settings/", content.course_settings, name="course_settings"),
+    path(C + "reorder/", content.reorder, name="reorder"),
+    path(C + "modules/new/", content.module_edit, name="module_new"),
+    path(C + "modules/<int:pk>/", content.module_edit, name="module"),
+    path(C + "topics/new/", content.topic_edit, name="topic_new"),
+    path(C + "topics/<int:pk>/", content.topic_edit, name="topic"),
+    path(C + "topics/<int:pk>/publish/", content.topic_publish, name="topic_publish"),
+    path(C + "stages/new/", content.stage_new, name="stage_new"),
+    path(C + "stages/<int:pk>/", content.stage_edit, name="stage"),
+    path(C + "stages/<int:pk>/quiz/", content.stage_quiz_create, name="stage_quiz_create"),
+    path(C + "stages/<int:stage_pk>/items/new/", content.item_edit, name="item_new"),
+    path(C + "stages/<int:stage_pk>/items/<int:pk>/", content.item_edit, name="item"),
+    path(C + "quizzes/<int:pk>/", content.quiz_edit, name="quiz"),
+    path(C + "quizzes/<int:quiz_pk>/questions/new/", content.question_edit, name="question_new"),
+    path(C + "quizzes/<int:quiz_pk>/questions/<int:pk>/", content.question_edit, name="question"),
+    path(C + "<str:what>/<int:pk>/delete/", content.delete, name="delete"),
     path("gradebook/", gradebook.gradebook, name="gradebook"),
     path("gradebook/<slug:course_slug>/", gradebook.gradebook, name="gradebook_course"),
     path("students/", views.students, name="students"),

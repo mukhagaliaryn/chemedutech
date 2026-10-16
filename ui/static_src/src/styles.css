@@ -516,6 +516,42 @@
     font-weight: 600;
   }
 
+  /* the same look inside the CKEditor 5 editing area (the teacher sees what students will see) */
+  .ck.ck-content h2 {
+    font-size: var(--text-h2);
+    line-height: var(--text-h2--line-height);
+    font-weight: 600;
+    margin: 1.5rem 0 0.75rem;
+  }
+  .ck.ck-content h3 {
+    font-size: var(--text-h3);
+    line-height: var(--text-h3--line-height);
+    font-weight: 600;
+    margin: 1.25rem 0 0.5rem;
+  }
+  .ck.ck-content p {
+    margin: 0 0 0.75rem;
+  }
+  .ck.ck-content ul,
+  .ck.ck-content ol {
+    padding-left: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+  .ck.ck-content ul {
+    list-style: disc;
+  }
+  .ck.ck-content ol {
+    list-style: decimal;
+  }
+  .ck.ck-content .formula {
+    display: block;
+    margin: 0.75rem 0;
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
+    background: var(--color-canvas);
+    font-weight: 600;
+  }
+
   /* equation with a catalyst written over the arrow */
   .eq-cat {
     display: inline-flex;

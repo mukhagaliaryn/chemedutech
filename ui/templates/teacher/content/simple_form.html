@@ -1,0 +1,19 @@
+{% extends "layouts/teacher.html" %}
+{% load i18n %}
+{% block title %}{{ noun }} · ChemEduTech{% endblock %}
+{% block head %}{{ form.media }}{% endblock %}
+{% block content %}
+<p class="text-sm text-ink-soft"><a href="{% url 'teacher:courses' %}">{% translate "Course content" %}</a> / <a href="{% url 'teacher:course_content' course.slug %}">{{ course.title }}</a></p>
+<h1 class="text-h1">{% if object %}{{ object }}{% else %}{% blocktranslate with n=noun %}New: {{ n }}{% endblocktranslate %}{% endif %}</h1>
+<section class="card max-w-3xl">
+  <form method="post" class="flex flex-col gap-4" {% if multipart %}enctype="multipart/form-data"{% endif %} novalidate>
+    {% csrf_token %}
+    {% if form.non_field_errors %}<p class="error-text" role="alert">{{ form.non_field_errors|join:" " }}</p>{% endif %}
+    {% for field in form %}{% include "components/input.html" with field=field %}{% endfor %}
+    <div class="flex gap-2">
+      <button type="submit" class="btn btn-primary">{% translate "Save" %}</button>
+      <a class="btn btn-ghost" href="{% url 'teacher:course_content' course.slug %}">{% translate "Cancel" %}</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

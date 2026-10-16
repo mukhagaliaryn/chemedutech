@@ -1,0 +1,95 @@
+{% extends "layouts/teacher.html" %}
+{% load i18n %}
+{% block title %}{% if item %}{{ item.label }}{% else %}{% translate "New answer field" %}{% endif %} · ChemEduTech{% endblock %}
+{% block content %}
+<p class="text-sm text-ink-soft"><a href="{% url 'teacher:course_content' course.slug %}">{{ course.title }}</a> / <a href="{% url 'teacher:stage' course.slug stage.pk %}#items">{{ stage.title }}</a></p>
+<h1 class="text-h1">{% if item %}{{ item.label }}{% else %}{% translate "New answer field" %}{% endif %}</h1>
+{% if in_use %}<p class="rounded-md bg-warning-50 px-4 py-2 text-sm text-warning-700">{% translate "Students have answered this field: its kind cannot change and it cannot be deleted." %}</p>{% endif %}
+
+{{ criteria|json_script:"criteria-rows" }}
+<form method="post" class="flex flex-col gap-4" novalidate
+      x-data="{ kind: '{{ form.kind.value|default:'numeric' }}', rows: JSON.parse(document.getElementById('criteria-rows').textContent) }">
+  {% csrf_token %}<input type="hidden" name="action" value="save">
+  {% if form.non_field_errors %}<p class="error-text" role="alert">{{ form.non_field_errors|join:" " }}</p>{% endif %}
+  <section class="card flex flex-col gap-4">
+    <div class="grid gap-4 sm:grid-cols-[2fr_2fr_1fr]">
+      {% include "components/input.html" with field=form.label %}
+      <div class="field">
+        <label class="label" for="{{ form.kind.id_for_label }}">{{ form.kind.label }}</label>
+        <select id="{{ form.kind.id_for_label }}" name="kind" class="input" x-model="kind">
+          {% for value, label in form.kind.field.choices %}<option value="{{ value }}">{{ label }}</option>{% endfor %}
+        </select>
+        {% for e in form.kind.errors %}<p class="error-text">{{ e }}</p>{% endfor %}
+      </div>
+      {% include "components/input.html" with field=form.points %}
+    </div>
+    {% include "components/input.html" with field=form.prompt %}
+    <div x-show="kind !== 'open'">{% include "components/input.html" with field=form.answer_spec %}</div>
+    {% include "components/input.html" with field=form.hint %}
+  </section>
+
+  <section class="card flex flex-col gap-4" x-show="kind === 'open'">
+    <h2 class="text-h3">{% translate "AI grading rubric" %}</h2>
+    <p class="text-body-sm text-ink-soft">{% translate "The AI scores each criterion and explains why; the platform adds the points. The model answer is a reference, not a word-for-word requirement." %}</p>
+    <label class="field"><span class="label">{% translate "Model answer" %}</span>
+      <textarea name="model_answer" rows="3" class="input">{{ rubric.model_answer }}</textarea></label>
+    <label class="field"><span class="label">{% translate "Notes for the grader" %}</span>
+      <textarea name="notes" rows="2" class="input">{{ rubric.notes }}</textarea></label>
+    <fieldset class="flex flex-col gap-2">
+      <legend class="label">{% translate "Criteria" %}</legend>
+      <input type="hidden" name="criteria-count" :value="rows.length">
+      <template x-for="(row, i) in rows" :key="i">
+        <div class="flex items-center gap-2" :class="row.delete && 'opacity-50'">
+          <input type="hidden" :name="`criteria-${i}-id`" :value="row.id">
+          <input type="text" class="input flex-1" :name="`criteria-${i}-text`" x-model="row.text" maxlength="300" placeholder="{% translate 'e.g. The reaction equation is right and balanced' %}">
+          <input type="number" class="input num w-24 text-right" min="0" step="0.5" :name="`criteria-${i}-points`" x-model="row.points" aria-label="{% translate 'points' %}">
+          <label class="flex items-center gap-1 text-caption text-ink-soft" x-show="row.id && !{{ in_use|yesno:'true,false' }}">
+            <input type="checkbox" class="size-4" :name="`criteria-${i}-delete`" x-model="row.delete">{% translate "delete" %}
+          </label>
+        </div>
+      </template>
+      <button type="button" class="btn btn-ghost btn-sm self-start" @click="rows.push({id: '', text: '', points: 1, delete: false})">{% include "components/icons.html#plus" %}{% translate "Criterion" %}</button>
+      <p class="help">{% translate "The field's points should equal the sum of its criteria." %}</p>
+    </fieldset>
+  </section>
+
+  <div class="flex gap-2">
+    <button type="submit" class="btn btn-primary">{% translate "Save" %}</button>
+    <a class="btn btn-ghost" href="{% url 'teacher:stage' course.slug stage.pk %}#items">{% translate "Back to the stage" %}</a>
+  </div>
+</form>
+
+{% if item %}
+<section class="card flex flex-col gap-3" aria-labelledby="try">
+  <h2 id="try" class="text-h3">{% translate "Try it" %}</h2>
+  <p class="text-body-sm text-ink-soft">{% if item.kind == "open" %}{% translate "Type an answer as a student would: the AI grades it by the rubric (a real request, nothing is saved)." %}{% else %}{% translate "Type an answer as a student would and see how it is checked (nothing is saved). Lists and pairs as JSON." %}{% endif %}</p>
+  <form method="post" class="flex flex-col gap-2">
+    {% csrf_token %}<input type="hidden" name="action" value="try">
+    <textarea name="answer" rows="3" class="input" aria-label="{% translate 'Sample answer' %}">{{ trial.answer }}</textarea>
+    <button type="submit" class="btn btn-secondary self-start">{% translate "Check" %}</button>
+  </form>
+  {% if trial %}
+    {% if trial.error %}<p class="error-text">{{ trial.error }}</p>{% endif %}
+    {% if trial.result %}
+      <div class="rounded-md px-4 py-3 text-sm {% if trial.result.is_correct %}bg-success-50 text-success-700{% elif trial.result.fraction > 0 %}bg-primary-50 text-primary-700{% else %}bg-danger-50 text-danger-700{% endif %}">
+        <p class="num font-semibold">{% blocktranslate with f=trial.result.fraction|floatformat:2 %}Share of the points: {{ f }}{% endblocktranslate %}</p>
+        {% if trial.result.feedback %}<p>{{ trial.result.feedback }}</p>{% endif %}
+        {% if trial.result.normalized %}<p class="text-caption opacity-80">{{ trial.result.normalized }}</p>{% endif %}
+      </div>
+    {% endif %}
+    {% if trial.ai %}
+      <div class="rounded-md bg-surface-sunken px-4 py-3 text-sm">
+        {% if trial.ai.error %}<p class="error-text">{{ trial.ai.error }}</p>{% endif %}
+        <p class="font-semibold">{% translate "AI" %} · {{ trial.ai.confidence }} · {{ trial.ai.model }}</p>
+        <ul class="mt-1 flex flex-col gap-1">{% for c in trial.ai.criteria_scores %}<li class="num">· {{ c.points }} — {{ c.reason }}</li>{% endfor %}</ul>
+        {% if trial.ai.feedback_kk %}<p class="mt-2">«{{ trial.ai.feedback_kk }}»</p>{% endif %}
+      </div>
+    {% endif %}
+  {% endif %}
+</section>
+<section class="card flex flex-wrap items-center gap-4">
+  <p class="min-w-0 flex-1 text-sm text-ink-soft">{% if in_use %}{% translate "Answered fields cannot be deleted." %}{% else %}{% translate "No student has answered it yet." %}{% endif %}</p>
+  {% if not in_use %}{% include "teacher/content/partials/delete.html" with what="item" pk=item.pk %}{% endif %}
+</section>
+{% endif %}
+{% endblock %}

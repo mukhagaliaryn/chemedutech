@@ -453,6 +453,12 @@
   .ml-auto {
     margin-left: auto;
   }
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
   .block {
     display: block;
   }
@@ -1298,6 +1304,9 @@
   .text-right {
     text-align: right;
   }
+  .font-mono {
+    font-family: var(--font-mono);
+  }
   .font-sans {
     font-family: var(--font-sans);
   }
@@ -1529,6 +1538,9 @@
   .opacity-55 {
     opacity: 55%;
   }
+  .opacity-60 {
+    opacity: 60%;
+  }
   .opacity-80 {
     opacity: 80%;
   }
@@ -1615,6 +1627,9 @@
     }
     .hover\:bg-primary-50:hover {
       background-color: var(--color-primary-50);
+    }
+    .hover\:bg-surface-sunken:hover {
+      background-color: var(--color-surface-sunken);
     }
     .hover\:text-danger-600:hover {
       color: var(--color-danger-600);
@@ -1736,11 +1751,23 @@
     .sm\:grid-cols-2 {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+    .sm\:grid-cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
     .sm\:grid-cols-4 {
       grid-template-columns: repeat(4, minmax(0, 1fr));
     }
+    .sm\:grid-cols-5 {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+    .sm\:grid-cols-\[2fr_1fr\] {
+      grid-template-columns: 2fr 1fr;
+    }
     .sm\:grid-cols-\[2fr_1fr_1fr_auto\] {
       grid-template-columns: 2fr 1fr 1fr auto;
+    }
+    .sm\:grid-cols-\[2fr_2fr_1fr\] {
+      grid-template-columns: 2fr 2fr 1fr;
     }
     .sm\:grid-cols-\[minmax\(0\,1fr\)_minmax\(0\,1\.4fr\)\] {
       grid-template-columns: minmax(0,1fr) minmax(0,1.4fr);
@@ -1769,8 +1796,14 @@
     .sm\:px-\[clamp\(24px\,5vw\,72px\)\] {
       padding-inline: clamp(24px, 5vw, 72px);
     }
+    .sm\:pt-7 {
+      padding-top: calc(var(--spacing) * 7);
+    }
     .sm\:pb-1 {
       padding-bottom: var(--spacing);
+    }
+    .sm\:pl-12 {
+      padding-left: calc(var(--spacing) * 12);
     }
     .sm\:text-2xl {
       font-size: var(--text-2xl);
@@ -2238,6 +2271,40 @@
     border-radius: var(--radius-md);
     background: var(--color-canvas);
     font-size: 19px;
+    font-weight: 600;
+  }
+  .ck.ck-content h2 {
+    font-size: var(--text-h2);
+    line-height: var(--text-h2--line-height);
+    font-weight: 600;
+    margin: 1.5rem 0 0.75rem;
+  }
+  .ck.ck-content h3 {
+    font-size: var(--text-h3);
+    line-height: var(--text-h3--line-height);
+    font-weight: 600;
+    margin: 1.25rem 0 0.5rem;
+  }
+  .ck.ck-content p {
+    margin: 0 0 0.75rem;
+  }
+  .ck.ck-content ul,
+  .ck.ck-content ol {
+    padding-left: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+  .ck.ck-content ul {
+    list-style: disc;
+  }
+  .ck.ck-content ol {
+    list-style: decimal;
+  }
+  .ck.ck-content .formula {
+    display: block;
+    margin: 0.75rem 0;
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
+    background: var(--color-canvas);
     font-weight: 600;
   }
   .eq-cat {

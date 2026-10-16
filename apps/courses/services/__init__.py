@@ -1,3 +1,4 @@
+from . import authoring
 from .content import ensure_stage_content
 from .enrollment import (
     EnrollmentError,
@@ -23,6 +24,7 @@ from .groups import (
 )
 
 __all__ = [
+    "authoring",
     "EnrollmentError",
     "GroupError",
     "add_student",

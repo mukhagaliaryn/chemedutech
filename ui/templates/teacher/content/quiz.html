@@ -1,0 +1,55 @@
+{% extends "layouts/teacher.html" %}
+{% load i18n static %}
+{% block title %}{{ quiz.title }} · ChemEduTech{% endblock %}
+{% block content %}
+<p class="text-sm text-ink-soft">
+  <a href="{% url 'teacher:course_content' course.slug %}">{{ course.title }}</a>
+  {% if stage %} / <a href="{% url 'teacher:stage' course.slug stage.pk %}">{{ stage.title }}</a>{% endif %} / {{ quiz.get_kind_display }}
+</p>
+<h1 class="text-h1">{{ quiz.title }}</h1>
+
+<section id="questions" class="flex flex-col gap-3" aria-labelledby="q-title">
+  <div class="flex items-center justify-between gap-3">
+    <h2 id="q-title" class="text-h2">{% translate "Questions" %}</h2>
+    <a class="btn btn-primary" href="{% url 'teacher:question_new' course.slug quiz.pk %}">{% include "components/icons.html#plus" %}{% translate "Question" %}</a>
+  </div>
+  {% url 'teacher:reorder' course.slug as reorder_url %}
+  <ol class="overflow-hidden rounded-lg border border-line bg-surface" data-sortable="questions" data-parent="{{ quiz.pk }}" data-url="{{ reorder_url }}">
+    {% for q in questions %}
+      <li data-id="{{ q.pk }}" class="flex flex-wrap items-start gap-3 border-line px-4 py-3 not-last:border-b {% if not q.is_active %}opacity-60{% endif %}">
+        {% include "teacher/content/partials/move.html" %}
+        <a class="min-w-0 flex-1 text-sm text-ink hover:text-primary-700" href="{% url 'teacher:question' course.slug quiz.pk q.pk %}">
+          <span class="line-clamp-2">{{ q.text|striptags|truncatechars:160 }}</span>
+          {% if q.kind == "single" or q.kind == "multiple" %}
+            <span class="mt-1 block text-caption text-ink-soft">{% for c in q.choices.all %}{% if c.is_correct %}✓ {% endif %}{{ c.text|striptags }}{% if not forloop.last %} · {% endif %}{% endfor %}</span>
+          {% endif %}
+        </a>
+        <span class="text-caption text-ink-soft">{{ q.get_kind_display }}{% if not q.is_active %} · {% translate "retired" %}{% endif %}</span>
+        <span class="num text-caption text-ink-soft">{{ q.points|floatformat:"-2" }}</span>
+      </li>
+    {% empty %}
+      <li class="px-4 py-6 text-center text-sm text-ink-soft">{% translate "No questions yet." %}</li>
+    {% endfor %}
+  </ol>
+</section>
+
+<section class="card max-w-3xl" aria-labelledby="settings">
+  <h2 id="settings" class="mb-4 text-h3">{% translate "Quiz settings" %}</h2>
+  <form method="post" class="flex flex-col gap-4" novalidate>
+    {% csrf_token %}
+    {% include "components/input.html" with field=form.title %}
+    <div class="grid gap-4 sm:grid-cols-2">
+      {% include "components/input.html" with field=form.pass_percent %}
+      {% include "components/input.html" with field=form.grading %}
+      {% include "components/input.html" with field=form.max_attempts %}
+      {% include "components/input.html" with field=form.time_limit_min %}
+      {% include "components/input.html" with field=form.questions_per_attempt %}
+    </div>
+    {% include "components/input.html" with field=form.shuffle_questions %}
+    {% include "components/input.html" with field=form.shuffle_choices %}
+    {% include "components/input.html" with field=form.show_answers_after %}
+    <button type="submit" class="btn btn-secondary self-start">{% translate "Save the settings" %}</button>
+  </form>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{% static 'js/sortable.js' %}" defer></script>{% endblock %}

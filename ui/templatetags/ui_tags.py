@@ -62,8 +62,11 @@ def initials(person):
 
 @register.filter
 def with_attrs(bound_field, css="input"):
-    """Render a form field's widget with design-system classes and aria-invalid on errors."""
-    attrs = {"class": css}
+    """Render a form field's widget with design-system classes and aria-invalid on errors.
+
+    The widget's own classes stay (CKEditor 5 finds its textarea by «django_ckeditor_5»)."""
+    own = bound_field.field.widget.attrs.get("class", "")
+    attrs = {"class": f"{own} {css}".strip()}
     if bound_field.errors:
         attrs["aria-invalid"] = "true"
         attrs["aria-describedby"] = f"{bound_field.auto_id}_error"

@@ -70,3 +70,12 @@ def departments_for(user) -> QuerySet[Department]:
 
 def specialties_for(user) -> QuerySet[Specialty]:
     return Specialty.objects.filter(department__in=departments_for(user)).order_by("code")
+
+
+def can_edit_course(user, course) -> bool:
+    """Authors of the course and the admin edit its content; assistants only teach (groups, grading)."""
+    from ..models import CourseTeacher
+
+    if has_role(user, ADMIN):
+        return True
+    return CourseTeacher.objects.filter(course=course, teacher=user, role=CourseTeacher.Role.AUTHOR).exists()

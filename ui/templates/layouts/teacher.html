@@ -6,7 +6,7 @@ not exist yet are hidden by components/nav_item.html.
 {% endcomment %}
 {% block nav %}
   {% translate "Home" as l_home %}{% include "components/nav_item.html" with url_name="teacher:dashboard" icon="home" label=l_home %}
-  {% translate "Course content" as l_courses %}{% include "components/nav_item.html" with url_name="teacher:courses" icon="book" label=l_courses %}
+  {% translate "Course content" as l_courses %}{% include "components/nav_item.html" with url_name="teacher:courses" match="teacher:courses teacher:course_content teacher:course_settings teacher:module_new teacher:module teacher:topic_new teacher:topic teacher:stage_new teacher:stage teacher:item_new teacher:item teacher:quiz teacher:question_new teacher:question" icon="book" label=l_courses %}
   {% translate "Groups and students" as l_groups %}{% include "components/nav_item.html" with url_name="teacher:groups" match="teacher:groups teacher:group teacher:group_new teacher:group_edit teacher:students teacher:student teacher:lab_log" icon="users" label=l_groups %}
   {% translate "Checking works" as l_grading %}{% include "components/nav_item.html" with url_name="teacher:grading" match="teacher:grading teacher:grading_detail" icon="check" label=l_grading %}
   {% translate "Grade register" as l_gradebook %}{% include "components/nav_item.html" with url_name="teacher:gradebook" match="teacher:gradebook teacher:gradebook_course" icon="table" label=l_gradebook %}

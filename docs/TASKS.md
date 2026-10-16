@@ -111,9 +111,9 @@
 - [x] Мұғалім тек өз курстары мен топтарын көреді (selectors-та сүзу + тест).
 
 ## STEP-11 · Мұғалім: мазмұн басқару, тексеру, кері байланыс
-- [ ] `/teacher/courses/<slug>/`: модуль/тақырып/кезең CRUD, сұрыптау (drag), CKEditor 5, тест редакторы, зертханаға `lab_key` таңдау.
-- [ ] `/teacher/grading/` — `needs_review` кезегі, AI ұсынған бағаны критерийлер бойынша **растау/өзгерту** (TeacherReview), қайтару; Comment (тред) және Notification.
-- [ ] `/teacher/gradebook/<course>/` матрица + CSV/XLSX экспорт.
+- [x] `/teacher/courses/<slug>/`: модуль/тақырып/кезең CRUD, сұрыптау (drag), CKEditor 5, тест редакторы, зертханаға `lab_key` таңдау.
+- [x] `/teacher/grading/` — `needs_review` кезегі, AI ұсынған бағаны критерийлер бойынша **растау/өзгерту** (TeacherReview), қайтару; Comment (тред) және Notification.
+- [x] `/teacher/gradebook/<course>/` матрица + CSV/XLSX экспорт.
 
 ## STEP-12 · Статистика және зерттеу
 - [ ] `/teacher/analytics/<course>/`: аяқтау воронкасы, тақырып бойынша орташа ұпай, зертханадағы жиі қателер (қадам бойынша), қадамдағы орташа уақыт,
