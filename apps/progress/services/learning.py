@@ -74,3 +74,37 @@ def record_quiz_result(enrollment, stage, quiz) -> StageProgress:
         passed=counted.passed,
         attempts_exhausted=(left == 0 and not counted.passed),
     )
+
+
+# --- lab stages (ARCHITECTURE §3.5, §4.4, §5.4) -------------------------------------
+
+
+def lab_experiments(enrollment, stage) -> list[dict]:
+    """Experiments of a lab stage in order: {spec, attempt (best analysed), done, open}.
+
+    They open one after another: the next experiment needs the analysis of the previous one sent.
+    Without an enrolment (a teacher's preview) everything is open.
+    """
+    from apps.labs.selectors import analysed_attempts
+
+    content = stage.content
+    specs = content.experiment_specs() if content else []
+    best = analysed_attempts(enrollment, stage) if enrollment else {}
+    rows, previous_done = [], True
+    for spec in specs:
+        attempt = best.get(spec.key)
+        rows.append(
+            {"spec": spec, "attempt": attempt, "done": attempt is not None, "open": enrollment is None or previous_done}
+        )
+        previous_done = attempt is not None
+    return rows
+
+
+@transaction.atomic
+def record_lab_result(enrollment, stage) -> StageProgress:
+    """After an analysis: when every experiment has one, the stage passes with the mean of the best scores."""
+    rows = lab_experiments(enrollment, stage)
+    if rows and all(r["done"] for r in rows):
+        scores = [r["attempt"].score_percent or 0 for r in rows]
+        return complete_stage(enrollment, stage, sum(scores) / len(scores), passed=True)
+    return start_stage(enrollment, stage)

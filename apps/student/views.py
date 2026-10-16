@@ -23,7 +23,10 @@ from apps.core.permissions import STUDENT, has_role, role_required
 from apps.courses import selectors as course_selectors
 from apps.courses import services as course_services
 from apps.courses.models import Course, Stage
-from apps.labs.selectors import best_attempts_by_experiment
+from apps.labs import services as lab_services
+from apps.labs.engine import get_lab
+from apps.labs.models import LabAttempt
+from apps.labs.views import analysis_payload, lab_page
 from apps.practice import forms as practice_forms
 from apps.practice import services as practice
 from apps.practice.models import PracticeSubmission
@@ -203,8 +206,16 @@ def stage(request, course_slug, topic_number, stage_pk):
     if stage.kind == Stage.Kind.PRACTICE and stage.content:
         context.update(_practice_context(place, stage))
     if stage.kind == Stage.Kind.LAB and stage.content:
-        done = best_attempts_by_experiment(request.user, stage.content.lab_key)
-        context["experiments"] = [{"spec": e, "attempt": done.get(e.key)} for e in stage.content.experiment_specs()]
+        rows = progress.lab_experiments(place.enrollment, stage)
+        if not place.preview and rows and all(r["done"] for r in rows) and context["status"] != S.PASSED:
+            progress.record_lab_result(place.enrollment, stage)  # e.g. the analysis was sent from another tab
+            place.progress = progress_selectors.stage_progress_map(place.enrollment)
+            context.update(sp=place.progress.get(stage.pk), status=learning.stage_status(place, stage))
+        for row in rows:
+            row["url"] = reverse(
+                "student:lab_run", args=[place.course.slug, place.topic.number, stage.pk, row["spec"].key]
+            )
+        context["experiments"] = rows
     return render(request, "student/stage.html", context)
 
 
@@ -329,6 +340,83 @@ def ping(request, course_slug, topic_number, stage_pk):
     if not denied and not place.preview:
         progress.add_time(place.enrollment, place.stage, 30)
     return JsonResponse({"ok": True})
+
+
+# --- lab inside a stage -------------------------------------------------------------
+
+
+def _lab_stage(request, course_slug, topic_number, stage_pk, experiment_key):
+    place, _stages, denied = _open_stage(request, course_slug, topic_number, stage_pk)
+    if denied:
+        return place, None, None, denied
+    content = place.stage.content
+    if place.stage.kind != Stage.Kind.LAB or content is None:
+        raise Http404
+    rows = progress.lab_experiments(place.enrollment, place.stage)
+    row = next((r for r in rows if r["spec"].key == experiment_key), None)
+    if row is None:
+        raise Http404
+    if not row["open"]:
+        messages.info(request, _("Experiments open one after another: finish the previous one and send its analysis."))
+        return place, rows, row, redirect(learning.stage_url(place.stage))
+    return place, rows, row, None
+
+
+@login_required
+def lab_run(request, course_slug, topic_number, stage_pk, experiment_key):
+    place, rows, row, denied = _lab_stage(request, course_slug, topic_number, stage_pk, experiment_key)
+    if denied:
+        return denied
+    stage, lab = place.stage, get_lab(place.stage.content.lab_key)
+    experiment = row["spec"]
+    if not place.preview:
+        progress.start_stage(place.enrollment, stage)
+    attempt = lab_services.start_attempt(request.user, lab.key, experiment, place.enrollment, stage)
+    args = [place.course.slug, place.topic.number, stage.pk]
+    index = [r["spec"].key for r in rows].index(experiment.key)
+    following = rows[index + 1] if index + 1 < len(rows) else None
+    nav = [
+        {
+            "number": i + 1,
+            "title": r["spec"].title,
+            "url": reverse("student:lab_run", args=[*args, r["spec"].key]) if r["open"] else None,
+            "current": r is row,
+            "done": r["done"],
+        }
+        for i, r in enumerate(rows)
+    ]
+    urls = {
+        "analysis": reverse("student:lab_analysis", args=[*args, experiment.key, attempt.pk]),
+        "topic": learning.stage_url(stage),
+        # the next experiment opens once this analysis is sent, which is when the runner shows the link
+        "next": reverse("student:lab_run", args=[*args, following["spec"].key]) if following else "",
+    }
+    return lab_page(
+        request, lab=lab, experiment=experiment, attempt=attempt, urls=urls, nav=nav, topic=place.topic,
+        back_url=learning.stage_url(stage),
+    )  # fmt: skip
+
+
+@require_POST
+@login_required
+def lab_analysis(request, course_slug, topic_number, stage_pk, experiment_key, attempt_id):
+    """The runner sends the analysis here inside a stage: stored by labs, then the stage result is recorded."""
+    place, _rows, row, denied = _lab_stage(request, course_slug, topic_number, stage_pk, experiment_key)
+    if denied:
+        return JsonResponse({"error": "locked"}, status=403)
+    attempt = get_object_or_404(
+        LabAttempt, pk=attempt_id, user=request.user, stage=place.stage, experiment_key=experiment_key
+    )
+    try:
+        data = json.loads(request.body or b"{}")
+    except json.JSONDecodeError:
+        data = None
+    if not isinstance(data, dict):
+        return JsonResponse({"error": "object expected"}, status=400)
+    attempt = lab_services.submit_analysis(attempt, row["spec"], data)
+    if not place.preview:
+        progress.record_lab_result(place.enrollment, place.stage)
+    return JsonResponse(analysis_payload(attempt))
 
 
 # --- quizzes inside a stage ---------------------------------------------------------

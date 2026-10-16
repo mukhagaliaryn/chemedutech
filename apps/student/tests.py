@@ -215,7 +215,7 @@ class VideoAndTestStageTests(StudentFlowBase):
         self.assertTrue(attempt.passed)
         self.assertEqual(self.status(self.lab), S.AVAILABLE)
         r = self.client.get(self.url(self.lab))
-        self.assertContains(r, reverse("labs:run", args=["t01", "hydrogen"]))
+        self.assertContains(r, self.url(self.lab, "student:lab_run", "hydrogen"))
 
     def test_topic_test_opens_without_material(self):
         teacher = User.objects.create_user("t", "t@example.kz", "x", role=User.Role.TEACHER)

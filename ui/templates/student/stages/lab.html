@@ -10,15 +10,23 @@
   <ol class="flex flex-col gap-2">
     {% for row in experiments %}
       <li>
-        <a href="{% url 'labs:run' content.lab_key row.spec.key %}" class="flex items-center gap-3 rounded-md border px-3 py-3 {% if row.attempt %}border-transparent bg-success-50{% else %}border-line hover:border-line-strong{% endif %}">
-          <span class="num grid size-7 shrink-0 place-items-center rounded-full text-caption font-semibold {% if row.attempt %}bg-success-600 text-white{% else %}bg-surface-sunken text-ink-soft{% endif %}">{{ forloop.counter }}</span>
+        {% if row.open %}
+          <a href="{{ row.url }}" class="flex items-center gap-3 rounded-md border px-3 py-3 {% if row.done %}border-transparent bg-success-50{% else %}border-line hover:border-line-strong{% endif %}">
+        {% else %}
+          <div class="flex items-center gap-3 rounded-md bg-surface-sunken px-3 py-3 text-ink-faint" title="{% translate 'Opens after the previous experiment' %}">
+        {% endif %}
+          <span class="num grid size-7 shrink-0 place-items-center rounded-full text-caption font-semibold {% if row.done %}bg-success-600 text-white{% elif row.open %}bg-primary-600 text-white{% else %}bg-surface text-ink-faint{% endif %}">
+            {% if row.done %}{% include "components/icons.html#check" with size=13 %}{% elif row.open %}{{ forloop.counter }}{% else %}{% include "components/icons.html#lock" with size=13 %}{% endif %}
+          </span>
           <span class="flex-1 text-sm font-medium">{{ row.spec.title }}</span>
-          {% if row.attempt %}<span class="num text-caption text-success-700">{% translate "analysis" %} {{ row.attempt.analysis_correct }}/{{ row.attempt.analysis_total }}</span>{% endif %}
-          {% include "components/icons.html#arrow-right" with icon_class="text-ink-faint" %}
-        </a>
+          {% if row.done %}<span class="num text-caption text-success-700">{{ row.attempt.score_percent|floatformat:0 }}%</span>
+          {% elif not row.open %}<span class="text-caption">{% translate "Locked" %}</span>{% endif %}
+          {% if row.open %}{% include "components/icons.html#arrow-right" with icon_class="text-ink-faint" %}{% endif %}
+        {% if row.open %}</a>{% else %}</div>{% endif %}
       </li>
     {% empty %}
       <li class="text-ink-soft">{% translate "The lab is not set up yet." %}</li>
     {% endfor %}
   </ol>
+  <p class="text-body-sm text-ink-soft">{% translate "The stage score is the average of your best attempt in every experiment: actions in the right order, the journal and the analysis." %}</p>
 </div>

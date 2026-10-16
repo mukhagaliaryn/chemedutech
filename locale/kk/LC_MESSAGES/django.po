@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 18:54+0500\n"
+"POT-Creation-Date: 2026-10-16 19:20+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -228,10 +228,10 @@ msgid "Assessments"
 msgstr "Бағалау"
 
 #: apps/assessments/models/attempt.py:17 apps/courses/models/course.py:37
-#: apps/courses/models/enrollment.py:52 apps/practice/models/submission.py:21
-#: apps/progress/models/progress.py:22 apps/progress/models/progress.py:76
-#: apps/progress/models/progress.py:98 apps/progress/models/progress.py:118
-#: apps/progress/models/progress.py:153
+#: apps/courses/models/enrollment.py:52 apps/labs/models/attempt.py:23
+#: apps/practice/models/submission.py:21 apps/progress/models/progress.py:22
+#: apps/progress/models/progress.py:76 apps/progress/models/progress.py:98
+#: apps/progress/models/progress.py:118 apps/progress/models/progress.py:153
 msgid "enrolment"
 msgstr "жазылу тәсілі"
 
@@ -248,12 +248,12 @@ msgstr "тест"
 msgid "attempt number"
 msgstr "талпыныс нөмірі"
 
-#: apps/assessments/models/attempt.py:27 apps/labs/models/attempt.py:21
+#: apps/assessments/models/attempt.py:27 apps/labs/models/attempt.py:40
 #: apps/progress/models/progress.py:36
 msgid "started at"
 msgstr "басталған уақыты"
 
-#: apps/assessments/models/attempt.py:28 apps/labs/models/attempt.py:22
+#: apps/assessments/models/attempt.py:28 apps/labs/models/attempt.py:41
 msgid "finished at"
 msgstr "аяқталған уақыты"
 
@@ -294,7 +294,7 @@ msgstr "тест талпынысы"
 msgid "quiz attempts"
 msgstr "тест талпыныстары"
 
-#: apps/assessments/models/attempt.py:53 apps/labs/models/attempt.py:67
+#: apps/assessments/models/attempt.py:53 apps/labs/models/attempt.py:94
 msgid "attempt"
 msgstr "талпыныс"
 
@@ -442,7 +442,7 @@ msgstr "Қысқа мәтін"
 msgid "Chemical formula"
 msgstr "Химиялық формула"
 
-#: apps/assessments/models/quiz.py:61 apps/labs/views.py:53
+#: apps/assessments/models/quiz.py:61 apps/labs/views.py:55
 #: apps/practice/models/task.py:46 ui/templates/assessments/take.html:64
 msgid "Reaction equation"
 msgstr "Реакция теңдеуі"
@@ -603,9 +603,9 @@ msgstr "Курстар"
 
 #: apps/courses/models/content.py:17 apps/courses/models/content.py:53
 #: apps/courses/models/content.py:107 apps/courses/models/content.py:151
-#: apps/courses/models/structure.py:112 apps/practice/models/submission.py:24
-#: apps/practice/models/task.py:22 apps/progress/models/progress.py:25
-#: apps/progress/models/progress.py:156
+#: apps/courses/models/structure.py:112 apps/labs/models/attempt.py:32
+#: apps/practice/models/submission.py:24 apps/practice/models/task.py:22
+#: apps/progress/models/progress.py:25 apps/progress/models/progress.py:156
 msgid "stage"
 msgstr "кезең"
 
@@ -642,7 +642,7 @@ msgstr "сілтеме"
 msgid "video file"
 msgstr "видеофайл"
 
-#: apps/courses/models/content.py:58 apps/labs/models/attempt.py:23
+#: apps/courses/models/content.py:58 apps/labs/models/attempt.py:42
 msgid "duration, s"
 msgstr "ұзақтығы, с"
 
@@ -674,7 +674,7 @@ msgstr "Видеофайлды жүктеңіз."
 msgid "Paste the video link."
 msgstr "Видео сілтемесін қойыңыз."
 
-#: apps/courses/models/content.py:109 apps/labs/models/attempt.py:17
+#: apps/courses/models/content.py:109 apps/labs/models/attempt.py:34
 msgid "lab"
 msgstr "зертхана"
 
@@ -754,7 +754,7 @@ msgid "cover"
 msgstr "мұқаба"
 
 #: apps/courses/models/course.py:35 apps/courses/models/enrollment.py:46
-#: apps/labs/models/attempt.py:20 apps/practice/models/submission.py:28
+#: apps/labs/models/attempt.py:39 apps/practice/models/submission.py:28
 #: apps/progress/models/progress.py:27 apps/progress/models/progress.py:81
 msgid "status"
 msgstr "күйі"
@@ -879,7 +879,7 @@ msgstr "студент"
 msgid "The student's group at enrolment"
 msgstr "Жазылған кездегі студенттің тобы"
 
-#: apps/courses/models/enrollment.py:40 apps/labs/models/attempt.py:19
+#: apps/courses/models/enrollment.py:40 apps/labs/models/attempt.py:37
 #: apps/organizations/models/group.py:65
 msgid "research group"
 msgstr "зерттеу тобы"
@@ -1013,31 +1013,31 @@ msgstr "Бұл кодпен курс табылмады. Кодты мұғалі
 msgid "Virtual lab"
 msgstr "Виртуалды зертхана"
 
-#: apps/labs/experiments/t01/__init__.py:11
+#: apps/labs/experiments/t01/__init__.py:12
 msgid "Hydrogen and oxygen: obtaining and properties"
 msgstr "Сутегі және оттегі: алынуы және қасиеттері"
 
-#: apps/labs/experiments/t01/common.py:8 apps/labs/experiments/t01/rate.py:30
+#: apps/labs/experiments/t01/common.py:9 apps/labs/experiments/t01/rate.py:31
 msgid "Spirit lamp"
 msgstr "Спирт шамы"
 
-#: apps/labs/experiments/t01/common.py:12
+#: apps/labs/experiments/t01/common.py:13
 msgid "Heating is not needed here: the reaction goes at room temperature."
 msgstr "Мұнда қыздыру қажет емес: реакция бөлме температурасында жүреді."
 
-#: apps/labs/experiments/t01/common.py:15
+#: apps/labs/experiments/t01/common.py:16
 msgid "Hydrogen peroxide solution, 3%"
 msgstr "Сутегі пероксидінің ерітіндісі, 3%"
 
-#: apps/labs/experiments/t01/common.py:16
+#: apps/labs/experiments/t01/common.py:17
 msgid "Manganese(IV) oxide"
 msgstr "Марганец(IV) оксиді"
 
-#: apps/labs/experiments/t01/electrolysis.py:18
+#: apps/labs/experiments/t01/electrolysis.py:19
 msgid "Electrolysis of water"
 msgstr "Судың электролизі"
 
-#: apps/labs/experiments/t01/electrolysis.py:19
+#: apps/labs/experiments/t01/electrolysis.py:20
 msgid ""
 "Decompose water by direct current and determine the volume ratio of hydrogen "
 "and oxygen."
@@ -1045,7 +1045,7 @@ msgstr ""
 "Суды тұрақты токпен ыдыратып, сутегі мен оттегі көлемдерінің қатынасын "
 "анықтау."
 
-#: apps/labs/experiments/t01/electrolysis.py:23
+#: apps/labs/experiments/t01/electrolysis.py:24
 msgid ""
 "Water is reduced at the cathode and hydroxide ions are oxidised at the "
 "anode. Twice as many hydrogen molecules are formed as oxygen molecules, so "
@@ -1055,27 +1055,27 @@ msgstr ""
 "молекулалары оттегі молекулаларынан екі есе көп түзіледі, сондықтан V(H₂) : "
 "V(O₂) = 2 : 1."
 
-#: apps/labs/experiments/t01/electrolysis.py:27
+#: apps/labs/experiments/t01/electrolysis.py:28
 msgid "Cathode (−), alkaline medium"
 msgstr "Катод (−), сілтілік орта"
 
-#: apps/labs/experiments/t01/electrolysis.py:28
+#: apps/labs/experiments/t01/electrolysis.py:29
 msgid "Anode (+), alkaline medium"
 msgstr "Анод (+), сілтілік орта"
 
-#: apps/labs/experiments/t01/electrolysis.py:31
+#: apps/labs/experiments/t01/electrolysis.py:32
 msgid "Electrolyzer with two gas tubes"
 msgstr "Екі газ жинағыш түтігі бар электролизер"
 
-#: apps/labs/experiments/t01/electrolysis.py:32
+#: apps/labs/experiments/t01/electrolysis.py:33
 msgid "DC power supply"
 msgstr "Тұрақты ток көзі"
 
-#: apps/labs/experiments/t01/electrolysis.py:35
+#: apps/labs/experiments/t01/electrolysis.py:36
 msgid "AC power supply"
 msgstr "Айнымалы ток көзі"
 
-#: apps/labs/experiments/t01/electrolysis.py:39
+#: apps/labs/experiments/t01/electrolysis.py:41
 msgid ""
 "Alternating current keeps swapping the electrodes, so the gases would mix in "
 "both tubes. Electrolysis needs direct current."
@@ -1083,162 +1083,162 @@ msgstr ""
 "Айнымалы ток электродтардың полярлығын үнемі ауыстырады, сондықтан газдар "
 "екі түтікте де араласып кетеді. Электролизге тұрақты ток қажет."
 
-#: apps/labs/experiments/t01/electrolysis.py:45
+#: apps/labs/experiments/t01/electrolysis.py:48
 msgid "Select the electrolyzer"
 msgstr "Электролизерді таңдау"
 
-#: apps/labs/experiments/t01/electrolysis.py:46
+#: apps/labs/experiments/t01/electrolysis.py:49
 msgid "An electrolyzer with two gas collecting tubes appears."
 msgstr "Екі газ жинағыш түтігі бар электролизер пайда болады."
 
-#: apps/labs/experiments/t01/electrolysis.py:52
+#: apps/labs/experiments/t01/electrolysis.py:55
 msgid "Select the electrolyte"
 msgstr "Электролитті таңдау"
 
-#: apps/labs/experiments/t01/electrolysis.py:53
+#: apps/labs/experiments/t01/electrolysis.py:56
 msgid "A suitable electrolyte solution is added."
 msgstr "Қолайлы электролит ерітіндісі қосылады."
 
-#: apps/labs/experiments/t01/electrolysis.py:58
+#: apps/labs/experiments/t01/electrolysis.py:61
 msgid "Sodium hydroxide solution, 5% (NaOH)"
 msgstr "Натрий гидроксидінің ерітіндісі, 5% (NaOH)"
 
-#: apps/labs/experiments/t01/electrolysis.py:60
+#: apps/labs/experiments/t01/electrolysis.py:63
 msgid "NaOH makes the solution conductive; it is water that is decomposed."
 msgstr "NaOH ерітіндінің электр өткізгіштігін арттырады; ыдырайтын — су."
 
-#: apps/labs/experiments/t01/electrolysis.py:64
+#: apps/labs/experiments/t01/electrolysis.py:67
 msgid "Distilled water"
 msgstr "Тазартылған су"
 
-#: apps/labs/experiments/t01/electrolysis.py:65
+#: apps/labs/experiments/t01/electrolysis.py:68
 msgid ""
 "Pure water hardly conducts current: electrolysis would be extremely slow."
 msgstr "Таза су токты өте нашар өткізеді: электролиз тым баяу жүрер еді."
 
-#: apps/labs/experiments/t01/electrolysis.py:69
+#: apps/labs/experiments/t01/electrolysis.py:72
 msgid "Sodium chloride solution (NaCl)"
 msgstr "Натрий хлоридінің ерітіндісі (NaCl)"
 
-#: apps/labs/experiments/t01/electrolysis.py:70
+#: apps/labs/experiments/t01/electrolysis.py:73
 msgid "Chlorine, not oxygen, would be released at the anode."
 msgstr "Анодта оттегі емес, хлор бөлінер еді."
 
-#: apps/labs/experiments/t01/electrolysis.py:73
+#: apps/labs/experiments/t01/electrolysis.py:76
 msgid "Select the electrolyzer first."
 msgstr "Алдымен электролизерді таңдаңыз."
 
-#: apps/labs/experiments/t01/electrolysis.py:77
+#: apps/labs/experiments/t01/electrolysis.py:80
 msgid "Connect the electrodes"
 msgstr "Электродтарды жалғау"
 
-#: apps/labs/experiments/t01/electrolysis.py:78
+#: apps/labs/experiments/t01/electrolysis.py:81
 msgid "The cathode (−) and the anode (+) are marked."
 msgstr "Катод (−) пен анод (+) белгіленеді."
 
-#: apps/labs/experiments/t01/electrolysis.py:80
+#: apps/labs/experiments/t01/electrolysis.py:83
 msgid "Fill the electrolyzer with the electrolyte first."
 msgstr "Алдымен электролизерді электролитпен толтырыңыз."
 
-#: apps/labs/experiments/t01/electrolysis.py:84
+#: apps/labs/experiments/t01/electrolysis.py:87
 msgid "Switch on the DC source"
 msgstr "Тұрақты ток көзін қосу"
 
-#: apps/labs/experiments/t01/electrolysis.py:85
+#: apps/labs/experiments/t01/electrolysis.py:88
 msgid "Electrolysis starts: bubbles form on both electrodes."
 msgstr "Электролиз процесі басталады: екі электродта да көпіршіктер түзіледі."
 
-#: apps/labs/experiments/t01/electrolysis.py:88
+#: apps/labs/experiments/t01/electrolysis.py:91
 msgid "Connect the electrodes first."
 msgstr "Алдымен электродтарды жалғаңыз."
 
-#: apps/labs/experiments/t01/electrolysis.py:92
+#: apps/labs/experiments/t01/electrolysis.py:95
 msgid "Run the time"
 msgstr "Уақытты жүргізу"
 
-#: apps/labs/experiments/t01/electrolysis.py:93
+#: apps/labs/experiments/t01/electrolysis.py:96
 msgid "The gas volumes change; the V(t) graph is drawn."
 msgstr "Газ көлемдерінің өзгеруі көрсетіледі; V(t) графигі сызылады."
 
-#: apps/labs/experiments/t01/electrolysis.py:95
+#: apps/labs/experiments/t01/electrolysis.py:98
 msgid "Switch on the power supply first."
 msgstr "Алдымен ток көзін қосыңыз."
 
-#: apps/labs/experiments/t01/electrolysis.py:99
+#: apps/labs/experiments/t01/electrolysis.py:102
 msgid "Compare the gas volumes"
 msgstr "Газ көлемдерін салыстыру"
 
-#: apps/labs/experiments/t01/electrolysis.py:100
+#: apps/labs/experiments/t01/electrolysis.py:103
 msgid "The ratio H₂ : O₂ = 2 : 1 is determined."
 msgstr "H₂ : O₂ қатынасы 2 : 1 екені анықталады."
 
-#: apps/labs/experiments/t01/electrolysis.py:102
+#: apps/labs/experiments/t01/electrolysis.py:105
 msgid "Let the electrolysis run first."
 msgstr "Алдымен электролизді жүргізіңіз."
 
-#: apps/labs/experiments/t01/electrolysis.py:104
+#: apps/labs/experiments/t01/electrolysis.py:107
 msgid "Draw a conclusion"
 msgstr "Қорытынды жасау"
 
-#: apps/labs/experiments/t01/electrolysis.py:104
+#: apps/labs/experiments/t01/electrolysis.py:107
 msgid "Write the electrode reactions."
 msgstr "Электродтық реакцияларды жазыңыз."
 
-#: apps/labs/experiments/t01/electrolysis.py:107
-#: apps/labs/experiments/t01/hydrogen.py:89
-#: apps/labs/experiments/t01/oxygen.py:102 apps/labs/experiments/t01/rate.py:84
+#: apps/labs/experiments/t01/electrolysis.py:110
+#: apps/labs/experiments/t01/hydrogen.py:90
+#: apps/labs/experiments/t01/oxygen.py:109 apps/labs/experiments/t01/rate.py:87
 msgid "Finish the experiment"
 msgstr "Тәжірибені аяқтау"
 
-#: apps/labs/experiments/t01/electrolysis.py:108
-#: apps/labs/experiments/t01/hydrogen.py:90
-#: apps/labs/experiments/t01/oxygen.py:103 apps/labs/experiments/t01/rate.py:85
+#: apps/labs/experiments/t01/electrolysis.py:111
+#: apps/labs/experiments/t01/hydrogen.py:91
+#: apps/labs/experiments/t01/oxygen.py:110 apps/labs/experiments/t01/rate.py:88
 msgid "The results are saved and the analysis task opens."
 msgstr "Нәтижелер сақталып, талдау тапсырмасы ашылады."
 
-#: apps/labs/experiments/t01/electrolysis.py:110
-#: apps/labs/experiments/t01/hydrogen.py:92
-#: apps/labs/experiments/t01/oxygen.py:105 apps/labs/experiments/t01/rate.py:87
+#: apps/labs/experiments/t01/electrolysis.py:113
+#: apps/labs/experiments/t01/hydrogen.py:93
+#: apps/labs/experiments/t01/oxygen.py:112 apps/labs/experiments/t01/rate.py:90
 msgid "Fill in the lab journal first."
 msgstr "Алдымен зертханалық журналды толтырыңыз."
 
-#: apps/labs/experiments/t01/electrolysis.py:114
+#: apps/labs/experiments/t01/electrolysis.py:117
 msgid "Volume of gas at the cathode"
 msgstr "Катодтағы газ көлемі"
 
-#: apps/labs/experiments/t01/electrolysis.py:114
-#: apps/labs/experiments/t01/electrolysis.py:115
-#: apps/labs/experiments/t01/hydrogen.py:97
-#: apps/labs/experiments/t01/rate.py:91 apps/labs/experiments/t01/rate.py:92
-#: apps/labs/views.py:60
+#: apps/labs/experiments/t01/electrolysis.py:117
+#: apps/labs/experiments/t01/electrolysis.py:118
+#: apps/labs/experiments/t01/hydrogen.py:98
+#: apps/labs/experiments/t01/rate.py:94 apps/labs/experiments/t01/rate.py:95
+#: apps/labs/views.py:62
 msgid "mL"
 msgstr "мл"
 
-#: apps/labs/experiments/t01/electrolysis.py:115
+#: apps/labs/experiments/t01/electrolysis.py:118
 msgid "Volume of gas at the anode"
 msgstr "Анодтағы газ көлемі"
 
-#: apps/labs/experiments/t01/electrolysis.py:116
+#: apps/labs/experiments/t01/electrolysis.py:119
 msgid "Gas at the cathode"
 msgstr "Катодта бөлінетін газ"
 
-#: apps/labs/experiments/t01/electrolysis.py:117
+#: apps/labs/experiments/t01/electrolysis.py:120
 msgid "Gas at the anode"
 msgstr "Анодта бөлінетін газ"
 
-#: apps/labs/experiments/t01/electrolysis.py:118
+#: apps/labs/experiments/t01/electrolysis.py:121
 msgid "Cathode reaction"
 msgstr "Катодтағы реакция"
 
-#: apps/labs/experiments/t01/electrolysis.py:119
+#: apps/labs/experiments/t01/electrolysis.py:122
 msgid "Anode reaction"
 msgstr "Анодтағы реакция"
 
-#: apps/labs/experiments/t01/electrolysis.py:124
+#: apps/labs/experiments/t01/electrolysis.py:127
 msgid "Why is the volume of hydrogen twice the volume of oxygen?"
 msgstr "Неліктен сутегінің көлемі оттегінің көлемінен екі есе көп?"
 
-#: apps/labs/experiments/t01/electrolysis.py:128
+#: apps/labs/experiments/t01/electrolysis.py:131
 msgid ""
 "Two H₂ molecules form per O₂ molecule, and equal amounts of gases occupy "
 "equal volumes"
@@ -1246,49 +1246,49 @@ msgstr ""
 "Бір O₂ молекуласына екі H₂ молекуласы түзіледі, ал газдардың бірдей зат "
 "мөлшері бірдей көлем алады"
 
-#: apps/labs/experiments/t01/electrolysis.py:131
+#: apps/labs/experiments/t01/electrolysis.py:134
 msgid "Hydrogen is lighter than oxygen"
 msgstr "Сутегі оттегіден жеңіл"
 
-#: apps/labs/experiments/t01/electrolysis.py:132
+#: apps/labs/experiments/t01/electrolysis.py:135
 msgid "Hydrogen reacts faster"
 msgstr "Сутегі тезірек әрекеттеседі"
 
-#: apps/labs/experiments/t01/electrolysis.py:137
+#: apps/labs/experiments/t01/electrolysis.py:140
 msgid "Which process takes place at the cathode?"
 msgstr "Катодта қандай процесс жүреді?"
 
-#: apps/labs/experiments/t01/electrolysis.py:139
-#: apps/labs/experiments/t01/hydrogen.py:21
+#: apps/labs/experiments/t01/electrolysis.py:142
+#: apps/labs/experiments/t01/hydrogen.py:22
 msgid "Reduction"
 msgstr "Тотықсыздану"
 
-#: apps/labs/experiments/t01/electrolysis.py:140
-#: apps/labs/experiments/t01/hydrogen.py:20
+#: apps/labs/experiments/t01/electrolysis.py:143
+#: apps/labs/experiments/t01/hydrogen.py:21
 msgid "Oxidation"
 msgstr "Тотығу"
 
-#: apps/labs/experiments/t01/electrolysis.py:141
+#: apps/labs/experiments/t01/electrolysis.py:144
 msgid "Neither"
 msgstr "Ешқайсысы"
 
-#: apps/labs/experiments/t01/electrolysis.py:146
+#: apps/labs/experiments/t01/electrolysis.py:149
 msgid "Why is NaOH added to the water?"
 msgstr "Суға NaOH не үшін қосылады?"
 
-#: apps/labs/experiments/t01/electrolysis.py:148
+#: apps/labs/experiments/t01/electrolysis.py:151
 msgid "To make the solution conduct current"
 msgstr "Ерітінді ток өткізуі үшін"
 
-#: apps/labs/experiments/t01/electrolysis.py:149
+#: apps/labs/experiments/t01/electrolysis.py:152
 msgid "NaOH itself is decomposed"
 msgstr "NaOH өзі ыдырайды"
 
-#: apps/labs/experiments/t01/electrolysis.py:150
+#: apps/labs/experiments/t01/electrolysis.py:153
 msgid "To obtain more hydrogen from NaOH"
 msgstr "NaOH-тан көбірек сутегі алу үшін"
 
-#: apps/labs/experiments/t01/electrolysis.py:153
+#: apps/labs/experiments/t01/electrolysis.py:157
 msgid ""
 "How would you show the class which tube contains hydrogen and which contains "
 "oxygen?"
@@ -1296,18 +1296,18 @@ msgstr ""
 "Қай түтікте сутегі, қайсысында оттегі бар екенін сыныпқа қалай көрсетер "
 "едіңіз?"
 
-#: apps/labs/experiments/t01/hydrogen.py:14
+#: apps/labs/experiments/t01/hydrogen.py:15
 msgid "Obtaining and collecting hydrogen"
 msgstr "Сутегіні алу және жинау"
 
-#: apps/labs/experiments/t01/hydrogen.py:15
+#: apps/labs/experiments/t01/hydrogen.py:16
 msgid ""
 "Obtain hydrogen from zinc and hydrochloric acid and collect it by "
 "displacement of water."
 msgstr ""
 "Мырыш пен тұз қышқылынан сутегі алып, оны суды ығыстыру әдісімен жинау."
 
-#: apps/labs/experiments/t01/hydrogen.py:18
+#: apps/labs/experiments/t01/hydrogen.py:19
 msgid ""
 "Zinc gives up electrons and is oxidised, while hydrogen ions accept "
 "electrons and are reduced."
@@ -1315,35 +1315,35 @@ msgstr ""
 "Мырыш электрон беріп тотығады, ал сутегі иондары электрон қабылдап "
 "тотықсызданады."
 
-#: apps/labs/experiments/t01/hydrogen.py:24
+#: apps/labs/experiments/t01/hydrogen.py:25
 msgid "Flask"
 msgstr "Колба"
 
-#: apps/labs/experiments/t01/hydrogen.py:25
+#: apps/labs/experiments/t01/hydrogen.py:26
 msgid "Stopper with gas delivery tube"
 msgstr "Газөткізгіш түтігі бар тығын"
 
-#: apps/labs/experiments/t01/hydrogen.py:26
+#: apps/labs/experiments/t01/hydrogen.py:27
 msgid "Trough with water"
 msgstr "Суы бар ыдыс"
 
-#: apps/labs/experiments/t01/hydrogen.py:27
+#: apps/labs/experiments/t01/hydrogen.py:28
 msgid "Gas collecting cylinder"
 msgstr "Газ жинағыш цилиндр"
 
-#: apps/labs/experiments/t01/hydrogen.py:28
+#: apps/labs/experiments/t01/hydrogen.py:29
 msgid "Zinc granules"
 msgstr "Мырыш түйіршіктері"
 
-#: apps/labs/experiments/t01/hydrogen.py:29
+#: apps/labs/experiments/t01/hydrogen.py:30
 msgid "Hydrochloric acid, 10%"
 msgstr "Тұз қышқылы, 10%"
 
-#: apps/labs/experiments/t01/hydrogen.py:32
+#: apps/labs/experiments/t01/hydrogen.py:33
 msgid "Copper turnings"
 msgstr "Мыс жоңқалары"
 
-#: apps/labs/experiments/t01/hydrogen.py:37
+#: apps/labs/experiments/t01/hydrogen.py:38
 msgid ""
 "Copper does not displace hydrogen from acids: it stands after hydrogen in "
 "the activity series."
@@ -1351,53 +1351,53 @@ msgstr ""
 "Мыс қышқылдардан сутегіні ығыстырмайды: ол белсенділік қатарында сутегіден "
 "кейін тұр."
 
-#: apps/labs/experiments/t01/hydrogen.py:42
+#: apps/labs/experiments/t01/hydrogen.py:43
 msgid "Select the flask"
 msgstr "Колбаны таңдау"
 
-#: apps/labs/experiments/t01/hydrogen.py:42
+#: apps/labs/experiments/t01/hydrogen.py:43
 msgid "The flask appears on the bench."
 msgstr "Колба жұмыс үстелінде пайда болады."
 
-#: apps/labs/experiments/t01/hydrogen.py:45
+#: apps/labs/experiments/t01/hydrogen.py:46
 msgid "Add zinc"
 msgstr "Мырыш қосу"
 
-#: apps/labs/experiments/t01/hydrogen.py:46
+#: apps/labs/experiments/t01/hydrogen.py:47
 msgid "Zinc granules are placed in the flask."
 msgstr "Колбаға мырыш түйіршіктері орналастырылады."
 
-#: apps/labs/experiments/t01/hydrogen.py:49
+#: apps/labs/experiments/t01/hydrogen.py:50
 msgid "Put the flask on the bench first."
 msgstr "Алдымен колбаны жұмыс үстеліне қойыңыз."
 
-#: apps/labs/experiments/t01/hydrogen.py:53
+#: apps/labs/experiments/t01/hydrogen.py:54
 msgid "Assemble the gas delivery system"
 msgstr "Газөткізгіш жүйені құрастыру"
 
-#: apps/labs/experiments/t01/hydrogen.py:54
+#: apps/labs/experiments/t01/hydrogen.py:55
 msgid "The stopper, the tube and the water-filled gas collector are attached."
 msgstr "Тығын, түтік және суы бар газ жинау жүйесі қосылады."
 
-#: apps/labs/experiments/t01/hydrogen.py:57
+#: apps/labs/experiments/t01/hydrogen.py:58
 msgid "Put zinc into the flask before closing it with the stopper."
 msgstr "Колбаны тығынмен жаппас бұрын оған мырыш салыңыз."
 
-#: apps/labs/experiments/t01/hydrogen.py:58
+#: apps/labs/experiments/t01/hydrogen.py:59
 msgid ""
 "You need three items: the stopper with the tube, the trough with water and "
 "the cylinder."
 msgstr "Үш зат керек: түтігі бар тығын, суы бар ыдыс және цилиндр."
 
-#: apps/labs/experiments/t01/hydrogen.py:62
+#: apps/labs/experiments/t01/hydrogen.py:63
 msgid "Add the acid"
 msgstr "Қышқылды қосу"
 
-#: apps/labs/experiments/t01/hydrogen.py:63
+#: apps/labs/experiments/t01/hydrogen.py:64
 msgid "The reaction starts and bubbles appear."
 msgstr "Реакция басталып, көпіршіктер пайда болады."
 
-#: apps/labs/experiments/t01/hydrogen.py:67
+#: apps/labs/experiments/t01/hydrogen.py:68
 msgid ""
 "Assemble the gas delivery system first: otherwise hydrogen escapes into the "
 "room, and a mixture of hydrogen with air is explosive."
@@ -1405,128 +1405,128 @@ msgstr ""
 "Алдымен газөткізгіш жүйені құрастырыңыз: әйтпесе сутегі бөлмеге тарайды, ал "
 "сутегінің ауамен қоспасы жарылғыш."
 
-#: apps/labs/experiments/t01/hydrogen.py:74
+#: apps/labs/experiments/t01/hydrogen.py:75
 msgid "Collect the gas"
 msgstr "Газды жинау"
 
-#: apps/labs/experiments/t01/hydrogen.py:75
+#: apps/labs/experiments/t01/hydrogen.py:76
 msgid "Hydrogen displaces water from the cylinder."
 msgstr "Газ жинағыштағы су сутегімен ығыстырылады."
 
-#: apps/labs/experiments/t01/hydrogen.py:77
+#: apps/labs/experiments/t01/hydrogen.py:78
 msgid "There is no gas to collect yet: start the reaction first."
 msgstr "Жинайтын газ әлі жоқ: алдымен реакцияны бастаңыз."
 
-#: apps/labs/experiments/t01/hydrogen.py:81
+#: apps/labs/experiments/t01/hydrogen.py:82
 msgid "Observe the result"
 msgstr "Нәтижені бақылау"
 
-#: apps/labs/experiments/t01/hydrogen.py:82
+#: apps/labs/experiments/t01/hydrogen.py:83
 msgid "The gas volume and the reaction equation are shown."
 msgstr "Газ көлемі мен реакция теңдеуі көрсетіледі."
 
-#: apps/labs/experiments/t01/hydrogen.py:84
+#: apps/labs/experiments/t01/hydrogen.py:85
 msgid "Wait until the gas has been collected."
 msgstr "Газ жиналғанша күтіңіз."
 
-#: apps/labs/experiments/t01/hydrogen.py:86
+#: apps/labs/experiments/t01/hydrogen.py:87
 msgid "Write to the lab journal"
 msgstr "Зертханалық журналға жазу"
 
-#: apps/labs/experiments/t01/hydrogen.py:86
+#: apps/labs/experiments/t01/hydrogen.py:87
 msgid "Record your observations."
 msgstr "Бақылауларыңызды енгізіңіз."
 
-#: apps/labs/experiments/t01/hydrogen.py:96
+#: apps/labs/experiments/t01/hydrogen.py:97
 msgid "What did you observe in the flask after adding the acid?"
 msgstr "Қышқыл қосқаннан кейін колбада не байқадыңыз?"
 
-#: apps/labs/experiments/t01/hydrogen.py:97
+#: apps/labs/experiments/t01/hydrogen.py:98
 msgid "Volume of hydrogen collected"
 msgstr "Жиналған сутегінің көлемі"
 
-#: apps/labs/experiments/t01/hydrogen.py:98
+#: apps/labs/experiments/t01/hydrogen.py:99
 msgid "What happened when the gas was tested with a flame?"
 msgstr "Газды жалынмен тексергенде не болды?"
 
-#: apps/labs/experiments/t01/hydrogen.py:101
+#: apps/labs/experiments/t01/hydrogen.py:102
 msgid "Why can hydrogen be collected by displacing water?"
 msgstr "Неліктен сутегіні суды ығыстыру әдісімен жинауға болады?"
 
-#: apps/labs/experiments/t01/hydrogen.py:104
+#: apps/labs/experiments/t01/hydrogen.py:105
 msgid "It is practically insoluble in water"
 msgstr "Ол суда іс жүзінде ерімейді"
 
-#: apps/labs/experiments/t01/hydrogen.py:105
+#: apps/labs/experiments/t01/hydrogen.py:106
 msgid "It is heavier than water"
 msgstr "Ол судан ауыр"
 
-#: apps/labs/experiments/t01/hydrogen.py:106
+#: apps/labs/experiments/t01/hydrogen.py:107
 msgid "It reacts with water"
 msgstr "Ол сумен әрекеттеседі"
 
-#: apps/labs/experiments/t01/hydrogen.py:113
+#: apps/labs/experiments/t01/hydrogen.py:114
 msgid ""
 "Which particle is the oxidising agent in the reaction Zn + 2HCl → ZnCl₂ + H₂?"
 msgstr ""
 "Zn + 2HCl → ZnCl₂ + H₂ реакциясында қай бөлшек тотықтырғыш болып табылады?"
 
-#: apps/labs/experiments/t01/hydrogen.py:115
+#: apps/labs/experiments/t01/hydrogen.py:116
 msgid "H⁺ ions of the acid"
 msgstr "Қышқылдың H⁺ иондары"
 
-#: apps/labs/experiments/t01/hydrogen.py:116
+#: apps/labs/experiments/t01/hydrogen.py:117
 msgid "Zinc atoms"
 msgstr "Мырыш атомдары"
 
-#: apps/labs/experiments/t01/hydrogen.py:117
+#: apps/labs/experiments/t01/hydrogen.py:118
 msgid "Cl⁻ ions"
 msgstr "Cl⁻ иондары"
 
-#: apps/labs/experiments/t01/hydrogen.py:118
+#: apps/labs/experiments/t01/hydrogen.py:119
 msgid "H₂ molecules"
 msgstr "H₂ молекулалары"
 
-#: apps/labs/experiments/t01/hydrogen.py:123
+#: apps/labs/experiments/t01/hydrogen.py:124
 msgid ""
 "Hydrogen can also be collected by displacing air. How should the vessel be "
 "held?"
 msgstr ""
 "Сутегіні ауаны ығыстыру арқылы да жинауға болады. Ыдысты қалай ұстау керек?"
 
-#: apps/labs/experiments/t01/hydrogen.py:125
+#: apps/labs/experiments/t01/hydrogen.py:126
 msgid "Upside down: hydrogen is lighter than air"
 msgstr "Төңкеріп: сутегі ауадан жеңіл"
 
-#: apps/labs/experiments/t01/hydrogen.py:126
+#: apps/labs/experiments/t01/hydrogen.py:127
 msgid "Mouth up: hydrogen is heavier than air"
 msgstr "Аузын жоғары қаратып: сутегі ауадан ауыр"
 
-#: apps/labs/experiments/t01/hydrogen.py:127
+#: apps/labs/experiments/t01/hydrogen.py:128
 msgid "It does not matter"
 msgstr "Маңызы жоқ"
 
-#: apps/labs/experiments/t01/hydrogen.py:132
+#: apps/labs/experiments/t01/hydrogen.py:133
 msgid "Which metal does not displace hydrogen from hydrochloric acid?"
 msgstr "Қай металл тұз қышқылынан сутегіні ығыстырмайды?"
 
-#: apps/labs/experiments/t01/hydrogen.py:134
+#: apps/labs/experiments/t01/hydrogen.py:135
 msgid "Copper"
 msgstr "Мыс"
 
-#: apps/labs/experiments/t01/hydrogen.py:135
+#: apps/labs/experiments/t01/hydrogen.py:136
 msgid "Zinc"
 msgstr "Мырыш"
 
-#: apps/labs/experiments/t01/hydrogen.py:136
+#: apps/labs/experiments/t01/hydrogen.py:137
 msgid "Iron"
 msgstr "Темір"
 
-#: apps/labs/experiments/t01/hydrogen.py:137
+#: apps/labs/experiments/t01/hydrogen.py:138
 msgid "Magnesium"
 msgstr "Магний"
 
-#: apps/labs/experiments/t01/hydrogen.py:142
+#: apps/labs/experiments/t01/hydrogen.py:143
 msgid ""
 "How would you explain to school students why hydrogen must be tested for "
 "purity before it is ignited?"
@@ -1534,11 +1534,11 @@ msgstr ""
 "Сутегіні тұтатпас бұрын оның тазалығын неліктен тексеру керек екенін "
 "оқушыларға қалай түсіндірер едіңіз?"
 
-#: apps/labs/experiments/t01/oxygen.py:28
+#: apps/labs/experiments/t01/oxygen.py:29
 msgid "Obtaining oxygen"
 msgstr "Оттегіні алу"
 
-#: apps/labs/experiments/t01/oxygen.py:29
+#: apps/labs/experiments/t01/oxygen.py:30
 msgid ""
 "Obtain oxygen by decomposing hydrogen peroxide and compare the rate with and "
 "without a catalyst."
@@ -1546,7 +1546,7 @@ msgstr ""
 "Сутегі пероксидін ыдыратып оттегі алу және катализатормен және "
 "катализаторсыз жылдамдықты салыстыру."
 
-#: apps/labs/experiments/t01/oxygen.py:33
+#: apps/labs/experiments/t01/oxygen.py:34
 msgid ""
 "Manganese(IV) oxide is a catalyst: it speeds up the decomposition of "
 "hydrogen peroxide and remains unchanged at the end of the reaction."
@@ -1554,19 +1554,19 @@ msgstr ""
 "Марганец(IV) оксиді — катализатор: ол сутегі пероксидінің ыдырауын "
 "жылдамдатады және реакция соңында өзгеріссіз қалады."
 
-#: apps/labs/experiments/t01/oxygen.py:37
+#: apps/labs/experiments/t01/oxygen.py:38
 msgid "Test tube"
 msgstr "Пробирка"
 
-#: apps/labs/experiments/t01/oxygen.py:40
+#: apps/labs/experiments/t01/oxygen.py:41
 msgid "Gas collector with water"
 msgstr "Суы бар газ жинағыш"
 
-#: apps/labs/experiments/t01/oxygen.py:43
+#: apps/labs/experiments/t01/oxygen.py:44
 msgid "Potassium permanganate"
 msgstr "Калий перманганаты"
 
-#: apps/labs/experiments/t01/oxygen.py:48
+#: apps/labs/experiments/t01/oxygen.py:50
 msgid ""
 "KMnO₄ also gives oxygen, but only when heated. This experiment studies the "
 "catalytic decomposition of H₂O₂."
@@ -1574,43 +1574,43 @@ msgstr ""
 "KMnO₄ та оттегі береді, бірақ тек қыздырғанда. Бұл тәжірибеде H₂O₂-нің "
 "каталитикалық ыдырауы зерттеледі."
 
-#: apps/labs/experiments/t01/oxygen.py:53
+#: apps/labs/experiments/t01/oxygen.py:57
 msgid "Take a test tube"
 msgstr "Пробирканы алу"
 
-#: apps/labs/experiments/t01/oxygen.py:53
+#: apps/labs/experiments/t01/oxygen.py:57
 msgid "A test tube is placed on the bench."
 msgstr "Виртуалды үстелге пробирка қойылады."
 
-#: apps/labs/experiments/t01/oxygen.py:56
+#: apps/labs/experiments/t01/oxygen.py:61
 msgid "Select the H₂O₂ solution"
 msgstr "H₂O₂ ерітіндісін таңдау"
 
-#: apps/labs/experiments/t01/oxygen.py:57
+#: apps/labs/experiments/t01/oxygen.py:62
 msgid "10 mL of the solution is poured into the test tube."
 msgstr "Ерітінді пробиркаға енгізіледі (10 мл)."
 
-#: apps/labs/experiments/t01/oxygen.py:60
+#: apps/labs/experiments/t01/oxygen.py:65
 msgid "Put the test tube on the bench first."
 msgstr "Алдымен пробирканы үстелге қойыңыз."
 
-#: apps/labs/experiments/t01/oxygen.py:64
+#: apps/labs/experiments/t01/oxygen.py:69
 msgid "Attach the gas collector"
 msgstr "Газ жинағышты қосу"
 
-#: apps/labs/experiments/t01/oxygen.py:65
+#: apps/labs/experiments/t01/oxygen.py:70
 msgid "The delivery tube leads to the collector filled with water."
 msgstr "Газөткізгіш түтік суы бар газ жинағышқа жалғанады."
 
-#: apps/labs/experiments/t01/oxygen.py:68
+#: apps/labs/experiments/t01/oxygen.py:73
 msgid "Pour the solution into the test tube first."
 msgstr "Алдымен ерітіндіні пробиркаға құйыңыз."
 
-#: apps/labs/experiments/t01/oxygen.py:72
+#: apps/labs/experiments/t01/oxygen.py:77
 msgid "Start the reaction without a catalyst"
 msgstr "Реакцияны катализаторсыз бастау"
 
-#: apps/labs/experiments/t01/oxygen.py:73
+#: apps/labs/experiments/t01/oxygen.py:78
 msgid ""
 "Only single bubbles appear: without a catalyst the decomposition is very "
 "slow."
@@ -1618,19 +1618,19 @@ msgstr ""
 "Тек жекелеген көпіршіктер пайда болады: катализаторсыз ыдырау өте баяу "
 "жүреді."
 
-#: apps/labs/experiments/t01/oxygen.py:75
+#: apps/labs/experiments/t01/oxygen.py:80
 msgid "Attach the gas collector first, otherwise the gas will be lost."
 msgstr "Алдымен газ жинағышты қосыңыз, әйтпесе газ жоғалады."
 
-#: apps/labs/experiments/t01/oxygen.py:79
+#: apps/labs/experiments/t01/oxygen.py:84
 msgid "Add the MnO₂ catalyst"
 msgstr "MnO₂ катализаторын қосу"
 
-#: apps/labs/experiments/t01/oxygen.py:80
+#: apps/labs/experiments/t01/oxygen.py:85
 msgid "Black catalyst powder is added to the solution."
 msgstr "Қара түсті катализатор ұнтағы ерітіндіге қосылады."
 
-#: apps/labs/experiments/t01/oxygen.py:83
+#: apps/labs/experiments/t01/oxygen.py:89
 msgid ""
 "First observe the reaction without a catalyst, otherwise you will have "
 "nothing to compare with."
@@ -1638,137 +1638,137 @@ msgstr ""
 "Алдымен реакцияны катализаторсыз бақылаңыз, әйтпесе салыстыратын ештеңе "
 "болмайды."
 
-#: apps/labs/experiments/t01/oxygen.py:87
+#: apps/labs/experiments/t01/oxygen.py:94
 msgid "Start the reaction"
 msgstr "Реакцияны бастау"
 
-#: apps/labs/experiments/t01/oxygen.py:88
+#: apps/labs/experiments/t01/oxygen.py:95
 msgid "Gas bubbles are released intensively and oxygen collects."
 msgstr "Газ көпіршіктері қарқынды бөлініп, оттегі жиналады."
 
-#: apps/labs/experiments/t01/oxygen.py:90
+#: apps/labs/experiments/t01/oxygen.py:97
 msgid "Add the catalyst first."
 msgstr "Алдымен катализаторды қосыңыз."
 
-#: apps/labs/experiments/t01/oxygen.py:94
+#: apps/labs/experiments/t01/oxygen.py:101
 msgid "Observe"
 msgstr "Бақылау"
 
-#: apps/labs/experiments/t01/oxygen.py:95
+#: apps/labs/experiments/t01/oxygen.py:102
 msgid ""
 "A glowing splint flares up in oxygen. The rates of the two runs are compared."
 msgstr ""
 "Оттегіде бықсып тұрған шамшырақ лап етіп жанады. Екі тәжірибенің "
 "жылдамдықтары салыстырылады."
 
-#: apps/labs/experiments/t01/oxygen.py:97
+#: apps/labs/experiments/t01/oxygen.py:104
 msgid "Wait until the oxygen has been collected."
 msgstr "Оттегі жиналғанша күтіңіз."
 
-#: apps/labs/experiments/t01/oxygen.py:99
+#: apps/labs/experiments/t01/oxygen.py:106
 msgid "Record the result"
 msgstr "Нәтижені тіркеу"
 
-#: apps/labs/experiments/t01/oxygen.py:99
+#: apps/labs/experiments/t01/oxygen.py:106
 msgid "Fill in the observation journal."
 msgstr "Бақылау журналын толтырыңыз."
 
-#: apps/labs/experiments/t01/oxygen.py:109
+#: apps/labs/experiments/t01/oxygen.py:116
 msgid "Average rate without a catalyst"
 msgstr "Катализаторсыз орташа жылдамдық"
 
-#: apps/labs/experiments/t01/oxygen.py:109
-#: apps/labs/experiments/t01/oxygen.py:110 apps/labs/views.py:62
+#: apps/labs/experiments/t01/oxygen.py:116
+#: apps/labs/experiments/t01/oxygen.py:117 apps/labs/views.py:64
 msgid "mL/min"
 msgstr "мл/мин"
 
-#: apps/labs/experiments/t01/oxygen.py:110
+#: apps/labs/experiments/t01/oxygen.py:117
 msgid "Average rate with MnO₂"
 msgstr "MnO₂ қатысындағы орташа жылдамдық"
 
-#: apps/labs/experiments/t01/oxygen.py:111
+#: apps/labs/experiments/t01/oxygen.py:118
 msgid "What happened to the glowing splint?"
 msgstr "Бықсып тұрған шамшыраққа не болды?"
 
-#: apps/labs/experiments/t01/oxygen.py:114
+#: apps/labs/experiments/t01/oxygen.py:121
 msgid "What is the role of MnO₂?"
 msgstr "MnO₂-нің рөлі қандай?"
 
-#: apps/labs/experiments/t01/oxygen.py:117
+#: apps/labs/experiments/t01/oxygen.py:124
 msgid "A catalyst: speeds up the reaction and is not consumed"
 msgstr "Катализатор: реакцияны жылдамдатады және жұмсалмайды"
 
-#: apps/labs/experiments/t01/oxygen.py:118
+#: apps/labs/experiments/t01/oxygen.py:125
 msgid "A reactant: it is consumed"
 msgstr "Әрекеттесуші зат: ол жұмсалады"
 
-#: apps/labs/experiments/t01/oxygen.py:119
+#: apps/labs/experiments/t01/oxygen.py:126
 msgid "A product of the reaction"
 msgstr "Реакция өнімі"
 
-#: apps/labs/experiments/t01/oxygen.py:126
+#: apps/labs/experiments/t01/oxygen.py:133
 msgid "Is MnO₂ consumed in the reaction?"
 msgstr "Реакцияда MnO₂ жұмсала ма?"
 
-#: apps/labs/experiments/t01/oxygen.py:128
+#: apps/labs/experiments/t01/oxygen.py:135
 msgid "No, its mass stays the same at the end"
 msgstr "Жоқ, соңында оның массасы өзгермейді"
 
-#: apps/labs/experiments/t01/oxygen.py:129
+#: apps/labs/experiments/t01/oxygen.py:136
 msgid "Yes, it is completely consumed"
 msgstr "Иә, толық жұмсалады"
 
-#: apps/labs/experiments/t01/oxygen.py:130
+#: apps/labs/experiments/t01/oxygen.py:137
 msgid "Partly"
 msgstr "Жартылай"
 
-#: apps/labs/experiments/t01/oxygen.py:135
+#: apps/labs/experiments/t01/oxygen.py:142
 msgid ""
 "What happens to the total volume of O₂ if more MnO₂ is added to the same "
 "amount of H₂O₂?"
 msgstr ""
 "H₂O₂-нің сол мөлшеріне көбірек MnO₂ қосса, O₂-нің жалпы көлеміне не болады?"
 
-#: apps/labs/experiments/t01/oxygen.py:137
+#: apps/labs/experiments/t01/oxygen.py:144
 msgid "It stays the same; only the rate changes"
 msgstr "Өзгермейді; тек жылдамдық өзгереді"
 
-#: apps/labs/experiments/t01/oxygen.py:138
+#: apps/labs/experiments/t01/oxygen.py:145
 msgid "It increases"
 msgstr "Артады"
 
-#: apps/labs/experiments/t01/oxygen.py:139
+#: apps/labs/experiments/t01/oxygen.py:146
 msgid "It decreases"
 msgstr "Азаяды"
 
-#: apps/labs/experiments/t01/oxygen.py:144
+#: apps/labs/experiments/t01/oxygen.py:151
 msgid "How is oxygen detected?"
 msgstr "Оттегіні қалай анықтайды?"
 
-#: apps/labs/experiments/t01/oxygen.py:146
+#: apps/labs/experiments/t01/oxygen.py:153
 msgid "A glowing splint flares up"
 msgstr "Бықсып тұрған шамшырақ лап етіп жанады"
 
-#: apps/labs/experiments/t01/oxygen.py:147
+#: apps/labs/experiments/t01/oxygen.py:154
 msgid "A burning splint goes out with a pop"
 msgstr "Жанып тұрған шамшырақ «пах» етіп сөнеді"
 
-#: apps/labs/experiments/t01/oxygen.py:148
+#: apps/labs/experiments/t01/oxygen.py:155
 msgid "Limewater turns cloudy"
 msgstr "Әк суы лайланады"
 
-#: apps/labs/experiments/t01/oxygen.py:151
+#: apps/labs/experiments/t01/oxygen.py:159
 msgid ""
 "Suggest a way to show students that the catalyst is not consumed in the "
 "reaction."
 msgstr ""
 "Катализатордың реакцияда жұмсалмайтынын оқушыларға көрсету тәсілін ұсыныңыз."
 
-#: apps/labs/experiments/t01/rate.py:14
+#: apps/labs/experiments/t01/rate.py:15
 msgid "Rate of hydrogen peroxide decomposition"
 msgstr "Сутегі пероксидінің ыдырау жылдамдығын зерттеу"
 
-#: apps/labs/experiments/t01/rate.py:15
+#: apps/labs/experiments/t01/rate.py:16
 msgid ""
 "Compare how fast oxygen is released in two test tubes: without a catalyst "
 "(A) and with MnO₂ (B)."
@@ -1776,7 +1776,7 @@ msgstr ""
 "Екі пробиркадағы оттегінің бөліну жылдамдығын салыстыру: катализаторсыз (А) "
 "және MnO₂ қатысында (В)."
 
-#: apps/labs/experiments/t01/rate.py:19
+#: apps/labs/experiments/t01/rate.py:20
 msgid ""
 "A catalyst changes the rate of the reaction, but it does not increase the "
 "theoretical total amount of oxygen formed when the same initial amount of "
@@ -1786,19 +1786,19 @@ msgstr ""
 "мөлшердегі сутегі пероксиді толық ыдыраған жағдайда түзілетін оттегінің "
 "теориялық жалпы мөлшерін арттырмайды."
 
-#: apps/labs/experiments/t01/rate.py:23
+#: apps/labs/experiments/t01/rate.py:24
 msgid "Test tube A"
 msgstr "А пробиркасы"
 
-#: apps/labs/experiments/t01/rate.py:24
+#: apps/labs/experiments/t01/rate.py:25
 msgid "Test tube B"
 msgstr "В пробиркасы"
 
-#: apps/labs/experiments/t01/rate.py:25
+#: apps/labs/experiments/t01/rate.py:26
 msgid "Gas syringes"
 msgstr "Газ шприцтері"
 
-#: apps/labs/experiments/t01/rate.py:34
+#: apps/labs/experiments/t01/rate.py:36
 msgid ""
 "Heating would also speed up the reaction and mix two factors. Change only "
 "one variable: the catalyst."
@@ -1806,140 +1806,140 @@ msgstr ""
 "Қыздыру да реакцияны жылдамдатады, сонда екі фактор араласып кетеді. Тек бір "
 "айнымалыны өзгертіңіз: катализаторды."
 
-#: apps/labs/experiments/t01/rate.py:40
+#: apps/labs/experiments/t01/rate.py:43
 msgid "Select two test tubes"
 msgstr "Екі пробирканы таңдау"
 
-#: apps/labs/experiments/t01/rate.py:41
+#: apps/labs/experiments/t01/rate.py:44
 msgid "Tubes A and B are placed and connected to gas syringes."
 msgstr "А және В пробиркалары орналастырылып, газ шприцтеріне жалғанады."
 
-#: apps/labs/experiments/t01/rate.py:44
+#: apps/labs/experiments/t01/rate.py:47
 msgid "You need tube A, tube B and the gas syringes."
 msgstr "А пробиркасы, В пробиркасы және газ шприцтері керек."
 
-#: apps/labs/experiments/t01/rate.py:48
+#: apps/labs/experiments/t01/rate.py:51
 msgid "Add H₂O₂"
 msgstr "H₂O₂ қосу"
 
-#: apps/labs/experiments/t01/rate.py:49
+#: apps/labs/experiments/t01/rate.py:52
 msgid "The same initial amount (5 mL) is poured into both tubes."
 msgstr "Екі пробиркаға бірдей бастапқы мөлшер (5 мл) енгізіледі."
 
-#: apps/labs/experiments/t01/rate.py:52
+#: apps/labs/experiments/t01/rate.py:55
 msgid "Place both test tubes first."
 msgstr "Алдымен екі пробирканы да орналастырыңыз."
 
-#: apps/labs/experiments/t01/rate.py:56
+#: apps/labs/experiments/t01/rate.py:59
 msgid "Add MnO₂"
 msgstr "MnO₂ қосу"
 
-#: apps/labs/experiments/t01/rate.py:57
+#: apps/labs/experiments/t01/rate.py:60
 msgid "The catalyst is added to tube B only."
 msgstr "Катализатор тек В пробиркасына енгізіледі."
 
-#: apps/labs/experiments/t01/rate.py:60
+#: apps/labs/experiments/t01/rate.py:63
 msgid "Pour H₂O₂ into both tubes first."
 msgstr "Алдымен екі пробиркаға да H₂O₂ құйыңыз."
 
-#: apps/labs/experiments/t01/rate.py:64
+#: apps/labs/experiments/t01/rate.py:67
 msgid "Start the timer"
 msgstr "Таймерді бастау"
 
-#: apps/labs/experiments/t01/rate.py:65
+#: apps/labs/experiments/t01/rate.py:68
 msgid "The comparison of the two reactions begins."
 msgstr "Реакцияларды салыстыру басталады."
 
-#: apps/labs/experiments/t01/rate.py:67
+#: apps/labs/experiments/t01/rate.py:70
 msgid "Prepare both tubes first."
 msgstr "Алдымен екі пробирканы да дайындаңыз."
 
-#: apps/labs/experiments/t01/rate.py:71
+#: apps/labs/experiments/t01/rate.py:74
 msgid "Open the graph"
 msgstr "Графикті ашу"
 
-#: apps/labs/experiments/t01/rate.py:72
+#: apps/labs/experiments/t01/rate.py:75
 msgid "The volume of O₂ released is plotted against time."
 msgstr "Бөлінген O₂ көлемінің уақытқа тәуелділігі көрсетіледі."
 
-#: apps/labs/experiments/t01/rate.py:74
+#: apps/labs/experiments/t01/rate.py:77
 msgid "Start the timer first."
 msgstr "Алдымен таймерді бастаңыз."
 
-#: apps/labs/experiments/t01/rate.py:78
+#: apps/labs/experiments/t01/rate.py:81
 msgid "Write a conclusion"
 msgstr "Қорытынды жазу"
 
-#: apps/labs/experiments/t01/rate.py:79
+#: apps/labs/experiments/t01/rate.py:82
 msgid "Explain the effect of the catalyst on the reaction rate."
 msgstr "Катализатордың реакция жылдамдығына әсерін түсіндіріңіз."
 
-#: apps/labs/experiments/t01/rate.py:91
+#: apps/labs/experiments/t01/rate.py:94
 msgid "V(O₂) in tube A after 2 min"
 msgstr "2 минуттан кейінгі А пробиркасындағы V(O₂)"
 
-#: apps/labs/experiments/t01/rate.py:92
+#: apps/labs/experiments/t01/rate.py:95
 msgid "V(O₂) in tube B after 2 min"
 msgstr "2 минуттан кейінгі В пробиркасындағы V(O₂)"
 
-#: apps/labs/experiments/t01/rate.py:95
+#: apps/labs/experiments/t01/rate.py:98
 msgid "Conclusion"
 msgstr "Қорытынды"
 
-#: apps/labs/experiments/t01/rate.py:98
+#: apps/labs/experiments/t01/rate.py:103
 msgid ""
 "The catalyst speeds up the reaction but does not change the total volume of "
 "O₂"
 msgstr ""
 "Катализатор реакцияны жылдамдатады, бірақ O₂-нің жалпы көлемін өзгертпейді"
 
-#: apps/labs/experiments/t01/rate.py:99
+#: apps/labs/experiments/t01/rate.py:106
 msgid "The catalyst increases the amount of O₂"
 msgstr "Катализатор O₂ мөлшерін арттырады"
 
-#: apps/labs/experiments/t01/rate.py:100
+#: apps/labs/experiments/t01/rate.py:107
 msgid "The catalyst slows the reaction down"
 msgstr "Катализатор реакцияны баяулатады"
 
-#: apps/labs/experiments/t01/rate.py:103
+#: apps/labs/experiments/t01/rate.py:110
 msgid "Explain the effect of the catalyst in your own words"
 msgstr "Катализатордың әсерін өз сөзіңізбен түсіндіріңіз"
 
-#: apps/labs/experiments/t01/rate.py:108
+#: apps/labs/experiments/t01/rate.py:115
 msgid ""
 "How much oxygen will be formed in each tube when H₂O₂ decomposes completely "
 "(5 mL, 3%)?"
 msgstr "H₂O₂ (5 мл, 3%) толық ыдырағанда әр пробиркада қанша оттегі түзіледі?"
 
-#: apps/labs/experiments/t01/rate.py:110
+#: apps/labs/experiments/t01/rate.py:117
 msgid "About 49 mL in both tubes"
 msgstr "Екі пробиркада да шамамен 49 мл"
 
-#: apps/labs/experiments/t01/rate.py:111
+#: apps/labs/experiments/t01/rate.py:118
 msgid "More in tube B"
 msgstr "В пробиркасында көбірек"
 
-#: apps/labs/experiments/t01/rate.py:112
+#: apps/labs/experiments/t01/rate.py:119
 msgid "More in tube A"
 msgstr "А пробиркасында көбірек"
 
-#: apps/labs/experiments/t01/rate.py:117
+#: apps/labs/experiments/t01/rate.py:124
 msgid "Which variable was changed in this experiment?"
 msgstr "Бұл тәжірибеде қай айнымалы өзгертілді?"
 
-#: apps/labs/experiments/t01/rate.py:119
+#: apps/labs/experiments/t01/rate.py:126
 msgid "Only the presence of the catalyst"
 msgstr "Тек катализатордың болуы"
 
-#: apps/labs/experiments/t01/rate.py:120
+#: apps/labs/experiments/t01/rate.py:127
 msgid "The temperature"
 msgstr "Температура"
 
-#: apps/labs/experiments/t01/rate.py:121
+#: apps/labs/experiments/t01/rate.py:128
 msgid "The concentration of H₂O₂"
 msgstr "H₂O₂ концентрациясы"
 
-#: apps/labs/experiments/t01/rate.py:124
+#: apps/labs/experiments/t01/rate.py:131
 msgid ""
 "Using the idea of activation energy, explain why MnO₂ speeds up the "
 "decomposition."
@@ -1962,333 +1962,350 @@ msgstr "Аяқталды"
 msgid "Analysis submitted"
 msgstr "Талдау жіберілді"
 
-#: apps/labs/models/attempt.py:18
+#: apps/labs/models/attempt.py:24
+msgid ""
+"Empty for a teacher's preview and for attempts made before the course "
+"structure"
+msgstr "Мұғалімнің алдын ала қарауында және курс құрылымына дейінгі талпыныстарда бос"
+
+#: apps/labs/models/attempt.py:35
 msgid "experiment"
 msgstr "тәжірибе"
 
-#: apps/labs/models/attempt.py:19
-msgid "Snapshot at start"
-msgstr "Басталған сәттегі мәні"
+#: apps/labs/models/attempt.py:37
+msgid "Snapshot at start (from the enrolment)"
+msgstr "Басталған сәттегі мәні (курсқа жазылудан)"
 
-#: apps/labs/models/attempt.py:26
+#: apps/labs/models/attempt.py:45
 msgid "order errors"
 msgstr "рет қателері"
 
-#: apps/labs/models/attempt.py:27
+#: apps/labs/models/attempt.py:46
 msgid "safety warnings"
 msgstr "қауіпсіздік ескертулері"
 
-#: apps/labs/models/attempt.py:28
+#: apps/labs/models/attempt.py:47
 msgid "wrong equipment or reagent"
 msgstr "қате құрал немесе реагент"
 
-#: apps/labs/models/attempt.py:29
+#: apps/labs/models/attempt.py:48
 msgid "wrong choices"
 msgstr "қате таңдаулар"
 
-#: apps/labs/models/attempt.py:30
+#: apps/labs/models/attempt.py:49
 msgid "hints used"
 msgstr "қолданылған кеңестер"
 
-#: apps/labs/models/attempt.py:31
+#: apps/labs/models/attempt.py:50
 msgid "time per step, ms"
 msgstr "әр қадамға кеткен уақыт, мс"
 
-#: apps/labs/models/attempt.py:33
+#: apps/labs/models/attempt.py:52
 msgid "lab journal"
 msgstr "зертханалық журнал"
 
-#: apps/labs/models/attempt.py:34
+#: apps/labs/models/attempt.py:53
 msgid "journal: correct choices"
 msgstr "журнал: дұрыс таңдаулар"
 
-#: apps/labs/models/attempt.py:35
+#: apps/labs/models/attempt.py:54
 msgid "journal: choice fields"
 msgstr "журнал: таңдау өрістері"
 
-#: apps/labs/models/attempt.py:36
+#: apps/labs/models/attempt.py:55
 msgid "analysis answers"
 msgstr "талдау жауаптары"
 
-#: apps/labs/models/attempt.py:37
+#: apps/labs/models/attempt.py:56
 msgid "analysis: correct"
 msgstr "талдау: дұрыс"
 
-#: apps/labs/models/attempt.py:38
+#: apps/labs/models/attempt.py:57
 msgid "analysis: closed questions"
 msgstr "талдау: жабық сұрақтар"
 
-#: apps/labs/models/attempt.py:43
+#: apps/labs/models/attempt.py:59 apps/progress/models/progress.py:28
+#: apps/progress/models/progress.py:83 apps/progress/models/progress.py:171
+msgid "score, %"
+msgstr "ұпай, %"
+
+#: apps/labs/models/attempt.py:64
+msgid ""
+"Process, journal and analysis by the lab's scoring formula; set when the "
+"analysis is sent"
+msgstr "Зертхананың бағалау формуласы бойынша үдеріс, журнал және талдау; талдау жіберілгенде қойылады"
+
+#: apps/labs/models/attempt.py:70
 msgid "lab attempt"
 msgstr "зертханалық талпыныс"
 
-#: apps/labs/models/attempt.py:44
+#: apps/labs/models/attempt.py:71
 msgid "lab attempts"
 msgstr "зертханалық талпыныстар"
 
-#: apps/labs/models/attempt.py:54
+#: apps/labs/models/attempt.py:81
 msgid "Start"
 msgstr "Бастау"
 
-#: apps/labs/models/attempt.py:55
+#: apps/labs/models/attempt.py:82
 msgid "Item placed"
 msgstr "Зат қойылды"
 
-#: apps/labs/models/attempt.py:56
+#: apps/labs/models/attempt.py:83
 msgid "Wrong item"
 msgstr "Қате зат"
 
-#: apps/labs/models/attempt.py:57
+#: apps/labs/models/attempt.py:84
 msgid "Command"
 msgstr "Команда"
 
-#: apps/labs/models/attempt.py:58
+#: apps/labs/models/attempt.py:85
 msgid "Step done"
 msgstr "Қадам орындалды"
 
-#: apps/labs/models/attempt.py:59
+#: apps/labs/models/attempt.py:86
 msgid "Order error"
 msgstr "Рет қатесі"
 
-#: apps/labs/models/attempt.py:60
+#: apps/labs/models/attempt.py:87
 msgid "Safety warning"
 msgstr "Қауіпсіздік ескертуі"
 
-#: apps/labs/models/attempt.py:61
+#: apps/labs/models/attempt.py:88
 msgid "Wrong choice"
 msgstr "Қате таңдау"
 
-#: apps/labs/models/attempt.py:62 apps/labs/views.py:44
+#: apps/labs/models/attempt.py:89 apps/labs/views.py:46
 #: ui/templates/student/partials/practice_field.html:86
 msgid "Hint"
 msgstr "Кеңес"
 
-#: apps/labs/models/attempt.py:63
+#: apps/labs/models/attempt.py:90
 msgid "Journal saved"
 msgstr "Журнал сақталды"
 
-#: apps/labs/models/attempt.py:64
+#: apps/labs/models/attempt.py:91
 msgid "Finish"
 msgstr "Аяқтау"
 
-#: apps/labs/models/attempt.py:65
+#: apps/labs/models/attempt.py:92
 msgid "Restart"
 msgstr "Қайта бастау"
 
-#: apps/labs/models/attempt.py:68
+#: apps/labs/models/attempt.py:95
 msgid "sequence"
 msgstr "реттік нөмірі"
 
-#: apps/labs/models/attempt.py:69
+#: apps/labs/models/attempt.py:96
 msgid "time from start, ms"
 msgstr "басынан бергі уақыт, мс"
 
-#: apps/labs/models/attempt.py:70
+#: apps/labs/models/attempt.py:97
 msgid "type"
 msgstr "түрі"
 
-#: apps/labs/models/attempt.py:71
+#: apps/labs/models/attempt.py:98
 msgid "step"
 msgstr "қадам"
 
-#: apps/labs/models/attempt.py:72
+#: apps/labs/models/attempt.py:99
 msgid "payload"
 msgstr "деректер"
 
-#: apps/labs/models/attempt.py:78
+#: apps/labs/models/attempt.py:105
 msgid "lab event"
 msgstr "зертхана оқиғасы"
 
-#: apps/labs/models/attempt.py:79
+#: apps/labs/models/attempt.py:106
 msgid "lab events"
 msgstr "зертхана оқиғалары"
 
-#: apps/labs/views.py:28
+#: apps/labs/views.py:30
 msgid "Equipment and reagents"
 msgstr "Құралдар мен реагенттер"
 
-#: apps/labs/views.py:29
+#: apps/labs/views.py:31
 msgid "Glassware"
 msgstr "Шыны ыдыстар"
 
-#: apps/labs/views.py:30
+#: apps/labs/views.py:32
 msgid "Devices"
 msgstr "Аспаптар"
 
-#: apps/labs/views.py:31
+#: apps/labs/views.py:33
 msgid "Reagents"
 msgstr "Реагенттер"
 
-#: apps/labs/views.py:32
+#: apps/labs/views.py:34
 msgid "Virtual bench"
 msgstr "Виртуалды жұмыс үстелі"
 
-#: apps/labs/views.py:33
+#: apps/labs/views.py:35
 msgid "Drag equipment here or use the commands below."
 msgstr ""
 "Құралдарды осында сүйреп әкеліңіз немесе төмендегі командаларды қолданыңыз."
 
-#: apps/labs/views.py:34
+#: apps/labs/views.py:36
 msgid "Release to place on the bench"
 msgstr "Үстелге қою үшін жіберіңіз"
 
-#: apps/labs/views.py:35
+#: apps/labs/views.py:37
 msgid "Add to bench"
 msgstr "Құралды таңдау"
 
-#: apps/labs/views.py:36
+#: apps/labs/views.py:38
 msgid "Commands"
 msgstr "Тәжірибе командалары"
 
-#: apps/labs/views.py:37
+#: apps/labs/views.py:39
 msgid "Warnings and observations"
 msgstr "Ескертулер мен бақылаулар"
 
-#: apps/labs/views.py:38
+#: apps/labs/views.py:40
 msgid "Messages about your actions will appear here."
 msgstr "Әрекеттеріңіз туралы хабарлар осында шығады."
 
-#: apps/labs/views.py:39
+#: apps/labs/views.py:41
 msgid "Lab journal"
 msgstr "Зертханалық журнал"
 
-#: apps/labs/views.py:40
+#: apps/labs/views.py:42
 msgid "Save journal"
 msgstr "Журналды сақтау"
 
-#: apps/labs/views.py:41
+#: apps/labs/views.py:43
 msgid "Journal saved."
 msgstr "Журнал сақталды."
 
-#: apps/labs/views.py:42
+#: apps/labs/views.py:44
 msgid "Fill in all fields of the journal."
 msgstr "Журналдың барлық өрістерін толтырыңыз."
 
-#: apps/labs/views.py:43
+#: apps/labs/views.py:45
 #, python-format
 msgid "The journal opens at the «%(step)s» step."
 msgstr "Журнал «%(step)s» қадамында ашылады."
 
-#: apps/labs/views.py:45
+#: apps/labs/views.py:47
 msgid "Done"
 msgstr "Орындалды"
 
-#: apps/labs/views.py:46
+#: apps/labs/views.py:48
 msgid "In progress…"
 msgstr "Жүріп жатыр…"
 
-#: apps/labs/views.py:47
+#: apps/labs/views.py:49
 msgid "Next"
 msgstr "Келесі"
 
-#: apps/labs/views.py:48
+#: apps/labs/views.py:50
 #, python-format
 msgid "Not yet. Next step: «%(step)s»."
 msgstr "Әлі ерте. Келесі қадам: «%(step)s»."
 
-#: apps/labs/views.py:49
+#: apps/labs/views.py:51
 msgid "This step is already done."
 msgstr "Бұл қадам орындалып қойған."
 
-#: apps/labs/views.py:50
+#: apps/labs/views.py:52
 msgid "This item is not needed in this experiment."
 msgstr "Бұл зат осы тәжірибеге қажет емес."
 
-#: apps/labs/views.py:51
+#: apps/labs/views.py:53
 msgid "This item is already on the bench."
 msgstr "Бұл зат үстелде тұр."
 
-#: apps/labs/views.py:52
+#: apps/labs/views.py:54
 msgid "Choose"
 msgstr "Таңдау"
 
-#: apps/labs/views.py:54
+#: apps/labs/views.py:56
 msgid "Scientific explanation"
 msgstr "Ғылыми түсіндірме"
 
-#: apps/labs/views.py:55
+#: apps/labs/views.py:57
 msgid "Measurements"
 msgstr "Өлшемдер"
 
-#: apps/labs/views.py:56 ui/templates/labs/run.html:40
+#: apps/labs/views.py:58 ui/templates/labs/run.html:46
 msgid "Time"
 msgstr "Уақыт"
 
-#: apps/labs/views.py:57
+#: apps/labs/views.py:59
 msgid "Volume"
 msgstr "Көлем"
 
-#: apps/labs/views.py:58 ui/templates/student/course_map.html:52
+#: apps/labs/views.py:60 ui/templates/student/course_map.html:52
 msgid "min"
 msgstr "мин"
 
-#: apps/labs/views.py:59
+#: apps/labs/views.py:61
 msgid "s"
 msgstr "с"
 
-#: apps/labs/views.py:61
+#: apps/labs/views.py:63
 msgid "Rate"
 msgstr "Жылдамдық"
 
-#: apps/labs/views.py:63
+#: apps/labs/views.py:65
 msgid "Volume of gas against time"
 msgstr "Газ көлемінің уақытқа тәуелділігі"
 
-#: apps/labs/views.py:64
+#: apps/labs/views.py:66
 msgid "Theoretical maximum"
 msgstr "Теориялық шегі"
 
-#: apps/labs/views.py:65
+#: apps/labs/views.py:67
 msgid "Analysis task"
 msgstr "Талдау тапсырмасы"
 
-#: apps/labs/views.py:66
+#: apps/labs/views.py:68
 msgid "Submit answers"
 msgstr "Жауаптарды жіберу"
 
-#: apps/labs/views.py:67 ui/templates/assessments/take.html:74
+#: apps/labs/views.py:69 ui/templates/assessments/take.html:74
 msgid "Your answer"
 msgstr "Сіздің жауабыңыз"
 
-#: apps/labs/views.py:68
+#: apps/labs/views.py:70
 msgid "Experiment complete"
 msgstr "Тәжірибе аяқталды"
 
-#: apps/labs/views.py:69 ui/templates/research/dashboard.html:49
+#: apps/labs/views.py:71 ui/templates/research/dashboard.html:49
 #: ui/templates/research/dashboard.html:84
 msgid "Order errors"
 msgstr "Рет қателері"
 
-#: apps/labs/views.py:70 ui/templates/research/dashboard.html:50
+#: apps/labs/views.py:72 ui/templates/research/dashboard.html:50
 #: ui/templates/research/dashboard.html:84
 msgid "Safety warnings"
 msgstr "Қауіпсіздік ескертулері"
 
-#: apps/labs/views.py:71
+#: apps/labs/views.py:73
 msgid "Wrong equipment or choices"
 msgstr "Қате құрал не таңдау"
 
-#: apps/labs/views.py:72
+#: apps/labs/views.py:74
 msgid "Time spent"
 msgstr "Жұмсалған уақыт"
 
-#: apps/labs/views.py:73
+#: apps/labs/views.py:75
 msgid "Analysis: correct answers"
 msgstr "Талдау: дұрыс жауаптар"
 
-#: apps/labs/views.py:74 ui/templates/labs/run.html:17
+#: apps/labs/views.py:76 ui/templates/labs/run.html:17
 msgid "Back to the topic"
 msgstr "Тақырыпқа оралу"
 
-#: apps/labs/views.py:75
+#: apps/labs/views.py:77
 msgid "Next experiment"
 msgstr "Келесі тәжірибе"
 
-#: apps/labs/views.py:76 ui/templates/labs/run.html:42
+#: apps/labs/views.py:78 ui/templates/labs/run.html:48
 msgid "Start again"
 msgstr "Қайта бастау"
 
-#: apps/labs/views.py:78
+#: apps/labs/views.py:80
 msgid ""
 "Start the experiment again? The current progress will be saved as an "
 "unfinished attempt."
@@ -2296,67 +2313,67 @@ msgstr ""
 "Тәжірибені қайта бастайсыз ба? Ағымдағы барыс аяқталмаған талпыныс ретінде "
 "сақталады."
 
-#: apps/labs/views.py:80
+#: apps/labs/views.py:82
 msgid "Safety"
 msgstr "Қауіпсіздік"
 
-#: apps/labs/views.py:81
+#: apps/labs/views.py:83
 msgid "Observation"
 msgstr "Бақылау"
 
-#: apps/labs/views.py:82
+#: apps/labs/views.py:84
 msgid "Mistake"
 msgstr "Қате"
 
-#: apps/labs/views.py:83
+#: apps/labs/views.py:85
 msgid "Note"
 msgstr "Ескерту"
 
-#: apps/labs/views.py:84
+#: apps/labs/views.py:86
 msgid "Speed"
 msgstr "Жылдамдық"
 
-#: apps/labs/views.py:85
+#: apps/labs/views.py:87
 msgid "without catalyst"
 msgstr "катализаторсыз"
 
-#: apps/labs/views.py:86
+#: apps/labs/views.py:88
 msgid "with MnO₂"
 msgstr "MnO₂ қатысында"
 
-#: apps/labs/views.py:87
+#: apps/labs/views.py:89
 msgid "A: without catalyst"
 msgstr "А: катализаторсыз"
 
-#: apps/labs/views.py:88
+#: apps/labs/views.py:90
 msgid "B: with MnO₂"
 msgstr "В: MnO₂ қатысында"
 
-#: apps/labs/views.py:89
+#: apps/labs/views.py:91
 msgid "Cathode (−)"
 msgstr "Катод (−)"
 
-#: apps/labs/views.py:90
+#: apps/labs/views.py:92
 msgid "Anode (+)"
 msgstr "Анод (+)"
 
-#: apps/labs/views.py:91
+#: apps/labs/views.py:93
 msgid "Ratio"
 msgstr "Қатынас"
 
-#: apps/labs/views.py:92
+#: apps/labs/views.py:94
 msgid "Purity test: a quiet pop — the hydrogen is pure."
 msgstr "Тазалығын тексеру: тыныш «пах» дыбысы — сутегі таза."
 
-#: apps/labs/views.py:93
+#: apps/labs/views.py:95
 msgid "The glowing splint flares up: the gas is oxygen."
 msgstr "Бықсып тұрған шамшырақ лап етіп жанды: бұл газ — оттегі."
 
-#: apps/labs/views.py:94
+#: apps/labs/views.py:96
 msgid "Tube A is the control: it must stay without a catalyst."
 msgstr "А пробиркасы — бақылау үлгісі: ол катализаторсыз қалуы керек."
 
-#: apps/labs/views.py:95
+#: apps/labs/views.py:97
 msgid "Connection problem. Your actions are kept and will be sent again."
 msgstr "Байланыс ақауы. Әрекеттеріңіз сақталған және қайта жіберіледі."
 
@@ -3055,7 +3072,8 @@ msgstr "Қанағаттанарлықсыз"
 
 #: apps/progress/models/progress.py:15 apps/progress/models/progress.py:70
 #: apps/student/learning.py:95 ui/templates/components/stage_stepper.html:22
-#: ui/templates/student/course_map.html:44 ui/templates/student/topic.html:30
+#: ui/templates/student/course_map.html:44
+#: ui/templates/student/stages/lab.html:23 ui/templates/student/topic.html:30
 msgid "Locked"
 msgstr "Жабық"
 
@@ -3076,11 +3094,6 @@ msgstr "Тексеруді күтуде"
 #: ui/templates/student/topic.html:30
 msgid "Passed"
 msgstr "Өтті"
-
-#: apps/progress/models/progress.py:28 apps/progress/models/progress.py:83
-#: apps/progress/models/progress.py:171
-msgid "score, %"
-msgstr "ұпай, %"
 
 #: apps/progress/models/progress.py:30
 msgid "needs the teacher's attention"
@@ -3252,19 +3265,25 @@ msgstr "Студент кабинеті"
 msgid "Passed · %(score)s%%"
 msgstr "Өтті · %(score)s%%"
 
-#: apps/student/views.py:253 ui/templates/student/stages/practice.html:71
+#: apps/student/views.py:264 ui/templates/student/stages/practice.html:71
 msgid "Preview: answers are not saved."
 msgstr "Алдын ала қарау: жауаптар сақталмайды."
 
-#: apps/student/views.py:347
+#: apps/student/views.py:360
+msgid ""
+"Experiments open one after another: finish the previous one and send its "
+"analysis."
+msgstr "Тәжірибелер бірінен соң бірі ашылады: алдыңғысын аяқтап, оның талдауын жіберіңіз."
+
+#: apps/student/views.py:435
 msgid "Finish the material first — the test opens after it."
 msgstr "Алдымен материалды аяқтаңыз — тест содан кейін ашылады."
 
-#: apps/student/views.py:426 ui/templates/student/stage.html:19
+#: apps/student/views.py:514 ui/templates/student/stage.html:19
 msgid "Go to the next stage"
 msgstr "Келесі кезеңге өту"
 
-#: apps/student/views.py:428
+#: apps/student/views.py:516
 msgid "Back to the stage"
 msgstr "Кезеңге оралу"
 
@@ -3445,7 +3464,9 @@ msgstr "Жауап"
 msgid ""
 "Numeric: {\"value\": \"2,24\", \"unit\": \"L\"}; choice and ordering: a JSON "
 "list; matching: a JSON object. Other kinds: plain text."
-msgstr "Сан: {\"value\": \"2,24\", \"unit\": \"L\"}; таңдау мен рет: JSON тізім; сәйкестендіру: JSON объект. Басқалары: кәдімгі мәтін."
+msgstr ""
+"Сан: {\"value\": \"2,24\", \"unit\": \"L\"}; таңдау мен рет: JSON тізім; "
+"сәйкестендіру: JSON объект. Басқалары: кәдімгі мәтін."
 
 #: ui/templates/admin/practice/practiceitem/try.html:15
 msgid "Check"
@@ -3652,6 +3673,11 @@ msgstr "%(n)s-тәжірибе"
 #: ui/templates/labs/run.html:29
 msgid "Experiments"
 msgstr "Тәжірибелер"
+
+#: ui/templates/labs/run.html:37
+#: ui/templates/student/partials/stage_tile.html:2
+msgid "locked"
+msgstr "жабық"
 
 #: ui/templates/layouts/auth.html:27
 msgid ""
@@ -4040,7 +4066,9 @@ msgstr "Орны"
 msgid ""
 "Write in your own words — the answer is graded by its meaning against the "
 "criteria."
-msgstr "Өз сөзіңізбен жазыңыз — жауап критерийлер бойынша мағынасына қарай бағаланады."
+msgstr ""
+"Өз сөзіңізбен жазыңыз — жауап критерийлер бойынша мағынасына қарай "
+"бағаланады."
 
 #: ui/templates/student/partials/practice_grading.html:4
 msgid "Graded — refreshing…"
@@ -4049,7 +4077,8 @@ msgstr "Бағаланды — бет жаңартылуда…"
 #: ui/templates/student/partials/practice_grading.html:6
 msgid ""
 "Being graded… The open answers are checked by AI, usually in under a minute."
-msgstr "Бағалануда… Ашық жауаптарды AI тексереді, әдетте бір минуттан аз уақыт."
+msgstr ""
+"Бағалануда… Ашық жауаптарды AI тексереді, әдетте бір минуттан аз уақыт."
 
 #: ui/templates/student/partials/quiz_panel.html:6
 #: ui/templates/student/stages/test.html:7
@@ -4101,10 +4130,6 @@ msgid "Start the test"
 msgstr "Тестті бастау"
 
 #: ui/templates/student/partials/stage_tile.html:2
-msgid "locked"
-msgstr "жабық"
-
-#: ui/templates/student/partials/stage_tile.html:2
 msgid "awaiting check"
 msgstr "тексеруді күтуде"
 
@@ -4124,12 +4149,18 @@ msgstr ""
 "жіберіңіз."
 
 #: ui/templates/student/stages/lab.html:16
-msgid "analysis"
-msgstr "талдау"
+msgid "Opens after the previous experiment"
+msgstr "Алдыңғы тәжірибеден кейін ашылады"
 
-#: ui/templates/student/stages/lab.html:21
+#: ui/templates/student/stages/lab.html:28
 msgid "The lab is not set up yet."
 msgstr "Зертхана әлі бапталмаған."
+
+#: ui/templates/student/stages/lab.html:31
+msgid ""
+"The stage score is the average of your best attempt in every experiment: "
+"actions in the right order, the journal and the analysis."
+msgstr "Кезең ұпайы — әр тәжірибедегі ең жақсы талпынысыңыздың орташасы: әрекеттердің дұрыс реті, журнал және талдау."
 
 #: ui/templates/student/stages/practice.html:3
 msgid "The practice task is being prepared"
@@ -4152,7 +4183,8 @@ msgstr "Мұғалімнің тексеруін күтуде"
 msgid ""
 "Part of the answer is checked by the teacher. You can go on to the next "
 "stage."
-msgstr "Жауаптың бір бөлігін мұғалім тексереді. Келесі кезеңге өте беруге болады."
+msgstr ""
+"Жауаптың бір бөлігін мұғалім тексереді. Келесі кезеңге өте беруге болады."
 
 #: ui/templates/student/stages/practice.html:23
 msgid "Work accepted"
@@ -4290,6 +4322,9 @@ msgstr "Практикалық жұмыс 3"
 #: ui/views.py:21
 msgid "Score"
 msgstr "Ұпай"
+
+#~ msgid "analysis"
+#~ msgstr "талдау"
 
 #~ msgid "Coming soon"
 #~ msgstr "Жақында"

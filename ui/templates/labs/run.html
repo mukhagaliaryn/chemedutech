@@ -13,7 +13,7 @@
   {# ---------- lab header ---------- #}
   <header class="mb-5 border-b border-line bg-surface">
   <div class="mx-auto flex max-w-[1400px] flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3 sm:px-[clamp(16px,2vw,32px)]">
-    <a href="{% if topic %}{{ topic.get_absolute_url }}{% else %}{% url 'student:courses' %}{% endif %}"
+    <a href="{% if back_url %}{{ back_url }}{% elif topic %}{{ topic.get_absolute_url }}{% else %}{% url 'student:courses' %}{% endif %}"
        class="flex items-center gap-2 text-ink" aria-label="{% translate 'Back to the topic' %}">
       {% include "partials/logo.html" %}
     </a>
@@ -27,11 +27,17 @@
     </div>
 
     <nav class="flex items-center gap-1" aria-label="{% translate 'Experiments' %}">
-      {% for e in experiments %}
-        <a href="{% url 'labs:run' lab.key e.key %}" title="{{ e.title }}"
-           class="grid h-9 w-9 place-items-center rounded-md text-sm font-semibold num
-                  {% if e.key == experiment.key %}bg-primary-900 text-white{% else %}text-ink-soft ring-1 ring-line hover:text-ink{% endif %}"
-           {% if e.key == experiment.key %}aria-current="page"{% endif %}>{{ e.number }}</a>
+      {% for e in nav %}
+        {% if e.url %}
+          <a href="{{ e.url }}" title="{{ e.title }}"
+             class="grid h-9 w-9 place-items-center rounded-md text-sm font-semibold num
+                    {% if e.current %}bg-primary-900 text-white{% elif e.done %}bg-success-50 text-success-700{% else %}text-ink-soft ring-1 ring-line hover:text-ink{% endif %}"
+             {% if e.current %}aria-current="page"{% endif %}>{{ e.number }}</a>
+        {% else %}
+          <span title="{{ e.title }} · {% translate 'locked' %}" class="grid h-9 w-9 place-items-center rounded-md bg-surface-sunken text-ink-faint">
+            {% include "components/icons.html#lock" with size=14 %}<span class="sr-only">{{ e.number }}</span>
+          </span>
+        {% endif %}
       {% endfor %}
     </nav>
 

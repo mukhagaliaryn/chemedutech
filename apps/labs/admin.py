@@ -15,7 +15,9 @@ class LabEventInline(TabularInline):
 class LabAttemptAdmin(ModelAdmin):
     list_display = (
         "user",
-        "cohort",
+        "research_cohort",
+        "stage",
+        "score_percent",
         "lab_key",
         "experiment_key",
         "status",
@@ -27,7 +29,7 @@ class LabAttemptAdmin(ModelAdmin):
         "analysis_total",
         "started_at",
     )
-    list_filter = ("lab_key", "experiment_key", "cohort", "status")
+    list_filter = ("lab_key", "experiment_key", "research_cohort", "status", "enrollment__course")
     search_fields = ("user__username", "user__last_name")
     inlines = [LabEventInline]
 

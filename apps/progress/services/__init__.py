@@ -11,7 +11,15 @@ from .engine import (
     start_stage,
     unlock_stage,
 )
-from .learning import complete_material, quiz_is_open, record_quiz_result, record_watch, stage_quiz
+from .learning import (
+    complete_material,
+    lab_experiments,
+    quiz_is_open,
+    record_lab_result,
+    record_quiz_result,
+    record_watch,
+    stage_quiz,
+)
 from .scoring import stage_weights, weighted_average
 
 __all__ = [
@@ -23,8 +31,10 @@ __all__ = [
     "complete_stage",
     "confirm_stage",
     "ensure_progress",
+    "lab_experiments",
     "quiz_is_open",
     "recalculate",
+    "record_lab_result",
     "record_quiz_result",
     "record_watch",
     "return_stage",

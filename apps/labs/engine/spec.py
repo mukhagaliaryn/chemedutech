@@ -175,11 +175,31 @@ class ExperimentSpec:
 
 
 @dataclass(frozen=True)
+class LabScoring:
+    """Lab score formula (ARCHITECTURE §5.4); a lab may override any number.
+
+    process  = max(0, 100 − order·order_errors − safety·safety_warnings − wrong·(wrong_items + wrong_choices))
+    journal  = journal_correct / journal_total · 100      (choice fields of the journal)
+    analysis = analysis_correct / analysis_total · 100    (closed analysis questions)
+    experiment = w_process·process + w_journal·journal + w_analysis·analysis
+    A part with nothing to score (no choice fields) drops out and the other weights are rescaled.
+    """
+
+    order_error_penalty: float = 10
+    safety_warning_penalty: float = 15
+    wrong_penalty: float = 5
+    weight_process: float = 0.3
+    weight_journal: float = 0.2
+    weight_analysis: float = 0.5
+
+
+@dataclass(frozen=True)
 class LabSpec:
     key: str  # e.g. "t01"
     topic_number: int
     title: str
     experiments: tuple[ExperimentSpec, ...]
+    scoring: LabScoring = field(default_factory=LabScoring)
 
     def experiment(self, key):
         for e in self.experiments:

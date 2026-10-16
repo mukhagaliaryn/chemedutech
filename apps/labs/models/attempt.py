@@ -14,9 +14,28 @@ class LabAttempt(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="lab_attempts", verbose_name=_("student")
     )
+    enrollment = models.ForeignKey(
+        "courses.Enrollment",
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="lab_attempts",
+        verbose_name=_("enrolment"),
+        help_text=_("Empty for a teacher's preview and for attempts made before the course structure"),
+    )
+    stage = models.ForeignKey(
+        "courses.Stage",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="lab_attempts",
+        verbose_name=_("stage"),
+    )
     lab_key = models.CharField(_("lab"), max_length=32)
     experiment_key = models.CharField(_("experiment"), max_length=32)
-    cohort = models.CharField(_("research group"), max_length=16, blank=True, help_text=_("Snapshot at start"))
+    research_cohort = models.CharField(
+        _("research group"), max_length=16, blank=True, help_text=_("Snapshot at start (from the enrolment)")
+    )
     status = models.CharField(_("status"), max_length=16, choices=Status.choices, default=Status.IN_PROGRESS)
     started_at = models.DateTimeField(_("started at"), auto_now_add=True)
     finished_at = models.DateTimeField(_("finished at"), null=True, blank=True)
@@ -36,10 +55,18 @@ class LabAttempt(models.Model):
     analysis = models.JSONField(_("analysis answers"), default=dict, blank=True)
     analysis_correct = models.PositiveSmallIntegerField(_("analysis: correct"), default=0)
     analysis_total = models.PositiveSmallIntegerField(_("analysis: closed questions"), default=0)
+    score_percent = models.DecimalField(
+        _("score, %"),
+        max_digits=5,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        help_text=_("Process, journal and analysis by the lab's scoring formula; set when the analysis is sent"),
+    )
 
     class Meta:
         ordering = ("-started_at",)
-        indexes = [models.Index(fields=("lab_key", "experiment_key", "cohort"))]
+        indexes = [models.Index(fields=("lab_key", "experiment_key", "research_cohort"))]
         verbose_name = _("lab attempt")
         verbose_name_plural = _("lab attempts")
 

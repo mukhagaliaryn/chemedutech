@@ -45,7 +45,7 @@ class AttemptFlowTests(TestCase):
         record_events(a2, [{"seq": 1, "t": 0, "type": "start"}, {"seq": 2, "t": 50, "type": "command", "step": "x"}])
         a3 = start_attempt(self.user, "t01", self.exp)
         self.assertNotEqual(a2.pk, a3.pk)
-        self.assertEqual(a3.cohort, "experimental")
+        self.assertEqual(a3.research_cohort, "experimental")
 
     def test_events_idempotent_and_metrics(self):
         a = start_attempt(self.user, "t01", self.exp)
@@ -84,7 +84,8 @@ class AttemptFlowTests(TestCase):
         self.assertEqual(r.status_code, 404)
 
     def test_run_pages_render(self):
-        self.client.force_login(self.user)
+        # outside a course stage the simulator is a teacher's preview
+        self.client.force_login(User.objects.create_user("t", "t@example.kz", "x", role=User.Role.TEACHER))
         for exp in self.lab.experiments:
             r = self.client.get(reverse("labs:run", args=["t01", exp.key]))
             self.assertEqual(r.status_code, 200, exp.key)

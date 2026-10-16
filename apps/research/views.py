@@ -19,10 +19,11 @@ def _group_name(user):
 
 def _filtered(request):
     qs = LabAttempt.objects.select_related("user__student_profile__group")
-    for param in ("lab_key", "experiment_key", "cohort"):
+    # ?cohort= keeps its old name in links; the field is LabAttempt.research_cohort
+    for param, field in (("lab_key", "lab_key"), ("experiment_key", "experiment_key"), ("cohort", "research_cohort")):
         value = request.GET.get(param)
         if value:
-            qs = qs.filter(**{param: value})
+            qs = qs.filter(**{field: value})
     if request.GET.get("group"):
         qs = qs.filter(user__student_profile__group__name=request.GET["group"])
     return qs
@@ -33,7 +34,7 @@ def dashboard(request):
     qs = _filtered(request)
     finished = qs.exclude(status=LabAttempt.Status.IN_PROGRESS)
     summary = (
-        finished.values("experiment_key", "cohort")
+        finished.values("experiment_key", "research_cohort")
         .annotate(
             n=Count("id"),
             students=Count("user", distinct=True),
@@ -43,7 +44,7 @@ def dashboard(request):
             avg_wrong=Avg("wrong_items"),
             avg_score=Avg("analysis_correct"),
         )
-        .order_by("experiment_key", "cohort")
+        .order_by("experiment_key", "research_cohort")
     )
     experiments = [(e.key, e.title) for lab in all_labs().values() for e in lab.experiments]
     return render(
@@ -104,6 +105,11 @@ def export_attempts(request):
         "journal_total",
         "analysis_correct",
         "analysis_total",
+        # added in STEP-08 — appended so that existing analysis scripts keep their column positions
+        "enrollment_id",
+        "course",
+        "stage_id",
+        "score_percent",
     ]
     rows = (
         [
@@ -111,7 +117,7 @@ def export_attempts(request):
             a.user.username,
             a.user.get_full_name(),
             _group_name(a.user),
-            a.cohort,
+            a.research_cohort,
             a.lab_key,
             a.experiment_key,
             a.status,
@@ -126,8 +132,12 @@ def export_attempts(request):
             a.journal_total,
             a.analysis_correct,
             a.analysis_total,
+            a.enrollment_id or "",
+            a.enrollment.course.slug if a.enrollment_id else "",
+            a.stage_id or "",
+            a.score_percent if a.score_percent is not None else "",
         ]
-        for a in qs.iterator()
+        for a in qs.select_related("enrollment__course").iterator()
     )
     return _csv_response("attempts.csv", header, rows)
 
@@ -141,7 +151,7 @@ def export_events(request):
         [
             e.attempt_id,
             e.attempt.user.username,
-            e.attempt.cohort,
+            e.attempt.research_cohort,
             e.attempt.experiment_key,
             e.seq,
             e.t_ms,

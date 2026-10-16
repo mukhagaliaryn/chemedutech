@@ -38,6 +38,8 @@ AttemptAnswer) without an explicit migration plan agreed with the user.
 - **Alpine `x-for`/`x-if` do not work inside `<svg>`** — use Django loops (`{% for i in 6|times %}`, `"0 10 20"|split`).
 - Step kinds: `place`, `action`, `process` (scene calls `runner.processDone()`), `choice`, `journal`, `finish`;
   `Step.safety=True` logs a premature attempt as `safety_warning`.
+- Score formula: `LabSpec.scoring = LabScoring(...)` → `apps/labs/scoring.py`; students run labs inside a course stage
+  (`student:lab_run`, experiments open in order), `/labs/<lab>/<exp>/` is a teacher preview.
 
 ## Commands
 `python manage.py test apps` · `python manage.py tailwind start|build` · `python manage.py seed_course` ·

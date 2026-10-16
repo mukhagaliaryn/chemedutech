@@ -1,10 +1,10 @@
 from apps.labs.models import LabAttempt
 
 
-def best_attempts_by_experiment(user, lab_key):
-    """Latest completed attempt per experiment for the topic page progress."""
+def analysed_attempts(enrollment, stage) -> dict:
+    """{experiment_key: best analysed attempt} of one student in one lab stage (highest score, then earliest)."""
     result = {}
-    qs = LabAttempt.objects.filter(user=user, lab_key=lab_key).exclude(status=LabAttempt.Status.IN_PROGRESS)
-    for a in qs.order_by("started_at"):
-        result[a.experiment_key] = a
+    qs = LabAttempt.objects.filter(enrollment=enrollment, stage=stage, status=LabAttempt.Status.ANALYSED)
+    for a in qs.order_by("experiment_key", "-score_percent", "started_at"):
+        result.setdefault(a.experiment_key, a)
     return result

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 18:54+0500\n"
+"POT-Creation-Date: 2026-10-16 19:20+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -231,10 +231,10 @@ msgid "Assessments"
 msgstr "Оценивание"
 
 #: apps/assessments/models/attempt.py:17 apps/courses/models/course.py:37
-#: apps/courses/models/enrollment.py:52 apps/practice/models/submission.py:21
-#: apps/progress/models/progress.py:22 apps/progress/models/progress.py:76
-#: apps/progress/models/progress.py:98 apps/progress/models/progress.py:118
-#: apps/progress/models/progress.py:153
+#: apps/courses/models/enrollment.py:52 apps/labs/models/attempt.py:23
+#: apps/practice/models/submission.py:21 apps/progress/models/progress.py:22
+#: apps/progress/models/progress.py:76 apps/progress/models/progress.py:98
+#: apps/progress/models/progress.py:118 apps/progress/models/progress.py:153
 msgid "enrolment"
 msgstr "способ записи"
 
@@ -251,12 +251,12 @@ msgstr "тест"
 msgid "attempt number"
 msgstr "номер попытки"
 
-#: apps/assessments/models/attempt.py:27 apps/labs/models/attempt.py:21
+#: apps/assessments/models/attempt.py:27 apps/labs/models/attempt.py:40
 #: apps/progress/models/progress.py:36
 msgid "started at"
 msgstr "начато"
 
-#: apps/assessments/models/attempt.py:28 apps/labs/models/attempt.py:22
+#: apps/assessments/models/attempt.py:28 apps/labs/models/attempt.py:41
 msgid "finished at"
 msgstr "завершено"
 
@@ -297,7 +297,7 @@ msgstr "попытка теста"
 msgid "quiz attempts"
 msgstr "попытки тестов"
 
-#: apps/assessments/models/attempt.py:53 apps/labs/models/attempt.py:67
+#: apps/assessments/models/attempt.py:53 apps/labs/models/attempt.py:94
 msgid "attempt"
 msgstr "попытка"
 
@@ -445,7 +445,7 @@ msgstr "Краткий текст"
 msgid "Chemical formula"
 msgstr "Химическая формула"
 
-#: apps/assessments/models/quiz.py:61 apps/labs/views.py:53
+#: apps/assessments/models/quiz.py:61 apps/labs/views.py:55
 #: apps/practice/models/task.py:46 ui/templates/assessments/take.html:64
 msgid "Reaction equation"
 msgstr "Уравнение реакции"
@@ -607,9 +607,9 @@ msgstr "Курсы"
 
 #: apps/courses/models/content.py:17 apps/courses/models/content.py:53
 #: apps/courses/models/content.py:107 apps/courses/models/content.py:151
-#: apps/courses/models/structure.py:112 apps/practice/models/submission.py:24
-#: apps/practice/models/task.py:22 apps/progress/models/progress.py:25
-#: apps/progress/models/progress.py:156
+#: apps/courses/models/structure.py:112 apps/labs/models/attempt.py:32
+#: apps/practice/models/submission.py:24 apps/practice/models/task.py:22
+#: apps/progress/models/progress.py:25 apps/progress/models/progress.py:156
 msgid "stage"
 msgstr "этап"
 
@@ -646,7 +646,7 @@ msgstr "ссылка"
 msgid "video file"
 msgstr "видеофайл"
 
-#: apps/courses/models/content.py:58 apps/labs/models/attempt.py:23
+#: apps/courses/models/content.py:58 apps/labs/models/attempt.py:42
 msgid "duration, s"
 msgstr "длительность, с"
 
@@ -678,7 +678,7 @@ msgstr "Загрузите видеофайл."
 msgid "Paste the video link."
 msgstr "Вставьте ссылку на видео."
 
-#: apps/courses/models/content.py:109 apps/labs/models/attempt.py:17
+#: apps/courses/models/content.py:109 apps/labs/models/attempt.py:34
 msgid "lab"
 msgstr "лаборатория"
 
@@ -757,7 +757,7 @@ msgid "cover"
 msgstr "обложка"
 
 #: apps/courses/models/course.py:35 apps/courses/models/enrollment.py:46
-#: apps/labs/models/attempt.py:20 apps/practice/models/submission.py:28
+#: apps/labs/models/attempt.py:39 apps/practice/models/submission.py:28
 #: apps/progress/models/progress.py:27 apps/progress/models/progress.py:81
 msgid "status"
 msgstr "статус"
@@ -882,7 +882,7 @@ msgstr "студент"
 msgid "The student's group at enrolment"
 msgstr "Группа студента на момент записи"
 
-#: apps/courses/models/enrollment.py:40 apps/labs/models/attempt.py:19
+#: apps/courses/models/enrollment.py:40 apps/labs/models/attempt.py:37
 #: apps/organizations/models/group.py:65
 msgid "research group"
 msgstr "исследовательская группа"
@@ -1015,31 +1015,31 @@ msgstr "Курс с таким кодом не найден. Уточните к
 msgid "Virtual lab"
 msgstr "Виртуальная лаборатория"
 
-#: apps/labs/experiments/t01/__init__.py:11
+#: apps/labs/experiments/t01/__init__.py:12
 msgid "Hydrogen and oxygen: obtaining and properties"
 msgstr "Водород и кислород: получение и свойства"
 
-#: apps/labs/experiments/t01/common.py:8 apps/labs/experiments/t01/rate.py:30
+#: apps/labs/experiments/t01/common.py:9 apps/labs/experiments/t01/rate.py:31
 msgid "Spirit lamp"
 msgstr "Спиртовка"
 
-#: apps/labs/experiments/t01/common.py:12
+#: apps/labs/experiments/t01/common.py:13
 msgid "Heating is not needed here: the reaction goes at room temperature."
 msgstr "Нагревание здесь не нужно: реакция идёт при комнатной температуре."
 
-#: apps/labs/experiments/t01/common.py:15
+#: apps/labs/experiments/t01/common.py:16
 msgid "Hydrogen peroxide solution, 3%"
 msgstr "Раствор пероксида водорода, 3%"
 
-#: apps/labs/experiments/t01/common.py:16
+#: apps/labs/experiments/t01/common.py:17
 msgid "Manganese(IV) oxide"
 msgstr "Оксид марганца(IV)"
 
-#: apps/labs/experiments/t01/electrolysis.py:18
+#: apps/labs/experiments/t01/electrolysis.py:19
 msgid "Electrolysis of water"
 msgstr "Электролиз воды"
 
-#: apps/labs/experiments/t01/electrolysis.py:19
+#: apps/labs/experiments/t01/electrolysis.py:20
 msgid ""
 "Decompose water by direct current and determine the volume ratio of hydrogen "
 "and oxygen."
@@ -1047,7 +1047,7 @@ msgstr ""
 "Разложить воду постоянным током и определить объёмное отношение водорода и "
 "кислорода."
 
-#: apps/labs/experiments/t01/electrolysis.py:23
+#: apps/labs/experiments/t01/electrolysis.py:24
 msgid ""
 "Water is reduced at the cathode and hydroxide ions are oxidised at the "
 "anode. Twice as many hydrogen molecules are formed as oxygen molecules, so "
@@ -1057,27 +1057,27 @@ msgstr ""
 "Молекул водорода образуется вдвое больше, чем молекул кислорода, поэтому "
 "V(H₂) : V(O₂) = 2 : 1."
 
-#: apps/labs/experiments/t01/electrolysis.py:27
+#: apps/labs/experiments/t01/electrolysis.py:28
 msgid "Cathode (−), alkaline medium"
 msgstr "Катод (−), щелочная среда"
 
-#: apps/labs/experiments/t01/electrolysis.py:28
+#: apps/labs/experiments/t01/electrolysis.py:29
 msgid "Anode (+), alkaline medium"
 msgstr "Анод (+), щелочная среда"
 
-#: apps/labs/experiments/t01/electrolysis.py:31
+#: apps/labs/experiments/t01/electrolysis.py:32
 msgid "Electrolyzer with two gas tubes"
 msgstr "Электролизёр с двумя газовыми трубками"
 
-#: apps/labs/experiments/t01/electrolysis.py:32
+#: apps/labs/experiments/t01/electrolysis.py:33
 msgid "DC power supply"
 msgstr "Источник постоянного тока"
 
-#: apps/labs/experiments/t01/electrolysis.py:35
+#: apps/labs/experiments/t01/electrolysis.py:36
 msgid "AC power supply"
 msgstr "Источник переменного тока"
 
-#: apps/labs/experiments/t01/electrolysis.py:39
+#: apps/labs/experiments/t01/electrolysis.py:41
 msgid ""
 "Alternating current keeps swapping the electrodes, so the gases would mix in "
 "both tubes. Electrolysis needs direct current."
@@ -1085,162 +1085,162 @@ msgstr ""
 "Переменный ток постоянно меняет полярность электродов, и газы смешались бы в "
 "обеих трубках. Для электролиза нужен постоянный ток."
 
-#: apps/labs/experiments/t01/electrolysis.py:45
+#: apps/labs/experiments/t01/electrolysis.py:48
 msgid "Select the electrolyzer"
 msgstr "Выбрать электролизёр"
 
-#: apps/labs/experiments/t01/electrolysis.py:46
+#: apps/labs/experiments/t01/electrolysis.py:49
 msgid "An electrolyzer with two gas collecting tubes appears."
 msgstr "Появляется электролизёр с двумя газосборными трубками."
 
-#: apps/labs/experiments/t01/electrolysis.py:52
+#: apps/labs/experiments/t01/electrolysis.py:55
 msgid "Select the electrolyte"
 msgstr "Выбрать электролит"
 
-#: apps/labs/experiments/t01/electrolysis.py:53
+#: apps/labs/experiments/t01/electrolysis.py:56
 msgid "A suitable electrolyte solution is added."
 msgstr "Добавляется подходящий раствор электролита."
 
-#: apps/labs/experiments/t01/electrolysis.py:58
+#: apps/labs/experiments/t01/electrolysis.py:61
 msgid "Sodium hydroxide solution, 5% (NaOH)"
 msgstr "Раствор гидроксида натрия, 5% (NaOH)"
 
-#: apps/labs/experiments/t01/electrolysis.py:60
+#: apps/labs/experiments/t01/electrolysis.py:63
 msgid "NaOH makes the solution conductive; it is water that is decomposed."
 msgstr "NaOH делает раствор электропроводным; разлагается именно вода."
 
-#: apps/labs/experiments/t01/electrolysis.py:64
+#: apps/labs/experiments/t01/electrolysis.py:67
 msgid "Distilled water"
 msgstr "Дистиллированная вода"
 
-#: apps/labs/experiments/t01/electrolysis.py:65
+#: apps/labs/experiments/t01/electrolysis.py:68
 msgid ""
 "Pure water hardly conducts current: electrolysis would be extremely slow."
 msgstr "Чистая вода почти не проводит ток: электролиз шёл бы крайне медленно."
 
-#: apps/labs/experiments/t01/electrolysis.py:69
+#: apps/labs/experiments/t01/electrolysis.py:72
 msgid "Sodium chloride solution (NaCl)"
 msgstr "Раствор хлорида натрия (NaCl)"
 
-#: apps/labs/experiments/t01/electrolysis.py:70
+#: apps/labs/experiments/t01/electrolysis.py:73
 msgid "Chlorine, not oxygen, would be released at the anode."
 msgstr "На аноде выделялся бы хлор, а не кислород."
 
-#: apps/labs/experiments/t01/electrolysis.py:73
+#: apps/labs/experiments/t01/electrolysis.py:76
 msgid "Select the electrolyzer first."
 msgstr "Сначала выберите электролизёр."
 
-#: apps/labs/experiments/t01/electrolysis.py:77
+#: apps/labs/experiments/t01/electrolysis.py:80
 msgid "Connect the electrodes"
 msgstr "Подключить электроды"
 
-#: apps/labs/experiments/t01/electrolysis.py:78
+#: apps/labs/experiments/t01/electrolysis.py:81
 msgid "The cathode (−) and the anode (+) are marked."
 msgstr "Отмечены катод (−) и анод (+)."
 
-#: apps/labs/experiments/t01/electrolysis.py:80
+#: apps/labs/experiments/t01/electrolysis.py:83
 msgid "Fill the electrolyzer with the electrolyte first."
 msgstr "Сначала заполните электролизёр электролитом."
 
-#: apps/labs/experiments/t01/electrolysis.py:84
+#: apps/labs/experiments/t01/electrolysis.py:87
 msgid "Switch on the DC source"
 msgstr "Включить источник постоянного тока"
 
-#: apps/labs/experiments/t01/electrolysis.py:85
+#: apps/labs/experiments/t01/electrolysis.py:88
 msgid "Electrolysis starts: bubbles form on both electrodes."
 msgstr "Начинается электролиз: на обоих электродах образуются пузырьки."
 
-#: apps/labs/experiments/t01/electrolysis.py:88
+#: apps/labs/experiments/t01/electrolysis.py:91
 msgid "Connect the electrodes first."
 msgstr "Сначала подключите электроды."
 
-#: apps/labs/experiments/t01/electrolysis.py:92
+#: apps/labs/experiments/t01/electrolysis.py:95
 msgid "Run the time"
 msgstr "Запустить время"
 
-#: apps/labs/experiments/t01/electrolysis.py:93
+#: apps/labs/experiments/t01/electrolysis.py:96
 msgid "The gas volumes change; the V(t) graph is drawn."
 msgstr "Объёмы газов меняются; строится график V(t)."
 
-#: apps/labs/experiments/t01/electrolysis.py:95
+#: apps/labs/experiments/t01/electrolysis.py:98
 msgid "Switch on the power supply first."
 msgstr "Сначала включите источник тока."
 
-#: apps/labs/experiments/t01/electrolysis.py:99
+#: apps/labs/experiments/t01/electrolysis.py:102
 msgid "Compare the gas volumes"
 msgstr "Сравнить объёмы газов"
 
-#: apps/labs/experiments/t01/electrolysis.py:100
+#: apps/labs/experiments/t01/electrolysis.py:103
 msgid "The ratio H₂ : O₂ = 2 : 1 is determined."
 msgstr "Определено отношение H₂ : O₂ = 2 : 1."
 
-#: apps/labs/experiments/t01/electrolysis.py:102
+#: apps/labs/experiments/t01/electrolysis.py:105
 msgid "Let the electrolysis run first."
 msgstr "Сначала проведите электролиз."
 
-#: apps/labs/experiments/t01/electrolysis.py:104
+#: apps/labs/experiments/t01/electrolysis.py:107
 msgid "Draw a conclusion"
 msgstr "Сделать вывод"
 
-#: apps/labs/experiments/t01/electrolysis.py:104
+#: apps/labs/experiments/t01/electrolysis.py:107
 msgid "Write the electrode reactions."
 msgstr "Запишите электродные реакции."
 
-#: apps/labs/experiments/t01/electrolysis.py:107
-#: apps/labs/experiments/t01/hydrogen.py:89
-#: apps/labs/experiments/t01/oxygen.py:102 apps/labs/experiments/t01/rate.py:84
+#: apps/labs/experiments/t01/electrolysis.py:110
+#: apps/labs/experiments/t01/hydrogen.py:90
+#: apps/labs/experiments/t01/oxygen.py:109 apps/labs/experiments/t01/rate.py:87
 msgid "Finish the experiment"
 msgstr "Завершить опыт"
 
-#: apps/labs/experiments/t01/electrolysis.py:108
-#: apps/labs/experiments/t01/hydrogen.py:90
-#: apps/labs/experiments/t01/oxygen.py:103 apps/labs/experiments/t01/rate.py:85
+#: apps/labs/experiments/t01/electrolysis.py:111
+#: apps/labs/experiments/t01/hydrogen.py:91
+#: apps/labs/experiments/t01/oxygen.py:110 apps/labs/experiments/t01/rate.py:88
 msgid "The results are saved and the analysis task opens."
 msgstr "Результаты сохраняются, открывается задание на анализ."
 
-#: apps/labs/experiments/t01/electrolysis.py:110
-#: apps/labs/experiments/t01/hydrogen.py:92
-#: apps/labs/experiments/t01/oxygen.py:105 apps/labs/experiments/t01/rate.py:87
+#: apps/labs/experiments/t01/electrolysis.py:113
+#: apps/labs/experiments/t01/hydrogen.py:93
+#: apps/labs/experiments/t01/oxygen.py:112 apps/labs/experiments/t01/rate.py:90
 msgid "Fill in the lab journal first."
 msgstr "Сначала заполните лабораторный журнал."
 
-#: apps/labs/experiments/t01/electrolysis.py:114
+#: apps/labs/experiments/t01/electrolysis.py:117
 msgid "Volume of gas at the cathode"
 msgstr "Объём газа на катоде"
 
-#: apps/labs/experiments/t01/electrolysis.py:114
-#: apps/labs/experiments/t01/electrolysis.py:115
-#: apps/labs/experiments/t01/hydrogen.py:97
-#: apps/labs/experiments/t01/rate.py:91 apps/labs/experiments/t01/rate.py:92
-#: apps/labs/views.py:60
+#: apps/labs/experiments/t01/electrolysis.py:117
+#: apps/labs/experiments/t01/electrolysis.py:118
+#: apps/labs/experiments/t01/hydrogen.py:98
+#: apps/labs/experiments/t01/rate.py:94 apps/labs/experiments/t01/rate.py:95
+#: apps/labs/views.py:62
 msgid "mL"
 msgstr "мл"
 
-#: apps/labs/experiments/t01/electrolysis.py:115
+#: apps/labs/experiments/t01/electrolysis.py:118
 msgid "Volume of gas at the anode"
 msgstr "Объём газа на аноде"
 
-#: apps/labs/experiments/t01/electrolysis.py:116
+#: apps/labs/experiments/t01/electrolysis.py:119
 msgid "Gas at the cathode"
 msgstr "Газ на катоде"
 
-#: apps/labs/experiments/t01/electrolysis.py:117
+#: apps/labs/experiments/t01/electrolysis.py:120
 msgid "Gas at the anode"
 msgstr "Газ на аноде"
 
-#: apps/labs/experiments/t01/electrolysis.py:118
+#: apps/labs/experiments/t01/electrolysis.py:121
 msgid "Cathode reaction"
 msgstr "Реакция на катоде"
 
-#: apps/labs/experiments/t01/electrolysis.py:119
+#: apps/labs/experiments/t01/electrolysis.py:122
 msgid "Anode reaction"
 msgstr "Реакция на аноде"
 
-#: apps/labs/experiments/t01/electrolysis.py:124
+#: apps/labs/experiments/t01/electrolysis.py:127
 msgid "Why is the volume of hydrogen twice the volume of oxygen?"
 msgstr "Почему объём водорода вдвое больше объёма кислорода?"
 
-#: apps/labs/experiments/t01/electrolysis.py:128
+#: apps/labs/experiments/t01/electrolysis.py:131
 msgid ""
 "Two H₂ molecules form per O₂ molecule, and equal amounts of gases occupy "
 "equal volumes"
@@ -1248,59 +1248,59 @@ msgstr ""
 "На одну молекулу O₂ образуются две молекулы H₂, а равные количества газов "
 "занимают равные объёмы"
 
-#: apps/labs/experiments/t01/electrolysis.py:131
+#: apps/labs/experiments/t01/electrolysis.py:134
 msgid "Hydrogen is lighter than oxygen"
 msgstr "Водород легче кислорода"
 
-#: apps/labs/experiments/t01/electrolysis.py:132
+#: apps/labs/experiments/t01/electrolysis.py:135
 msgid "Hydrogen reacts faster"
 msgstr "Водород реагирует быстрее"
 
-#: apps/labs/experiments/t01/electrolysis.py:137
+#: apps/labs/experiments/t01/electrolysis.py:140
 msgid "Which process takes place at the cathode?"
 msgstr "Какой процесс идёт на катоде?"
 
-#: apps/labs/experiments/t01/electrolysis.py:139
-#: apps/labs/experiments/t01/hydrogen.py:21
+#: apps/labs/experiments/t01/electrolysis.py:142
+#: apps/labs/experiments/t01/hydrogen.py:22
 msgid "Reduction"
 msgstr "Восстановление"
 
-#: apps/labs/experiments/t01/electrolysis.py:140
-#: apps/labs/experiments/t01/hydrogen.py:20
+#: apps/labs/experiments/t01/electrolysis.py:143
+#: apps/labs/experiments/t01/hydrogen.py:21
 msgid "Oxidation"
 msgstr "Окисление"
 
-#: apps/labs/experiments/t01/electrolysis.py:141
+#: apps/labs/experiments/t01/electrolysis.py:144
 msgid "Neither"
 msgstr "Ни один"
 
-#: apps/labs/experiments/t01/electrolysis.py:146
+#: apps/labs/experiments/t01/electrolysis.py:149
 msgid "Why is NaOH added to the water?"
 msgstr "Зачем в воду добавляют NaOH?"
 
-#: apps/labs/experiments/t01/electrolysis.py:148
+#: apps/labs/experiments/t01/electrolysis.py:151
 msgid "To make the solution conduct current"
 msgstr "Чтобы раствор проводил ток"
 
-#: apps/labs/experiments/t01/electrolysis.py:149
+#: apps/labs/experiments/t01/electrolysis.py:152
 msgid "NaOH itself is decomposed"
 msgstr "Разлагается сам NaOH"
 
-#: apps/labs/experiments/t01/electrolysis.py:150
+#: apps/labs/experiments/t01/electrolysis.py:153
 msgid "To obtain more hydrogen from NaOH"
 msgstr "Чтобы получить больше водорода из NaOH"
 
-#: apps/labs/experiments/t01/electrolysis.py:153
+#: apps/labs/experiments/t01/electrolysis.py:157
 msgid ""
 "How would you show the class which tube contains hydrogen and which contains "
 "oxygen?"
 msgstr "Как бы вы показали классу, в какой трубке водород, а в какой кислород?"
 
-#: apps/labs/experiments/t01/hydrogen.py:14
+#: apps/labs/experiments/t01/hydrogen.py:15
 msgid "Obtaining and collecting hydrogen"
 msgstr "Получение и собирание водорода"
 
-#: apps/labs/experiments/t01/hydrogen.py:15
+#: apps/labs/experiments/t01/hydrogen.py:16
 msgid ""
 "Obtain hydrogen from zinc and hydrochloric acid and collect it by "
 "displacement of water."
@@ -1308,7 +1308,7 @@ msgstr ""
 "Получить водород из цинка и соляной кислоты и собрать его методом вытеснения "
 "воды."
 
-#: apps/labs/experiments/t01/hydrogen.py:18
+#: apps/labs/experiments/t01/hydrogen.py:19
 msgid ""
 "Zinc gives up electrons and is oxidised, while hydrogen ions accept "
 "electrons and are reduced."
@@ -1316,35 +1316,35 @@ msgstr ""
 "Цинк отдаёт электроны и окисляется, а ионы водорода принимают электроны и "
 "восстанавливаются."
 
-#: apps/labs/experiments/t01/hydrogen.py:24
+#: apps/labs/experiments/t01/hydrogen.py:25
 msgid "Flask"
 msgstr "Колба"
 
-#: apps/labs/experiments/t01/hydrogen.py:25
+#: apps/labs/experiments/t01/hydrogen.py:26
 msgid "Stopper with gas delivery tube"
 msgstr "Пробка с газоотводной трубкой"
 
-#: apps/labs/experiments/t01/hydrogen.py:26
+#: apps/labs/experiments/t01/hydrogen.py:27
 msgid "Trough with water"
 msgstr "Ванночка с водой"
 
-#: apps/labs/experiments/t01/hydrogen.py:27
+#: apps/labs/experiments/t01/hydrogen.py:28
 msgid "Gas collecting cylinder"
 msgstr "Газосборный цилиндр"
 
-#: apps/labs/experiments/t01/hydrogen.py:28
+#: apps/labs/experiments/t01/hydrogen.py:29
 msgid "Zinc granules"
 msgstr "Гранулы цинка"
 
-#: apps/labs/experiments/t01/hydrogen.py:29
+#: apps/labs/experiments/t01/hydrogen.py:30
 msgid "Hydrochloric acid, 10%"
 msgstr "Соляная кислота, 10%"
 
-#: apps/labs/experiments/t01/hydrogen.py:32
+#: apps/labs/experiments/t01/hydrogen.py:33
 msgid "Copper turnings"
 msgstr "Медная стружка"
 
-#: apps/labs/experiments/t01/hydrogen.py:37
+#: apps/labs/experiments/t01/hydrogen.py:38
 msgid ""
 "Copper does not displace hydrogen from acids: it stands after hydrogen in "
 "the activity series."
@@ -1352,53 +1352,53 @@ msgstr ""
 "Медь не вытесняет водород из кислот: в ряду активности она стоит после "
 "водорода."
 
-#: apps/labs/experiments/t01/hydrogen.py:42
+#: apps/labs/experiments/t01/hydrogen.py:43
 msgid "Select the flask"
 msgstr "Выбрать колбу"
 
-#: apps/labs/experiments/t01/hydrogen.py:42
+#: apps/labs/experiments/t01/hydrogen.py:43
 msgid "The flask appears on the bench."
 msgstr "Колба появляется на рабочем столе."
 
-#: apps/labs/experiments/t01/hydrogen.py:45
+#: apps/labs/experiments/t01/hydrogen.py:46
 msgid "Add zinc"
 msgstr "Добавить цинк"
 
-#: apps/labs/experiments/t01/hydrogen.py:46
+#: apps/labs/experiments/t01/hydrogen.py:47
 msgid "Zinc granules are placed in the flask."
 msgstr "В колбу помещаются гранулы цинка."
 
-#: apps/labs/experiments/t01/hydrogen.py:49
+#: apps/labs/experiments/t01/hydrogen.py:50
 msgid "Put the flask on the bench first."
 msgstr "Сначала поставьте колбу на стол."
 
-#: apps/labs/experiments/t01/hydrogen.py:53
+#: apps/labs/experiments/t01/hydrogen.py:54
 msgid "Assemble the gas delivery system"
 msgstr "Собрать газоотводную систему"
 
-#: apps/labs/experiments/t01/hydrogen.py:54
+#: apps/labs/experiments/t01/hydrogen.py:55
 msgid "The stopper, the tube and the water-filled gas collector are attached."
 msgstr "Присоединены пробка, трубка и система собирания газа с водой."
 
-#: apps/labs/experiments/t01/hydrogen.py:57
+#: apps/labs/experiments/t01/hydrogen.py:58
 msgid "Put zinc into the flask before closing it with the stopper."
 msgstr "Положите цинк в колбу до того, как закрыть её пробкой."
 
-#: apps/labs/experiments/t01/hydrogen.py:58
+#: apps/labs/experiments/t01/hydrogen.py:59
 msgid ""
 "You need three items: the stopper with the tube, the trough with water and "
 "the cylinder."
 msgstr "Нужны три предмета: пробка с трубкой, ванночка с водой и цилиндр."
 
-#: apps/labs/experiments/t01/hydrogen.py:62
+#: apps/labs/experiments/t01/hydrogen.py:63
 msgid "Add the acid"
 msgstr "Добавить кислоту"
 
-#: apps/labs/experiments/t01/hydrogen.py:63
+#: apps/labs/experiments/t01/hydrogen.py:64
 msgid "The reaction starts and bubbles appear."
 msgstr "Реакция начинается, появляются пузырьки."
 
-#: apps/labs/experiments/t01/hydrogen.py:67
+#: apps/labs/experiments/t01/hydrogen.py:68
 msgid ""
 "Assemble the gas delivery system first: otherwise hydrogen escapes into the "
 "room, and a mixture of hydrogen with air is explosive."
@@ -1406,126 +1406,126 @@ msgstr ""
 "Сначала соберите газоотводную систему: иначе водород уйдёт в помещение, а "
 "смесь водорода с воздухом взрывоопасна."
 
-#: apps/labs/experiments/t01/hydrogen.py:74
+#: apps/labs/experiments/t01/hydrogen.py:75
 msgid "Collect the gas"
 msgstr "Собрать газ"
 
-#: apps/labs/experiments/t01/hydrogen.py:75
+#: apps/labs/experiments/t01/hydrogen.py:76
 msgid "Hydrogen displaces water from the cylinder."
 msgstr "Водород вытесняет воду из цилиндра."
 
-#: apps/labs/experiments/t01/hydrogen.py:77
+#: apps/labs/experiments/t01/hydrogen.py:78
 msgid "There is no gas to collect yet: start the reaction first."
 msgstr "Собирать пока нечего: сначала начните реакцию."
 
-#: apps/labs/experiments/t01/hydrogen.py:81
+#: apps/labs/experiments/t01/hydrogen.py:82
 msgid "Observe the result"
 msgstr "Наблюдать результат"
 
-#: apps/labs/experiments/t01/hydrogen.py:82
+#: apps/labs/experiments/t01/hydrogen.py:83
 msgid "The gas volume and the reaction equation are shown."
 msgstr "Показаны объём газа и уравнение реакции."
 
-#: apps/labs/experiments/t01/hydrogen.py:84
+#: apps/labs/experiments/t01/hydrogen.py:85
 msgid "Wait until the gas has been collected."
 msgstr "Дождитесь, пока газ соберётся."
 
-#: apps/labs/experiments/t01/hydrogen.py:86
+#: apps/labs/experiments/t01/hydrogen.py:87
 msgid "Write to the lab journal"
 msgstr "Записать в лабораторный журнал"
 
-#: apps/labs/experiments/t01/hydrogen.py:86
+#: apps/labs/experiments/t01/hydrogen.py:87
 msgid "Record your observations."
 msgstr "Запишите свои наблюдения."
 
-#: apps/labs/experiments/t01/hydrogen.py:96
+#: apps/labs/experiments/t01/hydrogen.py:97
 msgid "What did you observe in the flask after adding the acid?"
 msgstr "Что вы наблюдали в колбе после добавления кислоты?"
 
-#: apps/labs/experiments/t01/hydrogen.py:97
+#: apps/labs/experiments/t01/hydrogen.py:98
 msgid "Volume of hydrogen collected"
 msgstr "Объём собранного водорода"
 
-#: apps/labs/experiments/t01/hydrogen.py:98
+#: apps/labs/experiments/t01/hydrogen.py:99
 msgid "What happened when the gas was tested with a flame?"
 msgstr "Что произошло при проверке газа пламенем?"
 
-#: apps/labs/experiments/t01/hydrogen.py:101
+#: apps/labs/experiments/t01/hydrogen.py:102
 msgid "Why can hydrogen be collected by displacing water?"
 msgstr "Почему водород можно собирать вытеснением воды?"
 
-#: apps/labs/experiments/t01/hydrogen.py:104
+#: apps/labs/experiments/t01/hydrogen.py:105
 msgid "It is practically insoluble in water"
 msgstr "Он практически не растворяется в воде"
 
-#: apps/labs/experiments/t01/hydrogen.py:105
+#: apps/labs/experiments/t01/hydrogen.py:106
 msgid "It is heavier than water"
 msgstr "Он тяжелее воды"
 
-#: apps/labs/experiments/t01/hydrogen.py:106
+#: apps/labs/experiments/t01/hydrogen.py:107
 msgid "It reacts with water"
 msgstr "Он реагирует с водой"
 
-#: apps/labs/experiments/t01/hydrogen.py:113
+#: apps/labs/experiments/t01/hydrogen.py:114
 msgid ""
 "Which particle is the oxidising agent in the reaction Zn + 2HCl → ZnCl₂ + H₂?"
 msgstr "Какая частица является окислителем в реакции Zn + 2HCl → ZnCl₂ + H₂?"
 
-#: apps/labs/experiments/t01/hydrogen.py:115
+#: apps/labs/experiments/t01/hydrogen.py:116
 msgid "H⁺ ions of the acid"
 msgstr "Ионы H⁺ кислоты"
 
-#: apps/labs/experiments/t01/hydrogen.py:116
+#: apps/labs/experiments/t01/hydrogen.py:117
 msgid "Zinc atoms"
 msgstr "Атомы цинка"
 
-#: apps/labs/experiments/t01/hydrogen.py:117
+#: apps/labs/experiments/t01/hydrogen.py:118
 msgid "Cl⁻ ions"
 msgstr "Ионы Cl⁻"
 
-#: apps/labs/experiments/t01/hydrogen.py:118
+#: apps/labs/experiments/t01/hydrogen.py:119
 msgid "H₂ molecules"
 msgstr "Молекулы H₂"
 
-#: apps/labs/experiments/t01/hydrogen.py:123
+#: apps/labs/experiments/t01/hydrogen.py:124
 msgid ""
 "Hydrogen can also be collected by displacing air. How should the vessel be "
 "held?"
 msgstr "Водород можно собрать и вытеснением воздуха. Как нужно держать сосуд?"
 
-#: apps/labs/experiments/t01/hydrogen.py:125
+#: apps/labs/experiments/t01/hydrogen.py:126
 msgid "Upside down: hydrogen is lighter than air"
 msgstr "Вверх дном: водород легче воздуха"
 
-#: apps/labs/experiments/t01/hydrogen.py:126
+#: apps/labs/experiments/t01/hydrogen.py:127
 msgid "Mouth up: hydrogen is heavier than air"
 msgstr "Горлышком вверх: водород тяжелее воздуха"
 
-#: apps/labs/experiments/t01/hydrogen.py:127
+#: apps/labs/experiments/t01/hydrogen.py:128
 msgid "It does not matter"
 msgstr "Не имеет значения"
 
-#: apps/labs/experiments/t01/hydrogen.py:132
+#: apps/labs/experiments/t01/hydrogen.py:133
 msgid "Which metal does not displace hydrogen from hydrochloric acid?"
 msgstr "Какой металл не вытесняет водород из соляной кислоты?"
 
-#: apps/labs/experiments/t01/hydrogen.py:134
+#: apps/labs/experiments/t01/hydrogen.py:135
 msgid "Copper"
 msgstr "Медь"
 
-#: apps/labs/experiments/t01/hydrogen.py:135
+#: apps/labs/experiments/t01/hydrogen.py:136
 msgid "Zinc"
 msgstr "Цинк"
 
-#: apps/labs/experiments/t01/hydrogen.py:136
+#: apps/labs/experiments/t01/hydrogen.py:137
 msgid "Iron"
 msgstr "Железо"
 
-#: apps/labs/experiments/t01/hydrogen.py:137
+#: apps/labs/experiments/t01/hydrogen.py:138
 msgid "Magnesium"
 msgstr "Магний"
 
-#: apps/labs/experiments/t01/hydrogen.py:142
+#: apps/labs/experiments/t01/hydrogen.py:143
 msgid ""
 "How would you explain to school students why hydrogen must be tested for "
 "purity before it is ignited?"
@@ -1533,11 +1533,11 @@ msgstr ""
 "Как бы вы объяснили школьникам, почему водород перед поджиганием нужно "
 "проверять на чистоту?"
 
-#: apps/labs/experiments/t01/oxygen.py:28
+#: apps/labs/experiments/t01/oxygen.py:29
 msgid "Obtaining oxygen"
 msgstr "Получение кислорода"
 
-#: apps/labs/experiments/t01/oxygen.py:29
+#: apps/labs/experiments/t01/oxygen.py:30
 msgid ""
 "Obtain oxygen by decomposing hydrogen peroxide and compare the rate with and "
 "without a catalyst."
@@ -1545,7 +1545,7 @@ msgstr ""
 "Получить кислород разложением пероксида водорода и сравнить скорость с "
 "катализатором и без него."
 
-#: apps/labs/experiments/t01/oxygen.py:33
+#: apps/labs/experiments/t01/oxygen.py:34
 msgid ""
 "Manganese(IV) oxide is a catalyst: it speeds up the decomposition of "
 "hydrogen peroxide and remains unchanged at the end of the reaction."
@@ -1553,19 +1553,19 @@ msgstr ""
 "Оксид марганца(IV) — катализатор: он ускоряет разложение пероксида водорода "
 "и в конце реакции остаётся неизменным."
 
-#: apps/labs/experiments/t01/oxygen.py:37
+#: apps/labs/experiments/t01/oxygen.py:38
 msgid "Test tube"
 msgstr "Пробирка"
 
-#: apps/labs/experiments/t01/oxygen.py:40
+#: apps/labs/experiments/t01/oxygen.py:41
 msgid "Gas collector with water"
 msgstr "Газосборник с водой"
 
-#: apps/labs/experiments/t01/oxygen.py:43
+#: apps/labs/experiments/t01/oxygen.py:44
 msgid "Potassium permanganate"
 msgstr "Перманганат калия"
 
-#: apps/labs/experiments/t01/oxygen.py:48
+#: apps/labs/experiments/t01/oxygen.py:50
 msgid ""
 "KMnO₄ also gives oxygen, but only when heated. This experiment studies the "
 "catalytic decomposition of H₂O₂."
@@ -1573,43 +1573,43 @@ msgstr ""
 "KMnO₄ тоже даёт кислород, но только при нагревании. В этом опыте изучается "
 "каталитическое разложение H₂O₂."
 
-#: apps/labs/experiments/t01/oxygen.py:53
+#: apps/labs/experiments/t01/oxygen.py:57
 msgid "Take a test tube"
 msgstr "Взять пробирку"
 
-#: apps/labs/experiments/t01/oxygen.py:53
+#: apps/labs/experiments/t01/oxygen.py:57
 msgid "A test tube is placed on the bench."
 msgstr "На стол ставится пробирка."
 
-#: apps/labs/experiments/t01/oxygen.py:56
+#: apps/labs/experiments/t01/oxygen.py:61
 msgid "Select the H₂O₂ solution"
 msgstr "Выбрать раствор H₂O₂"
 
-#: apps/labs/experiments/t01/oxygen.py:57
+#: apps/labs/experiments/t01/oxygen.py:62
 msgid "10 mL of the solution is poured into the test tube."
 msgstr "В пробирку наливается 10 мл раствора."
 
-#: apps/labs/experiments/t01/oxygen.py:60
+#: apps/labs/experiments/t01/oxygen.py:65
 msgid "Put the test tube on the bench first."
 msgstr "Сначала поставьте пробирку на стол."
 
-#: apps/labs/experiments/t01/oxygen.py:64
+#: apps/labs/experiments/t01/oxygen.py:69
 msgid "Attach the gas collector"
 msgstr "Присоединить газосборник"
 
-#: apps/labs/experiments/t01/oxygen.py:65
+#: apps/labs/experiments/t01/oxygen.py:70
 msgid "The delivery tube leads to the collector filled with water."
 msgstr "Газоотводная трубка подведена к газосборнику с водой."
 
-#: apps/labs/experiments/t01/oxygen.py:68
+#: apps/labs/experiments/t01/oxygen.py:73
 msgid "Pour the solution into the test tube first."
 msgstr "Сначала налейте раствор в пробирку."
 
-#: apps/labs/experiments/t01/oxygen.py:72
+#: apps/labs/experiments/t01/oxygen.py:77
 msgid "Start the reaction without a catalyst"
 msgstr "Начать реакцию без катализатора"
 
-#: apps/labs/experiments/t01/oxygen.py:73
+#: apps/labs/experiments/t01/oxygen.py:78
 msgid ""
 "Only single bubbles appear: without a catalyst the decomposition is very "
 "slow."
@@ -1617,19 +1617,19 @@ msgstr ""
 "Появляются лишь единичные пузырьки: без катализатора разложение идёт очень "
 "медленно."
 
-#: apps/labs/experiments/t01/oxygen.py:75
+#: apps/labs/experiments/t01/oxygen.py:80
 msgid "Attach the gas collector first, otherwise the gas will be lost."
 msgstr "Сначала присоедините газосборник, иначе газ будет потерян."
 
-#: apps/labs/experiments/t01/oxygen.py:79
+#: apps/labs/experiments/t01/oxygen.py:84
 msgid "Add the MnO₂ catalyst"
 msgstr "Добавить катализатор MnO₂"
 
-#: apps/labs/experiments/t01/oxygen.py:80
+#: apps/labs/experiments/t01/oxygen.py:85
 msgid "Black catalyst powder is added to the solution."
 msgstr "В раствор добавлен чёрный порошок катализатора."
 
-#: apps/labs/experiments/t01/oxygen.py:83
+#: apps/labs/experiments/t01/oxygen.py:89
 msgid ""
 "First observe the reaction without a catalyst, otherwise you will have "
 "nothing to compare with."
@@ -1637,90 +1637,90 @@ msgstr ""
 "Сначала понаблюдайте реакцию без катализатора, иначе не с чем будет "
 "сравнивать."
 
-#: apps/labs/experiments/t01/oxygen.py:87
+#: apps/labs/experiments/t01/oxygen.py:94
 msgid "Start the reaction"
 msgstr "Начать реакцию"
 
-#: apps/labs/experiments/t01/oxygen.py:88
+#: apps/labs/experiments/t01/oxygen.py:95
 msgid "Gas bubbles are released intensively and oxygen collects."
 msgstr "Интенсивно выделяются пузырьки газа, собирается кислород."
 
-#: apps/labs/experiments/t01/oxygen.py:90
+#: apps/labs/experiments/t01/oxygen.py:97
 msgid "Add the catalyst first."
 msgstr "Сначала добавьте катализатор."
 
-#: apps/labs/experiments/t01/oxygen.py:94
+#: apps/labs/experiments/t01/oxygen.py:101
 msgid "Observe"
 msgstr "Наблюдение"
 
-#: apps/labs/experiments/t01/oxygen.py:95
+#: apps/labs/experiments/t01/oxygen.py:102
 msgid ""
 "A glowing splint flares up in oxygen. The rates of the two runs are compared."
 msgstr ""
 "Тлеющая лучинка вспыхивает в кислороде. Скорости двух опытов сравниваются."
 
-#: apps/labs/experiments/t01/oxygen.py:97
+#: apps/labs/experiments/t01/oxygen.py:104
 msgid "Wait until the oxygen has been collected."
 msgstr "Дождитесь, пока соберётся кислород."
 
-#: apps/labs/experiments/t01/oxygen.py:99
+#: apps/labs/experiments/t01/oxygen.py:106
 msgid "Record the result"
 msgstr "Зафиксировать результат"
 
-#: apps/labs/experiments/t01/oxygen.py:99
+#: apps/labs/experiments/t01/oxygen.py:106
 msgid "Fill in the observation journal."
 msgstr "Заполните журнал наблюдений."
 
-#: apps/labs/experiments/t01/oxygen.py:109
+#: apps/labs/experiments/t01/oxygen.py:116
 msgid "Average rate without a catalyst"
 msgstr "Средняя скорость без катализатора"
 
-#: apps/labs/experiments/t01/oxygen.py:109
-#: apps/labs/experiments/t01/oxygen.py:110 apps/labs/views.py:62
+#: apps/labs/experiments/t01/oxygen.py:116
+#: apps/labs/experiments/t01/oxygen.py:117 apps/labs/views.py:64
 msgid "mL/min"
 msgstr "мл/мин"
 
-#: apps/labs/experiments/t01/oxygen.py:110
+#: apps/labs/experiments/t01/oxygen.py:117
 msgid "Average rate with MnO₂"
 msgstr "Средняя скорость с MnO₂"
 
-#: apps/labs/experiments/t01/oxygen.py:111
+#: apps/labs/experiments/t01/oxygen.py:118
 msgid "What happened to the glowing splint?"
 msgstr "Что произошло с тлеющей лучинкой?"
 
-#: apps/labs/experiments/t01/oxygen.py:114
+#: apps/labs/experiments/t01/oxygen.py:121
 msgid "What is the role of MnO₂?"
 msgstr "Какова роль MnO₂?"
 
-#: apps/labs/experiments/t01/oxygen.py:117
+#: apps/labs/experiments/t01/oxygen.py:124
 msgid "A catalyst: speeds up the reaction and is not consumed"
 msgstr "Катализатор: ускоряет реакцию и не расходуется"
 
-#: apps/labs/experiments/t01/oxygen.py:118
+#: apps/labs/experiments/t01/oxygen.py:125
 msgid "A reactant: it is consumed"
 msgstr "Реагент: он расходуется"
 
-#: apps/labs/experiments/t01/oxygen.py:119
+#: apps/labs/experiments/t01/oxygen.py:126
 msgid "A product of the reaction"
 msgstr "Продукт реакции"
 
-#: apps/labs/experiments/t01/oxygen.py:126
+#: apps/labs/experiments/t01/oxygen.py:133
 msgid "Is MnO₂ consumed in the reaction?"
 msgstr "Расходуется ли MnO₂ в реакции?"
 
-#: apps/labs/experiments/t01/oxygen.py:128
+#: apps/labs/experiments/t01/oxygen.py:135
 msgid "No, its mass stays the same at the end"
 msgstr "Нет, в конце его масса остаётся прежней"
 
-#: apps/labs/experiments/t01/oxygen.py:129
+#: apps/labs/experiments/t01/oxygen.py:136
 msgid "Yes, it is completely consumed"
 msgstr "Да, расходуется полностью"
 
-#: apps/labs/experiments/t01/oxygen.py:130
+#: apps/labs/experiments/t01/oxygen.py:137
 msgid "Partly"
 msgstr "Частично"
 
-#: apps/labs/experiments/t01/oxygen.py:135
+#: apps/labs/experiments/t01/oxygen.py:142
 msgid ""
 "What happens to the total volume of O₂ if more MnO₂ is added to the same "
 "amount of H₂O₂?"
@@ -1728,35 +1728,35 @@ msgstr ""
 "Что произойдёт с общим объёмом O₂, если к тому же количеству H₂O₂ добавить "
 "больше MnO₂?"
 
-#: apps/labs/experiments/t01/oxygen.py:137
+#: apps/labs/experiments/t01/oxygen.py:144
 msgid "It stays the same; only the rate changes"
 msgstr "Не изменится; меняется только скорость"
 
-#: apps/labs/experiments/t01/oxygen.py:138
+#: apps/labs/experiments/t01/oxygen.py:145
 msgid "It increases"
 msgstr "Увеличится"
 
-#: apps/labs/experiments/t01/oxygen.py:139
+#: apps/labs/experiments/t01/oxygen.py:146
 msgid "It decreases"
 msgstr "Уменьшится"
 
-#: apps/labs/experiments/t01/oxygen.py:144
+#: apps/labs/experiments/t01/oxygen.py:151
 msgid "How is oxygen detected?"
 msgstr "Как обнаруживают кислород?"
 
-#: apps/labs/experiments/t01/oxygen.py:146
+#: apps/labs/experiments/t01/oxygen.py:153
 msgid "A glowing splint flares up"
 msgstr "Тлеющая лучинка вспыхивает"
 
-#: apps/labs/experiments/t01/oxygen.py:147
+#: apps/labs/experiments/t01/oxygen.py:154
 msgid "A burning splint goes out with a pop"
 msgstr "Горящая лучинка гаснет с хлопком"
 
-#: apps/labs/experiments/t01/oxygen.py:148
+#: apps/labs/experiments/t01/oxygen.py:155
 msgid "Limewater turns cloudy"
 msgstr "Известковая вода мутнеет"
 
-#: apps/labs/experiments/t01/oxygen.py:151
+#: apps/labs/experiments/t01/oxygen.py:159
 msgid ""
 "Suggest a way to show students that the catalyst is not consumed in the "
 "reaction."
@@ -1764,11 +1764,11 @@ msgstr ""
 "Предложите способ показать ученикам, что катализатор не расходуется в "
 "реакции."
 
-#: apps/labs/experiments/t01/rate.py:14
+#: apps/labs/experiments/t01/rate.py:15
 msgid "Rate of hydrogen peroxide decomposition"
 msgstr "Скорость разложения пероксида водорода"
 
-#: apps/labs/experiments/t01/rate.py:15
+#: apps/labs/experiments/t01/rate.py:16
 msgid ""
 "Compare how fast oxygen is released in two test tubes: without a catalyst "
 "(A) and with MnO₂ (B)."
@@ -1776,7 +1776,7 @@ msgstr ""
 "Сравнить скорость выделения кислорода в двух пробирках: без катализатора (A) "
 "и с MnO₂ (B)."
 
-#: apps/labs/experiments/t01/rate.py:19
+#: apps/labs/experiments/t01/rate.py:20
 msgid ""
 "A catalyst changes the rate of the reaction, but it does not increase the "
 "theoretical total amount of oxygen formed when the same initial amount of "
@@ -1786,19 +1786,19 @@ msgstr ""
 "количество кислорода, образующегося при полном разложении одинакового "
 "исходного количества пероксида водорода."
 
-#: apps/labs/experiments/t01/rate.py:23
+#: apps/labs/experiments/t01/rate.py:24
 msgid "Test tube A"
 msgstr "Пробирка A"
 
-#: apps/labs/experiments/t01/rate.py:24
+#: apps/labs/experiments/t01/rate.py:25
 msgid "Test tube B"
 msgstr "Пробирка B"
 
-#: apps/labs/experiments/t01/rate.py:25
+#: apps/labs/experiments/t01/rate.py:26
 msgid "Gas syringes"
 msgstr "Газовые шприцы"
 
-#: apps/labs/experiments/t01/rate.py:34
+#: apps/labs/experiments/t01/rate.py:36
 msgid ""
 "Heating would also speed up the reaction and mix two factors. Change only "
 "one variable: the catalyst."
@@ -1806,105 +1806,105 @@ msgstr ""
 "Нагревание тоже ускорит реакцию, и два фактора смешаются. Меняйте только "
 "одну переменную — катализатор."
 
-#: apps/labs/experiments/t01/rate.py:40
+#: apps/labs/experiments/t01/rate.py:43
 msgid "Select two test tubes"
 msgstr "Выбрать две пробирки"
 
-#: apps/labs/experiments/t01/rate.py:41
+#: apps/labs/experiments/t01/rate.py:44
 msgid "Tubes A and B are placed and connected to gas syringes."
 msgstr "Пробирки A и B установлены и подключены к газовым шприцам."
 
-#: apps/labs/experiments/t01/rate.py:44
+#: apps/labs/experiments/t01/rate.py:47
 msgid "You need tube A, tube B and the gas syringes."
 msgstr "Нужны пробирка A, пробирка B и газовые шприцы."
 
-#: apps/labs/experiments/t01/rate.py:48
+#: apps/labs/experiments/t01/rate.py:51
 msgid "Add H₂O₂"
 msgstr "Добавить H₂O₂"
 
-#: apps/labs/experiments/t01/rate.py:49
+#: apps/labs/experiments/t01/rate.py:52
 msgid "The same initial amount (5 mL) is poured into both tubes."
 msgstr "В обе пробирки наливается одинаковое исходное количество (5 мл)."
 
-#: apps/labs/experiments/t01/rate.py:52
+#: apps/labs/experiments/t01/rate.py:55
 msgid "Place both test tubes first."
 msgstr "Сначала установите обе пробирки."
 
-#: apps/labs/experiments/t01/rate.py:56
+#: apps/labs/experiments/t01/rate.py:59
 msgid "Add MnO₂"
 msgstr "Добавить MnO₂"
 
-#: apps/labs/experiments/t01/rate.py:57
+#: apps/labs/experiments/t01/rate.py:60
 msgid "The catalyst is added to tube B only."
 msgstr "Катализатор добавлен только в пробирку B."
 
-#: apps/labs/experiments/t01/rate.py:60
+#: apps/labs/experiments/t01/rate.py:63
 msgid "Pour H₂O₂ into both tubes first."
 msgstr "Сначала налейте H₂O₂ в обе пробирки."
 
-#: apps/labs/experiments/t01/rate.py:64
+#: apps/labs/experiments/t01/rate.py:67
 msgid "Start the timer"
 msgstr "Запустить таймер"
 
-#: apps/labs/experiments/t01/rate.py:65
+#: apps/labs/experiments/t01/rate.py:68
 msgid "The comparison of the two reactions begins."
 msgstr "Начинается сравнение двух реакций."
 
-#: apps/labs/experiments/t01/rate.py:67
+#: apps/labs/experiments/t01/rate.py:70
 msgid "Prepare both tubes first."
 msgstr "Сначала подготовьте обе пробирки."
 
-#: apps/labs/experiments/t01/rate.py:71
+#: apps/labs/experiments/t01/rate.py:74
 msgid "Open the graph"
 msgstr "Открыть график"
 
-#: apps/labs/experiments/t01/rate.py:72
+#: apps/labs/experiments/t01/rate.py:75
 msgid "The volume of O₂ released is plotted against time."
 msgstr "Построена зависимость объёма выделившегося O₂ от времени."
 
-#: apps/labs/experiments/t01/rate.py:74
+#: apps/labs/experiments/t01/rate.py:77
 msgid "Start the timer first."
 msgstr "Сначала запустите таймер."
 
-#: apps/labs/experiments/t01/rate.py:78
+#: apps/labs/experiments/t01/rate.py:81
 msgid "Write a conclusion"
 msgstr "Записать вывод"
 
-#: apps/labs/experiments/t01/rate.py:79
+#: apps/labs/experiments/t01/rate.py:82
 msgid "Explain the effect of the catalyst on the reaction rate."
 msgstr "Объясните влияние катализатора на скорость реакции."
 
-#: apps/labs/experiments/t01/rate.py:91
+#: apps/labs/experiments/t01/rate.py:94
 msgid "V(O₂) in tube A after 2 min"
 msgstr "V(O₂) в пробирке A через 2 мин"
 
-#: apps/labs/experiments/t01/rate.py:92
+#: apps/labs/experiments/t01/rate.py:95
 msgid "V(O₂) in tube B after 2 min"
 msgstr "V(O₂) в пробирке B через 2 мин"
 
-#: apps/labs/experiments/t01/rate.py:95
+#: apps/labs/experiments/t01/rate.py:98
 msgid "Conclusion"
 msgstr "Вывод"
 
-#: apps/labs/experiments/t01/rate.py:98
+#: apps/labs/experiments/t01/rate.py:103
 msgid ""
 "The catalyst speeds up the reaction but does not change the total volume of "
 "O₂"
 msgstr "Катализатор ускоряет реакцию, но не меняет общий объём O₂"
 
-#: apps/labs/experiments/t01/rate.py:99
+#: apps/labs/experiments/t01/rate.py:106
 msgid "The catalyst increases the amount of O₂"
 msgstr "Катализатор увеличивает количество O₂"
 
-#: apps/labs/experiments/t01/rate.py:100
+#: apps/labs/experiments/t01/rate.py:107
 msgid "The catalyst slows the reaction down"
 msgstr "Катализатор замедляет реакцию"
 
-#: apps/labs/experiments/t01/rate.py:103
+#: apps/labs/experiments/t01/rate.py:110
 msgid "Explain the effect of the catalyst in your own words"
 msgstr "Объясните действие катализатора своими словами"
 
-#: apps/labs/experiments/t01/rate.py:108
+#: apps/labs/experiments/t01/rate.py:115
 msgid ""
 "How much oxygen will be formed in each tube when H₂O₂ decomposes completely "
 "(5 mL, 3%)?"
@@ -1912,35 +1912,35 @@ msgstr ""
 "Сколько кислорода образуется в каждой пробирке при полном разложении H₂O₂ (5 "
 "мл, 3%)?"
 
-#: apps/labs/experiments/t01/rate.py:110
+#: apps/labs/experiments/t01/rate.py:117
 msgid "About 49 mL in both tubes"
 msgstr "Около 49 мл в обеих пробирках"
 
-#: apps/labs/experiments/t01/rate.py:111
+#: apps/labs/experiments/t01/rate.py:118
 msgid "More in tube B"
 msgstr "Больше в пробирке B"
 
-#: apps/labs/experiments/t01/rate.py:112
+#: apps/labs/experiments/t01/rate.py:119
 msgid "More in tube A"
 msgstr "Больше в пробирке A"
 
-#: apps/labs/experiments/t01/rate.py:117
+#: apps/labs/experiments/t01/rate.py:124
 msgid "Which variable was changed in this experiment?"
 msgstr "Какая переменная менялась в этом опыте?"
 
-#: apps/labs/experiments/t01/rate.py:119
+#: apps/labs/experiments/t01/rate.py:126
 msgid "Only the presence of the catalyst"
 msgstr "Только наличие катализатора"
 
-#: apps/labs/experiments/t01/rate.py:120
+#: apps/labs/experiments/t01/rate.py:127
 msgid "The temperature"
 msgstr "Температура"
 
-#: apps/labs/experiments/t01/rate.py:121
+#: apps/labs/experiments/t01/rate.py:128
 msgid "The concentration of H₂O₂"
 msgstr "Концентрация H₂O₂"
 
-#: apps/labs/experiments/t01/rate.py:124
+#: apps/labs/experiments/t01/rate.py:131
 msgid ""
 "Using the idea of activation energy, explain why MnO₂ speeds up the "
 "decomposition."
@@ -1963,399 +1963,416 @@ msgstr "Завершено"
 msgid "Analysis submitted"
 msgstr "Анализ отправлен"
 
-#: apps/labs/models/attempt.py:18
+#: apps/labs/models/attempt.py:24
+msgid ""
+"Empty for a teacher's preview and for attempts made before the course "
+"structure"
+msgstr "Пусто для предпросмотра преподавателя и для попыток до появления структуры курса"
+
+#: apps/labs/models/attempt.py:35
 msgid "experiment"
 msgstr "опыт"
 
-#: apps/labs/models/attempt.py:19
-msgid "Snapshot at start"
-msgstr "Значение на момент начала"
+#: apps/labs/models/attempt.py:37
+msgid "Snapshot at start (from the enrolment)"
+msgstr "Значение на момент начала (из записи на курс)"
 
-#: apps/labs/models/attempt.py:26
+#: apps/labs/models/attempt.py:45
 msgid "order errors"
 msgstr "ошибки порядка"
 
-#: apps/labs/models/attempt.py:27
+#: apps/labs/models/attempt.py:46
 msgid "safety warnings"
 msgstr "предупреждения безопасности"
 
-#: apps/labs/models/attempt.py:28
+#: apps/labs/models/attempt.py:47
 msgid "wrong equipment or reagent"
 msgstr "неверное оборудование или реактив"
 
-#: apps/labs/models/attempt.py:29
+#: apps/labs/models/attempt.py:48
 msgid "wrong choices"
 msgstr "неверные выборы"
 
-#: apps/labs/models/attempt.py:30
+#: apps/labs/models/attempt.py:49
 msgid "hints used"
 msgstr "использовано подсказок"
 
-#: apps/labs/models/attempt.py:31
+#: apps/labs/models/attempt.py:50
 msgid "time per step, ms"
 msgstr "время на шаг, мс"
 
-#: apps/labs/models/attempt.py:33
+#: apps/labs/models/attempt.py:52
 msgid "lab journal"
 msgstr "лабораторный журнал"
 
-#: apps/labs/models/attempt.py:34
+#: apps/labs/models/attempt.py:53
 msgid "journal: correct choices"
 msgstr "журнал: верные выборы"
 
-#: apps/labs/models/attempt.py:35
+#: apps/labs/models/attempt.py:54
 msgid "journal: choice fields"
 msgstr "журнал: поля с выбором"
 
-#: apps/labs/models/attempt.py:36
+#: apps/labs/models/attempt.py:55
 msgid "analysis answers"
 msgstr "ответы анализа"
 
-#: apps/labs/models/attempt.py:37
+#: apps/labs/models/attempt.py:56
 msgid "analysis: correct"
 msgstr "анализ: верно"
 
-#: apps/labs/models/attempt.py:38
+#: apps/labs/models/attempt.py:57
 msgid "analysis: closed questions"
 msgstr "анализ: закрытые вопросы"
 
-#: apps/labs/models/attempt.py:43
+#: apps/labs/models/attempt.py:59 apps/progress/models/progress.py:28
+#: apps/progress/models/progress.py:83 apps/progress/models/progress.py:171
+msgid "score, %"
+msgstr "балл, %"
+
+#: apps/labs/models/attempt.py:64
+msgid ""
+"Process, journal and analysis by the lab's scoring formula; set when the "
+"analysis is sent"
+msgstr "Процесс, журнал и анализ по формуле оценивания лаборатории; ставится при отправке анализа"
+
+#: apps/labs/models/attempt.py:70
 msgid "lab attempt"
 msgstr "попытка в лаборатории"
 
-#: apps/labs/models/attempt.py:44
+#: apps/labs/models/attempt.py:71
 msgid "lab attempts"
 msgstr "попытки в лаборатории"
 
-#: apps/labs/models/attempt.py:54
+#: apps/labs/models/attempt.py:81
 msgid "Start"
 msgstr "Начало"
 
-#: apps/labs/models/attempt.py:55
+#: apps/labs/models/attempt.py:82
 msgid "Item placed"
 msgstr "Предмет размещён"
 
-#: apps/labs/models/attempt.py:56
+#: apps/labs/models/attempt.py:83
 msgid "Wrong item"
 msgstr "Неверный предмет"
 
-#: apps/labs/models/attempt.py:57
+#: apps/labs/models/attempt.py:84
 msgid "Command"
 msgstr "Команда"
 
-#: apps/labs/models/attempt.py:58
+#: apps/labs/models/attempt.py:85
 msgid "Step done"
 msgstr "Шаг выполнен"
 
-#: apps/labs/models/attempt.py:59
+#: apps/labs/models/attempt.py:86
 msgid "Order error"
 msgstr "Ошибка порядка"
 
-#: apps/labs/models/attempt.py:60
+#: apps/labs/models/attempt.py:87
 msgid "Safety warning"
 msgstr "Предупреждение безопасности"
 
-#: apps/labs/models/attempt.py:61
+#: apps/labs/models/attempt.py:88
 msgid "Wrong choice"
 msgstr "Неверный выбор"
 
-#: apps/labs/models/attempt.py:62 apps/labs/views.py:44
+#: apps/labs/models/attempt.py:89 apps/labs/views.py:46
 #: ui/templates/student/partials/practice_field.html:86
 msgid "Hint"
 msgstr "Подсказка"
 
-#: apps/labs/models/attempt.py:63
+#: apps/labs/models/attempt.py:90
 msgid "Journal saved"
 msgstr "Журнал сохранён"
 
-#: apps/labs/models/attempt.py:64
+#: apps/labs/models/attempt.py:91
 msgid "Finish"
 msgstr "Завершение"
 
-#: apps/labs/models/attempt.py:65
+#: apps/labs/models/attempt.py:92
 msgid "Restart"
 msgstr "Перезапуск"
 
-#: apps/labs/models/attempt.py:68
+#: apps/labs/models/attempt.py:95
 msgid "sequence"
 msgstr "порядковый номер"
 
-#: apps/labs/models/attempt.py:69
+#: apps/labs/models/attempt.py:96
 msgid "time from start, ms"
 msgstr "время от начала, мс"
 
-#: apps/labs/models/attempt.py:70
+#: apps/labs/models/attempt.py:97
 msgid "type"
 msgstr "тип"
 
-#: apps/labs/models/attempt.py:71
+#: apps/labs/models/attempt.py:98
 msgid "step"
 msgstr "шаг"
 
-#: apps/labs/models/attempt.py:72
+#: apps/labs/models/attempt.py:99
 msgid "payload"
 msgstr "данные"
 
-#: apps/labs/models/attempt.py:78
+#: apps/labs/models/attempt.py:105
 msgid "lab event"
 msgstr "событие лаборатории"
 
-#: apps/labs/models/attempt.py:79
+#: apps/labs/models/attempt.py:106
 msgid "lab events"
 msgstr "события лаборатории"
 
-#: apps/labs/views.py:28
+#: apps/labs/views.py:30
 msgid "Equipment and reagents"
 msgstr "Оборудование и реактивы"
 
-#: apps/labs/views.py:29
+#: apps/labs/views.py:31
 msgid "Glassware"
 msgstr "Посуда"
 
-#: apps/labs/views.py:30
+#: apps/labs/views.py:32
 msgid "Devices"
 msgstr "Приборы"
 
-#: apps/labs/views.py:31
+#: apps/labs/views.py:33
 msgid "Reagents"
 msgstr "Реактивы"
 
-#: apps/labs/views.py:32
+#: apps/labs/views.py:34
 msgid "Virtual bench"
 msgstr "Виртуальный рабочий стол"
 
-#: apps/labs/views.py:33
+#: apps/labs/views.py:35
 msgid "Drag equipment here or use the commands below."
 msgstr "Перетащите оборудование сюда или используйте команды ниже."
 
-#: apps/labs/views.py:34
+#: apps/labs/views.py:36
 msgid "Release to place on the bench"
 msgstr "Отпустите, чтобы поставить на стол"
 
-#: apps/labs/views.py:35
+#: apps/labs/views.py:37
 msgid "Add to bench"
 msgstr "Поставить на стол"
 
-#: apps/labs/views.py:36
+#: apps/labs/views.py:38
 msgid "Commands"
 msgstr "Команды"
 
-#: apps/labs/views.py:37
+#: apps/labs/views.py:39
 msgid "Warnings and observations"
 msgstr "Предупреждения и наблюдения"
 
-#: apps/labs/views.py:38
+#: apps/labs/views.py:40
 msgid "Messages about your actions will appear here."
 msgstr "Здесь появятся сообщения о ваших действиях."
 
-#: apps/labs/views.py:39
+#: apps/labs/views.py:41
 msgid "Lab journal"
 msgstr "Лабораторный журнал"
 
-#: apps/labs/views.py:40
+#: apps/labs/views.py:42
 msgid "Save journal"
 msgstr "Сохранить журнал"
 
-#: apps/labs/views.py:41
+#: apps/labs/views.py:43
 msgid "Journal saved."
 msgstr "Журнал сохранён."
 
-#: apps/labs/views.py:42
+#: apps/labs/views.py:44
 msgid "Fill in all fields of the journal."
 msgstr "Заполните все поля журнала."
 
-#: apps/labs/views.py:43
+#: apps/labs/views.py:45
 #, python-format
 msgid "The journal opens at the «%(step)s» step."
 msgstr "Журнал откроется на шаге «%(step)s»."
 
-#: apps/labs/views.py:45
+#: apps/labs/views.py:47
 msgid "Done"
 msgstr "Выполнено"
 
-#: apps/labs/views.py:46
+#: apps/labs/views.py:48
 msgid "In progress…"
 msgstr "Идёт…"
 
-#: apps/labs/views.py:47
+#: apps/labs/views.py:49
 msgid "Next"
 msgstr "Далее"
 
-#: apps/labs/views.py:48
+#: apps/labs/views.py:50
 #, python-format
 msgid "Not yet. Next step: «%(step)s»."
 msgstr "Пока рано. Следующий шаг: «%(step)s»."
 
-#: apps/labs/views.py:49
+#: apps/labs/views.py:51
 msgid "This step is already done."
 msgstr "Этот шаг уже выполнен."
 
-#: apps/labs/views.py:50
+#: apps/labs/views.py:52
 msgid "This item is not needed in this experiment."
 msgstr "Этот предмет не нужен в данном опыте."
 
-#: apps/labs/views.py:51
+#: apps/labs/views.py:53
 msgid "This item is already on the bench."
 msgstr "Этот предмет уже на столе."
 
-#: apps/labs/views.py:52
+#: apps/labs/views.py:54
 msgid "Choose"
 msgstr "Выбрать"
 
-#: apps/labs/views.py:54
+#: apps/labs/views.py:56
 msgid "Scientific explanation"
 msgstr "Научное объяснение"
 
-#: apps/labs/views.py:55
+#: apps/labs/views.py:57
 msgid "Measurements"
 msgstr "Измерения"
 
-#: apps/labs/views.py:56 ui/templates/labs/run.html:40
+#: apps/labs/views.py:58 ui/templates/labs/run.html:46
 msgid "Time"
 msgstr "Время"
 
-#: apps/labs/views.py:57
+#: apps/labs/views.py:59
 msgid "Volume"
 msgstr "Объём"
 
-#: apps/labs/views.py:58 ui/templates/student/course_map.html:52
+#: apps/labs/views.py:60 ui/templates/student/course_map.html:52
 msgid "min"
 msgstr "мин"
 
-#: apps/labs/views.py:59
+#: apps/labs/views.py:61
 msgid "s"
 msgstr "с"
 
-#: apps/labs/views.py:61
+#: apps/labs/views.py:63
 msgid "Rate"
 msgstr "Скорость"
 
-#: apps/labs/views.py:63
+#: apps/labs/views.py:65
 msgid "Volume of gas against time"
 msgstr "Зависимость объёма газа от времени"
 
-#: apps/labs/views.py:64
+#: apps/labs/views.py:66
 msgid "Theoretical maximum"
 msgstr "Теоретический максимум"
 
-#: apps/labs/views.py:65
+#: apps/labs/views.py:67
 msgid "Analysis task"
 msgstr "Задание на анализ"
 
-#: apps/labs/views.py:66
+#: apps/labs/views.py:68
 msgid "Submit answers"
 msgstr "Отправить ответы"
 
-#: apps/labs/views.py:67 ui/templates/assessments/take.html:74
+#: apps/labs/views.py:69 ui/templates/assessments/take.html:74
 msgid "Your answer"
 msgstr "Ваш ответ"
 
-#: apps/labs/views.py:68
+#: apps/labs/views.py:70
 msgid "Experiment complete"
 msgstr "Опыт завершён"
 
-#: apps/labs/views.py:69 ui/templates/research/dashboard.html:49
+#: apps/labs/views.py:71 ui/templates/research/dashboard.html:49
 #: ui/templates/research/dashboard.html:84
 msgid "Order errors"
 msgstr "Ошибки порядка"
 
-#: apps/labs/views.py:70 ui/templates/research/dashboard.html:50
+#: apps/labs/views.py:72 ui/templates/research/dashboard.html:50
 #: ui/templates/research/dashboard.html:84
 msgid "Safety warnings"
 msgstr "Предупреждения безопасности"
 
-#: apps/labs/views.py:71
+#: apps/labs/views.py:73
 msgid "Wrong equipment or choices"
 msgstr "Неверное оборудование или выбор"
 
-#: apps/labs/views.py:72
+#: apps/labs/views.py:74
 msgid "Time spent"
 msgstr "Затрачено времени"
 
-#: apps/labs/views.py:73
+#: apps/labs/views.py:75
 msgid "Analysis: correct answers"
 msgstr "Анализ: верные ответы"
 
-#: apps/labs/views.py:74 ui/templates/labs/run.html:17
+#: apps/labs/views.py:76 ui/templates/labs/run.html:17
 msgid "Back to the topic"
 msgstr "Вернуться к теме"
 
-#: apps/labs/views.py:75
+#: apps/labs/views.py:77
 msgid "Next experiment"
 msgstr "Следующий опыт"
 
-#: apps/labs/views.py:76 ui/templates/labs/run.html:42
+#: apps/labs/views.py:78 ui/templates/labs/run.html:48
 msgid "Start again"
 msgstr "Начать заново"
 
-#: apps/labs/views.py:78
+#: apps/labs/views.py:80
 msgid ""
 "Start the experiment again? The current progress will be saved as an "
 "unfinished attempt."
 msgstr ""
 "Начать опыт заново? Текущий прогресс сохранится как незавершённая попытка."
 
-#: apps/labs/views.py:80
+#: apps/labs/views.py:82
 msgid "Safety"
 msgstr "Безопасность"
 
-#: apps/labs/views.py:81
+#: apps/labs/views.py:83
 msgid "Observation"
 msgstr "Наблюдение"
 
-#: apps/labs/views.py:82
+#: apps/labs/views.py:84
 msgid "Mistake"
 msgstr "Ошибка"
 
-#: apps/labs/views.py:83
+#: apps/labs/views.py:85
 msgid "Note"
 msgstr "Примечание"
 
-#: apps/labs/views.py:84
+#: apps/labs/views.py:86
 msgid "Speed"
 msgstr "Скорость"
 
-#: apps/labs/views.py:85
+#: apps/labs/views.py:87
 msgid "without catalyst"
 msgstr "без катализатора"
 
-#: apps/labs/views.py:86
+#: apps/labs/views.py:88
 msgid "with MnO₂"
 msgstr "с MnO₂"
 
-#: apps/labs/views.py:87
+#: apps/labs/views.py:89
 msgid "A: without catalyst"
 msgstr "A: без катализатора"
 
-#: apps/labs/views.py:88
+#: apps/labs/views.py:90
 msgid "B: with MnO₂"
 msgstr "B: с MnO₂"
 
-#: apps/labs/views.py:89
+#: apps/labs/views.py:91
 msgid "Cathode (−)"
 msgstr "Катод (−)"
 
-#: apps/labs/views.py:90
+#: apps/labs/views.py:92
 msgid "Anode (+)"
 msgstr "Анод (+)"
 
-#: apps/labs/views.py:91
+#: apps/labs/views.py:93
 msgid "Ratio"
 msgstr "Отношение"
 
-#: apps/labs/views.py:92
+#: apps/labs/views.py:94
 msgid "Purity test: a quiet pop — the hydrogen is pure."
 msgstr "Проверка на чистоту: глухой хлопок — водород чистый."
 
-#: apps/labs/views.py:93
+#: apps/labs/views.py:95
 msgid "The glowing splint flares up: the gas is oxygen."
 msgstr "Тлеющая лучинка вспыхнула: этот газ — кислород."
 
-#: apps/labs/views.py:94
+#: apps/labs/views.py:96
 msgid "Tube A is the control: it must stay without a catalyst."
 msgstr "Пробирка A — контрольная: она должна остаться без катализатора."
 
-#: apps/labs/views.py:95
+#: apps/labs/views.py:97
 msgid "Connection problem. Your actions are kept and will be sent again."
 msgstr ""
 "Проблема со связью. Ваши действия сохранены и будут отправлены повторно."
@@ -3058,7 +3075,8 @@ msgstr "Неудовлетворительно"
 
 #: apps/progress/models/progress.py:15 apps/progress/models/progress.py:70
 #: apps/student/learning.py:95 ui/templates/components/stage_stepper.html:22
-#: ui/templates/student/course_map.html:44 ui/templates/student/topic.html:30
+#: ui/templates/student/course_map.html:44
+#: ui/templates/student/stages/lab.html:23 ui/templates/student/topic.html:30
 msgid "Locked"
 msgstr "Закрыто"
 
@@ -3079,11 +3097,6 @@ msgstr "Ожидает проверки"
 #: ui/templates/student/topic.html:30
 msgid "Passed"
 msgstr "Пройдено"
-
-#: apps/progress/models/progress.py:28 apps/progress/models/progress.py:83
-#: apps/progress/models/progress.py:171
-msgid "score, %"
-msgstr "балл, %"
 
 #: apps/progress/models/progress.py:30
 msgid "needs the teacher's attention"
@@ -3255,19 +3268,25 @@ msgstr "Кабинет студента"
 msgid "Passed · %(score)s%%"
 msgstr "Пройдено · %(score)s%%"
 
-#: apps/student/views.py:253 ui/templates/student/stages/practice.html:71
+#: apps/student/views.py:264 ui/templates/student/stages/practice.html:71
 msgid "Preview: answers are not saved."
 msgstr "Предпросмотр: ответы не сохраняются."
 
-#: apps/student/views.py:347
+#: apps/student/views.py:360
+msgid ""
+"Experiments open one after another: finish the previous one and send its "
+"analysis."
+msgstr "Опыты открываются по очереди: завершите предыдущий и отправьте его анализ."
+
+#: apps/student/views.py:435
 msgid "Finish the material first — the test opens after it."
 msgstr "Сначала завершите материал — тест откроется после него."
 
-#: apps/student/views.py:426 ui/templates/student/stage.html:19
+#: apps/student/views.py:514 ui/templates/student/stage.html:19
 msgid "Go to the next stage"
 msgstr "Перейти к следующему этапу"
 
-#: apps/student/views.py:428
+#: apps/student/views.py:516
 msgid "Back to the stage"
 msgstr "Вернуться к этапу"
 
@@ -3448,7 +3467,9 @@ msgstr "Ответ"
 msgid ""
 "Numeric: {\"value\": \"2,24\", \"unit\": \"L\"}; choice and ordering: a JSON "
 "list; matching: a JSON object. Other kinds: plain text."
-msgstr "Число: {\"value\": \"2,24\", \"unit\": \"L\"}; выбор и порядок: JSON-список; сопоставление: JSON-объект. Остальное: обычный текст."
+msgstr ""
+"Число: {\"value\": \"2,24\", \"unit\": \"L\"}; выбор и порядок: JSON-список; "
+"сопоставление: JSON-объект. Остальное: обычный текст."
 
 #: ui/templates/admin/practice/practiceitem/try.html:15
 msgid "Check"
@@ -3654,6 +3675,11 @@ msgstr "Опыт %(n)s"
 #: ui/templates/labs/run.html:29
 msgid "Experiments"
 msgstr "Опыты"
+
+#: ui/templates/labs/run.html:37
+#: ui/templates/student/partials/stage_tile.html:2
+msgid "locked"
+msgstr "закрыт"
 
 #: ui/templates/layouts/auth.html:27
 msgid ""
@@ -4110,10 +4136,6 @@ msgid "Start the test"
 msgstr "Начать тест"
 
 #: ui/templates/student/partials/stage_tile.html:2
-msgid "locked"
-msgstr "закрыт"
-
-#: ui/templates/student/partials/stage_tile.html:2
 msgid "awaiting check"
 msgstr "ожидает проверки"
 
@@ -4132,12 +4154,18 @@ msgstr ""
 "Выполните опыты по порядку, заполните лабораторный журнал и отправьте анализ."
 
 #: ui/templates/student/stages/lab.html:16
-msgid "analysis"
-msgstr "анализ"
+msgid "Opens after the previous experiment"
+msgstr "Откроется после предыдущего опыта"
 
-#: ui/templates/student/stages/lab.html:21
+#: ui/templates/student/stages/lab.html:28
 msgid "The lab is not set up yet."
 msgstr "Лаборатория ещё не настроена."
+
+#: ui/templates/student/stages/lab.html:31
+msgid ""
+"The stage score is the average of your best attempt in every experiment: "
+"actions in the right order, the journal and the analysis."
+msgstr "Балл этапа — среднее лучших попыток по каждому опыту: правильный порядок действий, журнал и анализ."
 
 #: ui/templates/student/stages/practice.html:3
 msgid "The practice task is being prepared"
@@ -4160,7 +4188,8 @@ msgstr "Ожидает проверки преподавателем"
 msgid ""
 "Part of the answer is checked by the teacher. You can go on to the next "
 "stage."
-msgstr "Часть ответа проверит преподаватель. Можно переходить к следующему этапу."
+msgstr ""
+"Часть ответа проверит преподаватель. Можно переходить к следующему этапу."
 
 #: ui/templates/student/stages/practice.html:23
 msgid "Work accepted"
@@ -4298,6 +4327,9 @@ msgstr "Практическая работа 3"
 #: ui/views.py:21
 msgid "Score"
 msgstr "Балл"
+
+#~ msgid "analysis"
+#~ msgstr "анализ"
 
 #~ msgid "Coming soon"
 #~ msgstr "Скоро"

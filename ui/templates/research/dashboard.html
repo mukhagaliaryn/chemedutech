@@ -56,7 +56,7 @@
         {% for row in summary %}
           <tr>
             <td>{{ titles|get:row.experiment_key }}</td>
-            <td>{{ cohort_names|get:row.cohort|default:"—" }}</td>
+            <td>{{ cohort_names|get:row.research_cohort|default:"—" }}</td>
             <td class="text-right">{{ row.students }}</td>
             <td class="text-right">{{ row.n }}</td>
             <td class="text-right">{{ row.avg_time|floatformat:0 }}</td>

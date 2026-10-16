@@ -2,11 +2,13 @@ import json
 
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponseBadRequest, JsonResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
+from apps.core.permissions import ADMIN, TEACHER, has_role
+from apps.courses.models import Stage
 from apps.courses.selectors import topic_for_lab
 
 from . import services
@@ -96,16 +98,9 @@ def _ui_strings():
     }
 
 
-@login_required
-def run_experiment(request, lab_key, experiment_key):
-    lab, experiment = _get_spec(lab_key, experiment_key)
-    topic = topic_for_lab(lab.key)
-    attempt = services.start_attempt(request.user, lab.key, experiment)
-
-    experiments = list(lab.experiments)
-    idx = experiments.index(experiment)
-    next_exp = experiments[idx + 1] if idx + 1 < len(experiments) else None
-
+def lab_page(request, *, lab, experiment, attempt, urls: dict, nav: list[dict], topic=None, back_url=""):
+    """Render the simulator. ``urls`` override the API/navigation endpoints the runner (engine.js) calls;
+    ``nav`` — [{number, title, url (None = locked), current, done}] for the experiment switcher."""
     config = {
         "attempt": attempt.pk,
         "lab": lab.key,
@@ -116,9 +111,9 @@ def run_experiment(request, lab_key, experiment_key):
             "journal": reverse("labs:api_journal", args=[attempt.pk]),
             "finish": reverse("labs:api_finish", args=[attempt.pk]),
             "analysis": reverse("labs:api_analysis", args=[attempt.pk]),
-            "topic": topic.get_absolute_url() if topic else reverse("student:courses"),
-            "next": reverse("labs:run", args=[lab.key, next_exp.key]) if next_exp else "",
             "restart": request.path,
+            "next": "",
+            **urls,
         },
     }
     return render(
@@ -127,11 +122,52 @@ def run_experiment(request, lab_key, experiment_key):
         {
             "lab": lab,
             "experiment": experiment,
-            "experiments": experiments,
+            "nav": nav,
             "topic": topic,
+            "back_url": back_url or config["urls"].get("topic", ""),
             "config": config,
         },
     )
+
+
+@login_required
+def run_experiment(request, lab_key, experiment_key):
+    """Outside a course stage: a teacher's or admin's preview. Students are sent to their lab stage."""
+    lab, experiment = _get_spec(lab_key, experiment_key)
+    if not has_role(request.user, TEACHER, ADMIN):
+        stage = (
+            Stage.objects.filter(
+                kind=Stage.Kind.LAB,
+                lab_content__lab_key=lab.key,
+                topic__module__course__enrollments__student=request.user,
+                topic__is_published=True,
+            )
+            .select_related("topic__module__course")
+            .first()
+        )
+        if stage is None:
+            raise Http404
+        course = stage.topic.module.course
+        return redirect("student:lab_run", course.slug, stage.topic.number, stage.pk, experiment.key)
+    topic = topic_for_lab(lab.key)
+    attempt = services.start_attempt(request.user, lab.key, experiment)
+    experiments = list(lab.experiments)
+    idx = experiments.index(experiment)
+    next_exp = experiments[idx + 1] if idx + 1 < len(experiments) else None
+    nav = [
+        {
+            "number": e.number,
+            "title": e.title,
+            "url": reverse("labs:run", args=[lab.key, e.key]),
+            "current": e == experiment,
+        }
+        for e in experiments
+    ]
+    urls = {
+        "topic": topic.get_absolute_url() if topic else reverse("student:courses"),
+        "next": reverse("labs:run", args=[lab.key, next_exp.key]) if next_exp else "",
+    }
+    return lab_page(request, lab=lab, experiment=experiment, attempt=attempt, urls=urls, nav=nav, topic=topic)
 
 
 def _attempt_for(request, pk):
@@ -195,4 +231,12 @@ def api_analysis(request, pk):
     if not isinstance(data, dict):
         return HttpResponseBadRequest("object expected")
     attempt = services.submit_analysis(attempt, experiment, data)
-    return JsonResponse({"correct": attempt.analysis_correct, "total": attempt.analysis_total})
+    return JsonResponse(analysis_payload(attempt))
+
+
+def analysis_payload(attempt):
+    return {
+        "correct": attempt.analysis_correct,
+        "total": attempt.analysis_total,
+        "score": float(attempt.score_percent) if attempt.score_percent is not None else None,
+    }

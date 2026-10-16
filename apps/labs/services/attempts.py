@@ -1,4 +1,5 @@
 """Write operations on lab attempts (public interface of the labs domain)."""
+
 from __future__ import annotations
 
 from collections import Counter
@@ -7,24 +8,32 @@ from django.db import IntegrityError, transaction
 from django.db.models import Count
 from django.utils import timezone
 
-from apps.labs.engine.spec import ExperimentSpec
+from apps.labs.engine import get_lab
+from apps.labs.engine.spec import ExperimentSpec, LabScoring
 from apps.labs.models import LabAttempt, LabEvent
+from apps.labs.scoring import attempt_score
 from apps.organizations.selectors import research_cohort_for
 
 MAX_EVENTS_PER_BATCH = 200
 VALID_TYPES = {t.value for t in LabEvent.Type}
 
 
-def start_attempt(user, lab_key: str, experiment: ExperimentSpec) -> LabAttempt:
+def start_attempt(user, lab_key: str, experiment: ExperimentSpec, enrollment=None, stage=None) -> LabAttempt:
     """Open an attempt for the run page.
 
     A plain page reload must not inflate the research data, so an unfinished
     attempt in which the student has not done anything yet (only the "start"
-    event) is reused instead of creating a new one.
+    event) is reused instead of creating a new one. Inside a course stage the
+    attempt is tied to the enrolment and its research group is copied from it.
     """
     untouched = (
         LabAttempt.objects.filter(
-            user=user, lab_key=lab_key, experiment_key=experiment.key, status=LabAttempt.Status.IN_PROGRESS
+            user=user,
+            lab_key=lab_key,
+            experiment_key=experiment.key,
+            status=LabAttempt.Status.IN_PROGRESS,
+            enrollment=enrollment,
+            stage=stage,
         )
         .annotate(n_events=Count("events"))
         .filter(n_events__lte=1)
@@ -37,7 +46,12 @@ def start_attempt(user, lab_key: str, experiment: ExperimentSpec) -> LabAttempt:
         untouched.save(update_fields=["started_at"])
         return untouched
     return LabAttempt.objects.create(
-        user=user, lab_key=lab_key, experiment_key=experiment.key, cohort=research_cohort_for(user)
+        user=user,
+        lab_key=lab_key,
+        experiment_key=experiment.key,
+        enrollment=enrollment,
+        stage=stage,
+        research_cohort=enrollment.research_cohort if enrollment else research_cohort_for(user),
     )
 
 
@@ -117,5 +131,7 @@ def submit_analysis(attempt: LabAttempt, experiment: ExperimentSpec, answers: di
     attempt.analysis = clean
     attempt.analysis_correct, attempt.analysis_total = _score_choices(experiment.questions, clean)
     attempt.status = LabAttempt.Status.ANALYSED
-    attempt.save(update_fields=["analysis", "analysis_correct", "analysis_total", "status"])
+    lab = get_lab(attempt.lab_key)
+    attempt.score_percent = attempt_score(attempt, lab.scoring if lab else LabScoring())
+    attempt.save(update_fields=["analysis", "analysis_correct", "analysis_total", "status", "score_percent"])
     return attempt

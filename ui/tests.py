@@ -122,7 +122,7 @@ class PageTests(TestCase):
         self.assertContains(response, 'class="table num"')
 
     def test_all_lab_experiments_render(self):
-        self.client.force_login(self.student)
+        self.client.force_login(self.teacher)  # preview outside a stage; students run labs inside their stage
         lab = get_lab("t01")
         for exp in lab.experiments:
             response = self.client.get(reverse("labs:run", args=[lab.key, exp.key]))
