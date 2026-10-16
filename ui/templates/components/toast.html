@@ -1,0 +1,19 @@
+{% comment %}
+Django messages as toasts (included once by base.html). Auto-dismiss after 6 s; errors stay until closed.
+Level → colour: success → success, warning → warning, error → danger, info/debug → info.
+{% endcomment %}{% load i18n %}{% if messages %}
+<div class="pointer-events-none fixed inset-x-4 bottom-4 z-[70] flex flex-col items-end gap-2 sm:left-auto" aria-live="polite">
+  {% for m in messages %}
+    <div x-data="{ show: true }" x-show="show" x-transition.opacity.duration.200ms
+         {% if m.level_tag != "error" %}x-init="setTimeout(() => show = false, 6000)"{% endif %}
+         class="pointer-events-auto flex w-full max-w-sm items-start gap-3 rounded-md border border-line bg-surface p-3 pr-2 text-sm shadow-pop"
+         role="{% if m.level_tag == 'error' %}alert{% else %}status{% endif %}">
+      <span class="mt-0.5 {% if m.level_tag == 'success' %}text-success-600{% elif m.level_tag == 'warning' %}text-warning-500{% elif m.level_tag == 'error' %}text-danger-600{% else %}text-primary-500{% endif %}">
+        {% if m.level_tag == "success" %}{% include "components/icons.html#check" %}{% elif m.level_tag == "warning" or m.level_tag == "error" %}{% include "components/icons.html#alert" %}{% else %}{% include "components/icons.html#info" %}{% endif %}
+      </span>
+      <p class="flex-1">{{ m }}</p>
+      <button type="button" class="btn btn-ghost btn-sm h-6 px-1 text-ink-soft" @click="show = false" aria-label="{% translate 'Close' %}">{% include "components/icons.html#x" with size=14 %}</button>
+    </div>
+  {% endfor %}
+</div>
+{% endif %}

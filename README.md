@@ -12,16 +12,17 @@
 
 ```bash
 pip install -r requirements/dev.txt                  # prod: requirements/base.txt
-npm install && npm run build:css && npm run vendor   # Tailwind + Alpine
+python manage.py tailwind install && python manage.py tailwind build   # Tailwind 4 (ui/static_src, Node.js керек)
 cp .env.example .env                                  # дерекқор параметрлері
 python manage.py migrate
-python manage.py compilemessages -l kk -l ru
+python manage.py compilemessages -l kk -l ru --ignore=env
 python manage.py seed_course                          # курс қаңқасы, 1-тақырып
 python manage.py createsuperuser
 python manage.py runserver
 ```
 
-CSS-ті әзірлеу кезінде: `npm run watch:css`.
+CSS-ті әзірлеу кезінде: `python manage.py tailwind start`. Компоненттер үлгісі: `/ui/styleguide/` (тек staff).
+Alpine мен HTMX `ui/static/vendor/`-да; жаңарту: `cd ui/static_src && npm run vendor`.
 
 ## Не дайын
 
@@ -45,16 +46,16 @@ CSS-ті әзірлеу кезінде: `npm run watch:css`.
 | Файл | Мазмұны |
 |---|---|
 | `apps/labs/experiments/<lab>/<name>.py` | `ExperimentSpec`: құралдар, командалар реті, ескертулер, журнал, талдау сұрақтары, физикалық параметрлер |
-| `apps/labs/templates/labs/scenes/<name>.html` | 2D SVG жұмыс үстелі |
-| `static/js/lab/experiments/<name>.js` | Анимация және физикалық модель (`ChemLab.scene(...)`) |
+| `ui/templates/labs/scenes/<name>.html` | 2D SVG жұмыс үстелі |
+| `ui/static/js/lab/experiments/<name>.js` | Анимация және физикалық модель (`ChemLab.scene(...)`) |
 
-Жалпы логика (рет, ескертулер, журнал, логтау) `static/js/lab/engine.js` ішінде.
+Жалпы логика (рет, ескертулер, журнал, логтау) `ui/static/js/lab/engine.js` ішінде.
 Барлық мәтін ағылшынша `gettext_lazy` арқылы жазылады, кейін:
 
 ```bash
-python manage.py makemessages -l kk -l ru --ignore=node_modules
+python manage.py makemessages -l kk -l ru --ignore=env --ignore="ui/static_src/*"
 # locale/*/LC_MESSAGES/django.po аудару
-python manage.py compilemessages -l kk -l ru
+python manage.py compilemessages -l kk -l ru --ignore=env
 ```
 
 ## Демо-пайдаланушылар (тек әзірлеуге)

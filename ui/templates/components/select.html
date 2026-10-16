@@ -1,0 +1,16 @@
+{% comment %}
+Plain <select> not tied to a Django form (filters, HTMX cascades).
+name; label; options — list of (value, text); selected; empty_label (default "—");
+hx_get, hx_target, hx_include — for cascading selects (University → Faculty → Department → Group);
+help; id (default id_<name>); class.
+For a form field use components/input.html — it renders selects too.
+{% endcomment %}{% with sid=id|default:"id_"|add:name %}
+<div class="field {{ class }}">
+  {% if label %}<label class="label" for="{{ sid }}">{{ label }}</label>{% endif %}
+  <select class="input" id="{{ sid }}" name="{{ name }}"
+          {% if hx_get %}hx-get="{{ hx_get }}" hx-trigger="change" hx-target="{{ hx_target }}"{% if hx_include %} hx-include="{{ hx_include }}"{% endif %}{% endif %}>
+    <option value="">{{ empty_label|default:"—" }}</option>
+    {% for value, text in options %}<option value="{{ value }}"{% if value|stringformat:"s" == selected|stringformat:"s" %} selected{% endif %}>{{ text }}</option>{% endfor %}
+  </select>
+  {% if help %}<p class="help">{{ help }}</p>{% endif %}
+</div>{% endwith %}

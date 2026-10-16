@@ -11,28 +11,28 @@
 ---
 
 ## STEP-00 · Бастапқы күй
-- [ ] `git init`, `.gitignore` тексеру, бастапқы коммит («prototype»).
-- [ ] Қазіргі тесттерді іске қосу (`python manage.py test apps`) — 6 тест өтуі керек.
-- [ ] `docs/` құжаттарын оқып, түсініксіз жерлерді тізіп шық (код жазбай).
+- [x] `git init`, `.gitignore` тексеру, бастапқы коммит («prototype»).
+- [x] Қазіргі тесттерді іске қосу (`python manage.py test apps`) — 6 тест өтуі керек.
+- [x] `docs/` құжаттарын оқып, түсініксіз жерлерді тізіп шық (код жазбай).
 
 ## STEP-01 · Тәуелділіктер, settings, тіл
-- [ ] `requirements/` (`base.txt`, `dev.txt`): `Django>=6.0,<6.1`, `psycopg[binary]`, `django-unfold`, `django-ckeditor-5`,
+- [x] `requirements/` (`base.txt`, `dev.txt`): `Django>=6.0,<6.1`, `psycopg[binary]`, `django-unfold`, `django-ckeditor-5`,
       `django-tailwind`, `django-browser-reload` (dev), `django-htmx`, `nh3`, `python-dotenv`, `weasyprint`, `qrcode`,
       `anthropic`, `django-tasks`, `pytest-django`, `ruff`. `.env.example`-ге `ANTHROPIC_API_KEY`, `AI_GRADING_MODEL`, `AI_GRADING_ENABLED` қосу.
-- [ ] `config/settings/{base,dev,prod}.py`; `DJANGO_SETTINGS_MODULE` default — `config.settings.dev`.
-- [ ] `apps/core/middleware.py` → `KazakhFirstLocaleMiddleware` (ARCHITECTURE §9.5); `LocaleMiddleware`-ді алмастыру.
-- [ ] Тест: `Accept-Language: ru,en` + cookie жоқ → `<html lang="kk">` және қазақша мәтін; cookie `ru` → орысша.
+- [x] `config/settings/{base,dev,prod}.py`; `DJANGO_SETTINGS_MODULE` default — `config.settings.dev`.
+- [x] `apps/core/middleware.py` → `KazakhFirstLocaleMiddleware` (ARCHITECTURE §9.5); `LocaleMiddleware`-ді алмастыру.
+- [x] Тест: `Accept-Language: ru,en` + cookie жоқ → `<html lang="kk">` және қазақша мәтін; cookie `ru` → орысша.
 - **Қабылдау шарты:** браузер тілі қандай болса да, бірінші кіргенде платформа қазақша.
 
 ## STEP-02 · `ui/` апп (django-tailwind) және дизайн жүйесі
-- [ ] `python manage.py tailwind init` → `ui` (Tailwind v4). `TAILWIND_APP_NAME="ui"`.
-- [ ] Түбірдегі `templates/` → `ui/templates/`, `static/` → `ui/static/`, апптардағы шаблондар → `ui/templates/<app>/`.
+- [x] `python manage.py tailwind init` → `ui` (Tailwind v4). `TAILWIND_APP_NAME="ui"`.
+- [x] Түбірдегі `templates/` → `ui/templates/`, `static/` → `ui/static/`, апптардағы шаблондар → `ui/templates/<app>/`.
       `static/src/app.css` токендері → `ui/static_src/src/styles.css`. Түбірдегі `package.json`, `node_modules` жойылады.
-- [ ] Шрифт: Golos (self-hosted) → **Inter (Google Fonts)**. `static/fonts/` жойылады.
-- [ ] Дизайн токендері: ARCHITECTURE §10 + «ChemEduTech Design System» артефакты (түстер, радиус, көлеңке, типография шкаласы).
-- [ ] Layout-тар: `layouts/public.html`, `layouts/student.html` (сол жақ навигация + жоғарғы панель), `layouts/teacher.html`.
-- [ ] Компоненттер: `components/` (button, input, select, card, badge, progress_bar, stat_card, table, empty_state, modal, toast, avatar, stage_stepper, lock_state).
-- [ ] Зертхана беті жаңа токендерге көшеді, бірақ **симулятор логикасы мен сахналар өзгермейді** (тек түстер/шрифт).
+- [x] Шрифт: Golos (self-hosted) → **Inter (Google Fonts)**. `static/fonts/` жойылады.
+- [x] Дизайн токендері: ARCHITECTURE §10 + «ChemEduTech Design System» артефакты (түстер, радиус, көлеңке, типография шкаласы).
+- [x] Layout-тар: `layouts/public.html`, `layouts/student.html` (сол жақ навигация + жоғарғы панель), `layouts/teacher.html`.
+- [x] Компоненттер: `components/` (button, input, select, card, badge, progress_bar, stat_card, table, empty_state, modal, toast, avatar, stage_stepper, lock_state).
+- [x] Зертхана беті жаңа токендерге көшеді, бірақ **симулятор логикасы мен сахналар өзгермейді** (тек түстер/шрифт).
 - **Қабылдау шарты:** `python manage.py tailwind build` жұмыс істейді; 4 тәжірибе бұрынғыдай өтеді; барлық беттер Inter-мен.
 
 ## STEP-03 · accounts + organizations

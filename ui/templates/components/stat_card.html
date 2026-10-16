@@ -1,0 +1,9 @@
+{% comment %}
+Dashboard number. label; value; note (one short line below); tone: success (an improvement) |
+neutral (default, a plain fact); class. Use in a grid of 3–4 (desktop) / 2 / 1.
+{% endcomment %}
+<div class="card grid gap-1 {{ class }}">
+  <span class="text-label text-ink-soft">{{ label }}</span>
+  <span class="num text-stat">{{ value }}</span>
+  {% if note %}<span class="text-caption {% if tone == 'success' %}text-success-700{% else %}text-ink-soft{% endif %}">{{ note }}</span>{% endif %}
+</div>

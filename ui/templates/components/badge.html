@@ -1,0 +1,6 @@
+{% comment %}
+Status or category label, one or two words. label;
+variant: neutral | info | success | warning | danger — or status (passed, in_progress, available,
+awaiting_check, needs_review, failed, returned, locked …) mapped by the |status_variant filter;
+dot (bool) — leading dot. Research groups use info/neutral, never good/bad colours.
+{% endcomment %}<span class="badge badge-{% if variant %}{{ variant }}{% else %}{{ status|status_variant }}{% endif %} {{ class }}">{% if dot %}<span class="dot" aria-hidden="true"></span>{% endif %}{{ label }}</span>

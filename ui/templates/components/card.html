@@ -1,0 +1,12 @@
+{% comment %}
+Simple content card. title; text; meta (small line above the title); href (whole card is a link);
+icon (icons.html partial shown in a tinted tile); class.
+For arbitrary content use the .card class directly: <section class="card">…</section>.
+{% endcomment %}{% if href %}<a href="{{ href }}" class="card flex gap-4 transition-colors hover:border-line-strong {{ class }}">{% else %}<section class="card flex gap-4 {{ class }}">{% endif %}
+  {% if icon %}<span class="grid size-10 shrink-0 place-items-center rounded-md bg-primary-50 text-primary-600">{% include "components/icons.html#"|add:icon with size=20 %}</span>{% endif %}
+  <span class="flex min-w-0 flex-col gap-1">
+    {% if meta %}<span class="text-body-sm font-medium text-ink-soft">{{ meta }}</span>{% endif %}
+    <span class="text-h3">{{ title }}</span>
+    {% if text %}<span class="text-sm text-ink-soft">{{ text }}</span>{% endif %}
+  </span>
+{% if href %}</a>{% else %}</section>{% endif %}

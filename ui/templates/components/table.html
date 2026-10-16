@@ -1,0 +1,20 @@
+{% comment %}
+Data table in a card that scrolls horizontally on narrow screens.
+headers — list of column titles; rows — list of row lists (cells are escaped);
+numeric — space-separated column indexes ("2 3") to right-align with tabular figures; caption (sr-only);
+empty_text — shown when there are no rows; class.
+For rich cells (badges, links) write <table class="table"> by hand inside the same wrapper.
+{% endcomment %}
+<div class="overflow-x-auto rounded-lg border border-line bg-surface {{ class }}">
+  <table class="table">
+    {% if caption %}<caption class="sr-only">{{ caption }}</caption>{% endif %}
+    <thead><tr>{% for h in headers %}<th scope="col"{% if forloop.counter0|stringformat:"s" in numeric|split %} class="text-right"{% endif %}>{{ h }}</th>{% endfor %}</tr></thead>
+    <tbody>
+      {% for row in rows %}
+        <tr>{% for cell in row %}<td{% if forloop.counter0|stringformat:"s" in numeric|split %} class="num text-right"{% endif %}>{{ cell }}</td>{% endfor %}</tr>
+      {% empty %}
+        <tr><td colspan="{{ headers|length }}" class="py-8 text-center text-ink-faint">{{ empty_text|default:"—" }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>

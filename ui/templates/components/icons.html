@@ -1,0 +1,52 @@
+{% comment %}
+Line icons (Lucide-compatible, 1.6px stroke, currentColor). Each icon is a Django 6 partial:
+  {% include "components/icons.html#lock" with size=16 %}
+  {% include "components/icons.html#"|add:stage.kind %}        {# theory | video | lab | practice | test #}
+Optional: size (px, default 18), icon_class.
+{% endcomment %}
+
+{% partialdef home %}<svg width="{{ size|default:18 }}" height="{{ size|default:18 }}" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" class="shrink-0 {{ icon_class }}"><path d="M2.5 8 9 2.5 15.5 8v7.5h-4.5v-4.5H7v4.5H2.5z" stroke-linejoin="round"/></svg>{% endpartialdef %}
+
+{% partialdef book %}<svg width="{{ size|default:18 }}" height="{{ size|default:18 }}" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" class="shrink-0 {{ icon_class }}"><path d="M3 3.5h5a2 2 0 0 1 2 2v9a1.5 1.5 0 0 0-1.5-1.5H3zM15 3.5h-5a2 2 0 0 0-2 2"/><path d="M15 3.5V13h-5.5A1.5 1.5 0 0 0 8 14.5"/></svg>{% endpartialdef %}
+
+{% partialdef chart %}<svg width="{{ size|default:18 }}" height="{{ size|default:18 }}" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" class="shrink-0 {{ icon_class }}"><path d="M3 15V9M7 15V4M11 15v-4M15 15V7"/></svg>{% endpartialdef %}
+
+{% partialdef award %}<svg width="{{ size|default:18 }}" height="{{ size|default:18 }}" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" class="shrink-0 {{ icon_class }}"><circle cx="9" cy="7" r="4"/><path d="M6.5 10.5 5.5 16 9 14l3.5 2-1-5.5"/></svg>{% endpartialdef %}
+
+{% partialdef bell %}<svg width="{{ size|default:18 }}" height="{{ size|default:18 }}" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" class="shrink-0 {{ icon_class }}"><path d="M4.5 12.5V8a4.5 4.5 0 0 1 9 0v4.5l1.5 1.5H3z"/><path d="M7.5 15.5a1.5 1.5 0 0 0 3 0"/></svg>{% endpartialdef %}
+
+{% partialdef users %}<svg width="{{ size|default:18 }}" height="{{ size|default:18 }}" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" class="shrink-0 {{ icon_class }}"><circle cx="7" cy="6.5" r="2.5"/><path d="M2.5 15a4.5 4.5 0 0 1 9 0M12 4.5a2.5 2.5 0 0 1 0 4.5M13.5 11a4 4 0 0 1 2 4"/></svg>{% endpartialdef %}
+
+{% partialdef table %}<svg width="{{ size|default:18 }}" height="{{ size|default:18 }}" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" class="shrink-0 {{ icon_class }}"><rect x="2.5" y="3" width="13" height="12" rx="1.5"/><path d="M2.5 7h13M7 7v8"/></svg>{% endpartialdef %}
+
+{% partialdef search %}<svg width="{{ size|default:18 }}" height="{{ size|default:18 }}" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" class="shrink-0 {{ icon_class }}"><circle cx="8" cy="8" r="4.5"/><path d="M11.5 11.5 15 15"/></svg>{% endpartialdef %}
+
+{% partialdef logout %}<svg width="{{ size|default:18 }}" height="{{ size|default:18 }}" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" class="shrink-0 {{ icon_class }}"><path d="M7 3H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3M11.5 12.5 15 9l-3.5-3.5M15 9H7"/></svg>{% endpartialdef %}
+
+{% partialdef menu %}<svg width="{{ size|default:18 }}" height="{{ size|default:18 }}" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" class="shrink-0 {{ icon_class }}"><path d="M3 5h12M3 9h12M3 13h12"/></svg>{% endpartialdef %}
+
+{% partialdef theory %}<svg width="{{ size|default:16 }}" height="{{ size|default:16 }}" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" class="shrink-0 {{ icon_class }}"><path d="M3.5 2.5h6l3 3v8h-9z"/><path d="M5.5 8h5M5.5 10.5h5"/></svg>{% endpartialdef %}
+
+{% partialdef video %}<svg width="{{ size|default:16 }}" height="{{ size|default:16 }}" viewBox="0 0 16 16" aria-hidden="true" class="shrink-0 {{ icon_class }}"><path d="M5.5 3.5v9l7-4.5z" fill="currentColor"/></svg>{% endpartialdef %}
+
+{% partialdef lab %}<svg width="{{ size|default:16 }}" height="{{ size|default:16 }}" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" class="shrink-0 {{ icon_class }}"><path d="M6 2h4M6.5 2v4.5L3 13a1 1 0 0 0 .9 1.5h8.2A1 1 0 0 0 13 13L9.5 6.5V2"/></svg>{% endpartialdef %}
+
+{% partialdef practice %}<svg width="{{ size|default:16 }}" height="{{ size|default:16 }}" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" class="shrink-0 {{ icon_class }}"><path d="M3 13l2.5-.5L13 5l-2-2-7.5 7.5z"/></svg>{% endpartialdef %}
+
+{% partialdef test %}<svg width="{{ size|default:16 }}" height="{{ size|default:16 }}" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" class="shrink-0 {{ icon_class }}"><path d="M3.5 8.5l3 3 6-7"/></svg>{% endpartialdef %}
+
+{% partialdef check %}<svg width="{{ size|default:16 }}" height="{{ size|default:16 }}" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" class="shrink-0 {{ icon_class }}"><path d="M3.5 8.5l3 3 6-7"/></svg>{% endpartialdef %}
+
+{% partialdef lock %}<svg width="{{ size|default:16 }}" height="{{ size|default:16 }}" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" class="shrink-0 {{ icon_class }}"><rect x="3.5" y="7" width="9" height="6.5" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>{% endpartialdef %}
+
+{% partialdef arrow-left %}<svg width="{{ size|default:16 }}" height="{{ size|default:16 }}" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" class="shrink-0 {{ icon_class }}"><path d="M13 8H3M7 4 3 8l4 4"/></svg>{% endpartialdef %}
+
+{% partialdef arrow-right %}<svg width="{{ size|default:16 }}" height="{{ size|default:16 }}" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" class="shrink-0 {{ icon_class }}"><path d="M3 8h10M9 4l4 4-4 4"/></svg>{% endpartialdef %}
+
+{% partialdef plus %}<svg width="{{ size|default:16 }}" height="{{ size|default:16 }}" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" class="shrink-0 {{ icon_class }}"><path d="M8 3v10M3 8h10"/></svg>{% endpartialdef %}
+
+{% partialdef x %}<svg width="{{ size|default:16 }}" height="{{ size|default:16 }}" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" class="shrink-0 {{ icon_class }}"><path d="M4 4l8 8M12 4l-8 8"/></svg>{% endpartialdef %}
+
+{% partialdef info %}<svg width="{{ size|default:16 }}" height="{{ size|default:16 }}" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" class="shrink-0 {{ icon_class }}"><circle cx="8" cy="8" r="6"/><path d="M8 7.5V11M8 5.2v.1"/></svg>{% endpartialdef %}
+
+{% partialdef alert %}<svg width="{{ size|default:16 }}" height="{{ size|default:16 }}" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" class="shrink-0 {{ icon_class }}"><path d="M8 2.5 14 13H2z" stroke-linejoin="round"/><path d="M8 6.5v3M8 11.2v.1"/></svg>{% endpartialdef %}

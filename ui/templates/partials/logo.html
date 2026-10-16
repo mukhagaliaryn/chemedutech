@@ -1,0 +1,8 @@
+{# Brand mark: flask on a primary-900 tile. `inverse` = white tile for dark grounds. #}
+<svg width="{{ size|default:28 }}" height="{{ size|default:28 }}" viewBox="0 0 28 28" aria-hidden="true" class="shrink-0">
+  <rect width="28" height="28" rx="8" class="{% if inverse %}fill-white{% else %}fill-primary-900{% endif %}"/>
+  <path d="M11 6h6M12 6v6l-5 9a1.4 1.4 0 0 0 1.2 2h11.6a1.4 1.4 0 0 0 1.2-2l-5-9V6" fill="none"
+        class="{% if inverse %}stroke-primary-900{% else %}stroke-white{% endif %}" stroke-width="1.6" stroke-linejoin="round"/>
+  <circle cx="12.5" cy="19" r="1.4" class="{% if inverse %}fill-stage-lab{% else %}fill-lab-water{% endif %}"/>
+  <circle cx="16" cy="17" r="1" class="{% if inverse %}fill-stage-lab{% else %}fill-lab-water{% endif %}"/>
+</svg>

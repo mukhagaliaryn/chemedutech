@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 10:33+0500\n"
+"POT-Creation-Date: 2026-10-16 16:05+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,7 +16,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
+"(n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #: apps/accounts/admin.py:13
 msgid "Platform"
@@ -34,13 +36,12 @@ msgstr "Имя"
 msgid "Last name"
 msgstr "Фамилия"
 
-#: apps/accounts/forms.py:11
-#: apps/research/templates/research/dashboard.html:34
+#: apps/accounts/forms.py:11 ui/templates/research/dashboard.html:33
 msgid "Study group"
 msgstr "Учебная группа"
 
-#: apps/accounts/models/user.py:15
-#: apps/research/templates/research/dashboard.html:81
+#: apps/accounts/models/user.py:15 ui/templates/research/dashboard.html:80
+#: ui/views.py:21
 msgid "Student"
 msgstr "Студент"
 
@@ -56,13 +57,11 @@ msgstr "Исследователь"
 msgid "Not assigned"
 msgstr "Не назначена"
 
-#: apps/accounts/models/user.py:21
-#: apps/research/templates/research/dashboard.html:29
+#: apps/accounts/models/user.py:21 ui/templates/research/dashboard.html:28
 msgid "Control group"
 msgstr "Контрольная группа"
 
-#: apps/accounts/models/user.py:22
-#: apps/research/templates/research/dashboard.html:30
+#: apps/accounts/models/user.py:22 ui/templates/research/dashboard.html:29
 msgid "Experimental group"
 msgstr "Экспериментальная группа"
 
@@ -89,32 +88,6 @@ msgstr "пользователь"
 #: apps/accounts/models/user.py:32
 msgid "users"
 msgstr "пользователи"
-
-#: apps/accounts/templates/accounts/login.html:3
-#: apps/accounts/templates/accounts/login.html:6
-#: apps/accounts/templates/accounts/login.html:19 templates/base.html:32
-#: templates/core/home.html:12
-msgid "Log in"
-msgstr "Войти"
-
-#: apps/accounts/templates/accounts/login.html:11
-msgid "Username"
-msgstr "Логин"
-
-#: apps/accounts/templates/accounts/login.html:15
-msgid "Password"
-msgstr "Пароль"
-
-#: apps/accounts/templates/accounts/login.html:21
-msgid "No account yet?"
-msgstr "Ещё нет аккаунта?"
-
-#: apps/accounts/templates/accounts/login.html:21
-#: apps/accounts/templates/accounts/signup.html:3
-#: apps/accounts/templates/accounts/signup.html:6
-#: apps/accounts/templates/accounts/signup.html:17 templates/core/home.html:11
-msgid "Create an account"
-msgstr "Зарегистрироваться"
 
 #: apps/core/apps.py:8
 msgid "Core"
@@ -189,50 +162,6 @@ msgstr "тема"
 msgid "topics"
 msgstr "темы"
 
-#: apps/courses/templates/courses/dashboard.html:3 templates/base.html:21
-msgid "Course"
-msgstr "Курс"
-
-#: apps/courses/templates/courses/dashboard.html:12
-#, python-format
-msgid "Module %(n)s"
-msgstr "Модуль %(n)s"
-
-#: apps/courses/templates/courses/dashboard.html:21
-msgid "Theory and virtual lab work"
-msgstr "Теория и виртуальная лабораторная работа"
-
-#: apps/courses/templates/courses/dashboard.html:23
-msgid "Draft"
-msgstr "Черновик"
-
-#: apps/courses/templates/courses/dashboard.html:30
-msgid "Coming soon"
-msgstr "Скоро"
-
-#: apps/courses/templates/courses/dashboard.html:38
-msgid "No courses yet. Run: python manage.py seed_course"
-msgstr "Курсов пока нет. Выполните: python manage.py seed_course"
-
-#: apps/courses/templates/courses/topic.html:7
-#: apps/labs/templates/labs/run.html:23
-#, python-format
-msgid "Topic %(n)s"
-msgstr "Тема %(n)s"
-
-#: apps/courses/templates/courses/topic.html:16
-#: apps/labs/templates/labs/run.html:23
-msgid "Lab work"
-msgstr "Лабораторная работа"
-
-#: apps/courses/templates/courses/topic.html:25 apps/labs/views.py:73
-msgid "Analysis: correct answers"
-msgstr "Анализ: верные ответы"
-
-#: apps/courses/templates/courses/topic.html:32
-msgid "Open the virtual lab"
-msgstr "Открыть виртуальную лабораторию"
-
 #: apps/labs/apps.py:8
 msgid "Virtual lab"
 msgstr "Виртуальная лаборатория"
@@ -263,8 +192,8 @@ msgstr "Электролиз воды"
 
 #: apps/labs/experiments/t01/electrolysis.py:19
 msgid ""
-"Decompose water by direct current and determine the volume ratio of hydrogen"
-" and oxygen."
+"Decompose water by direct current and determine the volume ratio of hydrogen "
+"and oxygen."
 msgstr ""
 "Разложить воду постоянным током и определить объёмное отношение водорода и "
 "кислорода."
@@ -301,11 +230,11 @@ msgstr "Источник переменного тока"
 
 #: apps/labs/experiments/t01/electrolysis.py:39
 msgid ""
-"Alternating current keeps swapping the electrodes, so the gases would mix in"
-" both tubes. Electrolysis needs direct current."
+"Alternating current keeps swapping the electrodes, so the gases would mix in "
+"both tubes. Electrolysis needs direct current."
 msgstr ""
-"Переменный ток постоянно меняет полярность электродов, и газы смешались бы в"
-" обеих трубках. Для электролиза нужен постоянный ток."
+"Переменный ток постоянно меняет полярность электродов, и газы смешались бы в "
+"обеих трубках. Для электролиза нужен постоянный ток."
 
 #: apps/labs/experiments/t01/electrolysis.py:45
 msgid "Select the electrolyzer"
@@ -410,22 +339,19 @@ msgstr "Запишите электродные реакции."
 
 #: apps/labs/experiments/t01/electrolysis.py:107
 #: apps/labs/experiments/t01/hydrogen.py:89
-#: apps/labs/experiments/t01/oxygen.py:102
-#: apps/labs/experiments/t01/rate.py:84
+#: apps/labs/experiments/t01/oxygen.py:102 apps/labs/experiments/t01/rate.py:84
 msgid "Finish the experiment"
 msgstr "Завершить опыт"
 
 #: apps/labs/experiments/t01/electrolysis.py:108
 #: apps/labs/experiments/t01/hydrogen.py:90
-#: apps/labs/experiments/t01/oxygen.py:103
-#: apps/labs/experiments/t01/rate.py:85
+#: apps/labs/experiments/t01/oxygen.py:103 apps/labs/experiments/t01/rate.py:85
 msgid "The results are saved and the analysis task opens."
 msgstr "Результаты сохраняются, открывается задание на анализ."
 
 #: apps/labs/experiments/t01/electrolysis.py:110
 #: apps/labs/experiments/t01/hydrogen.py:92
-#: apps/labs/experiments/t01/oxygen.py:105
-#: apps/labs/experiments/t01/rate.py:87
+#: apps/labs/experiments/t01/oxygen.py:105 apps/labs/experiments/t01/rate.py:87
 msgid "Fill in the lab journal first."
 msgstr "Сначала заполните лабораторный журнал."
 
@@ -517,10 +443,9 @@ msgstr "Чтобы получить больше водорода из NaOH"
 
 #: apps/labs/experiments/t01/electrolysis.py:153
 msgid ""
-"How would you show the class which tube contains hydrogen and which contains"
-" oxygen?"
-msgstr ""
-"Как бы вы показали классу, в какой трубке водород, а в какой кислород?"
+"How would you show the class which tube contains hydrogen and which contains "
+"oxygen?"
+msgstr "Как бы вы показали классу, в какой трубке водород, а в какой кислород?"
 
 #: apps/labs/experiments/t01/hydrogen.py:14
 msgid "Obtaining and collecting hydrogen"
@@ -531,8 +456,8 @@ msgid ""
 "Obtain hydrogen from zinc and hydrochloric acid and collect it by "
 "displacement of water."
 msgstr ""
-"Получить водород из цинка и соляной кислоты и собрать его методом вытеснения"
-" воды."
+"Получить водород из цинка и соляной кислоты и собрать его методом вытеснения "
+"воды."
 
 #: apps/labs/experiments/t01/hydrogen.py:18
 msgid ""
@@ -694,8 +619,7 @@ msgstr "Он реагирует с водой"
 
 #: apps/labs/experiments/t01/hydrogen.py:113
 msgid ""
-"Which particle is the oxidising agent in the reaction Zn + 2HCl → ZnCl₂ + "
-"H₂?"
+"Which particle is the oxidising agent in the reaction Zn + 2HCl → ZnCl₂ + H₂?"
 msgstr "Какая частица является окислителем в реакции Zn + 2HCl → ZnCl₂ + H₂?"
 
 #: apps/labs/experiments/t01/hydrogen.py:115
@@ -766,8 +690,8 @@ msgstr "Получение кислорода"
 
 #: apps/labs/experiments/t01/oxygen.py:29
 msgid ""
-"Obtain oxygen by decomposing hydrogen peroxide and compare the rate with and"
-" without a catalyst."
+"Obtain oxygen by decomposing hydrogen peroxide and compare the rate with and "
+"without a catalyst."
 msgstr ""
 "Получить кислород разложением пероксида водорода и сравнить скорость с "
 "катализатором и без него."
@@ -882,8 +806,7 @@ msgstr "Наблюдение"
 
 #: apps/labs/experiments/t01/oxygen.py:95
 msgid ""
-"A glowing splint flares up in oxygen. The rates of the two runs are "
-"compared."
+"A glowing splint flares up in oxygen. The rates of the two runs are compared."
 msgstr ""
 "Тлеющая лучинка вспыхивает в кислороде. Скорости двух опытов сравниваются."
 
@@ -1001,8 +924,8 @@ msgid ""
 "Compare how fast oxygen is released in two test tubes: without a catalyst "
 "(A) and with MnO₂ (B)."
 msgstr ""
-"Сравнить скорость выделения кислорода в двух пробирках: без катализатора (A)"
-" и с MnO₂ (B)."
+"Сравнить скорость выделения кислорода в двух пробирках: без катализатора (A) "
+"и с MnO₂ (B)."
 
 #: apps/labs/experiments/t01/rate.py:19
 msgid ""
@@ -1010,8 +933,8 @@ msgid ""
 "theoretical total amount of oxygen formed when the same initial amount of "
 "hydrogen peroxide decomposes completely."
 msgstr ""
-"Катализатор изменяет скорость реакции, но не увеличивает теоретическое общее"
-" количество кислорода, образующегося при полном разложении одинакового "
+"Катализатор изменяет скорость реакции, но не увеличивает теоретическое общее "
+"количество кислорода, образующегося при полном разложении одинакового "
 "исходного количества пероксида водорода."
 
 #: apps/labs/experiments/t01/rate.py:23
@@ -1137,8 +1060,8 @@ msgid ""
 "How much oxygen will be formed in each tube when H₂O₂ decomposes completely "
 "(5 mL, 3%)?"
 msgstr ""
-"Сколько кислорода образуется в каждой пробирке при полном разложении H₂O₂ (5"
-" мл, 3%)?"
+"Сколько кислорода образуется в каждой пробирке при полном разложении H₂O₂ (5 "
+"мл, 3%)?"
 
 #: apps/labs/experiments/t01/rate.py:110
 msgid "About 49 mL in both tubes"
@@ -1176,7 +1099,7 @@ msgstr ""
 "Используя понятие энергии активации, объясните, почему MnO₂ ускоряет "
 "разложение."
 
-#: apps/labs/models/attempt.py:10
+#: apps/labs/models/attempt.py:10 ui/templates/components/stage_stepper.html:23
 msgid "In progress"
 msgstr "В процессе"
 
@@ -1188,7 +1111,7 @@ msgstr "Завершено"
 msgid "Analysis submitted"
 msgstr "Анализ отправлен"
 
-#: apps/labs/models/attempt.py:15
+#: apps/labs/models/attempt.py:15 ui/templates/layouts/student.html:16
 msgid "student"
 msgstr "студент"
 
@@ -1356,27 +1279,6 @@ msgstr "событие лаборатории"
 msgid "lab events"
 msgstr "события лаборатории"
 
-#: apps/labs/templates/labs/run.html:18 apps/labs/views.py:74
-msgid "Back to the topic"
-msgstr "Вернуться к теме"
-
-#: apps/labs/templates/labs/run.html:26
-#, python-format
-msgid "Experiment %(n)s"
-msgstr "Опыт %(n)s"
-
-#: apps/labs/templates/labs/run.html:30
-msgid "Experiments"
-msgstr "Опыты"
-
-#: apps/labs/templates/labs/run.html:41 apps/labs/views.py:56
-msgid "Time"
-msgstr "Время"
-
-#: apps/labs/templates/labs/run.html:43 apps/labs/views.py:76
-msgid "Start again"
-msgstr "Начать заново"
-
 #: apps/labs/views.py:28
 msgid "Equipment and reagents"
 msgstr "Оборудование и реактивы"
@@ -1487,6 +1389,10 @@ msgstr "Научное объяснение"
 msgid "Measurements"
 msgstr "Измерения"
 
+#: apps/labs/views.py:56 ui/templates/labs/run.html:40
+msgid "Time"
+msgstr "Время"
+
 #: apps/labs/views.py:57
 msgid "Volume"
 msgstr "Объём"
@@ -1527,13 +1433,13 @@ msgstr "Ваш ответ"
 msgid "Experiment complete"
 msgstr "Опыт завершён"
 
-#: apps/labs/views.py:69 apps/research/templates/research/dashboard.html:50
-#: apps/research/templates/research/dashboard.html:85
+#: apps/labs/views.py:69 ui/templates/research/dashboard.html:49
+#: ui/templates/research/dashboard.html:84
 msgid "Order errors"
 msgstr "Ошибки порядка"
 
-#: apps/labs/views.py:70 apps/research/templates/research/dashboard.html:51
-#: apps/research/templates/research/dashboard.html:85
+#: apps/labs/views.py:70 ui/templates/research/dashboard.html:50
+#: ui/templates/research/dashboard.html:84
 msgid "Safety warnings"
 msgstr "Предупреждения безопасности"
 
@@ -1545,9 +1451,21 @@ msgstr "Неверное оборудование или выбор"
 msgid "Time spent"
 msgstr "Затрачено времени"
 
+#: apps/labs/views.py:73 ui/templates/courses/topic.html:35
+msgid "Analysis: correct answers"
+msgstr "Анализ: верные ответы"
+
+#: apps/labs/views.py:74 ui/templates/labs/run.html:17
+msgid "Back to the topic"
+msgstr "Вернуться к теме"
+
 #: apps/labs/views.py:75
 msgid "Next experiment"
 msgstr "Следующий опыт"
+
+#: apps/labs/views.py:76 ui/templates/labs/run.html:42
+msgid "Start again"
+msgstr "Начать заново"
 
 #: apps/labs/views.py:77
 msgid ""
@@ -1621,111 +1539,103 @@ msgid "Connection problem. Your actions are kept and will be sent again."
 msgstr ""
 "Проблема со связью. Ваши действия сохранены и будут отправлены повторно."
 
-#: apps/research/apps.py:8 apps/research/templates/research/dashboard.html:3
-#: templates/base.html:23
+#: apps/research/apps.py:8 ui/templates/research/dashboard.html:3
 msgid "Research"
 msgstr "Исследование"
 
-#: apps/research/templates/research/dashboard.html:8
-msgid "Research data"
-msgstr "Данные исследования"
-
-#: apps/research/templates/research/dashboard.html:9
-#, python-format
-msgid "Attempts: %(total)s, unfinished: %(unfinished)s."
-msgstr "Попыток: %(total)s, незавершённых: %(unfinished)s."
-
-#: apps/research/templates/research/dashboard.html:12
-msgid "Download attempts (CSV)"
-msgstr "Скачать попытки (CSV)"
-
-#: apps/research/templates/research/dashboard.html:13
-msgid "Download action log (CSV)"
-msgstr "Скачать журнал действий (CSV)"
-
-#: apps/research/templates/research/dashboard.html:19
-#: apps/research/templates/research/dashboard.html:45
-#: apps/research/templates/research/dashboard.html:82
-msgid "Experiment"
-msgstr "Опыт"
-
-#: apps/research/templates/research/dashboard.html:26
-#: apps/research/templates/research/dashboard.html:46
-msgid "Research group"
-msgstr "Исследовательская группа"
-
-#: apps/research/templates/research/dashboard.html:37
-msgid "Apply"
-msgstr "Применить"
-
-#: apps/research/templates/research/dashboard.html:40
-msgid "Averages by experiment and group (finished attempts)"
-msgstr "Средние по опыту и группе (завершённые попытки)"
-
-#: apps/research/templates/research/dashboard.html:47
-msgid "Students"
-msgstr "Студенты"
-
-#: apps/research/templates/research/dashboard.html:48
-msgid "Attempts"
-msgstr "Попытки"
-
-#: apps/research/templates/research/dashboard.html:49
-#: apps/research/templates/research/dashboard.html:84
-msgid "Time, s"
-msgstr "Время, с"
-
-#: apps/research/templates/research/dashboard.html:52
-#: apps/research/templates/research/dashboard.html:85
-msgid "Wrong equipment"
-msgstr "Неверное оборудование"
-
-#: apps/research/templates/research/dashboard.html:53
-#: apps/research/templates/research/dashboard.html:86
-msgid "Analysis score"
-msgstr "Результат анализа"
-
-#: apps/research/templates/research/dashboard.html:70
-msgid "No finished attempts yet."
-msgstr "Завершённых попыток пока нет."
-
-#: apps/research/templates/research/dashboard.html:76
-msgid "Latest attempts"
-msgstr "Последние попытки"
-
-#: apps/research/templates/research/dashboard.html:83
-msgid "Status"
-msgstr "Статус"
-
-#: apps/research/templates/research/dashboard.html:85
-msgid "Errors"
-msgstr "Ошибки"
-
-#: apps/research/templates/research/dashboard.html:87
-msgid "Started"
-msgstr "Начато"
-
-#: config/settings.py:106
+#: config/settings/base.py:121
 msgid "Kazakh"
 msgstr "Казахский"
 
-#: config/settings.py:107
+#: config/settings/base.py:122
 msgid "Russian"
 msgstr "Русский"
 
-#: config/settings.py:108
+#: config/settings/base.py:123
 msgid "English"
 msgstr "Английский"
 
-#: templates/base.html:29
-msgid "Log out"
-msgstr "Выйти"
+#: ui/apps.py:9
+msgid "User interface"
+msgstr "Пользовательский интерфейс"
 
-#: templates/core/home.html:6
+#: ui/templates/accounts/login.html:3 ui/templates/accounts/login.html:8
+#: ui/templates/accounts/login.html:17 ui/templates/accounts/signup.html:11
+#: ui/templates/core/home.html:12 ui/templates/layouts/public.html:16
+msgid "Log in"
+msgstr "Войти"
+
+#: ui/templates/accounts/login.html:9
+msgid "Enter your username and password."
+msgstr "Введите логин и пароль."
+
+#: ui/templates/accounts/login.html:19
+msgid "No account yet?"
+msgstr "Ещё нет аккаунта?"
+
+#: ui/templates/accounts/login.html:19 ui/templates/accounts/signup.html:18
+msgid "Sign up as a student"
+msgstr "Зарегистрироваться как студент"
+
+#: ui/templates/accounts/login.html:22
+msgid ""
+"Teacher accounts are created by the platform administrator. Ask the "
+"administrator for your login details."
+msgstr "Аккаунты преподавателей создаёт администратор платформы. Данные для входа получите у администратора."
+
+#: ui/templates/accounts/signup.html:3 ui/templates/core/home.html:11
+msgid "Create an account"
+msgstr "Зарегистрироваться"
+
+#: ui/templates/accounts/signup.html:11
+msgid "Already have an account?"
+msgstr "Уже есть аккаунт?"
+
+#: ui/templates/accounts/signup.html:19
+msgid "After signing up you can enrol in a course and start learning."
+msgstr "После регистрации вы сможете записаться на курс и начать обучение."
+
+#: ui/templates/accounts/signup.html:26 ui/templates/layouts/public.html:17
+msgid "Sign up"
+msgstr "Зарегистрироваться"
+
+#: ui/templates/accounts/signup.html:27
+msgid "Teachers do not sign up themselves — the administrator adds them."
+msgstr "Преподаватели не регистрируются сами — их добавляет администратор."
+
+#: ui/templates/components/modal.html:15
+msgid "Cancel"
+msgstr "Отмена"
+
+#: ui/templates/components/modal.html:16
+msgid "Confirm"
+msgstr "Подтвердить"
+
+#: ui/templates/components/stage_stepper.html:19
+msgid "Awaiting check"
+msgstr "Ожидает проверки"
+
+#: ui/templates/components/stage_stepper.html:21
+msgid "Passed"
+msgstr "Пройдено"
+
+#: ui/templates/components/stage_stepper.html:22
+msgid "Locked"
+msgstr "Закрыто"
+
+#: ui/templates/components/stage_stepper.html:24
+msgid "Available"
+msgstr "Доступно"
+
+#: ui/templates/components/toast.html:15
+msgid "Close"
+msgstr "Закрыть"
+
+#: ui/templates/core/home.html:6 ui/templates/layouts/auth.html:25
 msgid "A chemistry lab that is always open"
 msgstr "Химическая лаборатория, которая всегда открыта"
 
-#: templates/core/home.html:8
+#: ui/templates/core/home.html:8
 msgid ""
 "Run laboratory experiments on a virtual bench: choose glassware and "
 "reagents, follow the procedure, observe the reaction and keep a lab journal."
@@ -1734,6 +1644,245 @@ msgstr ""
 "реактивы, выполняйте порядок работы, наблюдайте реакцию и ведите "
 "лабораторный журнал."
 
-#: templates/core/partials/lang_switch.html:2
+#: ui/templates/courses/dashboard.html:3 ui/templates/courses/dashboard.html:7
+#: ui/templates/layouts/teacher.html:11
+msgid "Course"
+msgstr "Курс"
+
+#: ui/templates/courses/dashboard.html:15
+#, python-format
+msgid "Module %(n)s"
+msgstr "Модуль %(n)s"
+
+#: ui/templates/courses/dashboard.html:26
+msgid "Theory and virtual lab work"
+msgstr "Теория и виртуальная лабораторная работа"
+
+#: ui/templates/courses/dashboard.html:28
+msgid "Draft"
+msgstr "Черновик"
+
+#: ui/templates/courses/dashboard.html:35
+msgid "Coming soon"
+msgstr "Скоро"
+
+#: ui/templates/courses/dashboard.html:44
+msgid "No courses yet"
+msgstr "Курсов пока нет"
+
+#: ui/templates/courses/dashboard.html:44
+msgid "Run: python manage.py seed_course"
+msgstr "Выполните: python manage.py seed_course"
+
+#: ui/templates/courses/topic.html:5
+msgid "Breadcrumbs"
+msgstr "Навигационная цепочка"
+
+#: ui/templates/courses/topic.html:8 ui/templates/labs/run.html:22
+#, python-format
+msgid "Topic %(n)s"
+msgstr "Тема %(n)s"
+
+#: ui/templates/courses/topic.html:24 ui/templates/labs/run.html:22
+#: ui/views.py:12
+msgid "Lab work"
+msgstr "Лабораторная работа"
+
+#: ui/templates/courses/topic.html:42
+msgid "Open the virtual lab"
+msgstr "Открыть виртуальную лабораторию"
+
+#: ui/templates/labs/run.html:25
+#, python-format
+msgid "Experiment %(n)s"
+msgstr "Опыт %(n)s"
+
+#: ui/templates/labs/run.html:29
+msgid "Experiments"
+msgstr "Опыты"
+
+#: ui/templates/layouts/auth.html:27
+msgid ""
+"A course for future chemistry teachers: theory, video lessons and virtual "
+"lab work — safe and available at any time."
+msgstr "Курс для будущих учителей химии: теория, видеоуроки и виртуальные лабораторные работы — безопасно и в любое время."
+
+#: ui/templates/layouts/cabinet.html:9
+msgid "Skip to content"
+msgstr "Перейти к содержимому"
+
+#: ui/templates/layouts/cabinet.html:17
+msgid "Menu"
+msgstr "Меню"
+
+#: ui/templates/layouts/cabinet.html:22
+msgid "Main menu"
+msgstr "Главное меню"
+
+#: ui/templates/layouts/cabinet.html:31
+msgid "Close menu"
+msgstr "Закрыть меню"
+
+#: ui/templates/layouts/cabinet.html:48
+msgid "Log out"
+msgstr "Выйти"
+
+#: ui/templates/layouts/public.html:11
+msgid "Account"
+msgstr "Аккаунт"
+
+#: ui/templates/layouts/public.html:14
+msgid "My cabinet"
+msgstr "Личный кабинет"
+
+#: ui/templates/layouts/student.html:8 ui/templates/layouts/teacher.html:8
+msgid "Home"
+msgstr "Главная"
+
+#: ui/templates/layouts/student.html:9
+msgid "My courses"
+msgstr "Мои курсы"
+
+#: ui/templates/layouts/student.html:10
+msgid "Grades"
+msgstr "Оценки"
+
+#: ui/templates/layouts/student.html:11
+msgid "Certificates"
+msgstr "Сертификаты"
+
+#: ui/templates/layouts/student.html:13 ui/templates/layouts/teacher.html:12
+#: ui/templates/research/dashboard.html:7
+msgid "Research data"
+msgstr "Данные исследования"
+
+#: ui/templates/layouts/teacher.html:9
+msgid "Course content"
+msgstr "Содержание курсов"
+
+#: ui/templates/layouts/teacher.html:10
+msgid "Groups and students"
+msgstr "Группы и студенты"
+
+#: ui/templates/layouts/teacher.html:14
+msgid "teacher"
+msgstr "преподаватель"
+
+#: ui/templates/partials/lang_switch.html:2
 msgid "Interface language"
 msgstr "Язык интерфейса"
+
+#: ui/templates/research/dashboard.html:8
+#, python-format
+msgid "Attempts: %(total)s, unfinished: %(unfinished)s."
+msgstr "Попыток: %(total)s, незавершённых: %(unfinished)s."
+
+#: ui/templates/research/dashboard.html:11
+msgid "Download attempts (CSV)"
+msgstr "Скачать попытки (CSV)"
+
+#: ui/templates/research/dashboard.html:12
+msgid "Download action log (CSV)"
+msgstr "Скачать журнал действий (CSV)"
+
+#: ui/templates/research/dashboard.html:18
+#: ui/templates/research/dashboard.html:44
+#: ui/templates/research/dashboard.html:81
+msgid "Experiment"
+msgstr "Опыт"
+
+#: ui/templates/research/dashboard.html:25
+#: ui/templates/research/dashboard.html:45
+msgid "Research group"
+msgstr "Исследовательская группа"
+
+#: ui/templates/research/dashboard.html:36
+msgid "Apply"
+msgstr "Применить"
+
+#: ui/templates/research/dashboard.html:39
+msgid "Averages by experiment and group (finished attempts)"
+msgstr "Средние по опыту и группе (завершённые попытки)"
+
+#: ui/templates/research/dashboard.html:46
+msgid "Students"
+msgstr "Студенты"
+
+#: ui/templates/research/dashboard.html:47
+msgid "Attempts"
+msgstr "Попытки"
+
+#: ui/templates/research/dashboard.html:48
+#: ui/templates/research/dashboard.html:83
+msgid "Time, s"
+msgstr "Время, с"
+
+#: ui/templates/research/dashboard.html:51
+#: ui/templates/research/dashboard.html:84
+msgid "Wrong equipment"
+msgstr "Неверное оборудование"
+
+#: ui/templates/research/dashboard.html:52
+#: ui/templates/research/dashboard.html:85
+msgid "Analysis score"
+msgstr "Результат анализа"
+
+#: ui/templates/research/dashboard.html:69
+msgid "No finished attempts yet."
+msgstr "Завершённых попыток пока нет."
+
+#: ui/templates/research/dashboard.html:75
+msgid "Latest attempts"
+msgstr "Последние попытки"
+
+#: ui/templates/research/dashboard.html:82
+msgid "Status"
+msgstr "Статус"
+
+#: ui/templates/research/dashboard.html:84
+msgid "Errors"
+msgstr "Ошибки"
+
+#: ui/templates/research/dashboard.html:86
+msgid "Started"
+msgstr "Начато"
+
+#: ui/templates/ui/styleguide.html:7
+msgid "Every component of ui/templates/components with sample data."
+msgstr "Все компоненты ui/templates/components с примерами данных."
+
+#: ui/templates/ui/styleguide.html:29
+msgid "Open dialog"
+msgstr "Открыть диалог"
+
+#: ui/views.py:10
+msgid "Theory"
+msgstr "Теория"
+
+#: ui/views.py:11
+msgid "Video lesson"
+msgstr "Видеоурок"
+
+#: ui/views.py:13
+msgid "Practice 1"
+msgstr "Практическая работа 1"
+
+#: ui/views.py:14
+msgid "Practice 2"
+msgstr "Практическая работа 2"
+
+#: ui/views.py:15
+msgid "Practice 3"
+msgstr "Практическая работа 3"
+
+#: ui/views.py:16
+msgid "Topic test"
+msgstr "Тест по теме"
+
+#: ui/views.py:21
+msgid "Group"
+msgstr "Группа"
+
+#: ui/views.py:21
+msgid "Score"
+msgstr "Балл"

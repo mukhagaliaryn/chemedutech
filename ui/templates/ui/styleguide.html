@@ -1,0 +1,73 @@
+{% extends "layouts/teacher.html" %}
+{% load i18n %}
+{% block title %}Styleguide · ChemEduTech{% endblock %}
+{% block content %}
+<header>
+  <h1 class="text-h1">Styleguide</h1>
+  <p class="mt-1 text-ink-soft">{% translate "Every component of ui/templates/components with sample data." %}</p>
+</header>
+
+<section class="card flex flex-col gap-4">
+  <h2 class="text-h2">Type</h2>
+  <p class="text-display">Әрдайым ашық химия зертханасы</p>
+  <p class="text-h1">Сутегі және оттегі</p>
+  <p class="text-h2">1-модуль. Бейорганикалық химия негіздері</p>
+  <p class="text-h3">Зертханалық журнал</p>
+  <p>Мырыш электрон беріп тотығады, ал сутегі иондары электрон қабылдап тотықсызданады.</p>
+  <p class="text-body-sm text-ink-soft">Соңғы белсенділік: 2 сағат бұрын</p>
+  <p class="text-caption text-ink-faint">Бақылау · 00:42</p>
+</section>
+
+<section class="card flex flex-col gap-4">
+  <h2 class="text-h2">Button · Badge</h2>
+  <div class="flex flex-wrap items-center gap-3">
+    {% include "components/button.html" with label="Тәжірибені бастау" icon_after="arrow-right" %}
+    {% include "components/button.html" with label="Журналды сақтау" variant="secondary" %}
+    {% include "components/button.html" with label="Кеңес" variant="ghost" %}
+    {% include "components/button.html" with label="Студентті шығару" variant="danger" size="sm" %}
+    {% include "components/button.html" with label="Келесі кезең" disabled=True %}
+    <button type="button" class="btn btn-secondary" data-open-modal="demo-modal">{% translate "Open dialog" %}</button>
+  </div>
+  <div class="flex flex-wrap items-center gap-2">
+    {% for st in statuses %}{% include "components/badge.html" with status=st label=st dot=True %}{% endfor %}
+    {% include "components/badge.html" with variant="info" label="Эксперименттік топ" %}
+  </div>
+  {% include "components/modal.html" with id="demo-modal" title="Студентті топтан шығару керек пе?" text="Студенттің нәтижелері сақталады." action="#" confirm_label="Шығару" confirm_variant="danger" %}
+</section>
+
+<section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+  {% include "components/stat_card.html" with label="Курс бойынша ұпай" value="84.6" note="B+ · ағымдағы" tone="success" %}
+  {% include "components/stat_card.html" with label="Аяқталған тақырыптар" value="4 / 15" note="27%" %}
+  {% include "components/stat_card.html" with label="Зертханалық жұмыстар" value="11" note="+3 осы аптада" tone="success" %}
+</section>
+
+<section class="card flex flex-col gap-4">
+  <h2 class="text-h2">Progress · Stage stepper</h2>
+  {% include "components/progress_bar.html" with label="1-модуль прогресі" value=8 max=12 value_text="8 / 12 кезең" %}
+  {% include "components/progress_bar.html" with value=100 size="sm" %}
+  {% include "components/stage_stepper.html" with stages=stages label="Тақырып кезеңдері" %}
+</section>
+
+<section class="card grid gap-4 sm:grid-cols-2">
+  <h2 class="text-h2 sm:col-span-2">Form</h2>
+  <div class="field"><label class="label" for="sg-login">Логин немесе email</label><input class="input" id="sg-login" placeholder="aigerim@kaznpu.kz"><p class="help">Тіркелгенде көрсеткен логин не email</p></div>
+  <div class="field"><label class="label" for="sg-pass">Құпиясөз</label><input class="input" id="sg-pass" type="password" aria-invalid="true" value="12345"><p class="error-text">Логин немесе құпиясөз қате.</p></div>
+  {% include "components/select.html" with name="group" label="Топ" options=select_options selected=1 %}
+</section>
+
+{% include "components/table.html" with headers=table_headers rows=table_rows numeric="2" caption="Students" %}
+
+<div class="grid gap-4 md:grid-cols-2">
+  {% include "components/empty_state.html" with title="Әзірге курс жоқ" text="Мұғалім топты курсқа бекіткенде курс осында пайда болады." action_url="#" action_label="Каталог" %}
+  {% include "components/lock_state.html" with title="Бұл кезең әлі жабық" text="Бұл кезең теорияның бекіту тестінен кейін ашылады." action_url="#" action_label="Теорияға оралу" %}
+</div>
+
+<div class="grid gap-4 md:grid-cols-2">
+  {% include "components/card.html" with meta="1-модуль · 1-тақырып" title="Сутегі және оттегі" text="Зертханалық жұмыс: 4 тәжірибе" icon="lab" href="#" %}
+  <div class="card flex items-center gap-3">
+    {% include "components/avatar.html" with person="Айгерім Сапарова" size="sm" %}
+    {% include "components/avatar.html" with person="Айгерім Сапарова" %}
+    {% include "components/avatar.html" with person="Айгерім Сапарова" size="lg" %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,104 @@
+{% extends "layouts/teacher.html" %}
+{% load i18n %}
+{% block title %}{% translate "Research" %} · ChemEduTech{% endblock %}
+{% block content %}
+  <div class="flex flex-wrap items-end gap-4">
+    <div>
+      <h1 class="text-h1">{% translate "Research data" %}</h1>
+      <p class="mt-1 text-ink-soft">{% blocktranslate %}Attempts: {{ total }}, unfinished: {{ unfinished }}.{% endblocktranslate %}</p>
+    </div>
+    <div class="ml-auto flex gap-2">
+      <a class="btn btn-secondary btn-sm" href="{% url 'research:export_attempts' %}?{{ query }}">{% translate "Download attempts (CSV)" %}</a>
+      <a class="btn btn-secondary btn-sm" href="{% url 'research:export_events' %}?{{ query }}">{% translate "Download action log (CSV)" %}</a>
+    </div>
+  </div>
+
+  <form method="get" class="card card-compact flex flex-wrap items-end gap-3">
+    <label class="field">
+      <span class="label">{% translate "Experiment" %}</span>
+      <select class="input" name="experiment_key">
+        <option value="">—</option>
+        {% for key, title in experiments %}<option value="{{ key }}" {% if request.GET.experiment_key == key %}selected{% endif %}>{{ title }}</option>{% endfor %}
+      </select>
+    </label>
+    <label class="field">
+      <span class="label">{% translate "Research group" %}</span>
+      <select class="input" name="cohort">
+        <option value="">—</option>
+        <option value="control" {% if request.GET.cohort == "control" %}selected{% endif %}>{% translate "Control group" %}</option>
+        <option value="experimental" {% if request.GET.cohort == "experimental" %}selected{% endif %}>{% translate "Experimental group" %}</option>
+      </select>
+    </label>
+    <label class="field">
+      <span class="label">{% translate "Study group" %}</span>
+      <input class="input" name="group" value="{{ request.GET.group }}">
+    </label>
+    <button class="btn btn-primary" type="submit">{% translate "Apply" %}</button>
+  </form>
+
+  <h2 class="text-h2">{% translate "Averages by experiment and group (finished attempts)" %}</h2>
+  <div class="-mt-3 overflow-x-auto rounded-lg border border-line bg-surface">
+    <table class="table num">
+      <thead>
+        <tr>
+          <th scope="col">{% translate "Experiment" %}</th>
+          <th scope="col">{% translate "Research group" %}</th>
+          <th scope="col" class="text-right">{% translate "Students" %}</th>
+          <th scope="col" class="text-right">{% translate "Attempts" %}</th>
+          <th scope="col" class="text-right">{% translate "Time, s" %}</th>
+          <th scope="col" class="text-right">{% translate "Order errors" %}</th>
+          <th scope="col" class="text-right">{% translate "Safety warnings" %}</th>
+          <th scope="col" class="text-right">{% translate "Wrong equipment" %}</th>
+          <th scope="col" class="text-right">{% translate "Analysis score" %}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in summary %}
+          <tr>
+            <td>{{ titles|get:row.experiment_key }}</td>
+            <td>{{ cohort_names|get:row.cohort|default:"—" }}</td>
+            <td class="text-right">{{ row.students }}</td>
+            <td class="text-right">{{ row.n }}</td>
+            <td class="text-right">{{ row.avg_time|floatformat:0 }}</td>
+            <td class="text-right">{{ row.avg_order|floatformat:2 }}</td>
+            <td class="text-right">{{ row.avg_safety|floatformat:2 }}</td>
+            <td class="text-right">{{ row.avg_wrong|floatformat:2 }}</td>
+            <td class="text-right">{{ row.avg_score|floatformat:2 }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="9" class="py-8 text-center text-ink-faint">{% translate "No finished attempts yet." %}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="text-h2">{% translate "Latest attempts" %}</h2>
+  <div class="-mt-3 overflow-x-auto rounded-lg border border-line bg-surface">
+    <table class="table num">
+      <thead>
+        <tr>
+          <th scope="col">{% translate "Student" %}</th>
+          <th scope="col">{% translate "Experiment" %}</th>
+          <th scope="col">{% translate "Status" %}</th>
+          <th scope="col" class="text-right">{% translate "Time, s" %}</th>
+          <th scope="col" class="text-right" title="{% translate 'Order errors' %} / {% translate 'Safety warnings' %} / {% translate 'Wrong equipment' %}">{% translate "Errors" %}</th>
+          <th scope="col" class="text-right">{% translate "Analysis score" %}</th>
+          <th scope="col">{% translate "Started" %}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in attempts %}
+          <tr>
+            <td>{{ a.user }} <span class="text-ink-faint">{{ a.user.study_group }}</span></td>
+            <td>{{ titles|get:a.experiment_key }}</td>
+            <td>{{ a.get_status_display }}</td>
+            <td class="text-right">{{ a.duration_s|default:"—" }}</td>
+            <td class="text-right">{{ a.order_errors }} / {{ a.safety_warnings }} / {{ a.wrong_items }}</td>
+            <td class="text-right">{% if a.analysis_total %}{{ a.analysis_correct }}/{{ a.analysis_total }}{% else %}—{% endif %}</td>
+            <td>{{ a.started_at|date:"d.m.Y H:i" }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

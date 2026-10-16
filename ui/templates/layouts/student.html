@@ -1,0 +1,16 @@
+{% extends "layouts/cabinet.html" %}
+{% load i18n %}
+{% comment %}
+Student cabinet (/me/, /learn/). Nav items whose url name does not exist yet are hidden by
+components/nav_item.html, so the list below is the target menu from the «Студент» mockups.
+{% endcomment %}
+{% block nav %}
+  {% translate "Home" as l_home %}{% include "components/nav_item.html" with url_name="courses:dashboard" match="courses: student:dashboard" icon="home" label=l_home %}
+  {% translate "My courses" as l_courses %}{% include "components/nav_item.html" with url_name="student:courses" icon="book" label=l_courses %}
+  {% translate "Grades" as l_grades %}{% include "components/nav_item.html" with url_name="student:results" icon="chart" label=l_grades %}
+  {% translate "Certificates" as l_certs %}{% include "components/nav_item.html" with url_name="student:certificates" icon="award" label=l_certs %}
+  {% if user.is_teacher %}
+    {% translate "Research data" as l_research %}{% include "components/nav_item.html" with url_name="research:dashboard" match="research:" icon="search" label=l_research %}
+  {% endif %}
+{% endblock %}
+{% block user_meta %}{% if user.study_group %}{{ user.study_group }} · {% endif %}{% translate "student" %}{% endblock %}

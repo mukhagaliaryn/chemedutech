@@ -1,0 +1,19 @@
+{% load i18n %}{% comment %}
+Confirmation dialog on the native <dialog> element (focus trap and Esc for free).
+id; title; text; action — URL the confirm button POSTs to (omit for an informational dialog);
+confirm_label; confirm_variant (primary | danger, default primary); cancel_label.
+Open it from any element: <button type="button" data-open-modal="ID">…</button> (static/js/ui.js).
+Destructive actions always go through this dialog.
+{% endcomment %}
+<dialog id="{{ id }}" aria-labelledby="{{ id }}-title"
+        class="m-auto w-[calc(100%-32px)] max-w-md rounded-lg border border-line bg-surface p-0 text-ink shadow-pop backdrop:bg-ink/40">
+  <form method="post" {% if action %}action="{{ action }}"{% endif %} class="flex flex-col gap-4 p-6">
+    {% csrf_token %}
+    <h2 id="{{ id }}-title" class="text-h3">{{ title }}</h2>
+    {% if text %}<p class="text-sm text-ink-soft">{{ text }}</p>{% endif %}
+    <div class="flex flex-wrap justify-end gap-2">
+      <button type="submit" formmethod="dialog" formnovalidate class="btn btn-secondary">{{ cancel_label|default:_("Cancel") }}</button>
+      {% if action %}<button type="submit" class="btn btn-{{ confirm_variant|default:'primary' }}">{{ confirm_label|default:_("Confirm") }}</button>{% endif %}
+    </div>
+  </form>
+</dialog>

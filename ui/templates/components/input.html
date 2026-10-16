@@ -1,0 +1,23 @@
+{% comment %}
+Form field from a BoundField: label above, widget, help or error below.
+field; class (wrapper extras). Checkboxes render inline with the label on the right.
+Text inputs, textareas and selects get the .input class; aria-invalid / aria-describedby are set.
+{% endcomment %}{% with wtype=field|widget_type %}
+{% if wtype == "checkbox" %}
+<div class="flex flex-col gap-1 {{ class }}">
+  <label class="flex items-start gap-2.5 text-sm text-ink-soft" for="{{ field.id_for_label }}">
+    {{ field|with_attrs:"mt-1 size-4 shrink-0" }}<span>{{ field.label }}</span>
+  </label>
+  {% for e in field.errors %}<p class="error-text" id="{{ field.auto_id }}_error">{{ e }}</p>{% endfor %}
+</div>
+{% else %}
+<div class="field {{ class }}">
+  <label class="label" for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %}<span class="sr-only"> *</span>{% endif %}</label>
+  {{ field|with_attrs:"input" }}
+  {% if field.errors %}
+    {% for e in field.errors %}<p class="error-text" id="{{ field.auto_id }}_error">{{ e }}</p>{% endfor %}
+  {% elif field.help_text %}
+    <p class="help" id="{{ field.auto_id }}_help">{{ field.help_text }}</p>
+  {% endif %}
+</div>
+{% endif %}{% endwith %}

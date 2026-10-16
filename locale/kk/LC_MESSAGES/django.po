@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 10:33+0500\n"
+"POT-Creation-Date: 2026-10-16 16:05+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,13 +34,12 @@ msgstr "Аты"
 msgid "Last name"
 msgstr "Тегі"
 
-#: apps/accounts/forms.py:11
-#: apps/research/templates/research/dashboard.html:34
+#: apps/accounts/forms.py:11 ui/templates/research/dashboard.html:33
 msgid "Study group"
 msgstr "Оқу тобы"
 
-#: apps/accounts/models/user.py:15
-#: apps/research/templates/research/dashboard.html:81
+#: apps/accounts/models/user.py:15 ui/templates/research/dashboard.html:80
+#: ui/views.py:21
 msgid "Student"
 msgstr "Студент"
 
@@ -56,13 +55,11 @@ msgstr "Зерттеуші"
 msgid "Not assigned"
 msgstr "Тағайындалмаған"
 
-#: apps/accounts/models/user.py:21
-#: apps/research/templates/research/dashboard.html:29
+#: apps/accounts/models/user.py:21 ui/templates/research/dashboard.html:28
 msgid "Control group"
 msgstr "Бақылау тобы"
 
-#: apps/accounts/models/user.py:22
-#: apps/research/templates/research/dashboard.html:30
+#: apps/accounts/models/user.py:22 ui/templates/research/dashboard.html:29
 msgid "Experimental group"
 msgstr "Эксперименттік топ"
 
@@ -89,32 +86,6 @@ msgstr "пайдаланушы"
 #: apps/accounts/models/user.py:32
 msgid "users"
 msgstr "пайдаланушылар"
-
-#: apps/accounts/templates/accounts/login.html:3
-#: apps/accounts/templates/accounts/login.html:6
-#: apps/accounts/templates/accounts/login.html:19 templates/base.html:32
-#: templates/core/home.html:12
-msgid "Log in"
-msgstr "Кіру"
-
-#: apps/accounts/templates/accounts/login.html:11
-msgid "Username"
-msgstr "Логин"
-
-#: apps/accounts/templates/accounts/login.html:15
-msgid "Password"
-msgstr "Құпиясөз"
-
-#: apps/accounts/templates/accounts/login.html:21
-msgid "No account yet?"
-msgstr "Аккаунтыңыз жоқ па?"
-
-#: apps/accounts/templates/accounts/login.html:21
-#: apps/accounts/templates/accounts/signup.html:3
-#: apps/accounts/templates/accounts/signup.html:6
-#: apps/accounts/templates/accounts/signup.html:17 templates/core/home.html:11
-msgid "Create an account"
-msgstr "Тіркелу"
 
 #: apps/core/apps.py:8
 msgid "Core"
@@ -189,50 +160,6 @@ msgstr "тақырып"
 msgid "topics"
 msgstr "тақырыптар"
 
-#: apps/courses/templates/courses/dashboard.html:3 templates/base.html:21
-msgid "Course"
-msgstr "Курс"
-
-#: apps/courses/templates/courses/dashboard.html:12
-#, python-format
-msgid "Module %(n)s"
-msgstr "%(n)s-модуль"
-
-#: apps/courses/templates/courses/dashboard.html:21
-msgid "Theory and virtual lab work"
-msgstr "Теория және виртуалды зертханалық жұмыс"
-
-#: apps/courses/templates/courses/dashboard.html:23
-msgid "Draft"
-msgstr "Жоба"
-
-#: apps/courses/templates/courses/dashboard.html:30
-msgid "Coming soon"
-msgstr "Жақында"
-
-#: apps/courses/templates/courses/dashboard.html:38
-msgid "No courses yet. Run: python manage.py seed_course"
-msgstr "Курстар әлі жоқ. Іске қосыңыз: python manage.py seed_course"
-
-#: apps/courses/templates/courses/topic.html:7
-#: apps/labs/templates/labs/run.html:23
-#, python-format
-msgid "Topic %(n)s"
-msgstr "%(n)s-тақырып"
-
-#: apps/courses/templates/courses/topic.html:16
-#: apps/labs/templates/labs/run.html:23
-msgid "Lab work"
-msgstr "Зертханалық жұмыс"
-
-#: apps/courses/templates/courses/topic.html:25 apps/labs/views.py:73
-msgid "Analysis: correct answers"
-msgstr "Талдау: дұрыс жауаптар"
-
-#: apps/courses/templates/courses/topic.html:32
-msgid "Open the virtual lab"
-msgstr "Виртуалды зертхананы ашу"
-
 #: apps/labs/apps.py:8
 msgid "Virtual lab"
 msgstr "Виртуалды зертхана"
@@ -263,8 +190,8 @@ msgstr "Судың электролизі"
 
 #: apps/labs/experiments/t01/electrolysis.py:19
 msgid ""
-"Decompose water by direct current and determine the volume ratio of hydrogen"
-" and oxygen."
+"Decompose water by direct current and determine the volume ratio of hydrogen "
+"and oxygen."
 msgstr ""
 "Суды тұрақты токпен ыдыратып, сутегі мен оттегі көлемдерінің қатынасын "
 "анықтау."
@@ -301,8 +228,8 @@ msgstr "Айнымалы ток көзі"
 
 #: apps/labs/experiments/t01/electrolysis.py:39
 msgid ""
-"Alternating current keeps swapping the electrodes, so the gases would mix in"
-" both tubes. Electrolysis needs direct current."
+"Alternating current keeps swapping the electrodes, so the gases would mix in "
+"both tubes. Electrolysis needs direct current."
 msgstr ""
 "Айнымалы ток электродтардың полярлығын үнемі ауыстырады, сондықтан газдар "
 "екі түтікте де араласып кетеді. Электролизге тұрақты ток қажет."
@@ -410,22 +337,19 @@ msgstr "Электродтық реакцияларды жазыңыз."
 
 #: apps/labs/experiments/t01/electrolysis.py:107
 #: apps/labs/experiments/t01/hydrogen.py:89
-#: apps/labs/experiments/t01/oxygen.py:102
-#: apps/labs/experiments/t01/rate.py:84
+#: apps/labs/experiments/t01/oxygen.py:102 apps/labs/experiments/t01/rate.py:84
 msgid "Finish the experiment"
 msgstr "Тәжірибені аяқтау"
 
 #: apps/labs/experiments/t01/electrolysis.py:108
 #: apps/labs/experiments/t01/hydrogen.py:90
-#: apps/labs/experiments/t01/oxygen.py:103
-#: apps/labs/experiments/t01/rate.py:85
+#: apps/labs/experiments/t01/oxygen.py:103 apps/labs/experiments/t01/rate.py:85
 msgid "The results are saved and the analysis task opens."
 msgstr "Нәтижелер сақталып, талдау тапсырмасы ашылады."
 
 #: apps/labs/experiments/t01/electrolysis.py:110
 #: apps/labs/experiments/t01/hydrogen.py:92
-#: apps/labs/experiments/t01/oxygen.py:105
-#: apps/labs/experiments/t01/rate.py:87
+#: apps/labs/experiments/t01/oxygen.py:105 apps/labs/experiments/t01/rate.py:87
 msgid "Fill in the lab journal first."
 msgstr "Алдымен зертханалық журналды толтырыңыз."
 
@@ -517,8 +441,8 @@ msgstr "NaOH-тан көбірек сутегі алу үшін"
 
 #: apps/labs/experiments/t01/electrolysis.py:153
 msgid ""
-"How would you show the class which tube contains hydrogen and which contains"
-" oxygen?"
+"How would you show the class which tube contains hydrogen and which contains "
+"oxygen?"
 msgstr ""
 "Қай түтікте сутегі, қайсысында оттегі бар екенін сыныпқа қалай көрсетер "
 "едіңіз?"
@@ -694,8 +618,7 @@ msgstr "Ол сумен әрекеттеседі"
 
 #: apps/labs/experiments/t01/hydrogen.py:113
 msgid ""
-"Which particle is the oxidising agent in the reaction Zn + 2HCl → ZnCl₂ + "
-"H₂?"
+"Which particle is the oxidising agent in the reaction Zn + 2HCl → ZnCl₂ + H₂?"
 msgstr ""
 "Zn + 2HCl → ZnCl₂ + H₂ реакциясында қай бөлшек тотықтырғыш болып табылады?"
 
@@ -768,8 +691,8 @@ msgstr "Оттегіні алу"
 
 #: apps/labs/experiments/t01/oxygen.py:29
 msgid ""
-"Obtain oxygen by decomposing hydrogen peroxide and compare the rate with and"
-" without a catalyst."
+"Obtain oxygen by decomposing hydrogen peroxide and compare the rate with and "
+"without a catalyst."
 msgstr ""
 "Сутегі пероксидін ыдыратып оттегі алу және катализатормен және "
 "катализаторсыз жылдамдықты салыстыру."
@@ -884,8 +807,7 @@ msgstr "Бақылау"
 
 #: apps/labs/experiments/t01/oxygen.py:95
 msgid ""
-"A glowing splint flares up in oxygen. The rates of the two runs are "
-"compared."
+"A glowing splint flares up in oxygen. The rates of the two runs are compared."
 msgstr ""
 "Оттегіде бықсып тұрған шамшырақ лап етіп жанады. Екі тәжірибенің "
 "жылдамдықтары салыстырылады."
@@ -1032,8 +954,8 @@ msgid ""
 "Heating would also speed up the reaction and mix two factors. Change only "
 "one variable: the catalyst."
 msgstr ""
-"Қыздыру да реакцияны жылдамдатады, сонда екі фактор араласып кетеді. Тек бір"
-" айнымалыны өзгертіңіз: катализаторды."
+"Қыздыру да реакцияны жылдамдатады, сонда екі фактор араласып кетеді. Тек бір "
+"айнымалыны өзгертіңіз: катализаторды."
 
 #: apps/labs/experiments/t01/rate.py:40
 msgid "Select two test tubes"
@@ -1176,7 +1098,7 @@ msgstr ""
 "Активтендіру энергиясы ұғымын пайдаланып, MnO₂ ыдырауды неліктен "
 "жылдамдататынын түсіндіріңіз."
 
-#: apps/labs/models/attempt.py:10
+#: apps/labs/models/attempt.py:10 ui/templates/components/stage_stepper.html:23
 msgid "In progress"
 msgstr "Орындалуда"
 
@@ -1188,7 +1110,7 @@ msgstr "Аяқталды"
 msgid "Analysis submitted"
 msgstr "Талдау жіберілді"
 
-#: apps/labs/models/attempt.py:15
+#: apps/labs/models/attempt.py:15 ui/templates/layouts/student.html:16
 msgid "student"
 msgstr "студент"
 
@@ -1356,27 +1278,6 @@ msgstr "зертхана оқиғасы"
 msgid "lab events"
 msgstr "зертхана оқиғалары"
 
-#: apps/labs/templates/labs/run.html:18 apps/labs/views.py:74
-msgid "Back to the topic"
-msgstr "Тақырыпқа оралу"
-
-#: apps/labs/templates/labs/run.html:26
-#, python-format
-msgid "Experiment %(n)s"
-msgstr "%(n)s-тәжірибе"
-
-#: apps/labs/templates/labs/run.html:30
-msgid "Experiments"
-msgstr "Тәжірибелер"
-
-#: apps/labs/templates/labs/run.html:41 apps/labs/views.py:56
-msgid "Time"
-msgstr "Уақыт"
-
-#: apps/labs/templates/labs/run.html:43 apps/labs/views.py:76
-msgid "Start again"
-msgstr "Қайта бастау"
-
 #: apps/labs/views.py:28
 msgid "Equipment and reagents"
 msgstr "Құралдар мен реагенттер"
@@ -1488,6 +1389,10 @@ msgstr "Ғылыми түсіндірме"
 msgid "Measurements"
 msgstr "Өлшемдер"
 
+#: apps/labs/views.py:56 ui/templates/labs/run.html:40
+msgid "Time"
+msgstr "Уақыт"
+
 #: apps/labs/views.py:57
 msgid "Volume"
 msgstr "Көлем"
@@ -1528,13 +1433,13 @@ msgstr "Сіздің жауабыңыз"
 msgid "Experiment complete"
 msgstr "Тәжірибе аяқталды"
 
-#: apps/labs/views.py:69 apps/research/templates/research/dashboard.html:50
-#: apps/research/templates/research/dashboard.html:85
+#: apps/labs/views.py:69 ui/templates/research/dashboard.html:49
+#: ui/templates/research/dashboard.html:84
 msgid "Order errors"
 msgstr "Рет қателері"
 
-#: apps/labs/views.py:70 apps/research/templates/research/dashboard.html:51
-#: apps/research/templates/research/dashboard.html:85
+#: apps/labs/views.py:70 ui/templates/research/dashboard.html:50
+#: ui/templates/research/dashboard.html:84
 msgid "Safety warnings"
 msgstr "Қауіпсіздік ескертулері"
 
@@ -1546,9 +1451,21 @@ msgstr "Қате құрал не таңдау"
 msgid "Time spent"
 msgstr "Жұмсалған уақыт"
 
+#: apps/labs/views.py:73 ui/templates/courses/topic.html:35
+msgid "Analysis: correct answers"
+msgstr "Талдау: дұрыс жауаптар"
+
+#: apps/labs/views.py:74 ui/templates/labs/run.html:17
+msgid "Back to the topic"
+msgstr "Тақырыпқа оралу"
+
 #: apps/labs/views.py:75
 msgid "Next experiment"
 msgstr "Келесі тәжірибе"
+
+#: apps/labs/views.py:76 ui/templates/labs/run.html:42
+msgid "Start again"
+msgstr "Қайта бастау"
 
 #: apps/labs/views.py:77
 msgid ""
@@ -1622,119 +1539,350 @@ msgstr "А пробиркасы — бақылау үлгісі: ол катал
 msgid "Connection problem. Your actions are kept and will be sent again."
 msgstr "Байланыс ақауы. Әрекеттеріңіз сақталған және қайта жіберіледі."
 
-#: apps/research/apps.py:8 apps/research/templates/research/dashboard.html:3
-#: templates/base.html:23
+#: apps/research/apps.py:8 ui/templates/research/dashboard.html:3
 msgid "Research"
 msgstr "Зерттеу"
 
-#: apps/research/templates/research/dashboard.html:8
-msgid "Research data"
-msgstr "Зерттеу деректері"
-
-#: apps/research/templates/research/dashboard.html:9
-#, python-format
-msgid "Attempts: %(total)s, unfinished: %(unfinished)s."
-msgstr "Талпыныстар: %(total)s, аяқталмағаны: %(unfinished)s."
-
-#: apps/research/templates/research/dashboard.html:12
-msgid "Download attempts (CSV)"
-msgstr "Талпыныстарды жүктеу (CSV)"
-
-#: apps/research/templates/research/dashboard.html:13
-msgid "Download action log (CSV)"
-msgstr "Әрекеттер журналын жүктеу (CSV)"
-
-#: apps/research/templates/research/dashboard.html:19
-#: apps/research/templates/research/dashboard.html:45
-#: apps/research/templates/research/dashboard.html:82
-msgid "Experiment"
-msgstr "Тәжірибе"
-
-#: apps/research/templates/research/dashboard.html:26
-#: apps/research/templates/research/dashboard.html:46
-msgid "Research group"
-msgstr "Зерттеу тобы"
-
-#: apps/research/templates/research/dashboard.html:37
-msgid "Apply"
-msgstr "Қолдану"
-
-#: apps/research/templates/research/dashboard.html:40
-msgid "Averages by experiment and group (finished attempts)"
-msgstr "Тәжірибе мен топ бойынша орташа мәндер (аяқталған талпыныстар)"
-
-#: apps/research/templates/research/dashboard.html:47
-msgid "Students"
-msgstr "Студенттер"
-
-#: apps/research/templates/research/dashboard.html:48
-msgid "Attempts"
-msgstr "Талпыныстар"
-
-#: apps/research/templates/research/dashboard.html:49
-#: apps/research/templates/research/dashboard.html:84
-msgid "Time, s"
-msgstr "Уақыт, с"
-
-#: apps/research/templates/research/dashboard.html:52
-#: apps/research/templates/research/dashboard.html:85
-msgid "Wrong equipment"
-msgstr "Қате құрал"
-
-#: apps/research/templates/research/dashboard.html:53
-#: apps/research/templates/research/dashboard.html:86
-msgid "Analysis score"
-msgstr "Талдау нәтижесі"
-
-#: apps/research/templates/research/dashboard.html:70
-msgid "No finished attempts yet."
-msgstr "Аяқталған талпыныстар әлі жоқ."
-
-#: apps/research/templates/research/dashboard.html:76
-msgid "Latest attempts"
-msgstr "Соңғы талпыныстар"
-
-#: apps/research/templates/research/dashboard.html:83
-msgid "Status"
-msgstr "Күйі"
-
-#: apps/research/templates/research/dashboard.html:85
-msgid "Errors"
-msgstr "Қателер"
-
-#: apps/research/templates/research/dashboard.html:87
-msgid "Started"
-msgstr "Басталды"
-
-#: config/settings.py:106
+#: config/settings/base.py:121
 msgid "Kazakh"
 msgstr "Қазақша"
 
-#: config/settings.py:107
+#: config/settings/base.py:122
 msgid "Russian"
 msgstr "Орысша"
 
-#: config/settings.py:108
+#: config/settings/base.py:123
 msgid "English"
 msgstr "Ағылшынша"
 
-#: templates/base.html:29
-msgid "Log out"
-msgstr "Шығу"
+#: ui/apps.py:9
+msgid "User interface"
+msgstr "Пайдаланушы интерфейсі"
 
-#: templates/core/home.html:6
+#: ui/templates/accounts/login.html:3 ui/templates/accounts/login.html:8
+#: ui/templates/accounts/login.html:17 ui/templates/accounts/signup.html:11
+#: ui/templates/core/home.html:12 ui/templates/layouts/public.html:16
+msgid "Log in"
+msgstr "Кіру"
+
+#: ui/templates/accounts/login.html:9
+msgid "Enter your username and password."
+msgstr "Логиніңіз бен құпиясөзіңізді енгізіңіз."
+
+#: ui/templates/accounts/login.html:19
+msgid "No account yet?"
+msgstr "Аккаунтыңыз жоқ па?"
+
+#: ui/templates/accounts/login.html:19 ui/templates/accounts/signup.html:18
+msgid "Sign up as a student"
+msgstr "Студент ретінде тіркелу"
+
+#: ui/templates/accounts/login.html:22
+msgid ""
+"Teacher accounts are created by the platform administrator. Ask the "
+"administrator for your login details."
+msgstr "Мұғалім аккаунттарын платформа әкімшісі ашады. Кіру деректерін әкімшіден алыңыз."
+
+#: ui/templates/accounts/signup.html:3 ui/templates/core/home.html:11
+msgid "Create an account"
+msgstr "Тіркелу"
+
+#: ui/templates/accounts/signup.html:11
+msgid "Already have an account?"
+msgstr "Аккаунтыңыз бар ма?"
+
+#: ui/templates/accounts/signup.html:19
+msgid "After signing up you can enrol in a course and start learning."
+msgstr "Тіркелгеннен кейін курсқа жазылып, оқуды бастай аласыз."
+
+#: ui/templates/accounts/signup.html:26 ui/templates/layouts/public.html:17
+msgid "Sign up"
+msgstr "Тіркелу"
+
+#: ui/templates/accounts/signup.html:27
+msgid "Teachers do not sign up themselves — the administrator adds them."
+msgstr "Мұғалімдер өздігінен тіркелмейді — оларды әкімші қосады."
+
+#: ui/templates/components/modal.html:15
+msgid "Cancel"
+msgstr "Болдырмау"
+
+#: ui/templates/components/modal.html:16
+msgid "Confirm"
+msgstr "Растау"
+
+#: ui/templates/components/stage_stepper.html:19
+msgid "Awaiting check"
+msgstr "Тексеруді күтуде"
+
+#: ui/templates/components/stage_stepper.html:21
+msgid "Passed"
+msgstr "Өтті"
+
+#: ui/templates/components/stage_stepper.html:22
+msgid "Locked"
+msgstr "Жабық"
+
+#: ui/templates/components/stage_stepper.html:24
+msgid "Available"
+msgstr "Ашық"
+
+#: ui/templates/components/toast.html:15
+msgid "Close"
+msgstr "Жабу"
+
+#: ui/templates/core/home.html:6 ui/templates/layouts/auth.html:25
 msgid "A chemistry lab that is always open"
 msgstr "Әрдайым ашық химия зертханасы"
 
-#: templates/core/home.html:8
+#: ui/templates/core/home.html:8
 msgid ""
 "Run laboratory experiments on a virtual bench: choose glassware and "
 "reagents, follow the procedure, observe the reaction and keep a lab journal."
 msgstr ""
 "Зертханалық тәжірибелерді виртуалды үстелде жасаңыз: ыдыстар мен "
-"реагенттерді таңдаңыз, жұмыс ретін орындаңыз, реакцияны бақылап, зертханалық"
-" журнал толтырыңыз."
+"реагенттерді таңдаңыз, жұмыс ретін орындаңыз, реакцияны бақылап, зертханалық "
+"журнал толтырыңыз."
 
-#: templates/core/partials/lang_switch.html:2
+#: ui/templates/courses/dashboard.html:3 ui/templates/courses/dashboard.html:7
+#: ui/templates/layouts/teacher.html:11
+msgid "Course"
+msgstr "Курс"
+
+#: ui/templates/courses/dashboard.html:15
+#, python-format
+msgid "Module %(n)s"
+msgstr "%(n)s-модуль"
+
+#: ui/templates/courses/dashboard.html:26
+msgid "Theory and virtual lab work"
+msgstr "Теория және виртуалды зертханалық жұмыс"
+
+#: ui/templates/courses/dashboard.html:28
+msgid "Draft"
+msgstr "Жоба"
+
+#: ui/templates/courses/dashboard.html:35
+msgid "Coming soon"
+msgstr "Жақында"
+
+#: ui/templates/courses/dashboard.html:44
+msgid "No courses yet"
+msgstr "Әзірге курс жоқ"
+
+#: ui/templates/courses/dashboard.html:44
+msgid "Run: python manage.py seed_course"
+msgstr "Іске қосыңыз: python manage.py seed_course"
+
+#: ui/templates/courses/topic.html:5
+msgid "Breadcrumbs"
+msgstr "Навигация жолы"
+
+#: ui/templates/courses/topic.html:8 ui/templates/labs/run.html:22
+#, python-format
+msgid "Topic %(n)s"
+msgstr "%(n)s-тақырып"
+
+#: ui/templates/courses/topic.html:24 ui/templates/labs/run.html:22
+#: ui/views.py:12
+msgid "Lab work"
+msgstr "Зертханалық жұмыс"
+
+#: ui/templates/courses/topic.html:42
+msgid "Open the virtual lab"
+msgstr "Виртуалды зертхананы ашу"
+
+#: ui/templates/labs/run.html:25
+#, python-format
+msgid "Experiment %(n)s"
+msgstr "%(n)s-тәжірибе"
+
+#: ui/templates/labs/run.html:29
+msgid "Experiments"
+msgstr "Тәжірибелер"
+
+#: ui/templates/layouts/auth.html:27
+msgid ""
+"A course for future chemistry teachers: theory, video lessons and virtual "
+"lab work — safe and available at any time."
+msgstr "Болашақ химия мұғалімдеріне арналған курс: теория, видеосабақтар және виртуалды зертханалық жұмыстар — қауіпсіз, кез келген уақытта."
+
+#: ui/templates/layouts/cabinet.html:9
+msgid "Skip to content"
+msgstr "Мазмұнға өту"
+
+#: ui/templates/layouts/cabinet.html:17
+msgid "Menu"
+msgstr "Мәзір"
+
+#: ui/templates/layouts/cabinet.html:22
+msgid "Main menu"
+msgstr "Негізгі мәзір"
+
+#: ui/templates/layouts/cabinet.html:31
+msgid "Close menu"
+msgstr "Мәзірді жабу"
+
+#: ui/templates/layouts/cabinet.html:48
+msgid "Log out"
+msgstr "Шығу"
+
+#: ui/templates/layouts/public.html:11
+msgid "Account"
+msgstr "Аккаунт"
+
+#: ui/templates/layouts/public.html:14
+msgid "My cabinet"
+msgstr "Жеке кабинет"
+
+#: ui/templates/layouts/student.html:8 ui/templates/layouts/teacher.html:8
+msgid "Home"
+msgstr "Басты бет"
+
+#: ui/templates/layouts/student.html:9
+msgid "My courses"
+msgstr "Менің курстарым"
+
+#: ui/templates/layouts/student.html:10
+msgid "Grades"
+msgstr "Бағалар"
+
+#: ui/templates/layouts/student.html:11
+msgid "Certificates"
+msgstr "Сертификаттар"
+
+#: ui/templates/layouts/student.html:13 ui/templates/layouts/teacher.html:12
+#: ui/templates/research/dashboard.html:7
+msgid "Research data"
+msgstr "Зерттеу деректері"
+
+#: ui/templates/layouts/teacher.html:9
+msgid "Course content"
+msgstr "Курстар мазмұны"
+
+#: ui/templates/layouts/teacher.html:10
+msgid "Groups and students"
+msgstr "Топтар мен студенттер"
+
+#: ui/templates/layouts/teacher.html:14
+msgid "teacher"
+msgstr "мұғалім"
+
+#: ui/templates/partials/lang_switch.html:2
 msgid "Interface language"
 msgstr "Интерфейс тілі"
+
+#: ui/templates/research/dashboard.html:8
+#, python-format
+msgid "Attempts: %(total)s, unfinished: %(unfinished)s."
+msgstr "Талпыныстар: %(total)s, аяқталмағаны: %(unfinished)s."
+
+#: ui/templates/research/dashboard.html:11
+msgid "Download attempts (CSV)"
+msgstr "Талпыныстарды жүктеу (CSV)"
+
+#: ui/templates/research/dashboard.html:12
+msgid "Download action log (CSV)"
+msgstr "Әрекеттер журналын жүктеу (CSV)"
+
+#: ui/templates/research/dashboard.html:18
+#: ui/templates/research/dashboard.html:44
+#: ui/templates/research/dashboard.html:81
+msgid "Experiment"
+msgstr "Тәжірибе"
+
+#: ui/templates/research/dashboard.html:25
+#: ui/templates/research/dashboard.html:45
+msgid "Research group"
+msgstr "Зерттеу тобы"
+
+#: ui/templates/research/dashboard.html:36
+msgid "Apply"
+msgstr "Қолдану"
+
+#: ui/templates/research/dashboard.html:39
+msgid "Averages by experiment and group (finished attempts)"
+msgstr "Тәжірибе мен топ бойынша орташа мәндер (аяқталған талпыныстар)"
+
+#: ui/templates/research/dashboard.html:46
+msgid "Students"
+msgstr "Студенттер"
+
+#: ui/templates/research/dashboard.html:47
+msgid "Attempts"
+msgstr "Талпыныстар"
+
+#: ui/templates/research/dashboard.html:48
+#: ui/templates/research/dashboard.html:83
+msgid "Time, s"
+msgstr "Уақыт, с"
+
+#: ui/templates/research/dashboard.html:51
+#: ui/templates/research/dashboard.html:84
+msgid "Wrong equipment"
+msgstr "Қате құрал"
+
+#: ui/templates/research/dashboard.html:52
+#: ui/templates/research/dashboard.html:85
+msgid "Analysis score"
+msgstr "Талдау нәтижесі"
+
+#: ui/templates/research/dashboard.html:69
+msgid "No finished attempts yet."
+msgstr "Аяқталған талпыныстар әлі жоқ."
+
+#: ui/templates/research/dashboard.html:75
+msgid "Latest attempts"
+msgstr "Соңғы талпыныстар"
+
+#: ui/templates/research/dashboard.html:82
+msgid "Status"
+msgstr "Күйі"
+
+#: ui/templates/research/dashboard.html:84
+msgid "Errors"
+msgstr "Қателер"
+
+#: ui/templates/research/dashboard.html:86
+msgid "Started"
+msgstr "Басталды"
+
+#: ui/templates/ui/styleguide.html:7
+msgid "Every component of ui/templates/components with sample data."
+msgstr "ui/templates/components ішіндегі барлық компонент үлгі деректермен."
+
+#: ui/templates/ui/styleguide.html:29
+msgid "Open dialog"
+msgstr "Диалогты ашу"
+
+#: ui/views.py:10
+msgid "Theory"
+msgstr "Теория"
+
+#: ui/views.py:11
+msgid "Video lesson"
+msgstr "Видеосабақ"
+
+#: ui/views.py:13
+msgid "Practice 1"
+msgstr "Практикалық жұмыс 1"
+
+#: ui/views.py:14
+msgid "Practice 2"
+msgstr "Практикалық жұмыс 2"
+
+#: ui/views.py:15
+msgid "Practice 3"
+msgstr "Практикалық жұмыс 3"
+
+#: ui/views.py:16
+msgid "Topic test"
+msgstr "Тақырып тесті"
+
+#: ui/views.py:21
+msgid "Group"
+msgstr "Топ"
+
+#: ui/views.py:21
+msgid "Score"
+msgstr "Ұпай"

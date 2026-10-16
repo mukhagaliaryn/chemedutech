@@ -1,0 +1,48 @@
+{% extends "layouts/student.html" %}
+{% load i18n %}
+{% block title %}{{ topic.title }} · ChemEduTech{% endblock %}
+{% block content %}
+<nav class="flex flex-wrap items-center gap-2 text-sm" aria-label="{% translate 'Breadcrumbs' %}">
+  <a class="link inline-flex items-center gap-1.5 font-semibold" href="{% url 'courses:dashboard' %}">{% include "components/icons.html#arrow-left" %}{{ course.title }}</a>
+  <span class="text-line-strong">/</span>
+  <span class="text-ink-soft">{% blocktranslate with n=topic.number %}Topic {{ n }}{% endblocktranslate %}</span>
+</nav>
+<h1 class="text-h1">{{ topic.title }}</h1>
+
+<div class="flex flex-wrap items-start gap-6">
+  <article class="card min-w-0 flex-[999_1_560px] p-[clamp(20px,4vw,48px)]">
+    {% if topic.summary %}<p class="mb-6 max-w-[72ch] text-lg leading-relaxed text-ink-soft">{{ topic.summary }}</p>{% endif %}
+    <div class="prose-theory">{{ topic.theory|safe }}</div>
+  </article>
+
+  {% if lab %}
+  <aside class="flex min-w-0 flex-[1_1_300px] flex-col gap-4 lg:sticky lg:top-6">
+    <div class="card flex flex-col gap-4 p-5">
+      <div class="flex items-center gap-3">
+        <span class="stage-lab grid size-7 place-items-center rounded-sm text-white">{% include "components/icons.html#lab" %}</span>
+        <div>
+          <h2 class="text-h3">{% translate "Lab work" %}</h2>
+          <p class="text-body-sm text-ink-soft">{{ lab.title }}</p>
+        </div>
+      </div>
+      <ol class="flex flex-col gap-2">
+        {% for row in experiments %}
+          <li>
+            <a href="{% url 'labs:run' lab.key row.spec.key %}" class="flex items-center gap-3 rounded-md border px-3 py-2.5 {% if row.attempt %}border-transparent bg-success-50{% else %}border-line bg-surface hover:border-line-strong{% endif %}">
+              <span class="num grid size-7 shrink-0 place-items-center rounded-full text-caption font-semibold {% if row.attempt %}bg-success-600 text-white{% else %}bg-surface-sunken text-ink-soft{% endif %}">{{ row.spec.number }}</span>
+              <span class="flex-1 text-sm font-medium">{{ row.spec.title }}</span>
+              {% if row.attempt %}
+                <span class="num text-caption text-success-700" title="{% translate 'Analysis: correct answers' %}">{{ row.attempt.analysis_correct }}/{{ row.attempt.analysis_total }}</span>
+              {% endif %}
+            </a>
+          </li>
+        {% endfor %}
+      </ol>
+      {% with first=experiments.0.spec %}
+        <a class="btn btn-primary w-full" href="{% url 'labs:run' lab.key first.key %}">{% translate "Open the virtual lab" %}</a>
+      {% endwith %}
+    </div>
+  </aside>
+  {% endif %}
+</div>
+{% endblock %}

@@ -12,8 +12,11 @@ urlpatterns = [
     path("courses/", include("apps.courses.urls")),
     path("labs/", include("apps.labs.urls")),
     path("research/", include("apps.research.urls")),
+    path("ui/", include("ui.urls")),
     path("", include("apps.core.urls")),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if "django_browser_reload" in settings.INSTALLED_APPS:
+    urlpatterns.insert(0, path("__reload__/", include("django_browser_reload.urls")))

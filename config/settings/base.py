@@ -40,13 +40,20 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # third-party
+    "tailwind",
+    "django_htmx",
     # project apps (layered: core → accounts/courses → labs → research)
     "apps.core",
     "apps.accounts",
     "apps.courses",
     "apps.labs",
     "apps.research",
+    # presentation: every template and static file lives here (django-tailwind theme app)
+    "ui",
 ]
+
+TAILWIND_APP_NAME = "ui"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -58,6 +65,7 @@ MIDDLEWARE = [
     # ignores Accept-Language (ARCHITECTURE §9.5).
     "apps.core.middleware.KazakhFirstLocaleMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
+    "django_htmx.middleware.HtmxMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
@@ -66,10 +74,10 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],
+        "DIRS": [],
         "APP_DIRS": True,
         "OPTIONS": {
-            "builtins": ["apps.core.templatetags.lab_tags"],
+            "builtins": ["apps.core.templatetags.lab_tags", "ui.templatetags.ui_tags"],
             "context_processors": [
                 "django.template.context_processors.request",
                 "django.template.context_processors.i18n",
@@ -120,7 +128,6 @@ TIME_ZONE = "Asia/Almaty"
 USE_TZ = True
 
 STATIC_URL = "static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"

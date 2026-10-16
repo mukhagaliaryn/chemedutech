@@ -1,0 +1,90 @@
+{% load lab_tags %}{# Experiment 3 — electrolysis of water in a Hofmann-type electrolyzer #}
+<svg viewBox="0 0 900 460" class="relative z-[1] block h-auto w-full" role="img" :aria-label="exp.title">
+  <defs>
+    <clipPath id="e-left"><rect x="173" y="74" width="34" height="320"/></clipPath>
+    <clipPath id="e-right"><rect x="333" y="74" width="34" height="320"/></clipPath>
+  </defs>
+
+  <g x-show="has('electrolyzer')" class="appear" style="display:none">
+    {# stand #}
+    <rect x="120" y="436" width="300" height="10" rx="3" fill="#5c6b78"/>
+    <rect x="266" y="20" width="8" height="420" rx="3" fill="#7b8a96"/>
+
+    {# reservoir: central tube with a funnel bulb #}
+    <path d="M258,120 V60 Q240,40 240,24 H300 Q300,40 282,60 V120" fill="none" stroke="#6b8ba0" stroke-width="3"/>
+    <rect x="258" y="120" width="24" height="292" fill="none" stroke="#6b8ba0" stroke-width="3"/>
+    <rect x="260" :y="sc.filled ? 60 + sc.reservoirDrop() : 420" width="20" :height="sc.filled ? 352 - sc.reservoirDrop() : 0" :fill="sc.liquidColor()" opacity=".9"/>
+
+    {# bottom connection #}
+    <rect x="174" y="394" width="192" height="22" rx="8" :fill="sc.filled ? sc.liquidColor() : 'none'" stroke="#6b8ba0" stroke-width="3"/>
+
+    {# side tubes: liquid with gas pocket at the top #}
+    <g clip-path="url(#e-left)">
+      <rect x="170" y="70" width="40" height="330" :fill="sc.filled ? sc.liquidColor() : 'transparent'"/>
+      <rect x="170" y="70" width="40" :height="sc.filled ? 6 + sc.gasPx(sc.vH) : 330" fill="#f7fbfd"/>
+      <g x-show="sc.running">
+        {% for i in 6|times %}
+          <circle :cx="182 + ({{ i }} * 7) % 18" cy="372" r="2.5" fill="#fff" stroke="#8fc3dc" class="bubble"
+                  :style="`--rise:${-(296 - sc.gasPx(sc.vH))}px; --dur:${1 + {{ i }} * 0.12}s; --delay:${ {{ i }} * 0.23}s`"/>
+        {% endfor %}
+      </g>
+    </g>
+    <g clip-path="url(#e-right)">
+      <rect x="330" y="70" width="40" height="330" :fill="sc.filled ? sc.liquidColor() : 'transparent'"/>
+      <rect x="330" y="70" width="40" :height="sc.filled ? 6 + sc.gasPx(sc.vO) : 330" fill="#f7fbfd"/>
+      <g x-show="sc.running">
+        {% for i in 3|times %}
+          <circle :cx="343 + ({{ i }} * 7) % 14" cy="372" r="2.5" fill="#fff" stroke="#8fc3dc" class="bubble"
+                  :style="`--rise:${-(296 - sc.gasPx(sc.vO))}px; --dur:${1.3 + {{ i }} * 0.2}s; --delay:${ {{ i }} * 0.41}s`"/>
+        {% endfor %}
+      </g>
+    </g>
+    <rect x="172" y="72" width="36" height="324" rx="4" fill="#fff" fill-opacity=".12" stroke="#6b8ba0" stroke-width="3"/>
+    <rect x="332" y="72" width="36" height="324" rx="4" fill="#fff" fill-opacity=".12" stroke="#6b8ba0" stroke-width="3"/>
+    {# stopcocks #}
+    <path d="M190,72 V48 M350,72 V48" stroke="#6b8ba0" stroke-width="5"/>
+    <rect x="178" y="52" width="24" height="10" rx="3" fill="#5c6b78"/>
+    <rect x="338" y="52" width="24" height="10" rx="3" fill="#5c6b78"/>
+    {# graduation 0–50 mL from the top #}
+    {% for m in "0 10 20 30 40 50"|split %}
+      <line x1="208" x2="218" :y1="sc.markY({{ m }})" :y2="sc.markY({{ m }})" stroke="#4a5b74" stroke-width="1.4"/>
+      <text x="221" :y="sc.markY({{ m }}) + 4" font-size="11" fill="#4a5b74">{{ m }}</text>
+      <line x1="322" x2="332" :y1="sc.markY({{ m }})" :y2="sc.markY({{ m }})" stroke="#4a5b74" stroke-width="1.4"/>
+    {% endfor %}
+    {# electrodes #}
+    <rect x="183" y="352" width="14" height="36" rx="2" fill="#6f7a84"/>
+    <rect x="343" y="352" width="14" height="36" rx="2" fill="#6f7a84"/>
+  </g>
+
+  {# polarity labels + wires #}
+  <g x-show="sc.connected" style="display:none" class="appear">
+    <circle cx="160" cy="420" r="13" fill="#14213d"/><text x="160" y="425" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">−</text>
+    <circle cx="384" cy="420" r="13" fill="#b0124f"/><text x="384" y="425" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">+</text>
+    <text x="190" y="34" text-anchor="middle" font-size="13" font-weight="600" fill="#14213d" x-text="sc.running || sc.vH > 0 ? 'H₂' : ''"></text>
+    <text x="350" y="34" text-anchor="middle" font-size="13" font-weight="600" fill="#b0124f" x-text="sc.running || sc.vO > 0 ? 'O₂' : ''"></text>
+  </g>
+  <g x-show="has('dc_source')" style="display:none" class="appear">
+    <path d="M190,388 C190,450 520,452 560,420" fill="none" stroke="#14213d" stroke-width="3"/>
+    <path d="M350,388 C350,440 560,446 640,420" fill="none" stroke="#b0124f" stroke-width="3"/>
+    <rect x="540" y="350" width="140" height="80" rx="10" fill="#f4f7f8" stroke="#4a5b74" stroke-width="2.5"/>
+    <rect x="556" y="364" width="66" height="28" rx="3" fill="#14213d"/>
+    <text x="589" y="384" text-anchor="middle" font-size="14" fill="#7cf0c8" class="num" x-text="sc.running || sc.vH > 0 ? '0.50 A' : '—'"></text>
+    <circle cx="560" cy="414" r="7" fill="#14213d"/><circle cx="640" cy="414" r="7" fill="#b0124f"/>
+    <circle cx="660" cy="376" r="6" :fill="sc.running ? '#16a34a' : '#9aa3ab'"/>
+  </g>
+</svg>
+
+{# readout + live chart #}
+<div x-show="sc.started" x-cloak class="relative z-10 m-3 md:absolute md:right-3 md:top-3 md:m-0 md:w-[min(46%,340px)] space-y-2">
+  <div class="rounded-lg bg-surface/95 px-4 py-3 ring-1 ring-line">
+    <dl class="num grid grid-cols-2 gap-2">
+      <div><dt class="text-xs text-ink-soft"><span x-text="ui.cathode"></span>, H<sub>2</sub></dt><dd class="text-xl font-semibold"><span x-text="fmt(sc.vH, 1)"></span> <span class="text-sm font-normal" x-text="ui.ml"></span></dd></div>
+      <div><dt class="text-xs text-ink-soft"><span x-text="ui.anode"></span>, O<sub>2</sub></dt><dd class="text-xl font-semibold"><span x-text="fmt(sc.vO, 1)"></span> <span class="text-sm font-normal" x-text="ui.ml"></span></dd></div>
+    </dl>
+    <p class="num mt-1 text-xs text-ink-soft"><span x-text="ui.time"></span>: <span x-text="fmt(sc.t / 60, 1)"></span> <span x-text="ui.min"></span></p>
+    <p x-show="sc.compared" class="num mt-2 rounded bg-success-50 px-2 py-1 text-sm font-semibold">
+      <span x-text="ui.ratio"></span> H<sub>2</sub> : O<sub>2</sub> = <span x-text="fmt(sc.vH, 1) + ' : ' + fmt(sc.vO, 1)"></span> ≈ 2 : 1
+    </p>
+  </div>
+  {% include "labs/partials/chart.html" with series=2 %}
+</div>

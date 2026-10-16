@@ -1,0 +1,45 @@
+{% load lab_tags %}{% comment %}
+V(t) chart on graph paper. The scene provides `sc.chart`:
+  { tmax: minutes, vmax: mL, series: [{label, color, data: [{t: min, v: mL}]}], ref: mL|null }
+`series` (Django) = number of series to draw — Alpine x-for does not work inside SVG.
+{% endcomment %}
+<figure class="graph-paper rounded-lg p-3 ring-1 ring-graph-paper">
+  <figcaption class="mb-2 text-xs font-medium text-ink-soft" x-text="ui.graph"></figcaption>
+  <svg viewBox="0 0 300 180" class="block h-auto w-full overflow-visible" role="img" :aria-label="ui.graph">
+    <g transform="translate(34 8)">
+      {# axes #}
+      <path d="M0,0 V150 H256" fill="none" stroke="#4a5b74" stroke-width="1.2"/>
+      {% for i in 5|times %}
+        <line x1="-4" x2="0" :y1="150 - {{ i }} * 37.5" :y2="150 - {{ i }} * 37.5" stroke="#4a5b74"/>
+        <text x="-7" :y="154 - {{ i }} * 37.5" text-anchor="end" font-size="9" fill="#4a5b74" x-text="fmt(sc.chart.vmax * {{ i }} / 4, 0)"></text>
+      {% endfor %}
+      {% for i in 11|times %}
+        <g x-show="{{ i }} <= (sc.chart.xdiv || 4)">
+          <line :x1="{{ i }} * 256 / (sc.chart.xdiv || 4)" :x2="{{ i }} * 256 / (sc.chart.xdiv || 4)" y1="150" y2="154" stroke="#4a5b74"/>
+          <text :x="{{ i }} * 256 / (sc.chart.xdiv || 4)" y="165" text-anchor="middle" font-size="9" fill="#4a5b74"
+                x-text="fmt(sc.chart.tmax * {{ i }} / (sc.chart.xdiv || 4), 1)"></text>
+        </g>
+      {% endfor %}
+      <text x="262" y="165" text-anchor="start" font-size="9" fill="#4a5b74" x-text="ui.min"></text>
+      <text x="-30" y="-1" font-size="9" fill="#4a5b74" x-text="ui.ml"></text>
+
+      {# theoretical maximum #}
+      <g x-show="sc.chart.ref">
+        <line x1="0" x2="256" :y1="150 - (sc.chart.ref / sc.chart.vmax) * 150" :y2="150 - (sc.chart.ref / sc.chart.vmax) * 150"
+              stroke="#b0124f" stroke-width="1.2" stroke-dasharray="5 4"/>
+      </g>
+
+      {% for i in series|times %}
+        <polyline fill="none" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"
+                  :stroke="sc.chart.series[{{ i }}].color"
+                  :points="ChemLab.points(sc.chart.series[{{ i }}].data, sc.chart.tmax, sc.chart.vmax, 256, 150)"/>
+      {% endfor %}
+    </g>
+  </svg>
+  <ul class="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-xs">
+    <template x-for="s in sc.chart.series" :key="s.label">
+      <li class="flex items-center gap-1.5"><span class="inline-block h-0.5 w-4" :style="`background:${s.color}`"></span><span x-html="s.label"></span></li>
+    </template>
+    <li x-show="sc.chart.ref" class="flex items-center gap-1.5"><span class="inline-block w-4 border-t-2 border-dashed border-primary-600"></span><span x-text="ui.theoretical_max"></span></li>
+  </ul>
+</figure>

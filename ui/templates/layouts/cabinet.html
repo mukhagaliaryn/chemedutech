@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% comment %}
+Shared cabinet shell: 240px sidebar (logo, nav, language, user) + content up to 1200px.
+On < lg the sidebar becomes a bottom sheet opened from the top bar.
+Children: layouts/student.html, layouts/teacher.html — they fill {% block nav %} and {% block user_meta %}.
+{% endcomment %}
+{% block body %}
+<a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] btn btn-secondary">{% translate "Skip to content" %}</a>
+<div x-data="{ nav: false }" @keydown.escape.window="nav = false" class="lg:flex">
+  <header class="sticky top-0 z-30 flex items-center gap-3 border-b border-line bg-surface px-4 py-3 lg:hidden">
+    <a href="{% url 'core:home' %}" class="flex items-center gap-2.5 font-bold">
+      {% include "partials/logo.html" %}ChemEduTech
+    </a>
+    <button type="button" class="btn btn-secondary btn-sm ml-auto" @click="nav = true"
+            aria-controls="cabinet-nav" :aria-expanded="nav.toString()">
+      {% include "components/icons.html#menu" with size=16 %}{% translate "Menu" %}
+    </button>
+  </header>
+  <div x-show="nav" x-cloak x-transition.opacity class="fixed inset-0 z-40 bg-ink/40 lg:hidden" @click="nav = false"></div>
+
+  <nav id="cabinet-nav" aria-label="{% translate 'Main menu' %}" :data-open="nav ? 'true' : null"
+       class="z-50 flex flex-col gap-6 bg-surface px-4 py-6
+              max-lg:fixed max-lg:inset-x-0 max-lg:bottom-0 max-lg:max-h-[85vh] max-lg:translate-y-full max-lg:overflow-y-auto
+              max-lg:rounded-t-lg max-lg:shadow-pop max-lg:transition-transform max-lg:data-[open=true]:translate-y-0
+              lg:sticky lg:top-0 lg:h-screen lg:w-60 lg:shrink-0 lg:overflow-y-auto lg:border-r lg:border-line">
+    <div class="flex items-center gap-2">
+      <a href="{% url 'core:home' %}" class="flex items-center gap-2.5 px-2 text-h3 font-bold">
+        {% include "partials/logo.html" %}ChemEduTech
+      </a>
+      <button type="button" class="btn btn-ghost btn-sm ml-auto lg:hidden" @click="nav = false" aria-label="{% translate 'Close menu' %}">
+        {% include "components/icons.html#x" %}
+      </button>
+    </div>
+
+    <div class="flex flex-col gap-0.5">{% block nav %}{% endblock %}</div>
+
+    <div class="mt-auto flex flex-col gap-3">
+      {% include "partials/lang_switch.html" %}
+      <div class="flex items-center gap-2.5 p-2">
+        {% include "components/avatar.html" with person=user %}
+        <span class="flex min-w-0 flex-1 flex-col leading-[18px]">
+          <span class="truncate text-sm font-semibold">{{ user.get_full_name|default:user.get_username }}</span>
+          <span class="truncate text-caption font-normal text-ink-soft">{% block user_meta %}{% endblock %}</span>
+        </span>
+        <form method="post" action="{% url 'accounts:logout' %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-ghost btn-sm px-2 text-ink-soft" title="{% translate 'Log out' %}" aria-label="{% translate 'Log out' %}">
+            {% include "components/icons.html#logout" %}
+          </button>
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main" class="min-w-0 flex-1 px-4 pt-8 pb-12 sm:px-[clamp(16px,3vw,48px)]">
+    <div class="flex max-w-[1200px] flex-col gap-6">{% block content %}{% endblock %}</div>
+  </main>
+</div>
+{% endblock %}

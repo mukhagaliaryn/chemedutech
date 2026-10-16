@@ -1,0 +1,28 @@
+{% extends "layouts/public.html" %}
+{% load i18n %}
+{% block content %}
+<section class="grid items-center gap-10 py-14 lg:grid-cols-[1.1fr_1fr] lg:py-20">
+  <div>
+    <h1 class="text-display">{% translate "A chemistry lab that is always open" %}</h1>
+    <p class="mt-5 max-w-xl text-lg leading-relaxed text-ink-soft">
+      {% translate "Run laboratory experiments on a virtual bench: choose glassware and reagents, follow the procedure, observe the reaction and keep a lab journal." %}
+    </p>
+    <div class="mt-8 flex flex-wrap gap-3">
+      <a class="btn btn-primary btn-lg" href="{% url 'accounts:signup' %}">{% translate "Create an account" %}</a>
+      <a class="btn btn-secondary btn-lg" href="{% url 'accounts:login' %}">{% translate "Log in" %}</a>
+    </div>
+  </div>
+  <figure class="bench relative aspect-[4/3] overflow-hidden rounded-lg border border-line" aria-hidden="true">
+    <svg viewBox="0 0 400 300" class="h-full w-full">
+      <path d="M150,70 V120 L95,240 Q91,252 104,252 H246 Q259,252 255,240 L200,120 V70" fill="#ffffff" fill-opacity=".5" stroke="#6b8ba0" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M143,70 H207" stroke="#6b8ba0" stroke-width="3" stroke-linecap="round"/>
+      <path d="M118,200 H232 L251,240 Q254,249 245,249 H105 Q96,249 99,240 Z" class="fill-stage-lab" opacity=".85"/>
+      <circle cx="160" cy="220" r="4" fill="#fff" class="bubble" style="--rise:-40px;--dur:1.6s"/>
+      <circle cx="185" cy="232" r="3" fill="#fff" class="bubble" style="--rise:-50px;--dur:1.9s;--delay:.5s"/>
+      <circle cx="205" cy="226" r="3.5" fill="#fff" class="bubble" style="--rise:-45px;--dur:1.4s;--delay:.9s"/>
+      <rect x="290" y="80" width="40" height="170" rx="8" fill="#ffffff" fill-opacity=".5" stroke="#6b8ba0" stroke-width="3"/>
+      <rect x="293" y="150" width="34" height="97" rx="5" class="fill-lab-water"/>
+    </svg>
+  </figure>
+</section>
+{% endblock %}

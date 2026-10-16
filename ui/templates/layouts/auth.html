@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% comment %}Login / password reset: brand panel (primary-900) on the left, form on the right. Mockup: «Кіру».{% endcomment %}
+{% block body_class %}bg-surface{% endblock %}
+{% block body %}
+<div class="flex min-h-screen flex-wrap">
+  <section aria-label="ChemEduTech"
+           class="relative flex min-h-80 flex-[1_1_420px] flex-col justify-between gap-12 overflow-hidden bg-primary-900 px-6 py-12 text-white sm:px-[clamp(24px,5vw,72px)]">
+    <svg width="360" height="520" viewBox="0 0 360 520" aria-hidden="true" class="pointer-events-none absolute -right-10 -bottom-5">
+      <rect x="120" y="260" width="200" height="300" rx="16" class="fill-stage-lab"/>
+      <rect x="230" y="120" width="140" height="124" rx="16" class="fill-primary-600"/>
+      <circle cx="160" cy="470" r="16" class="fill-lab-water"/>
+      <circle cx="210" cy="420" r="11" class="fill-lab-water"/>
+      <circle cx="176" cy="372" r="8" class="fill-lab-water"/>
+      <circle cx="230" cy="330" r="6" class="fill-lab-water"/>
+      <circle cx="190" cy="292" r="4" class="fill-lab-water"/>
+      <circle cx="96" cy="230" r="5" class="fill-primary-500"/>
+      <circle cx="70" cy="190" r="3" class="fill-primary-500"/>
+    </svg>
+    <a href="{% url 'core:home' %}" class="relative flex items-center gap-2.5 text-lg font-bold">
+      {% include "partials/logo.html" with inverse=True size=32 %}ChemEduTech
+    </a>
+    <div class="relative max-w-[400px]">
+      <p class="text-display">{% translate "A chemistry lab that is always open" %}</p>
+      <p class="mt-4 text-base leading-relaxed text-primary-100">
+        {% translate "A course for future chemistry teachers: theory, video lessons and virtual lab work — safe and available at any time." %}
+      </p>
+    </div>
+  </section>
+
+  <main class="flex flex-[1_1_480px] flex-col gap-8 px-6 py-10 sm:px-[clamp(24px,5vw,72px)]">
+    <div class="flex justify-end">{% include "partials/lang_switch.html" %}</div>
+    <div class="m-auto w-full max-w-[400px]">{% block content %}{% endblock %}</div>
+  </main>
+</div>
+{% endblock %}

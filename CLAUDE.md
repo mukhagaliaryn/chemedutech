@@ -31,8 +31,9 @@ AttemptAnswer) without an explicit migration plan agreed with the user.
 
 ## Lab engine (code-based, keep as is unless asked)
 - `apps/labs/engine/spec.py`: `LabSpec` → `ExperimentSpec` → `Item`, `Step`, `JournalField`, `Question`; registry in `engine/registry.py`.
-- One experiment = `experiments/<lab>/<name>.py` + `templates/labs/scenes/<scene>.html` + `static/js/lab/experiments/<scene>.js`
-  (after STEP-02 templates/static live under `ui/`).
+- One experiment = `experiments/<lab>/<name>.py` + `ui/templates/labs/scenes/<scene>.html` + `ui/static/js/lab/experiments/<scene>.js`.
+- All templates live in `ui/templates/` (layouts/, components/, partials/, <app>/); components are documented in their
+  header comments and shown at `/ui/styleguide/` (staff only). Icons: `{% include "components/icons.html#lock" %}`.
 - `engine.js` (`Alpine.data("labRunner")`): step order, warnings, pointer drag & drop, journal, finish, analysis, batched event log.
 - **Alpine `x-for`/`x-if` do not work inside `<svg>`** — use Django loops (`{% for i in 6|times %}`, `"0 10 20"|split`).
 - Step kinds: `place`, `action`, `process` (scene calls `runner.processDone()`), `choice`, `journal`, `finish`;
@@ -40,4 +41,4 @@ AttemptAnswer) without an explicit migration plan agreed with the user.
 
 ## Commands
 `python manage.py test apps` · `python manage.py tailwind start|build` · `python manage.py seed_course` ·
-`python manage.py makemessages -l kk -l ru --ignore=node_modules` · `ruff check .`
+`python manage.py makemessages -l kk -l ru --ignore=env --ignore="ui/static_src/*"` · `ruff check .`

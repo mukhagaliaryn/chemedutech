@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Create an account" %} · ChemEduTech{% endblock %}
+{% block body %}
+<div class="px-4 py-10">
+  <div class="mx-auto flex max-w-[760px] flex-col gap-6">
+    <header class="flex flex-wrap items-center justify-between gap-4">
+      <a href="{% url 'core:home' %}" class="flex items-center gap-2.5 text-h3 font-bold">{% include "partials/logo.html" %}ChemEduTech</a>
+      <div class="flex flex-wrap items-center gap-3 text-sm text-ink-soft">
+        {% include "partials/lang_switch.html" %}
+        <span>{% translate "Already have an account?" %} <a class="link font-semibold" href="{% url 'accounts:login' %}">{% translate "Log in" %}</a></span>
+      </div>
+    </header>
+
+    <form method="post" class="card flex flex-col gap-7 p-[clamp(20px,4vw,40px)]" novalidate>
+      {% csrf_token %}
+      <div>
+        <h1 class="text-h1">{% translate "Sign up as a student" %}</h1>
+        <p class="mt-1.5 text-ink-soft">{% translate "After signing up you can enrol in a course and start learning." %}</p>
+      </div>
+      {% if form.non_field_errors %}<p class="rounded-md bg-danger-50 px-3.5 py-3 text-sm text-danger-700" role="alert">{{ form.non_field_errors|join:" " }}</p>{% endif %}
+      <div class="grid gap-4 sm:grid-cols-2">
+        {% for field in form %}{% include "components/input.html" with field=field %}{% endfor %}
+      </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <button class="btn btn-primary btn-lg" type="submit">{% translate "Sign up" %}</button>
+        <span class="text-body-sm text-ink-faint">{% translate "Teachers do not sign up themselves — the administrator adds them." %}</span>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

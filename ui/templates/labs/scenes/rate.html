@@ -1,0 +1,37 @@
+{% load lab_tags %}{# Experiment 4 — two test tubes (A: no catalyst, B: MnO₂) with gas syringes #}
+<svg viewBox="0 0 900 460" class="relative z-[1] block h-auto w-full" role="img" :aria-label="exp.title">
+  {# rack #}
+  <g x-show="has('tube_a') || has('tube_b')" class="appear" style="display:none">
+    <rect x="120" y="300" width="310" height="14" rx="4" fill="#7b8a96"/>
+    <rect x="120" y="420" width="310" height="12" rx="4" fill="#5c6b78"/>
+    <rect x="130" y="300" width="10" height="130" fill="#7b8a96"/>
+    <rect x="410" y="300" width="10" height="130" fill="#7b8a96"/>
+  </g>
+
+  {% for side in "a b"|split %}
+  {% if side == "a" %}{% with x=200 %}{% include "labs/scenes/_rate_tube.html" %}{% endwith %}
+  {% else %}{% with x=350 %}{% include "labs/scenes/_rate_tube.html" %}{% endwith %}{% endif %}
+  {% endfor %}
+</svg>
+
+{# readout + chart #}
+<div x-show="sc.started" x-cloak class="relative z-10 m-3 md:absolute md:right-3 md:top-3 md:m-0 md:w-[min(48%,350px)] space-y-2">
+  <div class="rounded-lg bg-surface/95 px-4 py-3 ring-1 ring-line">
+    <dl class="num grid grid-cols-2 gap-2">
+      <div><dt class="text-xs text-ink-soft" x-text="ui.tube_a"></dt><dd class="text-xl font-semibold"><span x-text="fmt(sc.vA, 1)"></span> <span class="text-sm font-normal" x-text="ui.ml"></span></dd></div>
+      <div><dt class="text-xs text-ink-soft" x-text="ui.tube_b"></dt><dd class="text-xl font-semibold"><span x-text="fmt(sc.vB, 1)"></span> <span class="text-sm font-normal" x-text="ui.ml"></span></dd></div>
+    </dl>
+    <p class="num mt-1 text-xs text-ink-soft"><span x-text="ui.time"></span>: <span x-text="fmt(sc.t / 60, 1)"></span> <span x-text="ui.min"></span></p>
+  </div>
+  <div x-show="sc.showGraph" x-transition.opacity>
+    {% include "labs/partials/chart.html" with series=2 %}
+    <table class="num mt-2 w-full overflow-hidden rounded-lg bg-surface text-xs ring-1 ring-line">
+      <thead><tr class="text-ink-soft"><th class="px-2 py-1 text-left font-medium"><span x-text="ui.time"></span>, <span x-text="ui.min"></span></th>
+        <template x-for="row in sc.table" :key="row.min"><th class="px-2 py-1 text-right font-medium" x-text="row.min"></th></template></tr></thead>
+      <tbody>
+        <tr><td class="px-2 py-1">A, <span x-text="ui.ml"></span></td><template x-for="row in sc.table" :key="row.min"><td class="px-2 py-1 text-right" x-text="fmt(row.a, 1)"></td></template></tr>
+        <tr><td class="px-2 py-1">B, <span x-text="ui.ml"></span></td><template x-for="row in sc.table" :key="row.min"><td class="px-2 py-1 text-right" x-text="fmt(row.b, 1)"></td></template></tr>
+      </tbody>
+    </table>
+  </div>
+</div>

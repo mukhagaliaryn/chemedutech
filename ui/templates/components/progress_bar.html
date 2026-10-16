@@ -1,0 +1,17 @@
+{% comment %}
+Completion bar, always paired with a number. value; max (default 100); label (left);
+value_text (right, e.g. "8 / 12 кезең"; default "<percent>%"); size: sm (6px, tables); class.
+Turns success-600 at 100 %.
+{% endcomment %}{% with total=max|default:100 %}{% with pct=value|percent_of:total %}
+<div class="flex flex-col gap-2 {{ class }}">
+  {% if label or value_text %}
+  <div class="flex items-baseline justify-between gap-3 text-sm">
+    <span class="font-semibold">{{ label }}</span>
+    <span class="num text-ink-soft">{% if value_text %}{{ value_text }}{% else %}{{ pct|floatformat:0 }}%{% endif %}</span>
+  </div>
+  {% endif %}
+  <div class="progress{% if size == 'sm' %} progress-sm{% endif %}{% if pct >= 100 %} progress-success{% endif %}"
+       role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ pct|floatformat:0 }}"{% if label %} aria-label="{{ label }}"{% endif %}>
+    <span style="width: {{ pct|stringformat:'s' }}%"></span>
+  </div>
+</div>{% endwith %}{% endwith %}
