@@ -1,0 +1,27 @@
+{% extends "admin/index.html" %}
+{% load i18n unfold %}
+{% comment %}
+Admin home (unfold): platform numbers from apps.research.admin_dashboard, quick links, then the default app list.
+Only unfold's own classes are used here (its stylesheet is built separately from the site's Tailwind).
+{% endcomment %}
+{% block content %}
+  {% if kpis %}
+  <div class="flex flex-col gap-6 mb-8">
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      {% for k in kpis %}
+        {% component "unfold/components/card.html" with href=k.url %}
+          {% component "unfold/components/text.html" %}{{ k.title }}{% endcomponent %}
+          {% component "unfold/components/title.html" %}{{ k.value }}{% endcomponent %}
+          {% if k.note %}{% component "unfold/components/text.html" %}{{ k.note }}{% endcomponent %}{% endif %}
+        {% endcomponent %}
+      {% endfor %}
+    </div>
+    <div class="flex flex-row flex-wrap gap-3">
+      {% for title, url in quick_links %}
+        {% component "unfold/components/button.html" with href=url variant="default" %}{{ title }}{% endcomponent %}
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+  {{ block.super }}
+{% endblock %}

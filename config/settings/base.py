@@ -8,6 +8,7 @@ Secrets and environment-specific values come from environment variables
 import os
 from pathlib import Path
 
+from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -216,6 +217,173 @@ UNFOLD = {
     "SITE_TITLE": "ChemEduTech",
     "SITE_HEADER": "ChemEduTech",
     "SITE_SYMBOL": "science",
+    "SITE_URL": "/",
+    "DASHBOARD_CALLBACK": "apps.research.admin_dashboard.dashboard_callback",
+    "SIDEBAR": {
+        "show_search": True,
+        "show_all_applications": True,
+        "navigation": [
+            {
+                "title": _("Users"),
+                "separator": True,
+                "items": [
+                    {"title": _("Users"), "icon": "person", "link": reverse_lazy("admin:accounts_user_changelist")},
+                    {
+                        "title": _("Student profiles"),
+                        "icon": "school",
+                        "link": reverse_lazy("admin:organizations_studentprofile_changelist"),
+                    },
+                    {
+                        "title": _("Teacher profiles"),
+                        "icon": "badge",
+                        "link": reverse_lazy("admin:organizations_teacherprofile_changelist"),
+                    },
+                ],
+            },
+            {
+                "title": _("Organisations"),
+                "separator": True,
+                "items": [
+                    {
+                        "title": _("Universities"),
+                        "icon": "account_balance",
+                        "link": reverse_lazy("admin:organizations_university_changelist"),
+                    },
+                    {
+                        "title": _("Faculties"),
+                        "icon": "domain",
+                        "link": reverse_lazy("admin:organizations_faculty_changelist"),
+                    },
+                    {
+                        "title": _("Departments"),
+                        "icon": "apartment",
+                        "link": reverse_lazy("admin:organizations_department_changelist"),
+                    },
+                    {
+                        "title": _("Specialties"),
+                        "icon": "menu_book",
+                        "link": reverse_lazy("admin:organizations_specialty_changelist"),
+                    },
+                    {
+                        "title": _("Academic groups"),
+                        "icon": "groups",
+                        "link": reverse_lazy("admin:organizations_academicgroup_changelist"),
+                    },
+                ],
+            },
+            {
+                "title": _("Courses"),
+                "separator": True,
+                "items": [
+                    {
+                        "title": _("Courses"),
+                        "icon": "library_books",
+                        "link": reverse_lazy("admin:courses_course_changelist"),
+                    },
+                    {
+                        "title": _("Modules"),
+                        "icon": "view_module",
+                        "link": reverse_lazy("admin:courses_module_changelist"),
+                    },
+                    {"title": _("Topics"), "icon": "topic", "link": reverse_lazy("admin:courses_topic_changelist")},
+                    {
+                        "title": _("Stages"),
+                        "icon": "format_list_numbered",
+                        "link": reverse_lazy("admin:courses_stage_changelist"),
+                    },
+                    {
+                        "title": _("Enrolments"),
+                        "icon": "how_to_reg",
+                        "link": reverse_lazy("admin:courses_enrollment_changelist"),
+                    },
+                    {
+                        "title": _("Course groups"),
+                        "icon": "group_work",
+                        "link": reverse_lazy("admin:courses_coursegroup_changelist"),
+                    },
+                ],
+            },
+            {
+                "title": _("Assessment"),
+                "separator": True,
+                "items": [
+                    {"title": _("Quizzes"), "icon": "quiz", "link": reverse_lazy("admin:assessments_quiz_changelist")},
+                    {
+                        "title": _("Quiz attempts"),
+                        "icon": "fact_check",
+                        "link": reverse_lazy("admin:assessments_quizattempt_changelist"),
+                    },
+                    {
+                        "title": _("Practice tasks"),
+                        "icon": "edit_note",
+                        "link": reverse_lazy("admin:practice_practicetask_changelist"),
+                    },
+                    {
+                        "title": _("Practice submissions"),
+                        "icon": "assignment_turned_in",
+                        "link": reverse_lazy("admin:practice_practicesubmission_changelist"),
+                    },
+                    {
+                        "title": _("AI grades"),
+                        "icon": "smart_toy",
+                        "link": reverse_lazy("admin:practice_aigrade_changelist"),
+                    },
+                    {
+                        "title": _("Teacher reviews"),
+                        "icon": "rate_review",
+                        "link": reverse_lazy("admin:practice_teacherreview_changelist"),
+                    },
+                    {
+                        "title": _("Stage progress"),
+                        "icon": "timeline",
+                        "link": reverse_lazy("admin:progress_stageprogress_changelist"),
+                    },
+                    {
+                        "title": _("Course results"),
+                        "icon": "grade",
+                        "link": reverse_lazy("admin:progress_courseresult_changelist"),
+                    },
+                ],
+            },
+            {
+                "title": _("Lab"),
+                "separator": True,
+                "items": [
+                    {
+                        "title": _("Lab attempts"),
+                        "icon": "science",
+                        "link": reverse_lazy("admin:labs_labattempt_changelist"),
+                    },
+                ],
+            },
+            {
+                "title": _("Certificates and feedback"),
+                "separator": True,
+                "items": [
+                    {
+                        "title": _("Certificates"),
+                        "icon": "workspace_premium",
+                        "link": reverse_lazy("admin:certificates_certificate_changelist"),
+                    },
+                    {
+                        "title": _("Certificate templates"),
+                        "icon": "design_services",
+                        "link": reverse_lazy("admin:certificates_certificatetemplate_changelist"),
+                    },
+                    {
+                        "title": _("Comments"),
+                        "icon": "forum",
+                        "link": reverse_lazy("admin:feedback_comment_changelist"),
+                    },
+                    {
+                        "title": _("Notifications"),
+                        "icon": "notifications",
+                        "link": reverse_lazy("admin:feedback_notification_changelist"),
+                    },
+                ],
+            },
+        ],
+    },
     "COLORS": {
         "primary": {  # Reagent Blue — the design system primary scale
             "50": "#eef4ff",

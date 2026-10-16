@@ -1,17 +1,13 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# ChemEduTech — Russian translation.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: ChemEduTech\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 21:01+0500\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"POT-Creation-Date: 2026-10-16 21:06+0500\n"
+"PO-Revision-Date: 2026-10-16 21:00+0500\n"
+"Last-Translator: ChemEduTech\n"
+"Language-Team: ChemEduTech\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -253,7 +249,7 @@ msgid "Assessments"
 msgstr "Оценивание"
 
 #: apps/assessments/models/attempt.py:17
-#: apps/certificates/models/certificate.py:40 apps/courses/models/course.py:38
+#: apps/certificates/models/certificate.py:43 apps/courses/models/course.py:38
 #: apps/courses/models/enrollment.py:52 apps/feedback/models/comment.py:19
 #: apps/labs/models/attempt.py:23 apps/practice/models/submission.py:21
 #: apps/progress/models/progress.py:22 apps/progress/models/progress.py:76
@@ -391,7 +387,7 @@ msgid "First attempt"
 msgstr "Первая попытка"
 
 #: apps/assessments/models/quiz.py:22
-#: apps/certificates/models/certificate.py:17 apps/courses/models/content.py:34
+#: apps/certificates/models/certificate.py:18 apps/courses/models/content.py:34
 #: apps/courses/models/course.py:31 apps/courses/models/structure.py:17
 #: apps/courses/models/structure.py:36 apps/courses/models/structure.py:76
 #: apps/practice/models/task.py:24
@@ -548,7 +544,7 @@ msgid "Cannot read %(answer)s: %(error)s"
 msgstr "Не удалось прочитать %(answer)s: %(error)s"
 
 #: apps/assessments/models/quiz.py:127
-#: apps/certificates/models/certificate.py:19 apps/courses/models/content.py:19
+#: apps/certificates/models/certificate.py:20 apps/courses/models/content.py:19
 #: apps/feedback/models/comment.py:30
 msgid "text"
 msgstr "текст"
@@ -611,95 +607,98 @@ msgstr "Создать PDF заново"
 msgid "PDF made: %(n)d"
 msgstr "PDF создано: %(n)d"
 
-#: apps/certificates/apps.py:8 ui/templates/layouts/student.html:11
+#: apps/certificates/apps.py:8 config/settings/base.py:283
+#: ui/templates/layouts/student.html:11
 #: ui/templates/student/certificates.html:3
 #: ui/templates/student/certificates.html:6
 msgid "Certificates"
 msgstr "Сертификаты"
 
-#: apps/certificates/models/certificate.py:12
-#: apps/certificates/models/certificate.py:45 apps/courses/models/course.py:69
+#: apps/certificates/models/certificate.py:13
+#: apps/certificates/models/certificate.py:48 apps/courses/models/course.py:69
 #: apps/courses/models/course.py:92 apps/courses/models/course.py:115
 #: apps/courses/models/enrollment.py:27 apps/courses/models/structure.py:14
 msgid "course"
 msgstr "курс"
 
-#: apps/certificates/models/certificate.py:15
+#: apps/certificates/models/certificate.py:16
 msgid "background"
 msgstr "фон"
 
-#: apps/certificates/models/certificate.py:15
+#: apps/certificates/models/certificate.py:16
 msgid "A4 landscape, 297 × 210 mm"
 msgstr "A4 альбомная, 297 × 210 мм"
 
-#: apps/certificates/models/certificate.py:21
+#: apps/certificates/models/certificate.py:23
 #, python-brace-format
 msgid ""
 "Shown under the holder's name. Placeholders: {full_name}, {course}, {score}, "
 "{letter}, {date}, {number}"
-msgstr "Показывается под именем владельца. Подстановки: {full_name}, {course}, {score}, {letter}, {date}, {number}"
+msgstr ""
+"Показывается под именем владельца. Подстановки: {full_name}, {course}, "
+"{score}, {letter}, {date}, {number}"
 
-#: apps/certificates/models/certificate.py:23
+#: apps/certificates/models/certificate.py:26
 msgid "signatory"
 msgstr "подписант"
 
-#: apps/certificates/models/certificate.py:24
+#: apps/certificates/models/certificate.py:27
 msgid "signatory's position"
 msgstr "должность подписанта"
 
-#: apps/certificates/models/certificate.py:25
+#: apps/certificates/models/certificate.py:28
 msgid "signature"
 msgstr "подпись"
 
-#: apps/certificates/models/certificate.py:28
+#: apps/certificates/models/certificate.py:31
 msgid "certificate template"
 msgstr "шаблон сертификата"
 
-#: apps/certificates/models/certificate.py:29
+#: apps/certificates/models/certificate.py:32
 msgid "certificate templates"
 msgstr "шаблоны сертификатов"
 
-#: apps/certificates/models/certificate.py:42
+#: apps/certificates/models/certificate.py:45
 #: apps/courses/models/structure.py:35
 msgid "number"
 msgstr "номер"
 
-#: apps/certificates/models/certificate.py:42
+#: apps/certificates/models/certificate.py:45
 msgid "e.g. CET-2026-000123"
 msgstr "например, CET-2026-000123"
 
-#: apps/certificates/models/certificate.py:43
+#: apps/certificates/models/certificate.py:46
 msgid "issued at"
 msgstr "выдан"
 
-#: apps/certificates/models/certificate.py:44
+#: apps/certificates/models/certificate.py:47
 msgid "holder"
 msgstr "владелец"
 
-#: apps/certificates/models/certificate.py:46 apps/labs/models/attempt.py:59
+#: apps/certificates/models/certificate.py:49 apps/labs/models/attempt.py:59
 #: apps/progress/models/progress.py:28 apps/progress/models/progress.py:83
 #: apps/progress/models/progress.py:171
 msgid "score, %"
 msgstr "балл, %"
 
-#: apps/certificates/models/certificate.py:47
+#: apps/certificates/models/certificate.py:50
 #: apps/progress/models/progress.py:122
 msgid "letter grade"
 msgstr "буквенная оценка"
 
-#: apps/certificates/models/certificate.py:48
+#: apps/certificates/models/certificate.py:51
 msgid "PDF"
 msgstr "PDF"
 
-#: apps/certificates/models/certificate.py:49
+#: apps/certificates/models/certificate.py:52
 msgid "verification code"
 msgstr "код проверки"
 
-#: apps/certificates/models/certificate.py:53 apps/courses/models/course.py:47
+#: apps/certificates/models/certificate.py:56 apps/courses/models/course.py:47
 msgid "certificate"
 msgstr "сертификат"
 
-#: apps/certificates/models/certificate.py:54
+#: apps/certificates/models/certificate.py:57
 msgid "certificates"
 msgstr "сертификаты"
 
@@ -763,7 +762,9 @@ msgstr "На курс можно записать только студенто�
 msgid "This student is already enrolled in the course."
 msgstr "Этот студент уже записан на курс."
 
-#: apps/courses/apps.py:8 ui/templates/student/partials/course_switch.html:3
+#: apps/courses/apps.py:8 apps/research/admin_dashboard.py:38
+#: config/settings/base.py:247 config/settings/base.py:250
+#: ui/templates/student/partials/course_switch.html:3
 #: ui/templates/teacher/group.html:50 ui/templates/teacher/student.html:23
 msgid "Courses"
 msgstr "Курсы"
@@ -3197,7 +3198,7 @@ msgstr "ошибка"
 msgid "AI grade"
 msgstr "оценка AI"
 
-#: apps/practice/models/submission.py:111
+#: apps/practice/models/submission.py:111 config/settings/base.py:266
 msgid "AI grades"
 msgstr "оценки AI"
 
@@ -3574,6 +3575,76 @@ msgstr "событие прогресса"
 msgid "progress events"
 msgstr "события прогресса"
 
+#: apps/research/admin_dashboard.py:34 ui/templates/research/analytics.html:110
+#: ui/templates/research/dashboard.html:48 ui/templates/teacher/group.html:79
+#: ui/templates/teacher/partials/groups_table.html:8
+#: ui/templates/teacher/students.html:3 ui/templates/teacher/students.html:5
+#: ui/templates/teacher/students.html:6
+msgid "Students"
+msgstr "Студенты"
+
+#: apps/research/admin_dashboard.py:34
+#, python-format
+msgid "%(n)s active in the last 7 days"
+msgstr "активны за 7 дней: %(n)s"
+
+#: apps/research/admin_dashboard.py:36
+msgid "Teachers"
+msgstr "Преподаватели"
+
+#: apps/research/admin_dashboard.py:39
+#, python-format
+msgid "published of %(n)s"
+msgstr "опубликовано из %(n)s"
+
+#: apps/research/admin_dashboard.py:40
+msgid "Active enrolments"
+msgstr "Активные записи"
+
+#: apps/research/admin_dashboard.py:41
+#, python-format
+msgid "%(n)s completed"
+msgstr "завершено: %(n)s"
+
+#: apps/research/admin_dashboard.py:43 config/settings/base.py:276
+#: ui/templates/teacher/student.html:104
+msgid "Lab attempts"
+msgstr "Лабораторные попытки"
+
+#: apps/research/admin_dashboard.py:44
+#, python-format
+msgid "%(n)s with the analysis sent"
+msgstr "с отправленным анализом: %(n)s"
+
+#: apps/research/admin_dashboard.py:46
+msgid "Works awaiting a teacher"
+msgstr "Работы ждут преподавателя"
+
+#: apps/research/admin_dashboard.py:47
+#, python-format
+msgid "the oldest sent %(date)s"
+msgstr "самая давняя отправлена %(date)s"
+
+#: apps/research/admin_dashboard.py:49
+msgid "Certificates issued"
+msgstr "Выдано сертификатов"
+
+#: apps/research/admin_dashboard.py:53 apps/teacher/apps.py:8
+msgid "Teacher cabinet"
+msgstr "Кабинет преподавателя"
+
+#: apps/research/admin_dashboard.py:54 ui/templates/layouts/teacher.html:13
+#: ui/templates/research/analytics.html:3
+#: ui/templates/research/analytics.html:6
+#: ui/templates/research/analytics.html:12
+msgid "Statistics"
+msgstr "Статистика"
+
+#: apps/research/admin_dashboard.py:55 ui/templates/layouts/student.html:13
+#: ui/templates/layouts/teacher.html:15 ui/templates/research/dashboard.html:7
+msgid "Research data"
+msgstr "Данные исследования"
+
 #: apps/research/analytics.py:83 apps/student/cabinet.py:53
 #, python-format
 msgid "%(h)s h %(m)s min"
@@ -3688,7 +3759,7 @@ msgstr "Автопроверка и ИИ, подтверждает препод�
 msgid "Quiz · attempt %(n)s"
 msgstr "Тест · попытка %(n)s"
 
-#: apps/student/cabinet.py:184
+#: apps/student/cabinet.py:184 config/settings/base.py:273
 msgid "Lab"
 msgstr "Лаборатория"
 
@@ -3736,10 +3807,6 @@ msgstr "Перейти к следующему этапу"
 #: apps/student/views.py:657 ui/templates/teacher/content/item.html:58
 msgid "Back to the stage"
 msgstr "Вернуться к этапу"
-
-#: apps/teacher/apps.py:8
-msgid "Teacher cabinet"
-msgstr "Кабинет преподавателя"
 
 #: apps/teacher/content.py:127
 msgid "The course settings are saved."
@@ -4051,17 +4118,123 @@ msgstr "Этот этап нельзя открыть: его тема не оп
 msgid "«%(stage)s» is open for the student."
 msgstr "«%(stage)s» открыт для студента."
 
-#: config/settings/base.py:146
+#: config/settings/base.py:147
 msgid "Kazakh"
 msgstr "Казахский"
 
-#: config/settings/base.py:147
+#: config/settings/base.py:148
 msgid "Russian"
 msgstr "Русский"
 
-#: config/settings/base.py:148
+#: config/settings/base.py:149
 msgid "English"
 msgstr "Английский"
+
+#: config/settings/base.py:227 config/settings/base.py:230
+msgid "Users"
+msgstr "Пользователи"
+
+#: config/settings/base.py:231
+msgid "Student profiles"
+msgstr "Профили студентов"
+
+#: config/settings/base.py:232
+msgid "Teacher profiles"
+msgstr "Профили преподавателей"
+
+#: config/settings/base.py:236
+msgid "Organisations"
+msgstr "Организации"
+
+#: config/settings/base.py:239
+msgid "Universities"
+msgstr "Университеты"
+
+#: config/settings/base.py:240
+msgid "Faculties"
+msgstr "Факультеты"
+
+#: config/settings/base.py:241
+msgid "Departments"
+msgstr "Кафедры"
+
+#: config/settings/base.py:242
+msgid "Specialties"
+msgstr "Образовательные программы"
+
+#: config/settings/base.py:243
+msgid "Academic groups"
+msgstr "Академические группы"
+
+#: config/settings/base.py:251
+msgid "Modules"
+msgstr "Модули"
+
+#: config/settings/base.py:252
+msgid "Topics"
+msgstr "Темы"
+
+#: config/settings/base.py:253
+msgid "Stages"
+msgstr "Этапы"
+
+#: config/settings/base.py:254
+msgid "Enrolments"
+msgstr "Записи на курсы"
+
+#: config/settings/base.py:255
+msgid "Course groups"
+msgstr "Группы курсов"
+
+#: config/settings/base.py:259
+msgid "Assessment"
+msgstr "Оценивание"
+
+#: config/settings/base.py:262
+msgid "Quizzes"
+msgstr "Тесты"
+
+#: config/settings/base.py:263 ui/templates/teacher/student.html:135
+msgid "Quiz attempts"
+msgstr "Попытки тестов"
+
+#: config/settings/base.py:264
+msgid "Practice tasks"
+msgstr "Практические задания"
+
+#: config/settings/base.py:265
+msgid "Practice submissions"
+msgstr "Отправки практических работ"
+
+#: config/settings/base.py:267
+msgid "Teacher reviews"
+msgstr "Проверки преподавателей"
+
+#: config/settings/base.py:268
+msgid "Stage progress"
+msgstr "Прогресс по этапам"
+
+#: config/settings/base.py:269
+msgid "Course results"
+msgstr "Результаты курсов"
+
+#: config/settings/base.py:280
+msgid "Certificates and feedback"
+msgstr "Сертификаты и обратная связь"
+
+#: config/settings/base.py:284
+msgid "Certificate templates"
+msgstr "Шаблоны сертификатов"
+
+#: config/settings/base.py:285 ui/templates/feedback/partials/thread.html:7
+msgid "Comments"
+msgstr "Комментарии"
+
+#: config/settings/base.py:286 ui/templates/feedback/notifications.html:3
+#: ui/templates/feedback/notifications.html:7
+#: ui/templates/layouts/cabinet.html:16 ui/templates/layouts/cabinet.html:44
+msgid "Notifications"
+msgstr "Уведомления"
 
 #: ui/apps.py:9
 msgid "User interface"
@@ -4475,12 +4648,6 @@ msgstr ""
 msgid "Create an account"
 msgstr "Зарегистрироваться"
 
-#: ui/templates/feedback/notifications.html:3
-#: ui/templates/feedback/notifications.html:7
-#: ui/templates/layouts/cabinet.html:16 ui/templates/layouts/cabinet.html:44
-msgid "Notifications"
-msgstr "Уведомления"
-
 #: ui/templates/feedback/notifications.html:8
 #: ui/templates/feedback/partials/badge.html:6
 #, python-format
@@ -4518,10 +4685,6 @@ msgstr "Здесь появятся оценки, возвращённые ра�
 #: ui/templates/feedback/partials/item.html:13
 msgid "unread"
 msgstr "непрочитанное"
-
-#: ui/templates/feedback/partials/thread.html:7
-msgid "Comments"
-msgstr "Комментарии"
 
 #: ui/templates/feedback/partials/thread.html:12
 #: ui/templates/feedback/partials/thread.html:16
@@ -4630,11 +4793,6 @@ msgstr "Мои курсы"
 msgid "Grades"
 msgstr "Оценки"
 
-#: ui/templates/layouts/student.html:13 ui/templates/layouts/teacher.html:15
-#: ui/templates/research/dashboard.html:7
-msgid "Research data"
-msgstr "Данные исследования"
-
 #: ui/templates/layouts/teacher.html:9
 #: ui/templates/teacher/content/course.html:5
 #: ui/templates/teacher/content/course_form.html:6
@@ -4658,12 +4816,6 @@ msgstr "Проверка работ"
 #: ui/templates/teacher/gradebook.html:7 ui/templates/teacher/gradebook.html:30
 msgid "Grade register"
 msgstr "Журнал оценок"
-
-#: ui/templates/layouts/teacher.html:13 ui/templates/research/analytics.html:3
-#: ui/templates/research/analytics.html:6
-#: ui/templates/research/analytics.html:12
-msgid "Statistics"
-msgstr "Статистика"
 
 #: ui/templates/research/analytics.html:7
 #: ui/templates/teacher/content/courses.html:25
@@ -4791,14 +4943,6 @@ msgstr "Опыт · шаг"
 #: ui/templates/research/analytics.html:109
 msgid "Error type"
 msgstr "Тип ошибки"
-
-#: ui/templates/research/analytics.html:110
-#: ui/templates/research/dashboard.html:48 ui/templates/teacher/group.html:79
-#: ui/templates/teacher/partials/groups_table.html:8
-#: ui/templates/teacher/students.html:3 ui/templates/teacher/students.html:5
-#: ui/templates/teacher/students.html:6
-msgid "Students"
-msgstr "Студенты"
 
 #: ui/templates/research/analytics.html:110
 msgid "Average time on the step"
@@ -6652,10 +6796,6 @@ msgstr "попытки закончились"
 msgid "Open for the student"
 msgstr "Открыть студенту"
 
-#: ui/templates/teacher/student.html:104
-msgid "Lab attempts"
-msgstr "Лабораторные попытки"
-
 #: ui/templates/teacher/student.html:109
 msgid "Duration"
 msgstr "Длительность"
@@ -6667,10 +6807,6 @@ msgstr "Журнал"
 #: ui/templates/teacher/student.html:126
 msgid "No lab attempts yet."
 msgstr "Лабораторных попыток пока нет."
-
-#: ui/templates/teacher/student.html:135
-msgid "Quiz attempts"
-msgstr "Попытки тестов"
 
 #: ui/templates/teacher/student.html:138
 msgid "Quiz"

@@ -7,6 +7,8 @@ from django.views.generic import RedirectView
 from apps.accounts import views as accounts_views
 from apps.core.uploads import ckeditor_upload
 
+admin.site.index_template = "admin/dashboard.html"  # unfold's index + platform numbers (ui/templates)
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("i18n/setlang/", accounts_views.set_language, name="set_language"),

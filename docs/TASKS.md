@@ -126,7 +126,7 @@
 - [x] CourseResult.passed → автоматты шығару + Notification.
 
 ## STEP-14 · Админ және жылтырату
-- [ ] Unfold: `UNFOLD` баптаулары (түстер — дизайн жүйесінен), бүйір навигация, `DASHBOARD_CALLBACK` (жалпы сандар).
-- [ ] i18n: `makemessages -l kk -l ru`, барлық жаңа жолдарды аудару, `compilemessages`.
-- [ ] Қауіпсіздік: рұқсат тесттері (студент `/teacher/`-ге кіре алмайды т.б.), CKEditor HTML санитизациясы.
-- [ ] README жаңарту.
+- [x] Unfold: `UNFOLD` баптаулары (түстер — дизайн жүйесінен), бүйір навигация, `DASHBOARD_CALLBACK` (жалпы сандар).
+- [x] i18n: `makemessages -l kk -l ru`, барлық жаңа жолдарды аудару, `compilemessages`.
+- [x] Қауіпсіздік: рұқсат тесттері (студент `/teacher/`-ге кіре алмайды т.б.), CKEditor HTML санитизациясы.
+- [x] README жаңарту.
