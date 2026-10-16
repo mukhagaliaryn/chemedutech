@@ -1,0 +1,85 @@
+{% extends "layouts/student.html" %}
+{% load i18n %}
+{% block title %}{{ course.title }} · ChemEduTech{% endblock %}
+{% block content %}
+{% if place.preview %}<p class="rounded-md bg-warning-50 px-4 py-2 text-body-sm text-warning-700">{% translate "Preview: everything is open and nothing is recorded." %}</p>{% endif %}
+<header class="card flex flex-wrap items-center justify-between gap-6 p-7">
+  <div class="min-w-0 flex-[1_1_420px]">
+    <p class="text-body-sm font-medium text-ink-soft">
+      {% blocktranslate count n=modules|length %}Course · {{ n }} module{% plural %}Course · {{ n }} modules{% endblocktranslate %}
+    </p>
+    <h1 class="mt-1 text-h1">{{ course.title }}</h1>
+    <p class="mt-2 text-ink-soft">
+      {% if teachers %}{% translate "Teacher:" %} {{ teachers|join:", " }} · {% endif %}
+      {% if course.is_sequential %}{% translate "Stages open in order: finish one to open the next." %}{% endif %}
+    </p>
+  </div>
+  <div class="flex flex-[0_1_300px] flex-col gap-2">
+    {% blocktranslate with a=stages_passed b=stages_total asvar l_stages %}{{ a }} / {{ b }} stages{% endblocktranslate %}
+    {% translate "Course progress" as l_progress %}
+    {% include "components/progress_bar.html" with label=l_progress value=stages_passed max=stages_total value_text=l_stages %}
+    {% if result.current_percent is not None %}
+      <span class="num text-body-sm text-ink-soft">{% translate "Current score" %} {{ result.current_percent|floatformat:1 }} · {{ grade.letter }}</span>
+    {% endif %}
+    {% if next %}<a class="btn btn-primary mt-1 self-start" href="{% url 'student:stage' course.slug next.topic.number next.pk %}">{% translate "Continue learning" %}{% include "components/icons.html#arrow-right" %}</a>{% endif %}
+  </div>
+</header>
+
+{% for m in modules %}
+  <section class="flex flex-col gap-3" aria-labelledby="m{{ m.module.pk }}">
+    <h2 id="m{{ m.module.pk }}" class="text-h2">
+      {% blocktranslate with n=m.module.order %}Module {{ n }}{% endblocktranslate %}
+      <span class="font-normal text-ink-soft">· {{ m.module.title }}</span>
+    </h2>
+    <ol class="overflow-hidden rounded-lg border border-line bg-surface">
+      {% for row in m.topics %}{% with t=row.topic %}
+        <li class="border-line not-last:border-b">
+          {% if row.status == "locked" %}
+            <div class="flex flex-wrap items-center gap-4 px-4 py-4 text-ink-faint sm:px-6">
+              <span class="num grid size-9 shrink-0 place-items-center rounded-full border border-line-strong font-semibold">{{ t.number }}</span>
+              <span class="flex min-w-0 flex-[1_1_240px] flex-col">
+                <span class="font-semibold text-ink-soft">{{ t.title }}</span>
+                <span class="text-body-sm">{% blocktranslate with n=t.number|add:"-1" %}Opens after topic {{ n }} is completed{% endblocktranslate %}</span>
+              </span>
+              <span class="flex items-center gap-1.5 text-body-sm">{% include "components/icons.html#lock" %}{% translate "Locked" %}</span>
+            </div>
+          {% else %}
+            <a href="{{ row.url }}" class="flex flex-wrap items-center gap-4 px-4 py-4 sm:px-6 {% if row.status == 'in_progress' or row.status == 'available' %}bg-primary-50{% else %}hover:bg-canvas{% endif %}">
+              <span class="num grid size-9 shrink-0 place-items-center rounded-full font-semibold text-white {% if row.status == 'completed' %}bg-success-600{% else %}bg-primary-600{% endif %}">{{ t.number }}</span>
+              <span class="flex min-w-0 flex-[1_1_240px] flex-col">
+                <span class="font-semibold">{{ t.title }}</span>
+                <span class="text-body-sm text-ink-soft">
+                  {% blocktranslate count n=row.stages|length %}{{ n }} stage{% plural %}{{ n }} stages{% endblocktranslate %}{% if t.estimated_minutes %} · ~{{ t.estimated_minutes }} {% translate "min" %}{% endif %}
+                </span>
+              </span>
+              <span class="flex flex-wrap gap-1.5" aria-hidden="true">
+                {% for s in row.stages %}{% include "student/partials/stage_tile.html" with stage=s.stage status=s.status %}{% endfor %}
+              </span>
+              {% if row.status == "completed" %}
+                {% blocktranslate with s=row.result.score_percent|floatformat:1 asvar l_done %}Completed · {{ s }}{% endblocktranslate %}
+                {% include "components/badge.html" with variant="success" label=l_done %}
+              {% else %}
+                {% blocktranslate with a=row.passed b=row.required asvar l_prog %}In progress · {{ a }} / {{ b }}{% endblocktranslate %}
+                {% include "components/badge.html" with variant="info" label=l_prog %}
+              {% endif %}
+            </a>
+          {% endif %}
+        </li>
+      {% endwith %}{% endfor %}
+    </ol>
+  </section>
+{% empty %}
+  {% translate "The course has no published topics yet" as l_title %}
+  {% include "components/empty_state.html" with title=l_title %}
+{% endfor %}
+
+{% if course.certificate_enabled %}
+<section class="flex flex-wrap items-center gap-4 rounded-lg border border-dashed border-line-strong bg-surface px-6 py-5" aria-labelledby="cert">
+  <span class="grid size-10 place-items-center rounded-md bg-primary-50 text-primary-600">{% include "components/icons.html#award" with size=22 %}</span>
+  <div class="flex-[1_1_300px]">
+    <h2 id="cert" class="text-h3">{% translate "Course certificate" %}</h2>
+    <p class="text-sm text-ink-soft">{% blocktranslate with p=course.passing_score %}Complete every topic with a course score of at least {{ p }} and the certificate is issued automatically.{% endblocktranslate %}</p>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

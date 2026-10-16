@@ -1,0 +1,3 @@
+{% load i18n %}
+{% translate "The practice task is being prepared" as l_title %}{% translate "The task with its answer fields appears here soon." as l_text %}
+{% include "components/empty_state.html" with title=l_title text=l_text icon="practice" %}

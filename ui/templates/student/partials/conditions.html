@@ -1,0 +1,32 @@
+{% load i18n %}{# «How to complete this stage» checklist (mockup «Кезеңді аяқтау шарты»). #}
+<div class="card flex flex-col gap-3 p-5">
+  <h2 class="text-h3">{% translate "To complete the stage" %}</h2>
+  {% if stage.kind == "theory" or stage.kind == "video" %}
+    {% with done=sp.material_done_at %}
+      <p class="flex gap-2.5 text-sm">
+        <span class="grid size-5 shrink-0 place-items-center rounded-full {% if done %}bg-success-600 text-white{% else %}border-2 border-primary-600{% endif %}">{% if done %}{% include "components/icons.html#check" with size=11 %}{% endif %}</span>
+        <span>{% if stage.kind == "theory" %}{% translate "Read the theory to the end" %}{% else %}{% blocktranslate with p=content.min_watch_percent %}Watch at least {{ p }}% of the video{% endblocktranslate %}{% if not done and sp.material_percent %} <span class="num text-ink-soft">({{ sp.material_percent }}%)</span>{% endif %}{% endif %}</span>
+      </p>
+    {% endwith %}
+  {% endif %}
+  {% if quiz %}
+      <p class="flex gap-2.5 text-sm">
+        <span class="grid size-5 shrink-0 place-items-center rounded-full {% if status == 'passed' %}bg-success-600 text-white{% else %}border-2 border-primary-600{% endif %}">{% if status == "passed" %}{% include "components/icons.html#check" with size=11 %}{% endif %}</span>
+        <span>{% blocktranslate with p=quiz.pass_percent n=question_count count counter=question_count %}Score at least {{ p }}% in the test ({{ n }} question){% plural %}Score at least {{ p }}% in the test ({{ n }} questions){% endblocktranslate %}</span>
+      </p>
+  {% elif stage.kind == "lab" %}
+    <p class="text-sm">{% translate "Finish every experiment and send its analysis." %}</p>
+  {% elif stage.kind == "practice" %}
+    <p class="text-sm">{% blocktranslate with p=stage.pass_percent %}Send the work and get at least {{ p }}%.{% endblocktranslate %}</p>
+  {% endif %}
+  {% if status == "passed" %}
+    <p class="rounded-md bg-success-50 px-3 py-2 text-sm font-medium text-success-700">
+      {% translate "Stage passed" %}{% if sp.score_percent is not None %} · <span class="num">{{ sp.score_percent|floatformat:0 }}%</span>{% endif %}
+    </p>
+    {% if sp.needs_attention %}<p class="text-body-sm text-warning-700">{% translate "The attempts ran out below the pass mark — your teacher will look at this stage." %}</p>{% endif %}
+  {% elif status == "awaiting_check" %}
+    <p class="rounded-md bg-warning-50 px-3 py-2 text-sm text-warning-700">{% translate "Waiting for the teacher's check. You can go on to the next stage." %}</p>
+  {% elif next %}
+    <p class="text-body-sm text-ink-soft">{% blocktranslate with t=next.1 %}Then «{{ t }}» opens.{% endblocktranslate %}</p>
+  {% endif %}
+</div>

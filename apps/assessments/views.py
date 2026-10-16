@@ -1,23 +1,17 @@
-"""Taking a quiz: player, submit, result. STEP-07 embeds the same templates in the stage player."""
+"""Quiz preview for teachers and admins. Students take quizzes inside the stage player (apps.student),
+which also records the stage result; these pages never touch progress."""
 
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.views.decorators.http import require_POST
 
-from apps.core.permissions import ADMIN, TEACHER, has_role
+from apps.core.permissions import ADMIN, TEACHER, role_required
 
 from . import selectors, services
-from .models import Question, Quiz, QuizAttempt
-
-
-def _access(request, quiz):
-    """(enrollment, allowed). Students need an active enrolment in the quiz's course; staff may preview."""
-    enrollment = selectors.enrollment_for(request.user, quiz)
-    if enrollment is None and not has_role(request.user, TEACHER, ADMIN):
-        raise Http404
-    return enrollment
+from .forms import collect_answers
+from .models import Quiz, QuizAttempt
 
 
 def _own_attempt(request, attempt_id):
@@ -27,88 +21,90 @@ def _own_attempt(request, attempt_id):
     return attempt
 
 
-@login_required
+def _back(quiz):
+    stage = selectors.stage_of_quiz(quiz)
+    if stage:
+        return stage.topic.get_absolute_url(), stage.topic.title
+    return reverse("admin:assessments_quiz_change", args=[quiz.pk]), quiz.title
+
+
+def take_context(quiz, attempt, submit_url, back_url, back_label, base_template="layouts/student.html"):
+    end = services.deadline(attempt)
+    return {
+        "quiz": quiz,
+        "attempt": attempt,
+        "rows": selectors.review_rows(attempt),
+        "deadline": end.isoformat() if end else "",
+        "submit_url": submit_url,
+        "back_url": back_url,
+        "back_label": back_label,
+        "base_template": base_template,
+    }
+
+
+def result_context(user, attempt, retry_url, back_url, back_label, base_template="layouts/student.html"):
+    quiz = attempt.quiz
+    left = services.attempts_left(user, quiz)
+    return {
+        "quiz": quiz,
+        "attempt": attempt,
+        "rows": selectors.review_rows(attempt),
+        "counted": selectors.counted_attempt(user, quiz),
+        "history": QuizAttempt.objects.filter(user=user, quiz=quiz).order_by("attempt_no"),
+        "attempts_left": left,
+        "can_retry": left != 0,
+        "retry_url": retry_url,
+        "back_url": back_url,
+        "back_label": back_label,
+        "base_template": base_template,
+    }
+
+
+@role_required(TEACHER, ADMIN)
 def take(request, quiz_id):
     quiz = get_object_or_404(Quiz, pk=quiz_id)
-    enrollment = _access(request, quiz)
     last = selectors.last_attempt(request.user, quiz)
     if last and last.is_finished:
         return redirect("assessments:result", last.pk)
+    back_url, back_label = _back(quiz)
     try:
-        attempt = services.start_attempt(request.user, quiz, enrollment)
+        attempt = services.start_attempt(request.user, quiz)
     except services.AttemptError as exc:
         messages.error(request, str(exc))
-        return redirect(_back_url(quiz))
-    end = services.deadline(attempt)
-    return render(
-        request,
-        "assessments/take.html",
-        {
-            "quiz": quiz,
-            "attempt": attempt,
-            "rows": selectors.review_rows(attempt),
-            "deadline": end.isoformat() if end else "",
-            "stage": selectors.stage_of_quiz(quiz),
-            "attempts_left": services.attempts_left(request.user, quiz),
-        },
-    )
+        return redirect(back_url)
+    submit_url = reverse("assessments:submit", args=[attempt.pk])
+    return render(request, "assessments/take.html", take_context(quiz, attempt, submit_url, back_url, back_label))
 
 
 @require_POST
-@login_required
+@role_required(TEACHER, ADMIN)
 def retry(request, quiz_id):
     quiz = get_object_or_404(Quiz, pk=quiz_id)
-    enrollment = _access(request, quiz)
     try:
-        services.start_attempt(request.user, quiz, enrollment)
+        services.start_attempt(request.user, quiz)
     except services.AttemptError as exc:
         messages.error(request, str(exc))
-        last = selectors.last_attempt(request.user, quiz)
-        return redirect("assessments:result", last.pk) if last else redirect(_back_url(quiz))
     return redirect("assessments:take", quiz.pk)
 
 
 @require_POST
-@login_required
+@role_required(TEACHER, ADMIN)
 def submit(request, attempt_id):
     attempt = _own_attempt(request, attempt_id)
-    kinds = dict(Question.objects.filter(pk__in=attempt.question_ids).values_list("pk", "kind"))
-    answers = {}
-    for qid in attempt.question_ids:
-        name = f"q{qid}"
-        answers[qid] = (
-            request.POST.getlist(name) if kinds.get(qid) == Question.Kind.MULTIPLE else request.POST.get(name)
-        )
     try:
-        services.submit_attempt(attempt, answers)
+        services.submit_attempt(attempt, collect_answers(attempt, request.POST))
     except services.AttemptError as exc:
         messages.info(request, str(exc))
     return redirect("assessments:result", attempt.pk)
 
 
-@login_required
+@role_required(TEACHER, ADMIN)
 def result(request, attempt_id):
     attempt = _own_attempt(request, attempt_id)
     if not attempt.is_finished:
         return redirect("assessments:take", attempt.quiz_id)
-    quiz = attempt.quiz
-    left = services.attempts_left(request.user, quiz)
+    back_url, back_label = _back(attempt.quiz)
+    retry_url = reverse("assessments:retry", args=[attempt.quiz_id])
     return render(
-        request,
-        "assessments/result.html",
-        {
-            "quiz": quiz,
-            "attempt": attempt,
-            "rows": selectors.review_rows(attempt),
-            "counted": selectors.counted_attempt(request.user, quiz),
-            "history": QuizAttempt.objects.filter(user=request.user, quiz=quiz).order_by("attempt_no"),
-            "attempts_left": left,
-            "can_retry": left != 0,
-            "stage": selectors.stage_of_quiz(quiz),
-        },
+        request, "assessments/result.html", result_context(request.user, attempt, retry_url, back_url, back_label)
     )
-
-
-def _back_url(quiz):
-    stage = selectors.stage_of_quiz(quiz)
-    return stage.topic.get_absolute_url() if stage else "core:home"

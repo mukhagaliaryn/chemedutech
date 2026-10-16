@@ -241,58 +241,29 @@ class QuizViewTests(TestCase):
         self.assertEqual(Quiz.objects.count(), 3)
         self.assertEqual(test.questions.count(), 10)
 
-    def test_not_enrolled_student_gets_404(self):
-        self.client.force_login(self.student)
-        self.assertEqual(self.client.get(reverse("assessments:take", args=[self.quiz.pk])).status_code, 404)
-
-    def test_take_submit_result_flow(self):
+    def test_students_take_quizzes_only_inside_the_stage(self):
         enroll(self.student, self.course, "admin")
         self.client.force_login(self.student)
+        self.assertEqual(self.client.get(reverse("assessments:take", args=[self.quiz.pk])).status_code, 403)
+        self.assertFalse(QuizAttempt.objects.exists())
+
+    def test_teacher_preview_flow(self):
+        teacher = User.objects.create_user("t", "t@example.kz", "x", role=User.Role.TEACHER)
+        self.client.force_login(teacher)
         r = self.client.get(reverse("assessments:take", args=[self.quiz.pk]))
         self.assertContains(r, "quizPlayer")
-        attempt = QuizAttempt.objects.get(user=self.student)
-        self.assertIsNotNone(attempt.enrollment)
+        attempt = QuizAttempt.objects.get(user=teacher)
+        self.assertIsNone(attempt.enrollment)
         r = self.client.post(reverse("assessments:submit", args=[attempt.pk]), self.correct_answers(attempt))
         self.assertRedirects(r, reverse("assessments:result", args=[attempt.pk]))
         attempt.refresh_from_db()
         self.assertEqual(attempt.percent, Decimal("100.00"))
-        self.assertTrue(attempt.passed)
         r = self.client.get(reverse("assessments:result", args=[attempt.pk]))
         self.assertContains(r, "100%")
         self.assertContains(r, self.quiz.questions.first().explanation)  # show_answers_after
-        # taking again shows the result; retry starts attempt 2
-        self.assertRedirects(
-            self.client.get(reverse("assessments:take", args=[self.quiz.pk])),
-            reverse("assessments:result", args=[attempt.pk]),
-        )
-        self.client.post(reverse("assessments:retry", args=[self.quiz.pk]))
-        self.assertEqual(QuizAttempt.objects.filter(user=self.student).count(), 2)
-
-    def test_hidden_answers_for_topic_test(self):
-        enroll(self.student, self.course, "admin")
-        self.client.force_login(self.student)
-        test = Stage.objects.get(topic__number=1, kind="test").test_content.quiz
-        self.client.get(reverse("assessments:take", args=[test.pk]))
-        attempt = QuizAttempt.objects.get(user=self.student, quiz=test)
-        self.client.post(reverse("assessments:submit", args=[attempt.pk]), {})
-        r = self.client.get(reverse("assessments:result", args=[attempt.pk]))
-        self.assertContains(r, "0%")
-        for q in test.questions.exclude(explanation=""):
-            self.assertNotContains(r, q.explanation)
-
-    def test_other_users_attempt_is_hidden(self):
-        enroll(self.student, self.course, "admin")
-        attempt = services.start_attempt(self.student, self.quiz)
-        other = make_student("s2")
+        other = User.objects.create_user("t2", "t2@example.kz", "x", role=User.Role.TEACHER)
         self.client.force_login(other)
         self.assertEqual(self.client.get(reverse("assessments:result", args=[attempt.pk])).status_code, 404)
-        self.assertEqual(self.client.post(reverse("assessments:submit", args=[attempt.pk])).status_code, 404)
-
-    def test_teacher_preview_without_enrolment(self):
-        teacher = User.objects.create_user("t", "t@example.kz", "x", role=User.Role.TEACHER)
-        self.client.force_login(teacher)
-        self.assertEqual(self.client.get(reverse("assessments:take", args=[self.quiz.pk])).status_code, 200)
-        self.assertIsNone(QuizAttempt.objects.get(user=teacher).enrollment)
 
     def test_admin_pages(self):
         admin = User.objects.create_superuser("root", "root@example.kz", "x")

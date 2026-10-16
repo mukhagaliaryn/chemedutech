@@ -1,0 +1,21 @@
+{% extends "layouts/learn.html" %}
+{% load i18n %}
+{% block title %}{% translate "Not open yet" %} · ChemEduTech{% endblock %}
+{% block content %}
+<h1 class="text-h1">{% if stage %}{{ stage.title }}{% else %}{{ topic.title }}{% endif %}</h1>
+{% if stepper %}{% translate "Topic stages" as l_stages %}{% include "components/stage_stepper.html" with stages=stepper label=l_stages %}{% endif %}
+{% translate "This stage is not open yet" as l_title %}
+{% if blocking %}
+  {% if blocking_status == "awaiting_check" %}
+    {% blocktranslate with t=blocking.title asvar l_text %}«{{ t }}» is waiting for the teacher's check. The next topic opens after the check.{% endblocktranslate %}
+  {% else %}
+    {% blocktranslate with t=blocking.title asvar l_text %}Finish «{{ t }}» first — then this stage opens.{% endblocktranslate %}
+  {% endif %}
+  {% blocktranslate with t=blocking.title|truncatechars:40 asvar l_action %}Go to «{{ t }}»{% endblocktranslate %}
+  {% include "components/lock_state.html" with title=l_title text=l_text action_url=blocking_url action_label=l_action %}
+{% else %}
+  {% translate "Stages open one after another. Go back to the course map to see what to do next." as l_text %}
+  {% translate "Course map" as l_action %}
+  {% include "components/lock_state.html" with title=l_title text=l_text action_url=course_url action_label=l_action %}
+{% endif %}
+{% endblock %}

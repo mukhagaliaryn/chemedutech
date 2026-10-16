@@ -1,0 +1,50 @@
+{% extends "layouts/student.html" %}
+{% load i18n %}
+{% block title %}{% translate "My courses" %} · ChemEduTech{% endblock %}
+{% block content %}
+<header>
+  <h1 class="text-h1">{% translate "My courses" %}</h1>
+</header>
+{% for row in rows %}{% with c=row.course r=row.result %}
+  <section class="card flex flex-wrap items-center gap-6 p-7">
+    <div class="min-w-0 flex-[1_1_420px]">
+      <p class="text-body-sm font-medium text-ink-soft">{% translate "Course" %}{% if not c.is_published %} · {{ c.get_status_display }}{% endif %}{% if row.preview %} · {% translate "preview" %}{% endif %}</p>
+      <h2 class="mt-1 text-h2"><a href="{% url 'student:course' c.slug %}" class="hover:text-primary-700">{{ c.title }}</a></h2>
+      {% if c.short_description %}<p class="mt-2 text-ink-soft">{{ c.short_description }}</p>{% endif %}
+    </div>
+    <div class="flex flex-[0_1_300px] flex-col gap-3">
+      {% if r %}
+        {% blocktranslate with a=r.topics_completed b=r.topics_total asvar l_topics %}{{ a }} / {{ b }} topics{% endblocktranslate %}
+        {% translate "Course progress" as l_progress %}
+        {% include "components/progress_bar.html" with label=l_progress value=r.topics_completed max=r.topics_total value_text=l_topics %}
+        {% if r.current_percent is not None %}<p class="num text-body-sm text-ink-soft">{% translate "Current score" %} {{ r.current_percent|floatformat:1 }}</p>{% endif %}
+      {% endif %}
+      <div class="flex flex-wrap gap-2">
+        {% if row.next %}<a class="btn btn-primary" href="{% url 'student:stage' c.slug row.next.topic.number row.next.pk %}">{% translate "Continue" %}</a>{% endif %}
+        <a class="btn btn-secondary" href="{% url 'student:course' c.slug %}">{% translate "Course map" %}</a>
+      </div>
+    </div>
+  </section>
+{% endwith %}{% empty %}
+  {% if not open_courses %}
+    {% translate "No courses yet" as l_title %}{% translate "The course appears here when your teacher assigns it to your group." as l_text %}
+    {% include "components/empty_state.html" with title=l_title text=l_text %}
+  {% endif %}
+{% endfor %}
+
+{% if open_courses %}
+  <section class="flex flex-col gap-3" aria-labelledby="open-title">
+    <h2 id="open-title" class="text-h2">{% translate "Courses open for enrolment" %}</h2>
+    <div class="grid gap-4 md:grid-cols-2">
+      {% for c in open_courses %}
+        <form method="post" action="{% url 'student:enroll' c.slug %}" class="card flex flex-col gap-3">
+          {% csrf_token %}
+          <h3 class="text-h3">{{ c.title }}</h3>
+          {% if c.short_description %}<p class="text-sm text-ink-soft">{{ c.short_description }}</p>{% endif %}
+          <button type="submit" class="btn btn-primary self-start">{% translate "Enrol" %}</button>
+        </form>
+      {% endfor %}
+    </div>
+  </section>
+{% endif %}
+{% endblock %}

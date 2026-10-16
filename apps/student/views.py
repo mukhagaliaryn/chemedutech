@@ -1,0 +1,357 @@
+"""Student cabinet: my courses, course map, topic page and the stage player (ARCHITECTURE §8, STEP-07).
+
+Thin views: access and progress go through progress.services, quizzes through assessments.services.
+Teachers and admins see the same pages in preview mode (everything open, nothing recorded).
+"""
+
+import json
+
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.http import Http404, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
+from django.utils.translation import gettext as _
+from django.views.decorators.http import require_POST
+
+from apps.assessments import selectors as quiz_selectors
+from apps.assessments import services as quiz_services
+from apps.assessments.forms import collect_answers
+from apps.assessments.models import QuizAttempt
+from apps.assessments.views import result_context, take_context
+from apps.core.permissions import STUDENT, has_role, role_required
+from apps.courses import selectors as course_selectors
+from apps.courses import services as course_services
+from apps.courses.models import Course, Stage
+from apps.labs.selectors import best_attempts_by_experiment
+from apps.progress import selectors as progress_selectors
+from apps.progress import services as progress
+from apps.progress.grading import grade_for
+
+from . import learning
+from .learning import S
+
+LEARN = "layouts/learn.html"
+
+
+# --- courses ------------------------------------------------------------------------
+
+
+@login_required
+def courses(request):
+    user = request.user
+    course_services.sync_student_enrollments(user)
+    rows = []
+    for course in course_selectors.courses_for(user).order_by("title"):
+        place = learning.resolve(request, course.slug)
+        result = None
+        if place.enrollment:
+            progress.recalculate(place.enrollment)
+            result = progress_selectors.course_result(place.enrollment)
+            place.progress = progress_selectors.stage_progress_map(place.enrollment)
+        rows.append(
+            {"course": course, "result": result, "next": learning.continue_target(place), "preview": place.preview}
+        )
+    open_courses = course_selectors.open_courses().exclude(pk__in=[r["course"].pk for r in rows])
+    return render(
+        request,
+        "student/courses.html",
+        {"rows": rows, "open_courses": open_courses if has_role(user, STUDENT) else []},
+    )
+
+
+@require_POST
+@role_required(STUDENT)
+def enroll(request, course_slug):
+    course = get_object_or_404(Course, slug=course_slug)
+    try:
+        course_services.self_enroll(request.user, course)
+    except course_services.EnrollmentError as exc:
+        messages.error(request, str(exc))
+        return redirect("student:courses")
+    return redirect("student:course", course.slug)
+
+
+@login_required
+def course(request, course_slug):
+    place = learning.resolve(request, course_slug)
+    result = None
+    if place.enrollment:
+        progress.recalculate(place.enrollment)
+        place.progress = progress_selectors.stage_progress_map(place.enrollment)
+        result = progress_selectors.course_result(place.enrollment)
+    modules = learning.course_map(place)
+    total = sum(t["required"] for m in modules for t in m["topics"])
+    passed = sum(t["passed"] for m in modules for t in m["topics"])
+    return render(
+        request,
+        "student/course_map.html",
+        {
+            "place": place,
+            "course": place.course,
+            "modules": modules,
+            "result": result,
+            "grade": grade_for(result.current_percent) if result and result.current_percent is not None else None,
+            "stages_total": total,
+            "stages_passed": passed,
+            "next": learning.continue_target(place),
+            "teachers": place.course.teachers.all(),
+        },
+    )
+
+
+# --- topic and stage ----------------------------------------------------------------
+
+
+def _learn_context(place, stages, current=None):
+    passed = sum(1 for s in stages if s.is_required and learning.stage_status(place, s) == S.PASSED)
+    return {
+        "place": place,
+        "course": place.course,
+        "topic": place.topic,
+        "stepper": learning.stepper(place, place.topic, stages, current),
+        "topic_passed": passed,
+        "topic_required": sum(1 for s in stages if s.is_required),
+        "course_url": reverse("student:course", args=[place.course.slug]),
+    }
+
+
+@login_required
+def topic(request, course_slug, topic_number):
+    place = learning.resolve(request, course_slug, topic_number)
+    if place.enrollment:
+        progress.recalculate(place.enrollment)
+        place.progress = progress_selectors.stage_progress_map(place.enrollment)
+    stages = learning.ordered_stages(place.topic)
+    target = next((s for s in stages if learning.stage_status(place, s) in (S.AVAILABLE, S.IN_PROGRESS)), None)
+    result = progress_selectors.topic_results_map(place.enrollment).get(place.topic.pk) if place.enrollment else None
+    if result and result.status == "locked" and not any(learning.stage_status(place, s) != S.LOCKED for s in stages):
+        return _locked(request, place, stages[0] if stages else None, stages)
+    context = _learn_context(place, stages)
+    context.update(
+        {
+            "rows": [
+                {
+                    "stage": s,
+                    "status": learning.stage_status(place, s),
+                    "sp": place.progress.get(s.pk),
+                    "url": learning.stage_url(s),
+                }
+                for s in stages
+            ],
+            "target": target,
+            "result": result,
+        }
+    )
+    return render(request, "student/topic.html", context)
+
+
+def _locked(request, place, stage, stages):
+    blocking = progress.blocking_stage(place.enrollment, stage) if stage is not None else None
+    context = _learn_context(place, stages, stage)
+    context.update(
+        {
+            "stage": stage,
+            "blocking": blocking,
+            "blocking_url": learning.stage_url(blocking) if blocking else context["course_url"],
+            "blocking_status": learning.stage_status(place, blocking) if blocking else None,
+        }
+    )
+    return render(request, "student/locked.html", context, status=200)
+
+
+def _open_stage(request, course_slug, topic_number, stage_pk):
+    """(place, stages) for an open stage, or a response (the «finish … first» page)."""
+    place = learning.resolve(request, course_slug, topic_number, stage_pk)
+    stages = learning.ordered_stages(place.topic)
+    if not place.preview and not progress.can_access(place.enrollment, place.stage):
+        return place, stages, _locked(request, place, place.stage, stages)
+    return place, stages, None
+
+
+@login_required
+def stage(request, course_slug, topic_number, stage_pk):
+    place, stages, denied = _open_stage(request, course_slug, topic_number, stage_pk)
+    if denied:
+        return denied
+    stage = place.stage
+    if not place.preview:
+        progress.start_stage(place.enrollment, stage)
+        place.progress = progress_selectors.stage_progress_map(place.enrollment)
+    sp = place.progress.get(stage.pk)
+    quiz = progress.stage_quiz(stage)
+    context = _learn_context(place, stages, stage)
+    context.update(
+        {
+            "stage": stage,
+            "sp": sp,
+            "status": learning.stage_status(place, stage),
+            "content": stage.content,
+            "quiz": quiz,
+            "next": learning.next_place(place, stage),
+            "urls": {
+                name: learning.stage_url(stage, f"student:{name}")
+                for name in ("material_done", "watch", "ping", "quiz_take", "quiz_retry")
+            },
+        }
+    )
+    if quiz:
+        context.update(_quiz_panel(request, place, stage, quiz, sp))
+    if stage.kind == Stage.Kind.LAB and stage.content:
+        done = best_attempts_by_experiment(request.user, stage.content.lab_key)
+        context["experiments"] = [{"spec": e, "attempt": done.get(e.key)} for e in stage.content.experiment_specs()]
+    return render(request, "student/stage.html", context)
+
+
+def _quiz_panel(request, place, stage, quiz, sp):
+    user = request.user
+    last = quiz_selectors.last_attempt(user, quiz)
+    return {
+        "quiz_open": place.preview or progress.quiz_is_open(place.enrollment, stage, sp),
+        "open_attempt": last if last and not last.is_finished else None,
+        "last_attempt": last if last and last.is_finished else None,
+        "counted": quiz_selectors.counted_attempt(user, quiz),
+        "attempts_left": quiz_services.attempts_left(user, quiz),
+        "question_count": quiz.questions_per_attempt or quiz.questions.filter(is_active=True).count(),
+    }
+
+
+@require_POST
+@login_required
+def material_done(request, course_slug, topic_number, stage_pk):
+    place, _stages, denied = _open_stage(request, course_slug, topic_number, stage_pk)
+    if denied:
+        return denied
+    stage = place.stage
+    allowed = stage.kind == Stage.Kind.THEORY or (
+        stage.kind == Stage.Kind.VIDEO and not (stage.content and stage.content.has_source)
+    )
+    if not allowed:
+        raise Http404  # a video with a source is completed by watching it
+    if not place.preview:
+        progress.complete_material(place.enrollment, stage)
+    return redirect(f"{learning.stage_url(stage)}#quiz")
+
+
+@require_POST
+@login_required
+def watch(request, course_slug, topic_number, stage_pk):
+    place, _stages, denied = _open_stage(request, course_slug, topic_number, stage_pk)
+    if denied or place.stage.kind != Stage.Kind.VIDEO or not place.stage.content:
+        return JsonResponse({"error": "not_available"}, status=403)
+    try:
+        percent = int(json.loads(request.body or b"{}").get("percent", 0))
+    except (ValueError, TypeError, AttributeError):
+        return JsonResponse({"error": "bad_request"}, status=400)
+    if place.preview:
+        return JsonResponse({"percent": percent, "done": False, "preview": True})
+    sp = progress.record_watch(place.enrollment, place.stage, percent, place.stage.content.min_watch_percent)
+    return JsonResponse({"percent": sp.material_percent, "done": sp.material_done_at is not None})
+
+
+@require_POST
+@login_required
+def ping(request, course_slug, topic_number, stage_pk):
+    """Time on a stage: the page sends a beat every 30 s while it is visible."""
+    place, _stages, denied = _open_stage(request, course_slug, topic_number, stage_pk)
+    if not denied and not place.preview:
+        progress.add_time(place.enrollment, place.stage, 30)
+    return JsonResponse({"ok": True})
+
+
+# --- quizzes inside a stage ---------------------------------------------------------
+
+
+def _quiz_stage(request, course_slug, topic_number, stage_pk):
+    place, stages, denied = _open_stage(request, course_slug, topic_number, stage_pk)
+    if denied:
+        return place, None, denied
+    quiz = progress.stage_quiz(place.stage)
+    if quiz is None:
+        raise Http404
+    if not place.preview:
+        sp = place.progress.get(place.stage.pk)
+        if not progress.quiz_is_open(place.enrollment, place.stage, sp):
+            messages.info(request, _("Finish the material first — the test opens after it."))
+            return place, quiz, redirect(learning.stage_url(place.stage))
+    return place, quiz, None
+
+
+@login_required
+def quiz_take(request, course_slug, topic_number, stage_pk):
+    place, quiz, denied = _quiz_stage(request, course_slug, topic_number, stage_pk)
+    if denied:
+        return denied
+    stage_page = learning.stage_url(place.stage)
+    last = quiz_selectors.last_attempt(request.user, quiz)
+    if last and last.is_finished:
+        return redirect(f"{stage_page}#quiz")
+    try:
+        attempt = quiz_services.start_attempt(request.user, quiz, place.enrollment)
+    except quiz_services.AttemptError as exc:
+        messages.error(request, str(exc))
+        return redirect(stage_page)
+    submit_url = reverse(
+        "student:quiz_submit", args=[place.course.slug, place.topic.number, place.stage.pk, attempt.pk]
+    )
+    context = take_context(quiz, attempt, submit_url, stage_page, place.stage.title, LEARN)
+    context.update(_learn_context(place, learning.ordered_stages(place.topic), place.stage))
+    return render(request, "assessments/take.html", context)
+
+
+@require_POST
+@login_required
+def quiz_retry(request, course_slug, topic_number, stage_pk):
+    place, quiz, denied = _quiz_stage(request, course_slug, topic_number, stage_pk)
+    if denied:
+        return denied
+    try:
+        quiz_services.start_attempt(request.user, quiz, place.enrollment)
+    except quiz_services.AttemptError as exc:
+        messages.error(request, str(exc))
+        return redirect(learning.stage_url(place.stage))
+    return redirect(learning.stage_url(place.stage, "student:quiz_take"))
+
+
+def _stage_attempt(request, quiz, attempt_id):
+    attempt = get_object_or_404(QuizAttempt, pk=attempt_id, quiz=quiz)
+    if attempt.user_id != request.user.pk:
+        raise Http404
+    return attempt
+
+
+@require_POST
+@login_required
+def quiz_submit(request, course_slug, topic_number, stage_pk, attempt_id):
+    place, quiz, denied = _quiz_stage(request, course_slug, topic_number, stage_pk)
+    if denied:
+        return denied
+    attempt = _stage_attempt(request, quiz, attempt_id)
+    try:
+        quiz_services.submit_attempt(attempt, collect_answers(attempt, request.POST))
+    except quiz_services.AttemptError as exc:
+        messages.info(request, str(exc))
+    if not place.preview:
+        progress.record_quiz_result(place.enrollment, place.stage, quiz)
+    return redirect("student:quiz_review", place.course.slug, place.topic.number, place.stage.pk, attempt.pk)
+
+
+@login_required
+def quiz_review(request, course_slug, topic_number, stage_pk, attempt_id):
+    place, quiz, denied = _quiz_stage(request, course_slug, topic_number, stage_pk)
+    if denied:
+        return denied
+    attempt = _stage_attempt(request, quiz, attempt_id)
+    if not attempt.is_finished:
+        return redirect(learning.stage_url(place.stage, "student:quiz_take"))
+    stage_page = learning.stage_url(place.stage)
+    retry_url = learning.stage_url(place.stage, "student:quiz_retry")
+    context = result_context(request.user, attempt, retry_url, stage_page, place.stage.title, LEARN)
+    context.update(_learn_context(place, learning.ordered_stages(place.topic), place.stage))
+    sp = progress_selectors.stage_progress_map(place.enrollment).get(place.stage.pk) if place.enrollment else None
+    nxt = learning.next_place(place, place.stage)
+    if sp and sp.status == S.PASSED and nxt:
+        context.update({"back_url": nxt[0], "back_button": _("Go to the next stage")})
+    else:
+        context["back_button"] = _("Back to the stage")
+    return render(request, "assessments/result.html", context)

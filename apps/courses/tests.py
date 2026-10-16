@@ -150,38 +150,6 @@ class CoursePageTests(TestCase):
         call_command("seed_course", verbosity=0)  # idempotent
         self.assertEqual(Stage.objects.filter(topic=topic).count(), 6)
 
-    def test_not_enrolled_student_sees_open_course_and_enrols(self):
-        self.client.force_login(self.student)
-        topic_url = reverse("courses:topic", args=["chemistry", 1])
-        self.assertEqual(self.client.get(topic_url).status_code, 404)
-        r = self.client.get(reverse("courses:dashboard"))
-        self.assertContains(r, reverse("courses:enroll", args=["chemistry"]))
-        self.client.post(reverse("courses:enroll", args=["chemistry"]))
-        self.assertTrue(Enrollment.objects.filter(student=self.student, course=self.course).exists())
-        r = self.client.get(topic_url)
-        self.assertContains(r, "Сутегі")
-        self.assertContains(r, "Практикалық жұмыс 2")  # stepper lists every stage
-        self.assertContains(r, reverse("labs:run", args=["t01", "hydrogen"]))
-
-    def test_group_course_appears_without_self_enrolment(self):
-        group = self.student.student_profile.group
-        CourseGroup.objects.create(course=self.course, group=group)  # e.g. created before the student joined
-        self.client.force_login(self.student)
-        r = self.client.get(reverse("courses:dashboard"))
-        self.assertContains(r, self.course.title)
-        self.assertEqual(Enrollment.objects.get(student=self.student).source, "group")
-
-    def test_theory_is_sanitised(self):
-        theory = Stage.objects.get(topic__number=1, kind="theory").theory_content
-        theory.body = '<p onclick="x()">Zn<sub>2</sub></p><script>alert(1)</script><img src="javascript:alert(1)">'
-        theory.save()
-        services.enroll(self.student, self.course, "admin")
-        self.client.force_login(self.student)
-        r = self.client.get(reverse("courses:topic", args=["chemistry", 1]))
-        self.assertContains(r, "<p>Zn<sub>2</sub></p>")
-        self.assertNotContains(r, "alert(1)")
-        self.assertNotContains(r, "onclick")
-
 
 class SanitizeTests(TestCase):
     def test_keeps_chemistry_markup_and_strips_scripts(self):

@@ -57,7 +57,7 @@ class Topic(TimeStampedModel):
                 raise ValidationError({"number": _("This course already has a topic with this number.")})
 
     def get_absolute_url(self):
-        return reverse("courses:topic", args=[self.module.course.slug, self.number])
+        return reverse("student:topic", args=[self.module.course.slug, self.number])
 
 
 class Stage(TimeStampedModel):

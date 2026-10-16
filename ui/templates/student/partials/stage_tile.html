@@ -1,0 +1,9 @@
+{% load i18n %}{# A 28px stage tile on the course map: kind colour = passed, outline = open, grey lock = locked. #}
+<span title="{{ stage.title }} · {% if status == 'passed' %}{% translate 'passed' %}{% elif status == 'locked' %}{% translate 'locked' %}{% elif status == 'awaiting_check' %}{% translate 'awaiting check' %}{% else %}{% translate 'open' %}{% endif %}"
+      style="--k: var(--color-stage-{{ stage.kind }})"
+      class="grid size-7 shrink-0 place-items-center rounded-sm
+             {% if status == 'passed' %}bg-[var(--k)] text-white{% elif status == 'locked' %}bg-surface-sunken text-ink-faint{% elif status == 'awaiting_check' %}bg-warning-50 text-warning-700{% else %}border-2 border-[var(--k)] bg-surface text-[var(--k)]{% endif %}">
+  {% if status == "passed" %}{% include "components/icons.html#check" with size=14 %}
+  {% elif status == "locked" %}{% include "components/icons.html#lock" with size=14 %}
+  {% else %}{% include "components/icons.html#"|add:stage.kind with size=14 %}{% endif %}
+</span>

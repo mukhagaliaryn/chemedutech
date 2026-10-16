@@ -1,0 +1,24 @@
+{% load i18n %}
+<div class="flex flex-col gap-4">
+  <div class="flex items-center gap-3">
+    <span class="stage-lab grid size-9 place-items-center rounded-md text-white">{% include "components/icons.html#lab" with size=18 %}</span>
+    <div>
+      <h2 class="text-h3">{% translate "Virtual lab" %}</h2>
+      <p class="text-body-sm text-ink-soft">{% translate "Do the experiments in order, fill in the lab journal and send the analysis." %}</p>
+    </div>
+  </div>
+  <ol class="flex flex-col gap-2">
+    {% for row in experiments %}
+      <li>
+        <a href="{% url 'labs:run' content.lab_key row.spec.key %}" class="flex items-center gap-3 rounded-md border px-3 py-3 {% if row.attempt %}border-transparent bg-success-50{% else %}border-line hover:border-line-strong{% endif %}">
+          <span class="num grid size-7 shrink-0 place-items-center rounded-full text-caption font-semibold {% if row.attempt %}bg-success-600 text-white{% else %}bg-surface-sunken text-ink-soft{% endif %}">{{ forloop.counter }}</span>
+          <span class="flex-1 text-sm font-medium">{{ row.spec.title }}</span>
+          {% if row.attempt %}<span class="num text-caption text-success-700">{% translate "analysis" %} {{ row.attempt.analysis_correct }}/{{ row.attempt.analysis_total }}</span>{% endif %}
+          {% include "components/icons.html#arrow-right" with icon_class="text-ink-faint" %}
+        </a>
+      </li>
+    {% empty %}
+      <li class="text-ink-soft">{% translate "The lab is not set up yet." %}</li>
+    {% endfor %}
+  </ol>
+</div>

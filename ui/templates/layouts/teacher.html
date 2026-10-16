@@ -8,7 +8,7 @@ not exist yet are hidden by components/nav_item.html.
   {% translate "Home" as l_home %}{% include "components/nav_item.html" with url_name="teacher:dashboard" icon="home" label=l_home %}
   {% translate "Course content" as l_courses %}{% include "components/nav_item.html" with url_name="teacher:courses" icon="book" label=l_courses %}
   {% translate "Groups and students" as l_groups %}{% include "components/nav_item.html" with url_name="teacher:groups" icon="users" label=l_groups %}
-  {% translate "Course" as l_course %}{% include "components/nav_item.html" with url_name="courses:dashboard" match="courses:" icon="table" label=l_course %}
+  {% translate "Course" as l_course %}{% include "components/nav_item.html" with url_name="student:courses" match="student:" icon="table" label=l_course %}
   {% translate "Research data" as l_research %}{% include "components/nav_item.html" with url_name="research:dashboard" match="research:" icon="search" label=l_research %}
 {% endblock %}
 {% block user_meta %}{% translate "teacher" %}{% endblock %}

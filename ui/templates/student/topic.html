@@ -1,0 +1,42 @@
+{% extends "layouts/learn.html" %}
+{% load i18n %}
+{% block title %}{{ topic.title }} · ChemEduTech{% endblock %}
+{% block content %}
+<header class="flex flex-wrap items-end justify-between gap-4">
+  <div class="min-w-0">
+    <h1 class="text-h1">{{ topic.title }}</h1>
+    {% if topic.summary %}<p class="mt-2 max-w-3xl text-ink-soft">{{ topic.summary }}</p>{% endif %}
+  </div>
+  {% if target %}
+    <a class="btn btn-primary btn-lg" href="{% url 'student:stage' course.slug topic.number target.pk %}">
+      {% translate "Continue" %}: {{ target.title|truncatechars:40 }}{% include "components/icons.html#arrow-right" %}
+    </a>
+  {% elif result.status == "completed" %}
+    {% blocktranslate with s=result.score_percent|floatformat:1 asvar l_done %}Topic completed · {{ s }}{% endblocktranslate %}
+    {% include "components/badge.html" with variant="success" label=l_done class="h-8 px-3 text-sm" %}
+  {% endif %}
+</header>
+
+{% translate "Topic stages" as l_stages %}{% include "components/stage_stepper.html" with stages=stepper label=l_stages %}
+
+<ol class="flex flex-col gap-2">
+  {% for row in rows %}{% with s=row.stage %}
+    <li class="card card-compact flex flex-wrap items-center gap-4">
+      <span class="stage-{{ s.kind }} grid size-9 shrink-0 place-items-center rounded-md text-white {% if row.status == 'locked' %}opacity-40{% endif %}">{% include "components/icons.html#"|add:s.kind with size=18 %}</span>
+      <span class="flex min-w-0 flex-[1_1_260px] flex-col">
+        <span class="font-semibold {% if row.status == 'locked' %}text-ink-soft{% endif %}">{{ forloop.counter }}. {{ s.title }}</span>
+        <span class="text-body-sm text-ink-soft">{{ s.get_kind_display }}{% if not s.is_required %} · {% translate "optional" %}{% endif %}{% if row.sp.score_percent is not None %} · <span class="num">{{ row.sp.score_percent|floatformat:0 }}%</span>{% endif %}</span>
+      </span>
+      {% if row.status == "passed" %}{% translate "Passed" as l %}{% elif row.status == "awaiting_check" %}{% translate "Awaiting check" as l %}{% elif row.status == "in_progress" %}{% translate "In progress" as l %}{% elif row.status == "locked" %}{% translate "Locked" as l %}{% else %}{% translate "Available" as l %}{% endif %}
+      {% include "components/badge.html" with status=row.status label=l dot=True %}
+      {% if row.status == "locked" %}
+        <a class="btn btn-ghost btn-sm" href="{{ row.url }}">{% include "components/icons.html#lock" %}{% translate "Why locked?" %}</a>
+      {% else %}
+        <a class="btn {% if row.status == 'passed' %}btn-secondary{% else %}btn-primary{% endif %} btn-sm" href="{{ row.url }}">
+          {% if row.status == "passed" %}{% translate "Review" %}{% elif row.status == "in_progress" %}{% translate "Continue" %}{% else %}{% translate "Open" %}{% endif %}
+        </a>
+      {% endif %}
+    </li>
+  {% endwith %}{% endfor %}
+</ol>
+{% endblock %}

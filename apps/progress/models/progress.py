@@ -29,6 +29,10 @@ class StageProgress(TimeStampedModel):
     needs_attention = models.BooleanField(
         _("needs the teacher's attention"), default=False, help_text=_("Passed only because the attempts ran out")
     )
+    material_percent = models.PositiveSmallIntegerField(
+        _("material viewed, %"), default=0, help_text=_("Theory read / video watched before the checkpoint quiz")
+    )
+    material_done_at = models.DateTimeField(_("material done at"), null=True, blank=True)
     started_at = models.DateTimeField(_("started at"), null=True, blank=True)
     completed_at = models.DateTimeField(_("completed at"), null=True, blank=True)
     time_spent_s = models.PositiveIntegerField(_("time spent, s"), default=0)
@@ -135,6 +139,7 @@ class ProgressEvent(models.Model):
 
     class Action(models.TextChoices):
         STARTED = "started", _("Started")
+        MATERIAL_DONE = "material_done", _("Material read or watched")
         PASSED = "passed", _("Passed")
         FAILED = "failed", _("Not passed")
         AWAITING_CHECK = "awaiting_check", _("Sent for checking")

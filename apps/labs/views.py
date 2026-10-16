@@ -116,7 +116,7 @@ def run_experiment(request, lab_key, experiment_key):
             "journal": reverse("labs:api_journal", args=[attempt.pk]),
             "finish": reverse("labs:api_finish", args=[attempt.pk]),
             "analysis": reverse("labs:api_analysis", args=[attempt.pk]),
-            "topic": topic.get_absolute_url() if topic else reverse("courses:dashboard"),
+            "topic": topic.get_absolute_url() if topic else reverse("student:courses"),
             "next": reverse("labs:run", args=[lab.key, next_exp.key]) if next_exp else "",
             "restart": request.path,
         },

@@ -1,16 +1,15 @@
-{% extends "layouts/student.html" %}
+{% extends base_template|default:"layouts/student.html" %}
 {% load i18n static %}
 {% block title %}{{ quiz.title }} · ChemEduTech{% endblock %}
 {% block content %}
-{% if stage %}
+{% if back_url and base_template != "layouts/learn.html" %}
 <nav class="flex flex-wrap items-center gap-2 text-sm" aria-label="{% translate 'Breadcrumbs' %}">
-  <a class="link inline-flex items-center gap-1.5 font-semibold" href="{{ stage.topic.get_absolute_url }}">{% include "components/icons.html#arrow-left" %}{{ stage.topic.title }}</a>
-  <span class="text-line-strong">/</span><span class="text-ink-soft">{{ stage.title }}</span>
+  <a class="link inline-flex items-center gap-1.5 font-semibold" href="{{ back_url }}">{% include "components/icons.html#arrow-left" %}{{ back_label }}</a>
 </nav>
 {% endif %}
 
 <section class="card flex max-w-[840px] flex-col gap-5 p-[clamp(20px,4vw,32px)]" aria-labelledby="quiz-title">
-  <form method="post" action="{% url 'assessments:submit' attempt.pk %}" x-ref="form" class="flex flex-col gap-5"
+  <form method="post" action="{{ submit_url }}" x-ref="form" class="flex flex-col gap-5"
         x-data="quizPlayer({ total: {{ rows|length }}, deadline: '{{ deadline }}' })" @submit="submitting = true">
     {% csrf_token %}
     <div class="flex flex-wrap items-center justify-between gap-3" x-ref="top">

@@ -1,11 +1,10 @@
-{% extends "layouts/student.html" %}
+{% extends base_template|default:"layouts/student.html" %}
 {% load i18n %}
 {% block title %}{{ quiz.title }} · ChemEduTech{% endblock %}
 {% block content %}
-{% if stage %}
+{% if back_url and base_template != "layouts/learn.html" %}
 <nav class="flex flex-wrap items-center gap-2 text-sm" aria-label="{% translate 'Breadcrumbs' %}">
-  <a class="link inline-flex items-center gap-1.5 font-semibold" href="{{ stage.topic.get_absolute_url }}">{% include "components/icons.html#arrow-left" %}{{ stage.topic.title }}</a>
-  <span class="text-line-strong">/</span><span class="text-ink-soft">{{ stage.title }}</span>
+  <a class="link inline-flex items-center gap-1.5 font-semibold" href="{{ back_url }}">{% include "components/icons.html#arrow-left" %}{{ back_label }}</a>
 </nav>
 {% endif %}
 <header>
@@ -24,16 +23,16 @@
     <p class="num text-sm">
       {% blocktranslate with s=attempt.score|floatformat:"-2" m=attempt.max_score|floatformat:"-2" %}{{ s }} of {{ m }} points.{% endblocktranslate %}
       {% if attempts_left is not None %}{% blocktranslate with n=attempts_left %}Attempts left: {{ n }}.{% endblocktranslate %}{% endif %}
-      {% if not attempt.passed and stage %}{% translate "Read the material again and retake the test." %}{% endif %}
+      {% if not attempt.passed and can_retry %}{% translate "Read the material again and retake the test." %}{% endif %}
     </p>
   </div>
   <div class="flex flex-wrap gap-2">
     {% if can_retry %}
-      <form method="post" action="{% url 'assessments:retry' quiz.pk %}">{% csrf_token %}
+      <form method="post" action="{{ retry_url }}">{% csrf_token %}
         <button type="submit" class="btn {% if attempt.passed %}btn-secondary{% else %}btn-primary{% endif %}">{% translate "Retake the test" %}</button>
       </form>
     {% endif %}
-    {% if stage %}<a class="btn {% if attempt.passed %}btn-primary{% else %}btn-secondary{% endif %}" href="{{ stage.topic.get_absolute_url }}">{% translate "Back to the topic" %}</a>{% endif %}
+    {% if back_url %}<a class="btn {% if attempt.passed %}btn-primary{% else %}btn-secondary{% endif %}" href="{{ back_url }}">{{ back_button|default:back_label }}</a>{% endif %}
   </div>
 </section>
 

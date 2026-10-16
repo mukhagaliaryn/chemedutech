@@ -71,7 +71,7 @@ class LoginTests(TestCase):
 
     def test_login_by_email_redirects_student_to_cabinet(self):
         r = self.client.post(reverse("accounts:login"), {"username": "AIGERIM@example.kz", "password": "secret-pass-1"})
-        self.assertRedirects(r, reverse("courses:dashboard"), fetch_redirect_response=False)
+        self.assertRedirects(r, reverse("student:courses"), fetch_redirect_response=False)
 
     def test_login_redirects_by_role(self):
         r = self.client.post(reverse("accounts:login"), {"username": "teacher", "password": "secret-pass-1"})
@@ -113,7 +113,7 @@ class SignupTests(TestCase):
 
     def test_signup_from_list_creates_student_with_profile(self):
         r = self.client.post(reverse("accounts:signup"), signup_data(self.group, research_consent="on"))
-        self.assertRedirects(r, reverse("courses:dashboard"), fetch_redirect_response=False)
+        self.assertRedirects(r, reverse("student:courses"), fetch_redirect_response=False)
         user = User.objects.get(username="aigerim.s")
         self.assertEqual(user.role, User.Role.STUDENT)
         self.assertFalse(user.is_staff)
@@ -229,7 +229,7 @@ class LanguageTests(TestCase):
         self.assertEqual(user.language, "ru")
         # the saved language wins over a different cookie on the next request
         self.client.cookies["django_language"] = "kk"
-        r = self.client.get(reverse("courses:dashboard"))
+        r = self.client.get(reverse("student:courses"))
         self.assertEqual(r["Content-Language"], "ru")
 
 

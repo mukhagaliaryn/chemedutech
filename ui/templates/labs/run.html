@@ -13,7 +13,7 @@
   {# ---------- lab header ---------- #}
   <header class="mb-5 border-b border-line bg-surface">
   <div class="mx-auto flex max-w-[1400px] flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3 sm:px-[clamp(16px,2vw,32px)]">
-    <a href="{% if topic %}{{ topic.get_absolute_url }}{% else %}{% url 'courses:dashboard' %}{% endif %}"
+    <a href="{% if topic %}{{ topic.get_absolute_url }}{% else %}{% url 'student:courses' %}{% endif %}"
        class="flex items-center gap-2 text-ink" aria-label="{% translate 'Back to the topic' %}">
       {% include "partials/logo.html" %}
     </a>

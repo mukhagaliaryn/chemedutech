@@ -5,8 +5,8 @@ Student cabinet (/me/, /learn/). Nav items whose url name does not exist yet are
 components/nav_item.html, so the list below is the target menu from the «Студент» mockups.
 {% endcomment %}
 {% block nav %}
-  {% translate "Home" as l_home %}{% include "components/nav_item.html" with url_name="courses:dashboard" match="courses: student:dashboard" icon="home" label=l_home %}
-  {% translate "My courses" as l_courses %}{% include "components/nav_item.html" with url_name="student:courses" icon="book" label=l_courses %}
+  {% translate "Home" as l_home %}{% include "components/nav_item.html" with url_name="student:dashboard" icon="home" label=l_home %}
+  {% translate "My courses" as l_courses %}{% include "components/nav_item.html" with url_name="student:courses" match="student:courses student:course" icon="book" label=l_courses %}
   {% translate "Grades" as l_grades %}{% include "components/nav_item.html" with url_name="student:results" icon="chart" label=l_grades %}
   {% translate "Certificates" as l_certs %}{% include "components/nav_item.html" with url_name="student:certificates" icon="award" label=l_certs %}
   {% if user.is_teacher or user.is_admin_role %}

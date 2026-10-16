@@ -69,7 +69,7 @@ class Course(TimeStampedModel):
         return self.title
 
     def get_absolute_url(self):
-        return reverse("courses:dashboard")
+        return reverse("student:course", args=[self.slug])
 
     @property
     def is_published(self):

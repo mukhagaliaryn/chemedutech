@@ -72,4 +72,4 @@ def home_url_for(user):
         return _first_url("admin:index")
     if has_role(user, TEACHER):
         return _first_url("teacher:dashboard", "research:dashboard")
-    return _first_url("student:dashboard", "courses:dashboard")
+    return _first_url("student:dashboard", "student:courses")

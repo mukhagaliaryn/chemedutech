@@ -1,0 +1,26 @@
+{% extends "layouts/learn.html" %}
+{% load i18n static %}
+{% block title %}{{ stage.title }} · ChemEduTech{% endblock %}
+{% block content %}
+<header>
+  <p class="text-body-sm font-medium text-ink-soft">{{ stage.get_kind_display }}{% if not stage.is_required %} · {% translate "optional" %}{% endif %}</p>
+  <h1 class="text-h1">{{ stage.title }}</h1>
+</header>
+{% translate "Topic stages" as l_stages %}{% include "components/stage_stepper.html" with stages=stepper label=l_stages %}
+
+<div class="flex flex-wrap items-start gap-6" {% if not place.preview %}x-data="stagePing('{{ urls.ping }}')"{% endif %}>
+  <article class="card min-w-0 flex-[999_1_560px] p-[clamp(20px,4vw,48px)]">
+    {% with tpl="student/stages/"|add:stage.kind|add:".html" %}{% include tpl %}{% endwith %}
+  </article>
+
+  <aside class="flex min-w-0 flex-[1_1_300px] flex-col gap-4 lg:sticky lg:top-6">
+    {% include "student/partials/conditions.html" %}
+    {% if status == "passed" and next %}
+      <a class="btn btn-primary btn-lg w-full" href="{{ next.0 }}">{% translate "Go to the next stage" %}{% include "components/icons.html#arrow-right" %}</a>
+    {% endif %}
+  </aside>
+</div>
+
+{% if quiz %}{% include "student/partials/quiz_panel.html" %}{% endif %}
+{% endblock %}
+{% block scripts %}<script defer src="{% static 'js/stage.js' %}"></script>{% endblock %}

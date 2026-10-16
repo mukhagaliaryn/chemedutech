@@ -57,6 +57,8 @@ INSTALLED_APPS = [
     "apps.assessments",
     "apps.labs",
     "apps.progress",
+    # product layer: views and URLs only
+    "apps.student",
     "apps.research",
     # presentation: every template and static file lives here (django-tailwind theme app)
     "ui",

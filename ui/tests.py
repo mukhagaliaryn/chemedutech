@@ -69,7 +69,9 @@ class ComponentTests(TestCase):
 
     def test_nav_item_hidden_until_page_exists(self):
         self.assertEqual(self.render("nav_item", url_name="student:nowhere", icon="home", label="X").strip(), "")
-        self.assertIn('href="/courses/"', self.render("nav_item", url_name="courses:dashboard", icon="home", label="X"))
+        self.assertIn(
+            'href="/me/courses/"', self.render("nav_item", url_name="student:courses", icon="home", label="X")
+        )
 
     def test_table_and_states(self):
         html = self.render("table", headers=["A", "B"], rows=[["x", "1"]], numeric="1")
@@ -102,7 +104,7 @@ class PageTests(TestCase):
 
     def test_student_cabinet_pages(self):
         self.client.force_login(self.student)
-        response = self.client.get(reverse("courses:dashboard"))
+        response = self.client.get(reverse("student:courses"))
         self.assertDesignSystemPage(response)
         self.assertContains(response, 'id="cabinet-nav"')
         self.assertContains(response, 'aria-current="page"')

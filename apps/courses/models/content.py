@@ -1,5 +1,7 @@
 """Stage content, one model per stage kind (Stage.kind ↔ O2O). Practice work lives in apps.practice."""
 
+import re
+
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
@@ -65,7 +67,29 @@ class VideoContent(TimeStampedModel):
     def __str__(self):
         return str(self.stage)
 
+    @property
+    def youtube_id(self) -> str:
+        m = re.search(
+            r"(?:youtu\.be/|youtube(?:-nocookie)?\.com/(?:watch\?(?:.*&)?v=|embed/|shorts/|live/))([\w-]{11})", self.url
+        )
+        return m.group(1) if m else ""
+
+    @property
+    def vimeo_id(self) -> str:
+        m = re.search(r"vimeo\.com/(?:video/)?(\d+)", self.url)
+        return m.group(1) if m else ""
+
+    @property
+    def has_source(self) -> bool:
+        if self.provider == self.Provider.FILE:
+            return bool(self.file)
+        return bool(self.youtube_id if self.provider == self.Provider.YOUTUBE else self.vimeo_id)
+
     def clean(self):
+        if self.provider == self.Provider.YOUTUBE and self.url and not self.youtube_id:
+            raise ValidationError({"url": _("This is not a YouTube video link.")})
+        if self.provider == self.Provider.VIMEO and self.url and not self.vimeo_id:
+            raise ValidationError({"url": _("This is not a Vimeo video link.")})
         if self.provider == self.Provider.FILE and not self.file:
             raise ValidationError({"file": _("Upload the video file.")})
         if self.provider != self.Provider.FILE and not self.url:
