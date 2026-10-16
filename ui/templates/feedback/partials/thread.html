@@ -1,0 +1,31 @@
+{% load i18n %}{% comment %}
+Comment thread on one work. thread — feedback.selectors.thread(target); action — POST url;
+target — {"kind", "id"}; next — where to come back (teacher pages); title — optional heading.
+One level of replies; the newest comment form is at the bottom.
+{% endcomment %}
+<section id="comments" class="flex flex-col gap-3" aria-labelledby="comments-{{ target.kind }}-{{ target.id }}">
+  <h3 id="comments-{{ target.kind }}-{{ target.id }}" class="text-h3">{{ title|default:_("Comments") }}</h3>
+  {% for c in thread %}
+    <article class="flex flex-col gap-2 rounded-md border border-line bg-surface p-4" x-data="{ reply: false }">
+      {% include "feedback/partials/comment.html" %}
+      {% for r in c.replies.all %}<div class="ml-6 border-l-2 border-line pl-4">{% include "feedback/partials/comment.html" with c=r %}</div>{% endfor %}
+      <button type="button" class="self-start text-sm font-semibold text-primary-600" x-show="!reply" @click="reply = true">{% translate "Reply" %}</button>
+      <form method="post" action="{{ action }}" x-show="reply" x-cloak class="ml-6 flex flex-col gap-2">
+        {% csrf_token %}<input type="hidden" name="kind" value="{{ target.kind }}"><input type="hidden" name="id" value="{{ target.id }}">
+        <input type="hidden" name="parent" value="{{ c.pk }}">{% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+        <label class="sr-only" for="reply-{{ c.pk }}">{% translate "Reply" %}</label>
+        <textarea id="reply-{{ c.pk }}" name="body" rows="2" class="input min-h-16" required></textarea>
+        <span class="flex gap-2"><button type="submit" class="btn btn-primary btn-sm">{% translate "Send" %}</button><button type="button" class="btn btn-ghost btn-sm" @click="reply = false">{% translate "Cancel" %}</button></span>
+      </form>
+    </article>
+  {% empty %}
+    <p class="text-sm text-ink-soft">{% translate "No comments yet." %}</p>
+  {% endfor %}
+  <form method="post" action="{{ action }}" class="flex flex-col gap-2">
+    {% csrf_token %}<input type="hidden" name="kind" value="{{ target.kind }}"><input type="hidden" name="id" value="{{ target.id }}">
+    {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+    <label class="label" for="comment-{{ target.kind }}-{{ target.id }}">{% translate "New comment" %}</label>
+    <textarea id="comment-{{ target.kind }}-{{ target.id }}" name="body" rows="3" class="input min-h-20" required></textarea>
+    <button type="submit" class="btn btn-secondary self-start">{% translate "Send" %}</button>
+  </form>
+</section>

@@ -34,7 +34,7 @@
 
 <div class="grid items-start gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(420px,100%),1fr))]">
   <section aria-labelledby="queue" class="card flex flex-col gap-1">
-    <h2 id="queue" class="mb-2 text-h3">{% translate "Check queue" %}</h2>
+    <div class="mb-2 flex items-center justify-between gap-3"><h2 id="queue" class="text-h3">{% translate "Check queue" %}</h2><a class="text-sm font-semibold" href="{% url 'teacher:grading' %}">{% translate "All" %}</a></div>
     {% for s in queue %}
       <div class="flex items-center gap-3 border-surface-sunken py-2.5 not-last:border-b">
         {% include "components/avatar.html" with person=s.enrollment.student size="sm" %}
@@ -42,7 +42,7 @@
           <span class="truncate text-sm font-medium">{{ s.enrollment.student.full_name }}{% if s.enrollment.group %} · {{ s.enrollment.group }}{% endif %}</span>
           <span class="truncate text-caption text-ink-soft">{% blocktranslate with t=s.stage.topic.number %}Topic {{ t }}{% endblocktranslate %} · {{ s.stage.title }} · {{ s.submitted_at|ago }}</span>
         </span>
-        <a class="text-sm font-semibold" href="{% url 'teacher:student' s.enrollment.student_id %}?course={{ s.stage.topic.module.course.slug }}#works">{% translate "Open" %}</a>
+        <a class="text-sm font-semibold" href="{% url 'teacher:grading_detail' s.pk %}">{% translate "Grade" %}</a>
       </div>
     {% empty %}
       <p class="text-sm text-ink-soft">{% translate "Nothing to check. Works the AI could not grade with confidence will appear here." %}</p>

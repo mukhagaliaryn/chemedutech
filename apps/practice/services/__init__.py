@@ -10,6 +10,7 @@ from .submissions import (
     return_submission,
     review_answer,
     submit,
+    teacher_grade,
 )
 
 __all__ = [
@@ -24,4 +25,5 @@ __all__ = [
     "return_submission",
     "review_answer",
     "submit",
+    "teacher_grade",
 ]

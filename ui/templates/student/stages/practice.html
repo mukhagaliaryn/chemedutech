@@ -48,6 +48,11 @@
       </ol>
     {% endif %}
   </section>
+  {% if comment_target and not place.preview %}
+    {% url 'student:comment' place.course.slug place.topic.number stage.pk as comment_url %}
+    {% translate "Comments with the teacher" as l_comments %}
+    {% include "feedback/partials/thread.html" with action=comment_url target=comment_target title=l_comments %}
+  {% endif %}
   {% endif %}
 
   {% if can_submit %}

@@ -1,0 +1,12 @@
+{% load i18n %}{# One comment: c (Comment). #}
+<div class="flex gap-3">
+  {% include "components/avatar.html" with person=c.author size="sm" %}
+  <div class="min-w-0 flex-1">
+    <p class="text-body-sm text-ink-soft">
+      <span class="font-semibold text-ink">{{ c.author.full_name }}</span>
+      {% if c.author.is_teacher or c.author.is_admin_role %}· {% translate "teacher" %}{% endif %}
+      · <time datetime="{{ c.created_at|date:'c' }}">{{ c.created_at|ago }}</time>
+    </p>
+    <p class="mt-1 whitespace-pre-line text-sm">{{ c.body }}</p>
+  </div>
+</div>

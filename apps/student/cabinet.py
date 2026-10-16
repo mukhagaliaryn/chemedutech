@@ -213,6 +213,20 @@ def recent_results(enrollment, limit=RECENT) -> list[dict]:
     return items[:limit]
 
 
+def teacher_comments(enrollment, limit=3) -> list[dict]:
+    """Comments of teachers on the student's works and the comments written with a grade, newest first."""
+    items = [
+        {"author": c.author, "stage": c.stage, "body": c.body, "at": c.created_at}
+        for c in notification_selectors.latest_for_student(enrollment, limit)
+    ]
+    items += [
+        {"author": s.graded_by, "stage": s.stage, "body": s.teacher_comment, "at": s.updated_at}
+        for s in practice_selectors.teacher_comments(enrollment, limit)
+    ]
+    items.sort(key=lambda i: i["at"], reverse=True)
+    return items[:limit]
+
+
 def dashboard(user, enrollment) -> dict:
     place = place_of(enrollment)
     course_map = learning.course_map(place)
@@ -234,7 +248,7 @@ def dashboard(user, enrollment) -> dict:
         "labs_total": labs_total,
         "time_spent": duration(progress_selectors.time_spent_s(enrollment)),
         "recent": recent_results(enrollment),
-        "comments": practice_selectors.teacher_comments(enrollment),
+        "comments": teacher_comments(enrollment),
         "notifications": notification_selectors.recent(user, 3, unread_only=True),
     }
 

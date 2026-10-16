@@ -110,9 +110,7 @@ def grade_open_answers(submission: PracticeSubmission, client=None) -> None:
 
 def _notify(submission: PracticeSubmission, kind) -> None:
     stage = submission.stage
-    transaction.on_commit(
-        lambda: feedback.notify(submission.enrollment.student, kind, stage.title, stage_url(stage))
-    )
+    transaction.on_commit(lambda: feedback.notify(submission.enrollment.student, kind, stage.title, stage_url(stage)))
 
 
 def _needs_review(submission) -> bool:
@@ -217,3 +215,24 @@ def return_submission(submission: PracticeSubmission, teacher, comment: str = ""
     progress.return_stage(submission.enrollment, submission.stage, by=teacher)
     _notify(submission, feedback.Kind.RETURNED)
     return submission
+
+
+@transaction.atomic
+def teacher_grade(submission: PracticeSubmission, teacher, decisions: dict, comment: str = "") -> PracticeSubmission:
+    """The grading page: per open answer the teacher's criterion points (or plain points), then confirm.
+
+    decisions: {answer_id: {"points": Decimal, "criteria": [{criterion_id, points}], "reason": str}}.
+    Only answers whose points change, or that were never reviewed, get a TeacherReview — so «confirmed as is»
+    and «changed» stay apart for the AI ↔ teacher agreement (§5.6).
+    """
+    answers = {a.pk: a for a in submission.answers.select_related("item").filter(item__kind=PracticeItem.Kind.OPEN)}
+    for answer_id, decision in decisions.items():
+        answer = answers.get(int(answer_id))
+        if answer is None:
+            continue
+        points = decision["points"]
+        reviewed = answer.teacher_reviews.exists()
+        if not reviewed or q2(points) != q2(answer.points):
+            reason = decision.get("reason", "") or ("confirmed" if q2(points) == q2(answer.points) else "")
+            review_answer(answer, teacher, points, reason=reason, criteria_scores=decision.get("criteria") or [])
+    return confirm_submission(submission, teacher, comment=comment)

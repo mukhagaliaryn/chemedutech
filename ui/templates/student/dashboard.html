@@ -122,11 +122,11 @@
     <h2 id="fb-title" class="text-h3">{% translate "Teacher's comments" %}</h2>
     {% for c in comments %}
       <div class="flex gap-3">
-        {% if c.graded_by %}{% include "components/avatar.html" with person=c.graded_by %}{% endif %}
+        {% if c.author %}{% include "components/avatar.html" with person=c.author %}{% endif %}
         <div class="flex min-w-0 flex-col gap-1">
-          <span class="text-body-sm text-ink-soft">{% if c.graded_by %}<span class="font-semibold text-ink">{{ c.graded_by.get_full_name|default:c.graded_by }}</span> · {% endif %}{% blocktranslate with s=c.stage.title %}about «{{ s }}»{% endblocktranslate %}</span>
-          <p class="text-sm">{{ c.teacher_comment|linebreaksbr }}</p>
-          <a class="text-sm font-semibold" href="{% url 'student:stage' c.stage.topic.module.course.slug c.stage.topic.number c.stage.pk %}">{% translate "Open the work" %}</a>
+          <span class="text-body-sm text-ink-soft">{% if c.author %}<span class="font-semibold text-ink">{{ c.author.get_full_name|default:c.author }}</span> · {% endif %}{% if c.stage %}{% blocktranslate with s=c.stage.title %}about «{{ s }}»{% endblocktranslate %}{% endif %}</span>
+          <p class="whitespace-pre-line text-sm">{{ c.body|truncatechars:400 }}</p>
+          {% if c.stage %}<a class="text-sm font-semibold" href="{% url 'student:stage' c.stage.topic.module.course.slug c.stage.topic.number c.stage.pk %}#comments">{% translate "Open the work" %}</a>{% endif %}
         </div>
       </div>
     {% empty %}

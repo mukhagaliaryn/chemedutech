@@ -29,6 +29,8 @@ from apps.core.permissions import ADMIN, STUDENT, TEACHER, has_role, home_url_fo
 from apps.courses import selectors as course_selectors
 from apps.courses import services as course_services
 from apps.courses.models import Course, Stage
+from apps.feedback import selectors as feedback_selectors
+from apps.feedback import services as feedback
 from apps.labs import services as lab_services
 from apps.labs.engine import get_lab
 from apps.labs.models import LabAttempt
@@ -285,6 +287,8 @@ def stage(request, course_slug, topic_number, stage_pk):
         context.update(_quiz_panel(request, place, stage, quiz, sp))
     if stage.kind == Stage.Kind.PRACTICE and stage.content:
         context.update(_practice_context(place, stage))
+        if context["latest"] and not place.preview:
+            feedback.mark_thread_read(request.user, context["latest"])
     if stage.kind == Stage.Kind.LAB and stage.content:
         rows = progress.lab_experiments(place.enrollment, stage)
         if not place.preview and rows and all(r["done"] for r in rows) and context["status"] != S.PASSED:
@@ -296,7 +300,62 @@ def stage(request, course_slug, topic_number, stage_pk):
                 "student:lab_run", args=[place.course.slug, place.topic.number, stage.pk, row["spec"].key]
             )
         context["experiments"] = rows
+        if not place.preview:
+            context["lab_threads"] = _lab_threads(request, place, stage)
     return render(request, "student/stage.html", context)
+
+
+def _lab_threads(request, place, stage) -> list[dict]:
+    """Teacher comments on the student's attempts in this lab stage (read on display)."""
+    attempts = list(LabAttempt.objects.filter(enrollment=place.enrollment, stage=stage).order_by("-started_at"))
+    counts = feedback_selectors.comment_counts(attempts)
+    lab = get_lab(stage.content.lab_key)
+    threads = []
+    for attempt in attempts:
+        if not counts.get(attempt.pk):
+            continue
+        spec = lab.experiment(attempt.experiment_key) if lab else None
+        threads.append(
+            {
+                "attempt": attempt,
+                "title": f"{spec.number}. {spec.title}" if spec else attempt.experiment_key,
+                "thread": feedback_selectors.thread(attempt),
+                "target": {"kind": "lab", "id": attempt.pk},
+            }
+        )
+        feedback.mark_thread_read(request.user, attempt)
+    return threads
+
+
+@require_POST
+@login_required
+def comment(request, course_slug, topic_number, stage_pk):
+    """A student's comment or reply on their own work in this stage."""
+    place, _stages, denied = _open_stage(request, course_slug, topic_number, stage_pk)
+    if denied or place.preview:
+        raise Http404
+    kind, pk = request.POST.get("kind"), request.POST.get("id")
+    if kind == "practice":
+        target = get_object_or_404(PracticeSubmission, pk=pk, enrollment=place.enrollment, stage=place.stage)
+        teacher_url = reverse("teacher:grading_detail", args=[target.pk])
+    elif kind == "lab":
+        target = get_object_or_404(LabAttempt, pk=pk, enrollment=place.enrollment, stage=place.stage)
+        teacher_url = reverse("teacher:lab_log", args=[request.user.pk, target.pk])
+    else:
+        raise Http404
+    stage_page = learning.stage_url(place.stage)
+    try:
+        feedback.add_comment(
+            request.user,
+            target,
+            request.POST.get("body", ""),
+            parent=feedback_selectors.thread_comment(target, request.POST.get("parent")),
+            student_url=stage_page + "#comments",
+            teacher_url=teacher_url,
+        )
+    except feedback.CommentError as exc:
+        messages.error(request, str(exc))
+    return redirect(stage_page + "#comments")
 
 
 def _practice_context(place, stage):
@@ -318,6 +377,8 @@ def _practice_context(place, stage):
         "grading": grading,
         "can_submit": not place.preview and not grading and left > 0,
         "counted": practice.counted_submission(place.enrollment, task) if place.enrollment else None,
+        "thread": feedback_selectors.thread(latest) if latest else [],
+        "comment_target": {"kind": "practice", "id": latest.pk} if latest else None,
         "practice_urls": {
             "submit": learning.stage_url(stage, "student:practice_submit"),
             "status": reverse(

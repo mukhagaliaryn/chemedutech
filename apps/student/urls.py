@@ -19,6 +19,7 @@ urlpatterns = [
     path(STAGE + "material-done/", views.material_done, name="material_done"),
     path(STAGE + "watch/", views.watch, name="watch"),
     path(STAGE + "ping/", views.ping, name="ping"),
+    path(STAGE + "comment/", views.comment, name="comment"),
     path(STAGE + "lab/<slug:experiment_key>/", views.lab_run, name="lab_run"),
     path(STAGE + "lab/<slug:experiment_key>/analysis/<int:attempt_id>/", views.lab_analysis, name="lab_analysis"),
     path(STAGE + "practice/", views.practice_submit, name="practice_submit"),

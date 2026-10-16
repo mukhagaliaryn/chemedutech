@@ -108,10 +108,10 @@ class DashboardTests(TeacherBase):
         from apps.practice.models import PracticeSubmission
 
         practice = next(s for s in self.stages if s.kind == "practice")
-        PracticeSubmission.objects.create(enrollment=self.e1, stage=practice, attempt_no=1, status="needs_review")
+        sub = PracticeSubmission.objects.create(enrollment=self.e1, stage=practice, attempt_no=1, status="needs_review")
         r = self.client.get(reverse("teacher:dashboard"))
         self.assertEqual(r.context["queue_count"], 1)
-        self.assertContains(r, reverse("teacher:student", args=[self.s1.pk]))
+        self.assertContains(r, reverse("teacher:grading_detail", args=[sub.pk]))
 
 
 class GroupTests(TeacherBase):

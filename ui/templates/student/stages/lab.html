@@ -29,4 +29,11 @@
     {% endfor %}
   </ol>
   <p class="text-body-sm text-ink-soft">{% translate "The stage score is the average of your best attempt in every experiment: actions in the right order, the journal and the analysis." %}</p>
+  {% if lab_threads %}
+    {% url 'student:comment' place.course.slug place.topic.number stage.pk as comment_url %}
+    {% for t in lab_threads %}
+      {% blocktranslate with e=t.title asvar l_comments %}Teacher's comments · {{ e }}{% endblocktranslate %}
+      {% include "feedback/partials/thread.html" with action=comment_url target=t.target thread=t.thread title=l_comments %}
+    {% endfor %}
+  {% endif %}
 </div>

@@ -3,6 +3,10 @@ line-length = 120
 target-version = "py312"
 extend-exclude = ["env", "node_modules", "staticfiles", "**/migrations/*.py"]
 
+[tool.ruff.format]
+# The lab simulator is kept as written (CLAUDE.md): `ruff format` must not touch it.
+exclude = ["apps/labs/engine/*", "apps/labs/experiments/**"]
+
 [tool.ruff.lint]
 select = ["E", "W", "F", "I", "B", "UP", "DJ"]
 ignore = ["E501"]  # long strings in lab specs; formatting is handled by `ruff format`

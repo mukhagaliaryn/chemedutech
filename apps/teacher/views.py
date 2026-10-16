@@ -20,6 +20,8 @@ from apps.core.permissions import ADMIN, TEACHER, role_required
 from apps.courses import selectors as course_selectors
 from apps.courses import services as course_services
 from apps.courses.models import CourseGroup, Stage
+from apps.feedback import selectors as feedback_selectors
+from apps.feedback import services as feedback
 from apps.labs import selectors as lab_selectors
 from apps.labs.models import LabAttempt
 from apps.progress import services as progress
@@ -336,8 +338,15 @@ def lab_log(request, pk, attempt_pk):
     enrollments = course_selectors.teacher_enrollments(request.user).filter(student=student)
     attempt = get_object_or_404(LabAttempt.objects.select_related("stage"), pk=attempt_pk, enrollment__in=enrollments)
     attempt.title = overview.lab_title(attempt)
+    feedback.mark_thread_read(request.user, attempt)
     return render(
         request,
         "teacher/lab_log.html",
-        {"student": student, "attempt": attempt, "events": lab_selectors.events_of(attempt)},
+        {
+            "student": student,
+            "attempt": attempt,
+            "events": lab_selectors.events_of(attempt),
+            "thread": feedback_selectors.thread(attempt),
+            "comment_target": {"kind": "lab", "id": attempt.pk},
+        },
     )

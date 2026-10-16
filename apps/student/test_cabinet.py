@@ -156,7 +156,10 @@ class ProfileTests(CabinetBase):
         r = self.client.post(reverse("student:profile"), data)
         self.assertRedirects(r, reverse("student:profile"), fetch_redirect_response=False)
         self.student.refresh_from_db()
-        self.assertEqual((self.student.last_name, self.student.email, self.student.language), ("Сапарова", "aigerim@example.kz", "ru"))
+        self.assertEqual(
+            (self.student.last_name, self.student.email, self.student.language),
+            ("Сапарова", "aigerim@example.kz", "ru"),
+        )
         self.assertEqual(r.cookies["django_language"].value, "ru")
 
     def test_email_must_be_unique(self):
@@ -170,7 +173,12 @@ class ProfileTests(CabinetBase):
     def test_password_change_keeps_the_session(self):
         r = self.client.post(
             reverse("student:profile"),
-            {"form": "password", "old_password": "pw-12345", "new_password1": "Zertxana-2026!", "new_password2": "Zertxana-2026!"},
+            {
+                "form": "password",
+                "old_password": "pw-12345",
+                "new_password1": "Zertxana-2026!",
+                "new_password2": "Zertxana-2026!",
+            },
         )
         self.assertRedirects(r, reverse("student:profile"), fetch_redirect_response=False)
         self.student.refresh_from_db()
