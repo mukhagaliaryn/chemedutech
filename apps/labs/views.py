@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
-from apps.courses.models import Topic
+from apps.courses.selectors import topic_for_lab
 
 from . import services
 from .engine import get_lab
@@ -74,7 +74,9 @@ def _ui_strings():
         "back_to_topic": _("Back to the topic"),
         "next_experiment": _("Next experiment"),
         "restart": _("Start again"),
-        "restart_confirm": _("Start the experiment again? The current progress will be saved as an unfinished attempt."),
+        "restart_confirm": _(
+            "Start the experiment again? The current progress will be saved as an unfinished attempt."
+        ),
         "safety": _("Safety"),
         "observation": _("Observation"),
         "error": _("Mistake"),
@@ -97,7 +99,7 @@ def _ui_strings():
 @login_required
 def run_experiment(request, lab_key, experiment_key):
     lab, experiment = _get_spec(lab_key, experiment_key)
-    topic = Topic.objects.filter(lab_key=lab_key).select_related("module__course").first()
+    topic = topic_for_lab(lab.key)
     attempt = services.start_attempt(request.user, lab.key, experiment)
 
     experiments = list(lab.experiments)

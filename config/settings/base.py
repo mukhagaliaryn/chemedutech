@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     # third-party
     "tailwind",
     "django_htmx",
+    "django_ckeditor_5",
     # project apps (layered: core → accounts/courses → labs → research)
     "apps.core",
     "apps.accounts",
@@ -148,6 +149,58 @@ MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# --- Rich text: django-ckeditor-5 (ARCHITECTURE §9.2) ----------------------
+# Uploads go through apps.core.uploads.ckeditor_upload (teachers and admins); the package's own URL
+# is not included. Output is sanitised with apps.core.html.clean_html (|sanitize filter).
+CK_EDITOR_5_UPLOAD_FILE_VIEW_NAME = "ckeditor_upload"
+CKEDITOR_5_FILE_UPLOAD_PERMISSION = "any"  # checked by our view
+CKEDITOR_5_FILE_STORAGE = "apps.core.uploads.CKEditorStorage"
+CKEDITOR_5_UPLOAD_FILE_TYPES = ["jpeg", "png", "gif", "webp"]
+CKEDITOR_5_MAX_FILE_SIZE = 5  # MB
+_CK_SPECIAL = ["specialCharacters"]
+CKEDITOR_5_CONFIGS = {
+    "default": {  # theory, descriptions
+        "toolbar": {
+            "items": [
+                "heading",
+                "|",
+                "bold",
+                "italic",
+                "link",
+                "subscript",
+                "superscript",
+                *_CK_SPECIAL,
+                "|",
+                "bulletedList",
+                "numberedList",
+                "blockQuote",
+                "|",
+                "imageUpload",
+                "mediaEmbed",
+                "insertTable",
+                "|",
+                "undo",
+                "redo",
+                "sourceEditing",
+            ],  # fmt: skip
+            "shouldNotGroupWhenFull": True,
+        },
+        "heading": {
+            "options": [
+                {"model": "paragraph", "title": "Paragraph", "class": "ck-heading_paragraph"},
+                {"model": "heading2", "view": "h2", "title": "Heading 2", "class": "ck-heading_heading2"},
+                {"model": "heading3", "view": "h3", "title": "Heading 3", "class": "ck-heading_heading3"},
+            ]
+        },
+        "image": {"toolbar": ["imageTextAlternative", "|", "imageStyle:alignLeft", "imageStyle:alignCenter"]},
+        "table": {"contentToolbar": ["tableColumn", "tableRow", "mergeTableCells"]},
+        "mediaEmbed": {"previewsInData": False},
+    },
+    "compact": {  # question and answer text: formulas need sub/sup
+        "toolbar": {"items": ["bold", "italic", "subscript", "superscript", *_CK_SPECIAL, "|", "undo", "redo"]},
+    },
+}
 
 # --- Admin (django-unfold); full navigation/dashboard in STEP-14 ----------
 UNFOLD = {

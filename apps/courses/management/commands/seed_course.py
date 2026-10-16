@@ -1,12 +1,15 @@
-"""Create the course skeleton: 2 modules, 15 topics, topic 1 with its lab.
+"""Create the course skeleton: 2 modules, 15 topics; topic 1 with its stages.
 
 Course/module/topic texts are content (stored in the DB, in Kazakh) and are
-placeholders until the author provides the final wording.
+placeholders until the author provides the final wording. Checkpoint quizzes and the
+topic test questions are added in STEP-05, practice tasks in STEP-07a.
 """
+
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
-from apps.courses.models import Course, Module, Topic
+from apps.courses.models import Course, Module, Stage, Topic
+from apps.courses.services import ensure_stage_content
 
 THEORY_T1 = """
 <h2>Сутегі</h2>
@@ -36,6 +39,17 @@ THEORY_T1 = """
 """
 
 
+# Topic 1: a typical topic — the stage list is data, any length and mix of kinds is allowed.
+T1_STAGES = [
+    (Stage.Kind.THEORY, "Теория. Сутегі мен оттегінің алынуы және қасиеттері", {"body": THEORY_T1.strip()}),
+    (Stage.Kind.VIDEO, "Видеосабақ. Сутегі мен оттегіні зертханада алу", {}),
+    (Stage.Kind.LAB, "Зертханалық жұмыс. Сутегі және оттегі", {"lab_key": "t01"}),
+    (Stage.Kind.PRACTICE, "Практикалық жұмыс 1. Сутегінің көлемін есептеу", {}),
+    (Stage.Kind.PRACTICE, "Практикалық жұмыс 2. Оттегінің массасын есептеу", {}),
+    (Stage.Kind.TEST, "Тақырып тесті", {}),
+]
+
+
 class Command(BaseCommand):
     help = "Create the ChemEduTech course skeleton (idempotent)."
 
@@ -45,23 +59,37 @@ class Command(BaseCommand):
             slug="chemistry",
             defaults={
                 "title": "Химия: виртуалды зертханалық практикум",
-                "description": "Болашақ химия мұғалімдеріне арналған онлайн курс: теория және виртуалды зертханалық жұмыстар.",
+                "short_description": "Болашақ химия мұғалімдеріне арналған онлайн курс: теория және виртуалды зертханалық жұмыстар.",
+                "status": Course.Status.PUBLISHED,
+                "enrollment_mode": Course.EnrollmentMode.OPEN,
             },
         )
-        m1, _ = Module.objects.update_or_create(course=course, number=1, defaults={"title": "1-модуль"})
-        m2, _ = Module.objects.update_or_create(course=course, number=2, defaults={"title": "2-модуль"})
+        m1, _ = Module.objects.update_or_create(course=course, order=1, defaults={"title": "1-модуль"})
+        m2, _ = Module.objects.update_or_create(course=course, order=2, defaults={"title": "2-модуль"})
 
         for n in range(1, 16):
             module = m1 if n <= 8 else m2
-            defaults = {"module": module, "title": f"{n}-тақырып", "is_published": False}
+            defaults = {
+                "module": module,
+                "order": n if n <= 8 else n - 8,
+                "title": f"{n}-тақырып",
+                "is_published": False,
+            }
             if n == 1:
                 defaults.update(
                     title="Сутегі және оттегі: алынуы және қасиеттері",
                     summary="Сутегі мен оттегіні зертханада алу, жинау, судың электролизі және катализатордың әсері.",
-                    theory=THEORY_T1.strip(),
-                    lab_key="t01",
+                    estimated_minutes=180,
                     is_published=True,
                 )
-            Topic.objects.update_or_create(module__course=course, number=n, defaults=defaults)
+            topic, _ = Topic.objects.update_or_create(module__course=course, number=n, defaults=defaults)
+            if n == 1:
+                for order, (kind, title, content) in enumerate(T1_STAGES, start=1):
+                    stage, _ = Stage.objects.update_or_create(
+                        topic=topic, order=order, defaults={"kind": kind, "title": title}
+                    )
+                    ensure_stage_content(stage, **content)
 
-        self.stdout.write(self.style.SUCCESS("Course skeleton is ready: 2 modules, 15 topics (topic 1 published)."))
+        self.stdout.write(
+            self.style.SUCCESS("Course skeleton is ready: 2 modules, 15 topics (topic 1 published, 6 stages).")
+        )

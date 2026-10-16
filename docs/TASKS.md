@@ -47,13 +47,13 @@
 - [x] Тесттер: email/username логин, тіркелу тек student жасайды, teacher-ді өздігінен тіркеу мүмкін емес, каскадты select.
 
 ## STEP-04 · courses: курс құрылымы және контент
-- [ ] Course (+ `stage_kind_weights`), CourseTeacher, CourseGroup, Enrollment, Module, Topic, Stage + TheoryContent, VideoContent, LabContent, TestContent (ARCHITECTURE §3.3).
+- [x] Course (+ `stage_kind_weights`), CourseTeacher, CourseGroup, Enrollment, Module, Topic, Stage + TheoryContent, VideoContent, LabContent, TestContent (ARCHITECTURE §3.3).
       Практика контенті (PracticeTask/Item) — STEP-07a-да.
-- [ ] **Икемділік:** тақырыпта кез келген түрдің кез келген саны (бірнеше практика, 2 теория т.б.) — кодта «жалғыз теория» деген болжам болмасын (§3.3 Икемділік ережесі).
-- [ ] `django-ckeditor-5` баптау (`default`, `compact` конфигтері, sub/sup), жүктеу рұқсаты мұғалімге; `nh3` санитизация фильтрі.
-- [ ] Unfold админ: Course → Module (inline) → Topic → Stage (inline, сұрыптау), контент модельдері.
-- [ ] Жазылу сервисі: `enroll(student, course, source)`; CourseGroup жасалғанда топ студенттері жазылады.
-- [ ] `seed_course` командасын жаңа құрылымға көшіру: 1-тақырып → кезеңдер: Теория (+бекіту тесті), Видео (+бекіту тесті), Зертхана (t01),
+- [x] **Икемділік:** тақырыпта кез келген түрдің кез келген саны (бірнеше практика, 2 теория т.б.) — кодта «жалғыз теория» деген болжам болмасын (§3.3 Икемділік ережесі).
+- [x] `django-ckeditor-5` баптау (`default`, `compact` конфигтері, sub/sup), жүктеу рұқсаты мұғалімге; `nh3` санитизация фильтрі.
+- [x] Unfold админ: Course → Module (inline) → Topic → Stage (inline, сұрыптау), контент модельдері.
+- [x] Жазылу сервисі: `enroll(student, course, source)`; CourseGroup жасалғанда топ студенттері жазылады.
+- [x] `seed_course` командасын жаңа құрылымға көшіру: 1-тақырып → кезеңдер: Теория (+бекіту тесті), Видео (+бекіту тесті), Зертхана (t01),
       Практикалық жұмыс 1, Практикалық жұмыс 2, Тақырып тесті (практикалардың мазмұны STEP-07a-да толтырылады).
 
 ## STEP-05 · assessments: тесттер

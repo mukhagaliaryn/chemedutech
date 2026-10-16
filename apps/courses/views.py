@@ -1,34 +1,63 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Prefetch
 from django.http import Http404
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_POST
 
-from apps.labs.engine import get_lab
+from apps.core.permissions import STUDENT, has_role, role_required
 from apps.labs.selectors import best_attempts_by_experiment
 
-from .models import Course, Topic
+from . import selectors, services
+from .models import Course, Stage
 
 
 @login_required
 def dashboard(request):
-    courses = Course.objects.filter(is_published=True).prefetch_related(
-        "modules", Prefetch("modules__topics", queryset=Topic.objects.order_by("number"))
+    user = request.user
+    services.sync_student_enrollments(user)
+    courses = selectors.course_tree(selectors.courses_for(user))
+    show_open = has_role(user, STUDENT) and not courses.exists()
+    return render(
+        request,
+        "courses/dashboard.html",
+        {"courses": courses, "open_courses": selectors.open_courses() if show_open else []},
     )
-    return render(request, "courses/dashboard.html", {"courses": courses})
+
+
+@require_POST
+@role_required(STUDENT)
+def enroll(request, course_slug):
+    course = get_object_or_404(Course, slug=course_slug)
+    try:
+        services.self_enroll(request.user, course)
+    except services.EnrollmentError as exc:
+        messages.error(request, str(exc))
+    return redirect("courses:dashboard")
 
 
 @login_required
 def topic_detail(request, course_slug, number):
-    topic = get_object_or_404(
-        Topic.objects.select_related("module__course"), module__course__slug=course_slug, number=number
-    )
-    if not topic.is_published and not (request.user.is_teacher or request.user.is_admin_role):
+    topic = selectors.topic_by_number(request.user, course_slug, number)
+    if topic is None:
         raise Http404
-    lab = get_lab(topic.lab_key) if topic.lab_key else None
-    done = best_attempts_by_experiment(request.user, lab.key) if lab else {}
-    experiments = [{"spec": e, "attempt": done.get(e.key)} for e in lab.experiments] if lab else []
+    stages = list(selectors.stages_of(topic))
+    labs = []
+    for stage in stages:
+        if stage.kind == Stage.Kind.LAB and stage.content:
+            done = best_attempts_by_experiment(request.user, stage.content.lab_key)
+            specs = stage.content.experiment_specs()
+            labs.append({"stage": stage, "experiments": [{"spec": e, "attempt": done.get(e.key)} for e in specs]})
     return render(
         request,
         "courses/topic.html",
-        {"topic": topic, "course": topic.module.course, "lab": lab, "experiments": experiments},
+        {
+            "topic": topic,
+            "course": topic.module.course,
+            # progress statuses arrive with STEP-06; until then every stage is shown as available
+            "stepper": [
+                {"title": s.title, "kind": s.kind, "status": "available", "meta": s.get_kind_display()} for s in stages
+            ],
+            "theory_stages": [s for s in stages if s.kind == Stage.Kind.THEORY and s.content],
+            "labs": labs,
+        },
     )

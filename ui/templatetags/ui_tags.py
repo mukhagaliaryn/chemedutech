@@ -4,6 +4,8 @@ from django import template
 from django.urls import NoReverseMatch, reverse
 from django.utils.safestring import mark_safe
 
+from apps.core.html import clean_html
+
 register = template.Library()
 
 # Design-system status mapping, shared by badges, steppers and tables.
@@ -98,3 +100,9 @@ def url_or_empty(name, *args):
 def get_field(form, name):
     """{{ form|get_field:"email" }} — a BoundField by name (loops over a fixed field list)."""
     return form[name]
+
+
+@register.filter
+def sanitize(html):
+    """{{ content.body|sanitize }} — CKEditor HTML made safe for students (nh3 allow-list)."""
+    return mark_safe(clean_html(str(html or "")))  # cleaned by nh3 above

@@ -8,27 +8,31 @@
   <span class="text-ink-soft">{% blocktranslate with n=topic.number %}Topic {{ n }}{% endblocktranslate %}</span>
 </nav>
 <h1 class="text-h1">{{ topic.title }}</h1>
+{% if stepper %}{% translate "Topic stages" as l_stages %}{% include "components/stage_stepper.html" with stages=stepper label=l_stages %}{% endif %}
 
 <div class="flex flex-wrap items-start gap-6">
   <article class="card min-w-0 flex-[999_1_560px] p-[clamp(20px,4vw,48px)]">
     {% if topic.summary %}<p class="mb-6 max-w-[72ch] text-lg leading-relaxed text-ink-soft">{{ topic.summary }}</p>{% endif %}
-    <div class="prose-theory">{{ topic.theory|safe }}</div>
+    {% for stage in theory_stages %}
+      <div class="prose-theory">{{ stage.content.body|sanitize }}</div>
+    {% empty %}
+      <p class="text-ink-soft">{% translate "This topic has no theory yet." %}</p>
+    {% endfor %}
   </article>
 
-  {% if lab %}
+  {% for item in labs %}{% with lab_key=item.stage.content.lab_key %}
   <aside class="flex min-w-0 flex-[1_1_300px] flex-col gap-4 lg:sticky lg:top-6">
     <div class="card flex flex-col gap-4 p-5">
       <div class="flex items-center gap-3">
         <span class="stage-lab grid size-7 place-items-center rounded-sm text-white">{% include "components/icons.html#lab" %}</span>
         <div>
-          <h2 class="text-h3">{% translate "Lab work" %}</h2>
-          <p class="text-body-sm text-ink-soft">{{ lab.title }}</p>
+          <h2 class="text-h3">{{ item.stage.title }}</h2>
         </div>
       </div>
       <ol class="flex flex-col gap-2">
-        {% for row in experiments %}
+        {% for row in item.experiments %}
           <li>
-            <a href="{% url 'labs:run' lab.key row.spec.key %}" class="flex items-center gap-3 rounded-md border px-3 py-2.5 {% if row.attempt %}border-transparent bg-success-50{% else %}border-line bg-surface hover:border-line-strong{% endif %}">
+            <a href="{% url 'labs:run' lab_key row.spec.key %}" class="flex items-center gap-3 rounded-md border px-3 py-2.5 {% if row.attempt %}border-transparent bg-success-50{% else %}border-line bg-surface hover:border-line-strong{% endif %}">
               <span class="num grid size-7 shrink-0 place-items-center rounded-full text-caption font-semibold {% if row.attempt %}bg-success-600 text-white{% else %}bg-surface-sunken text-ink-soft{% endif %}">{{ row.spec.number }}</span>
               <span class="flex-1 text-sm font-medium">{{ row.spec.title }}</span>
               {% if row.attempt %}
@@ -38,11 +42,11 @@
           </li>
         {% endfor %}
       </ol>
-      {% with first=experiments.0.spec %}
-        <a class="btn btn-primary w-full" href="{% url 'labs:run' lab.key first.key %}">{% translate "Open the virtual lab" %}</a>
-      {% endwith %}
+      {% with first=item.experiments.0.spec %}{% if first %}
+        <a class="btn btn-primary w-full" href="{% url 'labs:run' lab_key first.key %}">{% translate "Open the virtual lab" %}</a>
+      {% endif %}{% endwith %}
     </div>
   </aside>
-  {% endif %}
+  {% endwith %}{% endfor %}
 </div>
 {% endblock %}

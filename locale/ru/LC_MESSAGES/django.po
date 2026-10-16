@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 16:17+0500\n"
+"POT-Creation-Date: 2026-10-16 16:44+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,7 +36,9 @@ msgstr "Важные даты"
 msgid "full name"
 msgstr "ФИО"
 
-#: apps/accounts/admin.py:98 apps/organizations/models/profiles.py:19
+#: apps/accounts/admin.py:98 apps/courses/models/course.py:110
+#: apps/courses/models/enrollment.py:36
+#: apps/organizations/models/profiles.py:19
 msgid "group"
 msgstr "группа"
 
@@ -108,7 +110,9 @@ msgstr "Спросите 8-значный код у преподавателя"
 msgid ""
 "I agree that anonymised data about my learning activity may be used in "
 "pedagogical research."
-msgstr "Я согласен(на), что обезличенные данные о моей учебной деятельности могут использоваться в педагогическом исследовании."
+msgstr ""
+"Я согласен(на), что обезличенные данные о моей учебной деятельности могут "
+"использоваться в педагогическом исследовании."
 
 #: apps/accounts/forms.py:80
 msgid "Latin letters, digits and . _ - characters"
@@ -120,7 +124,8 @@ msgstr "Пользователь с таким email уже существует
 
 #: apps/accounts/forms.py:116
 msgid "No active group has this code. Check it with your teacher."
-msgstr "Активная группа с таким кодом не найдена. Уточните код у преподавателя."
+msgstr ""
+"Активная группа с таким кодом не найдена. Уточните код у преподавателя."
 
 #: apps/accounts/forms.py:120
 msgid "Choose your group."
@@ -159,7 +164,7 @@ msgstr "Пользователь с таким логином уже сущес�
 msgid "email address"
 msgstr "адрес email"
 
-#: apps/accounts/models/user.py:44
+#: apps/accounts/models/user.py:44 apps/courses/models/course.py:94
 msgid "role"
 msgstr "роль"
 
@@ -204,74 +209,460 @@ msgstr "создано"
 msgid "updated at"
 msgstr "изменено"
 
+#: apps/core/uploads.py:25
+msgid "You do not have permission to upload files."
+msgstr "У вас нет прав на загрузку файлов."
+
+#: apps/courses/admin.py:59
+msgid "Enrolment"
+msgstr "Запись"
+
+#: apps/courses/admin.py:61
+msgid "Learning and grading"
+msgstr "Обучение и оценивание"
+
+#: apps/courses/admin.py:66 apps/organizations/admin.py:44
+msgid "students"
+msgstr "студенты"
+
+#: apps/courses/admin.py:77 apps/courses/admin.py:236
+#, python-format
+msgid "%(n)d student enrolled."
+msgid_plural "%(n)d students enrolled."
+msgstr[0] "%(n)d студент записан."
+msgstr[1] "%(n)d студента записано."
+msgstr[2] "%(n)d студентов записано."
+msgstr[3] "%(n)d студентов записано."
+
+#: apps/courses/admin.py:113
+msgid "A published topic needs at least one required stage."
+msgstr "В опубликованной теме должен быть хотя бы один обязательный этап."
+
+#: apps/courses/admin.py:136 apps/courses/models/structure.py:100
+msgid "stages"
+msgstr "этапы"
+
+#: apps/courses/admin.py:232
+msgid "Enrol all students of the selected groups"
+msgstr "Записать всех студентов выбранных групп"
+
+#: apps/courses/admin.py:249 apps/courses/services/enrollment.py:20
+msgid "Only students can be enrolled in a course."
+msgstr "На курс можно записать только студентов."
+
+#: apps/courses/admin.py:251
+msgid "This student is already enrolled in the course."
+msgstr "Этот студент уже записан на курс."
+
 #: apps/courses/apps.py:8
 msgid "Courses"
 msgstr "Курсы"
 
-#: apps/courses/models/course.py:7 apps/courses/models/course.py:23
-#: apps/courses/models/course.py:44
-msgid "title"
-msgstr "название"
+#: apps/courses/models/content.py:15 apps/courses/models/content.py:51
+#: apps/courses/models/content.py:83 apps/courses/models/content.py:127
+#: apps/courses/models/structure.py:99
+msgid "stage"
+msgstr "этап"
 
-#: apps/courses/models/course.py:8
-msgid "slug"
-msgstr "slug"
+#: apps/courses/models/content.py:17
+msgid "text"
+msgstr "текст"
 
-#: apps/courses/models/course.py:9
-msgid "description"
-msgstr "описание"
-
-#: apps/courses/models/course.py:10 apps/courses/models/course.py:48
-msgid "published"
-msgstr "опубликовано"
-
-#: apps/courses/models/course.py:13 apps/courses/models/course.py:21
-msgid "course"
-msgstr "курс"
-
-#: apps/courses/models/course.py:14
-msgid "courses"
-msgstr "курсы"
-
-#: apps/courses/models/course.py:22 apps/courses/models/course.py:43
-msgid "number"
-msgstr "номер"
-
-#: apps/courses/models/course.py:28 apps/courses/models/course.py:42
-msgid "module"
-msgstr "модуль"
-
-#: apps/courses/models/course.py:29
-msgid "modules"
-msgstr "модули"
-
-#: apps/courses/models/course.py:43
-msgid "Number within the whole course (1–15)"
-msgstr "Номер в рамках всего курса (1–15)"
-
-#: apps/courses/models/course.py:45
-msgid "summary"
-msgstr "краткое описание"
-
-#: apps/courses/models/course.py:46
+#: apps/courses/models/content.py:20 apps/courses/models/content.py:21
+#: apps/courses/models/content.py:29
 msgid "theory"
 msgstr "теория"
 
+#: apps/courses/models/content.py:31 apps/courses/models/structure.py:16
+#: apps/courses/models/structure.py:34 apps/courses/models/structure.py:74
+msgid "order"
+msgstr "порядок"
+
+#: apps/courses/models/content.py:32 apps/courses/models/course.py:30
+#: apps/courses/models/structure.py:17 apps/courses/models/structure.py:36
+#: apps/courses/models/structure.py:76
+msgid "title"
+msgstr "название"
+
+#: apps/courses/models/content.py:33
+msgid "file"
+msgstr "файл"
+
+#: apps/courses/models/content.py:37
+msgid "attachment"
+msgstr "вложение"
+
+#: apps/courses/models/content.py:38
+msgid "attachments"
+msgstr "вложения"
+
+#: apps/courses/models/content.py:48
+msgid "Uploaded file"
+msgstr "Загруженный файл"
+
+#: apps/courses/models/content.py:53 apps/courses/models/enrollment.py:29
+msgid "source"
+msgstr "источник"
+
+#: apps/courses/models/content.py:54
+msgid "link"
+msgstr "ссылка"
+
+#: apps/courses/models/content.py:55
+msgid "video file"
+msgstr "видеофайл"
+
+#: apps/courses/models/content.py:56 apps/labs/models/attempt.py:23
+msgid "duration, s"
+msgstr "длительность, с"
+
+#: apps/courses/models/content.py:58
+msgid "must be watched, %"
+msgstr "нужно посмотреть, %"
+
+#: apps/courses/models/content.py:62
+msgid "video"
+msgstr "видео"
+
+#: apps/courses/models/content.py:63
+msgid "videos"
+msgstr "видео"
+
+#: apps/courses/models/content.py:70
+msgid "Upload the video file."
+msgstr "Загрузите видеофайл."
+
+#: apps/courses/models/content.py:72
+msgid "Paste the video link."
+msgstr "Вставьте ссылку на видео."
+
+#: apps/courses/models/content.py:85 apps/labs/models/attempt.py:17
+msgid "lab"
+msgstr "лаборатория"
+
+#: apps/courses/models/content.py:87
+msgid "experiments"
+msgstr "опыты"
+
+#: apps/courses/models/content.py:90
+msgid ""
+"Experiment keys in the order they open; empty = all experiments of the lab"
+msgstr "Ключи опытов в порядке открытия; пусто — все опыты лаборатории"
+
+#: apps/courses/models/content.py:94
+msgid "lab work"
+msgstr "лабораторная работа"
+
+#: apps/courses/models/content.py:95
+msgid "lab works"
+msgstr "лабораторные работы"
+
+#: apps/courses/models/content.py:107
+#, python-format
+msgid "Use experiment keys of this lab: %(keys)s"
+msgstr "Используйте ключи опытов этой лаборатории: %(keys)s"
+
+#: apps/courses/models/content.py:129
+msgid "instructions"
+msgstr "инструкция"
+
+#: apps/courses/models/content.py:132
+msgid "topic test"
+msgstr "тест по теме"
+
+#: apps/courses/models/content.py:133
+msgid "topic tests"
+msgstr "тесты по темам"
+
+#: apps/courses/models/course.py:21 ui/templates/courses/dashboard.html:28
+msgid "Draft"
+msgstr "Черновик"
+
+#: apps/courses/models/course.py:22
+msgid "Published"
+msgstr "Опубликован"
+
+#: apps/courses/models/course.py:23
+msgid "Archived"
+msgstr "В архиве"
+
+#: apps/courses/models/course.py:26
+msgid "Open: any student can enrol"
+msgstr "Открытый: записаться может любой студент"
+
+#: apps/courses/models/course.py:27
+msgid "Assigned groups only"
+msgstr "Только назначенные группы"
+
+#: apps/courses/models/course.py:28 apps/courses/models/enrollment.py:15
+msgid "By course code"
+msgstr "По коду курса"
+
+#: apps/courses/models/course.py:31
+msgid "slug"
+msgstr "slug"
+
+#: apps/courses/models/course.py:32
+msgid "short description"
+msgstr "краткое описание"
+
+#: apps/courses/models/course.py:33 apps/courses/models/structure.py:18
+msgid "description"
+msgstr "описание"
+
+#: apps/courses/models/course.py:34 apps/courses/models/structure.py:38
+msgid "cover"
+msgstr "обложка"
+
+#: apps/courses/models/course.py:35 apps/courses/models/enrollment.py:46
+#: apps/labs/models/attempt.py:20
+msgid "status"
+msgstr "статус"
+
+#: apps/courses/models/course.py:37 apps/courses/models/enrollment.py:52
+msgid "enrolment"
+msgstr "способ записи"
+
+#: apps/courses/models/course.py:40
+msgid "course code"
+msgstr "код курса"
+
+#: apps/courses/models/course.py:40
+msgid "Used when enrolment is by course code"
+msgstr "Используется при записи по коду курса"
+
+#: apps/courses/models/course.py:43
+msgid "sequential"
+msgstr "последовательный"
+
+#: apps/courses/models/course.py:43
+msgid "Stages and topics open one after another"
+msgstr "Этапы и темы открываются по очереди"
+
+#: apps/courses/models/course.py:45
+msgid "passing score, %"
+msgstr "проходной балл, %"
+
 #: apps/courses/models/course.py:46
-msgid "HTML content of the theory section"
-msgstr "HTML-содержимое раздела теории"
+msgid "certificate"
+msgstr "сертификат"
 
-#: apps/courses/models/course.py:47
-msgid "lab key"
-msgstr "ключ лаборатории"
+#: apps/courses/models/course.py:48
+msgid "stage kind weights"
+msgstr "доли видов этапов"
 
-#: apps/courses/models/course.py:52
+#: apps/courses/models/course.py:50
+msgid ""
+"Share of each stage kind in a topic score, e.g. {\"lab\": 40, \"practice\": "
+"20, …}"
+msgstr "Доля каждого вида этапа в оценке темы, например {\"lab\": 40, \"practice\": 20, …}"
+
+#: apps/courses/models/course.py:57
+msgid "teachers"
+msgstr "преподаватели"
+
+#: apps/courses/models/course.py:62 apps/courses/models/course.py:85
+#: apps/courses/models/course.py:108 apps/courses/models/enrollment.py:27
+#: apps/courses/models/structure.py:14
+msgid "course"
+msgstr "курс"
+
+#: apps/courses/models/course.py:63
+msgid "courses"
+msgstr "курсы"
+
+#: apps/courses/models/course.py:81
+msgid "Author"
+msgstr "Автор"
+
+#: apps/courses/models/course.py:82
+msgid "Assistant"
+msgstr "Ассистент"
+
+#: apps/courses/models/course.py:92 apps/courses/models/course.py:119
+#: ui/templates/layouts/teacher.html:14
+msgid "teacher"
+msgstr "преподаватель"
+
+#: apps/courses/models/course.py:97
+msgid "course teacher"
+msgstr "преподаватель курса"
+
+#: apps/courses/models/course.py:98
+msgid "course teachers"
+msgstr "преподаватели курса"
+
+#: apps/courses/models/course.py:121
+msgid "starts on"
+msgstr "дата начала"
+
+#: apps/courses/models/course.py:122
+msgid "ends on"
+msgstr "дата окончания"
+
+#: apps/courses/models/course.py:125
+msgid "course group"
+msgstr "группа курса"
+
+#: apps/courses/models/course.py:126
+msgid "course groups"
+msgstr "группы курса"
+
+#: apps/courses/models/enrollment.py:13
+msgid "Self-enrolled"
+msgstr "Записался сам"
+
+#: apps/courses/models/enrollment.py:14
+msgid "Through the group"
+msgstr "Через группу"
+
+#: apps/courses/models/enrollment.py:16
+msgid "Added by the administrator"
+msgstr "Добавлен администратором"
+
+#: apps/courses/models/enrollment.py:19
+msgid "Active"
+msgstr "Активна"
+
+#: apps/courses/models/enrollment.py:20
+msgid "Completed"
+msgstr "Завершена"
+
+#: apps/courses/models/enrollment.py:21
+msgid "Dropped"
+msgstr "Отчислен"
+
+#: apps/courses/models/enrollment.py:24 apps/labs/models/attempt.py:15
+#: ui/templates/layouts/student.html:16
+msgid "student"
+msgstr "студент"
+
+#: apps/courses/models/enrollment.py:37
+msgid "The student's group at enrolment"
+msgstr "Группа студента на момент записи"
+
+#: apps/courses/models/enrollment.py:40 apps/labs/models/attempt.py:19
+#: apps/organizations/models/group.py:65
+msgid "research group"
+msgstr "исследовательская группа"
+
+#: apps/courses/models/enrollment.py:44
+msgid "Copied from the group at enrolment and kept fixed"
+msgstr "Копируется из группы при записи и не меняется"
+
+#: apps/courses/models/enrollment.py:47
+msgid "enrolled at"
+msgstr "дата записи"
+
+#: apps/courses/models/enrollment.py:48
+msgid "completed at"
+msgstr "дата завершения"
+
+#: apps/courses/models/enrollment.py:53
+msgid "enrolments"
+msgstr "записи на курс"
+
+#: apps/courses/models/structure.py:19 apps/courses/models/structure.py:40
+#: apps/courses/models/structure.py:79
+msgid "weight"
+msgstr "вес"
+
+#: apps/courses/models/structure.py:19
+msgid "Weight in the course score"
+msgstr "Вес в оценке курса"
+
+#: apps/courses/models/structure.py:23 apps/courses/models/structure.py:33
+msgid "module"
+msgstr "модуль"
+
+#: apps/courses/models/structure.py:24
+msgid "modules"
+msgstr "модули"
+
+#: apps/courses/models/structure.py:34
+msgid "Order within the module"
+msgstr "Порядок внутри модуля"
+
+#: apps/courses/models/structure.py:35
+msgid "number"
+msgstr "номер"
+
+#: apps/courses/models/structure.py:35
+msgid "Number within the whole course (1–15)"
+msgstr "Номер в рамках всего курса (1–15)"
+
+#: apps/courses/models/structure.py:37
+msgid "summary"
+msgstr "краткое описание"
+
+#: apps/courses/models/structure.py:39
+msgid "estimated time, min"
+msgstr "примерное время, мин"
+
+#: apps/courses/models/structure.py:40
+msgid "Weight in the module score"
+msgstr "Вес в оценке модуля"
+
+#: apps/courses/models/structure.py:41
+msgid "published"
+msgstr "опубликовано"
+
+#: apps/courses/models/structure.py:45 apps/courses/models/structure.py:73
 msgid "topic"
 msgstr "тема"
 
-#: apps/courses/models/course.py:53
+#: apps/courses/models/structure.py:46
 msgid "topics"
 msgstr "темы"
+
+#: apps/courses/models/structure.py:57
+msgid "This course already has a topic with this number."
+msgstr "В курсе уже есть тема с таким номером."
+
+#: apps/courses/models/structure.py:67 ui/views.py:10
+msgid "Theory"
+msgstr "Теория"
+
+#: apps/courses/models/structure.py:68 ui/views.py:11
+msgid "Video lesson"
+msgstr "Видеоурок"
+
+#: apps/courses/models/structure.py:69 ui/templates/labs/run.html:22
+#: ui/views.py:12
+msgid "Lab work"
+msgstr "Лабораторная работа"
+
+#: apps/courses/models/structure.py:70
+msgid "Practice work"
+msgstr "Практическая работа"
+
+#: apps/courses/models/structure.py:71 ui/views.py:16
+msgid "Topic test"
+msgstr "Тест по теме"
+
+#: apps/courses/models/structure.py:75
+msgid "kind"
+msgstr "вид"
+
+#: apps/courses/models/structure.py:77
+msgid "required"
+msgstr "обязательный"
+
+#: apps/courses/models/structure.py:82
+msgid "Leave empty to use the course share of this stage kind"
+msgstr "Оставьте пустым, чтобы использовать долю этого вида этапа в курсе"
+
+#: apps/courses/models/structure.py:86
+msgid "pass mark, %"
+msgstr "порог прохождения, %"
+
+#: apps/courses/services/enrollment.py:36
+msgid "This course is not open for enrolment."
+msgstr "Запись на этот курс закрыта."
+
+#: apps/courses/services/enrollment.py:50
+msgid "No course has this code. Check it with your teacher."
+msgstr "Курс с таким кодом не найден. Уточните код у преподавателя."
 
 #: apps/labs/apps.py:8
 msgid "Virtual lab"
@@ -1222,29 +1613,13 @@ msgstr "Завершено"
 msgid "Analysis submitted"
 msgstr "Анализ отправлен"
 
-#: apps/labs/models/attempt.py:15 ui/templates/layouts/student.html:16
-msgid "student"
-msgstr "студент"
-
-#: apps/labs/models/attempt.py:17
-msgid "lab"
-msgstr "лаборатория"
-
 #: apps/labs/models/attempt.py:18
 msgid "experiment"
 msgstr "опыт"
 
-#: apps/labs/models/attempt.py:19 apps/organizations/models/group.py:65
-msgid "research group"
-msgstr "исследовательская группа"
-
 #: apps/labs/models/attempt.py:19
 msgid "Snapshot at start"
 msgstr "Значение на момент начала"
-
-#: apps/labs/models/attempt.py:20
-msgid "status"
-msgstr "статус"
 
 #: apps/labs/models/attempt.py:21
 msgid "started at"
@@ -1253,10 +1628,6 @@ msgstr "начато"
 #: apps/labs/models/attempt.py:22
 msgid "finished at"
 msgstr "завершено"
-
-#: apps/labs/models/attempt.py:23
-msgid "duration, s"
-msgstr "длительность, с"
 
 #: apps/labs/models/attempt.py:26
 msgid "order errors"
@@ -1566,7 +1937,7 @@ msgstr "Неверное оборудование или выбор"
 msgid "Time spent"
 msgstr "Затрачено времени"
 
-#: apps/labs/views.py:73 ui/templates/courses/topic.html:35
+#: apps/labs/views.py:73 ui/templates/courses/topic.html:39
 msgid "Analysis: correct answers"
 msgstr "Анализ: верные ответы"
 
@@ -1582,81 +1953,77 @@ msgstr "Следующий опыт"
 msgid "Start again"
 msgstr "Начать заново"
 
-#: apps/labs/views.py:77
+#: apps/labs/views.py:78
 msgid ""
 "Start the experiment again? The current progress will be saved as an "
 "unfinished attempt."
 msgstr ""
 "Начать опыт заново? Текущий прогресс сохранится как незавершённая попытка."
 
-#: apps/labs/views.py:78
+#: apps/labs/views.py:80
 msgid "Safety"
 msgstr "Безопасность"
 
-#: apps/labs/views.py:79
+#: apps/labs/views.py:81
 msgid "Observation"
 msgstr "Наблюдение"
 
-#: apps/labs/views.py:80
+#: apps/labs/views.py:82
 msgid "Mistake"
 msgstr "Ошибка"
 
-#: apps/labs/views.py:81
+#: apps/labs/views.py:83
 msgid "Note"
 msgstr "Примечание"
 
-#: apps/labs/views.py:82
+#: apps/labs/views.py:84
 msgid "Speed"
 msgstr "Скорость"
 
-#: apps/labs/views.py:83
+#: apps/labs/views.py:85
 msgid "without catalyst"
 msgstr "без катализатора"
 
-#: apps/labs/views.py:84
+#: apps/labs/views.py:86
 msgid "with MnO₂"
 msgstr "с MnO₂"
 
-#: apps/labs/views.py:85
+#: apps/labs/views.py:87
 msgid "A: without catalyst"
 msgstr "A: без катализатора"
 
-#: apps/labs/views.py:86
+#: apps/labs/views.py:88
 msgid "B: with MnO₂"
 msgstr "B: с MnO₂"
 
-#: apps/labs/views.py:87
+#: apps/labs/views.py:89
 msgid "Cathode (−)"
 msgstr "Катод (−)"
 
-#: apps/labs/views.py:88
+#: apps/labs/views.py:90
 msgid "Anode (+)"
 msgstr "Анод (+)"
 
-#: apps/labs/views.py:89
+#: apps/labs/views.py:91
 msgid "Ratio"
 msgstr "Отношение"
 
-#: apps/labs/views.py:90
+#: apps/labs/views.py:92
 msgid "Purity test: a quiet pop — the hydrogen is pure."
 msgstr "Проверка на чистоту: глухой хлопок — водород чистый."
 
-#: apps/labs/views.py:91
+#: apps/labs/views.py:93
 msgid "The glowing splint flares up: the gas is oxygen."
 msgstr "Тлеющая лучинка вспыхнула: этот газ — кислород."
 
-#: apps/labs/views.py:92
+#: apps/labs/views.py:94
 msgid "Tube A is the control: it must stay without a catalyst."
 msgstr "Пробирка A — контрольная: она должна остаться без катализатора."
 
-#: apps/labs/views.py:93
+#: apps/labs/views.py:95
 msgid "Connection problem. Your actions are kept and will be sent again."
 msgstr ""
 "Проблема со связью. Ваши действия сохранены и будут отправлены повторно."
-
-#: apps/organizations/admin.py:44
-msgid "students"
-msgstr "студенты"
 
 #: apps/organizations/admin.py:76 apps/organizations/models/structure.py:16
 #: apps/organizations/models/structure.py:25
@@ -1767,7 +2134,9 @@ msgstr "согласие на исследование"
 #: apps/organizations/models/profiles.py:28
 msgid ""
 "Agreed that anonymised learning data may be used in pedagogical research"
-msgstr "Согласен(на) на использование обезличенных учебных данных в педагогическом исследовании"
+msgstr ""
+"Согласен(на) на использование обезличенных учебных данных в педагогическом "
+"исследовании"
 
 #: apps/organizations/models/profiles.py:30
 msgid "consent given at"
@@ -1856,15 +2225,15 @@ msgstr "образовательные программы"
 msgid "Research"
 msgstr "Исследование"
 
-#: config/settings/base.py:136
+#: config/settings/base.py:137
 msgid "Kazakh"
 msgstr "Казахский"
 
-#: config/settings/base.py:137
+#: config/settings/base.py:138
 msgid "Russian"
 msgstr "Русский"
 
-#: config/settings/base.py:138
+#: config/settings/base.py:139
 msgid "English"
 msgstr "Английский"
 
@@ -1880,14 +2249,20 @@ msgid ""
 "Someone (hopefully you) asked to reset the password of your ChemEduTech "
 "account.\n"
 "Open the link to set a new password:"
-msgstr "Здравствуйте, %(user)s!\n\nПоступил запрос на сброс пароля вашего аккаунта ChemEduTech.\nЧтобы задать новый пароль, откройте ссылку:"
+msgstr ""
+"Здравствуйте, %(user)s!\n"
+"\n"
+"Поступил запрос на сброс пароля вашего аккаунта ChemEduTech.\n"
+"Чтобы задать новый пароль, откройте ссылку:"
 
 #: ui/templates/accounts/email/password_reset.txt:8
 #, python-format
 msgid ""
 "Your username: %(username)s\n"
 "If you did not ask for this, just ignore the email."
-msgstr "Ваш логин: %(username)s\nЕсли вы не запрашивали сброс, просто проигнорируйте письмо."
+msgstr ""
+"Ваш логин: %(username)s\n"
+"Если вы не запрашивали сброс, просто проигнорируйте письмо."
 
 #: ui/templates/accounts/email/password_reset_subject.txt:1
 msgid "ChemEduTech: password reset"
@@ -1970,7 +2345,9 @@ msgstr "Проверьте почту"
 msgid ""
 "If an account with this email exists, we have sent a link to set a new "
 "password. It may take a few minutes."
-msgstr "Если аккаунт с таким email существует, мы отправили ссылку для нового пароля. Письмо может прийти через несколько минут."
+msgstr ""
+"Если аккаунт с таким email существует, мы отправили ссылку для нового "
+"пароля. Письмо может прийти через несколько минут."
 
 #: ui/templates/accounts/password_reset_done.html:8
 #: ui/templates/accounts/password_reset_form.html:13
@@ -1981,7 +2358,9 @@ msgstr "Вернуться ко входу"
 msgid ""
 "Enter the email you signed up with — we will send a link to set a new "
 "password."
-msgstr "Введите email, указанный при регистрации, — мы пришлём ссылку для нового пароля."
+msgstr ""
+"Введите email, указанный при регистрации, — мы пришлём ссылку для нового "
+"пароля."
 
 #: ui/templates/accounts/password_reset_form.html:12
 msgid "Send the link"
@@ -2071,24 +2450,37 @@ msgid "Module %(n)s"
 msgstr "Модуль %(n)s"
 
 #: ui/templates/courses/dashboard.html:26
-msgid "Theory and virtual lab work"
-msgstr "Теория и виртуальная лабораторная работа"
-
-#: ui/templates/courses/dashboard.html:28
-msgid "Draft"
-msgstr "Черновик"
+#, python-format
+msgid "%(n)s stage"
+msgid_plural "%(n)s stages"
+msgstr[0] "%(n)s этап"
+msgstr[1] "%(n)s этапа"
+msgstr[2] "%(n)s этапов"
+msgstr[3] "%(n)s этапов"
 
 #: ui/templates/courses/dashboard.html:35
 msgid "Coming soon"
 msgstr "Скоро"
 
-#: ui/templates/courses/dashboard.html:44
+#: ui/templates/courses/dashboard.html:46
+msgid "Courses open for enrolment"
+msgstr "Курсы, открытые для записи"
+
+#: ui/templates/courses/dashboard.html:47
+msgid "Your group has no assigned course yet. You can join an open course."
+msgstr "Вашей группе ещё не назначен курс. Можно записаться на открытый курс."
+
+#: ui/templates/courses/dashboard.html:55
+msgid "Enrol"
+msgstr "Записаться"
+
+#: ui/templates/courses/dashboard.html:60
 msgid "No courses yet"
 msgstr "Курсов пока нет"
 
-#: ui/templates/courses/dashboard.html:44
-msgid "Run: python manage.py seed_course"
-msgstr "Выполните: python manage.py seed_course"
+#: ui/templates/courses/dashboard.html:60
+msgid "The course appears here when your teacher assigns it to your group."
+msgstr "Курс появится здесь, когда преподаватель назначит его вашей группе."
 
 #: ui/templates/courses/topic.html:5
 msgid "Breadcrumbs"
@@ -2099,12 +2491,15 @@ msgstr "Навигационная цепочка"
 msgid "Topic %(n)s"
 msgstr "Тема %(n)s"
 
-#: ui/templates/courses/topic.html:24 ui/templates/labs/run.html:22
-#: ui/views.py:12
-msgid "Lab work"
-msgstr "Лабораторная работа"
+#: ui/templates/courses/topic.html:11
+msgid "Topic stages"
+msgstr "Этапы темы"
 
-#: ui/templates/courses/topic.html:42
+#: ui/templates/courses/topic.html:19
+msgid "This topic has no theory yet."
+msgstr "В этой теме пока нет теории."
+
+#: ui/templates/courses/topic.html:46
 msgid "Open the virtual lab"
 msgstr "Открыть виртуальную лабораторию"
 
@@ -2181,10 +2576,6 @@ msgstr "Содержание курсов"
 #: ui/templates/layouts/teacher.html:10
 msgid "Groups and students"
 msgstr "Группы и студенты"
-
-#: ui/templates/layouts/teacher.html:14
-msgid "teacher"
-msgstr "преподаватель"
 
 #: ui/templates/partials/lang_switch.html:2
 msgid "Interface language"
@@ -2277,14 +2668,6 @@ msgstr "Все компоненты ui/templates/components с примерам�
 msgid "Open dialog"
 msgstr "Открыть диалог"
 
-#: ui/views.py:10
-msgid "Theory"
-msgstr "Теория"
-
-#: ui/views.py:11
-msgid "Video lesson"
-msgstr "Видеоурок"
-
 #: ui/views.py:13
 msgid "Practice 1"
 msgstr "Практическая работа 1"
@@ -2297,13 +2680,21 @@ msgstr "Практическая работа 2"
 msgid "Practice 3"
 msgstr "Практическая работа 3"
 
-#: ui/views.py:16
-msgid "Topic test"
-msgstr "Тест по теме"
-
 #: ui/views.py:21
 msgid "Score"
 msgstr "Балл"
+
+#~ msgid "HTML content of the theory section"
+#~ msgstr "HTML-содержимое раздела теории"
+
+#~ msgid "lab key"
+#~ msgstr "ключ лаборатории"
+
+#~ msgid "Theory and virtual lab work"
+#~ msgstr "Теория и виртуальная лабораторная работа"
+
+#~ msgid "Run: python manage.py seed_course"
+#~ msgstr "Выполните: python manage.py seed_course"
 
 #~ msgid "Platform"
 #~ msgstr "Платформа"

@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.urls import include, path
 
 from apps.accounts import views as accounts_views
+from apps.core.uploads import ckeditor_upload
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -13,6 +14,7 @@ urlpatterns = [
     path("labs/", include("apps.labs.urls")),
     path("research/", include("apps.research.urls")),
     path("ui/", include("ui.urls")),
+    path("ckeditor5/image_upload/", ckeditor_upload, name="ckeditor_upload"),
     path("", include("apps.core.urls")),
 ]
 

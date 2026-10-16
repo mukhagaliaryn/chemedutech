@@ -4,6 +4,7 @@ from django.test import RequestFactory, TestCase, override_settings
 from django.urls import reverse
 
 from apps.accounts.models import User
+from apps.courses import services
 from apps.courses.models import Topic
 from apps.labs.engine import get_lab
 from apps.organizations.testing import make_group, make_student
@@ -107,7 +108,10 @@ class PageTests(TestCase):
         self.assertContains(response, 'aria-current="page"')
         self.assertNotContains(response, reverse("research:dashboard"))
         topic = Topic.objects.filter(is_published=True).select_related("module__course").first()
-        self.assertDesignSystemPage(self.client.get(topic.get_absolute_url()))
+        services.enroll(self.student, topic.module.course, "admin")
+        response = self.client.get(topic.get_absolute_url())
+        self.assertDesignSystemPage(response)
+        self.assertContains(response, "stage-lab")  # stage stepper
 
     def test_teacher_layout_on_research_page(self):
         self.client.force_login(self.teacher)

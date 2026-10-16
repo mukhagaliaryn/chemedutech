@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 16:17+0500\n"
+"POT-Creation-Date: 2026-10-16 16:44+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,7 +34,9 @@ msgstr "Маңызды күндер"
 msgid "full name"
 msgstr "аты-жөні"
 
-#: apps/accounts/admin.py:98 apps/organizations/models/profiles.py:19
+#: apps/accounts/admin.py:98 apps/courses/models/course.py:110
+#: apps/courses/models/enrollment.py:36
+#: apps/organizations/models/profiles.py:19
 msgid "group"
 msgstr "топ"
 
@@ -106,7 +108,9 @@ msgstr "8 таңбалы кодты мұғаліміңізден сұраңыз"
 msgid ""
 "I agree that anonymised data about my learning activity may be used in "
 "pedagogical research."
-msgstr "Оқу әрекеттерімнің анонимделген деректері педагогикалық зерттеуде пайдаланылатынымен келісемін."
+msgstr ""
+"Оқу әрекеттерімнің анонимделген деректері педагогикалық зерттеуде "
+"пайдаланылатынымен келісемін."
 
 #: apps/accounts/forms.py:80
 msgid "Latin letters, digits and . _ - characters"
@@ -157,7 +161,7 @@ msgstr "Бұл логинмен тіркелген пайдаланушы бар
 msgid "email address"
 msgstr "email мекенжайы"
 
-#: apps/accounts/models/user.py:44
+#: apps/accounts/models/user.py:44 apps/courses/models/course.py:94
 msgid "role"
 msgstr "рөлі"
 
@@ -202,74 +206,458 @@ msgstr "жасалған уақыты"
 msgid "updated at"
 msgstr "өзгертілген уақыты"
 
+#: apps/core/uploads.py:25
+msgid "You do not have permission to upload files."
+msgstr "Файл жүктеуге рұқсатыңыз жоқ."
+
+#: apps/courses/admin.py:59
+msgid "Enrolment"
+msgstr "Жазылу"
+
+#: apps/courses/admin.py:61
+msgid "Learning and grading"
+msgstr "Оқу және бағалау"
+
+#: apps/courses/admin.py:66 apps/organizations/admin.py:44
+msgid "students"
+msgstr "студенттер"
+
+#: apps/courses/admin.py:77 apps/courses/admin.py:236
+#, python-format
+msgid "%(n)d student enrolled."
+msgid_plural "%(n)d students enrolled."
+msgstr[0] "%(n)d студент жазылды."
+msgstr[1] "%(n)d студент жазылды."
+
+#: apps/courses/admin.py:113
+msgid "A published topic needs at least one required stage."
+msgstr "Жарияланған тақырыпта кемінде бір міндетті кезең болуы керек."
+
+#: apps/courses/admin.py:136 apps/courses/models/structure.py:100
+msgid "stages"
+msgstr "кезеңдер"
+
+#: apps/courses/admin.py:232
+msgid "Enrol all students of the selected groups"
+msgstr "Таңдалған топтардың барлық студенттерін жазу"
+
+#: apps/courses/admin.py:249 apps/courses/services/enrollment.py:20
+msgid "Only students can be enrolled in a course."
+msgstr "Курсқа тек студенттерді жазуға болады."
+
+#: apps/courses/admin.py:251
+msgid "This student is already enrolled in the course."
+msgstr "Бұл студент курсқа жазылып қойған."
+
 #: apps/courses/apps.py:8
 msgid "Courses"
 msgstr "Курстар"
 
-#: apps/courses/models/course.py:7 apps/courses/models/course.py:23
-#: apps/courses/models/course.py:44
-msgid "title"
-msgstr "атауы"
+#: apps/courses/models/content.py:15 apps/courses/models/content.py:51
+#: apps/courses/models/content.py:83 apps/courses/models/content.py:127
+#: apps/courses/models/structure.py:99
+msgid "stage"
+msgstr "кезең"
 
-#: apps/courses/models/course.py:8
-msgid "slug"
-msgstr "slug"
+#: apps/courses/models/content.py:17
+msgid "text"
+msgstr "мәтін"
 
-#: apps/courses/models/course.py:9
-msgid "description"
-msgstr "сипаттамасы"
-
-#: apps/courses/models/course.py:10 apps/courses/models/course.py:48
-msgid "published"
-msgstr "жарияланған"
-
-#: apps/courses/models/course.py:13 apps/courses/models/course.py:21
-msgid "course"
-msgstr "курс"
-
-#: apps/courses/models/course.py:14
-msgid "courses"
-msgstr "курстар"
-
-#: apps/courses/models/course.py:22 apps/courses/models/course.py:43
-msgid "number"
-msgstr "нөмірі"
-
-#: apps/courses/models/course.py:28 apps/courses/models/course.py:42
-msgid "module"
-msgstr "модуль"
-
-#: apps/courses/models/course.py:29
-msgid "modules"
-msgstr "модульдер"
-
-#: apps/courses/models/course.py:43
-msgid "Number within the whole course (1–15)"
-msgstr "Бүкіл курс бойынша нөмірі (1–15)"
-
-#: apps/courses/models/course.py:45
-msgid "summary"
-msgstr "қысқаша сипаттамасы"
-
-#: apps/courses/models/course.py:46
+#: apps/courses/models/content.py:20 apps/courses/models/content.py:21
+#: apps/courses/models/content.py:29
 msgid "theory"
 msgstr "теория"
 
+#: apps/courses/models/content.py:31 apps/courses/models/structure.py:16
+#: apps/courses/models/structure.py:34 apps/courses/models/structure.py:74
+msgid "order"
+msgstr "реті"
+
+#: apps/courses/models/content.py:32 apps/courses/models/course.py:30
+#: apps/courses/models/structure.py:17 apps/courses/models/structure.py:36
+#: apps/courses/models/structure.py:76
+msgid "title"
+msgstr "атауы"
+
+#: apps/courses/models/content.py:33
+msgid "file"
+msgstr "файл"
+
+#: apps/courses/models/content.py:37
+msgid "attachment"
+msgstr "қосымша файл"
+
+#: apps/courses/models/content.py:38
+msgid "attachments"
+msgstr "қосымша файлдар"
+
+#: apps/courses/models/content.py:48
+msgid "Uploaded file"
+msgstr "Жүктелген файл"
+
+#: apps/courses/models/content.py:53 apps/courses/models/enrollment.py:29
+msgid "source"
+msgstr "көзі"
+
+#: apps/courses/models/content.py:54
+msgid "link"
+msgstr "сілтеме"
+
+#: apps/courses/models/content.py:55
+msgid "video file"
+msgstr "видеофайл"
+
+#: apps/courses/models/content.py:56 apps/labs/models/attempt.py:23
+msgid "duration, s"
+msgstr "ұзақтығы, с"
+
+#: apps/courses/models/content.py:58
+msgid "must be watched, %"
+msgstr "көрілуі керек, %"
+
+#: apps/courses/models/content.py:62
+msgid "video"
+msgstr "видео"
+
+#: apps/courses/models/content.py:63
+msgid "videos"
+msgstr "видеолар"
+
+#: apps/courses/models/content.py:70
+msgid "Upload the video file."
+msgstr "Видеофайлды жүктеңіз."
+
+#: apps/courses/models/content.py:72
+msgid "Paste the video link."
+msgstr "Видео сілтемесін қойыңыз."
+
+#: apps/courses/models/content.py:85 apps/labs/models/attempt.py:17
+msgid "lab"
+msgstr "зертхана"
+
+#: apps/courses/models/content.py:87
+msgid "experiments"
+msgstr "тәжірибелер"
+
+#: apps/courses/models/content.py:90
+msgid ""
+"Experiment keys in the order they open; empty = all experiments of the lab"
+msgstr "Тәжірибе кілттері ашылу ретімен; бос болса — зертхананың барлық тәжірибесі"
+
+#: apps/courses/models/content.py:94
+msgid "lab work"
+msgstr "зертханалық жұмыс"
+
+#: apps/courses/models/content.py:95
+msgid "lab works"
+msgstr "зертханалық жұмыстар"
+
+#: apps/courses/models/content.py:107
+#, python-format
+msgid "Use experiment keys of this lab: %(keys)s"
+msgstr "Осы зертхананың тәжірибе кілттерін қолданыңыз: %(keys)s"
+
+#: apps/courses/models/content.py:129
+msgid "instructions"
+msgstr "нұсқаулық"
+
+#: apps/courses/models/content.py:132
+msgid "topic test"
+msgstr "тақырып тесті"
+
+#: apps/courses/models/content.py:133
+msgid "topic tests"
+msgstr "тақырып тесттері"
+
+#: apps/courses/models/course.py:21 ui/templates/courses/dashboard.html:28
+msgid "Draft"
+msgstr "Жоба"
+
+#: apps/courses/models/course.py:22
+msgid "Published"
+msgstr "Жарияланған"
+
+#: apps/courses/models/course.py:23
+msgid "Archived"
+msgstr "Мұрағатта"
+
+#: apps/courses/models/course.py:26
+msgid "Open: any student can enrol"
+msgstr "Ашық: кез келген студент жазыла алады"
+
+#: apps/courses/models/course.py:27
+msgid "Assigned groups only"
+msgstr "Тек бекітілген топтар"
+
+#: apps/courses/models/course.py:28 apps/courses/models/enrollment.py:15
+msgid "By course code"
+msgstr "Курс коды арқылы"
+
+#: apps/courses/models/course.py:31
+msgid "slug"
+msgstr "slug"
+
+#: apps/courses/models/course.py:32
+msgid "short description"
+msgstr "қысқаша сипаттама"
+
+#: apps/courses/models/course.py:33 apps/courses/models/structure.py:18
+msgid "description"
+msgstr "сипаттамасы"
+
+#: apps/courses/models/course.py:34 apps/courses/models/structure.py:38
+msgid "cover"
+msgstr "мұқаба"
+
+#: apps/courses/models/course.py:35 apps/courses/models/enrollment.py:46
+#: apps/labs/models/attempt.py:20
+msgid "status"
+msgstr "күйі"
+
+#: apps/courses/models/course.py:37 apps/courses/models/enrollment.py:52
+msgid "enrolment"
+msgstr "жазылу тәсілі"
+
+#: apps/courses/models/course.py:40
+msgid "course code"
+msgstr "курс коды"
+
+#: apps/courses/models/course.py:40
+msgid "Used when enrolment is by course code"
+msgstr "Курс коды арқылы жазылғанда қолданылады"
+
+#: apps/courses/models/course.py:43
+msgid "sequential"
+msgstr "ретпен ашылады"
+
+#: apps/courses/models/course.py:43
+msgid "Stages and topics open one after another"
+msgstr "Кезеңдер мен тақырыптар бірінен кейін бірі ашылады"
+
+#: apps/courses/models/course.py:45
+msgid "passing score, %"
+msgstr "өту шегі, %"
+
 #: apps/courses/models/course.py:46
-msgid "HTML content of the theory section"
-msgstr "Теория бөлімінің HTML мазмұны"
+msgid "certificate"
+msgstr "сертификат"
 
-#: apps/courses/models/course.py:47
-msgid "lab key"
-msgstr "зертхана кілті"
+#: apps/courses/models/course.py:48
+msgid "stage kind weights"
+msgstr "кезең түрлерінің үлесі"
 
-#: apps/courses/models/course.py:52
+#: apps/courses/models/course.py:50
+msgid ""
+"Share of each stage kind in a topic score, e.g. {\"lab\": 40, \"practice\": "
+"20, …}"
+msgstr "Тақырып бағасындағы әр кезең түрінің үлесі, мысалы {\"lab\": 40, \"practice\": 20, …}"
+
+#: apps/courses/models/course.py:57
+msgid "teachers"
+msgstr "мұғалімдер"
+
+#: apps/courses/models/course.py:62 apps/courses/models/course.py:85
+#: apps/courses/models/course.py:108 apps/courses/models/enrollment.py:27
+#: apps/courses/models/structure.py:14
+msgid "course"
+msgstr "курс"
+
+#: apps/courses/models/course.py:63
+msgid "courses"
+msgstr "курстар"
+
+#: apps/courses/models/course.py:81
+msgid "Author"
+msgstr "Автор"
+
+#: apps/courses/models/course.py:82
+msgid "Assistant"
+msgstr "Ассистент"
+
+#: apps/courses/models/course.py:92 apps/courses/models/course.py:119
+#: ui/templates/layouts/teacher.html:14
+msgid "teacher"
+msgstr "мұғалім"
+
+#: apps/courses/models/course.py:97
+msgid "course teacher"
+msgstr "курс мұғалімі"
+
+#: apps/courses/models/course.py:98
+msgid "course teachers"
+msgstr "курс мұғалімдері"
+
+#: apps/courses/models/course.py:121
+msgid "starts on"
+msgstr "басталу күні"
+
+#: apps/courses/models/course.py:122
+msgid "ends on"
+msgstr "аяқталу күні"
+
+#: apps/courses/models/course.py:125
+msgid "course group"
+msgstr "курс тобы"
+
+#: apps/courses/models/course.py:126
+msgid "course groups"
+msgstr "курс топтары"
+
+#: apps/courses/models/enrollment.py:13
+msgid "Self-enrolled"
+msgstr "Өзі жазылды"
+
+#: apps/courses/models/enrollment.py:14
+msgid "Through the group"
+msgstr "Топ арқылы"
+
+#: apps/courses/models/enrollment.py:16
+msgid "Added by the administrator"
+msgstr "Әкімші қосты"
+
+#: apps/courses/models/enrollment.py:19
+msgid "Active"
+msgstr "Белсенді"
+
+#: apps/courses/models/enrollment.py:20
+msgid "Completed"
+msgstr "Аяқталды"
+
+#: apps/courses/models/enrollment.py:21
+msgid "Dropped"
+msgstr "Шығарылды"
+
+#: apps/courses/models/enrollment.py:24 apps/labs/models/attempt.py:15
+#: ui/templates/layouts/student.html:16
+msgid "student"
+msgstr "студент"
+
+#: apps/courses/models/enrollment.py:37
+msgid "The student's group at enrolment"
+msgstr "Жазылған кездегі студенттің тобы"
+
+#: apps/courses/models/enrollment.py:40 apps/labs/models/attempt.py:19
+#: apps/organizations/models/group.py:65
+msgid "research group"
+msgstr "зерттеу тобы"
+
+#: apps/courses/models/enrollment.py:44
+msgid "Copied from the group at enrolment and kept fixed"
+msgstr "Жазылғанда топтан көшіріледі және өзгермейді"
+
+#: apps/courses/models/enrollment.py:47
+msgid "enrolled at"
+msgstr "жазылған уақыты"
+
+#: apps/courses/models/enrollment.py:48
+msgid "completed at"
+msgstr "аяқталған уақыты"
+
+#: apps/courses/models/enrollment.py:53
+msgid "enrolments"
+msgstr "жазылулар"
+
+#: apps/courses/models/structure.py:19 apps/courses/models/structure.py:40
+#: apps/courses/models/structure.py:79
+msgid "weight"
+msgstr "салмағы"
+
+#: apps/courses/models/structure.py:19
+msgid "Weight in the course score"
+msgstr "Курс бағасындағы салмағы"
+
+#: apps/courses/models/structure.py:23 apps/courses/models/structure.py:33
+msgid "module"
+msgstr "модуль"
+
+#: apps/courses/models/structure.py:24
+msgid "modules"
+msgstr "модульдер"
+
+#: apps/courses/models/structure.py:34
+msgid "Order within the module"
+msgstr "Модуль ішіндегі реті"
+
+#: apps/courses/models/structure.py:35
+msgid "number"
+msgstr "нөмірі"
+
+#: apps/courses/models/structure.py:35
+msgid "Number within the whole course (1–15)"
+msgstr "Бүкіл курс бойынша нөмірі (1–15)"
+
+#: apps/courses/models/structure.py:37
+msgid "summary"
+msgstr "қысқаша сипаттамасы"
+
+#: apps/courses/models/structure.py:39
+msgid "estimated time, min"
+msgstr "шамамен уақыт, мин"
+
+#: apps/courses/models/structure.py:40
+msgid "Weight in the module score"
+msgstr "Модуль бағасындағы салмағы"
+
+#: apps/courses/models/structure.py:41
+msgid "published"
+msgstr "жарияланған"
+
+#: apps/courses/models/structure.py:45 apps/courses/models/structure.py:73
 msgid "topic"
 msgstr "тақырып"
 
-#: apps/courses/models/course.py:53
+#: apps/courses/models/structure.py:46
 msgid "topics"
 msgstr "тақырыптар"
+
+#: apps/courses/models/structure.py:57
+msgid "This course already has a topic with this number."
+msgstr "Бұл курста осы нөмірлі тақырып бар."
+
+#: apps/courses/models/structure.py:67 ui/views.py:10
+msgid "Theory"
+msgstr "Теория"
+
+#: apps/courses/models/structure.py:68 ui/views.py:11
+msgid "Video lesson"
+msgstr "Видеосабақ"
+
+#: apps/courses/models/structure.py:69 ui/templates/labs/run.html:22
+#: ui/views.py:12
+msgid "Lab work"
+msgstr "Зертханалық жұмыс"
+
+#: apps/courses/models/structure.py:70
+msgid "Practice work"
+msgstr "Практикалық жұмыс"
+
+#: apps/courses/models/structure.py:71 ui/views.py:16
+msgid "Topic test"
+msgstr "Тақырып тесті"
+
+#: apps/courses/models/structure.py:75
+msgid "kind"
+msgstr "түрі"
+
+#: apps/courses/models/structure.py:77
+msgid "required"
+msgstr "міндетті"
+
+#: apps/courses/models/structure.py:82
+msgid "Leave empty to use the course share of this stage kind"
+msgstr "Бос қалдырсаңыз, курстағы осы кезең түрінің үлесі қолданылады"
+
+#: apps/courses/models/structure.py:86
+msgid "pass mark, %"
+msgstr "өту шегі, %"
+
+#: apps/courses/services/enrollment.py:36
+msgid "This course is not open for enrolment."
+msgstr "Бұл курсқа жазылу ашық емес."
+
+#: apps/courses/services/enrollment.py:50
+msgid "No course has this code. Check it with your teacher."
+msgstr "Бұл кодпен курс табылмады. Кодты мұғаліміңізбен тексеріңіз."
 
 #: apps/labs/apps.py:8
 msgid "Virtual lab"
@@ -1221,29 +1609,13 @@ msgstr "Аяқталды"
 msgid "Analysis submitted"
 msgstr "Талдау жіберілді"
 
-#: apps/labs/models/attempt.py:15 ui/templates/layouts/student.html:16
-msgid "student"
-msgstr "студент"
-
-#: apps/labs/models/attempt.py:17
-msgid "lab"
-msgstr "зертхана"
-
 #: apps/labs/models/attempt.py:18
 msgid "experiment"
 msgstr "тәжірибе"
 
-#: apps/labs/models/attempt.py:19 apps/organizations/models/group.py:65
-msgid "research group"
-msgstr "зерттеу тобы"
-
 #: apps/labs/models/attempt.py:19
 msgid "Snapshot at start"
 msgstr "Басталған сәттегі мәні"
-
-#: apps/labs/models/attempt.py:20
-msgid "status"
-msgstr "күйі"
 
 #: apps/labs/models/attempt.py:21
 msgid "started at"
@@ -1252,10 +1624,6 @@ msgstr "басталған уақыты"
 #: apps/labs/models/attempt.py:22
 msgid "finished at"
 msgstr "аяқталған уақыты"
-
-#: apps/labs/models/attempt.py:23
-msgid "duration, s"
-msgstr "ұзақтығы, с"
 
 #: apps/labs/models/attempt.py:26
 msgid "order errors"
@@ -1566,7 +1934,7 @@ msgstr "Қате құрал не таңдау"
 msgid "Time spent"
 msgstr "Жұмсалған уақыт"
 
-#: apps/labs/views.py:73 ui/templates/courses/topic.html:35
+#: apps/labs/views.py:73 ui/templates/courses/topic.html:39
 msgid "Analysis: correct answers"
 msgstr "Талдау: дұрыс жауаптар"
 
@@ -1582,7 +1950,7 @@ msgstr "Келесі тәжірибе"
 msgid "Start again"
 msgstr "Қайта бастау"
 
-#: apps/labs/views.py:77
+#: apps/labs/views.py:78
 msgid ""
 "Start the experiment again? The current progress will be saved as an "
 "unfinished attempt."
@@ -1590,73 +1958,69 @@ msgstr ""
 "Тәжірибені қайта бастайсыз ба? Ағымдағы барыс аяқталмаған талпыныс ретінде "
 "сақталады."
 
-#: apps/labs/views.py:78
+#: apps/labs/views.py:80
 msgid "Safety"
 msgstr "Қауіпсіздік"
 
-#: apps/labs/views.py:79
+#: apps/labs/views.py:81
 msgid "Observation"
 msgstr "Бақылау"
 
-#: apps/labs/views.py:80
+#: apps/labs/views.py:82
 msgid "Mistake"
 msgstr "Қате"
 
-#: apps/labs/views.py:81
+#: apps/labs/views.py:83
 msgid "Note"
 msgstr "Ескерту"
 
-#: apps/labs/views.py:82
+#: apps/labs/views.py:84
 msgid "Speed"
 msgstr "Жылдамдық"
 
-#: apps/labs/views.py:83
+#: apps/labs/views.py:85
 msgid "without catalyst"
 msgstr "катализаторсыз"
 
-#: apps/labs/views.py:84
+#: apps/labs/views.py:86
 msgid "with MnO₂"
 msgstr "MnO₂ қатысында"
 
-#: apps/labs/views.py:85
+#: apps/labs/views.py:87
 msgid "A: without catalyst"
 msgstr "А: катализаторсыз"
 
-#: apps/labs/views.py:86
+#: apps/labs/views.py:88
 msgid "B: with MnO₂"
 msgstr "В: MnO₂ қатысында"
 
-#: apps/labs/views.py:87
+#: apps/labs/views.py:89
 msgid "Cathode (−)"
 msgstr "Катод (−)"
 
-#: apps/labs/views.py:88
+#: apps/labs/views.py:90
 msgid "Anode (+)"
 msgstr "Анод (+)"
 
-#: apps/labs/views.py:89
+#: apps/labs/views.py:91
 msgid "Ratio"
 msgstr "Қатынас"
 
-#: apps/labs/views.py:90
+#: apps/labs/views.py:92
 msgid "Purity test: a quiet pop — the hydrogen is pure."
 msgstr "Тазалығын тексеру: тыныш «пах» дыбысы — сутегі таза."
 
-#: apps/labs/views.py:91
+#: apps/labs/views.py:93
 msgid "The glowing splint flares up: the gas is oxygen."
 msgstr "Бықсып тұрған шамшырақ лап етіп жанды: бұл газ — оттегі."
 
-#: apps/labs/views.py:92
+#: apps/labs/views.py:94
 msgid "Tube A is the control: it must stay without a catalyst."
 msgstr "А пробиркасы — бақылау үлгісі: ол катализаторсыз қалуы керек."
 
-#: apps/labs/views.py:93
+#: apps/labs/views.py:95
 msgid "Connection problem. Your actions are kept and will be sent again."
 msgstr "Байланыс ақауы. Әрекеттеріңіз сақталған және қайта жіберіледі."
-
-#: apps/organizations/admin.py:44
-msgid "students"
-msgstr "студенттер"
 
 #: apps/organizations/admin.py:76 apps/organizations/models/structure.py:16
 #: apps/organizations/models/structure.py:25
@@ -1765,7 +2129,8 @@ msgstr "зерттеуге келісім"
 #: apps/organizations/models/profiles.py:28
 msgid ""
 "Agreed that anonymised learning data may be used in pedagogical research"
-msgstr "Анонимделген оқу деректерін педагогикалық зерттеуде пайдалануға келісті"
+msgstr ""
+"Анонимделген оқу деректерін педагогикалық зерттеуде пайдалануға келісті"
 
 #: apps/organizations/models/profiles.py:30
 msgid "consent given at"
@@ -1854,15 +2219,15 @@ msgstr "білім беру бағдарламалары"
 msgid "Research"
 msgstr "Зерттеу"
 
-#: config/settings/base.py:136
+#: config/settings/base.py:137
 msgid "Kazakh"
 msgstr "Қазақша"
 
-#: config/settings/base.py:137
+#: config/settings/base.py:138
 msgid "Russian"
 msgstr "Орысша"
 
-#: config/settings/base.py:138
+#: config/settings/base.py:139
 msgid "English"
 msgstr "Ағылшынша"
 
@@ -1878,14 +2243,20 @@ msgid ""
 "Someone (hopefully you) asked to reset the password of your ChemEduTech "
 "account.\n"
 "Open the link to set a new password:"
-msgstr "Сәлеметсіз бе, %(user)s!\n\nChemEduTech аккаунтыңыздың құпиясөзін қалпына келтіру сұралды.\nЖаңа құпиясөз орнату үшін сілтемені ашыңыз:"
+msgstr ""
+"Сәлеметсіз бе, %(user)s!\n"
+"\n"
+"ChemEduTech аккаунтыңыздың құпиясөзін қалпына келтіру сұралды.\n"
+"Жаңа құпиясөз орнату үшін сілтемені ашыңыз:"
 
 #: ui/templates/accounts/email/password_reset.txt:8
 #, python-format
 msgid ""
 "Your username: %(username)s\n"
 "If you did not ask for this, just ignore the email."
-msgstr "Логиніңіз: %(username)s\nЕгер сіз сұрамаған болсаңыз, бұл хатты елемеңіз."
+msgstr ""
+"Логиніңіз: %(username)s\n"
+"Егер сіз сұрамаған болсаңыз, бұл хатты елемеңіз."
 
 #: ui/templates/accounts/email/password_reset_subject.txt:1
 msgid "ChemEduTech: password reset"
@@ -1968,7 +2339,9 @@ msgstr "Поштаңызды тексеріңіз"
 msgid ""
 "If an account with this email exists, we have sent a link to set a new "
 "password. It may take a few minutes."
-msgstr "Егер бұл email-мен аккаунт болса, жаңа құпиясөз орнатуға сілтеме жібердік. Хат бірнеше минутта келуі мүмкін."
+msgstr ""
+"Егер бұл email-мен аккаунт болса, жаңа құпиясөз орнатуға сілтеме жібердік. "
+"Хат бірнеше минутта келуі мүмкін."
 
 #: ui/templates/accounts/password_reset_done.html:8
 #: ui/templates/accounts/password_reset_form.html:13
@@ -1979,7 +2352,9 @@ msgstr "Кіру бетіне оралу"
 msgid ""
 "Enter the email you signed up with — we will send a link to set a new "
 "password."
-msgstr "Тіркелгенде көрсеткен email-ды енгізіңіз — жаңа құпиясөз орнатуға сілтеме жібереміз."
+msgstr ""
+"Тіркелгенде көрсеткен email-ды енгізіңіз — жаңа құпиясөз орнатуға сілтеме "
+"жібереміз."
 
 #: ui/templates/accounts/password_reset_form.html:12
 msgid "Send the link"
@@ -2069,24 +2444,35 @@ msgid "Module %(n)s"
 msgstr "%(n)s-модуль"
 
 #: ui/templates/courses/dashboard.html:26
-msgid "Theory and virtual lab work"
-msgstr "Теория және виртуалды зертханалық жұмыс"
-
-#: ui/templates/courses/dashboard.html:28
-msgid "Draft"
-msgstr "Жоба"
+#, python-format
+msgid "%(n)s stage"
+msgid_plural "%(n)s stages"
+msgstr[0] "%(n)s кезең"
+msgstr[1] "%(n)s кезең"
 
 #: ui/templates/courses/dashboard.html:35
 msgid "Coming soon"
 msgstr "Жақында"
 
-#: ui/templates/courses/dashboard.html:44
+#: ui/templates/courses/dashboard.html:46
+msgid "Courses open for enrolment"
+msgstr "Жазылуға ашық курстар"
+
+#: ui/templates/courses/dashboard.html:47
+msgid "Your group has no assigned course yet. You can join an open course."
+msgstr "Тобыңызға әлі курс бекітілмеген. Ашық курсқа жазылуға болады."
+
+#: ui/templates/courses/dashboard.html:55
+msgid "Enrol"
+msgstr "Жазылу"
+
+#: ui/templates/courses/dashboard.html:60
 msgid "No courses yet"
 msgstr "Әзірге курс жоқ"
 
-#: ui/templates/courses/dashboard.html:44
-msgid "Run: python manage.py seed_course"
-msgstr "Іске қосыңыз: python manage.py seed_course"
+#: ui/templates/courses/dashboard.html:60
+msgid "The course appears here when your teacher assigns it to your group."
+msgstr "Мұғалім курсты тобыңызға бекіткенде, ол осында пайда болады."
 
 #: ui/templates/courses/topic.html:5
 msgid "Breadcrumbs"
@@ -2097,12 +2483,15 @@ msgstr "Навигация жолы"
 msgid "Topic %(n)s"
 msgstr "%(n)s-тақырып"
 
-#: ui/templates/courses/topic.html:24 ui/templates/labs/run.html:22
-#: ui/views.py:12
-msgid "Lab work"
-msgstr "Зертханалық жұмыс"
+#: ui/templates/courses/topic.html:11
+msgid "Topic stages"
+msgstr "Тақырып кезеңдері"
 
-#: ui/templates/courses/topic.html:42
+#: ui/templates/courses/topic.html:19
+msgid "This topic has no theory yet."
+msgstr "Бұл тақырыпта әзірге теория жоқ."
+
+#: ui/templates/courses/topic.html:46
 msgid "Open the virtual lab"
 msgstr "Виртуалды зертхананы ашу"
 
@@ -2179,10 +2568,6 @@ msgstr "Курстар мазмұны"
 #: ui/templates/layouts/teacher.html:10
 msgid "Groups and students"
 msgstr "Топтар мен студенттер"
-
-#: ui/templates/layouts/teacher.html:14
-msgid "teacher"
-msgstr "мұғалім"
 
 #: ui/templates/partials/lang_switch.html:2
 msgid "Interface language"
@@ -2275,14 +2660,6 @@ msgstr "ui/templates/components ішіндегі барлық компонент
 msgid "Open dialog"
 msgstr "Диалогты ашу"
 
-#: ui/views.py:10
-msgid "Theory"
-msgstr "Теория"
-
-#: ui/views.py:11
-msgid "Video lesson"
-msgstr "Видеосабақ"
-
 #: ui/views.py:13
 msgid "Practice 1"
 msgstr "Практикалық жұмыс 1"
@@ -2295,13 +2672,21 @@ msgstr "Практикалық жұмыс 2"
 msgid "Practice 3"
 msgstr "Практикалық жұмыс 3"
 
-#: ui/views.py:16
-msgid "Topic test"
-msgstr "Тақырып тесті"
-
 #: ui/views.py:21
 msgid "Score"
 msgstr "Ұпай"
+
+#~ msgid "HTML content of the theory section"
+#~ msgstr "Теория бөлімінің HTML мазмұны"
+
+#~ msgid "lab key"
+#~ msgstr "зертхана кілті"
+
+#~ msgid "Theory and virtual lab work"
+#~ msgstr "Теория және виртуалды зертханалық жұмыс"
+
+#~ msgid "Run: python manage.py seed_course"
+#~ msgstr "Іске қосыңыз: python manage.py seed_course"
 
 #~ msgid "Platform"
 #~ msgstr "Платформа"

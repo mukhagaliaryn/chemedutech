@@ -547,3 +547,9 @@ Inter, Google Fonts: `family=Inter:wght@400;500;600;700&display=swap` (cyrillic-
 | D12 | 2026-10-16 | **Логин**: латын әріптері, сандар және `. _ -`; `@` тыйым салынған — бір өрістегі логин/email `@` бойынша ажыратылады. |
 | D13 | 2026-10-16 | **Зерттеу деректерін қорғау**: `LabAttempt.user` → `PROTECT` (пайдаланушыны өшіру талпыныстарын жоймайды), LabAttempt админде өшірілмейді. |
 | D14 | 2026-10-16 | **Логиннен кейін бағыттау** `core.permissions.home_url_for`: admin → `/admin/`, teacher → `teacher:dashboard` (әзірге `research:dashboard`), student → `student:dashboard` (әзірге `courses:dashboard`). |
+| D15 | 2026-10-16 | **Quiz сілтемелері** (`Stage.checkpoint_quiz`, `TestContent.quiz`) STEP-05-те, `assessments.Quiz` пайда болғанда қосылады; бекіту тесттері мен тақырып тестінің сұрақтары да сонда seed-те толтырылады. |
+| D16 | 2026-10-16 | **courses → `apps.labs.engine`**: courses тек код-регистрді (`all_labs`, `get_lab` — модельсіз таза Python) импорттайды, labs модельдері/сервистерін ешқашан импорттамайды (STEP-08-де labs → courses бағыты қалады). |
+| D17 | 2026-10-16 | **Топқа кейін қосылған студент**: `courses.services.sync_student_enrollments(student)` — студент курс бетіне (кейін кабинетке) кіргенде шақырылады; топ курсқа бекітілгенде/админ әрекетімен `sync_group_enrollments`. Enrollment өшірілмейді (`PROTECT`, админде delete жоқ) — шығару `status=dropped`. |
+| D18 | 2026-10-16 | **CKEditor жүктеу**: пакеттің өз URL-і қосылмайды; `apps.core.uploads.ckeditor_upload` (teacher/admin), файлдар `MEDIA_ROOT/ckeditor/`. Шығарғанда `|sanitize` (nh3 allow-list). |
+| D19 | 2026-10-16 | **Тақырып тексерісі**: «кемінде 1 міндетті кезең» тек **жарияланған** тақырыпқа (жоба тақырыптар бос бола алады); `Topic.number` курс ішінде бірегей (`clean`). |
+
