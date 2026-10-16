@@ -180,7 +180,7 @@ core
 `time_limit_min` null, `max_attempts` null (= шексіз), `questions_per_attempt` null (= барлығы; әйтпесе пулдан кездейсоқ),
 `shuffle_questions`, `shuffle_choices`, `grading` (`best|last|first`, default `best`), `show_answers_after` (bool).
 
-**Question** — `quiz` FK, `order`, `kind` (`single|multiple|numeric|short_text`), `text` (CKEditor5 — формулалар үшін sub/sup),
+**Question** — `quiz` FK, `order`, `kind` (`single|multiple|numeric|short_text`; STEP-05a-да `formula|equation`), `text` (CKEditor5 — формулалар үшін sub/sup),
 `points` (default 1), `explanation` (жауаптан кейін көрсетіледі), `numeric_answer`, `numeric_tolerance`, `accepted_answers` (JSON, short_text үшін).
 
 **Choice** — `question` FK, `order`, `text`, `is_correct`.
@@ -489,7 +489,7 @@ Inter, Google Fonts: `family=Inter:wght@400;500;600;700&display=swap` (cyrillic-
 ### 9.6 Басқа
 - `django-htmx` — каскадты select-тер, кесте сүзгілері, хабарламалар, AI бағалау нәтижесін күту (polling).
 - `anthropic` (Python SDK) — тек `practice/services/ai_grading.py` ішінде; басқа жерден шақырылмайды.
-- `django-tasks` (DatabaseBackend) — фондық тапсырмалар (AI бағалау, сертификат PDF); prod-та `manage.py db_worker` (systemd).
+- `django-tasks` + `django-tasks-db` (DatabaseBackend 0.12-ден бастап бөлек пакетте) — фондық тапсырмалар (AI бағалау, сертификат PDF); prod-та `manage.py db_worker` (systemd).
 - Settings: `base/dev/prod`, құпиялар `.env`-тен (`python-dotenv` немесе `django-environ`).
 - Медиа файлдар: dev — жергілікті; prod — Nginx арқылы.
 - Тесттер: `pytest` + `pytest-django` (немесе Django test runner), әр STEP-те тест.
@@ -526,3 +526,18 @@ Inter, Google Fonts: `family=Inter:wght@400;500;600;700&display=swap` (cyrillic-
 **ChemEduTech UI** артефакттарында (сілтемелер `CLAUDE.md`-де):
 - Design System: https://claude.ai/artifact/K8oYpbz6mGru4Z7E5Z11uj
 - UI макеттері: https://claude.ai/artifact/R2Y3e5kNqsUNBn3Hnh9w5m
+
+---
+
+## 11. Қабылданған шешімдер (журнал)
+
+| # | Күні | Шешім |
+|---|---|---|
+| D1 | 2026-10-16 | **Settings:** `manage.py` → `config.settings.dev`, `wsgi.py`/`asgi.py` → `config.settings.prod` (env ұмытылса DEBUG қосылмайды). |
+| D2 | 2026-10-16 | **Оқу URL-дері:** тақырып — `topic.number` (курс ішінде бірегей, 1..15), кезең — `stage.pk` (мұғалім кезеңдерді қайта сұрыптағанда сілтеме өзгермейді): `/learn/<course_slug>/<topic_number>/<stage_pk>/`, зертхана — `.../<stage_pk>/lab/<experiment_key>/`. View кезеңнің сол тақырыпқа тиесілігін тексереді. |
+| D3 | 2026-10-16 | **`needs_review` практика** → `StageProgress.status=awaiting_check`: келесі кезең ашылады, `score_percent` уақытша жазылып «ағымдағы» ұпайға кіреді, бірақ кезең `passed` саналмайды — тақырып мұғалім растағанша `completed` болмайды. Растаса → `passed`. |
+| D4 | 2026-10-16 | **GradeScale** — модель емес, кодтағы тұрақты кесте (`apps/progress/grading.py`): шкала нормативтік, зерттеу кезеңінде өзгермеуі керек. |
+| D5 | 2026-10-16 | **Шрифт:** Inter — Google Fonts (§9.4), fallback `ui-sans-serif, system-ui` — интернет баяу болса да бет оқылады. |
+| D6 | 2026-10-16 | **WeasyPrint** серверде жүйелік `pango` кітапханасын қажет етеді — STEP-13/README-де орнату нұсқауы жазылады. |
+| D7 | 2026-10-16 | **Ruff:** `E501` өшірілген (зертхана спецификацияларындағы ұзын мәтіндер); `ruff format` тек жаңа/өзгерген файлдарға, симулятор файлдары әдейі форматталмайды. |
+
