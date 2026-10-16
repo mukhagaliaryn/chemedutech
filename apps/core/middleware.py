@@ -34,7 +34,6 @@ class KazakhFirstLocaleMiddleware:
     def get_language(request):
         user = getattr(request, "user", None)
         if user is not None and user.is_authenticated:
-            # User.language is added in STEP-03 (accounts); until then this is a no-op.
             code = getattr(user, "language", "")
             if _supported(code):
                 return code

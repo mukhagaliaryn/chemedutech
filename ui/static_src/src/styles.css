@@ -310,6 +310,7 @@
   /* ---- Form field ------------------------------------------------------ */
   .field {
     display: grid;
+    align-content: start;
     gap: 6px;
   }
   .label {
@@ -353,6 +354,10 @@
     font-size: 12px;
     line-height: 16px;
     color: var(--color-ink-faint);
+  }
+  .help ul {
+    list-style: disc;
+    padding-left: 1rem;
   }
   .error-text {
     font-size: 12px;
@@ -423,6 +428,7 @@
     color: var(--color-ink-soft);
     font-size: 12px;
     font-weight: 600;
+    white-space: nowrap;
   }
   .segmented > [aria-current="true"],
   .segmented > [aria-selected="true"] {

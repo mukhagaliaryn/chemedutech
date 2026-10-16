@@ -9,8 +9,8 @@ components/nav_item.html, so the list below is the target menu from the «Сту
   {% translate "My courses" as l_courses %}{% include "components/nav_item.html" with url_name="student:courses" icon="book" label=l_courses %}
   {% translate "Grades" as l_grades %}{% include "components/nav_item.html" with url_name="student:results" icon="chart" label=l_grades %}
   {% translate "Certificates" as l_certs %}{% include "components/nav_item.html" with url_name="student:certificates" icon="award" label=l_certs %}
-  {% if user.is_teacher %}
+  {% if user.is_teacher or user.is_admin_role %}
     {% translate "Research data" as l_research %}{% include "components/nav_item.html" with url_name="research:dashboard" match="research:" icon="search" label=l_research %}
   {% endif %}
 {% endblock %}
-{% block user_meta %}{% if user.study_group %}{{ user.study_group }} · {% endif %}{% translate "student" %}{% endblock %}
+{% block user_meta %}{% if user.student_profile.group %}{{ user.student_profile.group }} · {% endif %}{% translate "student" %}{% endblock %}

@@ -7,6 +7,7 @@ from apps.accounts.models import User
 from apps.labs.engine import all_labs, get_lab
 from apps.labs.models import LabAttempt
 from apps.labs.services import finish_attempt, record_events, save_journal, start_attempt, submit_analysis
+from apps.organizations.testing import make_group, make_student
 
 
 class SpecTests(TestCase):
@@ -32,7 +33,7 @@ class SpecTests(TestCase):
 @override_settings(ALLOWED_HOSTS=["testserver"])
 class AttemptFlowTests(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user("s1", password="x", cohort="experimental")
+        self.user = make_student("s1", group=make_group(research_cohort="experimental"))
         self.lab = get_lab("t01")
         self.exp = self.lab.experiment("hydrogen")
 

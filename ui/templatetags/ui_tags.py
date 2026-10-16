@@ -92,3 +92,9 @@ def url_or_empty(name, *args):
         return reverse(name, args=args or None)
     except NoReverseMatch:
         return ""
+
+
+@register.filter
+def get_field(form, name):
+    """{{ form|get_field:"email" }} — a BoundField by name (loops over a fixed field list)."""
+    return form[name]

@@ -6,6 +6,7 @@ from django.urls import reverse
 from apps.accounts.models import User
 from apps.courses.models import Topic
 from apps.labs.engine import get_lab
+from apps.organizations.testing import make_group, make_student
 from ui.templatetags.ui_tags import initials, percent_of, status_variant
 
 INTER = "fonts.googleapis.com/css2?family=Inter"
@@ -83,9 +84,9 @@ class PageTests(TestCase):
     @classmethod
     def setUpTestData(cls):
         call_command("seed_course", verbosity=0)
-        cls.student = User.objects.create_user("student1", password="pw-12345", first_name="Айгерім", last_name="С")
-        cls.teacher = User.objects.create_user("teacher1", password="pw-12345", role=User.Role.TEACHER)
-        cls.staff = User.objects.create_user("admin1", password="pw-12345", is_staff=True)
+        cls.student = make_student("student1", group=make_group(), first_name="Айгерім", last_name="С")
+        cls.teacher = User.objects.create_user("teacher1", "t1@example.kz", "pw-12345", role=User.Role.TEACHER)
+        cls.staff = User.objects.create_user("admin1", "a1@example.kz", "pw-12345", role=User.Role.ADMIN)
 
     def assertDesignSystemPage(self, response):
         self.assertEqual(response.status_code, 200)

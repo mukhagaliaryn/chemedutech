@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 16:05+0500\n"
+"POT-Creation-Date: 2026-10-16 16:17+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,78 +20,189 @@ msgstr ""
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
 "(n%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: apps/accounts/admin.py:13
-msgid "Platform"
-msgstr "Платформа"
+#: apps/accounts/admin.py:61
+msgid "Personal info"
+msgstr "Личные данные"
+
+#: apps/accounts/admin.py:64
+msgid "Permissions"
+msgstr "Права доступа"
+
+#: apps/accounts/admin.py:65
+msgid "Important dates"
+msgstr "Важные даты"
+
+#: apps/accounts/admin.py:94
+msgid "full name"
+msgstr "ФИО"
+
+#: apps/accounts/admin.py:98 apps/organizations/models/profiles.py:19
+msgid "group"
+msgstr "группа"
 
 #: apps/accounts/apps.py:8
 msgid "Accounts"
 msgstr "Аккаунты"
 
-#: apps/accounts/forms.py:9
+#: apps/accounts/forms.py:21
+msgid "Username or email"
+msgstr "Логин или email"
+
+#: apps/accounts/forms.py:25
+msgid "Remember me"
+msgstr "Запомнить меня"
+
+#: apps/accounts/forms.py:29
+msgid "Wrong username, email or password."
+msgstr "Неверный логин, email или пароль."
+
+#: apps/accounts/forms.py:40
 msgid "First name"
 msgstr "Имя"
 
-#: apps/accounts/forms.py:10
+#: apps/accounts/forms.py:41
 msgid "Last name"
 msgstr "Фамилия"
 
-#: apps/accounts/forms.py:11 ui/templates/research/dashboard.html:33
-msgid "Study group"
-msgstr "Учебная группа"
+#: apps/accounts/forms.py:42
+msgid "Email"
+msgstr "Email"
 
-#: apps/accounts/models/user.py:15 ui/templates/research/dashboard.html:80
+#: apps/accounts/forms.py:45 ui/templates/accounts/signup.html:35
+msgid "Choose from the list"
+msgstr "Выбрать из списка"
+
+#: apps/accounts/forms.py:45 ui/templates/accounts/signup.html:36
+msgid "I have a group code"
+msgstr "Есть код группы"
+
+#: apps/accounts/forms.py:50
+msgid "University"
+msgstr "Университет"
+
+#: apps/accounts/forms.py:51
+msgid "Faculty"
+msgstr "Факультет"
+
+#: apps/accounts/forms.py:52
+msgid "Department"
+msgstr "Кафедра"
+
+#: apps/accounts/forms.py:55 ui/views.py:21
+msgid "Group"
+msgstr "Группа"
+
+#: apps/accounts/forms.py:57
+msgid "Each list is loaded from the previous choice"
+msgstr "Каждый список загружается по предыдущему выбору"
+
+#: apps/accounts/forms.py:60
+msgid "Group code"
+msgstr "Код группы"
+
+#: apps/accounts/forms.py:63
+msgid "Ask your teacher for the 8-character code"
+msgstr "Спросите 8-значный код у преподавателя"
+
+#: apps/accounts/forms.py:67
+msgid ""
+"I agree that anonymised data about my learning activity may be used in "
+"pedagogical research."
+msgstr "Я согласен(на), что обезличенные данные о моей учебной деятельности могут использоваться в педагогическом исследовании."
+
+#: apps/accounts/forms.py:80
+msgid "Latin letters, digits and . _ - characters"
+msgstr "Латинские буквы, цифры и символы . _ -"
+
+#: apps/accounts/forms.py:108 apps/accounts/models/user.py:61
+msgid "A user with this email already exists."
+msgstr "Пользователь с таким email уже существует."
+
+#: apps/accounts/forms.py:116
+msgid "No active group has this code. Check it with your teacher."
+msgstr "Активная группа с таким кодом не найдена. Уточните код у преподавателя."
+
+#: apps/accounts/forms.py:120
+msgid "Choose your group."
+msgstr "Выберите свою группу."
+
+#: apps/accounts/models/user.py:14
+msgid "Use Latin letters, digits and the characters . _ - only."
+msgstr "Используйте только латинские буквы, цифры и символы . _ -"
+
+#: apps/accounts/models/user.py:31
+msgid "Administrator"
+msgstr "Администратор"
+
+#: apps/accounts/models/user.py:32
+msgid "Teacher"
+msgstr "Преподаватель"
+
+#: apps/accounts/models/user.py:33 ui/templates/research/dashboard.html:80
 #: ui/views.py:21
 msgid "Student"
 msgstr "Студент"
 
-#: apps/accounts/models/user.py:16
-msgid "Teacher"
-msgstr "Преподаватель"
+#: apps/accounts/models/user.py:36
+msgid "username"
+msgstr "логин"
 
-#: apps/accounts/models/user.py:17
-msgid "Researcher"
-msgstr "Исследователь"
+#: apps/accounts/models/user.py:40
+msgid "Latin letters, digits and . _ - characters."
+msgstr "Латинские буквы, цифры и символы . _ -"
 
-#: apps/accounts/models/user.py:20
-msgid "Not assigned"
-msgstr "Не назначена"
+#: apps/accounts/models/user.py:41
+msgid "A user with that username already exists."
+msgstr "Пользователь с таким логином уже существует."
 
-#: apps/accounts/models/user.py:21 ui/templates/research/dashboard.html:28
-msgid "Control group"
-msgstr "Контрольная группа"
+#: apps/accounts/models/user.py:43
+msgid "email address"
+msgstr "адрес email"
 
-#: apps/accounts/models/user.py:22 ui/templates/research/dashboard.html:29
-msgid "Experimental group"
-msgstr "Экспериментальная группа"
-
-#: apps/accounts/models/user.py:24
+#: apps/accounts/models/user.py:44
 msgid "role"
 msgstr "роль"
 
-#: apps/accounts/models/user.py:25 apps/labs/models/attempt.py:19
-msgid "research group"
-msgstr "исследовательская группа"
+#: apps/accounts/models/user.py:45
+msgid "middle name"
+msgstr "отчество"
 
-#: apps/accounts/models/user.py:27
-msgid "study group"
-msgstr "учебная группа"
+#: apps/accounts/models/user.py:45
+msgid "Patronymic"
+msgstr "Отчество"
 
-#: apps/accounts/models/user.py:27
-msgid "Academic group code, e.g. Chem-21-1"
-msgstr "Код академической группы, например Хим-21-1"
+#: apps/accounts/models/user.py:46
+msgid "phone"
+msgstr "телефон"
 
-#: apps/accounts/models/user.py:31
+#: apps/accounts/models/user.py:47
+msgid "avatar"
+msgstr "аватар"
+
+#: apps/accounts/models/user.py:49
+msgid "interface language"
+msgstr "язык интерфейса"
+
+#: apps/accounts/models/user.py:55 apps/organizations/models/profiles.py:11
+#: apps/organizations/models/profiles.py:42
 msgid "user"
 msgstr "пользователь"
 
-#: apps/accounts/models/user.py:32
+#: apps/accounts/models/user.py:56
 msgid "users"
 msgstr "пользователи"
 
 #: apps/core/apps.py:8
 msgid "Core"
 msgstr "Основное"
+
+#: apps/core/models.py:8
+msgid "created at"
+msgstr "создано"
+
+#: apps/core/models.py:9
+msgid "updated at"
+msgstr "изменено"
 
 #: apps/courses/apps.py:8
 msgid "Courses"
@@ -1123,6 +1234,10 @@ msgstr "лаборатория"
 msgid "experiment"
 msgstr "опыт"
 
+#: apps/labs/models/attempt.py:19 apps/organizations/models/group.py:65
+msgid "research group"
+msgstr "исследовательская группа"
+
 #: apps/labs/models/attempt.py:19
 msgid "Snapshot at start"
 msgstr "Значение на момент начала"
@@ -1539,19 +1654,217 @@ msgid "Connection problem. Your actions are kept and will be sent again."
 msgstr ""
 "Проблема со связью. Ваши действия сохранены и будут отправлены повторно."
 
+#: apps/organizations/admin.py:44
+msgid "students"
+msgstr "студенты"
+
+#: apps/organizations/admin.py:76 apps/organizations/models/structure.py:16
+#: apps/organizations/models/structure.py:25
+msgid "university"
+msgstr "университет"
+
+#: apps/organizations/admin.py:104
+msgid "Generate new join codes"
+msgstr "Сгенерировать новые коды"
+
+#: apps/organizations/admin.py:110
+#, python-format
+msgid "%(n)d code regenerated."
+msgid_plural "%(n)d codes regenerated."
+msgstr[0] "%(n)d код обновлён."
+msgstr[1] "%(n)d кода обновлено."
+msgstr[2] "%(n)d кодов обновлено."
+msgstr[3] "%(n)d кодов обновлено."
+
+#: apps/organizations/apps.py:8
+msgid "Organizations"
+msgstr "Организации"
+
+#: apps/organizations/models/group.py:22
+msgid "Not assigned"
+msgstr "Не назначена"
+
+#: apps/organizations/models/group.py:23
+#: ui/templates/research/dashboard.html:28
+msgid "Control group"
+msgstr "Контрольная группа"
+
+#: apps/organizations/models/group.py:24
+#: ui/templates/research/dashboard.html:29
+msgid "Experimental group"
+msgstr "Экспериментальная группа"
+
+#: apps/organizations/models/group.py:31
+#: apps/organizations/models/profiles.py:45
+#: apps/organizations/models/structure.py:51
+#: apps/organizations/models/structure.py:63
+msgid "department"
+msgstr "кафедра"
+
+#: apps/organizations/models/group.py:39
+#: apps/organizations/models/structure.py:70
+msgid "specialty"
+msgstr "образовательная программа"
+
+#: apps/organizations/models/group.py:41
+#: apps/organizations/models/structure.py:8
+#: apps/organizations/models/structure.py:27
+#: apps/organizations/models/structure.py:46
+#: apps/organizations/models/structure.py:66
+msgid "name"
+msgstr "название"
+
+#: apps/organizations/models/group.py:41
+msgid "e.g. Chem-23-1"
+msgstr "например, Хим-23-1"
+
+#: apps/organizations/models/group.py:43
+msgid "admission year"
+msgstr "год поступления"
+
+#: apps/organizations/models/group.py:46
+#: apps/organizations/models/profiles.py:23
+msgid "year of study"
+msgstr "курс"
+
+#: apps/organizations/models/group.py:55
+msgid "curator"
+msgstr "куратор"
+
+#: apps/organizations/models/group.py:58
+msgid "join code"
+msgstr "код для вступления"
+
+#: apps/organizations/models/group.py:62
+msgid "Students can enter it when signing up"
+msgstr "Студенты могут ввести его при регистрации"
+
+#: apps/organizations/models/group.py:67
+#: apps/organizations/models/structure.py:12
+msgid "active"
+msgstr "активна"
+
+#: apps/organizations/models/group.py:71
+msgid "academic group"
+msgstr "академическая группа"
+
+#: apps/organizations/models/group.py:72
+msgid "academic groups"
+msgstr "академические группы"
+
+#: apps/organizations/models/profiles.py:21
+msgid "student ID"
+msgstr "номер зачётной книжки"
+
+#: apps/organizations/models/profiles.py:21
+msgid "Record book number"
+msgstr "Номер зачётной книжки"
+
+#: apps/organizations/models/profiles.py:26
+msgid "research consent"
+msgstr "согласие на исследование"
+
+#: apps/organizations/models/profiles.py:28
+msgid ""
+"Agreed that anonymised learning data may be used in pedagogical research"
+msgstr "Согласен(на) на использование обезличенных учебных данных в педагогическом исследовании"
+
+#: apps/organizations/models/profiles.py:30
+msgid "consent given at"
+msgstr "согласие дано"
+
+#: apps/organizations/models/profiles.py:33
+msgid "student profile"
+msgstr "профиль студента"
+
+#: apps/organizations/models/profiles.py:34
+msgid "student profiles"
+msgstr "профили студентов"
+
+#: apps/organizations/models/profiles.py:47
+msgid "position"
+msgstr "должность"
+
+#: apps/organizations/models/profiles.py:47
+msgid "e.g. Senior lecturer"
+msgstr "например, старший преподаватель"
+
+#: apps/organizations/models/profiles.py:48
+msgid "academic degree"
+msgstr "учёная степень"
+
+#: apps/organizations/models/profiles.py:48
+msgid "e.g. PhD"
+msgstr "например, PhD"
+
+#: apps/organizations/models/profiles.py:51
+msgid "teacher profile"
+msgstr "профиль преподавателя"
+
+#: apps/organizations/models/profiles.py:52
+msgid "teacher profiles"
+msgstr "профили преподавателей"
+
+#: apps/organizations/models/structure.py:9
+#: apps/organizations/models/structure.py:28
+#: apps/organizations/models/structure.py:47
+msgid "short name"
+msgstr "краткое название"
+
+#: apps/organizations/models/structure.py:10
+msgid "city"
+msgstr "город"
+
+#: apps/organizations/models/structure.py:11
+msgid "logo"
+msgstr "логотип"
+
+#: apps/organizations/models/structure.py:12
+msgid "Shown in the sign-up form"
+msgstr "Показывается в форме регистрации"
+
+#: apps/organizations/models/structure.py:17
+msgid "universities"
+msgstr "университеты"
+
+#: apps/organizations/models/structure.py:32
+#: apps/organizations/models/structure.py:44
+msgid "faculty"
+msgstr "факультет"
+
+#: apps/organizations/models/structure.py:33
+msgid "faculties"
+msgstr "факультеты"
+
+#: apps/organizations/models/structure.py:52
+msgid "departments"
+msgstr "кафедры"
+
+#: apps/organizations/models/structure.py:65
+msgid "code"
+msgstr "код"
+
+#: apps/organizations/models/structure.py:65
+msgid "e.g. 6B01501"
+msgstr "например, 6B01501"
+
+#: apps/organizations/models/structure.py:71
+msgid "specialties"
+msgstr "образовательные программы"
+
 #: apps/research/apps.py:8 ui/templates/research/dashboard.html:3
 msgid "Research"
 msgstr "Исследование"
 
-#: config/settings/base.py:121
+#: config/settings/base.py:136
 msgid "Kazakh"
 msgstr "Казахский"
 
-#: config/settings/base.py:122
+#: config/settings/base.py:137
 msgid "Russian"
 msgstr "Русский"
 
-#: config/settings/base.py:123
+#: config/settings/base.py:138
 msgid "English"
 msgstr "Английский"
 
@@ -1559,47 +1872,146 @@ msgstr "Английский"
 msgid "User interface"
 msgstr "Пользовательский интерфейс"
 
+#: ui/templates/accounts/email/password_reset.txt:1
+#, python-format
+msgid ""
+"Hello, %(user)s!\n"
+"\n"
+"Someone (hopefully you) asked to reset the password of your ChemEduTech "
+"account.\n"
+"Open the link to set a new password:"
+msgstr "Здравствуйте, %(user)s!\n\nПоступил запрос на сброс пароля вашего аккаунта ChemEduTech.\nЧтобы задать новый пароль, откройте ссылку:"
+
+#: ui/templates/accounts/email/password_reset.txt:8
+#, python-format
+msgid ""
+"Your username: %(username)s\n"
+"If you did not ask for this, just ignore the email."
+msgstr "Ваш логин: %(username)s\nЕсли вы не запрашивали сброс, просто проигнорируйте письмо."
+
+#: ui/templates/accounts/email/password_reset_subject.txt:1
+msgid "ChemEduTech: password reset"
+msgstr "ChemEduTech: сброс пароля"
+
 #: ui/templates/accounts/login.html:3 ui/templates/accounts/login.html:8
-#: ui/templates/accounts/login.html:17 ui/templates/accounts/signup.html:11
-#: ui/templates/core/home.html:12 ui/templates/layouts/public.html:16
+#: ui/templates/accounts/login.html:24
+#: ui/templates/accounts/password_reset_complete.html:8
+#: ui/templates/accounts/signup.html:11 ui/templates/core/home.html:12
+#: ui/templates/layouts/public.html:16
 msgid "Log in"
 msgstr "Войти"
 
 #: ui/templates/accounts/login.html:9
-msgid "Enter your username and password."
-msgstr "Введите логин и пароль."
+msgid "Enter your username or email."
+msgstr "Введите логин или email."
 
-#: ui/templates/accounts/login.html:19
+#: ui/templates/accounts/login.html:18
+msgid "Forgot your password?"
+msgstr "Забыли пароль?"
+
+#: ui/templates/accounts/login.html:26
 msgid "No account yet?"
 msgstr "Ещё нет аккаунта?"
 
-#: ui/templates/accounts/login.html:19 ui/templates/accounts/signup.html:18
+#: ui/templates/accounts/login.html:26 ui/templates/accounts/signup.html:3
+#: ui/templates/accounts/signup.html:19
 msgid "Sign up as a student"
 msgstr "Зарегистрироваться как студент"
 
-#: ui/templates/accounts/login.html:22
+#: ui/templates/accounts/login.html:29
 msgid ""
 "Teacher accounts are created by the platform administrator. Ask the "
 "administrator for your login details."
-msgstr "Аккаунты преподавателей создаёт администратор платформы. Данные для входа получите у администратора."
+msgstr ""
+"Аккаунты преподавателей создаёт администратор платформы. Данные для входа "
+"получите у администратора."
 
-#: ui/templates/accounts/signup.html:3 ui/templates/core/home.html:11
-msgid "Create an account"
-msgstr "Зарегистрироваться"
+#: ui/templates/accounts/password_reset_complete.html:3
+#: ui/templates/accounts/password_reset_confirm.html:3
+#: ui/templates/accounts/password_reset_confirm.html:8
+msgid "New password"
+msgstr "Новый пароль"
+
+#: ui/templates/accounts/password_reset_complete.html:6
+msgid "Password changed"
+msgstr "Пароль изменён"
+
+#: ui/templates/accounts/password_reset_complete.html:7
+msgid "You can now log in with the new password."
+msgstr "Теперь можно войти с новым паролем."
+
+#: ui/templates/accounts/password_reset_confirm.html:11
+msgid "Save the password"
+msgstr "Сохранить пароль"
+
+#: ui/templates/accounts/password_reset_confirm.html:15
+msgid "The link is no longer valid"
+msgstr "Ссылка недействительна"
+
+#: ui/templates/accounts/password_reset_confirm.html:16
+msgid "It has already been used or has expired. Request a new one."
+msgstr "Она уже использована или устарела. Запросите новую."
+
+#: ui/templates/accounts/password_reset_confirm.html:17
+msgid "Request a new link"
+msgstr "Запросить новую ссылку"
+
+#: ui/templates/accounts/password_reset_done.html:3
+#: ui/templates/accounts/password_reset_form.html:3
+#: ui/templates/accounts/password_reset_form.html:8
+msgid "Password reset"
+msgstr "Сброс пароля"
+
+#: ui/templates/accounts/password_reset_done.html:6
+msgid "Check your email"
+msgstr "Проверьте почту"
+
+#: ui/templates/accounts/password_reset_done.html:7
+msgid ""
+"If an account with this email exists, we have sent a link to set a new "
+"password. It may take a few minutes."
+msgstr "Если аккаунт с таким email существует, мы отправили ссылку для нового пароля. Письмо может прийти через несколько минут."
+
+#: ui/templates/accounts/password_reset_done.html:8
+#: ui/templates/accounts/password_reset_form.html:13
+msgid "Back to login"
+msgstr "Вернуться ко входу"
+
+#: ui/templates/accounts/password_reset_form.html:9
+msgid ""
+"Enter the email you signed up with — we will send a link to set a new "
+"password."
+msgstr "Введите email, указанный при регистрации, — мы пришлём ссылку для нового пароля."
+
+#: ui/templates/accounts/password_reset_form.html:12
+msgid "Send the link"
+msgstr "Отправить ссылку"
 
 #: ui/templates/accounts/signup.html:11
 msgid "Already have an account?"
 msgstr "Уже есть аккаунт?"
 
-#: ui/templates/accounts/signup.html:19
+#: ui/templates/accounts/signup.html:20
 msgid "After signing up you can enrol in a course and start learning."
 msgstr "После регистрации вы сможете записаться на курс и начать обучение."
 
-#: ui/templates/accounts/signup.html:26 ui/templates/layouts/public.html:17
+#: ui/templates/accounts/signup.html:25
+msgid "Personal details"
+msgstr "Личные данные"
+
+#: ui/templates/accounts/signup.html:32
+msgid "University and group"
+msgstr "Вуз и группа"
+
+#: ui/templates/accounts/signup.html:34
+msgid "How to find your group"
+msgstr "Как указать группу"
+
+#: ui/templates/accounts/signup.html:45 ui/templates/layouts/public.html:17
 msgid "Sign up"
 msgstr "Зарегистрироваться"
 
-#: ui/templates/accounts/signup.html:27
+#: ui/templates/accounts/signup.html:46
 msgid "Teachers do not sign up themselves — the administrator adds them."
 msgstr "Преподаватели не регистрируются сами — их добавляет администратор."
 
@@ -1643,6 +2055,10 @@ msgstr ""
 "Проводите лабораторные опыты на виртуальном столе: выбирайте посуду и "
 "реактивы, выполняйте порядок работы, наблюдайте реакцию и ведите "
 "лабораторный журнал."
+
+#: ui/templates/core/home.html:11
+msgid "Create an account"
+msgstr "Зарегистрироваться"
 
 #: ui/templates/courses/dashboard.html:3 ui/templates/courses/dashboard.html:7
 #: ui/templates/layouts/teacher.html:11
@@ -1705,7 +2121,9 @@ msgstr "Опыты"
 msgid ""
 "A course for future chemistry teachers: theory, video lessons and virtual "
 "lab work — safe and available at any time."
-msgstr "Курс для будущих учителей химии: теория, видеоуроки и виртуальные лабораторные работы — безопасно и в любое время."
+msgstr ""
+"Курс для будущих учителей химии: теория, видеоуроки и виртуальные "
+"лабораторные работы — безопасно и в любое время."
 
 #: ui/templates/layouts/cabinet.html:9
 msgid "Skip to content"
@@ -1796,6 +2214,10 @@ msgstr "Опыт"
 msgid "Research group"
 msgstr "Исследовательская группа"
 
+#: ui/templates/research/dashboard.html:33
+msgid "Study group"
+msgstr "Учебная группа"
+
 #: ui/templates/research/dashboard.html:36
 msgid "Apply"
 msgstr "Применить"
@@ -1880,9 +2302,17 @@ msgid "Topic test"
 msgstr "Тест по теме"
 
 #: ui/views.py:21
-msgid "Group"
-msgstr "Группа"
-
-#: ui/views.py:21
 msgid "Score"
 msgstr "Балл"
+
+#~ msgid "Platform"
+#~ msgstr "Платформа"
+
+#~ msgid "Researcher"
+#~ msgstr "Исследователь"
+
+#~ msgid "study group"
+#~ msgstr "учебная группа"
+
+#~ msgid "Academic group code, e.g. Chem-21-1"
+#~ msgstr "Код академической группы, например Хим-21-1"

@@ -18,7 +18,7 @@
       <ol class="overflow-hidden rounded-lg border border-line bg-surface">
         {% for topic in module.topics.all %}
           <li class="border-line not-last:border-b">
-            {% if topic.is_published or user.is_teacher %}
+            {% if topic.is_published or user.is_teacher or user.is_admin_role %}
               <a href="{{ topic.get_absolute_url }}" class="flex items-center gap-4 px-4 py-4 hover:bg-canvas sm:px-6">
                 <span class="num grid size-9 shrink-0 place-items-center rounded-full bg-primary-600 font-semibold text-on-primary">{{ topic.number }}</span>
                 <span class="flex min-w-0 flex-1 flex-col">

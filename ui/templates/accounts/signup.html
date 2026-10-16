@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% block title %}{% translate "Create an account" %} · ChemEduTech{% endblock %}
+{% block title %}{% translate "Sign up as a student" %} · ChemEduTech{% endblock %}
 {% block body %}
 <div class="px-4 py-10">
   <div class="mx-auto flex max-w-[760px] flex-col gap-6">
@@ -12,16 +12,35 @@
       </div>
     </header>
 
-    <form method="post" class="card flex flex-col gap-7 p-[clamp(20px,4vw,40px)]" novalidate>
+    <form method="post" class="card flex flex-col gap-7 p-[clamp(20px,4vw,40px)]" novalidate
+          x-data="{ mode: '{{ form.group_mode.value|default:'list'|escapejs }}' }">
       {% csrf_token %}
       <div>
         <h1 class="text-h1">{% translate "Sign up as a student" %}</h1>
         <p class="mt-1.5 text-ink-soft">{% translate "After signing up you can enrol in a course and start learning." %}</p>
       </div>
       {% if form.non_field_errors %}<p class="rounded-md bg-danger-50 px-3.5 py-3 text-sm text-danger-700" role="alert">{{ form.non_field_errors|join:" " }}</p>{% endif %}
-      <div class="grid gap-4 sm:grid-cols-2">
-        {% for field in form %}{% include "components/input.html" with field=field %}{% endfor %}
-      </div>
+
+      <fieldset class="grid gap-4 sm:grid-cols-2">
+        <legend class="mb-3 text-h3">{% translate "Personal details" %}</legend>
+        {% for name in "first_name last_name email username password1 password2"|split %}{% with field=form|get_field:name %}
+          {% include "components/input.html" with field=field %}
+        {% endwith %}{% endfor %}
+      </fieldset>
+
+      <fieldset class="flex flex-col gap-4">
+        <legend class="mb-3 text-h3">{% translate "University and group" %}</legend>
+        <input type="hidden" name="group_mode" :value="mode" value="{{ form.group_mode.value|default:'list' }}">
+        <div class="segmented self-start" role="tablist" aria-label="{% translate 'How to find your group' %}">
+          <button type="button" role="tab" class="h-[34px] px-3.5 text-[13px]" :aria-selected="(mode === 'list').toString()" @click="mode = 'list'">{% translate "Choose from the list" %}</button>
+          <button type="button" role="tab" class="h-[34px] px-3.5 text-[13px]" :aria-selected="(mode === 'code').toString()" @click="mode = 'code'">{% translate "I have a group code" %}</button>
+        </div>
+        <div x-show="mode === 'list'">{% include "accounts/partials/signup_cascade.html" %}</div>
+        <div x-show="mode === 'code'" x-cloak class="max-w-xs">{% include "components/input.html" with field=form.join_code %}</div>
+      </fieldset>
+
+      {% include "components/input.html" with field=form.research_consent %}
+
       <div class="flex flex-wrap items-center gap-3">
         <button class="btn btn-primary btn-lg" type="submit">{% translate "Sign up" %}</button>
         <span class="text-body-sm text-ink-faint">{% translate "Teachers do not sign up themselves — the administrator adds them." %}</span>

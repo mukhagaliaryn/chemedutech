@@ -89,7 +89,7 @@
       <tbody>
         {% for a in attempts %}
           <tr>
-            <td>{{ a.user }} <span class="text-ink-faint">{{ a.user.study_group }}</span></td>
+            <td>{{ a.user }} <span class="text-ink-faint">{{ a.user.student_profile.group|default:"" }}</span></td>
             <td>{{ titles|get:a.experiment_key }}</td>
             <td>{{ a.get_status_display }}</td>
             <td class="text-right">{{ a.duration_s|default:"—" }}</td>

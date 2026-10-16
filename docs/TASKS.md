@@ -36,15 +36,15 @@
 - **Қабылдау шарты:** `python manage.py tailwind build` жұмыс істейді; 4 тәжірибе бұрынғыдай өтеді; барлық беттер Inter-мен.
 
 ## STEP-03 · accounts + organizations
-- [ ] `User`: `role` (admin/teacher/student), unique email (case-insensitive), `middle_name`, `phone`, `avatar`, `language`.
+- [x] `User`: `role` (admin/teacher/student), unique email (case-insensitive), `middle_name`, `phone`, `avatar`, `language`.
       Ескі `researcher` рөлі және `User.cohort` жойылады (cohort → AcademicGroup/Enrollment).
-- [ ] `UsernameOrEmailBackend`; логин формасында бір өріс «Логин немесе email».
-- [ ] `organizations`: University, Faculty, Department, Specialty, AcademicGroup (`join_code`, `research_cohort`, `curator`), StudentProfile, TeacherProfile.
-- [ ] Тіркелу (тек студент): HTMX каскадты select (университет → факультет → кафедра → топ) немесе топ коды.
-- [ ] Логиннен кейін рөл бойынша бағыттау; `core/permissions.py` mixin-дері.
-- [ ] Unfold админ: User (мұғалім қосу формасы — role=teacher, TeacherProfile inline), ұйымдар (иерархиялық inlines, сүзгілер).
-- [ ] Миграцияларды нөлден қайта жасау.
-- [ ] Тесттер: email/username логин, тіркелу тек student жасайды, teacher-ді өздігінен тіркеу мүмкін емес, каскадты select.
+- [x] `UsernameOrEmailBackend`; логин формасында бір өріс «Логин немесе email».
+- [x] `organizations`: University, Faculty, Department, Specialty, AcademicGroup (`join_code`, `research_cohort`, `curator`), StudentProfile, TeacherProfile.
+- [x] Тіркелу (тек студент): HTMX каскадты select (университет → факультет → кафедра → топ) немесе топ коды.
+- [x] Логиннен кейін рөл бойынша бағыттау; `core/permissions.py` mixin-дері.
+- [x] Unfold админ: User (мұғалім қосу формасы — role=teacher, TeacherProfile inline), ұйымдар (иерархиялық inlines, сүзгілер).
+- [x] Миграцияларды нөлден қайта жасау.
+- [x] Тесттер: email/username логин, тіркелу тек student жасайды, teacher-ді өздігінен тіркеу мүмкін емес, каскадты select.
 
 ## STEP-04 · courses: курс құрылымы және контент
 - [ ] Course (+ `stage_kind_weights`), CourseTeacher, CourseGroup, Enrollment, Module, Topic, Stage + TheoryContent, VideoContent, LabContent, TestContent (ARCHITECTURE §3.3).

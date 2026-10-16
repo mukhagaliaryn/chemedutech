@@ -12,7 +12,7 @@ class LabAttempt(models.Model):
         ANALYSED = "analysed", _("Analysis submitted")
 
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="lab_attempts", verbose_name=_("student")
+        settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="lab_attempts", verbose_name=_("student")
     )
     lab_key = models.CharField(_("lab"), max_length=32)
     experiment_key = models.CharField(_("experiment"), max_length=32)

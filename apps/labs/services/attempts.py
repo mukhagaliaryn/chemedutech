@@ -9,6 +9,7 @@ from django.utils import timezone
 
 from apps.labs.engine.spec import ExperimentSpec
 from apps.labs.models import LabAttempt, LabEvent
+from apps.organizations.selectors import research_cohort_for
 
 MAX_EVENTS_PER_BATCH = 200
 VALID_TYPES = {t.value for t in LabEvent.Type}
@@ -36,7 +37,7 @@ def start_attempt(user, lab_key: str, experiment: ExperimentSpec) -> LabAttempt:
         untouched.save(update_fields=["started_at"])
         return untouched
     return LabAttempt.objects.create(
-        user=user, lab_key=lab_key, experiment_key=experiment.key, cohort=getattr(user, "cohort", "")
+        user=user, lab_key=lab_key, experiment_key=experiment.key, cohort=research_cohort_for(user)
     )
 
 

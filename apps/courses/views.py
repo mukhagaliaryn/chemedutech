@@ -22,7 +22,7 @@ def topic_detail(request, course_slug, number):
     topic = get_object_or_404(
         Topic.objects.select_related("module__course"), module__course__slug=course_slug, number=number
     )
-    if not topic.is_published and not request.user.is_teacher:
+    if not topic.is_published and not (request.user.is_teacher or request.user.is_admin_role):
         raise Http404
     lab = get_lab(topic.lab_key) if topic.lab_key else None
     done = best_attempts_by_experiment(request.user, lab.key) if lab else {}

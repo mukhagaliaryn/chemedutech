@@ -6,13 +6,20 @@
   {% csrf_token %}
   <div>
     <h1 class="text-h1">{% translate "Log in" %}</h1>
-    <p class="mt-1.5 text-ink-soft">{% translate "Enter your username and password." %}</p>
+    <p class="mt-1.5 text-ink-soft">{% translate "Enter your username or email." %}</p>
   </div>
   {% if form.non_field_errors %}
     <p class="rounded-md bg-danger-50 px-3.5 py-3 text-sm text-danger-700" role="alert">{{ form.non_field_errors|join:" " }}</p>
   {% endif %}
   {% include "components/input.html" with field=form.username %}
-  {% include "components/input.html" with field=form.password %}
+  <div class="field">
+    <span class="flex items-baseline justify-between gap-3">
+      <label class="label" for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
+      <a class="link text-label" href="{% url 'accounts:password_reset' %}">{% translate "Forgot your password?" %}</a>
+    </span>
+    {{ form.password|with_attrs:"input" }}
+  </div>
+  {% include "components/input.html" with field=form.remember %}
   <input type="hidden" name="next" value="{{ next }}">
   <button class="btn btn-primary btn-lg w-full" type="submit">{% translate "Log in" %}</button>
   <p class="text-center text-sm text-ink-soft">

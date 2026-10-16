@@ -34,6 +34,11 @@ ALLOWED_HOSTS = env_list("DJANGO_ALLOWED_HOSTS")
 CSRF_TRUSTED_ORIGINS = env_list("DJANGO_CSRF_TRUSTED_ORIGINS")
 
 INSTALLED_APPS = [
+    # django-unfold must come before django.contrib.admin
+    "unfold",
+    "unfold.contrib.filters",
+    "unfold.contrib.forms",
+    "unfold.contrib.inlines",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -46,6 +51,7 @@ INSTALLED_APPS = [
     # project apps (layered: core → accounts/courses → labs → research)
     "apps.core",
     "apps.accounts",
+    "apps.organizations",
     "apps.courses",
     "apps.labs",
     "apps.research",
@@ -103,9 +109,18 @@ DATABASES = {
 }
 
 AUTH_USER_MODEL = "accounts.User"
+AUTHENTICATION_BACKENDS = ["apps.accounts.backends.UsernameOrEmailBackend"]
 LOGIN_URL = "accounts:login"
-LOGIN_REDIRECT_URL = "courses:dashboard"
+LOGIN_REDIRECT_URL = "core:home"  # core:home sends a signed-in user to the cabinet of their role
 LOGOUT_REDIRECT_URL = "core:home"
+
+EMAIL_BACKEND = os.environ.get("DJANGO_EMAIL_BACKEND", "django.core.mail.backends.smtp.EmailBackend")
+EMAIL_HOST = os.environ.get("DJANGO_EMAIL_HOST", "localhost")
+EMAIL_PORT = int(os.environ.get("DJANGO_EMAIL_PORT", "25"))
+EMAIL_HOST_USER = os.environ.get("DJANGO_EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.environ.get("DJANGO_EMAIL_HOST_PASSWORD", "")
+EMAIL_USE_TLS = env_bool("DJANGO_EMAIL_USE_TLS", False)
+DEFAULT_FROM_EMAIL = os.environ.get("DJANGO_DEFAULT_FROM_EMAIL", "ChemEduTech <noreply@localhost>")
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
@@ -133,6 +148,28 @@ MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# --- Admin (django-unfold); full navigation/dashboard in STEP-14 ----------
+UNFOLD = {
+    "SITE_TITLE": "ChemEduTech",
+    "SITE_HEADER": "ChemEduTech",
+    "SITE_SYMBOL": "science",
+    "COLORS": {
+        "primary": {  # Reagent Blue — the design system primary scale
+            "50": "#eef4ff",
+            "100": "#d9e6ff",
+            "200": "#b7ceff",
+            "300": "#8aaef7",
+            "400": "#5b88ec",
+            "500": "#3570df",
+            "600": "#1f5fd1",
+            "700": "#1a4dab",
+            "800": "#183f87",
+            "900": "#15336b",
+            "950": "#0d2149",
+        },
+    },
+}
 
 # --- AI grading of open practice answers (ARCHITECTURE §5.6) ---------------
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")

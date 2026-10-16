@@ -1,9 +1,10 @@
 from django.contrib import admin
+from unfold.admin import ModelAdmin, TabularInline
 
 from .models import LabAttempt, LabEvent
 
 
-class LabEventInline(admin.TabularInline):
+class LabEventInline(TabularInline):
     model = LabEvent
     extra = 0
     can_delete = False
@@ -11,7 +12,7 @@ class LabEventInline(admin.TabularInline):
 
 
 @admin.register(LabAttempt)
-class LabAttemptAdmin(admin.ModelAdmin):
+class LabAttemptAdmin(ModelAdmin):
     list_display = (
         "user",
         "cohort",
@@ -29,3 +30,6 @@ class LabAttemptAdmin(admin.ModelAdmin):
     list_filter = ("lab_key", "experiment_key", "cohort", "status")
     search_fields = ("user__username", "user__last_name")
     inlines = [LabEventInline]
+
+    def has_delete_permission(self, request, obj=None):
+        return False  # research data is never deleted (ARCHITECTURE §9.6)
