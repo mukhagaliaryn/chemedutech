@@ -1,0 +1,43 @@
+# ChemEduTech — Claude Code notes
+
+Doctoral dissertation (pedagogy) project: an LMS for future chemistry teachers with a 2D
+virtual lab as the main product. The research log is the basis of the dissertation's
+experimental chapter — never drop, rename or rewrite logged data (LabEvent, QuizAttempt,
+AttemptAnswer) without an explicit migration plan agreed with the user.
+
+**Read first:** `docs/ARCHITECTURE.md` (roles, models, gating, grading, technical decisions),
+`docs/TASKS.md` (STEP plan). Work one STEP at a time.
+
+**Design references** (ask the user for screenshots if you cannot open them):
+- Design system (tokens, components): https://claude.ai/artifact/K8oYpbz6mGru4Z7E5Z11uj
+- UI page mockups (student + teacher cabinets, lab, auth): https://claude.ai/artifact/R2Y3e5kNqsUNBn3Hnh9w5m
+
+## Conventions
+- Django 6, PostgreSQL, django-tailwind (`ui/` app, Tailwind 4), Alpine.js, HTMX, django-unfold, django-ckeditor-5.
+- Font: Inter (Google Fonts). Colours/radii/shadows only from design tokens (`ui/static_src/src/styles.css` `@theme`).
+- Layers: `core` → `accounts`, `organizations` → `courses`, `assessments`, `labs` → `practice`, `progress`,
+  `certificates`, `feedback` → `student`, `teacher`, `research`. Lower layers never import higher ones.
+- Each domain app: `models/` package (re-export in `__init__.py`), `services/` (writes), `selectors/` (reads),
+  unfold `admin.py`. Views stay thin. Cross-app FKs as strings (`"courses.Topic"`).
+- All source strings, `verbose_name`, `gettext_lazy` are **English**; kk (default) and ru via
+  `makemessages -l kk -l ru` / `compilemessages`. Default language must be kk regardless of the browser's
+  `Accept-Language` (see ARCHITECTURE §9.5).
+- A topic's stages are an ordered list of any length and any mix of kinds (typically 1 theory, 1 video, 1 lab,
+  several practice works, 1 test). Never assume a single stage of a kind; gating follows list order.
+- Practice works are auto-graded: exact fields by checkers (`assessments/chem.py` for formulas/equations),
+  open answers by AI (`practice/services/ai_grading.py`, Anthropic SDK) with teacher confirmation. Never compare answers 1:1 as raw strings.
+  Tests must mock the Anthropic client — no network in tests.
+- Reply to the user in Kazakh.
+
+## Lab engine (code-based, keep as is unless asked)
+- `apps/labs/engine/spec.py`: `LabSpec` → `ExperimentSpec` → `Item`, `Step`, `JournalField`, `Question`; registry in `engine/registry.py`.
+- One experiment = `experiments/<lab>/<name>.py` + `templates/labs/scenes/<scene>.html` + `static/js/lab/experiments/<scene>.js`
+  (after STEP-02 templates/static live under `ui/`).
+- `engine.js` (`Alpine.data("labRunner")`): step order, warnings, pointer drag & drop, journal, finish, analysis, batched event log.
+- **Alpine `x-for`/`x-if` do not work inside `<svg>`** — use Django loops (`{% for i in 6|times %}`, `"0 10 20"|split`).
+- Step kinds: `place`, `action`, `process` (scene calls `runner.processDone()`), `choice`, `journal`, `finish`;
+  `Step.safety=True` logs a premature attempt as `safety_warning`.
+
+## Commands
+`python manage.py test apps` · `python manage.py tailwind start|build` · `python manage.py seed_course` ·
+`python manage.py makemessages -l kk -l ru --ignore=node_modules` · `ruff check .`

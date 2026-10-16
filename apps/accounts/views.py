@@ -1,0 +1,15 @@
+from django.contrib.auth import login
+from django.shortcuts import redirect, render
+
+from .forms import SignUpForm
+
+
+def signup(request):
+    if request.user.is_authenticated:
+        return redirect("courses:dashboard")
+    form = SignUpForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        user = form.save()
+        login(request, user)
+        return redirect("courses:dashboard")
+    return render(request, "accounts/signup.html", {"form": form})

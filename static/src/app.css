@@ -1,0 +1,293 @@
+@import "tailwindcss";
+@import "./fonts.css";
+
+@source "../../templates";
+@source "../../apps";
+@source "../js";
+
+/*
+ * Design tokens — "lab enamel & notebook".
+ * ink:      methyl-blue ink of a lab notebook (text, structure)
+ * enamel:   pale tiled lab bench
+ * paper:    graph-paper journal
+ * glass:    borosilicate glass outlines
+ * phenol:   phenolphthalein crimson — primary action colour
+ * hazard:   safety amber — warnings only
+ * ok:       copper-sulfate teal — observations, success
+ */
+@theme {
+  --font-sans: "Golos Text", ui-sans-serif, system-ui, sans-serif;
+
+  --color-ink: #1d2f4b;
+  --color-ink-soft: #4a5b74;
+  --color-ink-faint: #8593a7;
+  --color-enamel: #e6eceb;
+  --color-enamel-deep: #d3dcdb;
+  --color-tile: #c7d2d1;
+  --color-paper: #fbfcf8;
+  --color-grid: #dbe6e2;
+  --color-glass: #6b8ba0;
+  --color-water: #cfe6f2;
+  --color-phenol: #b0124f;
+  --color-phenol-deep: #8c0c3e;
+  --color-phenol-pale: #fbe7ef;
+  --color-hazard: #d98b06;
+  --color-hazard-pale: #fdf1d8;
+  --color-ok: #137565;
+  --color-ok-pale: #e0f2ee;
+  --color-err: #b93815;
+  --color-err-pale: #fbe6de;
+
+  --radius-chip: 6px;
+  --radius-panel: 14px;
+}
+
+@layer base {
+  html {
+    color: var(--color-ink);
+    background: var(--color-enamel);
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    font-feature-settings: "tnum" 0;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-phenol);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  sub,
+  sup {
+    font-size: 0.68em;
+  }
+  [x-cloak] {
+    display: none !important;
+  }
+}
+
+@layer components {
+  .num {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* graph paper used by the journal and charts */
+  .graph-paper {
+    background-color: var(--color-paper);
+    background-image:
+      linear-gradient(var(--color-grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
+    background-size: 12px 12px;
+    background-position: -1px -1px;
+  }
+
+  /* ceramic bench tiles */
+  .bench {
+    background-color: #eef3f2;
+    background-image:
+      linear-gradient(var(--color-tile) 1.5px, transparent 1.5px),
+      linear-gradient(90deg, var(--color-tile) 1.5px, transparent 1.5px);
+    background-size: 64px 64px;
+    background-position: -1px -1px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 8px;
+    padding: 0.6rem 1.05rem;
+    font-weight: 600;
+    line-height: 1.2;
+    transition: background-color 0.15s, color 0.15s, box-shadow 0.15s;
+  }
+  .btn-primary {
+    background: var(--color-phenol);
+    color: #fff;
+  }
+  .btn-primary:hover {
+    background: var(--color-phenol-deep);
+  }
+  .btn-quiet {
+    background: transparent;
+    color: var(--color-ink);
+    box-shadow: inset 0 0 0 1.5px var(--color-enamel-deep);
+  }
+  .btn-quiet:hover {
+    box-shadow: inset 0 0 0 1.5px var(--color-ink-faint);
+  }
+
+  .field {
+    width: 100%;
+    border-radius: 6px;
+    border: 1.5px solid var(--color-enamel-deep);
+    background: #fff;
+    padding: 0.5rem 0.65rem;
+    color: var(--color-ink);
+  }
+  .field:focus {
+    outline: none;
+    border-color: var(--color-ink);
+  }
+
+  .prose-theory h2 {
+    font-size: 1.35rem;
+    font-weight: 650;
+    margin: 2rem 0 0.75rem;
+  }
+  .prose-theory h3 {
+    font-size: 1.1rem;
+    font-weight: 650;
+    margin: 1.5rem 0 0.5rem;
+  }
+  .prose-theory p {
+    margin: 0 0 1rem;
+    line-height: 1.7;
+  }
+  .prose-theory ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .prose-theory li {
+    margin-bottom: 0.35rem;
+    line-height: 1.6;
+  }
+  .prose-theory .formula {
+    display: block;
+    margin: 1rem 0;
+    padding: 0.75rem 1rem;
+    border-left: 3px solid var(--color-phenol);
+    background: var(--color-paper);
+    font-size: 1.1rem;
+  }
+
+  /* equation with a catalyst written over the arrow */
+  .eq-cat {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+    vertical-align: middle;
+    margin: 0 0.15em;
+  }
+  .eq-cat > span {
+    font-size: 0.62em;
+    margin-bottom: -0.1em;
+  }
+}
+
+/* ---------- simulator animation primitives ---------- */
+@keyframes rise {
+  0% {
+    transform: translateY(0) scale(0.6);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.95;
+  }
+  100% {
+    transform: translateY(var(--rise, -80px)) scale(1);
+    opacity: 0;
+  }
+}
+.bubble {
+  animation: rise var(--dur, 1.6s) ease-in infinite;
+  animation-delay: var(--delay, 0s);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(-14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.appear {
+  animation: appear 0.35s ease-out both;
+  transform-box: fill-box;
+}
+
+@keyframes flicker {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(1.18) scaleX(0.92);
+  }
+}
+.flame {
+  animation: flicker 0.35s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+
+@keyframes burst {
+  0% {
+    transform: scale(0.2);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+.burst {
+  animation: burst 0.9s ease-out 2;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@keyframes pour {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px) rotate(0);
+  }
+  20% {
+    opacity: 1;
+  }
+  60% {
+    transform: translateY(0) rotate(-35deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(0) rotate(-35deg);
+  }
+}
+.pour {
+  animation: pour 1.4s ease-in-out both;
+  transform-box: fill-box;
+  transform-origin: 80% 20%;
+}
+
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-phenol) 45%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 10px transparent;
+  }
+}
+.pulse {
+  animation: pulse-ring 1.6s ease-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bubble,
+  .flame,
+  .burst,
+  .pour,
+  .appear,
+  .pulse {
+    animation: none !important;
+  }
+}

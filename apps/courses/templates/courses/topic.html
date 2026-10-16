@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{{ topic.title }} · ChemEduTech{% endblock %}
+{% block content %}
+<div class="mx-auto grid max-w-6xl gap-10 px-4 py-10 lg:grid-cols-[minmax(0,1fr)_360px]">
+  <article>
+    <p class="text-sm text-ink-soft"><a class="hover:text-ink" href="{% url 'courses:dashboard' %}">{{ course.title }}</a> / {% blocktranslate with n=topic.number %}Topic {{ n }}{% endblocktranslate %}</p>
+    <h1 class="mt-2 text-3xl font-semibold tracking-tight">{{ topic.title }}</h1>
+    {% if topic.summary %}<p class="mt-4 text-lg leading-relaxed text-ink-soft">{{ topic.summary }}</p>{% endif %}
+    <div class="prose-theory mt-6 max-w-[68ch]">{{ topic.theory|safe }}</div>
+  </article>
+
+  {% if lab %}
+  <aside class="lg:sticky lg:top-6 lg:self-start">
+    <div class="rounded-[var(--radius-panel)] bg-paper p-5 ring-1 ring-enamel-deep">
+      <h2 class="font-semibold">{% translate "Lab work" %}</h2>
+      <p class="mt-1 text-sm text-ink-soft">{{ lab.title }}</p>
+      <ol class="mt-4 space-y-2">
+        {% for row in experiments %}
+          <li>
+            <a href="{% url 'labs:run' lab.key row.spec.key %}" class="flex items-center gap-3 rounded-lg bg-white px-3 py-2.5 ring-1 ring-enamel-deep hover:ring-ink-faint">
+              <span class="num grid h-7 w-7 shrink-0 place-items-center rounded-full text-xs font-semibold {% if row.attempt %}bg-ok text-white{% else %}bg-enamel{% endif %}">{{ row.spec.number }}</span>
+              <span class="flex-1 text-sm font-medium">{{ row.spec.title }}</span>
+              {% if row.attempt %}
+                <span class="num text-xs text-ok" title="{% translate 'Analysis: correct answers' %}">{{ row.attempt.analysis_correct }}/{{ row.attempt.analysis_total }}</span>
+              {% endif %}
+            </a>
+          </li>
+        {% endfor %}
+      </ol>
+      {% with first=experiments.0.spec %}
+        <a class="btn btn-primary mt-5 w-full" href="{% url 'labs:run' lab.key first.key %}">{% translate "Open the virtual lab" %}</a>
+      {% endwith %}
+    </div>
+  </aside>
+  {% endif %}
+</div>
+{% endblock %}

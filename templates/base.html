@@ -1,0 +1,42 @@
+{% load static i18n %}<!doctype html>
+{% get_current_language as LANG %}
+<html lang="{{ LANG }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}ChemEduTech{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+  {% block head %}{% endblock %}
+</head>
+<body class="min-h-screen font-sans text-ink {% block body_class %}bg-enamel{% endblock %}">
+  {% block header %}
+  <header class="border-b border-enamel-deep bg-paper/80 backdrop-blur">
+    <div class="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3">
+      <a href="{% url 'core:home' %}" class="flex items-center gap-2 font-semibold tracking-tight">
+        {% include "core/partials/logo.html" %}
+        <span>ChemEduTech</span>
+      </a>
+      <nav class="ml-auto flex items-center gap-1 text-sm">
+        {% if user.is_authenticated %}
+          <a class="rounded-md px-3 py-2 hover:bg-enamel" href="{% url 'courses:dashboard' %}">{% translate "Course" %}</a>
+          {% if user.is_teacher %}
+            <a class="rounded-md px-3 py-2 hover:bg-enamel" href="{% url 'research:dashboard' %}">{% translate "Research" %}</a>
+          {% endif %}
+        {% endif %}
+        {% include "core/partials/lang_switch.html" %}
+        {% if user.is_authenticated %}
+          <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}
+            <button class="rounded-md px-3 py-2 text-ink-soft hover:bg-enamel" type="submit">{% translate "Log out" %}</button>
+          </form>
+        {% else %}
+          <a class="rounded-md px-3 py-2 hover:bg-enamel" href="{% url 'accounts:login' %}">{% translate "Log in" %}</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+  {% endblock %}
+  <main>{% block content %}{% endblock %}</main>
+  {% block scripts %}{% endblock %}
+  <script defer src="{% static 'vendor/alpine.min.js' %}"></script>
+</body>
+</html>

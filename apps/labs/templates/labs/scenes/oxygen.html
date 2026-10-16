@@ -1,0 +1,86 @@
+{% load lab_tags %}{# Experiment 2 — oxygen: H₂O₂ in a test tube, MnO₂ catalyst, collection over water #}
+<svg viewBox="0 0 900 450" class="relative z-[1] block h-auto w-full" role="img" :aria-label="exp.title">
+  <defs>
+    <clipPath id="o-tube-in"><path d="M224,140 V362 a14,14 0 0 0 28,0 V140 Z"/></clipPath>
+    <clipPath id="o-col-in"><rect x="623" y="114" width="54" height="290" rx="9"/></clipPath>
+  </defs>
+
+  {# stand with clamp — part of the test tube set-up #}
+  <g x-show="has('test_tube')" class="appear" style="display:none">
+    <rect x="80" y="420" width="160" height="10" rx="3" fill="#5c6b78"/>
+    <rect x="104" y="80" width="8" height="344" rx="3" fill="#7b8a96"/>
+    <path d="M108,200 H222" stroke="#7b8a96" stroke-width="6" stroke-linecap="round"/>
+    <rect x="214" y="190" width="48" height="20" rx="4" fill="#5c6b78"/>
+  </g>
+
+  {# trough + inverted measuring tube #}
+  <g x-show="has('gas_collector')" class="appear" style="display:none">
+    <path d="M490,300 H812 L800,422 Q799,430 790,430 H512 Q503,430 502,422 Z" fill="#cfe6f2" fill-opacity=".35" stroke="#6b8ba0" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M494,326 H808 L800,422 Q799,428 790,428 H512 Q504,428 503,422 Z" fill="#bfe0ef" fill-opacity=".85"/>
+    <g clip-path="url(#o-col-in)">
+      <rect x="620" y="110" width="60" height="300" fill="#bfe0ef"/>
+      <rect x="620" y="110" width="60" :height="4 + sc.gasHeight()" fill="#f7fbfd"/>
+      <g x-show="sc.bubbling > 0">
+        {% for i in 5|times %}
+          <circle :cx="640 + {{ i }} * 5" cy="396" r="{{ i|add:2 }}" fill="#fff" stroke="#8fc3dc" class="bubble"
+                  :style="`--rise:${-(280 - sc.gasHeight())}px; --dur:${sc.bubbling > 1 ? 0.9 + {{ i }} * 0.15 : 3 + {{ i }}}s; --delay:${ {{ i }} * 0.37}s`"
+                  x-show="sc.bubbling > 1 || {{ i }} === 0"/>
+        {% endfor %}
+      </g>
+    </g>
+    <rect x="623" y="114" width="54" height="290" rx="9" fill="#fff" fill-opacity=".12" stroke="#6b8ba0" stroke-width="3"/>
+    {% for m in "0 20 40 60 80 100 120"|split %}
+      <line x1="663" :y1="sc.markY({{ m }})" x2="677" :y2="sc.markY({{ m }})" stroke="#4a5b74" stroke-width="1.6"/>
+      <text x="688" :y="sc.markY({{ m }}) + 4" font-size="12" fill="#4a5b74">{{ m }}</text>
+    {% endfor %}
+    {# delivery tube from the test tube stopper #}
+    <path d="M238,132 V100 Q238,88 250,88 H538 Q550,88 550,100 V404 Q550,416 562,416 H638 Q650,416 650,404 V388"
+          fill="none" stroke="#6b8ba0" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M238,132 V100 Q238,88 250,88 H538 Q550,88 550,100 V404 Q550,416 562,416 H638 Q650,416 650,404 V388"
+          fill="none" stroke="#eef6fa" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M220,126 H256 L253,152 H223 Z" fill="#7a4a35"/>
+  </g>
+
+  {# test tube #}
+  <g x-show="has('test_tube')" class="appear" style="display:none">
+    <g clip-path="url(#o-tube-in)">
+      <rect x="220" :y="376 - sc.liquid" width="40" :height="sc.liquid" fill="#e3f0f6"/>
+      <g x-show="has('mno2')">
+        {% for i in 9|times %}
+          <circle :cx="227 + {{ i }} * 2.7" :cy="372 - ({{ i }} % 3) * 3.5" r="2.8" fill="#2b2b2b"/>
+          <circle :cx="230 + ({{ i }} * 7) % 20" :cy="372 - sc.liquid + 18 + ({{ i }} * 13) % (sc.liquid > 20 ? sc.liquid - 20 : 1)" r="1.6" fill="#2b2b2b" x-show="sc.bubbling > 1" opacity=".7"/>
+        {% endfor %}
+      </g>
+      <g x-show="sc.bubbling > 0">
+        {% for i in 8|times %}
+          <circle :cx="230 + ({{ i }} * 5) % 18" cy="368" r="3" fill="#fff" stroke="#9ccbe0" class="bubble"
+                  :style="`--rise:${-(sc.liquid - 6)}px; --dur:${sc.bubbling > 1 ? 0.7 + {{ i }} * 0.08 : 2.8}s; --delay:${ {{ i }} * 0.29}s`"
+                  x-show="sc.bubbling > 1 || {{ i }} === 0"/>
+        {% endfor %}
+      </g>
+    </g>
+    <path d="M222,136 V362 a16,16 0 0 0 32,0 V136" fill="#fff" fill-opacity=".15" stroke="#6b8ba0" stroke-width="3"/>
+    <path d="M217,136 H259" stroke="#6b8ba0" stroke-width="3" stroke-linecap="round"/>
+    <text x="238" y="404" text-anchor="middle" font-size="13" fill="#4a5b74" x-show="has('h2o2')">H₂O₂<tspan x-show="has('mno2')"> + MnO₂</tspan></text>
+  </g>
+
+  {# glowing splint test #}
+  <g x-show="sc.splint" style="display:none" class="appear">
+    <path d="M572,40 L644,104" stroke="#b58552" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="646" cy="106" r="6" fill="#e8590c"/>
+    <path class="flame" d="M646,104 C658,90 654,76 644,64 C636,78 632,92 646,104 Z" fill="#e8a317" x-show="sc.flare"/>
+  </g>
+</svg>
+
+{# readouts #}
+<div x-show="sc.phase !== 'idle'" x-cloak class="relative z-10 m-3 md:absolute md:right-3 md:top-3 md:m-0 min-w-[12rem] rounded-lg bg-paper/95 px-4 py-3 ring-1 ring-enamel-deep">
+  <p class="text-xs text-ink-soft">V(O<sub>2</sub>)</p>
+  <p class="num text-2xl font-semibold"><span x-text="fmt(sc.V, 1)"></span> <span class="text-base font-normal text-ink-soft" x-text="ui.ml"></span></p>
+  <p class="num mt-1 text-xs text-ink-soft"><span x-text="ui.time"></span>: <span x-text="fmt(sc.simT, 0)"></span> <span x-text="ui.s"></span>
+    · <span x-text="sc.phase === 'cat' || sc.phase === 'done' ? ui.with_catalyst : ui.no_catalyst"></span></p>
+  <table class="num mt-3 w-full text-sm" x-show="sc.showRates">
+    <caption class="mb-1 text-left text-xs text-ink-soft"><span x-text="ui.rate"></span>, <span x-text="ui.ml_min"></span></caption>
+    <tr><td class="pr-3" x-text="ui.no_catalyst"></td><td class="text-right font-semibold" x-text="fmt(sc.rateNocat, 1)"></td></tr>
+    <tr><td class="pr-3" x-text="ui.with_catalyst"></td><td class="text-right font-semibold" x-text="fmt(sc.rateCat, 1)"></td></tr>
+  </table>
+</div>

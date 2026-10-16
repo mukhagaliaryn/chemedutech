@@ -1,0 +1,10 @@
+{% load i18n %}{% get_current_language as LANG %}{% get_available_languages as LANGS %}
+<form action="{% url 'set_language' %}" method="post" class="flex items-center rounded-md p-0.5 ring-1 ring-enamel-deep" aria-label="{% translate 'Interface language' %}">
+  {% csrf_token %}
+  <input type="hidden" name="next" value="{{ request.get_full_path }}">
+  {% for code, name in LANGS %}
+    <button type="submit" name="language" value="{{ code }}" title="{{ name }}"
+      class="rounded px-2 py-1 text-xs font-semibold {% if code == LANG %}bg-ink text-white{% else %}text-ink-soft hover:text-ink{% endif %}"
+      {% if code == LANG %}aria-current="true"{% endif %}>{% if code == "kk" %}ҚАЗ{% elif code == "ru" %}РУС{% else %}ENG{% endif %}</button>
+  {% endfor %}
+</form>

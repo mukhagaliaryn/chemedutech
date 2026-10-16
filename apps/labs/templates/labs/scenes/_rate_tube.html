@@ -1,0 +1,40 @@
+{# one test tube with a gas syringe; expects `side` ("a"|"b") and `x` (tube centre) #}
+<g x-show="has('tube_{{ side }}')" class="appear" style="display:none" data-drop="tube_{{ side }}">
+  {# generous transparent hit area for drag & drop #}
+  <rect x="{{ x|add:-45 }}" y="130" width="90" height="300" fill="none" pointer-events="all"/>
+
+  {# gas syringe: A points left, B points right; the piston moves out as gas collects #}
+  <g x-show="has('syringes')">
+    <path d="M{{ x }},150 V112" stroke="#6b8ba0" stroke-width="7"/>
+    <path d="M{{ x }},150 V112" stroke="#eef6fa" stroke-width="3"/>
+    <rect :x="sc.syr('{{ side }}').barrelX" y="92" :width="sc.syr('{{ side }}').barrelW" height="22" rx="4" fill="#fff" fill-opacity=".5" stroke="#6b8ba0" stroke-width="2.5"/>
+    <rect :x="sc.syr('{{ side }}').gasX" y="95" :width="sc.syr('{{ side }}').gasW" height="16" fill="#f7fbfd"/>
+    <rect :x="sc.syr('{{ side }}').piston - 3" y="94" width="6" height="18" fill="#4a5b74"/>
+    <path :d="`M${sc.syr('{{ side }}').piston},103 H${sc.syr('{{ side }}').rodEnd}`" stroke="#4a5b74" stroke-width="3"/>
+    <path :d="`M${sc.syr('{{ side }}').rodEnd},93 V113`" stroke="#4a5b74" stroke-width="4" stroke-linecap="round"/>
+    {% for m in "0 1 2 3 4 5 6"|split %}
+      <line :x1="sc.syr('{{ side }}').tick({{ m }})" :x2="sc.syr('{{ side }}').tick({{ m }})" y1="114" y2="120" stroke="#4a5b74" stroke-width="1.2"/>
+    {% endfor %}
+  </g>
+
+  {# tube #}
+  <clipPath id="r-in-{{ side }}"><path d="M{{ x|add:-16 }},150 V384 a16,16 0 0 0 32,0 V150 Z"/></clipPath>
+  <g clip-path="url(#r-in-{{ side }})">
+    <rect x="{{ x|add:-20 }}" :y="400 - sc.liquid" width="40" :height="sc.liquid" fill="#e3f0f6"/>
+    {% if side == "b" %}
+      <g x-show="has('mno2')">
+        {% for i in 8|times %}<circle :cx="{{ x|add:-9 }} + {{ i }} * 2.6" :cy="394 - ({{ i }} % 3) * 3" r="2.6" fill="#2b2b2b"/>{% endfor %}
+      </g>
+    {% endif %}
+    <g x-show="sc.running">
+      {% for i in 6|times %}
+        <circle :cx="{{ x|add:-8 }} + ({{ i }} * 5) % 16" cy="390" r="3" fill="#fff" stroke="#9ccbe0" class="bubble"
+                {% if side == "a" %}x-show="{{ i }} === 0"{% endif %}
+                :style="`--rise:${-(sc.liquid - 8)}px; --dur:${ '{{ side }}' === 'b' ? 0.7 + {{ i }} * 0.1 : 3.2}s; --delay:${ {{ i }} * 0.3}s`"/>
+      {% endfor %}
+    </g>
+  </g>
+  <path d="M{{ x|add:-18 }},150 V384 a18,18 0 0 0 36,0 V150" fill="#fff" fill-opacity=".15" stroke="#6b8ba0" stroke-width="3"/>
+  <path d="M{{ x|add:-22 }},150 H{{ x|add:22 }}" stroke="#7a4a35" stroke-width="10"/>
+  <text x="{{ x }}" y="452" text-anchor="middle" font-size="18" font-weight="700" fill="#1d2f4b">{{ side|upper }}</text>
+</g>
