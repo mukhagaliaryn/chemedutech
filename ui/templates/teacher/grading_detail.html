@@ -1,129 +1,155 @@
 {% extends "layouts/teacher.html" %}
 {% load i18n %}
+{% comment %}
+Grading one practice work (mockup «Мұғалім · Тексеру: AI бағасын растау»): the queue on the left; the work —
+each answer, for open answers the rubric with point buttons (the AI suggestion is dashed), a comment,
+the total and «Confirm» / «Return». Field names (c_<answer>_<criterion>, p_<answer>, r_<answer>) are read by
+teacher.grading._decisions.
+{% endcomment %}
 {% block title %}{{ submission.stage.title }} · {{ student.full_name }} · ChemEduTech{% endblock %}
+{% block crumb %}{% translate "Confirming AI grades" %}{% endblock %}
+{% block page_title %}{% translate "Checking works" %}{% endblock %}
+{% block main_class %}max-w-[1360px]{% endblock %}
 {% block content %}
-<p class="text-sm text-ink-soft"><a href="{% url 'teacher:grading' %}">{% translate "Checking works" %}</a> / {{ student.full_name }}</p>
-<header class="flex flex-wrap items-start justify-between gap-4">
-  <div class="min-w-0 flex-[1_1_420px]">
-    <h1 class="text-h1">{{ submission.stage.title }}</h1>
-    <p class="mt-1 text-ink-soft">
-      <a href="{% url 'teacher:student' student.pk %}?course={{ submission.stage.topic.module.course.slug }}">{{ student.full_name }}</a>{% if submission.enrollment.group %} · {{ submission.enrollment.group }}{% endif %}
-      · {% blocktranslate with n=submission.attempt_no %}attempt {{ n }}{% endblocktranslate %} · {{ submission.submitted_at|date:"j E, H:i" }}
-    </p>
-  </div>
-  <div class="flex items-center gap-3">
-    {% include "components/badge.html" with status=submission.status label=submission.get_status_display %}
-    {% if submission.percent is not None %}<span class="num text-stat">{{ submission.percent|floatformat:0 }}%</span>{% endif %}
-  </div>
-</header>
+<div class="grid items-start gap-5 lg:grid-cols-[340px_minmax(0,1fr)]">
+  {% include "teacher/partials/grading_queue.html" %}
 
-{% if submission.file %}<p class="text-sm"><a class="font-semibold" href="{{ submission.file.url }}" target="_blank" rel="noopener">{% translate "Attached file" %}</a></p>{% endif %}
+  <section class="fade flex min-w-0 flex-col gap-4">
+    <header class="flex flex-wrap items-center justify-between gap-4 rounded-card border border-line bg-surface px-6 py-[22px]">
+      <div class="flex min-w-0 items-center gap-3.5">
+        {% include "components/avatar.html" with person=student shape="square" size="lg" %}
+        <div class="min-w-0">
+          <h1 class="text-[22px] leading-7 font-extrabold tracking-[-0.01em]"><a href="{% url 'teacher:student' student.pk %}?course={{ submission.stage.topic.module.course.slug }}" class="hover:text-primary-700">{{ student.full_name|default:student.username }}</a></h1>
+          <p class="mt-0.5 text-[13px] text-ink-soft">{% if submission.enrollment.group %}{{ submission.enrollment.group }} · {% endif %}{{ submission.stage.topic.number }}. {{ submission.stage.title }} · {% blocktranslate with n=submission.attempt_no %}attempt {{ n }}{% endblocktranslate %} · {{ submission.submitted_at|date:"j E, H:i" }}</p>
+        </div>
+      </div>
+      <span class="flex flex-wrap items-center gap-2">
+        {% include "components/badge.html" with status=submission.status label=submission.get_status_display class="h-8 px-3 text-[13px] font-bold" %}
+        {% if submission.file %}<a class="btn btn-secondary btn-sm" href="{{ submission.file.url }}" target="_blank" rel="noopener">{% include "components/icons.html#download" %}{% translate "Attached file" %}</a>{% endif %}
+      </span>
+    </header>
 
-<form method="post" class="flex flex-col gap-4" x-data="{ action: 'confirm' }">
-  {% csrf_token %}
-  {% for row in rows %}{% with a=row.answer item=row.item %}
-    <section class="card flex flex-col gap-3" aria-labelledby="item-{{ a.pk }}">
-      <div class="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 id="item-{{ a.pk }}" class="text-h3">{{ item.label }}</h2>
-        <span class="num text-sm text-ink-soft">{{ a.points|floatformat:"-2" }} / {{ item.points|floatformat:"-2" }}</span>
-      </div>
-      {% if item.prompt %}<p class="text-sm text-ink-soft">{{ item.prompt }}</p>{% endif %}
-      <div class="rounded-md bg-surface-sunken px-4 py-3 text-sm">
-        <p class="text-caption font-semibold text-ink-soft">{% translate "Student's answer" %}</p>
-        {% if item.kind == "formula" or item.kind == "equation" %}<p class="mt-1">{{ a.raw_value|chem }}</p>
-        {% else %}<p class="mt-1 whitespace-pre-line">{{ a.raw_value|default:"—" }}</p>{% endif %}
-      </div>
-      {% if not row.open %}
-        <p class="text-sm {% if a.is_correct %}text-success-700{% elif a.points > 0 %}text-primary-700{% else %}text-danger-700{% endif %}">
-          {% if a.is_correct %}{% translate "Correct (checked automatically)" %}{% elif a.points > 0 %}{% translate "Partly correct (checked automatically)" %}{% else %}{% translate "Not correct (checked automatically)" %}{% endif %}
-          {% if a.feedback %} · {{ a.feedback }}{% endif %}
-        </p>
-      {% else %}
-        {% if row.grade %}
-          <div class="flex flex-wrap items-center gap-2 text-body-sm">
-            <span class="font-semibold">{% translate "AI suggestion" %}</span>
-            {% if row.grade.error %}{% translate "AI error" as l_e %}{% include "components/badge.html" with variant="danger" label=l_e %}
-            {% elif row.grade.confidence == "low" %}{% translate "low confidence" as l_c %}{% include "components/badge.html" with variant="warning" label=l_c %}
-            {% else %}{% translate "confident" as l_c %}{% include "components/badge.html" with variant="info" label=l_c %}{% endif %}
-            <span class="text-ink-faint">{{ row.grade.model }}</span>
+    <form method="post" class="flex flex-col gap-4" x-data="{ action: 'confirm', total: 0, ai: {{ ai_points|stringformat:'s' }},
+            recalc() { let t = {{ auto_points|stringformat:'s' }}; this.$root.querySelectorAll('input[data-points]:checked, input[data-points][type=number]').forEach(i => t += parseFloat((i.value || '0').replace(',', '.')) || 0); this.total = Math.round(t * 100) / 100; } }"
+          x-init="recalc()" @change="recalc()" @input="recalc()">
+      {% csrf_token %}
+      {% for row in rows %}{% with a=row.answer item=row.item %}
+        <article class="flex flex-col gap-4 rounded-card border border-line bg-surface px-6 py-[22px]" aria-labelledby="item-{{ a.pk }}">
+          <div class="flex flex-wrap items-baseline justify-between gap-2">
+            <p id="item-{{ a.pk }}" class="text-caption font-bold tracking-[.06em] text-stage-practice-700 uppercase">{{ forloop.counter }}. {{ item.label }}</p>
+            <span class="num text-[13px] font-semibold text-ink-faint">{% if row.open %}{% blocktranslate with m=item.points|floatformat:"-2" %}max. {{ m }}{% endblocktranslate %}{% else %}{{ a.points|floatformat:"-2" }} / {{ item.points|floatformat:"-2" }}{% endif %}</span>
           </div>
-          {% if row.grade.feedback_kk %}<p class="text-sm text-ink-soft">«{{ row.grade.feedback_kk }}»</p>{% endif %}
-        {% else %}
-          <p class="text-body-sm text-ink-soft">{% translate "No AI grade: grade it yourself." %}</p>
-        {% endif %}
-        {% if row.review %}<p class="text-body-sm text-ink-soft">{% blocktranslate with t=row.review.teacher.full_name p=row.review.teacher_points|floatformat:"-2" %}Last checked by {{ t }}: {{ p }} points.{% endblocktranslate %}</p>{% endif %}
+          {% if item.prompt %}<p class="-mt-2 font-semibold">{{ item.prompt }}</p>{% endif %}
+          <div>
+            <p class="mb-1.5 text-caption font-bold tracking-[.06em] text-ink-soft uppercase">{% translate "Student's answer" %}</p>
+            <blockquote class="rounded-[18px] border border-surface-sunken bg-[#f8fafc] px-[18px] py-4 text-[15px] leading-[25px] whitespace-pre-line">{% if item.kind == "formula" or item.kind == "equation" %}{{ a.raw_value|chem }}{% else %}{{ a.raw_value|default:"—" }}{% endif %}</blockquote>
+          </div>
+          {% if not row.open %}
+            <p class="flex items-center gap-2 text-sm font-semibold {% if a.is_correct %}text-success-700{% elif a.points > 0 %}text-warning-700{% else %}text-danger-700{% endif %}">
+              {% if a.is_correct %}{% include "components/icons.html#check" %}{% translate "Correct (checked automatically)" %}{% elif a.points > 0 %}{% translate "Partly correct (checked automatically)" %}{% else %}{% include "components/icons.html#x" %}{% translate "Not correct (checked automatically)" %}{% endif %}
+              {% if a.feedback %}<span class="font-normal text-ink-soft">· {{ a.feedback }}</span>{% endif %}
+            </p>
+          {% else %}
+            <div class="flex flex-wrap items-center gap-2 text-[13px]">
+              <span class="font-bold">{% translate "AI suggestion" %}</span>
+              {% if row.grade %}
+                {% if row.grade.error %}<span class="badge badge-danger font-bold">{% translate "AI error" %}</span>
+                {% elif row.grade.confidence == "low" %}<span class="badge badge-danger font-bold">needs_review · {% translate "low confidence" %}</span>
+                {% else %}<span class="badge badge-info font-bold">{% translate "confident" %}</span>{% endif %}
+                <span class="text-ink-faint">{{ row.grade.model }}</span>
+              {% else %}<span class="text-ink-soft">{% translate "No AI grade: grade it yourself." %}</span>{% endif %}
+            </div>
+            {% if row.grade.feedback_kk %}<div class="alert alert-ai"><span class="alert-icon">{% include "components/icons.html#sparkle" with size=18 %}</span><span class="self-center">{{ row.grade.feedback_kk }}</span></div>{% endif %}
+            {% if row.review %}<p class="text-[13px] text-ink-soft">{% blocktranslate with t=row.review.teacher.full_name p=row.review.teacher_points|floatformat:"-2" %}Last checked by {{ t }}: {{ p }} points.{% endblocktranslate %}</p>{% endif %}
 
-        {% if row.criteria %}
-          <div class="overflow-x-auto rounded-md border border-line">
-            <table class="table">
-              <thead><tr><th scope="col">{% translate "Criterion" %}</th><th scope="col" class="text-right">{% translate "AI" %}</th><th scope="col">{% translate "AI's reason" %}</th><th scope="col" class="text-right">{% translate "Your points" %}</th></tr></thead>
-              <tbody>
+            {% if row.criteria %}
+              <div class="flex items-center justify-between gap-3"><h2 class="text-[17px] font-extrabold">{% translate "Grade by the rubric" %}</h2><span class="text-[13px] text-ink-soft">{% translate "AI suggestion → your decision" %}</span></div>
+              <div class="grid gap-2.5">
                 {% for c in row.criteria %}
-                  <tr>
-                    <td class="text-sm">{{ c.criterion.text }} <span class="num text-caption text-ink-faint">/ {{ c.criterion.points|floatformat:"-2" }}</span></td>
-                    <td class="num text-right text-sm">{% if c.ai_points is not None %}{{ c.ai_points }}{% else %}—{% endif %}</td>
-                    <td class="text-caption text-ink-soft">{{ c.reason }}</td>
-                    <td class="text-right">
-                      <label class="sr-only" for="c_{{ a.pk }}_{{ c.criterion.pk }}">{{ c.criterion.text }}</label>
-                      <input id="c_{{ a.pk }}_{{ c.criterion.pk }}" name="c_{{ a.pk }}_{{ c.criterion.pk }}" type="number" min="0" max="{{ c.criterion.points|stringformat:'s' }}" step="0.5"
-                             value="{% if c.value is not None %}{{ c.value|stringformat:'s' }}{% else %}0{% endif %}" class="input num h-9 w-20 text-right">
-                    </td>
-                  </tr>
+                  <fieldset class="grid gap-2.5 rounded-[18px] border border-line p-4" x-data="{ v: '{% if c.value is not None %}{{ c.value|floatformat:"-2" }}{% endif %}', ai: '{% if c.ai_points is not None %}{{ c.ai_points|floatformat:"-2" }}{% endif %}' }">
+                    <legend class="sr-only">{{ c.criterion.text }}</legend>
+                    <div class="flex items-start justify-between gap-3">
+                      <div class="min-w-0"><span class="block font-bold">{{ c.criterion.text }}</span>{% if c.reason %}<span class="block text-[13px] leading-5 text-ink-soft">AI: «{{ c.reason }}»</span>{% endif %}</div>
+                      <span class="num shrink-0 text-[13px] text-ink-faint">{% blocktranslate with m=c.criterion.points|floatformat:"-2" %}max. {{ m }}{% endblocktranslate %}</span>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-1.5">
+                      {% for opt in c.criterion.points|point_options %}{% with o=opt|floatformat:"-2" %}
+                        <label class="num grid h-10 min-w-10 cursor-pointer place-items-center rounded-[12px] border px-2 text-sm font-bold transition-colors has-checked:border-primary-900 has-checked:bg-primary-900 has-checked:text-white has-focus-visible:shadow-focus
+                                      {% if c.ai_points is not None and o == c.ai_points|floatformat:'-2' %}border-dashed border-primary-400 bg-primary-50 text-primary-700{% else %}border-line bg-surface{% endif %}"
+                               {% if c.ai_points is not None and o == c.ai_points|floatformat:'-2' %}title="{% translate 'AI suggestion' %}"{% endif %}>
+                          <input type="radio" class="sr-only" name="c_{{ a.pk }}_{{ c.criterion.pk }}" value="{{ o }}" data-points @change="v = '{{ o }}'"
+                                 {% if c.value is not None and o == c.value|floatformat:'-2' %}checked{% elif c.value is None and forloop.first %}checked{% endif %}>{{ o }}
+                        </label>
+                      {% endwith %}{% endfor %}
+                      <span class="ml-2 text-[13px] font-bold" :class="ai === '' || v === ai ? 'text-success-700' : 'text-warning-700'"
+                            x-text="ai === '' ? '' : (v === ai ? '{% translate "Agree with the AI" %}' : '{% translate "Changed (AI:" %} ' + ai + ')')"></span>
+                    </div>
+                  </fieldset>
                 {% endfor %}
-              </tbody>
-            </table>
-          </div>
-        {% else %}
-          <label class="flex items-center gap-2 text-sm">{% translate "Points" %}
-            <input name="p_{{ a.pk }}" type="number" min="0" max="{{ item.points|stringformat:'s' }}" step="0.5" value="{{ a.points|stringformat:'s' }}" class="input num h-9 w-24 text-right">
-            <span class="num text-ink-soft">/ {{ item.points|floatformat:"-2" }}</span>
-          </label>
-        {% endif %}
-        {% if row.rubric.model_answer %}
-          <details class="text-sm"><summary class="cursor-pointer text-ink-soft">{% translate "Model answer" %}</summary><p class="mt-2 whitespace-pre-line">{{ row.rubric.model_answer }}</p></details>
-        {% endif %}
-        <label class="field">
-          <span class="label">{% translate "Why the points changed (for the research, optional)" %}</span>
-          <input name="r_{{ a.pk }}" type="text" maxlength="500" class="input">
+              </div>
+            {% else %}
+              <label class="flex items-center gap-2 text-sm font-semibold">{% translate "Points" %}
+                <input name="p_{{ a.pk }}" type="number" min="0" max="{{ item.points|stringformat:'s' }}" step="0.5" value="{{ a.points|stringformat:'s' }}" data-points class="input num h-10 w-24 text-right">
+                <span class="num text-ink-soft">/ {{ item.points|floatformat:"-2" }}</span>
+              </label>
+            {% endif %}
+            {% if row.rubric.model_answer %}
+              <details class="text-sm"><summary class="cursor-pointer font-semibold text-primary-700">{% translate "Model answer" %}</summary><p class="mt-2 whitespace-pre-line text-ink-soft">{{ row.rubric.model_answer }}</p></details>
+            {% endif %}
+            <label class="field">
+              <span class="label">{% translate "Why the points changed (for the research, optional)" %}</span>
+              <input name="r_{{ a.pk }}" type="text" maxlength="500" class="input">
+            </label>
+          {% endif %}
+        </article>
+      {% endwith %}{% endfor %}
+
+      <article class="grid gap-3 rounded-card border border-line bg-surface px-6 py-[22px]">
+        <label class="grid gap-1.5"><span class="font-bold">{% translate "Comment to the student" %}</span>
+          <textarea name="teacher_comment" rows="3" class="input text-[15px] leading-[23px]">{{ submission.teacher_comment }}</textarea>
+          <span class="help">{% translate "Shown with the result. For a conversation use the comments below." %}</span>
         </label>
-      {% endif %}
-    </section>
-  {% endwith %}{% endfor %}
+        <input type="hidden" name="action" :value="action" value="confirm">
+        {% if submission.status == "grading" %}
+          <p class="text-sm text-warning-700">{% translate "The AI is still grading this work." %}</p>
+        {% else %}
+          <div class="flex flex-wrap items-center justify-between gap-3" x-data="{ sure: false }">
+            <div class="num flex items-baseline gap-2">
+              <span class="text-[13px] text-ink-soft">{% translate "Total" %}</span>
+              <span class="text-[30px] font-extrabold tracking-[-0.02em]" x-text="total">{{ submission.score|floatformat:"-2" }}</span>
+              <span class="text-ink-faint">/ {{ submission.max_score|floatformat:"-2" }}</span>
+              <span class="text-[13px] font-bold text-warning-700" x-show="total !== ai" x-cloak>{% translate "AI:" %} <span x-text="ai"></span> → {% translate "changed" %}</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <a class="btn btn-secondary h-12" href="{% url 'teacher:grading' %}?status={{ status }}">{% translate "Skip" %}</a>
+              {% if submission.status != "returned" %}
+                <button type="button" class="btn btn-danger h-12" x-show="!sure" @click="sure = true">{% translate "Return to the student" %}</button>
+                <span x-show="sure" x-cloak class="flex flex-wrap items-center gap-2 text-sm text-ink-soft">
+                  {% translate "The attempt is given back and the stage reopens." %}
+                  <button type="submit" class="btn btn-danger btn-sm" @click="action = 'return'">{% translate "Return" %}</button>
+                  <button type="button" class="btn btn-ghost btn-sm" @click="sure = false">{% translate "Cancel" %}</button>
+                </span>
+              {% endif %}
+              <button type="submit" class="btn btn-success h-12 px-[22px] font-bold" @click="action = 'confirm'" x-text="total !== ai ? '{% translate "Change and confirm" %}' : '{% translate "Confirm the grade" %}'">{% translate "Confirm the grade" %}</button>
+            </div>
+          </div>
+        {% endif %}
+      </article>
+    </form>
 
-  <section class="card flex flex-col gap-3">
-    <label class="field">
-      <span class="label">{% translate "Comment to the student" %}</span>
-      <textarea name="teacher_comment" rows="3" class="input min-h-20">{{ submission.teacher_comment }}</textarea>
-      <span class="help">{% translate "Shown with the result. For a conversation use the comments below." %}</span>
-    </label>
-    <input type="hidden" name="action" :value="action">
-    {% if submission.status == "grading" %}
-      <p class="text-sm text-warning-700">{% translate "The AI is still grading this work." %}</p>
-    {% else %}
-    <div class="flex flex-wrap items-center gap-2" x-data="{ sure: false }">
-      <button type="submit" class="btn btn-primary" @click="action = 'confirm'">{% translate "Confirm the grade" %}</button>
-      {% if submission.status != "returned" %}
-        <button type="button" class="btn btn-secondary" x-show="!sure" @click="sure = true">{% translate "Return to the student" %}</button>
-        <span x-show="sure" x-cloak class="flex flex-wrap items-center gap-2 text-sm text-ink-soft">
-          {% translate "The attempt is given back and the stage reopens." %}
-          <button type="submit" class="btn btn-danger btn-sm" @click="action = 'return'">{% translate "Return" %}</button>
-          <button type="button" class="btn btn-ghost btn-sm" @click="sure = false">{% translate "Cancel" %}</button>
-        </span>
-      {% endif %}
-    </div>
+    <p class="rounded-[18px] bg-primary-50 px-[18px] py-3.5 text-[13px] leading-5 text-primary-900">{% translate "Your decision is saved as a teacher review and is used to compute the agreement between the AI and the teachers (Cohen's kappa). The student sees the grade after it is confirmed." %}</p>
+
+    {% if others %}
+      <section class="flex flex-col gap-2" aria-labelledby="others">
+        <h2 id="others" class="text-[15px] font-extrabold">{% translate "Other attempts" %}</h2>
+        <ul class="flex flex-wrap gap-2">
+          {% for o in others %}<li><a class="chip" href="{% url 'teacher:grading_detail' o.pk %}">{% blocktranslate with n=o.attempt_no %}attempt {{ n }}{% endblocktranslate %} · {{ o.get_status_display }}{% if o.percent is not None %} · {{ o.percent|floatformat:0 }}%{% endif %}</a></li>{% endfor %}
+        </ul>
+      </section>
     {% endif %}
+
+    {% url 'teacher:comment' as comment_url %}{% url 'teacher:grading_detail' submission.pk as here %}
+    {% include "feedback/partials/thread.html" with action=comment_url target=comment_target next=here %}
   </section>
-</form>
-
-{% if others %}
-<section class="flex flex-col gap-2" aria-labelledby="others">
-  <h2 id="others" class="text-h3">{% translate "Other attempts" %}</h2>
-  <ul class="flex flex-wrap gap-2">
-    {% for o in others %}<li><a class="btn btn-secondary btn-sm" href="{% url 'teacher:grading_detail' o.pk %}">{% blocktranslate with n=o.attempt_no %}attempt {{ n }}{% endblocktranslate %} · {{ o.get_status_display }}{% if o.percent is not None %} · {{ o.percent|floatformat:0 }}%{% endif %}</a></li>{% endfor %}
-  </ul>
-</section>
-{% endif %}
-
-{% url 'teacher:comment' as comment_url %}{% url 'teacher:grading_detail' submission.pk as here %}
-{% include "feedback/partials/thread.html" with action=comment_url target=comment_target next=here %}
+</div>
 {% endblock %}

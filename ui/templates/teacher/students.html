@@ -1,6 +1,8 @@
 {% extends "layouts/teacher.html" %}
 {% load i18n %}
 {% block title %}{% translate "Students" %} · ChemEduTech{% endblock %}
+{% block crumb %}{% translate "Groups and students" %}{% endblock %}
+{% block page_title %}{% translate "Students" %}{% endblock %}
 {% block content %}
 <p class="text-sm text-ink-soft"><a href="{% url 'teacher:groups' %}">{% translate "Groups" %}</a> / {% translate "Students" %}</p>
 <h1 class="text-h1">{% translate "Students" %}</h1>

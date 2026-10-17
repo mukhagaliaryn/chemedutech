@@ -1,6 +1,8 @@
 {% extends "layouts/teacher.html" %}
 {% load i18n %}
 {% block title %}{{ student.full_name }} · ChemEduTech{% endblock %}
+{% block crumb %}{% translate "Groups and students" %}{% endblock %}
+{% block page_title %}{{ student.full_name }}{% endblock %}
 {% block content %}
 {% with g=student.student_profile.group %}
 <p class="text-sm text-ink-soft">

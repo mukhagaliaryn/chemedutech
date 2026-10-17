@@ -261,3 +261,29 @@ class StudentPageTests(TeacherBase):
     def test_rows_for_a_finished_course(self):
         rows = overview.student_rows([self.e1])
         self.assertEqual(rows[0]["total"], len([s for s in self.stages if s.is_required]))
+
+
+class CabinetV2Tests(TeacherBase):
+    """STEP-20: dashboard series, chip counts on the group page, the student drawer."""
+
+    def test_dashboard_series_and_group_dialog(self):
+        from apps.progress.models import StudyDay
+
+        StudyDay.objects.create(enrollment=self.e1, date=timezone.localdate(), seconds=300)
+        r = self.client.get(reverse("teacher:dashboard"))
+        self.assertEqual(len(r.context["active_series"]), 7)
+        self.assertEqual(r.context["active_today"], 1)
+        self.assertEqual(len(r.context["queue_series"]), 7)
+        self.assertContains(r, 'id="new-group"')
+        self.assertContains(r, "<polyline")
+
+    def test_group_chips(self):
+        r = self.client.get(reverse("teacher:group", args=[self.g1.pk]))
+        self.assertEqual(r.context["counts"]["all"], 2)
+        self.assertContains(r, reverse("teacher:student_drawer", args=[self.s1.pk]))
+
+    def test_student_drawer_scope(self):
+        r = self.client.get(reverse("teacher:student_drawer", args=[self.s1.pk]))
+        self.assertContains(r, "Айгерім")
+        self.assertEqual(r.context["row"]["student"], self.s1)
+        self.assertEqual(self.client.get(reverse("teacher:student_drawer", args=[self.s3.pk])).status_code, 404)

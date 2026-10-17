@@ -45,7 +45,9 @@ def _student(request, pk):
 
 @teacher_only
 def dashboard(request):
-    return render(request, "teacher/dashboard.html", overview.dashboard(request.user))
+    context = overview.dashboard(request.user)
+    context["group_form"] = GroupForm(request.user)  # «Create a group» dialog
+    return render(request, "teacher/dashboard.html", context)
 
 
 # --- groups --------------------------------------------------------------------------------
@@ -117,6 +119,11 @@ def group(request, pk):
     rows, missing = _group_rows(request, group, course) if course else ([], list(course_selectors.group_members(group)))
     q, show = request.GET.get("q", ""), request.GET.get("show", "")
     shown = overview.filter_rows(rows, q, show)
+    counts = {
+        "all": len(rows) + len(missing),
+        "attention": len(overview.filter_rows(rows, "", "attention")),
+        "inactive": len(overview.filter_rows(rows, "", "inactive")),
+    }
     if request.GET.get("format") == "csv":
         return _group_csv(group, course, rows)
     return render(
@@ -133,6 +140,7 @@ def group(request, pk):
             "members": len(rows) + len(missing),
             "q": q,
             "show": show,
+            "counts": counts,
             "cohort_form": CohortForm(initial={"research_cohort": group.research_cohort}),
             "add_form": AddStudentForm(),
             "attach_form": AttachCourseForm(request.user, group),
@@ -340,6 +348,21 @@ def student(request, pk):
         progress.recalculate(enrollment)
         context.update(overview.student_page(enrollment))
     return render(request, "teacher/student.html", context)
+
+
+@teacher_only
+def student_drawer(request, pk):
+    """HTMX: the student's short profile for the drawer of the group page (figures and the latest events)."""
+    student = _student(request, pk)
+    _enrollments, enrollment = _enrollment(request, student)
+    context = {"student": student, "enrollment": enrollment}
+    if enrollment:
+        context.update(
+            row=overview.student_rows([enrollment])[0],
+            time_spent=overview.time_spent(enrollment),
+            events=list(overview.recent_events(enrollment, 6)),
+        )
+    return render(request, "teacher/partials/student_drawer.html", context)
 
 
 @require_POST

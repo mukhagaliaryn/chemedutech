@@ -164,3 +164,26 @@ class CommentTests(GradingBase):
         self.client.force_login(self.s1)
         r = self.client.get(reverse("student:dashboard"))
         self.assertEqual(r.context["comments"][0]["body"], "Жарайсың")
+
+
+class GradingPageV2Tests(GradingBase):
+    """STEP-20: the queue column next to the work, point buttons with the AI suggestion, totals."""
+
+    def test_detail_has_the_queue_and_point_buttons(self):
+        r = self.client.get(self.url())
+        self.assertEqual(list(r.context["submissions"]), [self.submission])  # the queue column
+        self.assertContains(r, 'aria-current="page"')  # the open work is marked in the queue
+        # a radio per possible point of the first criterion, the AI's 1 point preselected
+        name = f"c_{self.answer.pk}_{self.criteria[0].pk}"
+        self.assertContains(r, f'name="{name}"')
+        self.assertContains(r, "border-dashed")  # the AI suggestion
+        self.assertEqual(r.context["ai_points"], Decimal(1))
+        self.assertEqual(r.context["auto_points"], Decimal(0))
+
+    def test_confirming_with_buttons(self):
+        r = self.client.post(
+            self.url(), {f"c_{self.answer.pk}_{c.pk}": "1" for c in self.criteria} | {"action": "confirm"}
+        )
+        self.assertEqual(r.status_code, 302)
+        self.submission.refresh_from_db()
+        self.assertEqual(self.submission.status, "graded")

@@ -6,6 +6,8 @@
 {% include "feedback/partials/thread.html" with action=comment_url target=comment_target next=here title=l_comments %}
 {% endif %}
 {% endblock %}
+{% block crumb %}{% translate "Groups and students" %}{% endblock %}
+{% block page_title %}{{ attempt.title }}{% endblock %}
 {% block content %}
 <p class="text-sm text-ink-soft">
   <a href="{% url 'teacher:student' student.pk %}{% if attempt.enrollment_id %}?course={{ attempt.enrollment.course.slug }}{% endif %}#lab">{{ student.full_name }}</a> / {% translate "Lab log" %}

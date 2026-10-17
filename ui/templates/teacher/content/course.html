@@ -1,6 +1,8 @@
 {% extends "layouts/teacher.html" %}
 {% load i18n static %}
 {% block title %}{{ course.title }} · ChemEduTech{% endblock %}
+{% block crumb %}{% translate "Course content" %}{% endblock %}
+{% block page_title %}{{ course.title }}{% endblock %}
 {% block content %}
 <p class="text-sm text-ink-soft"><a href="{% url 'teacher:courses' %}">{% translate "Course content" %}</a> / {{ course.title }}</p>
 <header class="flex flex-wrap items-end justify-between gap-4">

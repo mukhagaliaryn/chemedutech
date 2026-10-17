@@ -34,8 +34,8 @@ def _enrollment_ids(request, course=None):
     return list(course_selectors.teacher_enrollments(request.user, course).values_list("pk", flat=True))
 
 
-@teacher_only
-def queue(request):
+def _queue_context(request) -> dict:
+    """The queue column: tabs with counts, the chosen course and the works of the chosen tab."""
     status = request.GET.get("status") or S.NEEDS_REVIEW
     if status not in dict(TABS):
         raise Http404
@@ -46,17 +46,18 @@ def queue(request):
         {"status": value, "label": label, "count": practice_selectors.grading_queue(ids, value).count()}
         for value, label in TABS
     ]
-    return render(
-        request,
-        "teacher/grading.html",
-        {
-            "tabs": tabs,
-            "status": status,
-            "courses": courses,
-            "course": course,
-            "submissions": practice_selectors.grading_queue(ids, status)[:200],
-        },
-    )
+    return {
+        "tabs": tabs,
+        "status": status,
+        "courses": courses,
+        "course": course,
+        "submissions": practice_selectors.grading_queue(ids, status)[:200],
+    }
+
+
+@teacher_only
+def queue(request):
+    return render(request, "teacher/grading.html", _queue_context(request))
 
 
 def _submission(request, pk):
@@ -128,6 +129,12 @@ def detail(request, pk):
             messages.success(request, _("The grade is confirmed."))
         return redirect(_next_in_queue(request, submission))
     feedback.mark_thread_read(request.user, submission)
+    auto_points = sum((r["answer"].points for r in rows if not r["open"]), Decimal(0))
+    ai_points = auto_points
+    for r in rows:
+        if r["open"]:
+            suggested = [c["ai_points"] for c in r.get("criteria") or [] if c["ai_points"] is not None]
+            ai_points += sum((Decimal(str(v)) for v in suggested), Decimal(0)) if suggested else r["answer"].points
     others = (
         PracticeSubmission.objects.filter(enrollment=submission.enrollment, stage=submission.stage)
         .exclude(pk=submission.pk)
@@ -137,8 +144,11 @@ def detail(request, pk):
         request,
         "teacher/grading_detail.html",
         {
+            **_queue_context(request),
             "submission": submission,
             "student": submission.enrollment.student,
+            "auto_points": auto_points,
+            "ai_points": ai_points,
             "rows": rows,
             "others": others,
             "thread": feedback_selectors.thread(submission),

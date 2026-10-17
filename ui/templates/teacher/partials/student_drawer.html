@@ -1,0 +1,41 @@
+{% load i18n %}{# Drawer of the group page (teacher:student_drawer): figures and the latest events of one student. #}
+<div class="flex items-start justify-between gap-3">
+  <div class="flex items-center gap-3.5">
+    {% include "components/avatar.html" with person=student shape="square" size="lg" %}
+    <span class="flex flex-col leading-[22px]">
+      <span class="text-lg font-extrabold">{{ student.full_name|default:student.username }}</span>
+      <span class="text-[13px] text-ink-soft">{% if student.student_profile.group %}{{ student.student_profile.group }}{% endif %}{% if enrollment.research_cohort %} · {% include "teacher/partials/cohort.html" with cohort=enrollment.research_cohort %}{% endif %}</span>
+    </span>
+  </div>
+  <button type="button" class="close-btn" @click="drawer = false" aria-label="{% translate 'Close' %}">{% include "components/icons.html#x" %}</button>
+</div>
+{% if enrollment %}
+  <div class="num grid grid-cols-3 gap-2">
+    <div class="rounded-md bg-canvas p-3"><span class="block text-caption font-normal text-ink-soft">{% translate "Score" %}</span><span class="text-xl font-extrabold">{% if row.score is not None %}{{ row.score|floatformat:1 }}{% else %}—{% endif %}</span></div>
+    <div class="rounded-md bg-canvas p-3"><span class="block text-caption font-normal text-ink-soft">{% translate "Progress" %}</span><span class="text-xl font-extrabold">{{ row.passed }}/{{ row.total }}</span></div>
+    <div class="rounded-md bg-canvas p-3"><span class="block text-caption font-normal text-ink-soft">{% translate "Time" %}</span><span class="text-xl font-extrabold">{{ time_spent }}</span></div>
+  </div>
+  {% if row.attention %}
+    <div class="flex flex-col gap-1.5">{% for reason in row.attention %}<p class="flex items-start gap-2 rounded-md bg-warning-50 px-3 py-2 text-sm text-warning-700">{% include "components/icons.html#warn" %}{{ reason }}</p>{% endfor %}</div>
+  {% endif %}
+  <div>
+    <h3 class="mb-2.5 text-[15px] font-extrabold">{% translate "Timeline" %}</h3>
+    <ol class="grid gap-3.5 border-l-2 border-line pl-[18px]">
+      {% for e in events %}
+        <li class="relative">
+          <span class="absolute top-1.5 -left-[25px] size-3 rounded-full border-2 border-white {% if e.action == 'passed' or e.action == 'topic_completed' or e.action == 'confirmed' %}bg-success-600{% elif e.action == 'failed' or e.action == 'returned' %}bg-danger-600{% elif e.action == 'awaiting_check' %}bg-warning-500{% elif e.stage %}stage-{{ e.stage.kind }}{% else %}bg-primary-600{% endif %}"></span>
+          <span class="text-sm font-bold">{{ e.get_action_display }}{% if e.stage %} · {{ e.stage.title|truncatechars:40 }}{% elif e.topic %} · {% blocktranslate with n=e.topic.number %}Topic {{ n }}{% endblocktranslate %}{% endif %}{% if e.score_percent is not None %} · <span class="num">{{ e.score_percent|floatformat:0 }}</span>{% endif %}</span>
+          <span class="block text-caption font-normal text-ink-faint">{{ e.created_at|ago }}{% if e.actor %} · {{ e.actor.full_name }}{% endif %}</span>
+        </li>
+      {% empty %}
+        <li class="text-sm text-ink-soft">{% translate "Nothing has happened yet." %}</li>
+      {% endfor %}
+    </ol>
+  </div>
+{% else %}
+  <p class="text-sm text-ink-soft">{% translate "The student is not enrolled in your course yet." %}</p>
+{% endif %}
+<div class="mt-auto grid gap-2">
+  <a class="btn btn-primary" href="{% url 'teacher:student' student.pk %}{% if enrollment %}?course={{ enrollment.course.slug }}{% endif %}">{% translate "Open the profile" %}</a>
+  <a class="btn btn-secondary" href="{% url 'teacher:student' student.pk %}{% if enrollment %}?course={{ enrollment.course.slug }}{% endif %}#lab">{% translate "Lab attempts" %}</a>
+</div>

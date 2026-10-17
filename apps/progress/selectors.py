@@ -1,6 +1,6 @@
 from datetime import timedelta
 
-from django.db.models import Sum
+from django.db.models import Count, Sum
 from django.utils import timezone
 
 from .models import CourseResult, ModuleResult, ProgressEvent, StageProgress, StudyDay, TopicResult
@@ -30,6 +30,19 @@ def study_days(enrollment, days: int) -> dict:
         StudyDay.objects.filter(enrollment=enrollment, date__gte=start, date__lte=today).values_list("date", "seconds")
     )
     return {start + timedelta(days=i): found.get(start + timedelta(days=i), 0) for i in range(days)}
+
+
+def active_students_by_day(enrollment_ids, days: int = 7) -> list[int]:
+    """Students with study time on each of the last ``days`` local days (oldest first)."""
+    today = timezone.localdate()
+    start = today - timedelta(days=days - 1)
+    counts = dict(
+        StudyDay.objects.filter(enrollment_id__in=enrollment_ids, date__gte=start, seconds__gt=0)
+        .values("date")
+        .annotate(n=Count("enrollment__student", distinct=True))
+        .values_list("date", "n")
+    )
+    return [counts.get(start + timedelta(days=i), 0) for i in range(days)]
 
 
 def study_streak(enrollment) -> int:

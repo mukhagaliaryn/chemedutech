@@ -258,3 +258,35 @@ def letter(index):
         return "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[int(index)]
     except (ValueError, TypeError, IndexError):
         return ""
+
+
+@register.simple_tag
+def sparkline(values, width=120, height=32):
+    """Polyline points for a small trend line: {% sparkline series as pts %} → "0,28 20,14 …" (empty if < 2 values)."""
+    values = [float(v or 0) for v in (values or [])]
+    if len(values) < 2:
+        return ""
+    low, high = min(values), max(values)
+    span = (high - low) or 1
+    step = width / (len(values) - 1)
+    pad = 4
+    return " ".join(
+        f"{i * step:.1f},{height - pad - (v - low) / span * (height - 2 * pad):.1f}" for i, v in enumerate(values)
+    )
+
+
+@register.filter
+def point_options(maximum):
+    """{% for v in criterion.points|point_options %} → 0 … max in steps of 0.5 (small or fractional maximums) or 1."""
+    from decimal import Decimal
+
+    try:
+        top = Decimal(str(maximum))
+    except Exception:
+        return []
+    step = Decimal("0.5") if top <= 3 or top != top.to_integral_value() else Decimal(1)
+    values, v = [], Decimal(0)
+    while v <= top:
+        values.append(v)
+        v += step
+    return values

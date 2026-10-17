@@ -27,7 +27,7 @@ the grading queue counter. Collapses like the student sidebar.
     {% include "components/avatar.html" with person=user shape="square" tone="inverse" %}
     <span class="nav-label flex min-w-0 flex-col leading-[18px]">
       <span class="truncate text-sm font-bold text-white">{{ user.get_full_name|default:user.get_username }}</span>
-      <span class="truncate text-caption font-normal text-on-dark-soft">{% if user.teacher_profile.department %}{{ user.teacher_profile.department }}{% else %}{% translate "teacher" %}{% endif %}</span>
+      <span class="truncate text-caption font-normal text-on-dark-soft">{% if user.teacher_profile.department %}{{ user.teacher_profile.department }}{% else %}{{ user.get_role_display }}{% endif %}</span>
     </span>
   </a>
 </div>

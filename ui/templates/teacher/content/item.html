@@ -1,6 +1,8 @@
 {% extends "layouts/teacher.html" %}
 {% load i18n %}
 {% block title %}{% if item %}{{ item.label }}{% else %}{% translate "New answer field" %}{% endif %} · ChemEduTech{% endblock %}
+{% block crumb %}{% translate "Course content" %}{% endblock %}
+{% block page_title %}{% if item %}{{ item.label }}{% else %}{% translate "New answer field" %}{% endif %}{% endblock %}
 {% block content %}
 <p class="text-sm text-ink-soft"><a href="{% url 'teacher:course_content' course.slug %}">{{ course.title }}</a> / <a href="{% url 'teacher:stage' course.slug stage.pk %}#items">{{ stage.title }}</a></p>
 <h1 class="text-h1">{% if item %}{{ item.label }}{% else %}{% translate "New answer field" %}{% endif %}</h1>

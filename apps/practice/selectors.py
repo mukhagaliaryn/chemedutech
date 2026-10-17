@@ -1,3 +1,5 @@
+from django.db import models
+
 from .models import PracticeSubmission
 
 S = PracticeSubmission.Status
@@ -110,3 +112,22 @@ def review_rows(submission) -> list[dict]:
             row.update({"grade": grade, "review": review, "rubric": rubric, "criteria": criteria})
         rows.append(row)
     return rows
+
+
+def submissions_by_day(enrollment_ids, days: int = 7) -> list[int]:
+    """Works sent on each of the last ``days`` local days (oldest first) — the teacher's queue trend."""
+    from datetime import timedelta
+
+    from django.db.models.functions import TruncDate
+    from django.utils import timezone
+
+    today = timezone.localdate()
+    start = today - timedelta(days=days - 1)
+    counts = dict(
+        PracticeSubmission.objects.filter(enrollment_id__in=enrollment_ids, submitted_at__date__gte=start)
+        .annotate(day=TruncDate("submitted_at", tzinfo=timezone.get_current_timezone()))
+        .values("day")
+        .annotate(n=models.Count("pk"))
+        .values_list("day", "n")
+    )
+    return [counts.get(start + timedelta(days=i), 0) for i in range(days)]

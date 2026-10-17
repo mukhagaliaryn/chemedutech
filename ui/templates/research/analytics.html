@@ -1,41 +1,165 @@
 {% extends "layouts/teacher.html" %}
 {% load i18n %}
+{% comment %}
+Statistics (mockup «Мұғалім · Статистика»): topic tabs and filters, key measures (experimental vs control),
+the average score by stage for both groups, the completion funnel, frequent lab errors by type, AI ↔ teacher
+agreement and the random spot-check, then the full descriptive table. Descriptive only — tests on the CSV.
+{% endcomment %}
 {% block title %}{% translate "Statistics" %} · ChemEduTech{% endblock %}
+{% block crumb %}{% translate "Control and experimental groups" %}{% endblock %}
+{% block page_title %}{% translate "Research analytics" %}{% endblock %}
 {% block content %}
 {% if not course %}
-  <h1 class="text-h1">{% translate "Statistics" %}</h1>
   {% translate "You are not assigned to a course yet." as l_title %}
   {% include "components/empty_state.html" with title=l_title icon="chart" %}
 {% else %}
-<header class="flex flex-wrap items-end justify-between gap-4">
-  <div>
-    <h1 class="text-h1">{% translate "Statistics" %}</h1>
-    <p class="mt-1 text-ink-soft">{{ course.title }} · {% if topic %}{% blocktranslate with n=topic.number %}Topic {{ n }}{% endblocktranslate %}{% else %}{% translate "the whole course" %}{% endif %}{% if group %} · {{ group.name }}{% endif %}</p>
-  </div>
-  <form method="get" class="flex flex-wrap items-end gap-2">
-    <label class="sr-only" for="f-topic">{% translate "Topic" %}</label>
-    <select id="f-topic" name="topic" class="input h-10 w-auto" onchange="this.form.submit()">
-      <option value="">{% translate "The whole course" %}</option>
-      {% for t in all_topics %}<option value="{{ t.number }}"{% if t == topic %} selected{% endif %}>{% blocktranslate with n=t.number %}Topic {{ n }}{% endblocktranslate %}</option>{% endfor %}
-    </select>
+<div class="flex flex-wrap items-center justify-between gap-3">
+  <nav class="segmented segmented-outline flex-wrap" aria-label="{% translate 'Topic' %}">
+    <a href="?{% if group %}group={{ group.pk }}{% endif %}" {% if not topic %}aria-current="page"{% endif %}>{% translate "Whole course" %}</a>
+    {% for t in all_topics %}
+      <a href="?topic={{ t.number }}{% if group %}&amp;group={{ group.pk }}{% endif %}" {% if t == topic %}aria-current="page"{% endif %}>{% blocktranslate with n=t.number %}Topic {{ n }}{% endblocktranslate %}</a>
+    {% endfor %}
+  </nav>
+  <form method="get" class="flex flex-wrap items-center gap-2">
+    {% if topic %}<input type="hidden" name="topic" value="{{ topic.number }}">{% endif %}
     <label class="sr-only" for="f-group">{% translate "Group" %}</label>
-    <select id="f-group" name="group" class="input h-10 w-auto" onchange="this.form.submit()">
+    <select id="f-group" name="group" class="input h-11 w-auto" onchange="this.form.submit()">
       <option value="">{% translate "All groups" %}</option>
       {% for g in groups %}<option value="{{ g.pk }}"{% if g == group %} selected{% endif %}>{{ g.name }}</option>{% endfor %}
     </select>
     <noscript><button type="submit" class="btn btn-secondary">{% translate "Show" %}</button></noscript>
-    <a class="btn btn-secondary" href="?{{ query }}{% if query %}&amp;{% endif %}format=csv">{% translate "Download data (CSV)" %}</a>
+    <a class="btn btn-secondary" href="?{{ query }}{% if query %}&amp;{% endif %}format=csv">{% include "components/icons.html#download" %}{% translate "Download data (CSV)" %}</a>
   </form>
-</header>
+</div>
 
-<section aria-labelledby="cmp" class="overflow-hidden rounded-lg border border-line bg-surface">
-  <div class="flex flex-wrap items-center justify-between gap-3 border-b border-line px-6 py-4">
-    <h2 id="cmp" class="text-h3">{% translate "Control and experimental groups" %}</h2>
-    <span class="flex flex-wrap gap-4 text-body-sm text-ink-soft">
-      <span class="flex items-center gap-2"><span class="size-2.5 rounded-full bg-primary-600"></span>{% blocktranslate with n=cohorts.n.experimental %}Experimental (n = {{ n }}){% endblocktranslate %}</span>
-      <span class="flex items-center gap-2"><span class="size-2.5 rounded-full bg-primary-300"></span>{% blocktranslate with n=cohorts.n.control %}Control (n = {{ n }}){% endblocktranslate %}</span>
-      {% if cohorts.unassigned %}<span>{% blocktranslate with n=cohorts.unassigned %}not assigned: {{ n }}{% endblocktranslate %}</span>{% endif %}
-    </span>
+{# ---- key measures ---- #}
+<section class="num grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4" aria-label="{% translate 'Key measures' %}">
+  {% for row in cohorts.rows|slice:":4" %}
+    <div class="rounded-card border border-line bg-surface p-5">
+      <span class="block text-[13px] font-semibold text-ink-soft">{{ row.title }}</span>
+      <span class="mt-1 flex items-baseline gap-2"><span class="text-[30px] font-extrabold tracking-[-0.02em]">{{ row.cells.0.value|default:"—" }}</span>{% if row.diff and row.diff != "—" %}<span class="text-[13px] font-bold text-primary-700">{{ row.diff }}</span>{% endif %}</span>
+      <span class="mt-1 block text-caption font-normal text-ink-faint">{% translate "Experimental" %} · n = {{ row.cells.0.n }} · {% translate "Control" %}: {{ row.cells.1.value|default:"—" }}</span>
+    </div>
+  {% endfor %}
+</section>
+
+<div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+  {# ---- grouped bars by stage ---- #}
+  <section class="card" aria-labelledby="by-stage">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <h2 id="by-stage" class="text-[17px] font-extrabold">{% translate "Average score by stage" %}</h2>
+      <div class="flex gap-3.5 text-[13px] text-ink-soft">
+        <span class="inline-flex items-center gap-1.5"><span class="size-3 rounded-[4px] bg-primary-600"></span>{% blocktranslate with n=cohorts.n.experimental %}Experimental (n = {{ n }}){% endblocktranslate %}</span>
+        <span class="inline-flex items-center gap-1.5"><span class="size-3 rounded-[4px] bg-chart-muted"></span>{% blocktranslate with n=cohorts.n.control %}Control (n = {{ n }}){% endblocktranslate %}</span>
+      </div>
+    </div>
+    {% if stage_rows %}
+      <div class="mt-[18px] overflow-x-auto">
+        <div class="flex h-[240px] min-w-max items-end gap-4 border-b border-line px-1" role="img" aria-label="{% translate 'Average score by stage' %}">
+          {% for row in stage_rows %}{% with e=row.mean|get_item:"experimental" c=row.mean|get_item:"control" %}
+            <div class="flex h-full w-[72px] items-end justify-center gap-1.5">
+              <span class="tip block w-7 rounded-t-[10px] rounded-b-[4px] bg-primary-600 transition-[height]" style="height: {% if e %}{{ e|stringformat:'.1f' }}{% else %}1{% endif %}%" tabindex="0"><span class="tipbox">{% translate "Experimental" %}: {% if e is not None %}{{ e|floatformat:1 }}{% else %}—{% endif %}</span></span>
+              <span class="tip block w-7 rounded-t-[10px] rounded-b-[4px] bg-chart-muted transition-[height]" style="height: {% if c %}{{ c|stringformat:'.1f' }}{% else %}1{% endif %}%" tabindex="0"><span class="tipbox">{% translate "Control" %}: {% if c is not None %}{{ c|floatformat:1 }}{% else %}—{% endif %}</span></span>
+            </div>
+          {% endwith %}{% endfor %}
+        </div>
+        <div class="mt-2 flex min-w-max gap-4 px-1">
+          {% for row in stage_rows %}<span class="w-[72px] truncate text-center text-caption font-bold text-stage-{{ row.stage.kind }}" title="{{ row.stage.title }}">{% if not topic %}{{ row.stage.topic.number }}. {% endif %}{{ row.stage.get_kind_display }}</span>{% endfor %}
+        </div>
+      </div>
+    {% else %}
+      <p class="mt-4 text-sm text-ink-soft">{% translate "No stages yet." %}</p>
+    {% endif %}
+    <p class="mt-4 rounded-md bg-primary-50 px-3.5 py-3 text-[13px] leading-5 text-primary-900">{% translate "Descriptive statistics only. Test significance (t-test, Mann–Whitney) on the downloaded data. The research group of an enrolment is the value at enrolment." %}</p>
+  </section>
+
+  {# ---- funnel ---- #}
+  <section class="card" aria-labelledby="funnel">
+    <h2 id="funnel" class="text-[17px] font-extrabold">{% if topic %}{% blocktranslate with n=topic.number %}Completion funnel · Topic {{ n }}{% endblocktranslate %}{% else %}{% translate "Completion funnel" %}{% endif %}</h2>
+    <p class="mt-0.5 mb-4 text-[13px] text-ink-soft">{% blocktranslate count n=enrollments|length %}Students who finished each stage, of {{ n }} student{% plural %}Students who finished each stage, of {{ n }} students{% endblocktranslate %}</p>
+    <div class="grid gap-2.5">
+      {% for row in stage_rows %}
+        <div class="grid grid-cols-[110px_1fr_56px] items-center gap-2.5">
+          <span class="truncate text-[13px] font-semibold" title="{{ row.stage.title }}">{% if not topic %}{{ row.stage.topic.number }}. {% endif %}{{ row.stage.title }}</span>
+          <span class="h-7 overflow-hidden rounded-sm bg-canvas"><span class="block h-full rounded-sm stage-{{ row.stage.kind }} transition-[width]" style="width: {{ row.share|stringformat:'.1f' }}%"></span></span>
+          <span class="num text-right text-[13px] font-extrabold">{{ row.share|floatformat:0 }}% <span class="block text-caption font-normal text-ink-faint">{{ row.done }}</span></span>
+        </div>
+      {% empty %}
+        <p class="text-sm text-ink-soft">{% translate "No stages yet." %}</p>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+
+<div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+  {# ---- frequent errors ---- #}
+  <section class="card" aria-labelledby="errs" x-data="{ kind: 'order' }">
+    <div class="mb-3.5 flex flex-wrap items-center justify-between gap-3">
+      <div><h2 id="errs" class="text-[17px] font-extrabold">{% translate "Frequent lab errors" %}</h2><p class="text-[13px] text-ink-soft">{% translate "At which step students go wrong — a hint for what to explain again in class." %}</p></div>
+      <div class="flex gap-1.5">
+        <button type="button" class="chip h-[34px] rounded-sm px-3 text-[13px]" @click="kind = 'order'" :aria-pressed="(kind === 'order').toString()">{% translate "Order" %}</button>
+        <button type="button" class="chip h-[34px] rounded-sm px-3 text-[13px]" @click="kind = 'safety'" :aria-pressed="(kind === 'safety').toString()">{% translate "Safety" %}</button>
+        <button type="button" class="chip h-[34px] rounded-sm px-3 text-[13px]" @click="kind = 'tool'" :aria-pressed="(kind === 'tool').toString()">{% translate "Equipment or choice" %}</button>
+      </div>
+    </div>
+    <ol class="grid gap-2">
+      {% for e in lab.errors %}
+        <li x-show="kind === '{% if e.type == 'order_error' %}order{% elif e.type == 'safety_warning' %}safety{% else %}tool{% endif %}'"
+            class="grid grid-cols-[minmax(0,1fr)_120px_56px] items-center gap-3 rounded-md border border-surface-sunken px-3 py-2.5 max-sm:grid-cols-[minmax(0,1fr)_56px]">
+          <span class="flex min-w-0 flex-col leading-[19px]"><span class="text-sm font-bold">{{ e.step }}</span><span class="truncate text-caption font-normal text-ink-faint">{{ e.experiment }}{% if e.time is not None %} · {% blocktranslate with t=e.time|floatformat:0 %}{{ t }} s on the step{% endblocktranslate %}{% endif %}</span></span>
+          <span class="h-2 overflow-hidden rounded-full bg-canvas max-sm:hidden"><span class="block h-full rounded-full {% if e.type == 'safety_warning' %}bg-danger-600{% elif e.type == 'order_error' %}bg-stage-lab{% else %}bg-stage-practice{% endif %}" style="width: {% widthratio e.students e.tried 100 %}%"></span></span>
+          <span class="num text-right text-[13px] font-extrabold">{{ e.students }}/{{ e.tried }}</span>
+        </li>
+      {% endfor %}
+    </ol>
+    {% if not lab.errors %}<p class="text-sm text-ink-soft">{% translate "No lab errors logged yet." %}</p>{% endif %}
+    {% if lab.experiments %}
+      <details class="accordion mt-4">
+        <summary>{% translate "Average time per step" %}<span class="chev">{% include "components/icons.html#chevron-down" with size=16 %}</span></summary>
+        <div class="accordion-body grid gap-3">
+          {% for x in lab.experiments %}
+            <div><p class="font-semibold text-ink">{{ x.title }} <span class="font-normal text-ink-faint">· {% blocktranslate count n=x.students %}{{ n }} student{% plural %}{{ n }} students{% endblocktranslate %}</span></p>
+              <ol class="mt-1 grid gap-1">{% for s in x.steps %}<li class="flex justify-between gap-4"><span>{{ forloop.counter }}. {{ s.title }}</span><span class="num">{% if s.time.mean is not None %}{{ s.time.mean|floatformat:0 }} {% translate "s" %} <span class="text-caption text-ink-faint">({% blocktranslate with m=s.time.median|floatformat:0 %}median {{ m }}{% endblocktranslate %}, n = {{ s.time.n }})</span>{% else %}—{% endif %}</span></li>{% endfor %}</ol></div>
+          {% endfor %}
+        </div>
+      </details>
+    {% endif %}
+  </section>
+
+  {# ---- AI agreement ---- #}
+  <section class="brand-ground flex flex-col gap-4 rounded-card p-6" aria-labelledby="ai">
+    <div class="relative"><h2 id="ai" class="text-[17px] font-extrabold">{% translate "AI ↔ teacher agreement" %}</h2>
+      <p class="text-[13px] text-on-dark-soft">{% blocktranslate count n=agreement.answers|default:0 %}Open answers · {{ n }} grade checked by a teacher{% plural %}Open answers · {{ n }} grades checked by a teacher{% endblocktranslate %}</p></div>
+    {% if agreement.answers %}
+      <div class="num relative flex flex-wrap items-center gap-5">
+        {% if agreement.kappa is not None %}{% widthratio agreement.kappa 1 100 as kappa_pct %}{% with k=agreement.kappa|floatformat:2 %}{% include "components/ring.html" with value=kappa_pct size=120 stroke=12 text=k color="stroke-mint" track="stroke-white/15" inverse=True label="Cohen κ" %}{% endwith %}{% endif %}
+        <dl class="grid gap-2 text-sm">
+          <div><dt class="sr-only">{% translate "Exact agreement on criteria" %}</dt><dd><b class="text-lg">{% if agreement.exact is not None %}{{ agreement.exact|floatformat:0 }}%{% else %}—{% endif %}</b> <span class="text-on-dark-soft">{% translate "exact agreement on criteria" %}</span></dd></div>
+          <div><dt class="sr-only">{% translate "Correlation (Pearson r)" %}</dt><dd><b class="text-lg">{% if agreement.pearson is not None %}{{ agreement.pearson|floatformat:2 }}{% else %}—{% endif %}</b> <span class="text-on-dark-soft">{% translate "Pearson r" %}</span></dd></div>
+          <div><dt class="sr-only">{% translate "Mean absolute difference" %}</dt><dd><b class="text-lg">{% if agreement.mean_abs_diff is not None %}{{ agreement.mean_abs_diff|floatformat:1 }}{% else %}—{% endif %}</b> <span class="text-on-dark-soft">{% translate "p.p. mean absolute difference" %}</span></dd></div>
+        </dl>
+      </div>
+      <p class="relative rounded-lg bg-white/[.08] px-4 py-3.5 text-[13px] leading-5 text-primary-100">{% translate "κ ≥ 0.80 — almost perfect agreement (Landis & Koch). Points as % of the field's points; the latest check of an answer is used." %}</p>
+    {% else %}
+      <p class="relative text-sm text-on-dark-soft">{% translate "No AI grade has been checked by a teacher yet. Draw a sample and check it." %}</p>
+    {% endif %}
+    <div class="relative grid gap-2 rounded-lg bg-white/[.06] p-4 text-sm">
+      <p class="font-bold">{% translate "Random spot-check" %} · {{ course.review_sample_percent }}%</p>
+      <p class="num text-on-dark-soft">{% translate "Graded by AI" %} {{ sample.ai_graded }} · {% translate "Drawn" %} {{ sample.sampled }} · {% translate "Checked" %} {{ sample.checked }}</p>
+      <div class="mt-1 flex flex-wrap gap-2">
+        <form method="post" action="{% url 'research:draw_sample' course.slug %}">{% csrf_token %}<button type="submit" class="btn btn-inverse btn-sm">{% translate "Draw the sample" %}</button></form>
+        <a class="btn btn-outline-inverse btn-sm" href="{% url 'teacher:grading' %}?status=sample&amp;course={{ course.slug }}">{% translate "Check the drawn works" %}</a>
+      </div>
+    </div>
+    <a class="link relative text-sm font-bold !text-primary-200" href="{% url 'research:export_ai_reviews' %}">{% translate "AI ↔ teacher grades (CSV)" %}</a>
+  </section>
+</div>
+
+{# ---- full descriptive table ---- #}
+<section aria-labelledby="cmp" class="overflow-hidden rounded-card border border-line bg-surface">
+  <div class="flex flex-wrap items-center justify-between gap-3 border-b border-surface-sunken px-6 py-4">
+    <h2 id="cmp" class="text-[17px] font-extrabold">{% translate "Control and experimental groups" %}</h2>
+    {% if cohorts.unassigned %}<span class="text-[13px] text-ink-soft">{% blocktranslate with n=cohorts.unassigned %}not assigned: {{ n }}{% endblocktranslate %}</span>{% endif %}
   </div>
   <div class="overflow-x-auto">
     <table class="table">
@@ -48,130 +172,18 @@
       <tbody class="num">
         {% for row in cohorts.rows %}
           <tr>
-            <td class="text-sm text-ink">{{ row.title }}</td>
+            <td>{{ row.title }}</td>
             {% for cell in row.cells %}
-              <td class="text-right text-sm">
-                <span class="font-semibold text-ink">{{ cell.value }}</span>
-                {% if cell.median %}<span class="block text-caption">{% blocktranslate with m=cell.median %}median {{ m }}{% endblocktranslate %}</span>{% endif %}
-                <span class="block text-caption">n = {{ cell.n }}</span>
-              </td>
+              <td class="text-right"><span class="font-bold">{{ cell.value }}</span>
+                {% if cell.median %}<span class="block text-caption text-ink-faint">{% blocktranslate with m=cell.median %}median {{ m }}{% endblocktranslate %}</span>{% endif %}
+                <span class="block text-caption text-ink-faint">n = {{ cell.n }}</span></td>
             {% endfor %}
-            <td class="text-right text-sm font-semibold text-ink">{{ row.diff }}</td>
+            <td class="text-right font-bold">{{ row.diff }}</td>
           </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
-  <p class="border-t border-line px-6 py-3 text-caption text-ink-soft">{% translate "Descriptive statistics only. Test significance (t-test, Mann–Whitney) on the downloaded data. The research group of an enrolment is the value at enrolment." %}</p>
 </section>
-
-<div class="grid items-start gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(440px,100%),1fr))]">
-  <figure class="card flex flex-col gap-4">
-    <figcaption class="text-h3">{% translate "Average score by stage" %}</figcaption>
-    {% for row in stage_rows %}
-      <div class="flex flex-col gap-1">
-        <span class="flex items-center gap-2 text-body-sm"><span class="size-2.5 shrink-0 rounded-sm stage-{{ row.stage.kind }}"></span><span class="truncate">{% if not topic %}{{ row.stage.topic.number }}. {% endif %}{{ row.stage.title }}</span></span>
-        {% for key in "experimental control"|split %}
-          {% with v=row.mean|get_item:key %}
-          <span class="flex items-center gap-2">
-            <span class="h-2.5 flex-1 overflow-hidden rounded-full bg-surface-sunken"><span class="block h-full rounded-full {% if key == 'experimental' %}bg-primary-600{% else %}bg-primary-300{% endif %}" style="width: {% if v %}{{ v|stringformat:'.1f' }}{% else %}0{% endif %}%"></span></span>
-            <span class="num w-12 text-right text-caption text-ink-soft">{% if v is not None %}{{ v|floatformat:1 }}{% else %}—{% endif %}</span>
-          </span>
-          {% endwith %}
-        {% endfor %}
-      </div>
-    {% empty %}
-      <p class="text-sm text-ink-soft">{% translate "No stages yet." %}</p>
-    {% endfor %}
-  </figure>
-
-  <figure class="card flex flex-col gap-3">
-    <figcaption class="text-h3">{% if topic %}{% blocktranslate with n=topic.number %}Completion funnel · Topic {{ n }}{% endblocktranslate %}{% else %}{% translate "Completion funnel" %}{% endif %}</figcaption>
-    {% for row in stage_rows %}
-      <div class="flex items-center gap-3 text-body-sm">
-        <span class="w-48 shrink-0 truncate" title="{{ row.stage.title }}">{% if not topic %}{{ row.stage.topic.number }}. {% endif %}{{ row.stage.title }}</span>
-        <span class="h-3 flex-1 overflow-hidden rounded-full bg-surface-sunken"><span class="block h-full rounded-full stage-{{ row.stage.kind }}" style="width: {{ row.share|stringformat:'.1f' }}%"></span></span>
-        <span class="num w-10 text-right font-semibold">{{ row.done }}</span>
-      </div>
-    {% endfor %}
-    <p class="text-caption text-ink-soft">{% blocktranslate count n=enrollments|length %}Students who finished each stage, of {{ n }} student{% plural %}Students who finished each stage, of {{ n }} students{% endblocktranslate %}</p>
-  </figure>
-</div>
-
-<section aria-labelledby="errs" class="overflow-hidden rounded-lg border border-line bg-surface">
-  <div class="border-b border-line px-6 py-4">
-    <h2 id="errs" class="text-h3">{% translate "Frequent lab errors" %}</h2>
-    <p class="text-body-sm text-ink-soft">{% translate "At which step students go wrong — a hint for what to explain again in class." %}</p>
-  </div>
-  <div class="overflow-x-auto">
-    <table class="table">
-      <thead><tr>
-        <th scope="col">{% translate "Experiment · step" %}</th><th scope="col">{% translate "Error type" %}</th>
-        <th scope="col" class="text-right">{% translate "Students" %}</th><th scope="col" class="text-right">{% translate "Average time on the step" %}</th>
-      </tr></thead>
-      <tbody>
-        {% for e in lab.errors %}
-          <tr>
-            <td class="text-sm text-ink">{{ e.number }} · {{ e.step }}</td>
-            <td>{% include "components/badge.html" with variant=e.type|error_variant label=e.type_label %}</td>
-            <td class="num text-right text-sm">{{ e.students }} / {{ e.tried }}</td>
-            <td class="num text-right text-sm">{% if e.time is not None %}{{ e.time|floatformat:0 }} {% translate "s" %}{% else %}—{% endif %}</td>
-          </tr>
-        {% empty %}
-          <tr><td colspan="4" class="py-6 text-center text-sm text-ink-soft">{% translate "No lab errors logged yet." %}</td></tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-  {% if lab.experiments %}
-  <div class="flex flex-col gap-2 border-t border-line px-6 py-4">
-    <h3 class="text-label text-ink-soft">{% translate "Average time per step" %}</h3>
-    {% for x in lab.experiments %}
-      <details class="text-sm">
-        <summary class="cursor-pointer">{{ x.title }} <span class="text-ink-soft">· {% blocktranslate count n=x.students %}{{ n }} student{% plural %}{{ n }} students{% endblocktranslate %}</span></summary>
-        <ol class="mt-2 flex flex-col gap-1 pl-4">
-          {% for s in x.steps %}<li class="flex justify-between gap-4"><span class="text-ink-soft">{{ forloop.counter }}. {{ s.title }}</span><span class="num">{% if s.time.mean is not None %}{{ s.time.mean|floatformat:0 }} {% translate "s" %} <span class="text-caption text-ink-faint">({% blocktranslate with m=s.time.median|floatformat:0 %}median {{ m }}{% endblocktranslate %}, n = {{ s.time.n }})</span>{% else %}—{% endif %}</span></li>{% endfor %}
-        </ol>
-      </details>
-    {% endfor %}
-  </div>
-  {% endif %}
-</section>
-
-<div class="grid items-start gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(440px,100%),1fr))]">
-  <section aria-labelledby="ai" class="card flex flex-col gap-3">
-    <h2 id="ai" class="text-h3">{% translate "AI ↔ teacher agreement" %}</h2>
-    {% if agreement.answers %}
-      <dl class="grid grid-cols-[1fr_auto] gap-x-4 gap-y-2 text-sm">
-        <dt class="text-ink-soft">{% translate "Answers checked by a teacher" %}</dt><dd class="num font-semibold">{{ agreement.answers }}</dd>
-        <dt class="text-ink-soft">{% translate "Cohen's kappa (criteria)" %}</dt><dd class="num font-semibold">{% if agreement.kappa is not None %}{{ agreement.kappa|floatformat:2 }} <span class="font-normal text-ink-soft">(n = {{ agreement.criteria }})</span>{% else %}—{% endif %}</dd>
-        <dt class="text-ink-soft">{% translate "Exact agreement on criteria" %}</dt><dd class="num font-semibold">{% if agreement.exact is not None %}{{ agreement.exact|floatformat:0 }}%{% else %}—{% endif %}</dd>
-        <dt class="text-ink-soft">{% translate "Correlation (Pearson r)" %}</dt><dd class="num font-semibold">{% if agreement.pearson is not None %}{{ agreement.pearson|floatformat:2 }}{% else %}—{% endif %}</dd>
-        <dt class="text-ink-soft">{% translate "Mean difference, teacher − AI" %}</dt><dd class="num font-semibold">{% if agreement.mean_diff is not None %}{{ agreement.mean_diff|floatformat:1 }} {% translate "p.p." %}{% else %}—{% endif %}</dd>
-        <dt class="text-ink-soft">{% translate "Mean absolute difference" %}</dt><dd class="num font-semibold">{% if agreement.mean_abs_diff is not None %}{{ agreement.mean_abs_diff|floatformat:1 }} {% translate "p.p." %}{% else %}—{% endif %}</dd>
-      </dl>
-      <p class="text-caption text-ink-soft">{% translate "Points as % of the field's points. Only grades a teacher checked count; the latest check of an answer is used." %}</p>
-    {% else %}
-      <p class="text-sm text-ink-soft">{% translate "No AI grade has been checked by a teacher yet. Draw a sample and check it." %}</p>
-    {% endif %}
-    <a class="text-sm font-semibold" href="{% url 'research:export_ai_reviews' %}">{% translate "AI ↔ teacher grades (CSV)" %}</a>
-  </section>
-
-  <section aria-labelledby="sample" class="card flex flex-col gap-3">
-    <h2 id="sample" class="text-h3">{% translate "Random spot-check" %}</h2>
-    <p class="text-sm text-ink-soft">{% blocktranslate with p=course.review_sample_percent %}{{ p }}% of AI-graded works are drawn at random for your check, so the agreement is measured on an unbiased sample (the share is set in the course settings).{% endblocktranslate %}</p>
-    <dl class="grid grid-cols-[1fr_auto] gap-x-4 gap-y-1 text-sm">
-      <dt class="text-ink-soft">{% translate "Graded by AI" %}</dt><dd class="num font-semibold">{{ sample.ai_graded }}</dd>
-      <dt class="text-ink-soft">{% translate "Drawn" %}</dt><dd class="num font-semibold">{{ sample.sampled }}</dd>
-      <dt class="text-ink-soft">{% translate "Checked" %}</dt><dd class="num font-semibold">{{ sample.checked }}</dd>
-    </dl>
-    <div class="flex flex-wrap gap-2">
-      <form method="post" action="{% url 'research:draw_sample' course.slug %}">{% csrf_token %}
-        <button type="submit" class="btn btn-primary">{% translate "Draw the sample" %}</button>
-      </form>
-      <a class="btn btn-secondary" href="{% url 'teacher:grading' %}?status=sample&amp;course={{ course.slug }}">{% translate "Check the drawn works" %}</a>
-    </div>
-  </section>
-</div>
 {% endif %}
 {% endblock %}

@@ -1,6 +1,8 @@
 {% extends "layouts/teacher.html" %}
 {% load i18n %}
 {% block title %}{% if group %}{{ group.name }}{% else %}{% translate "New group" %}{% endif %} · ChemEduTech{% endblock %}
+{% block crumb %}{% translate "Groups and students" %}{% endblock %}
+{% block page_title %}{% if group %}{% translate "Edit the group" %}{% else %}{% translate "New group" %}{% endif %}{% endblock %}
 {% block content %}
 <p class="text-sm text-ink-soft"><a href="{% url 'teacher:groups' %}">{% translate "Groups" %}</a>{% if group %} / <a href="{% url 'teacher:group' group.pk %}">{{ group.name }}</a>{% endif %}</p>
 <h1 class="text-h1">{% if group %}{% translate "Edit the group" %}{% else %}{% translate "New group" %}{% endif %}</h1>

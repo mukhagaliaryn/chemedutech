@@ -223,7 +223,11 @@ def dashboard(user) -> dict:
             first_topic_share = Decimal(progress_selectors.completed_topic_counts(same, first_topic)) / len(same) * 100
     attention = [(r, reason) for r in rows for reason in r["attention"]]
     groups = course_selectors.teacher_groups(user).filter(is_active=True).order_by("name")
+    active_series = progress_selectors.active_students_by_day(ids, 7)
     return {
+        "active_series": active_series,
+        "active_today": active_series[-1] if active_series else 0,
+        "queue_series": practice_selectors.submissions_by_day(ids, 7),
         "courses": course_selectors.teacher_courses(user),
         "students": len({e.student_id for e in enrollments}),
         "active_week": len({r["student"].pk for r in rows if r["last"] and r["last"] >= week_ago}),
@@ -241,6 +245,16 @@ def dashboard(user) -> dict:
 
 
 # --- one student -----------------------------------------------------------------------
+
+
+def time_spent(enrollment) -> str:
+    from apps.student import cabinet
+
+    return cabinet.duration(progress_selectors.time_spent_s(enrollment))
+
+
+def recent_events(enrollment, limit=6):
+    return progress_selectors.events_of(enrollment, limit)
 
 
 def student_page(enrollment) -> dict:

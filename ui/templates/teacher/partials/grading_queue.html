@@ -1,0 +1,43 @@
+{% load i18n %}{# The queue column of the grading pages: tabs, course filter, works (current = submission). #}
+<aside class="flex flex-col overflow-hidden rounded-card border border-line bg-surface lg:sticky lg:top-24">
+  <div class="flex items-center justify-between px-[18px] pt-[18px] pb-3">
+    <h2 class="text-[17px] font-extrabold">{% translate "Queue" %}</h2>
+    {% for t in tabs %}{% if t.status == "needs_review" %}<span class="badge badge-warning num font-bold">{% blocktranslate with n=t.count %}{{ n }} waiting{% endblocktranslate %}</span>{% endif %}{% endfor %}
+  </div>
+  <nav class="segmented segmented-xs mx-[18px] mb-3 flex flex-wrap bg-canvas" aria-label="{% translate 'Status' %}">
+    {% for t in tabs %}
+      <a href="?status={{ t.status }}{% if course %}&amp;course={{ course.slug }}{% endif %}" {% if t.status == status %}aria-current="page"{% endif %}>{{ t.label }} <span class="num opacity-70">{{ t.count }}</span></a>
+    {% endfor %}
+  </nav>
+  {% if courses|length > 1 %}
+    <form method="get" class="mx-[18px] mb-3">
+      <input type="hidden" name="status" value="{{ status }}">
+      <label class="sr-only" for="course">{% translate "Course" %}</label>
+      <select id="course" name="course" class="input h-10" onchange="this.form.submit()">
+        <option value="">{% translate "All courses" %}</option>
+        {% for c in courses %}<option value="{{ c.slug }}"{% if c == course %} selected{% endif %}>{{ c.title }}</option>{% endfor %}
+      </select>
+    </form>
+  {% endif %}
+  <ul class="grid max-h-[calc(100vh-260px)] gap-1 overflow-y-auto px-2.5 pb-2.5">
+    {% for s in submissions %}
+      <li>
+        <a href="{% url 'teacher:grading_detail' s.pk %}?status={{ status }}{% if course %}&amp;course={{ course.slug }}{% endif %}"
+           class="flex items-center gap-2.5 rounded-md border p-2.5 text-ink transition-colors {% if submission and s.pk == submission.pk %}border-primary-200 bg-primary-50{% else %}border-transparent hover:bg-[#f8fafc]{% endif %}"
+           {% if submission and s.pk == submission.pk %}aria-current="page"{% endif %}>
+          {% if s.status == "needs_review" %}{% include "components/avatar.html" with person=s.enrollment.student shape="square" tone="danger" %}{% else %}{% include "components/avatar.html" with person=s.enrollment.student shape="square" tone="neutral" %}{% endif %}
+          <span class="flex min-w-0 flex-1 flex-col leading-[19px]">
+            <span class="truncate text-sm font-bold">{{ s.enrollment.student.full_name|default:s.enrollment.student.username }}</span>
+            <span class="truncate text-caption font-normal text-ink-faint">{{ s.stage.topic.number }}. {{ s.stage.title }} · {{ s.submitted_at|ago }}</span>
+          </span>
+          <span class="flex flex-col items-end gap-0.5">
+            <span class="num text-sm font-extrabold">{% if s.percent is not None %}{{ s.percent|floatformat:0 }}%{% else %}—{% endif %}</span>
+            <span class="text-[11px] font-bold {% if s.status == 'needs_review' %}text-danger-700{% elif s.status == 'returned' %}text-warning-700{% else %}text-primary-700{% endif %}">{{ s.get_status_display }}</span>
+          </span>
+        </a>
+      </li>
+    {% empty %}
+      <li class="px-[18px] pt-6 pb-7 text-center text-sm text-ink-soft">{% translate "Nothing here." %}</li>
+    {% endfor %}
+  </ul>
+</aside>

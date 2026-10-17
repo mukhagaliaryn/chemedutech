@@ -1,64 +1,83 @@
 {% extends "layouts/teacher.html" %}
 {% load i18n %}
+{% comment %}
+Teacher home (mockup «Мұғалім · Басты бет»): greeting with the day's numbers, «Create a group» (dialog) and the
+grading queue button; 4 KPI cards (sparklines from real daily data); the check queue; students who need
+attention; my groups.
+{% endcomment %}
 {% block title %}{% translate "Home" %} · ChemEduTech{% endblock %}
+{% block crumb %}{% translate "Teacher cabinet" %}{% endblock %}
+{% block page_title %}{% translate "Home" %}{% endblock %}
 {% block content %}
-<header class="flex flex-wrap items-end justify-between gap-4">
+<section class="flex flex-wrap items-end justify-between gap-4">
   <div>
-    <h1 class="text-h1">{% blocktranslate with name=user.first_name|default:user.get_username %}Hello, {{ name }}{% endblocktranslate %}</h1>
+    <h1 class="text-[30px] leading-[38px] font-extrabold tracking-[-0.02em]">{% blocktranslate with name=user.first_name|default:user.get_username %}Hello, {{ name }}!{% endblocktranslate %}</h1>
     <p class="mt-1 text-ink-soft">
-      {% for c in courses %}{{ c.title }}{% if not forloop.last %}, {% endif %}{% empty %}{% translate "You are not assigned to a course yet." %}{% endfor %}
-      · {% blocktranslate count n=groups|length %}{{ n }} group{% plural %}{{ n }} groups{% endblocktranslate %}
+      {% blocktranslate count n=groups|length %}{{ n }} group{% plural %}{{ n }} groups{% endblocktranslate %} ·
+      {% blocktranslate count n=students %}{{ n }} student{% plural %}{{ n }} students{% endblocktranslate %} ·
+      {% blocktranslate count n=active_today %}{{ n }} studied today{% plural %}{{ n }} studied today{% endblocktranslate %}
     </p>
   </div>
-  <div class="flex flex-wrap gap-2">
-    <a class="btn btn-secondary" href="{% url 'teacher:group_new' %}">{% include "components/icons.html#plus" %}{% translate "Create a group" %}</a>
-    {% url_or_empty "teacher:grading" as grading_url %}
-    {% if grading_url %}<a class="btn btn-primary" href="{{ grading_url }}">{% blocktranslate with n=queue_count %}Check works · {{ n }}{% endblocktranslate %}</a>{% endif %}
+  <div class="flex flex-wrap gap-2.5">
+    <button type="button" class="btn btn-secondary h-[46px] font-bold" data-open-modal="new-group">{% include "components/icons.html#plus" %}{% translate "Create a group" %}</button>
+    <a class="btn btn-primary h-[46px] font-bold" href="{% url 'teacher:grading' %}">{% translate "Check queue" %}<span class="count bg-white text-primary-600">{{ queue_count }}</span></a>
   </div>
-</header>
-
-<section aria-label="{% translate 'Key figures' %}" class="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(200px,1fr))]">
-  {% translate "Active students" as l1 %}{% blocktranslate with n=active_week asvar n1 %}{{ n }} were active in the last 7 days{% endblocktranslate %}
-  {% include "components/stat_card.html" with label=l1 value=students note=n1 %}
-  {% translate "Average progress" as l2 %}
-  {% if avg_progress is not None %}{% with v=avg_progress|floatformat:0|add:"%" %}
-    {% if first_topic %}{% blocktranslate with t=first_topic.number p=first_topic_share|floatformat:0 asvar n2 %}Topic {{ t }}: {{ p }}% completed it{% endblocktranslate %}{% endif %}
-    {% include "components/stat_card.html" with label=l2 value=v note=n2 %}
-  {% endwith %}{% else %}{% include "components/stat_card.html" with label=l2 value="—" %}{% endif %}
-  {% translate "Average score" as l3 %}{% translate "by completed topics" as n3 %}
-  {% if avg_score is not None %}{% include "components/stat_card.html" with label=l3 value=avg_score|floatformat:1 note=n3 %}{% else %}{% include "components/stat_card.html" with label=l3 value="—" note=n3 %}{% endif %}
-  {% translate "Awaiting check" as l4 %}
-  {% if queue_oldest_days is not None %}{% blocktranslate count n=queue_oldest_days asvar n4 %}practice works · the oldest {{ n }} day{% plural %}practice works · the oldest {{ n }} days{% endblocktranslate %}{% else %}{% translate "practice works" as n4 %}{% endif %}
-  {% include "components/stat_card.html" with label=l4 value=queue_count note=n4 %}
 </section>
 
-<div class="grid items-start gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(420px,100%),1fr))]">
+<section aria-label="{% translate 'Key figures' %}" class="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4">
+  {% partialdef kpi %}
+    <div class="card-lift flex flex-col gap-1 rounded-[22px] border px-[22px] py-5 {% if warn %}border-warning-50 bg-warning-50{% else %}border-line bg-surface{% endif %}">
+      <span class="flex items-center justify-between">
+        <span class="text-[13px] font-semibold {% if warn %}text-warning-700{% else %}text-ink-soft{% endif %}">{{ label }}</span>
+        <span class="grid size-8 place-items-center rounded-sm {% if warn %}bg-white text-warning-700{% else %}bg-canvas {{ tone }}{% endif %}">{% include "components/icons.html#"|add:icon with size=16 %}</span>
+      </span>
+      <span class="num text-[30px] leading-9 font-extrabold">{{ value }}</span>
+      {% if series %}{% sparkline series as pts %}{% if pts %}<svg viewBox="0 0 120 32" class="h-8 w-full {% if warn %}text-warning-500{% else %}{{ tone }}{% endif %}" preserveAspectRatio="none" aria-hidden="true"><polyline points="{{ pts }}" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg>{% endif %}{% endif %}
+      {% if bar is not None and bar != "" %}<div class="progress my-2.5"><span style="width: {{ bar|stringformat:'s' }}%"></span></div>{% endif %}
+      <span class="text-caption font-normal {% if warn %}text-warning-700{% else %}text-ink-soft{% endif %}">{{ note }}</span>
+    </div>
+  {% endpartialdef %}
+  {% translate "Active students" as l %}{% blocktranslate with a=active_week b=students asvar v %}{{ a }} / {{ b }}{% endblocktranslate %}{% translate "in the last 7 days" as n %}
+  {% with label=l value=v note=n icon="users" tone="text-primary-600" series=active_series %}{% partial kpi %}{% endwith %}
+  {% translate "Average progress" as l %}
+  {% if first_topic %}{% blocktranslate with t=first_topic.number p=first_topic_share|floatformat:0 asvar n %}{{ p }}% completed topic {{ t }}{% endblocktranslate %}{% else %}{% translate "required stages passed" as n %}{% endif %}
+  {% if avg_progress is not None %}{% with v=avg_progress|floatformat:0|add:"%" %}{% with label=l value=v note=n icon="book" tone="text-stage-lab" bar=avg_progress %}{% partial kpi %}{% endwith %}{% endwith %}
+  {% else %}{% with label=l value="—" note=n icon="book" tone="text-stage-lab" %}{% partial kpi %}{% endwith %}{% endif %}
+  {% translate "Average score" as l %}{% translate "completed stages" as n %}
+  {% if avg_score is not None %}{% with v=avg_score|floatformat:1 %}{% with label=l value=v note=n icon="chart" tone="text-stage-video" bar=avg_score %}{% partial kpi %}{% endwith %}{% endwith %}
+  {% else %}{% with label=l value="—" note=n icon="chart" tone="text-stage-video" %}{% partial kpi %}{% endwith %}{% endif %}
+  {% translate "Awaiting check" as l %}
+  {% if queue_oldest_days is not None %}{% blocktranslate count d=queue_oldest_days asvar n %}the oldest {{ d }} day ago{% plural %}the oldest {{ d }} days ago{% endblocktranslate %}{% else %}{% translate "works sent this week" as n %}{% endif %}
+  {% with label=l value=queue_count note=n icon="check-square" series=queue_series warn=True %}{% partial kpi %}{% endwith %}
+</section>
+
+<div class="grid items-start gap-4 grid-cols-[repeat(auto-fit,minmax(min(380px,100%),1fr))]">
   <section aria-labelledby="queue" class="card flex flex-col gap-1">
-    <div class="mb-2 flex items-center justify-between gap-3"><h2 id="queue" class="text-h3">{% translate "Check queue" %}</h2><a class="text-sm font-semibold" href="{% url 'teacher:grading' %}">{% translate "All" %}</a></div>
+    <div class="mb-2 flex items-center justify-between gap-3"><h2 id="queue" class="text-[17px] font-extrabold">{% translate "Check queue" %}</h2><a class="link text-sm font-bold" href="{% url 'teacher:grading' %}">{% translate "All" %}</a></div>
     {% for s in queue %}
-      <div class="flex items-center gap-3 border-surface-sunken py-2.5 not-last:border-b">
-        {% include "components/avatar.html" with person=s.enrollment.student size="sm" %}
+      <a href="{% url 'teacher:grading_detail' s.pk %}" class="row-link text-ink">
+        {% include "components/avatar.html" with person=s.enrollment.student shape="square" tone="neutral" %}
         <span class="flex min-w-0 flex-1 flex-col leading-5">
-          <span class="truncate text-sm font-medium">{{ s.enrollment.student.full_name }}{% if s.enrollment.group %} · {{ s.enrollment.group }}{% endif %}</span>
-          <span class="truncate text-caption text-ink-soft">{% blocktranslate with t=s.stage.topic.number %}Topic {{ t }}{% endblocktranslate %} · {{ s.stage.title }} · {{ s.submitted_at|ago }}</span>
+          <span class="truncate text-sm font-bold">{{ s.enrollment.student.full_name }}{% if s.enrollment.group %} · {{ s.enrollment.group }}{% endif %}</span>
+          <span class="truncate text-caption font-normal text-ink-soft">{{ s.stage.topic.number }}. {{ s.stage.title }}{% if s.percent is not None %} · {% blocktranslate with p=s.percent|floatformat:0 %}AI: {{ p }}%{% endblocktranslate %}{% endif %} · {{ s.submitted_at|ago }}</span>
         </span>
-        <a class="text-sm font-semibold" href="{% url 'teacher:grading_detail' s.pk %}">{% translate "Grade" %}</a>
-      </div>
+        <span class="badge badge-warning font-bold">{% translate "Check" %}</span>
+      </a>
     {% empty %}
       <p class="text-sm text-ink-soft">{% translate "Nothing to check. Works the AI could not grade with confidence will appear here." %}</p>
     {% endfor %}
   </section>
 
   <section aria-labelledby="attn" class="card flex flex-col gap-1">
-    <h2 id="attn" class="mb-2 text-h3">{% translate "Needs attention" %}{% if attention_count > attention|length %} <span class="num font-normal text-ink-soft">· {{ attention_count }}</span>{% endif %}</h2>
+    <h2 id="attn" class="mb-2 text-[17px] font-extrabold">{% translate "Needs attention" %}{% if attention_count > attention|length %} <span class="num font-medium text-ink-faint">· {{ attention_count }}</span>{% endif %}</h2>
     {% for row, reason in attention %}
-      <div class="flex items-center gap-3 border-surface-sunken py-2.5 not-last:border-b">
-        <span class="size-2 shrink-0 rounded-full bg-warning-500" aria-hidden="true"></span>
+      <div class="row-link">
+        <span class="tile bg-warning-50 text-warning-700">{% include "components/icons.html#warn" %}</span>
         <span class="flex min-w-0 flex-1 flex-col leading-5">
-          <span class="truncate text-sm font-medium">{{ row.student.full_name }}{% if row.student.student_profile.group %} · {{ row.student.student_profile.group }}{% endif %}</span>
-          <span class="text-caption text-ink-soft">{{ reason }}</span>
+          <span class="truncate text-sm font-bold">{{ row.student.full_name }}{% if row.student.student_profile.group %} · {{ row.student.student_profile.group }}{% endif %}</span>
+          <span class="text-caption font-normal text-ink-soft">{{ reason }}</span>
         </span>
-        <a class="text-sm font-semibold" href="{% url 'teacher:student' row.student.pk %}?course={{ row.enrollment.course.slug }}">{% translate "Open" %}</a>
+        <a class="btn btn-secondary btn-sm" href="{% url 'teacher:student' row.student.pk %}?course={{ row.enrollment.course.slug }}">{% translate "Open" %}</a>
       </div>
     {% empty %}
       <p class="text-sm text-ink-soft">{% translate "No one is stuck: no repeated fails, risky lab attempts or long breaks." %}</p>
@@ -66,11 +85,34 @@
   </section>
 </div>
 
-<section aria-labelledby="groups" class="flex flex-col gap-3">
-  <div class="flex items-center justify-between gap-3">
-    <h2 id="groups" class="text-h2">{% translate "My groups" %}</h2>
-    <a class="text-sm font-semibold" href="{% url 'teacher:groups' %}">{% translate "All groups" %}</a>
+<section aria-labelledby="groups" class="overflow-hidden rounded-card border border-line bg-surface">
+  <div class="flex items-center justify-between gap-3 border-b border-surface-sunken px-6 py-5">
+    <h2 id="groups" class="text-[17px] font-extrabold">{% translate "My groups" %}</h2>
+    <a class="link text-sm font-bold" href="{% url 'teacher:groups' %}">{% translate "Manage groups" %}</a>
   </div>
   {% include "teacher/partials/groups_table.html" %}
 </section>
+
+<dialog id="new-group" class="dialog max-w-[560px]" aria-labelledby="new-group-title">
+  <form method="post" action="{% url 'teacher:group_new' %}" class="flex flex-col gap-4">
+    {% csrf_token %}
+    <div class="flex items-center justify-between gap-3">
+      <h2 id="new-group-title" class="text-[22px] font-extrabold">{% translate "New group" %}</h2>
+      <button type="submit" formmethod="dialog" formnovalidate class="close-btn" aria-label="{% translate 'Close' %}">{% include "components/icons.html#x" %}</button>
+    </div>
+    {% include "components/input.html" with field=group_form.name %}
+    <div class="grid gap-3 sm:grid-cols-2">
+      {% include "components/input.html" with field=group_form.department %}
+      {% include "components/input.html" with field=group_form.specialty %}
+      {% include "components/input.html" with field=group_form.admission_year %}
+      {% include "components/input.html" with field=group_form.study_year %}
+    </div>
+    {% include "components/input.html" with field=group_form.research_cohort %}
+    <input type="hidden" name="is_active" value="on">
+    <div class="flex justify-end gap-2.5">
+      <button type="submit" formmethod="dialog" formnovalidate class="btn btn-secondary">{% translate "Cancel" %}</button>
+      <button type="submit" class="btn btn-primary">{% translate "Create a group" %}</button>
+    </div>
+  </form>
+</dialog>
 {% endblock %}

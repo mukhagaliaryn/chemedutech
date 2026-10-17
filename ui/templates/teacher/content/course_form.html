@@ -1,6 +1,8 @@
 {% extends "layouts/teacher.html" %}
 {% load i18n %}
 {% block title %}{% translate "Course settings" %} · ChemEduTech{% endblock %}
+{% block crumb %}{% translate "Course content" %}{% endblock %}
+{% block page_title %}{% translate "Course settings" %}{% endblock %}
 {% block head %}{{ form.media }}{% endblock %}
 {% block content %}
 <p class="text-sm text-ink-soft"><a href="{% url 'teacher:courses' %}">{% translate "Course content" %}</a> / <a href="{% url 'teacher:course_content' course.slug %}">{{ course.title }}</a> / {% translate "Settings" %}</p>
