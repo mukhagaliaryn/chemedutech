@@ -11,6 +11,9 @@
 @source "../../templates";
 @source "../../static/js";
 @source "../../../apps";
+/* classes built from a stage kind in templates (text-stage-{{ kind }}, bg-stage-{{ kind }}-50 …) */
+@source inline("{text,bg,border,stroke,fill}-stage-{theory,video,lab,practice,test}");
+@source inline("bg-stage-{theory,video,lab,practice}-50");
 
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;

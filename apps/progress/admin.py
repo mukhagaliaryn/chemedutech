@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from unfold.admin import ModelAdmin
 
 from . import services
-from .models import CourseResult, ModuleResult, ProgressEvent, StageProgress, TopicResult
+from .models import CourseResult, ModuleResult, ProgressEvent, StageProgress, StudyDay, TopicResult
 
 
 class ReadOnlyAdmin(ModelAdmin):
@@ -72,4 +72,12 @@ class CourseResultAdmin(ReadOnlyAdmin):
 class ProgressEventAdmin(ReadOnlyAdmin):
     list_display = ("created_at", "enrollment", "action", "stage", "topic", "actor", "score_percent")
     list_filter = ("action", "enrollment__course")
+    search_fields = ("enrollment__student__username", "enrollment__student__last_name")
+
+
+@admin.register(StudyDay)
+class StudyDayAdmin(ReadOnlyAdmin):
+    list_display = ("enrollment", "date", "seconds")
+    list_filter = ("enrollment__course",)
+    date_hierarchy = "date"
     search_fields = ("enrollment__student__username", "enrollment__student__last_name")

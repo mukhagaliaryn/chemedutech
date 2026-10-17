@@ -1,10 +1,13 @@
 {% extends layout %}
 {% load i18n %}
 {% block title %}{% translate "Notifications" %} · ChemEduTech{% endblock %}
+{% block crumb %}{% translate "Cabinet" %}{% endblock %}
+{% block page_title %}{% translate "Notifications" %}{% endblock %}
+{% block main_class %}max-w-[960px]{% endblock %}
 {% block content %}
 <header class="flex flex-wrap items-end justify-between gap-4">
   <div>
-    <h1 class="text-h1">{% translate "Notifications" %}</h1>
+    <h1 class="text-[26px] leading-8 font-extrabold tracking-[-0.02em]">{% translate "Notifications" %}</h1>
     <p class="mt-1 text-ink-soft">{% blocktranslate count n=unread %}{{ n }} unread{% plural %}{{ n }} unread{% endblocktranslate %}</p>
   </div>
   {% if unread %}
@@ -14,7 +17,7 @@
   {% endif %}
 </header>
 {% if page.object_list %}
-  <ul class="overflow-hidden rounded-lg border border-line bg-surface">
+  <ul class="overflow-hidden rounded-card border border-line bg-surface">
     {% for n in page %}
       <li class="border-line not-last:border-b">
         {% include "feedback/partials/item.html" %}

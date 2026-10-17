@@ -13,7 +13,7 @@ from apps.courses.selectors import stage_url
 from apps.feedback import services as feedback
 
 from ..grading import grade_for
-from ..models import CourseResult, ModuleResult, ProgressEvent, StageProgress, TopicResult
+from ..models import CourseResult, ModuleResult, ProgressEvent, StageProgress, StudyDay, TopicResult
 from .scoring import q2, stage_weights, weighted_average
 
 S = StageProgress.Status
@@ -340,6 +340,8 @@ def add_time(enrollment, stage, seconds: int) -> None:
         StageProgress.objects.filter(enrollment=enrollment, stage=stage).update(
             time_spent_s=F("time_spent_s") + seconds
         )
+        day, _created = StudyDay.objects.get_or_create(enrollment=enrollment, date=timezone.localdate())
+        StudyDay.objects.filter(pk=day.pk).update(seconds=F("seconds") + seconds)
 
 
 def blocking_stage(enrollment, stage) -> Stage | None:

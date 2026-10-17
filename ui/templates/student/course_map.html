@@ -1,84 +1,120 @@
 {% extends "layouts/student.html" %}
 {% load i18n %}
+{% comment %}
+Course map (mockup «Студент · Курс картасы»): course hero with the progress ring, filter chips,
+module accordion → topic rows (stage dots, status badge) → the topic's stages. Any number of stages.
+{% endcomment %}
 {% block title %}{{ course.title }} · ChemEduTech{% endblock %}
+{% block crumb %}{% translate "My courses" %}{% endblock %}
+{% block page_title %}{% translate "Course map" %}{% endblock %}
+{% block main_class %}max-w-[1180px]{% endblock %}
 {% block content %}
-{% if place.preview %}<p class="rounded-md bg-warning-50 px-4 py-2 text-body-sm text-warning-700">{% translate "Preview: everything is open and nothing is recorded." %}</p>{% endif %}
-<header class="card flex flex-wrap items-center justify-between gap-6 p-7">
-  <div class="min-w-0 flex-[1_1_420px]">
-    <p class="text-body-sm font-medium text-ink-soft">
-      {% blocktranslate count n=modules|length %}Course · {{ n }} module{% plural %}Course · {{ n }} modules{% endblocktranslate %}
-    </p>
-    <h1 class="mt-1 text-h1">{{ course.title }}</h1>
-    <p class="mt-2 text-ink-soft">
-      {% if teachers %}{% translate "Teacher:" %} {{ teachers|join:", " }} · {% endif %}
-      {% if course.is_sequential %}{% translate "Stages open in order: finish one to open the next." %}{% endif %}
-    </p>
+{% if place.preview %}{% translate "Preview: everything is open and nothing is recorded." as l_prev %}{% include "components/alert.html" with variant="warning" text=l_prev %}{% endif %}
+
+<header class="flex flex-wrap overflow-hidden rounded-xl border border-line bg-surface">
+  <div aria-hidden="true" class="bench grid min-h-[200px] flex-[1_1_260px] place-items-center !bg-[size:40px_40px]">
+    <svg viewBox="0 0 160 140" width="160"><path d="M58,14 V44 L22,112 Q18,124 30,124 H130 Q142,124 138,112 L102,44 V14" fill="rgba(255,255,255,.75)" stroke="#6b8ba0" stroke-width="4" stroke-linejoin="round"/><path d="M38,90 H122 L136,114 Q138,122 128,122 H32 Q22,122 24,114 Z" class="fill-primary-600" opacity=".85"/><path d="M50,14 H110" stroke="#6b8ba0" stroke-width="4" stroke-linecap="round"/><circle cx="70" cy="108" r="5" fill="#fff"/><circle cx="90" cy="102" r="3.5" fill="#fff"/></svg>
   </div>
-  <div class="flex flex-[0_1_300px] flex-col gap-2">
-    {% blocktranslate with a=stages_passed b=stages_total asvar l_stages %}{{ a }} / {{ b }} stages{% endblocktranslate %}
-    {% translate "Course progress" as l_progress %}
-    {% include "components/progress_bar.html" with label=l_progress value=stages_passed max=stages_total value_text=l_stages %}
-    {% if result.current_percent is not None %}
-      <span class="num text-body-sm text-ink-soft">{% translate "Current score" %} {{ result.current_percent|floatformat:1 }} · {{ grade.letter }}</span>
-    {% endif %}
-    {% if next %}<a class="btn btn-primary mt-1 self-start" href="{% url 'student:stage' course.slug next.topic.number next.pk %}">{% translate "Continue learning" %}{% include "components/icons.html#arrow-right" %}</a>{% endif %}
+  <div class="flex flex-[3_1_480px] flex-wrap items-center justify-between gap-6 p-7">
+    <div class="min-w-0 flex-[1_1_320px]">
+      <span class="badge badge-info font-bold">{% blocktranslate count n=modules|length %}{{ n }} module{% plural %}{{ n }} modules{% endblocktranslate %} · {% blocktranslate count n=counts.all %}{{ n }} topic{% plural %}{{ n }} topics{% endblocktranslate %}</span>
+      <h1 class="mt-2.5 text-[28px] leading-9 font-extrabold tracking-[-0.02em]">{{ course.title }}</h1>
+      <p class="mt-2 text-sm text-ink-soft">
+        {% if teachers %}{% translate "Teacher:" %} {% for t in teachers %}{{ t.get_full_name|default:t }}{% if not forloop.last %}, {% endif %}{% endfor %} · {% endif %}
+        {% if course.is_sequential %}{% translate "Stages open in order" %}{% endif %}
+      </p>
+    </div>
+    <div class="flex items-center gap-4">
+      {% with pct=stages_passed|percent_of:stages_total %}{% include "components/ring.html" with value=pct size=88 stroke=9 %}{% endwith %}
+      <span class="flex flex-col leading-5">
+        {% if result.current_percent is not None %}<span class="num text-lg font-extrabold">{{ result.current_percent|floatformat:1 }} · {{ grade.letter }}</span><span class="text-[13px] text-ink-soft">{% translate "current score" %}</span>
+        {% else %}<span class="num text-lg font-extrabold">{{ stages_passed }} / {{ stages_total }}</span><span class="text-[13px] text-ink-soft">{% translate "stages passed" %}</span>{% endif %}
+        {% if next %}<a class="link mt-2 text-sm font-bold" href="{% url 'student:stage' course.slug next.topic.number next.pk %}">{% translate "Continue learning" %} →</a>{% endif %}
+      </span>
+    </div>
   </div>
 </header>
 
-{% for m in modules %}
-  <section class="flex flex-col gap-3" aria-labelledby="m{{ m.module.pk }}">
-    <h2 id="m{{ m.module.pk }}" class="text-h2">
-      {% blocktranslate with n=m.module.order %}Module {{ n }}{% endblocktranslate %}
-      <span class="font-normal text-ink-soft">· {{ m.module.title }}</span>
-    </h2>
-    <ol class="overflow-hidden rounded-lg border border-line bg-surface">
-      {% for row in m.topics %}{% with t=row.topic %}
-        <li class="border-line not-last:border-b">
-          {% if row.status == "locked" %}
-            <div class="flex flex-wrap items-center gap-4 px-4 py-4 text-ink-faint sm:px-6">
-              <span class="num grid size-9 shrink-0 place-items-center rounded-full border border-line-strong font-semibold">{{ t.number }}</span>
-              <span class="flex min-w-0 flex-[1_1_240px] flex-col">
-                <span class="font-semibold text-ink-soft">{{ t.title }}</span>
-                <span class="text-body-sm">{% blocktranslate with n=t.number|add:"-1" %}Opens after topic {{ n }} is completed{% endblocktranslate %}</span>
+<div x-data="{ filter: 'all' }" class="flex flex-col gap-5">
+  <div role="tablist" aria-label="{% translate 'Filter' %}" class="flex flex-wrap gap-2">
+    {% translate "All" as f1 %}{% translate "In progress" as f2 %}{% translate "Completed" as f3 %}{% translate "Locked" as f4 %}
+    {% partialdef chip %}<button type="button" role="tab" class="chip" @click="filter = '{{ key }}'" :aria-selected="(filter === '{{ key }}').toString()" {% if key == 'all' %}aria-selected="true"{% endif %}>{{ label }}<span class="chip-count">{{ n }}</span></button>{% endpartialdef %}
+    {% with key="all" label=f1 n=counts.all %}{% partial chip %}{% endwith %}
+    {% with key="progress" label=f2 n=counts.progress %}{% partial chip %}{% endwith %}
+    {% with key="done" label=f3 n=counts.done %}{% partial chip %}{% endwith %}
+    {% with key="locked" label=f4 n=counts.locked %}{% partial chip %}{% endwith %}
+  </div>
+
+  {% for m in modules %}
+    <section class="overflow-hidden rounded-card border border-line bg-surface" x-data="{ open: {% if m.open %}true{% else %}false{% endif %} }"
+             x-show="filter === 'all' || $el.querySelector('[data-filter=' + filter + ']')">
+      <button type="button" @click="open = !open" :aria-expanded="open.toString()" aria-controls="mod-{{ m.module.pk }}"
+              class="flex w-full items-center gap-4 px-6 py-5 text-left transition-colors hover:bg-[#f8fafc]">
+        <span class="num grid size-11 shrink-0 place-items-center rounded-md text-lg font-extrabold {% if m.started %}bg-primary-900 text-white{% else %}bg-surface-sunken text-ink-faint{% endif %}">{{ m.module.order }}</span>
+        <span class="flex min-w-0 flex-1 flex-col leading-[22px]">
+          <span class="text-lg font-extrabold">{% if m.module.title %}{{ m.module.title }}{% else %}{% blocktranslate with n=m.module.order %}Module {{ n }}{% endblocktranslate %}{% endif %}</span>
+          <span class="text-[13px] text-ink-soft">
+            {% if m.first == m.last %}{% blocktranslate with a=m.first %}Topic {{ a }}{% endblocktranslate %}{% else %}{% blocktranslate with a=m.first b=m.last %}Topics {{ a }}–{{ b }}{% endblocktranslate %}{% endif %}
+            · {% blocktranslate with a=m.passed b=m.required %}{{ a }} / {{ b }} stages{% endblocktranslate %}
+          </span>
+        </span>
+        <span class="w-[140px] max-sm:hidden"><span class="progress block"><span style="width: {{ m.passed|percent_of:m.required }}%"></span></span></span>
+        <span class="text-ink-soft transition-transform duration-200" :class="open && 'rotate-180'">{% include "components/icons.html#chevron-down" with size=18 %}</span>
+      </button>
+      <ol id="mod-{{ m.module.pk }}" x-show="open" {% if not m.open %}x-cloak{% endif %} class="fade grid gap-1.5 px-3 pb-3">
+        {% for row in m.topics %}{% with t=row.topic %}
+          <li data-filter="{{ row.filter }}" x-show="filter === 'all' || filter === '{{ row.filter }}'"
+              x-data="{ open: {% if row.current %}true{% else %}false{% endif %} }"
+              class="rounded-[18px] transition-colors {% if row.filter == 'progress' %}bg-primary-50{% elif row.filter == 'locked' %}bg-[#f8fafc] text-ink-soft{% else %}bg-surface{% endif %}">
+            <button type="button" @click="open = !open" :aria-expanded="open.toString()"
+                    class="flex w-full flex-wrap items-center gap-3.5 px-4 py-3.5 text-left">
+              <span class="num grid size-[38px] shrink-0 place-items-center rounded-[12px] font-extrabold {% if row.filter == 'progress' %}bg-primary-600 text-white{% elif row.filter == 'done' %}bg-success-600 text-white{% else %}border border-line bg-surface text-ink-faint{% endif %}">{{ t.number }}</span>
+              <span class="flex min-w-0 flex-[1_1_260px] flex-col leading-[21px]">
+                <span class="text-[15px] font-bold">{{ t.title }}</span>
+                <span class="text-[13px] opacity-80">{% blocktranslate count n=row.stages|length %}{{ n }} stage{% plural %}{{ n }} stages{% endblocktranslate %}{% if t.estimated_minutes %} · ~{{ t.estimated_minutes }} {% translate "min" %}{% endif %}</span>
               </span>
-              <span class="flex items-center gap-1.5 text-body-sm">{% include "components/icons.html#lock" %}{% translate "Locked" %}</span>
-            </div>
-          {% else %}
-            <a href="{{ row.url }}" class="flex flex-wrap items-center gap-4 px-4 py-4 sm:px-6 {% if row.status == 'in_progress' or row.status == 'available' %}bg-primary-50{% else %}hover:bg-canvas{% endif %}">
-              <span class="num grid size-9 shrink-0 place-items-center rounded-full font-semibold text-white {% if row.status == 'completed' %}bg-success-600{% else %}bg-primary-600{% endif %}">{{ t.number }}</span>
-              <span class="flex min-w-0 flex-[1_1_240px] flex-col">
-                <span class="font-semibold">{{ t.title }}</span>
-                <span class="text-body-sm text-ink-soft">
-                  {% blocktranslate count n=row.stages|length %}{{ n }} stage{% plural %}{{ n }} stages{% endblocktranslate %}{% if t.estimated_minutes %} · ~{{ t.estimated_minutes }} {% translate "min" %}{% endif %}
-                </span>
+              <span class="flex gap-1" aria-hidden="true">
+                {% for s in row.stages %}<span title="{{ s.stage.title }}" class="size-2.5 rounded-[4px] {% if s.status == 'passed' %}bg-success-600{% elif s.status == 'awaiting_check' %}bg-warning-500{% elif s.status == 'locked' %}bg-line-strong{% else %}bg-primary-600{% endif %}"></span>{% endfor %}
               </span>
-              <span class="flex flex-wrap gap-1.5" aria-hidden="true">
-                {% for s in row.stages %}{% include "student/partials/stage_tile.html" with stage=s.stage status=s.status %}{% endfor %}
-              </span>
-              {% if row.status == "completed" %}
-                {% blocktranslate with s=row.result.score_percent|floatformat:1 asvar l_done %}Completed · {{ s }}{% endblocktranslate %}
-                {% include "components/badge.html" with variant="success" label=l_done %}
-              {% else %}
-                {% blocktranslate with a=row.passed b=row.required asvar l_prog %}In progress · {{ a }} / {{ b }}{% endblocktranslate %}
-                {% include "components/badge.html" with variant="info" label=l_prog %}
+              {% if row.filter == "done" %}<span class="badge badge-success font-bold">{% blocktranslate with s=row.result.score_percent|floatformat:1 %}Completed · {{ s }}{% endblocktranslate %}</span>
+              {% elif row.filter == "progress" %}<span class="badge bg-white font-bold text-primary-700">{{ row.passed }} / {{ row.required }}{% if row.passed and row.result.score_percent is not None %} · {{ row.result.score_percent|floatformat:1 }}{% endif %}</span>
+              {% else %}<span class="badge badge-neutral font-bold">{% translate "Locked" %}</span>{% endif %}
+            </button>
+            <div x-show="open" x-cloak class="fade grid gap-1.5 pr-4 pb-4 pl-4 sm:pl-[66px]">
+              {% if row.filter == "locked" %}
+                <p class="rounded-md bg-warning-50 px-3.5 py-3 text-sm text-warning-700">{% if t.number > 1 %}{% blocktranslate with n=t.number|add:"-1" %}This topic opens after topic {{ n }} is fully completed.{% endblocktranslate %}{% else %}{% translate "This topic opens after the previous one is completed." %}{% endif %}</p>
               {% endif %}
-            </a>
-          {% endif %}
-        </li>
-      {% endwith %}{% endfor %}
-    </ol>
-  </section>
-{% empty %}
-  {% translate "The course has no published topics yet" as l_title %}
-  {% include "components/empty_state.html" with title=l_title %}
-{% endfor %}
+              {% for s in row.stages %}
+                {% if s.status == "locked" %}
+                  <span class="flex items-center gap-3 rounded-[12px] bg-surface px-3 py-2.5 text-sm font-semibold text-ink-faint">
+                    <span class="size-2.5 shrink-0 rounded-full bg-line-strong"></span><span class="flex-1">{{ s.stage.title }}</span>
+                    <span class="flex items-center gap-1 text-caption">{% include "components/icons.html#lock" with size=12 %}{% translate "Locked" %}</span>
+                  </span>
+                {% else %}
+                  <a href="{{ s.url }}" class="flex items-center gap-3 rounded-[12px] px-3 py-2.5 text-sm font-semibold {% if s.status == 'passed' %}bg-success-50 text-success-700{% elif s.status == 'awaiting_check' %}bg-warning-50 text-warning-700{% else %}bg-surface text-ink shadow-[inset_0_0_0_2px_var(--color-primary-600)]{% endif %}">
+                    <span class="size-2.5 shrink-0 rounded-full stage-{{ s.stage.kind }}"></span><span class="flex-1">{{ s.stage.title }}</span>
+                    <span class="num text-caption font-semibold opacity-85">{% if s.status == 'awaiting_check' %}{% translate "Awaiting check" %}{% else %}{{ s.meta }}{% endif %}</span>
+                  </a>
+                {% endif %}
+              {% endfor %}
+              <a href="{{ row.url }}" class="link mt-1 text-[13px] font-bold">{% translate "Open the topic page" %} →</a>
+            </div>
+          </li>
+        {% endwith %}{% endfor %}
+      </ol>
+    </section>
+  {% empty %}
+    {% translate "The course has no published topics yet" as l_title %}
+    {% include "components/empty_state.html" with title=l_title %}
+  {% endfor %}
+</div>
 
 {% if course.certificate_enabled %}
-<section class="flex flex-wrap items-center gap-4 rounded-lg border border-dashed border-line-strong bg-surface px-6 py-5" aria-labelledby="cert">
-  <span class="grid size-10 place-items-center rounded-md bg-primary-50 text-primary-600">{% include "components/icons.html#award" with size=22 %}</span>
+<section class="flex flex-wrap items-center gap-4 rounded-card border border-dashed border-line-strong bg-surface px-6 py-[22px]" aria-labelledby="cert">
+  <span class="tile size-[52px] rounded-[16px] bg-primary-50 text-primary-600">{% include "components/icons.html#award" with size=26 %}</span>
   <div class="flex-[1_1_300px]">
-    <h2 id="cert" class="text-h3">{% translate "Course certificate" %}</h2>
-    <p class="text-sm text-ink-soft">{% blocktranslate with p=course.passing_score %}Complete every topic with a course score of at least {{ p }} and the certificate is issued automatically.{% endblocktranslate %}</p>
+    <h2 id="cert" class="text-[17px] font-extrabold">{% translate "Course certificate" %}</h2>
+    <p class="mt-0.5 text-sm text-ink-soft">{% blocktranslate with p=course.passing_score %}Complete every topic with a course score of at least {{ p }} and the certificate is issued automatically.{% endblocktranslate %}</p>
   </div>
 </section>
 {% endif %}

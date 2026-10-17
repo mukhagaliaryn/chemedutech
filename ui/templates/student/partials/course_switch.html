@@ -1,8 +1,8 @@
-{% load i18n %}{# Course tabs when the student has more than one course: enrollments, course (current). #}
+{% load i18n %}{# Course chips when the student has more than one course: enrollments, course (current). #}
 {% if enrollments|length > 1 %}
 <nav class="flex flex-wrap gap-2" aria-label="{% translate 'Courses' %}">
   {% for e in enrollments %}
-    <a href="?course={{ e.course.slug }}" class="btn btn-sm {% if e.course == course %}btn-primary{% else %}btn-secondary{% endif %}"{% if e.course == course %} aria-current="page"{% endif %}>{{ e.course.title }}</a>
+    <a href="?course={{ e.course.slug }}" class="chip"{% if e.course == course %} aria-current="page"{% endif %}>{{ e.course.title }}</a>
   {% endfor %}
 </nav>
 {% endif %}

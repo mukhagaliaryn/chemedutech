@@ -1,12 +1,15 @@
 {% extends "layouts/student.html" %}
 {% load i18n %}
+{% comment %}
+Grade book (mockup «Студент · Бағалар кітапшасы»): course score card + module cards, tabs «Grades» /
+«Certificates», topics as an accordion with the stage table (how graded, weight, attempts, score, status),
+the grading scale.
+{% endcomment %}
 {% block title %}{% translate "Gradebook" %} · ChemEduTech{% endblock %}
+{% block crumb %}{% if course %}{{ course.title }}{% else %}{% translate "Student cabinet" %}{% endif %}{% endblock %}
+{% block page_title %}{% translate "Gradebook" %}{% endblock %}
+{% block main_class %}max-w-[1180px]{% endblock %}
 {% block content %}
-<header>
-  <h1 class="text-h1">{% translate "Gradebook" %}</h1>
-  {% if course %}<p class="mt-1 text-ink-soft">{{ course.title }} · {% translate "stage → topic → module → course" %}</p>{% endif %}
-</header>
-
 {% include "student/partials/course_switch.html" %}
 
 {% if not enrollment %}
@@ -14,95 +17,118 @@
   {% include "components/empty_state.html" with title=l_title text=l_text icon="chart" action_url=courses_url action_label=l_action %}
 {% else %}
 
-<section aria-label="{% translate 'Course summary' %}" class="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(200px,1fr))]">
-  <div class="flex flex-col gap-1 rounded-lg bg-primary-900 px-6 py-5 text-white">
-    <span class="text-label text-primary-200">{% translate "Current course score" %}</span>
+<section aria-label="{% translate 'Course summary' %}" class="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-4">
+  <div class="brand-ground rounded-card p-6">
+    <p class="relative text-[13px] font-semibold text-primary-200">{% translate "Current course score" %}</p>
     {% if result.current_percent is not None %}
-      <span class="num text-[36px] leading-[42px] font-bold">{{ result.current_percent|floatformat:1 }} <span class="text-[20px] font-semibold">{{ grade.letter }}</span></span>
-      <span class="num text-caption text-primary-200">{% blocktranslate with g=grade.gpa %}GPA {{ g }} · by completed topics{% endblocktranslate %}</span>
+      <p class="num relative mt-1.5 text-[46px] leading-[50px] font-extrabold tracking-[-0.02em]">{{ result.current_percent|floatformat:1 }}<span class="ml-2.5 rounded-[12px] bg-white px-2.5 py-1 align-middle text-[22px] text-primary-900">{{ grade.letter }}</span></p>
+      <p class="num relative mt-2 text-[13px] text-on-dark-soft">{% blocktranslate with g=grade.gpa %}GPA {{ g }} · by completed stages{% endblocktranslate %}</p>
     {% else %}
-      <span class="num text-[36px] leading-[42px] font-bold">—</span>
-      <span class="text-caption text-primary-200">{% translate "Shown after the first topic is completed" %}</span>
+      <p class="num relative mt-1.5 text-[46px] leading-[50px] font-extrabold">—</p>
+      <p class="relative mt-2 text-[13px] text-on-dark-soft">{% translate "Shown after the first topic is completed" %}</p>
     {% endif %}
   </div>
   {% for m in modules %}
-    <div class="card flex flex-col gap-1 {% if m.locked %}text-ink-faint{% endif %}">
-      <span class="text-label {% if m.locked %}text-ink-faint{% else %}text-ink-soft{% endif %}">{% blocktranslate with n=m.module.order %}Module {{ n }}{% endblocktranslate %}</span>
-      <span class="num text-stat">{% if m.result.current_percent is not None %}{{ m.result.current_percent|floatformat:1 }}{% else %}—{% endif %}</span>
-      <span class="text-caption {% if m.locked %}text-ink-faint{% else %}text-ink-soft{% endif %}">
-        {% if m.locked %}{% translate "Not opened yet" %}
-        {% else %}{% blocktranslate with a=m.started b=m.topics %}{{ a }} / {{ b }} topics started{% endblocktranslate %}{% endif %}
-      </span>
+    <div class="rounded-card border border-line bg-surface p-6">
+      <p class="text-[13px] font-semibold {% if m.locked %}text-ink-faint{% else %}text-ink-soft{% endif %}">{% if m.module.title %}{{ m.module.title }}{% else %}{% blocktranslate with n=m.module.order %}Module {{ n }}{% endblocktranslate %}{% endif %}</p>
+      <p class="num mt-1.5 text-[32px] leading-[38px] font-extrabold {% if m.locked %}text-line-strong{% endif %}">{% if m.result.current_percent is not None %}{{ m.result.current_percent|floatformat:1 }}{% else %}—{% endif %}</p>
+      {% if m.locked %}
+        <p class="mt-[18px] text-caption font-normal text-ink-faint">{% if m.previous %}{% blocktranslate with n=m.previous.order %}Opens after module {{ n }}{% endblocktranslate %}{% else %}{% translate "Not opened yet" %}{% endif %}</p>
+      {% else %}
+        <div class="progress mt-2.5"><span style="width: {{ m.passed|percent_of:m.required }}%"></span></div>
+        <p class="mt-2 text-caption font-normal text-ink-soft">{% blocktranslate with a=m.started b=m.topics %}{{ a }} / {{ b }} topics started{% endblocktranslate %}</p>
+      {% endif %}
     </div>
   {% endfor %}
 </section>
 
-{% for t in topics %}
-<section aria-labelledby="t{{ t.topic.pk }}" class="overflow-hidden rounded-lg border border-line bg-surface">
-  <div class="flex flex-wrap items-center justify-between gap-3 border-b border-line px-6 py-5">
-    <h2 id="t{{ t.topic.pk }}" class="text-h3">
-      <a href="{{ t.url }}" class="text-ink hover:text-primary-700">{% blocktranslate with n=t.topic.number %}Topic {{ n }}{% endblocktranslate %} · {{ t.topic.title }}</a>
-    </h2>
-    {% if t.status == "completed" %}
-      {% blocktranslate with s=t.result.score_percent|floatformat:1 asvar l_t %}Completed · {{ s }}{% endblocktranslate %}
-      {% include "components/badge.html" with variant="success" label=l_t class="num" %}
+<div x-data="{ tab: 'grades' }" class="flex flex-col gap-5">
+  <div class="segmented self-start" role="tablist">
+    <button type="button" role="tab" class="h-10 px-[18px]" @click="tab = 'grades'" :aria-selected="(tab === 'grades').toString()" aria-selected="true">{% translate "Grades" %}</button>
+    <button type="button" role="tab" class="h-10 px-[18px]" @click="tab = 'certs'" :aria-selected="(tab === 'certs').toString()">{% translate "Certificates" %}</button>
+  </div>
+
+  <div x-show="tab === 'grades'" class="flex flex-col gap-5">
+    <section class="overflow-hidden rounded-card border border-line bg-surface">
+      {% for t in topics %}
+        <details class="group border-b border-surface-sunken last:border-b-0" {% if forloop.first %}open{% endif %}>
+          <summary class="flex cursor-pointer list-none flex-wrap items-center gap-3.5 px-6 py-[18px] transition-colors hover:bg-[#f8fafc] [&::-webkit-details-marker]:hidden">
+            <span class="num grid size-[38px] shrink-0 place-items-center rounded-[12px] font-extrabold {% if t.status == 'completed' %}bg-success-600 text-white{% else %}bg-primary-600 text-white{% endif %}">{{ t.topic.number }}</span>
+            <span class="flex min-w-0 flex-[1_1_260px] flex-col leading-[21px]">
+              <span class="font-bold">{{ t.topic.title }}</span>
+              <span class="text-[13px] text-ink-soft">{% blocktranslate with a=t.passed b=t.required %}{{ a }} / {{ b }} stages{% endblocktranslate %}{% if t.status != "completed" %} · {% translate "current score" %}{% endif %}</span>
+            </span>
+            {% if t.result.score_percent is not None and t.passed %}
+              <span class="badge h-[30px] px-3 text-[13px] font-extrabold {% if t.status == 'completed' %}badge-success{% else %}badge-info{% endif %}">{{ t.result.score_percent|floatformat:1 }}{% if t.grade %} · {{ t.grade.letter }}{% endif %}</span>
+            {% else %}<span class="badge badge-neutral h-[30px] px-3 text-[13px] font-extrabold">—</span>{% endif %}
+            <span class="text-ink-soft transition-transform duration-200 group-open:rotate-180">{% include "components/icons.html#chevron-down" with size=16 %}</span>
+          </summary>
+          <div class="fade overflow-x-auto px-6 pb-5">
+            <table class="w-full min-w-[680px] border-separate border-spacing-y-1.5 text-sm">
+              <thead class="text-caption text-ink-faint">
+                <tr>
+                  <th scope="col" class="px-3.5 py-1 text-left font-semibold">{% translate "Stage" %}</th>
+                  <th scope="col" class="px-3 py-1 text-left font-semibold">{% translate "How it is graded" %}</th>
+                  <th scope="col" class="px-3 py-1 text-left font-semibold">{% translate "Weight" %}</th>
+                  <th scope="col" class="px-3 py-1 text-left font-semibold">{% translate "Attempts" %}</th>
+                  <th scope="col" class="px-3 py-1 text-left font-semibold">{% translate "Score" %}</th>
+                  <th scope="col" class="px-3.5 py-1 text-left font-semibold">{% translate "Status" %}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in t.table %}
+                  <tr class="{% if row.status == 'locked' %}bg-[#f8fafc] text-ink-faint{% else %}bg-canvas{% endif %}">
+                    <td class="rounded-l-[12px] px-3.5 py-3">
+                      <span class="inline-flex items-center gap-2.5 font-semibold">
+                        <span class="size-2.5 shrink-0 rounded-[4px] {% if row.status == 'locked' %}bg-line-strong{% else %}stage-{{ row.stage.kind }}{% endif %}"></span>
+                        {{ row.stage.title }}{% if not row.stage.is_required %} <span class="text-caption font-normal text-ink-faint">({% translate "optional" %})</span>{% endif %}
+                      </span>
+                    </td>
+                    <td class="px-3 py-3 {% if row.status != 'locked' %}text-ink-soft{% endif %}">{{ row.method }}</td>
+                    <td class="num px-3 py-3">{% if row.weight is not None %}{{ row.weight|floatformat:"-2" }}{% else %}—{% endif %}</td>
+                    <td class="num px-3 py-3">{{ row.attempts }}</td>
+                    <td class="num px-3 py-3 font-extrabold">{% if row.score is not None %}{{ row.score|floatformat:1 }}{% else %}—{% endif %}</td>
+                    <td class="rounded-r-[12px] px-3.5 py-3">
+                      {% if row.status == "passed" %}{% translate "Passed" as l_s %}{% elif row.status == "awaiting_check" %}{% translate "Awaiting check" as l_s %}{% elif row.status == "in_progress" %}{% translate "In progress" as l_s %}{% elif row.status == "locked" %}{% translate "Locked" as l_s %}{% else %}{% translate "Open" as l_s %}{% endif %}
+                      {% include "components/badge.html" with status=row.status label=l_s class="font-bold" %}
+                      {% if row.needs_attention %}<span class="ml-1 text-caption font-bold text-warning-700" title="{% translate 'Passed only because the attempts ran out' %}">!</span>{% endif %}
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <p class="mt-2 flex items-center gap-2 text-[13px] text-ink-soft">{% translate "Topic score = Σ(weight × score) / Σ weight" %}
+              <span class="tip inline-flex"><span tabindex="0" class="grid size-[22px] cursor-help place-items-center rounded-full bg-surface-sunken text-caption font-extrabold" aria-describedby="tip-{{ t.topic.pk }}">?</span>
+                <span id="tip-{{ t.topic.pk }}" role="tooltip" class="tipbox w-[260px]">{% translate "A kind's share is split equally between the stages of that kind (e.g. three practice works share the practice weight). Unfinished stages do not count in the current score." %}</span></span>
+            </p>
+          </div>
+        </details>
+      {% empty %}
+        <p class="px-6 py-8 text-center text-sm text-ink-soft">{% translate "Grades appear when you open the first topic." %}</p>
+      {% endfor %}
+    </section>
+    {% if closed %}
+      <p class="text-sm text-ink-soft">{% blocktranslate count n=closed|length %}{{ n }} more topic is not opened yet.{% plural %}{{ n }} more topics are not opened yet.{% endblocktranslate %}</p>
+    {% endif %}
+
+    <section aria-labelledby="scale" class="card flex flex-col gap-3 py-[22px]">
+      <h2 id="scale" class="text-base font-extrabold">{% translate "Grading scale" %}</h2>
+      <div class="num flex flex-wrap gap-1.5">
+        {% for g in scale %}
+          <span class="badge h-8 px-3 text-[13px] font-bold {% if g.current %}badge-solid shadow-primary{% else %}badge-{{ g.tone }}{% endif %}"{% if g.current %} aria-current="true"{% endif %}>{{ g.letter }} {{ g.range }}</span>
+        {% endfor %}
+      </div>
+      <p class="text-[13px] text-ink-soft">{% translate "A topic score is the weighted average of its stages; a module — of its topics, the course — of its modules." %}</p>
+    </section>
+  </div>
+
+  <div x-show="tab === 'certs'" x-cloak class="fade">
+    {% if certificate %}
+      {% with row=certificate %}{% include "student/partials/certificate_card.html" %}{% endwith %}
     {% else %}
-      {% blocktranslate with a=t.passed b=t.required asvar l_t %}In progress · {{ a }} / {{ b }}{% endblocktranslate %}
-      {% include "components/badge.html" with variant="info" label=l_t class="num" %}
+      {% translate "This course has no certificate" as l_t %}{% include "components/empty_state.html" with title=l_t icon="award" %}
     {% endif %}
   </div>
-  <div class="overflow-x-auto">
-    <table class="w-full min-w-[720px] border-collapse text-sm">
-      <thead class="bg-canvas text-caption text-ink-soft">
-        <tr>
-          <th scope="col" class="px-6 py-2.5 text-left font-semibold">{% translate "Stage" %}</th>
-          <th scope="col" class="px-3 py-2.5 text-left font-semibold">{% translate "How it is graded" %}</th>
-          <th scope="col" class="px-3 py-2.5 text-left font-semibold">{% translate "Weight" %}</th>
-          <th scope="col" class="px-3 py-2.5 text-left font-semibold">{% translate "Attempts" %}</th>
-          <th scope="col" class="px-3 py-2.5 text-left font-semibold">{% translate "Score" %}</th>
-          <th scope="col" class="px-6 py-2.5 text-left font-semibold">{% translate "Status" %}</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for row in t.table %}
-          <tr class="border-t border-surface-sunken {% if row.status == 'locked' %}text-ink-faint{% endif %}">
-            <td class="px-6 py-3">
-              <span class="inline-flex items-center gap-2.5">
-                <span class="grid size-6 shrink-0 place-items-center rounded-sm text-white {% if row.status == 'locked' %}bg-line-strong{% else %}stage-{{ row.stage.kind }}{% endif %}">{% include "components/icons.html#"|add:row.stage.kind with size=12 %}</span>
-                {{ row.stage.title }}{% if not row.stage.is_required %} <span class="text-caption text-ink-faint">({% translate "optional" %})</span>{% endif %}
-              </span>
-            </td>
-            <td class="px-3 py-3 {% if row.status != 'locked' %}text-ink-soft{% endif %}">{{ row.method }}</td>
-            <td class="num px-3 py-3">{% if row.weight is not None %}{{ row.weight|floatformat:0 }}{% else %}—{% endif %}</td>
-            <td class="num px-3 py-3">{{ row.attempts }}</td>
-            <td class="num px-3 py-3 font-semibold">{% if row.score is not None %}{{ row.score|floatformat:1 }}{% else %}—{% endif %}</td>
-            <td class="px-6 py-3">
-              {% if row.status == "passed" %}{% translate "Passed" as l_s %}{% elif row.status == "awaiting_check" %}{% translate "Awaiting check" as l_s %}{% elif row.status == "in_progress" %}{% translate "In progress" as l_s %}{% elif row.status == "locked" %}{% translate "Locked" as l_s %}{% else %}{% translate "Open" as l_s %}{% endif %}
-              {% include "components/badge.html" with status=row.status label=l_s %}
-              {% if row.needs_attention %}<span class="ml-1 text-caption text-warning-700" title="{% translate 'Passed only because the attempts ran out' %}">!</span>{% endif %}
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-</section>
-{% endfor %}
-
-{% if closed %}
-<p class="text-sm text-ink-soft">
-  {% blocktranslate count n=closed|length %}{{ n }} more topic is not opened yet.{% plural %}{{ n }} more topics are not opened yet.{% endblocktranslate %}
-</p>
-{% endif %}
-
-<section aria-labelledby="scale" class="card flex flex-col gap-3">
-  <h2 id="scale" class="text-h3">{% translate "Grading scale" %}</h2>
-  <div class="num flex flex-wrap gap-1.5 text-body-sm">
-    {% for g in scale %}
-      <span class="badge badge-{{ g.tone }}{% if g.current %} font-semibold outline-2 outline-primary-600{% endif %}"{% if g.current %} aria-current="true"{% endif %}>{{ g.letter }} {{ g.range }}</span>
-    {% endfor %}
-  </div>
-  <p class="text-body-sm text-ink-soft">{% translate "A topic score is the weighted average of its stages; a module — of its topics, the course — of its modules." %}</p>
-</section>
+</div>
 {% endif %}
 {% endblock %}

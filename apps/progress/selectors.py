@@ -1,6 +1,9 @@
-from django.db.models import Sum
+from datetime import timedelta
 
-from .models import CourseResult, ModuleResult, ProgressEvent, StageProgress, TopicResult
+from django.db.models import Sum
+from django.utils import timezone
+
+from .models import CourseResult, ModuleResult, ProgressEvent, StageProgress, StudyDay, TopicResult
 
 
 def stage_progress_map(enrollment) -> dict[int, StageProgress]:
@@ -17,6 +20,35 @@ def module_results_map(enrollment) -> dict[int, ModuleResult]:
 
 def time_spent_s(enrollment) -> int:
     return StageProgress.objects.filter(enrollment=enrollment).aggregate(t=Sum("time_spent_s"))["t"] or 0
+
+
+def study_days(enrollment, days: int) -> dict:
+    """{date: seconds} for the last ``days`` local days (today included); missing days are 0."""
+    today = timezone.localdate()
+    start = today - timedelta(days=days - 1)
+    found = dict(
+        StudyDay.objects.filter(enrollment=enrollment, date__gte=start, date__lte=today).values_list("date", "seconds")
+    )
+    return {start + timedelta(days=i): found.get(start + timedelta(days=i), 0) for i in range(days)}
+
+
+def study_streak(enrollment) -> int:
+    """Days in a row with study time, ending today (or yesterday, if today has nothing yet)."""
+    dates = set(StudyDay.objects.filter(enrollment=enrollment, seconds__gt=0).values_list("date", flat=True))
+    day = timezone.localdate()
+    if day not in dates:
+        day -= timedelta(days=1)
+    streak = 0
+    while day in dates:
+        streak += 1
+        day -= timedelta(days=1)
+    return streak
+
+
+def stages_passed_since(enrollment, since) -> int:
+    return StageProgress.objects.filter(
+        enrollment=enrollment, status=StageProgress.Status.PASSED, completed_at__gte=since
+    ).count()
 
 
 def course_result(enrollment) -> CourseResult | None:

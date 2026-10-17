@@ -1,21 +1,29 @@
 {% extends layout %}
 {% load i18n %}
+{% comment %}Profile for every role: personal data, study details (students), language and password («Settings»).{% endcomment %}
 {% block title %}{% translate "Profile" %} · ChemEduTech{% endblock %}
+{% block crumb %}{{ user.get_role_display }}{% endblock %}
+{% block page_title %}{% translate "Profile" %}{% endblock %}
+{% block main_class %}max-w-[1180px]{% endblock %}
 {% block content %}
-<header class="flex flex-wrap items-center gap-4">
-  {% include "components/avatar.html" with person=user size="lg" %}
-  <div class="min-w-0">
-    <h1 class="text-h1">{{ user.full_name }}</h1>
-    <p class="mt-1 text-ink-soft">{{ user.get_username }} · {{ user.get_role_display }}</p>
+<header class="flex flex-wrap items-center gap-5 rounded-xl border border-line bg-surface p-6">
+  {% include "components/avatar.html" with person=user size="lg" shape="square" %}
+  <div class="min-w-0 flex-1">
+    <h1 class="text-[26px] leading-8 font-extrabold tracking-[-0.02em]">{{ user.full_name|default:user.get_username }}</h1>
+    <p class="mt-1 flex flex-wrap items-center gap-2 text-sm text-ink-soft">
+      <span>{{ user.get_username }}</span>
+      <span class="badge badge-info">{{ user.get_role_display }}</span>
+      {% if student_profile.group %}<span class="badge badge-neutral">{{ student_profile.group }}</span>{% endif %}
+    </p>
   </div>
 </header>
 
-<div class="grid items-start gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(380px,100%),1fr))]">
+<div class="grid items-start gap-5 grid-cols-[repeat(auto-fit,minmax(min(380px,100%),1fr))]">
   <section class="card flex flex-col gap-5" aria-labelledby="p-title">
-    <h2 id="p-title" class="text-h3">{% translate "Personal data" %}</h2>
+    <h2 id="p-title" class="text-[17px] font-extrabold">{% translate "Personal data" %}</h2>
     <form method="post" class="flex flex-col gap-4" novalidate>
       {% csrf_token %}<input type="hidden" name="form" value="profile">
-      {% if profile_form.non_field_errors %}<p class="error-text" role="alert">{{ profile_form.non_field_errors|join:" " }}</p>{% endif %}
+      {% if profile_form.non_field_errors %}{% include "components/alert.html" with variant="danger" text=profile_form.non_field_errors|join:" " role="alert" %}{% endif %}
       <div class="grid gap-4 sm:grid-cols-2">
         {% include "components/input.html" with field=profile_form.last_name %}
         {% include "components/input.html" with field=profile_form.first_name %}
@@ -25,31 +33,31 @@
         {% include "components/input.html" with field=profile_form.email %}
         {% include "components/input.html" with field=profile_form.phone %}
       </div>
-      {% include "components/input.html" with field=profile_form.language %}
+      <div id="settings" class="scroll-mt-24">{% include "components/input.html" with field=profile_form.language %}</div>
       <button type="submit" class="btn btn-primary self-start">{% translate "Save" %}</button>
     </form>
   </section>
 
-  <div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-5">
     {% if student_profile %}
     <section class="card flex flex-col gap-3" aria-labelledby="g-title">
-      <h2 id="g-title" class="text-h3">{% translate "Study" %}</h2>
-      <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">
+      <h2 id="g-title" class="text-[17px] font-extrabold">{% translate "Study" %}</h2>
+      <dl class="grid gap-2 sm:grid-cols-2">
         {% with g=student_profile.group %}
           {% if g %}
-            <dt class="text-ink-soft">{% translate "Group" %}</dt><dd class="font-medium">{{ g }}</dd>
-            {% if g.department %}<dt class="text-ink-soft">{% translate "Department" %}</dt><dd>{{ g.department }}</dd>{% endif %}
+            <div class="rounded-md bg-canvas px-4 py-3"><dt class="text-caption font-normal text-ink-faint">{% translate "Group" %}</dt><dd class="mt-0.5 font-semibold">{{ g }}</dd></div>
+            {% if g.department %}<div class="rounded-md bg-canvas px-4 py-3"><dt class="text-caption font-normal text-ink-faint">{% translate "Department" %}</dt><dd class="mt-0.5 font-semibold">{{ g.department }}</dd></div>{% endif %}
           {% endif %}
         {% endwith %}
-        {% if student_profile.study_year %}<dt class="text-ink-soft">{% translate "Year of study" %}</dt><dd class="num">{{ student_profile.study_year }}</dd>{% endif %}
-        {% if student_profile.student_id %}<dt class="text-ink-soft">{% translate "Student ID" %}</dt><dd class="num">{{ student_profile.student_id }}</dd>{% endif %}
+        {% if student_profile.study_year %}<div class="rounded-md bg-canvas px-4 py-3"><dt class="text-caption font-normal text-ink-faint">{% translate "Year of study" %}</dt><dd class="num mt-0.5 font-semibold">{{ student_profile.study_year }}</dd></div>{% endif %}
+        {% if student_profile.student_id %}<div class="rounded-md bg-canvas px-4 py-3"><dt class="text-caption font-normal text-ink-faint">{% translate "Student ID" %}</dt><dd class="num mt-0.5 font-semibold">{{ student_profile.student_id }}</dd></div>{% endif %}
       </dl>
-      <p class="text-body-sm text-ink-soft">{% translate "The group is changed by your teacher." %}</p>
+      <p class="text-[13px] text-ink-soft">{% translate "The group is changed by your teacher." %}</p>
     </section>
     {% endif %}
 
     <section class="card flex flex-col gap-5" aria-labelledby="pw-title">
-      <h2 id="pw-title" class="text-h3">{% translate "Password" %}</h2>
+      <h2 id="pw-title" class="text-[17px] font-extrabold">{% translate "Password" %}</h2>
       <form method="post" class="flex flex-col gap-4" novalidate>
         {% csrf_token %}<input type="hidden" name="form" value="password">
         {% include "components/input.html" with field=password_form.old_password %}

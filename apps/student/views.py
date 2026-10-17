@@ -178,6 +178,8 @@ def course(request, course_slug):
     modules = learning.course_map(place)
     total = sum(t["required"] for m in modules for t in m["topics"])
     passed = sum(t["passed"] for m in modules for t in m["topics"])
+    nxt = learning.continue_target(place)
+    counts = learning.map_filters(modules, nxt.topic if nxt else None)
     return render(
         request,
         "student/course_map.html",
@@ -189,7 +191,8 @@ def course(request, course_slug):
             "grade": grade_for(result.current_percent) if result and result.current_percent is not None else None,
             "stages_total": total,
             "stages_passed": passed,
-            "next": learning.continue_target(place),
+            "next": nxt,
+            "counts": counts,
             "teachers": place.course.teachers.all(),
         },
     )

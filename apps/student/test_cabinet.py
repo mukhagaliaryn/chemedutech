@@ -189,3 +189,59 @@ class ProfileTests(CabinetBase):
         self.client.force_login(self.teacher)
         r = self.client.get(reverse("student:profile"))
         self.assertTemplateUsed(r, "layouts/teacher.html")
+
+
+class ActivityTests(CabinetBase):
+    """STEP-17: study days from the stage ping, the activity chart, streaks, the course map filters."""
+
+    def test_ping_feeds_the_study_day(self):
+        from apps.progress.models import StudyDay
+
+        url = reverse("student:ping", args=[self.course.slug, 1, self.theory.pk])
+        self.client.post(url)
+        self.client.post(url)
+        day = StudyDay.objects.get(enrollment=self.enrollment)
+        self.assertEqual((day.date, day.seconds), (timezone.localdate(), 60))
+        r = self.client.get(reverse("student:dashboard"))
+        week = r.context["activity"]["week"]
+        self.assertEqual(len(week), 7)
+        self.assertEqual(week[-1]["minutes"], 1)
+        self.assertTrue(week[-1]["top"])
+        self.assertEqual(len(r.context["activity"]["month"]), 4)
+        self.assertEqual(r.context["activity"]["streak"], 1)
+
+    def test_streak_counts_days_in_a_row(self):
+        from datetime import timedelta
+
+        from apps.progress.models import StudyDay
+        from apps.progress.selectors import study_streak
+
+        today = timezone.localdate()
+        for back in (1, 2, 3, 5):
+            StudyDay.objects.create(enrollment=self.enrollment, date=today - timedelta(days=back), seconds=120)
+        self.assertEqual(study_streak(self.enrollment), 3)  # yesterday, 2 and 3 days ago; today not yet
+        StudyDay.objects.create(enrollment=self.enrollment, date=today, seconds=30)
+        self.assertEqual(study_streak(self.enrollment), 4)
+
+    def test_dashboard_figures(self):
+        self.pass_theory()
+        r = self.client.get(reverse("student:dashboard"))
+        self.assertEqual(r.context["passed_week"], 1)
+        self.assertEqual(r.context["stages_done"], 1)
+        self.assertEqual(r.context["stages_total"], len([s for s in self.stages if s.is_required]))
+        self.assertContains(r, "brand-ground")
+
+    def test_course_map_filters(self):
+        r = self.client.get(reverse("student:course", args=[self.course.slug]))
+        counts = r.context["counts"]
+        self.assertEqual(counts["all"], counts["progress"] + counts["done"] + counts["locked"])
+        self.assertEqual(counts["progress"], 1)
+        module = r.context["modules"][0]
+        self.assertTrue(module["open"])
+        self.assertTrue(module["topics"][0]["current"])
+        self.assertContains(r, 'data-filter="progress"')
+
+    def test_gradebook_has_the_certificate_tab(self):
+        r = self.client.get(reverse("student:results"))
+        self.assertEqual(r.context["certificate"]["course"], self.course)
+        self.assertContains(r, "CET-")

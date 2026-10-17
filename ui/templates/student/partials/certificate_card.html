@@ -1,0 +1,40 @@
+{% load i18n %}{% comment %}
+One course certificate (mockup «Бағалар кітапшасы» → Сертификаттар): row from student.cabinet.certificate_rows.
+Issued — a certificate-like card with the number, holder, PDF and the verification link; not yet —
+a grey preview with what is still needed.
+{% endcomment %}
+<section class="flex flex-wrap items-stretch gap-5" aria-labelledby="c{{ row.course.pk }}">
+  <div class="relative flex min-h-[300px] flex-[1_1_520px] flex-col justify-between gap-6 overflow-hidden rounded-xl border border-line bg-surface p-7 pl-12">
+    <span aria-hidden="true" class="absolute inset-y-0 left-0 w-3.5 {% if row.certificate %}bg-primary-900{% else %}bg-line-strong{% endif %}"></span>
+    <div class="{% if not row.certificate %}opacity-55 grayscale{% endif %}">
+      <p class="num text-caption font-bold tracking-wide text-primary-600 uppercase">{% translate "Certificate" %} · {% if row.certificate %}{{ row.certificate.number }}{% else %}CET-····-······{% endif %}</p>
+      <h2 id="c{{ row.course.pk }}" class="mt-2.5 text-[28px] leading-[34px] font-extrabold">{% if row.certificate %}{{ row.certificate.holder_name }}{% else %}{{ user.get_full_name|default:user.get_username }}{% endif %}</h2>
+      <p class="mt-1.5 text-ink-soft">{% blocktranslate with c=row.course.title %}completed the course «{{ c }}»{% endblocktranslate %}</p>
+      {% if row.certificate %}<p class="num mt-3 text-sm font-semibold">{{ row.certificate.score_percent|floatformat:1 }} · {{ row.certificate.letter }} · {{ row.certificate.issued_at|date:"j E Y" }}</p>{% endif %}
+    </div>
+    {% if row.certificate %}
+      <div class="flex flex-wrap items-center gap-2.5">
+        <a class="btn btn-primary" href="{% url 'certificates:pdf' row.certificate.verification_code %}">{% include "components/icons.html#download" %}{% translate "Download the PDF" %}</a>
+        <button type="button" class="btn btn-secondary" data-copy="{{ row.verify_url }}" data-copied-label="{% translate 'Copied ✓' %}">{% include "components/icons.html#copy" %}<span data-copy-label>{% translate "Copy the verification link" %}</span></button>
+      </div>
+    {% elif row.passed %}
+      <div class="flex items-center gap-3 rounded-lg bg-success-50 px-4 py-3.5 text-sm text-success-700">{% include "components/icons.html#clock" %}{% translate "The course is completed. The certificate is being issued — refresh the page in a minute." %}</div>
+    {% else %}
+      <div class="flex items-center gap-3 rounded-lg bg-canvas px-4 py-3.5 text-sm text-ink-soft">
+        <span class="text-ink-soft">{% include "components/icons.html#key" %}</span>
+        <span>{% blocktranslate with b=row.topics_total p=row.course.passing_score %}Issued when all {{ b }} topics are completed with a course score of at least {{ p }}.{% endblocktranslate %}</span>
+      </div>
+    {% endif %}
+  </div>
+  <div class="flex flex-[1_1_280px] flex-col gap-2.5 rounded-xl bg-primary-50 p-6 text-primary-900">
+    <h3 class="text-[17px] font-extrabold">{% translate "About the certificate" %}</h3>
+    <p class="text-sm leading-[22px]">{% translate "It is downloaded as a PDF; anyone can check that it is real with its QR code." %}</p>
+    {% if not row.certificate %}
+      <div class="mt-auto flex flex-col gap-2">
+        <span class="num text-sm font-bold">{% blocktranslate with a=row.topics_completed b=row.topics_total %}Completed topics: {{ a }} / {{ b }}{% endblocktranslate %}</span>
+        <div class="progress progress-sm bg-white"><span style="width: {{ row.topics_completed|percent_of:row.topics_total }}%"></span></div>
+        {% if row.current is not None %}<span class="num text-caption font-semibold {% if row.below_pass %}text-warning-700{% endif %}">{% blocktranslate with c=row.current|floatformat:1 p=row.course.passing_score %}Current score {{ c }}; at least {{ p }} is needed for the certificate.{% endblocktranslate %}</span>{% endif %}
+      </div>
+    {% endif %}
+  </div>
+</section>

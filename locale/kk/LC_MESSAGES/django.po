@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ChemEduTech\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 11:48+0500\n"
+"POT-Creation-Date: 2026-10-17 12:03+0500\n"
 "PO-Revision-Date: 2026-10-16 21:00+0500\n"
 "Last-Translator: ChemEduTech\n"
 "Language-Team: ChemEduTech\n"
@@ -82,13 +82,13 @@ msgid "Faculty"
 msgstr "Факультет"
 
 #: apps/accounts/forms.py:53 ui/templates/accounts/signup.html:128
-#: ui/templates/student/profile.html:41
+#: ui/templates/student/profile.html:50
 msgid "Department"
 msgstr "Кафедра"
 
 #: apps/accounts/forms.py:56 apps/teacher/gradebook.py:21
 #: ui/templates/accounts/signup.html:129
-#: ui/templates/research/analytics.html:21 ui/templates/student/profile.html:40
+#: ui/templates/research/analytics.html:21 ui/templates/student/profile.html:49
 #: ui/templates/teacher/partials/groups_table.html:6
 #: ui/templates/teacher/students.html:17 ui/templates/ui/styleguide.html:140
 #: ui/views.py:21
@@ -217,15 +217,15 @@ msgstr "пайдаланушы"
 msgid "users"
 msgstr "пайдаланушылар"
 
-#: apps/accounts/views.py:53
+#: apps/accounts/views.py:52
 msgid "You are signed up! Enrol in a course and start with the first topic."
 msgstr "Тіркелдіңіз! Курсқа жазылып, бірінші тақырыптан бастаңыз."
 
-#: apps/accounts/views.py:88
+#: apps/accounts/views.py:87
 msgid "This username is already taken."
 msgstr "Бұл логин бос емес."
 
-#: apps/accounts/views.py:90
+#: apps/accounts/views.py:89
 msgid "The username is free ✓"
 msgstr "Логин бос ✓"
 
@@ -237,7 +237,7 @@ msgid "question"
 msgstr "сұрақ"
 
 #: apps/assessments/admin.py:38 ui/templates/assessments/result.html:81
-#: ui/templates/research/dashboard.html:49 ui/templates/student/results.html:61
+#: ui/templates/research/dashboard.html:49 ui/templates/student/results.html:73
 #: ui/templates/teacher/student.html:65
 msgid "Attempts"
 msgstr "Талпыныстар"
@@ -266,9 +266,9 @@ msgstr "Бағалау"
 #: apps/certificates/models/certificate.py:43 apps/courses/models/course.py:38
 #: apps/courses/models/enrollment.py:52 apps/feedback/models/comment.py:19
 #: apps/labs/models/attempt.py:23 apps/practice/models/submission.py:21
-#: apps/progress/models/progress.py:22 apps/progress/models/progress.py:76
-#: apps/progress/models/progress.py:98 apps/progress/models/progress.py:118
-#: apps/progress/models/progress.py:153
+#: apps/progress/models/activity.py:14 apps/progress/models/progress.py:22
+#: apps/progress/models/progress.py:76 apps/progress/models/progress.py:98
+#: apps/progress/models/progress.py:118 apps/progress/models/progress.py:153
 msgid "enrolment"
 msgstr "жазылу тәсілі"
 
@@ -625,7 +625,8 @@ msgstr "PDF жасалды: %(n)d"
 #: apps/certificates/apps.py:8 config/settings/base.py:364
 #: ui/templates/partials/shell/sidebar_student.html:18
 #: ui/templates/student/certificates.html:3
-#: ui/templates/student/certificates.html:6
+#: ui/templates/student/certificates.html:5
+#: ui/templates/student/dashboard.html:56 ui/templates/student/results.html:48
 msgid "Certificates"
 msgstr "Сертификаттар"
 
@@ -1049,6 +1050,7 @@ msgid "Active"
 msgstr "Белсенді"
 
 #: apps/courses/models/enrollment.py:20 apps/progress/models/progress.py:73
+#: ui/templates/student/course_map.html:40
 msgid "Completed"
 msgstr "Аяқталды"
 
@@ -2256,10 +2258,11 @@ msgstr ""
 "жылдамдататынын түсіндіріңіз."
 
 #: apps/labs/models/attempt.py:10 apps/progress/models/progress.py:17
-#: apps/progress/models/progress.py:72 apps/student/cabinet.py:91
+#: apps/progress/models/progress.py:72 apps/student/cabinet.py:94
 #: apps/student/learning.py:97 ui/templates/components/stage_stepper.html:24
-#: ui/templates/student/results.html:80 ui/templates/student/topic.html:30
-#: ui/templates/teacher/gradebook.html:50 ui/templates/teacher/student.html:80
+#: ui/templates/student/course_map.html:40 ui/templates/student/results.html:92
+#: ui/templates/student/topic.html:30 ui/templates/teacher/gradebook.html:50
+#: ui/templates/teacher/student.html:80
 msgid "In progress"
 msgstr "Орындалуда"
 
@@ -2544,7 +2547,9 @@ msgstr "Уақыт"
 msgid "Volume"
 msgstr "Көлем"
 
-#: apps/labs/views.py:60 ui/templates/student/course_map.html:52
+#: apps/labs/views.py:60 ui/templates/student/course_map.html:74
+#: ui/templates/student/dashboard.html:108
+#: ui/templates/student/dashboard.html:110
 msgid "min"
 msgstr "мин"
 
@@ -3406,10 +3411,28 @@ msgstr "Қанағаттанарлық"
 msgid "Unsatisfactory"
 msgstr "Қанағаттанарлықсыз"
 
+#: apps/progress/models/activity.py:16
+msgid "date"
+msgstr "күні"
+
+#: apps/progress/models/activity.py:17
+msgid "seconds"
+msgstr "секунд"
+
+#: apps/progress/models/activity.py:20
+msgid "study day"
+msgstr "оқу күні"
+
+#: apps/progress/models/activity.py:21
+msgid "study days"
+msgstr "оқу күндері"
+
 #: apps/progress/models/progress.py:15 apps/progress/models/progress.py:70
-#: apps/student/cabinet.py:79 apps/student/learning.py:95
+#: apps/student/cabinet.py:82 apps/student/learning.py:95
 #: ui/templates/components/stage_stepper.html:23
-#: ui/templates/student/course_map.html:44 ui/templates/student/results.html:80
+#: ui/templates/student/course_map.html:40
+#: ui/templates/student/course_map.html:81
+#: ui/templates/student/course_map.html:91 ui/templates/student/results.html:92
 #: ui/templates/student/stages/lab.html:23 ui/templates/student/topic.html:30
 #: ui/templates/teacher/student.html:58 ui/templates/teacher/student.html:80
 msgid "Locked"
@@ -3421,16 +3444,17 @@ msgstr "Жабық"
 msgid "Available"
 msgstr "Ашық"
 
-#: apps/progress/models/progress.py:18 apps/student/cabinet.py:81
-#: apps/student/cabinet.py:209 ui/templates/components/stage_stepper.html:20
-#: ui/templates/student/results.html:80 ui/templates/student/topic.html:30
-#: ui/templates/teacher/dashboard.html:30 ui/templates/teacher/student.html:80
+#: apps/progress/models/progress.py:18 apps/student/cabinet.py:84
+#: apps/student/cabinet.py:212 ui/templates/components/stage_stepper.html:20
+#: ui/templates/student/course_map.html:96 ui/templates/student/results.html:92
+#: ui/templates/student/topic.html:30 ui/templates/teacher/dashboard.html:30
+#: ui/templates/teacher/student.html:80
 msgid "Awaiting check"
 msgstr "Тексеруді күтуде"
 
 #: apps/progress/models/progress.py:19 apps/progress/models/progress.py:143
-#: apps/student/cabinet.py:77 ui/templates/components/stage_stepper.html:22
-#: ui/templates/student/results.html:80 ui/templates/student/topic.html:30
+#: apps/student/cabinet.py:80 ui/templates/components/stage_stepper.html:22
+#: ui/templates/student/results.html:92 ui/templates/student/topic.html:30
 #: ui/templates/teacher/student.html:80
 msgid "Passed"
 msgstr "Өтті"
@@ -3439,7 +3463,7 @@ msgstr "Өтті"
 msgid "needs the teacher's attention"
 msgstr "мұғалімнің назарын қажет етеді"
 
-#: apps/progress/models/progress.py:30 ui/templates/student/results.html:82
+#: apps/progress/models/progress.py:30 ui/templates/student/results.html:94
 msgid "Passed only because the attempts ran out"
 msgstr "Талпыныстар біткендіктен ғана өтті"
 
@@ -3562,7 +3586,7 @@ msgid "Topic completed"
 msgstr "Тақырып аяқталды"
 
 #: apps/progress/models/progress.py:150 apps/teacher/overview.py:111
-#: ui/templates/student/dashboard.html:51
+#: ui/templates/student/dashboard.html:54
 msgid "Course completed"
 msgstr "Курс аяқталды"
 
@@ -3663,12 +3687,12 @@ msgstr "Статистика"
 msgid "Research data"
 msgstr "Зерттеу деректері"
 
-#: apps/research/analytics.py:83 apps/student/cabinet.py:53
+#: apps/research/analytics.py:83 apps/student/cabinet.py:56
 #, python-format
 msgid "%(h)s h %(m)s min"
 msgstr "%(h)s сағ %(m)s мин"
 
-#: apps/research/analytics.py:83 apps/student/cabinet.py:54
+#: apps/research/analytics.py:83 apps/student/cabinet.py:57
 #, python-format
 msgid "%(m)s min"
 msgstr "%(m)s мин"
@@ -3714,23 +3738,25 @@ msgstr[1] "Тексеруіңізге %(n)s жұмыс таңдалды."
 msgid "The sample is already complete; nothing new was drawn."
 msgstr "Іріктеме толық; жаңа жұмыс таңдалмады."
 
-#: apps/student/apps.py:8
+#: apps/student/apps.py:8 ui/templates/student/certificates.html:4
+#: ui/templates/student/courses.html:4 ui/templates/student/dashboard.html:8
+#: ui/templates/student/results.html:9
 msgid "Student cabinet"
 msgstr "Студент кабинеті"
 
-#: apps/student/cabinet.py:76 apps/student/learning.py:93
+#: apps/student/cabinet.py:79 apps/student/learning.py:93
 #, python-format
 msgid "Passed · %(score)s%%"
 msgstr "Өтті · %(score)s%%"
 
-#: apps/student/cabinet.py:86 apps/student/cabinet.py:263
+#: apps/student/cabinet.py:89 apps/student/cabinet.py:305
 #, python-format
 msgid "%(a)s / %(b)s experiment"
 msgid_plural "%(a)s / %(b)s experiments"
 msgstr[0] "%(a)s / %(b)s тәжірибе"
 msgstr[1] "%(a)s / %(b)s тәжірибе"
 
-#: apps/student/cabinet.py:92 ui/templates/student/results.html:80
+#: apps/student/cabinet.py:95 ui/templates/student/results.html:92
 #: ui/templates/student/topic.html:36
 #: ui/templates/teacher/content/courses.html:21
 #: ui/templates/teacher/dashboard.html:61 ui/templates/teacher/grading.html:44
@@ -3739,56 +3765,61 @@ msgstr[1] "%(a)s / %(b)s тәжірибе"
 msgid "Open"
 msgstr "Ашу"
 
-#: apps/student/cabinet.py:99
+#: apps/student/cabinet.py:102
 msgid "Reading the material"
 msgstr "Материалды оқу"
 
-#: apps/student/cabinet.py:99
+#: apps/student/cabinet.py:102
 msgid "Watching the video"
 msgstr "Видеоны көру"
 
-#: apps/student/cabinet.py:101
+#: apps/student/cabinet.py:104
 #, python-format
 msgid "Checkpoint quiz (%(n)s question)"
 msgid_plural "Checkpoint quiz (%(n)s questions)"
 msgstr[0] "Бекіту тесті (%(n)s сұрақ)"
 msgstr[1] "Бекіту тесті (%(n)s сұрақ)"
 
-#: apps/student/cabinet.py:106 apps/student/cabinet.py:115
+#: apps/student/cabinet.py:109 apps/student/cabinet.py:118
 msgid "Automatic"
 msgstr "Автоматты"
 
-#: apps/student/cabinet.py:108
+#: apps/student/cabinet.py:111
 #, python-format
 msgid "Automatic: process %(p)s%% · journal %(j)s%% · analysis %(a)s%%"
 msgstr "Автоматты: процесс %(p)s%% · журнал %(j)s%% · талдау %(a)s%%"
 
-#: apps/student/cabinet.py:114
+#: apps/student/cabinet.py:117
 msgid "Automatic checks and AI, confirmed by the teacher"
 msgstr "Автоматты тексеру және AI, мұғалім растайды"
 
-#: apps/student/cabinet.py:175
+#: apps/student/cabinet.py:178
 #, python-format
 msgid "Quiz · attempt %(n)s"
 msgstr "Тест · %(n)s-талпыныс"
 
-#: apps/student/cabinet.py:184 config/settings/base.py:349
+#: apps/student/cabinet.py:187 config/settings/base.py:349
 #: ui/templates/core/home.html:26 ui/templates/core/home.html:193
 #: ui/templates/core/home.html:353
 msgid "Lab"
 msgstr "Зертхана"
 
-#: apps/student/cabinet.py:186
+#: apps/student/cabinet.py:189
 #, python-format
 msgid "%(n)s safety warning"
 msgid_plural "%(n)s safety warnings"
 msgstr[0] "%(n)s қауіпсіздік ескертуі"
 msgstr[1] "%(n)s қауіпсіздік ескертуі"
 
-#: apps/student/cabinet.py:205
+#: apps/student/cabinet.py:208
 #, python-format
 msgid "Practice · attempt %(n)s"
 msgstr "Практика · %(n)s-талпыныс"
+
+#: apps/student/cabinet.py:256
+#, python-format
+msgid "Week %(n)s"
+msgstr "%(n)s-апта"
 
 #: apps/student/views.py:113
 msgid "Profile saved."
@@ -3798,11 +3829,11 @@ msgstr "Профиль сақталды."
 msgid "Password changed."
 msgstr "Құпиясөз өзгертілді."
 
-#: apps/student/views.py:412 ui/templates/student/stages/practice.html:76
+#: apps/student/views.py:415 ui/templates/student/stages/practice.html:76
 msgid "Preview: answers are not saved."
 msgstr "Алдын ала қарау: жауаптар сақталмайды."
 
-#: apps/student/views.py:508
+#: apps/student/views.py:511
 msgid ""
 "Experiments open one after another: finish the previous one and send its "
 "analysis."
@@ -3810,15 +3841,15 @@ msgstr ""
 "Тәжірибелер бірінен соң бірі ашылады: алдыңғысын аяқтап, оның талдауын "
 "жіберіңіз."
 
-#: apps/student/views.py:583
+#: apps/student/views.py:586
 msgid "Finish the material first — the test opens after it."
 msgstr "Алдымен материалды аяқтаңыз — тест содан кейін ашылады."
 
-#: apps/student/views.py:662 ui/templates/student/stage.html:19
+#: apps/student/views.py:665 ui/templates/student/stage.html:19
 msgid "Go to the next stage"
 msgstr "Келесі кезеңге өту"
 
-#: apps/student/views.py:664 ui/templates/teacher/content/item.html:58
+#: apps/student/views.py:667 ui/templates/teacher/content/item.html:58
 msgid "Back to the stage"
 msgstr "Кезеңге оралу"
 
@@ -3944,8 +3975,8 @@ msgstr "Зерттеу тобы"
 msgid "The student signs up first; then add the account here."
 msgstr "Алдымен студент тіркеледі, содан кейін оның аккаунтын осында қосыңыз."
 
-#: apps/teacher/forms.py:41 ui/templates/student/courses.html:11
-#: ui/templates/teacher/gradebook.html:36 ui/templates/teacher/grading.html:20
+#: apps/teacher/forms.py:41 ui/templates/teacher/gradebook.html:36
+#: ui/templates/teacher/grading.html:20
 msgid "Course"
 msgstr "Курс"
 
@@ -3965,8 +3996,8 @@ msgstr "Аяқталу күні басталу күнінен ерте."
 msgid "Username"
 msgstr "Логин"
 
-#: apps/teacher/gradebook.py:25 ui/templates/student/course_map.html:22
-#: ui/templates/student/courses.html:20
+#: apps/teacher/gradebook.py:25 ui/templates/student/courses.html:24
+#: ui/templates/student/dashboard.html:74
 msgid "Current score"
 msgstr "Ағымдағы ұпай"
 
@@ -4228,7 +4259,8 @@ msgid "Comments"
 msgstr "Пікірлер"
 
 #: config/settings/base.py:379 ui/templates/feedback/notifications.html:3
-#: ui/templates/feedback/notifications.html:7
+#: ui/templates/feedback/notifications.html:5
+#: ui/templates/feedback/notifications.html:10
 #: ui/templates/feedback/partials/menu.html:4
 #: ui/templates/partials/shell/notifications_menu.html:8
 #: ui/templates/partials/shell/sidebar_student.html:19
@@ -4667,7 +4699,7 @@ msgstr "Берілген күні"
 
 #: ui/templates/certificates/pdf.html:45
 #: ui/templates/certificates/verify.html:16
-#: ui/templates/student/results.html:62 ui/templates/teacher/group.html:86
+#: ui/templates/student/results.html:74 ui/templates/teacher/group.html:86
 #: ui/templates/teacher/student.html:66 ui/templates/teacher/student.html:110
 #: ui/templates/ui/styleguide.html:140 ui/views.py:21
 msgid "Score"
@@ -4688,10 +4720,12 @@ msgstr "Сертификат түпнұсқа: оны ChemEduTech берген."
 
 #: ui/templates/certificates/verify.html:10
 #: ui/templates/certificates/verify.html:12 ui/templates/core/home.html:58
+#: ui/templates/student/partials/certificate_card.html:10
 msgid "Certificate"
 msgstr "Сертификат"
 
 #: ui/templates/certificates/verify.html:14
+#: ui/templates/student/partials/certificate_card.html:12
 #, python-format
 msgid "completed the course «%(c)s»"
 msgstr "«%(c)s» курсын аяқтады"
@@ -4774,7 +4808,10 @@ msgstr "Химияны қауіпсіз зертханада үйреніңіз"
 msgid ""
 "An online course for future chemistry teachers: theory, video lessons, an "
 "interactive virtual lab and automatic grading — on one platform, in Kazakh."
-msgstr "Болашақ химия мұғалімдеріне арналған онлайн курс: теория, видеосабақ, интерактивті виртуалды зертхана және автоматты бағалау — бір платформада, қазақ тілінде."
+msgstr ""
+"Болашақ химия мұғалімдеріне арналған онлайн курс: теория, видеосабақ, "
+"интерактивті виртуалды зертхана және автоматты бағалау — бір платформада, "
+"қазақ тілінде."
 
 #: ui/templates/core/home.html:53
 msgid "Start for free"
@@ -4841,7 +4878,9 @@ msgid ""
 "Drag the equipment onto the bench, add reagents and watch the gas being "
 "collected. The system warns at once about a wrong order and dangerous "
 "actions."
-msgstr "Құралдарды үстелге сүйреп қойыңыз, реагент қосыңыз, газдың жиналуын бақылаңыз. Жүйе қате ретті және қауіпті әрекетті бірден ескертеді."
+msgstr ""
+"Құралдарды үстелге сүйреп қойыңыз, реагент қосыңыз, газдың жиналуын "
+"бақылаңыз. Жүйе қате ретті және қауіпті әрекетті бірден ескертеді."
 
 #: ui/templates/core/home.html:154
 msgid "Step-by-step learning"
@@ -4851,7 +4890,9 @@ msgstr "Кезеңдік оқу"
 msgid ""
 "The next stage opens only when the previous one is finished. Theory and "
 "video end with a short 3–4 question checkpoint quiz."
-msgstr "Бір кезеңді аяқтамай келесісі ашылмайды. Теория мен видеодан кейін — 3–4 сұрақтық бекіту тесті."
+msgstr ""
+"Бір кезеңді аяқтамай келесісі ашылмайды. Теория мен видеодан кейін — 3–4 "
+"сұрақтық бекіту тесті."
 
 #: ui/templates/core/home.html:159
 msgid "Automatic and AI grading"
@@ -4861,7 +4902,9 @@ msgstr "Автоматты және AI бағалау"
 msgid ""
 "Formulas and equations are checked by meaning; open answers are graded by AI "
 "against criteria and confirmed by the teacher."
-msgstr "Формула мен теңдеуді мағынасы бойынша тексереді, ашық жауапты AI критерийлер арқылы бағалап, мұғалім растайды."
+msgstr ""
+"Формула мен теңдеуді мағынасы бойынша тексереді, ашық жауапты AI критерийлер "
+"арқылы бағалап, мұғалім растайды."
 
 #: ui/templates/core/home.html:164
 msgid "Analytics for the teacher"
@@ -4871,7 +4914,9 @@ msgstr "Мұғалімге аналитика"
 msgid ""
 "Groups, the grade register, frequent mistakes and time on each stage — all "
 "in one cabinet."
-msgstr "Топтар, бағалар журналы, жиі қателер мен кезеңдегі уақыт — бәрі бір кабинетте."
+msgstr ""
+"Топтар, бағалар журналы, жиі қателер мен кезеңдегі уақыт — бәрі бір "
+"кабинетте."
 
 #: ui/templates/core/home.html:169
 msgid "Certificate and grade book"
@@ -4881,7 +4926,9 @@ msgstr "Сертификат және бағалар кітапшасы"
 msgid ""
 "Stage → topic → module → course scores are calculated automatically. When "
 "the course is finished you get a certificate verifiable by its QR code."
-msgstr "Кезең → тақырып → модуль → курс ұпайы автоматты есептеледі. Курсты аяқтағанда QR-кодпен тексерілетін сертификат беріледі."
+msgstr ""
+"Кезең → тақырып → модуль → курс ұпайы автоматты есептеледі. Курсты "
+"аяқтағанда QR-кодпен тексерілетін сертификат беріледі."
 
 #: ui/templates/core/home.html:186
 msgid "Every topic is a full cycle of stages"
@@ -4891,7 +4938,9 @@ msgstr "Әр тақырып — кезеңдерден тұратын толық
 msgid ""
 "The author decides how many stages a topic has: one topic may contain "
 "several practice works."
-msgstr "Автор кезеңдердің санын өзі анықтайды: бір тақырыпта бірнеше практикалық жұмыс болуы мүмкін."
+msgstr ""
+"Автор кезеңдердің санын өзі анықтайды: бір тақырыпта бірнеше практикалық "
+"жұмыс болуы мүмкін."
 
 #: ui/templates/core/home.html:191
 msgid "Text with formulas and pictures + a checkpoint quiz"
@@ -4971,7 +5020,8 @@ msgstr "Түсінікті жол"
 #: ui/templates/core/home.html:280
 msgid ""
 "What to do next is always visible: «Continue learning» is one button away."
-msgstr "Келесі не істеу керегі әрқашан көрінеді: «Оқуды жалғастыру» бір батырмада."
+msgstr ""
+"Келесі не істеу керегі әрқашан көрінеді: «Оқуды жалғастыру» бір батырмада."
 
 #: ui/templates/core/home.html:281
 msgid "Mistakes without risk"
@@ -4981,7 +5031,8 @@ msgstr "Қатесіз тәжірибе"
 msgid ""
 "When you make a mistake the system explains why — without the danger of a "
 "real lab."
-msgstr "Қателескен жерде жүйе себебін түсіндіреді — нақты зертханадағы қаупі жоқ."
+msgstr ""
+"Қателескен жерде жүйе себебін түсіндіреді — нақты зертханадағы қаупі жоқ."
 
 #: ui/templates/core/home.html:282
 msgid "A fair grade"
@@ -4989,7 +5040,8 @@ msgstr "Әділ баға"
 
 #: ui/templates/core/home.html:282
 msgid "Every stage score and how it was calculated is shown in the grade book."
-msgstr "Әр кезеңнің ұпайы мен оның қалай есептелгені бағалар кітапшасында көрінеді."
+msgstr ""
+"Әр кезеңнің ұпайы мен оның қалай есептелгені бағалар кітапшасында көрінеді."
 
 #: ui/templates/core/home.html:285
 msgid "Group management"
@@ -4999,7 +5051,9 @@ msgstr "Топтарды басқару"
 msgid ""
 "Create a group, share the join code and assign the research group (control / "
 "experimental)."
-msgstr "Топ құрып, қосылу кодын беріңіз; зерттеу тобын (бақылау/эксперименттік) тағайындаңыз."
+msgstr ""
+"Топ құрып, қосылу кодын беріңіз; зерттеу тобын (бақылау/эксперименттік) "
+"тағайындаңыз."
 
 #: ui/templates/core/home.html:286
 msgid "AI assistant"
@@ -5009,12 +5063,15 @@ msgstr "AI көмекші"
 msgid ""
 "AI grades open answers of practice works against the criteria — you only "
 "confirm."
-msgstr "Практиканың ашық жауаптарын AI критерийлер бойынша бағалайды — сіз тек растайсыз."
+msgstr ""
+"Практиканың ашық жауаптарын AI критерийлер бойынша бағалайды — сіз тек "
+"растайсыз."
 
 #: ui/templates/core/home.html:287
 msgid ""
 "See at which step students make mistakes most often and adapt the lesson."
-msgstr "Қай қадамда студенттер жиі қателесетінін көріп, сабақты соған бейімдеңіз."
+msgstr ""
+"Қай қадамда студенттер жиі қателесетінін көріп, сабақты соған бейімдеңіз."
 
 #: ui/templates/core/home.html:295
 msgid "Pedagogical research"
@@ -5028,11 +5085,15 @@ msgstr "Әр әрекет — дәлелді дерек"
 msgid ""
 "The platform records every step of a student in the lab, quiz answers and "
 "time spent. Comparing control and experimental groups takes one click."
-msgstr "Платформа студенттің зертханадағы әр қадамын, тест жауаптарын және жұмсаған уақытын жазып отырады. Бақылау және эксперименттік топтарды салыстыру — бір батырмамен."
+msgstr ""
+"Платформа студенттің зертханадағы әр қадамын, тест жауаптарын және жұмсаған "
+"уақытын жазып отырады. Бақылау және эксперименттік топтарды салыстыру — бір "
+"батырмамен."
 
 #: ui/templates/core/home.html:299
 msgid "Action log: order errors, safety warnings, time on each step"
-msgstr "Әрекеттер журналы: рет қатесі, қауіпсіздік ескертуі, әр қадамдағы уақыт"
+msgstr ""
+"Әрекеттер журналы: рет қатесі, қауіпсіздік ескертуі, әр қадамдағы уақыт"
 
 #: ui/templates/core/home.html:299
 msgid "Group comparison: mean, median, n"
@@ -5068,7 +5129,8 @@ msgstr "Платформа кімге арналған?"
 msgid ""
 "For students of pedagogical universities training to become chemistry "
 "teachers."
-msgstr "Педагогикалық университетте химия мұғалімі мамандығында оқитын студенттерге."
+msgstr ""
+"Педагогикалық университетте химия мұғалімі мамандығында оқитын студенттерге."
 
 #: ui/templates/core/home.html:326
 msgid "How does the virtual lab work?"
@@ -5079,7 +5141,10 @@ msgid ""
 "It opens in the browser, nothing to install. You drag the equipment onto the "
 "bench and carry out the commands in order; the reaction is animated and you "
 "record the result in the journal."
-msgstr "Браузерде ашылады, ештеңе орнатудың қажеті жоқ. Құралдарды үстелге сүйреп қойып, командаларды ретпен орындайсыз; реакция анимациямен көрсетіледі, нәтижені журналға жазасыз."
+msgstr ""
+"Браузерде ашылады, ештеңе орнатудың қажеті жоқ. Құралдарды үстелге сүйреп "
+"қойып, командаларды ретпен орындайсыз; реакция анимациямен көрсетіледі, "
+"нәтижені журналға жазасыз."
 
 #: ui/templates/core/home.html:327
 msgid "Why does the next stage not open?"
@@ -5089,7 +5154,9 @@ msgstr "Неге келесі кезең ашылмайды?"
 msgid ""
 "Each stage opens when the previous one is finished. After the theory and the "
 "video you need to pass a 3–4 question checkpoint quiz."
-msgstr "Әр кезең алдыңғысы аяқталғанда ашылады. Теория мен видеодан кейін 3–4 сұрақтық бекіту тестінен өту керек."
+msgstr ""
+"Әр кезең алдыңғысы аяқталғанда ашылады. Теория мен видеодан кейін 3–4 "
+"сұрақтық бекіту тестінен өту керек."
 
 #: ui/templates/core/home.html:328
 msgid "Who grades the practice works?"
@@ -5099,7 +5166,9 @@ msgstr "Практикалық жұмысты кім бағалайды?"
 msgid ""
 "Numbers, formulas and equations are checked automatically. Free text is "
 "graded by AI against the criteria and confirmed by the teacher."
-msgstr "Сан, формула және теңдеу жауаптарын платформа автоматты тексереді. Еркін мәтінді AI критерийлер бойынша бағалайды, мұғалім растайды."
+msgstr ""
+"Сан, формула және теңдеу жауаптарын платформа автоматты тексереді. Еркін "
+"мәтінді AI критерийлер бойынша бағалайды, мұғалім растайды."
 
 #: ui/templates/core/home.html:329
 msgid "How do I sign up as a teacher?"
@@ -5117,13 +5186,16 @@ msgstr "Алғашқы тәжірибені бүгін жасап көріңіз
 
 #: ui/templates/core/home.html:339
 msgid "Signing up takes a minute. Ask your teacher for your group's join code."
-msgstr "Тіркелу бір минутты алады. Тобыңыздың қосылу кодын мұғаліміңізден сұраңыз."
+msgstr ""
+"Тіркелу бір минутты алады. Тобыңыздың қосылу кодын мұғаліміңізден сұраңыз."
 
 #: ui/templates/core/home.html:350
 msgid ""
 "A virtual lab and an online course for future chemistry teachers. A doctoral "
 "dissertation project."
-msgstr "Болашақ химия мұғалімдеріне арналған виртуалды зертхана және онлайн курс. Докторлық диссертациялық жоба."
+msgstr ""
+"Болашақ химия мұғалімдеріне арналған виртуалды зертхана және онлайн курс. "
+"Докторлық диссертациялық жоба."
 
 #: ui/templates/core/home.html:353
 msgid "Platform"
@@ -5133,7 +5205,11 @@ msgstr "Платформа"
 msgid "Account"
 msgstr "Аккаунт"
 
-#: ui/templates/feedback/notifications.html:8
+#: ui/templates/feedback/notifications.html:4
+msgid "Cabinet"
+msgstr "Кабинет"
+
+#: ui/templates/feedback/notifications.html:11
 #: ui/templates/feedback/partials/badge.html:7
 #, python-format
 msgid "%(n)s unread"
@@ -5141,29 +5217,29 @@ msgid_plural "%(n)s unread"
 msgstr[0] "%(n)s оқылмаған"
 msgstr[1] "%(n)s оқылмаған"
 
-#: ui/templates/feedback/notifications.html:12
+#: ui/templates/feedback/notifications.html:15
 #: ui/templates/feedback/partials/menu.html:7
 msgid "Mark all as read"
 msgstr "Барлығын оқылды деп белгілеу"
 
-#: ui/templates/feedback/notifications.html:25
+#: ui/templates/feedback/notifications.html:28
 msgid "Pages"
 msgstr "Беттер"
 
-#: ui/templates/feedback/notifications.html:26
+#: ui/templates/feedback/notifications.html:29
 msgid "Newer"
 msgstr "Жаңалары"
 
-#: ui/templates/feedback/notifications.html:28
+#: ui/templates/feedback/notifications.html:31
 msgid "Older"
 msgstr "Ескілері"
 
-#: ui/templates/feedback/notifications.html:32
+#: ui/templates/feedback/notifications.html:35
 #: ui/templates/feedback/partials/menu.html:23
 msgid "No notifications yet"
 msgstr "Әзірге хабарлама жоқ"
 
-#: ui/templates/feedback/notifications.html:32
+#: ui/templates/feedback/notifications.html:35
 msgid "Grades, returned works and opened stages will appear here."
 msgstr "Бағалар, қайтарылған жұмыстар және ашылған кезеңдер осында шығады."
 
@@ -5178,6 +5254,7 @@ msgstr "Барлық хабарламалар"
 
 #: ui/templates/feedback/partials/thread.html:12
 #: ui/templates/feedback/partials/thread.html:16
+#: ui/templates/student/dashboard.html:154
 msgid "Reply"
 msgstr "Жауап беру"
 
@@ -5191,8 +5268,8 @@ msgid "No comments yet."
 msgstr "Әзірге пікір жоқ."
 
 #: ui/templates/labs/run.html:22 ui/templates/research/analytics.html:13
-#: ui/templates/research/analytics.html:19 ui/templates/student/results.html:44
-#: ui/templates/teacher/student.html:56 ui/templates/teacher/student.html:185
+#: ui/templates/research/analytics.html:19 ui/templates/teacher/student.html:56
+#: ui/templates/teacher/student.html:185
 #, python-format
 msgid "Topic %(n)s"
 msgstr "%(n)s-тақырып"
@@ -5219,7 +5296,9 @@ msgstr "Бүгінгі тәжірибе"
 msgid ""
 "Pure hydrogen burns with a quiet «pop» — in the lab its purity is checked "
 "before it is lit."
-msgstr "Таза сутегі тыныш «пах» дыбысымен жанады — зертханада оны тұтатпас бұрын тазалығын тексереді."
+msgstr ""
+"Таза сутегі тыныш «пах» дыбысымен жанады — зертханада оны тұтатпас бұрын "
+"тазалығын тексереді."
 
 #: ui/templates/layouts/auth.html:33
 msgid "Catalysis"
@@ -5229,7 +5308,9 @@ msgstr "Катализ"
 msgid ""
 "MnO₂ speeds up the decomposition of hydrogen peroxide but does not change "
 "the total amount of oxygen formed."
-msgstr "MnO₂ сутегі пероксидінің ыдырауын жылдамдатады, бірақ түзілетін оттегінің жалпы мөлшерін өзгертпейді."
+msgstr ""
+"MnO₂ сутегі пероксидінің ыдырауын жылдамдатады, бірақ түзілетін оттегінің "
+"жалпы мөлшерін өзгертпейді."
 
 #: ui/templates/layouts/auth.html:34
 msgid "Electrolysis"
@@ -5239,7 +5320,9 @@ msgstr "Электролиз"
 msgid ""
 "In the electrolysis of water hydrogen is released at the cathode and oxygen "
 "at the anode — in a 2 : 1 volume ratio."
-msgstr "Судың электролизінде катодта сутегі, анодта оттегі бөлінеді — көлемдер қатынасы 2 : 1."
+msgstr ""
+"Судың электролизінде катодта сутегі, анодта оттегі бөлінеді — көлемдер "
+"қатынасы 2 : 1."
 
 #: ui/templates/layouts/auth.html:47
 #, python-format
@@ -5281,7 +5364,8 @@ msgstr "Аккаунт мәзірі"
 #: ui/templates/partials/shell/sidebar_student.html:20
 #: ui/templates/partials/shell/sidebar_student.html:33
 #: ui/templates/partials/shell/sidebar_teacher.html:26
-#: ui/templates/student/profile.html:3 ui/templates/teacher/group.html:108
+#: ui/templates/student/profile.html:5 ui/templates/student/profile.html:7
+#: ui/templates/teacher/group.html:108
 msgid "Profile"
 msgstr "Профиль"
 
@@ -5295,9 +5379,8 @@ msgstr "Баптаулар"
 msgid "Log out"
 msgstr "Шығу"
 
-#: ui/templates/layouts/learn.html:13 ui/templates/student/certificates.html:40
-#: ui/templates/student/courses.html:24 ui/templates/student/dashboard.html:10
-#: ui/templates/student/locked.html:18
+#: ui/templates/layouts/learn.html:13 ui/templates/student/course_map.html:9
+#: ui/templates/student/courses.html:28 ui/templates/student/locked.html:18
 msgid "Course map"
 msgstr "Курс картасы"
 
@@ -5311,7 +5394,7 @@ msgstr "%(m)s-модуль · %(n)s-тақырып"
 msgid "Topic: %(a)s / %(b)s stages"
 msgstr "Тақырып: %(a)s / %(b)s кезең"
 
-#: ui/templates/layouts/learn.html:31 ui/templates/student/course_map.html:5
+#: ui/templates/layouts/learn.html:31 ui/templates/student/course_map.html:12
 msgid "Preview: everything is open and nothing is recorded."
 msgstr "Алдын ала қарау: бәрі ашық, ештеңе жазылмайды."
 
@@ -5350,18 +5433,20 @@ msgstr "Студент мәзірі"
 
 #: ui/templates/partials/shell/sidebar_student.html:15
 #: ui/templates/partials/shell/sidebar_teacher.html:16
-#: ui/templates/student/dashboard.html:3 ui/templates/teacher/dashboard.html:3
+#: ui/templates/student/dashboard.html:7 ui/templates/student/dashboard.html:9
+#: ui/templates/teacher/dashboard.html:3
 msgid "Home"
 msgstr "Басты бет"
 
 #: ui/templates/partials/shell/sidebar_student.html:16
-#: ui/templates/student/courses.html:3 ui/templates/student/courses.html:6
-#: ui/templates/student/dashboard.html:16 ui/templates/student/results.html:13
+#: ui/templates/student/course_map.html:8 ui/templates/student/courses.html:3
+#: ui/templates/student/courses.html:5 ui/templates/student/dashboard.html:15
+#: ui/templates/student/results.html:16
 msgid "My courses"
 msgstr "Менің курстарым"
 
 #: ui/templates/partials/shell/sidebar_student.html:17
-#: ui/templates/student/dashboard.html:51
+#: ui/templates/student/results.html:47
 msgid "Grades"
 msgstr "Бағалар"
 
@@ -5375,7 +5460,7 @@ msgid "%(a)s of %(b)s stages"
 msgstr "%(b)s кезеңнің %(a)s-і"
 
 #: ui/templates/partials/shell/sidebar_student.html:29
-#: ui/templates/student/courses.html:23 ui/templates/student/topic.html:12
+#: ui/templates/student/courses.html:27 ui/templates/student/topic.html:12
 #: ui/templates/student/topic.html:36
 msgid "Continue"
 msgstr "Жалғастыру"
@@ -5695,7 +5780,7 @@ msgstr "Аяқталған талпыныстар әлі жоқ."
 msgid "Latest attempts"
 msgstr "Соңғы талпыныстар"
 
-#: ui/templates/research/dashboard.html:84 ui/templates/student/results.html:63
+#: ui/templates/research/dashboard.html:84 ui/templates/student/results.html:75
 #: ui/templates/teacher/grading.html:10 ui/templates/teacher/student.html:67
 #: ui/templates/teacher/student.html:109 ui/templates/teacher/student.html:159
 msgid "Status"
@@ -5706,145 +5791,123 @@ msgstr "Күйі"
 msgid "Errors"
 msgstr "Қателер"
 
-#: ui/templates/student/certificates.html:7
+#: ui/templates/student/certificates.html:8
 msgid ""
 "A certificate is issued automatically when the course is completed with a "
 "passing score."
 msgstr "Курс өту ұпайымен аяқталғанда сертификат автоматты түрде беріледі."
 
-#: ui/templates/student/certificates.html:17
-#, python-format
-msgid "№ %(n)s · issued %(d)s · %(s)s (%(g)s)"
-msgstr "№ %(n)s · берілді %(d)s · %(s)s (%(g)s)"
-
-#: ui/templates/student/certificates.html:20
-msgid "Verification link:"
-msgstr "Тексеру сілтемесі:"
-
-#: ui/templates/student/certificates.html:21 ui/templates/teacher/group.html:29
-msgid "Copy"
-msgstr "Көшіру"
-
-#: ui/templates/student/certificates.html:21 ui/templates/teacher/group.html:29
-msgid "Copied"
-msgstr "Көшірілді"
-
-#: ui/templates/student/certificates.html:24
-msgid ""
-"The course is completed. The certificate is being issued — refresh the page "
-"in a minute."
-msgstr ""
-"Курс аяқталды. Сертификат шығарылуда — бір минуттан кейін бетті жаңартыңыз."
-
-#: ui/templates/student/certificates.html:26
-#: ui/templates/student/courses.html:17
-#, python-format
-msgid "%(a)s / %(b)s topics"
-msgstr "%(a)s / %(b)s тақырып"
-
-#: ui/templates/student/certificates.html:27
-#: ui/templates/student/dashboard.html:66
-msgid "Completed topics"
-msgstr "Аяқталған тақырыптар"
-
-#: ui/templates/student/certificates.html:30
-#, python-format
-msgid "Current score %(c)s; at least %(p)s is needed for the certificate."
-msgstr "Ағымдағы ұпай %(c)s; сертификат үшін кемінде %(p)s керек."
-
-#: ui/templates/student/certificates.html:31
-#, python-format
-msgid "Complete every topic with a course score of at least %(p)s."
-msgstr "Барлық тақырыпты курс бойынша кемінде %(p)s ұпаймен аяқтаңыз."
-
-#: ui/templates/student/certificates.html:36
-msgid "Download the PDF"
-msgstr "PDF жүктеу"
-
-#: ui/templates/student/certificates.html:38
-msgid "Issued soon"
-msgstr "Жақында беріледі"
-
-#: ui/templates/student/certificates.html:44
+#: ui/templates/student/certificates.html:12
 msgid "No certificates yet"
 msgstr "Әзірге сертификат жоқ"
 
-#: ui/templates/student/certificates.html:44
+#: ui/templates/student/certificates.html:12
 msgid "Complete a course and its certificate will appear here."
 msgstr "Курсты аяқтаңыз — оның сертификаты осында шығады."
 
-#: ui/templates/student/course_map.html:9
+#: ui/templates/student/course_map.html:20
 #, python-format
-msgid "Course · %(n)s module"
-msgid_plural "Course · %(n)s modules"
-msgstr[0] "Курс · %(n)s модуль"
-msgstr[1] "Курс · %(n)s модуль"
+msgid "%(n)s module"
+msgid_plural "%(n)s modules"
+msgstr[0] "%(n)s модуль"
+msgstr[1] "%(n)s модуль"
 
-#: ui/templates/student/course_map.html:13
+#: ui/templates/student/course_map.html:20
+#, python-format
+msgid "%(n)s topic"
+msgid_plural "%(n)s topics"
+msgstr[0] "%(n)s тақырып"
+msgstr[1] "%(n)s тақырып"
+
+#: ui/templates/student/course_map.html:23
 #: ui/templates/student/stages/practice.html:28
 msgid "Teacher:"
 msgstr "Мұғалім:"
 
-#: ui/templates/student/course_map.html:14
-msgid "Stages open in order: finish one to open the next."
-msgstr ""
-"Кезеңдер ретпен ашылады: алдыңғысын аяқтамай келесісіне өтуге болмайды."
-
-#: ui/templates/student/course_map.html:18
-#: ui/templates/student/dashboard.html:86
-#, python-format
-msgid "%(a)s / %(b)s stages"
-msgstr "%(a)s / %(b)s кезең"
-
-#: ui/templates/student/course_map.html:19 ui/templates/student/courses.html:18
-msgid "Course progress"
-msgstr "Курс прогресі"
-
 #: ui/templates/student/course_map.html:24
+msgid "Stages open in order"
+msgstr "Кезеңдер ретпен ашылады"
+
+#: ui/templates/student/course_map.html:30 ui/templates/student/results.html:59
+msgid "current score"
+msgstr "ағымдағы ұпай"
+
+#: ui/templates/student/course_map.html:31
+msgid "stages passed"
+msgstr "кезең өтілді"
+
+#: ui/templates/student/course_map.html:32
+#: ui/templates/student/dashboard.html:34
 msgid "Continue learning"
 msgstr "Оқуды жалғастыру"
 
-#: ui/templates/student/course_map.html:31
-#: ui/templates/student/dashboard.html:84 ui/templates/student/results.html:30
+#: ui/templates/student/course_map.html:39 ui/templates/teacher/group.html:60
+#: ui/templates/teacher/groups.html:15
+msgid "Filter"
+msgstr "Сүзгі"
+
+#: ui/templates/student/course_map.html:40
+#: ui/templates/student/dashboard.html:127
+#: ui/templates/teacher/dashboard.html:37
+msgid "All"
+msgstr "Барлығы"
+
+#: ui/templates/student/course_map.html:55 ui/templates/student/results.html:33
 #: ui/templates/teacher/content/course.html:27
 #, python-format
 msgid "Module %(n)s"
 msgstr "%(n)s-модуль"
 
-#: ui/templates/student/course_map.html:42
+#: ui/templates/student/course_map.html:57
 #, python-format
-msgid "Opens after topic %(n)s is completed"
-msgstr "%(n)s-тақырыпты аяқтағаннан кейін ашылады"
+msgid "Topic %(a)s"
+msgstr "%(a)s-тақырып"
 
-#: ui/templates/student/course_map.html:52
+#: ui/templates/student/course_map.html:57
+#, python-format
+msgid "Topics %(a)s–%(b)s"
+msgstr "%(a)s–%(b)s тақырыптар"
+
+#: ui/templates/student/course_map.html:58 ui/templates/student/results.html:59
+#, python-format
+msgid "%(a)s / %(b)s stages"
+msgstr "%(a)s / %(b)s кезең"
+
+#: ui/templates/student/course_map.html:74
 #, python-format
 msgid "%(n)s stage"
 msgid_plural "%(n)s stages"
 msgstr[0] "%(n)s кезең"
 msgstr[1] "%(n)s кезең"
 
-#: ui/templates/student/course_map.html:59 ui/templates/student/results.html:47
-#: ui/templates/teacher/student.html:57
+#: ui/templates/student/course_map.html:79 ui/templates/teacher/student.html:57
 #, python-format
 msgid "Completed · %(s)s"
 msgstr "Аяқталды · %(s)s"
 
-#: ui/templates/student/course_map.html:62 ui/templates/student/results.html:50
-#: ui/templates/teacher/student.html:59
+#: ui/templates/student/course_map.html:85
 #, python-format
-msgid "In progress · %(a)s / %(b)s"
-msgstr "Орындалуда · %(a)s / %(b)s"
+msgid "This topic opens after topic %(n)s is fully completed."
+msgstr "Бұл тақырып %(n)s-тақырыпты толық аяқтағаннан кейін ашылады."
 
-#: ui/templates/student/course_map.html:72
-#: ui/templates/student/dashboard.html:97 ui/templates/teacher/student.html:99
+#: ui/templates/student/course_map.html:85
+msgid "This topic opens after the previous one is completed."
+msgstr "Бұл тақырып алдыңғы тақырыпты аяқтағаннан кейін ашылады."
+
+#: ui/templates/student/course_map.html:100
+msgid "Open the topic page"
+msgstr "Тақырып бетін ашу"
+
+#: ui/templates/student/course_map.html:107
+#: ui/templates/teacher/student.html:99
 msgid "The course has no published topics yet"
 msgstr "Курста әзірге жарияланған тақырып жоқ"
 
-#: ui/templates/student/course_map.html:80
+#: ui/templates/student/course_map.html:116
 msgid "Course certificate"
 msgstr "Курс сертификаты"
 
-#: ui/templates/student/course_map.html:81
+#: ui/templates/student/course_map.html:117
 #, python-format
 msgid ""
 "Complete every topic with a course score of at least %(p)s and the "
@@ -5853,164 +5916,190 @@ msgstr ""
 "Барлық тақырыпты аяқтап, курс бойынша кемінде %(p)s ұпай жинасаңыз, "
 "сертификат автоматты түрде беріледі."
 
-#: ui/templates/student/courses.html:11
+#: ui/templates/student/courses.html:15
 msgid "preview"
 msgstr "алдын ала қарау"
 
-#: ui/templates/student/courses.html:30
+#: ui/templates/student/courses.html:21
+#, python-format
+msgid "%(a)s / %(b)s topics"
+msgstr "%(a)s / %(b)s тақырып"
+
+#: ui/templates/student/courses.html:22 ui/templates/student/dashboard.html:85
+msgid "Course progress"
+msgstr "Курс прогресі"
+
+#: ui/templates/student/courses.html:35
 msgid "No courses yet"
 msgstr "Әзірге курс жоқ"
 
-#: ui/templates/student/courses.html:30
+#: ui/templates/student/courses.html:35
 msgid "The course appears here when your teacher assigns it to your group."
 msgstr "Мұғалім курсты тобыңызға бекіткенде, ол осында пайда болады."
 
-#: ui/templates/student/courses.html:37
+#: ui/templates/student/courses.html:42
 msgid "Courses open for enrolment"
 msgstr "Жазылуға ашық курстар"
 
-#: ui/templates/student/courses.html:44
+#: ui/templates/student/courses.html:50
 msgid "Enrol"
 msgstr "Жазылу"
 
-#: ui/templates/student/dashboard.html:7 ui/templates/teacher/dashboard.html:7
+#: ui/templates/student/dashboard.html:14
+#: ui/templates/student/dashboard.html:52
 #, python-format
-msgid "Hello, %(name)s"
-msgstr "Сәлеметсіз бе, %(name)s"
+msgid "Hello, %(name)s!"
+msgstr "Сәлеметсіз бе, %(name)s!"
 
-#: ui/templates/student/dashboard.html:16
+#: ui/templates/student/dashboard.html:15
 msgid "You are not enrolled in a course yet"
 msgstr "Сіз әлі ешбір курсқа жазылмағансыз"
 
-#: ui/templates/student/dashboard.html:16
+#: ui/templates/student/dashboard.html:15
 msgid "Choose a course in the catalogue or ask your teacher to add your group."
 msgstr "Каталогтан курс таңдаңыз немесе мұғалімнен тобыңызды қосуды сұраңыз."
 
-#: ui/templates/student/dashboard.html:26
+#: ui/templates/student/dashboard.html:30
 #, python-format
-msgid "Continue learning · Module %(m)s · Topic %(t)s"
-msgstr "Оқуды жалғастыру · %(m)s-модуль · %(t)s-тақырып"
+msgid "Hello, %(name)s! Where you stopped:"
+msgstr "Сәлеметсіз бе, %(name)s! Тоқтаған жеріңіз:"
 
 #: ui/templates/student/dashboard.html:31
 #, python-format
-msgid "Continue: %(k)s"
-msgstr "Жалғастыру: %(k)s"
+msgid "Topic %(n)s · %(s)s"
+msgstr "%(n)s-тақырып · %(s)s"
 
-#: ui/templates/student/dashboard.html:51
+#: ui/templates/student/dashboard.html:32
+#, python-format
+msgid "%(t)s — %(a)s of %(b)s stages completed."
+msgstr "%(t)s — %(b)s кезеңнің %(a)s-і аяқталды."
+
+#: ui/templates/student/dashboard.html:36
+msgid "Stages of the topic"
+msgstr "Тақырып кезеңдері"
+
+#: ui/templates/student/dashboard.html:55
 msgid "Every topic is done. Your grades are in the gradebook."
 msgstr "Барлық тақырып аяқталды. Бағаларыңыз бағалар кітапшасында."
 
-#: ui/templates/student/dashboard.html:54
+#: ui/templates/student/dashboard.html:58
 msgid "Waiting for the next step"
 msgstr "Келесі қадамды күтуде"
 
-#: ui/templates/student/dashboard.html:54
+#: ui/templates/student/dashboard.html:59
 msgid "Your works are being checked or the next topic is not published yet."
 msgstr "Жұмыстарыңыз тексерілуде немесе келесі тақырып әлі жарияланбаған."
 
-#: ui/templates/student/dashboard.html:58
+#: ui/templates/student/dashboard.html:66
 #: ui/templates/teacher/dashboard.html:20 ui/templates/teacher/student.html:33
 msgid "Key figures"
 msgstr "Көрсеткіштер"
 
-#: ui/templates/student/dashboard.html:59 ui/templates/student/results.html:19
-#: ui/templates/teacher/student.html:34
-msgid "Current course score"
-msgstr "Курс бойынша ағымдағы ұпай"
-
-#: ui/templates/student/dashboard.html:61
+#: ui/templates/student/dashboard.html:77
 #, python-format
-msgid "%(g)s · by completed topics"
-msgstr "%(g)s · аяқталған тақырыптар бойынша"
+msgid "+%(n)s stage this week"
+msgid_plural "+%(n)s stages this week"
+msgstr[0] "осы аптада +%(n)s кезең"
+msgstr[1] "осы аптада +%(n)s кезең"
 
-#: ui/templates/student/dashboard.html:64 ui/templates/student/results.html:25
-msgid "Shown after the first topic is completed"
-msgstr "Бірінші тақырып аяқталғаннан кейін шығады"
+#: ui/templates/student/dashboard.html:79
+msgid "After the first completed stages"
+msgstr "Алғашқы кезеңдер аяқталған соң"
 
-#: ui/templates/student/dashboard.html:67
-#: ui/templates/student/dashboard.html:71 ui/templates/teacher/lab_log.html:27
+#: ui/templates/student/dashboard.html:81
+msgid "by completed stages"
+msgstr "аяқталған кезеңдер бойынша"
+
+#: ui/templates/student/dashboard.html:85
+#: ui/templates/student/dashboard.html:88 ui/templates/teacher/lab_log.html:27
 #: ui/templates/teacher/student.html:37
 #, python-format
 msgid "%(a)s / %(b)s"
 msgstr "%(a)s / %(b)s"
 
-#: ui/templates/student/dashboard.html:68
+#: ui/templates/student/dashboard.html:86
 #, python-format
-msgid "Topic %(t)s: %(a)s / %(b)s stages"
-msgstr "%(t)s-тақырып: %(a)s / %(b)s кезең"
+msgid "stages · %(n)s topic"
+msgid_plural "stages · %(n)s topics"
+msgstr[0] "кезең · %(n)s тақырып"
+msgstr[1] "кезең · %(n)s тақырып"
 
-#: ui/templates/student/dashboard.html:70
+#: ui/templates/student/dashboard.html:88
 msgid "Lab experiments"
 msgstr "Зертханалық тәжірибелер"
 
-#: ui/templates/student/dashboard.html:72
+#: ui/templates/student/dashboard.html:89
+#, python-format
+msgid "average %(p)s%%"
+msgstr "орташа %(p)s%%"
+
+#: ui/templates/student/dashboard.html:89
 msgid "With the analysis sent"
 msgstr "Талдауы жіберілгендер"
 
-#: ui/templates/student/dashboard.html:74 ui/templates/teacher/student.html:39
-msgid "Time spent learning"
-msgstr "Оқуға жұмсалған уақыт"
-
-#: ui/templates/student/dashboard.html:74
-msgid "In total"
-msgstr "Барлығы"
-
-#: ui/templates/student/dashboard.html:80
-msgid "Progress by module"
-msgstr "Модульдер бойынша прогресс"
-
 #: ui/templates/student/dashboard.html:91
-#, python-format
-msgid "Opens after module %(n)s is completed"
-msgstr "%(n)s-модульді аяқтағаннан кейін ашылады"
+msgid "This week"
+msgstr "Осы аптада"
 
 #: ui/templates/student/dashboard.html:92
 #, python-format
-msgid "Topic %(a)s"
-msgstr "%(a)s-тақырып"
+msgid "active %(n)s day in a row"
+msgid_plural "active %(n)s days in a row"
+msgstr[0] "%(n)s күн қатарынан белсенді"
+msgstr[1] "%(n)s күн қатарынан белсенді"
 
-#: ui/templates/student/dashboard.html:93
+#: ui/templates/student/dashboard.html:92
 #, python-format
-msgid "Topics %(a)s–%(b)s"
-msgstr "%(a)s–%(b)s тақырыптар"
+msgid "%(t)s in total"
+msgstr "барлығы %(t)s"
+
+#: ui/templates/student/dashboard.html:100
+msgid "Study activity"
+msgstr "Оқу белсенділігі"
+
+#: ui/templates/student/dashboard.html:102
+msgid "Week"
+msgstr "Апта"
 
 #: ui/templates/student/dashboard.html:103
+msgid "Month"
+msgstr "Ай"
+
+#: ui/templates/student/dashboard.html:120
+msgid "Minutes on stage pages (theory, video, practice, tests)."
+msgstr "Кезең беттеріндегі минуттар (теория, видео, практика, тесттер)."
+
+#: ui/templates/student/dashboard.html:126
 msgid "Latest results"
 msgstr "Соңғы нәтижелер"
 
-#: ui/templates/student/dashboard.html:104
-#: ui/templates/student/dashboard.html:141
-#: ui/templates/teacher/dashboard.html:37
-msgid "All"
-msgstr "Барлығы"
-
-#: ui/templates/student/dashboard.html:117
+#: ui/templates/student/dashboard.html:140
 msgid "Results of quizzes, experiments and practice works will appear here."
 msgstr ""
 "Тесттердің, тәжірибелердің және практикалық жұмыстардың нәтижелері осында "
 "шығады."
 
-#: ui/templates/student/dashboard.html:122
-msgid "Teacher's comments"
+#: ui/templates/student/dashboard.html:151
+#: ui/templates/student/dashboard.html:160
+msgid "Teacher's comment"
 msgstr "Мұғалімнің пікірі"
 
-#: ui/templates/student/dashboard.html:127
+#: ui/templates/student/dashboard.html:152
 #, python-format
 msgid "about «%(s)s»"
 msgstr "«%(s)s» туралы"
 
-#: ui/templates/student/dashboard.html:129
-msgid "Open the work"
-msgstr "Жұмысты ашу"
+#: ui/templates/student/dashboard.html:155
+#, python-format
+msgid "%(n)s more comment"
+msgid_plural "%(n)s more comments"
+msgstr[0] "тағы %(n)s пікір"
+msgstr[1] "тағы %(n)s пікір"
 
-#: ui/templates/student/dashboard.html:133
+#: ui/templates/student/dashboard.html:161
 msgid "No comments yet. The teacher's comments on your works will appear here."
 msgstr ""
 "Әзірге пікір жоқ. Мұғалімнің жұмыстарыңызға жазған пікірлері осында шығады."
-
-#: ui/templates/student/dashboard.html:140
-msgid "New notifications"
-msgstr "Жаңа хабарламалар"
 
 #: ui/templates/student/locked.html:3
 msgid "Not open yet"
@@ -6050,6 +6139,51 @@ msgid ""
 "next."
 msgstr ""
 "Кезеңдер бірінен кейін бірі ашылады. Келесі қадамды курс картасынан көріңіз."
+
+#: ui/templates/student/partials/certificate_card.html:17
+msgid "Download the PDF"
+msgstr "PDF жүктеу"
+
+#: ui/templates/student/partials/certificate_card.html:18
+msgid "Copied ✓"
+msgstr "Көшірілді ✓"
+
+#: ui/templates/student/partials/certificate_card.html:18
+msgid "Copy the verification link"
+msgstr "Тексеру сілтемесін көшіру"
+
+#: ui/templates/student/partials/certificate_card.html:21
+msgid ""
+"The course is completed. The certificate is being issued — refresh the page "
+"in a minute."
+msgstr ""
+"Курс аяқталды. Сертификат шығарылуда — бір минуттан кейін бетті жаңартыңыз."
+
+#: ui/templates/student/partials/certificate_card.html:25
+#, python-format
+msgid ""
+"Issued when all %(b)s topics are completed with a course score of at least "
+"%(p)s."
+msgstr "Барлық %(b)s тақырыпты аяқтап, кемінде %(p)s ұпай жинағанда беріледі."
+
+#: ui/templates/student/partials/certificate_card.html:30
+msgid "About the certificate"
+msgstr "Сертификат туралы"
+
+#: ui/templates/student/partials/certificate_card.html:31
+msgid ""
+"It is downloaded as a PDF; anyone can check that it is real with its QR code."
+msgstr "PDF форматында жүктеледі, QR-код арқылы түпнұсқалығын кез келген адам тексере алады."
+
+#: ui/templates/student/partials/certificate_card.html:34
+#, python-format
+msgid "Completed topics: %(a)s / %(b)s"
+msgstr "Аяқталған тақырыптар: %(a)s / %(b)s"
+
+#: ui/templates/student/partials/certificate_card.html:36
+#, python-format
+msgid "Current score %(c)s; at least %(p)s is needed for the certificate."
+msgstr "Ағымдағы ұпай %(c)s; сертификат үшін кемінде %(p)s керек."
 
 #: ui/templates/student/partials/conditions.html:3
 msgid "To complete the stage"
@@ -6200,11 +6334,11 @@ msgstr "тексеруді күтуде"
 msgid "open"
 msgstr "ашық"
 
-#: ui/templates/student/profile.html:15
+#: ui/templates/student/profile.html:24
 msgid "Personal data"
 msgstr "Жеке деректер"
 
-#: ui/templates/student/profile.html:29
+#: ui/templates/student/profile.html:38
 #: ui/templates/teacher/content/course_form.html:37
 #: ui/templates/teacher/content/item.html:57
 #: ui/templates/teacher/content/question.html:55
@@ -6214,103 +6348,131 @@ msgstr "Жеке деректер"
 msgid "Save"
 msgstr "Сақтау"
 
-#: ui/templates/student/profile.html:36
+#: ui/templates/student/profile.html:45
 msgid "Study"
 msgstr "Оқу"
 
-#: ui/templates/student/profile.html:44
+#: ui/templates/student/profile.html:53
 msgid "Year of study"
 msgstr "Оқу курсы"
 
-#: ui/templates/student/profile.html:45
+#: ui/templates/student/profile.html:54
 msgid "Student ID"
 msgstr "Сынақ кітапшасының нөмірі"
 
-#: ui/templates/student/profile.html:47
+#: ui/templates/student/profile.html:56
 msgid "The group is changed by your teacher."
 msgstr "Топты мұғаліміңіз өзгертеді."
 
-#: ui/templates/student/profile.html:52
+#: ui/templates/student/profile.html:61
 msgid "Password"
 msgstr "Құпиясөз"
 
-#: ui/templates/student/profile.html:58
+#: ui/templates/student/profile.html:67
 msgid "Change the password"
 msgstr "Құпиясөзді өзгерту"
 
-#: ui/templates/student/results.html:3 ui/templates/student/results.html:6
+#: ui/templates/student/results.html:8 ui/templates/student/results.html:10
 msgid "Gradebook"
 msgstr "Бағалар кітапшасы"
 
-#: ui/templates/student/results.html:7
-msgid "stage → topic → module → course"
-msgstr "кезең → тақырып → модуль → курс"
-
-#: ui/templates/student/results.html:13
+#: ui/templates/student/results.html:16
 msgid "No grades yet"
 msgstr "Әзірге баға жоқ"
 
-#: ui/templates/student/results.html:13
+#: ui/templates/student/results.html:16
 msgid "Enrol in a course and your grades will appear here."
 msgstr "Курсқа жазылыңыз — бағаларыңыз осында шығады."
 
-#: ui/templates/student/results.html:17
+#: ui/templates/student/results.html:20
 msgid "Course summary"
 msgstr "Курс бойынша қорытынды"
 
-#: ui/templates/student/results.html:22
-#, python-format
-msgid "GPA %(g)s · by completed topics"
-msgstr "GPA %(g)s · аяқталған тақырыптар бойынша"
+#: ui/templates/student/results.html:22 ui/templates/teacher/student.html:34
+msgid "Current course score"
+msgstr "Курс бойынша ағымдағы ұпай"
 
-#: ui/templates/student/results.html:33
+#: ui/templates/student/results.html:25
+#, python-format
+msgid "GPA %(g)s · by completed stages"
+msgstr "GPA %(g)s · аяқталған кезеңдер бойынша"
+
+#: ui/templates/student/results.html:28
+msgid "Shown after the first topic is completed"
+msgstr "Бірінші тақырып аяқталғаннан кейін шығады"
+
+#: ui/templates/student/results.html:36
+#, python-format
+msgid "Opens after module %(n)s"
+msgstr "%(n)s-модульден кейін ашылады"
+
+#: ui/templates/student/results.html:36
 msgid "Not opened yet"
 msgstr "Әлі ашылмаған"
 
-#: ui/templates/student/results.html:34
+#: ui/templates/student/results.html:39
 #, python-format
 msgid "%(a)s / %(b)s topics started"
 msgstr "%(a)s / %(b)s тақырып басталды"
 
-#: ui/templates/student/results.html:58
+#: ui/templates/student/results.html:70
 #: ui/templates/teacher/content/course.html:48
 #: ui/templates/teacher/content/stage.html:20
 #: ui/templates/teacher/student.html:64
 msgid "Stage"
 msgstr "Кезең"
 
-#: ui/templates/student/results.html:59
+#: ui/templates/student/results.html:71
 msgid "How it is graded"
 msgstr "Бағалау тәсілі"
 
-#: ui/templates/student/results.html:60
+#: ui/templates/student/results.html:72
 msgid "Weight"
 msgstr "Салмақ"
 
-#: ui/templates/student/results.html:72 ui/templates/student/stage.html:6
+#: ui/templates/student/results.html:84 ui/templates/student/stage.html:6
 #: ui/templates/student/topic.html:28
 #: ui/templates/teacher/content/course.html:58
 msgid "optional"
 msgstr "міндетті емес"
 
-#: ui/templates/student/results.html:94
+#: ui/templates/student/results.html:100
+msgid "Topic score = Σ(weight × score) / Σ weight"
+msgstr "Тақырып ұпайы = Σ(салмақ × ұпай) / Σ салмақ"
+
+#: ui/templates/student/results.html:102
+msgid ""
+"A kind's share is split equally between the stages of that kind (e.g. three "
+"practice works share the practice weight). Unfinished stages do not count in "
+"the current score."
+msgstr "Түрдің үлесі сол түрдегі кезеңдерге тең бөлінеді (мысалы, практика үлесі үш практикаға). Аяқталмаған кезеңдер ағымдағы ұпайға кірмейді."
+
+#: ui/templates/student/results.html:107
+msgid "Grades appear when you open the first topic."
+msgstr "Бағалар бірінші тақырып ашылғанда пайда болады."
+
+#: ui/templates/student/results.html:111
 #, python-format
 msgid "%(n)s more topic is not opened yet."
 msgid_plural "%(n)s more topics are not opened yet."
 msgstr[0] "Тағы %(n)s тақырып әлі ашылмаған."
 msgstr[1] "Тағы %(n)s тақырып әлі ашылмаған."
 
-#: ui/templates/student/results.html:99
+#: ui/templates/student/results.html:115
 msgid "Grading scale"
 msgstr "Бағалау шкаласы"
 
-#: ui/templates/student/results.html:105
+#: ui/templates/student/results.html:121
 msgid ""
 "A topic score is the weighted average of its stages; a module — of its "
 "topics, the course — of its modules."
 msgstr ""
 "Тақырып ұпайы — кезеңдердің салмақты орташасы; модуль — тақырыптардың, курс "
 "— модульдердің салмақты орташасы."
+
+#: ui/templates/student/results.html:129
+msgid "This course has no certificate"
+msgstr "Бұл курста сертификат жоқ"
 
 #: ui/templates/student/search.html:8 ui/templates/teacher/search.html:8
 msgid "What are you looking for?"
@@ -6869,6 +7031,11 @@ msgstr ""
 msgid "Add"
 msgstr "Қосу"
 
+#: ui/templates/teacher/dashboard.html:7
+#, python-format
+msgid "Hello, %(name)s"
+msgstr "Сәлеметсіз бе, %(name)s"
+
 #: ui/templates/teacher/dashboard.html:10
 #, python-format
 msgid "%(n)s group"
@@ -7138,6 +7305,14 @@ msgstr "Топты өңдеу"
 msgid "Join code"
 msgstr "Қосылу коды"
 
+#: ui/templates/teacher/group.html:29
+msgid "Copy"
+msgstr "Көшіру"
+
+#: ui/templates/teacher/group.html:29
+msgid "Copied"
+msgstr "Көшірілді"
+
 #: ui/templates/teacher/group.html:32
 msgid "Make a new code; the old one stops working"
 msgstr "Жаңа код жасау; ескісі жұмыс істемей қалады"
@@ -7150,10 +7325,6 @@ msgstr "Жаңа код"
 #: ui/templates/teacher/students.html:8
 msgid "Search for a student"
 msgstr "Студентті іздеу"
-
-#: ui/templates/teacher/group.html:60 ui/templates/teacher/groups.html:15
-msgid "Filter"
-msgstr "Сүзгі"
 
 #: ui/templates/teacher/group.html:62
 msgid "All students"
@@ -7361,6 +7532,10 @@ msgstr "бірінші тақырып аяқталғаннан кейін"
 msgid "Stages passed"
 msgstr "Өтілген кезеңдер"
 
+#: ui/templates/teacher/student.html:39
+msgid "Time spent learning"
+msgstr "Оқуға жұмсалған уақыт"
+
 #: ui/templates/teacher/student.html:46
 msgid "A practice work awaits your check."
 msgstr "Практикалық жұмыс сіздің тексеруіңізді күтуде."
@@ -7368,6 +7543,11 @@ msgstr "Практикалық жұмыс сіздің тексеруіңізд�
 #: ui/templates/teacher/student.html:52
 msgid "Stages and scores"
 msgstr "Кезеңдер мен ұпайлар"
+
+#: ui/templates/teacher/student.html:59
+#, python-format
+msgid "In progress · %(a)s / %(b)s"
+msgstr "Орындалуда · %(a)s / %(b)s"
 
 #: ui/templates/teacher/student.html:82
 msgid "attempts ran out"
@@ -7503,6 +7683,42 @@ msgstr "Практикалық жұмыс 3"
 msgid "Conditions"
 msgstr "Шарты"
 
+#, python-format
+#~ msgid "№ %(n)s · issued %(d)s · %(s)s (%(g)s)"
+#~ msgstr "№ %(n)s · берілді %(d)s · %(s)s (%(g)s)"
+
+#~ msgid "Issued soon"
+#~ msgstr "Жақында беріледі"
+
+#~ msgid "Stages open in order: finish one to open the next."
+#~ msgstr ""
+#~ "Кезеңдер ретпен ашылады: алдыңғысын аяқтамай келесісіне өтуге болмайды."
+
+#, python-format
+#~ msgid "Continue learning · Module %(m)s · Topic %(t)s"
+#~ msgstr "Оқуды жалғастыру · %(m)s-модуль · %(t)s-тақырып"
+
+#, python-format
+#~ msgid "Continue: %(k)s"
+#~ msgstr "Жалғастыру: %(k)s"
+
+#, python-format
+#~ msgid "%(g)s · by completed topics"
+#~ msgstr "%(g)s · аяқталған тақырыптар бойынша"
+
+#, python-format
+#~ msgid "Topic %(t)s: %(a)s / %(b)s stages"
+#~ msgstr "%(t)s-тақырып: %(a)s / %(b)s кезең"
+
+#~ msgid "Progress by module"
+#~ msgstr "Модульдер бойынша прогресс"
+
+#~ msgid "New notifications"
+#~ msgstr "Жаңа хабарламалар"
+
+#~ msgid "stage → topic → module → course"
+#~ msgstr "кезең → тақырып → модуль → курс"
+
 #~ msgid "No account yet?"
 #~ msgstr "Аккаунтыңыз жоқ па?"
 
@@ -7564,9 +7780,6 @@ msgstr "Шарты"
 
 #~ msgid "Researcher"
 #~ msgstr "Зерттеуші"
-
-#~ msgid "study group"
-#~ msgstr "оқу тобы"
 
 #~ msgid "Academic group code, e.g. Chem-21-1"
 #~ msgstr "Академиялық топ коды, мысалы Хим-21-1"

@@ -163,7 +163,15 @@ def course_map(place: Place) -> list[dict]:
                     "topic": topic,
                     "result": result,
                     "status": result.status if result else ("available" if place.preview else "locked"),
-                    "stages": [{"stage": s, "status": stage_status(place, s)} for s in stages],
+                    "stages": [
+                        {
+                            "stage": s,
+                            "status": stage_status(place, s),
+                            "meta": stage_meta(place, s),
+                            "url": stage_url(s),
+                        }
+                        for s in stages
+                    ],
                     "passed": sum(1 for s in required if stage_status(place, s) == S.PASSED),
                     "required": len(required),
                     "url": topic_url(topic),
@@ -172,3 +180,33 @@ def course_map(place: Place) -> list[dict]:
         if rows:
             modules.append({"module": module, "topics": rows})
     return modules
+
+
+TOPIC_FILTER = {"completed": "done", "locked": "locked"}  # everything else is «in progress»
+
+
+def map_filters(modules, current_topic=None) -> dict:
+    """Adds the filter chip key of every topic, module summaries and which module/topic opens first.
+
+    Returns the chip counters {all, progress, done, locked}.
+    """
+    counts = {"all": 0, "progress": 0, "done": 0, "locked": 0}
+    for m in modules:
+        rows = m["topics"]
+        for row in rows:
+            row["filter"] = TOPIC_FILTER.get(row["status"], "progress")
+            row["current"] = current_topic is not None and row["topic"].pk == current_topic.pk
+            counts["all"] += 1
+            counts[row["filter"]] += 1
+        numbers = [r["topic"].number for r in rows]
+        m.update(
+            first=min(numbers),
+            last=max(numbers),
+            passed=sum(r["passed"] for r in rows),
+            required=sum(r["required"] for r in rows),
+            started=any(r["filter"] != "locked" for r in rows),
+            open=any(r["current"] for r in rows),
+        )
+    if modules and not any(m["open"] for m in modules):
+        modules[0]["open"] = True
+    return counts

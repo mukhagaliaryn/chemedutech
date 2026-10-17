@@ -1,27 +1,32 @@
 {% extends "layouts/student.html" %}
 {% load i18n %}
 {% block title %}{% translate "My courses" %} · ChemEduTech{% endblock %}
+{% block crumb %}{% translate "Student cabinet" %}{% endblock %}
+{% block page_title %}{% translate "My courses" %}{% endblock %}
+{% block main_class %}max-w-[1180px]{% endblock %}
 {% block content %}
-<header>
-  <h1 class="text-h1">{% translate "My courses" %}</h1>
-</header>
 {% for row in rows %}{% with c=row.course r=row.result %}
-  <section class="card flex flex-wrap items-center gap-6 p-7">
-    <div class="min-w-0 flex-[1_1_420px]">
-      <p class="text-body-sm font-medium text-ink-soft">{% translate "Course" %}{% if not c.is_published %} · {{ c.get_status_display }}{% endif %}{% if row.preview %} · {% translate "preview" %}{% endif %}</p>
-      <h2 class="mt-1 text-h2"><a href="{% url 'student:course' c.slug %}" class="hover:text-primary-700">{{ c.title }}</a></h2>
-      {% if c.short_description %}<p class="mt-2 text-ink-soft">{{ c.short_description }}</p>{% endif %}
+  <section class="card-lift flex flex-wrap overflow-hidden rounded-xl border border-line bg-surface">
+    <div aria-hidden="true" class="bench grid min-h-[180px] flex-[1_1_220px] place-items-center !bg-[size:40px_40px]">
+      <svg viewBox="0 0 160 140" width="130"><path d="M58,14 V44 L22,112 Q18,124 30,124 H130 Q142,124 138,112 L102,44 V14" fill="rgba(255,255,255,.75)" stroke="#6b8ba0" stroke-width="4" stroke-linejoin="round"/><path d="M38,90 H122 L136,114 Q138,122 128,122 H32 Q22,122 24,114 Z" class="fill-stage-lab" opacity=".85"/><path d="M50,14 H110" stroke="#6b8ba0" stroke-width="4" stroke-linecap="round"/></svg>
     </div>
-    <div class="flex flex-[0_1_300px] flex-col gap-3">
-      {% if r %}
-        {% blocktranslate with a=r.topics_completed b=r.topics_total asvar l_topics %}{{ a }} / {{ b }} topics{% endblocktranslate %}
-        {% translate "Course progress" as l_progress %}
-        {% include "components/progress_bar.html" with label=l_progress value=r.topics_completed max=r.topics_total value_text=l_topics %}
-        {% if r.current_percent is not None %}<p class="num text-body-sm text-ink-soft">{% translate "Current score" %} {{ r.current_percent|floatformat:1 }}</p>{% endif %}
-      {% endif %}
-      <div class="flex flex-wrap gap-2">
-        {% if row.next %}<a class="btn btn-primary" href="{% url 'student:stage' c.slug row.next.topic.number row.next.pk %}">{% translate "Continue" %}</a>{% endif %}
-        <a class="btn btn-secondary" href="{% url 'student:course' c.slug %}">{% translate "Course map" %}</a>
+    <div class="flex flex-[3_1_480px] flex-wrap items-center gap-6 p-7">
+      <div class="min-w-0 flex-[1_1_320px]">
+        <p class="flex flex-wrap gap-1.5">{% if not c.is_published %}<span class="badge badge-warning">{{ c.get_status_display }}</span>{% endif %}{% if row.preview %}<span class="badge badge-neutral">{% translate "preview" %}</span>{% endif %}</p>
+        <h2 class="mt-1.5 text-[24px] leading-8 font-extrabold tracking-[-0.015em]"><a href="{% url 'student:course' c.slug %}" class="hover:text-primary-700">{{ c.title }}</a></h2>
+        {% if c.short_description %}<p class="mt-2 text-ink-soft">{{ c.short_description }}</p>{% endif %}
+      </div>
+      <div class="flex flex-[0_1_300px] flex-col gap-3">
+        {% if r %}
+          {% blocktranslate with a=r.topics_completed b=r.topics_total asvar l_topics %}{{ a }} / {{ b }} topics{% endblocktranslate %}
+          {% translate "Course progress" as l_progress %}
+          {% include "components/progress_bar.html" with label=l_progress value=r.topics_completed max=r.topics_total value_text=l_topics %}
+          {% if r.current_percent is not None %}<p class="num text-[13px] text-ink-soft">{% translate "Current score" %} <b class="text-ink">{{ r.current_percent|floatformat:1 }}</b></p>{% endif %}
+        {% endif %}
+        <div class="flex flex-wrap gap-2">
+          {% if row.next %}<a class="btn btn-primary" href="{% url 'student:stage' c.slug row.next.topic.number row.next.pk %}">{% translate "Continue" %}{% include "components/icons.html#arrow-right" %}</a>{% endif %}
+          <a class="btn btn-secondary" href="{% url 'student:course' c.slug %}">{% translate "Course map" %}</a>
+        </div>
       </div>
     </div>
   </section>
@@ -34,12 +39,13 @@
 
 {% if open_courses %}
   <section class="flex flex-col gap-3" aria-labelledby="open-title">
-    <h2 id="open-title" class="text-h2">{% translate "Courses open for enrolment" %}</h2>
+    <h2 id="open-title" class="text-[22px] font-extrabold">{% translate "Courses open for enrolment" %}</h2>
     <div class="grid gap-4 md:grid-cols-2">
       {% for c in open_courses %}
-        <form method="post" action="{% url 'student:enroll' c.slug %}" class="card flex flex-col gap-3">
+        <form method="post" action="{% url 'student:enroll' c.slug %}" class="card card-lift flex flex-col gap-3">
           {% csrf_token %}
-          <h3 class="text-h3">{{ c.title }}</h3>
+          <span class="tile tile-lg bg-stage-lab-50 text-stage-lab">{% include "components/icons.html#lab" with size=22 %}</span>
+          <h3 class="text-lg font-bold">{{ c.title }}</h3>
           {% if c.short_description %}<p class="text-sm text-ink-soft">{{ c.short_description }}</p>{% endif %}
           <button type="submit" class="btn btn-primary self-start">{% translate "Enrol" %}</button>
         </form>

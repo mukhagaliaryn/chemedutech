@@ -1,8 +1,11 @@
 """Context builders for the cabinet pages: dashboard, gradebook, certificates (reads only, ARCHITECTURE §8)."""
 
+from datetime import timedelta
 from decimal import Decimal
 
-from django.db.models import F, Max
+from django.db.models import Avg, F, Max
+from django.utils import timezone
+from django.utils.formats import date_format
 from django.utils.translation import gettext as _
 from django.utils.translation import ngettext
 
@@ -227,6 +230,39 @@ def teacher_comments(enrollment, limit=3) -> list[dict]:
     return items[:limit]
 
 
+def activity(enrollment) -> dict:
+    """Minutes of study for the dashboard chart: the last 7 days and the last 4 weeks, plus the streak."""
+    days = progress_selectors.study_days(enrollment, 28)
+    values = list(days.items())
+
+    def bars(rows):
+        top = max((v for _label, v, _tip in rows), default=0) or 1
+        return [
+            {
+                "label": label,
+                "minutes": round(v / 60),
+                "tip": tip,
+                "height": max(4, round(130 * v / top)) if v else 4,
+                "top": v == top and v > 0,
+            }
+            for label, v, tip in rows
+        ]
+
+    week = [(date_format(d, "D"), v, date_format(d, "j E")) for d, v in values[-7:]]
+    month = []
+    for n in range(4):
+        chunk = values[n * 7 : (n + 1) * 7]
+        span = f"{date_format(chunk[0][0], 'j E')} – {date_format(chunk[-1][0], 'j E')}"
+        month.append((_("Week %(n)s") % {"n": n + 1}, sum(v for _d, v in chunk), span))
+    week_seconds = sum(v for _d, v in values[-7:])
+    return {
+        "week": bars(week),
+        "month": bars(month),
+        "week_time": duration(week_seconds),
+        "streak": progress_selectors.study_streak(enrollment),
+    }
+
+
 def dashboard(user, enrollment) -> dict:
     place = place_of(enrollment)
     course_map = learning.course_map(place)
@@ -247,6 +283,12 @@ def dashboard(user, enrollment) -> dict:
         "labs_done": labs_done,
         "labs_total": labs_total,
         "time_spent": duration(progress_selectors.time_spent_s(enrollment)),
+        "activity": activity(enrollment),
+        "passed_week": progress_selectors.stages_passed_since(enrollment, timezone.now() - timedelta(days=7)),
+        "lab_average": lab_selectors.recent_analysed(enrollment).aggregate(a=Avg("score_percent"))["a"],
+        "stages_done": sum(t["passed"] for m in course_map for t in m["topics"]),
+        "stages_total": sum(t["required"] for m in course_map for t in m["topics"]),
+        "topics_total": sum(len(m["topics"]) for m in course_map),
         "recent": recent_results(enrollment),
         "comments": teacher_comments(enrollment),
         "notifications": notification_selectors.recent(user, 3, unread_only=True),
@@ -326,6 +368,8 @@ def gradebook(enrollment) -> dict:
                 closed.append(t["topic"])
             else:
                 t["table"] = topic_table(place, t["topic"], quiz_counts, practice_counts)
+                score = t["result"].score_percent if t["result"] else None
+                t["grade"] = grade_for(score) if score is not None else None
                 topics.append(t)
     return {
         "enrollment": enrollment,
@@ -336,6 +380,7 @@ def gradebook(enrollment) -> dict:
         "topics": topics,
         "closed": closed,
         "scale": scale(grade.letter if grade else None),
+        "certificate": next(iter(certificate_rows([enrollment])), None),
     }
 
 
