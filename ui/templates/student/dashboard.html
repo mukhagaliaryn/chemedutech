@@ -17,6 +17,8 @@ Student home (mockup «Студент · Басты бет»): «continue learni
 {% else %}
 
 {# ---- hero: continue ---- #}
+{% if benchmark.pre == "open" or benchmark.post == "open" %}{% include "student/partials/benchmark_card.html" %}{% endif %}
+
 <section aria-labelledby="continue-title" class="brand-ground rounded-xl p-[clamp(24px,3vw,36px)]">
   <svg aria-hidden="true" width="220" height="200" viewBox="0 0 220 200" class="pointer-events-none absolute right-6 bottom-0">
     <circle class="bubble" cx="150" cy="190" r="12" fill="#3570df" style="--rise:-140px;--dur:4s"/>

@@ -1,0 +1,28 @@
+{% load i18n %}{% comment %}
+The course's pre/post knowledge test on the course map and the dashboard (STEP-22).
+benchmark (progress.services.benchmark.summary), course. Pre open → must be taken before the first stage;
+post open → after the course (or opened by the teacher); done → only the overall percent, no answers.
+{% endcomment %}{% with b=benchmark %}{% if b %}
+{% if b.pre == "open" or b.post == "open" %}
+  {% if b.pre == "open" %}{% url 'student:benchmark' course.slug 'pre' as b_url %}{% else %}{% url 'student:benchmark' course.slug 'post' as b_url %}{% endif %}
+  <section class="flex flex-wrap items-center gap-5 rounded-xl border-2 border-primary-600 bg-surface p-6 shadow-[0_16px_40px_rgba(31,95,209,.12)]" aria-labelledby="bm-title">
+    <span class="grid size-14 shrink-0 place-items-center rounded-lg bg-primary-50 text-primary-600">{% include "components/icons.html#check-square" with size=28 %}</span>
+    <div class="min-w-0 flex-[1_1_320px]">
+      <h2 id="bm-title" class="text-lg font-extrabold">{% if b.pre == "open" %}{% translate "Entry knowledge test" %}{% else %}{% translate "Final knowledge test" %}{% endif %}</h2>
+      <p class="mt-1 text-sm text-ink-soft">
+        {% if b.pre == "open" %}{% translate "Take it before the first stage: it shows what you already know. One attempt, it does not affect your grade." %}
+        {% else %}{% translate "The course is behind you — check how much your knowledge has grown. One attempt, it does not affect your grade." %}{% endif %}
+      </p>
+    </div>
+    <a class="btn btn-primary h-[46px] px-[22px] text-[15px] font-bold" href="{{ b_url }}">
+      {% if b.pre_attempt and b.pre == "open" or b.post_attempt and b.post == "open" %}{% translate "Continue the test" %}{% else %}{% translate "Start the test" %}{% endif %}{% include "components/icons.html#arrow-right" %}</a>
+  </section>
+{% elif b.pre == "done" or b.post == "done" %}
+  <section class="flex flex-wrap items-center gap-x-6 gap-y-3 rounded-xl border border-line bg-surface px-6 py-4" aria-label="{% translate 'Knowledge test' %}">
+    <span class="flex items-center gap-2.5 text-sm font-bold">{% include "components/icons.html#check-square" with size=20 %}{% translate "Knowledge test" %}</span>
+    {% if b.pre_attempt.is_finished %}<span class="num text-sm"><span class="text-ink-soft">{% translate "entry" %}</span> <b>{{ b.pre_attempt.percent|floatformat:0 }}%</b></span>{% endif %}
+    {% if b.post == "done" %}<span class="num text-sm"><span class="text-ink-soft">{% translate "final" %}</span> <b>{{ b.post_attempt.percent|floatformat:0 }}%</b></span>
+    {% else %}<span class="flex items-center gap-1.5 text-sm text-ink-soft">{% include "components/icons.html#lock" with size=16 %}{% translate "The final test opens when you finish the course." %}</span>{% endif %}
+  </section>
+{% endif %}
+{% endif %}{% endwith %}

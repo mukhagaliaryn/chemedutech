@@ -18,7 +18,7 @@ from apps.labs.engine import get_lab
 from apps.practice import selectors as practice_selectors
 from apps.progress import selectors as progress_selectors
 from apps.progress.grading import SCALE, grade_for
-from apps.progress.services import lab_experiments
+from apps.progress.services import benchmark, lab_experiments
 from apps.progress.services.scoring import stage_weights
 
 from . import learning
@@ -292,6 +292,7 @@ def dashboard(user, enrollment) -> dict:
         "recent": recent_results(enrollment),
         "comments": teacher_comments(enrollment),
         "notifications": notification_selectors.recent(user, 3, unread_only=True),
+        "benchmark": benchmark.summary(enrollment),
     }
 
 

@@ -12,6 +12,11 @@ class AuthoringError(Exception):
 
 
 def create_quiz(title: str, kind: str = Quiz.Kind.CHECKPOINT) -> Quiz:
+    if kind == Quiz.Kind.BENCHMARK:
+        # Pre/post: a single attempt per phase, nothing revealed, so the post-test stays a fair measure.
+        return Quiz.objects.create(
+            title=title[:255], kind=kind, max_attempts=1, show_answers_after=False, instant_feedback=False
+        )
     return Quiz.objects.create(title=title[:255], kind=kind)
 
 

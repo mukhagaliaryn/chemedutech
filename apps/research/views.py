@@ -199,6 +199,7 @@ def export_quiz_answers(request):
         "answer_id", "attempt_id", "username", "study_group", "cohort", "course", "quiz_id", "quiz_kind",
         "attempt_no", "started_at", "finished_at", "attempt_percent", "question_id", "question_kind",
         "chosen_ids", "text_value", "numeric_value", "is_correct", "points",
+        "phase",  # STEP-22: pre / post for the course's pre/post test, empty otherwise (appended)
     ]  # fmt: skip
     rows = (
         [
@@ -221,6 +222,7 @@ def export_quiz_answers(request):
             a.numeric_value if a.numeric_value is not None else "",
             int(a.is_correct),
             a.points,
+            a.attempt.phase,
         ]  # fmt: skip
         for a in qs.iterator(chunk_size=500)
     )

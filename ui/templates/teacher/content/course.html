@@ -19,6 +19,24 @@
   </div>
 </header>
 {% if not course.can_edit %}<p class="rounded-md bg-surface-sunken px-4 py-2 text-sm text-ink-soft">{% translate "You are an assistant of this course: the content is read-only." %}</p>{% endif %}
+<section class="flex flex-wrap items-center gap-4 rounded-lg border border-line bg-surface px-5 py-4" aria-labelledby="bm-title">
+  <span class="tile bg-primary-50 text-primary-600">{% include "components/icons.html#check-square" with size=20 %}</span>
+  <div class="min-w-0 flex-[1_1_320px]">
+    <h2 id="bm-title" class="text-h3">{% translate "Pre/post knowledge test" %}</h2>
+    <p class="text-sm text-ink-soft">
+      {% if benchmark %}{% blocktranslate count n=benchmark.questions %}{{ n }} question{% plural %}{{ n }} questions{% endblocktranslate %} · {% blocktranslate with a=benchmark.pre b=benchmark.post %}taken: pre {{ a }}, post {{ b }}{% endblocktranslate %}
+      {% else %}{% translate "One test for the research: students take it before the first stage and again after the course. It is not graded and its answers are not shown." %}{% endif %}
+    </p>
+  </div>
+  {% if benchmark %}
+    <a class="btn btn-secondary btn-sm" href="{% url 'teacher:quiz' course.slug benchmark.quiz.pk %}">{% if course.can_edit %}{% translate "Edit" %}{% else %}{% translate "Open" %}{% endif %}</a>
+  {% elif course.can_edit %}
+    <form method="post" action="{% url 'teacher:benchmark_create' course.slug %}">{% csrf_token %}
+      <button type="submit" class="btn btn-primary btn-sm">{% include "components/icons.html#plus" %}{% translate "Create the test" %}</button>
+    </form>
+  {% endif %}
+</section>
+
 {% url 'teacher:reorder' course.slug as reorder_url %}
 
 <ol class="flex flex-col gap-4" {% if course.can_edit %}data-sortable="modules" data-url="{{ reorder_url }}"{% endif %}>

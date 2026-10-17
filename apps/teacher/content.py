@@ -15,7 +15,7 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
-from apps.assessments.models import Question, Quiz
+from apps.assessments.models import Question, Quiz, QuizAttempt
 from apps.assessments.services import authoring as quiz_authoring
 from apps.courses import selectors as course_selectors
 from apps.courses.models import Module, Stage, Topic
@@ -48,10 +48,12 @@ def _stage(course, pk):
 
 
 def _quiz(course, pk):
-    """A quiz used by a stage of this course (checkpoint or topic test)."""
+    """A quiz used by a stage of this course (checkpoint or topic test) or its pre/post test."""
     return get_object_or_404(
         Quiz.objects.filter(
-            Q(checkpoint_for__topic__module__course=course) | Q(test_contents__stage__topic__module__course=course)
+            Q(checkpoint_for__topic__module__course=course)
+            | Q(test_contents__stage__topic__module__course=course)
+            | Q(benchmark_for=course)
         ).distinct(),
         pk=pk,
     )
@@ -98,7 +100,37 @@ def course_content(request, slug):
                 s.ready = _stage_ready(s)
             topics.append({"topic": topic, "stages": stages})
         modules.append({"module": module, "topics": topics})
-    return render(request, "teacher/content/course.html", {"course": course, "modules": modules})
+    return render(
+        request,
+        "teacher/content/course.html",
+        {"course": course, "modules": modules, "benchmark": _benchmark_info(course)},
+    )
+
+
+def _benchmark_info(course) -> dict | None:
+    quiz = course.benchmark_quiz
+    if quiz is None:
+        return None
+    attempts = QuizAttempt.objects.filter(quiz=quiz, enrollment__course=course).exclude(finished_at=None)
+    return {
+        "quiz": quiz,
+        "questions": quiz.questions.filter(is_active=True).count(),
+        "pre": attempts.filter(phase=QuizAttempt.Phase.PRE).count(),
+        "post": attempts.filter(phase=QuizAttempt.Phase.POST).count(),
+    }
+
+
+@require_POST
+@teacher_only
+def benchmark_create(request, slug):
+    """Make the course's pre/post knowledge test (one per course) and open its editor."""
+    course = _course(request, slug)
+    if course.benchmark_quiz_id:
+        return redirect("teacher:quiz", course.slug, course.benchmark_quiz_id)
+    quiz = quiz_authoring.create_quiz(_("Knowledge test: %(course)s") % {"course": course.title}, Quiz.Kind.BENCHMARK)
+    authoring.attach_benchmark(course, quiz)
+    messages.success(request, _("The pre/post test is created. Add its questions."))
+    return redirect("teacher:quiz", course.slug, quiz.pk)
 
 
 def _stage_ready(stage) -> bool:
@@ -316,7 +348,8 @@ def stage_quiz_create(request, slug, pk):
 def quiz_edit(request, slug, pk):
     course = _course(request, slug)
     quiz = _quiz(course, pk)
-    form = forms.QuizForm(request.POST or None, instance=quiz)
+    form_class = forms.BenchmarkQuizForm if quiz.kind == Quiz.Kind.BENCHMARK else forms.QuizForm
+    form = form_class(request.POST or None, instance=quiz)
     if request.method == "POST" and form.is_valid():
         form.save()
         messages.success(request, _("The quiz settings are saved."))

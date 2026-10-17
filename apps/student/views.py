@@ -42,6 +42,7 @@ from apps.practice.models import PracticeSubmission
 from apps.progress import selectors as progress_selectors
 from apps.progress import services as progress
 from apps.progress.grading import grade_for
+from apps.progress.services import benchmark
 
 from . import cabinet, learning
 from .learning import S
@@ -195,8 +196,79 @@ def course(request, course_slug):
             "next": nxt,
             "counts": counts,
             "teachers": place.course.teachers.all(),
+            "benchmark": benchmark.summary(place.enrollment) if place.enrollment else {},
         },
     )
+
+
+# --- the course's pre/post knowledge test (research, STEP-22) ----------------------------------
+
+
+def _benchmark_place(request, course_slug, phase):
+    if phase not in benchmark.PHASES:
+        raise Http404
+    place = learning.resolve(request, course_slug)
+    if place.preview or benchmark.benchmark_quiz(place.course) is None:
+        raise Http404
+    return place
+
+
+def _benchmark_url(place, phase):
+    return reverse("student:benchmark", args=[place.course.slug, phase])
+
+
+@login_required
+def benchmark_page(request, course_slug, phase):
+    """Intro → the single attempt (the usual test page, no answers shown) → «done» with the overall percent."""
+    place = _benchmark_place(request, course_slug, phase)
+    enrollment = place.enrollment
+    quiz = benchmark.benchmark_quiz(place.course)
+    attempt = benchmark.phase_attempt(enrollment, phase, quiz)
+    if attempt and not attempt.is_finished and quiz_services.is_expired(attempt):
+        attempt = quiz_services.submit_attempt(attempt, {}, allow_late=True)
+    course_url = reverse("student:course", args=[place.course.slug])
+    if attempt and not attempt.is_finished:
+        submit_url = reverse("student:benchmark_submit", args=[place.course.slug, phase, attempt.pk])
+        return render(
+            request, "assessments/take.html", take_context(quiz, attempt, submit_url, course_url, place.course.title)
+        )
+    return render(
+        request,
+        "student/benchmark.html",
+        {
+            "place": place,
+            "course": place.course,
+            "course_url": course_url,
+            "quiz": quiz,
+            "phase": phase,
+            "state": benchmark.phase_state(enrollment, phase),
+            "attempt": attempt,
+            "question_count": quiz.questions_per_attempt or quiz.questions.filter(is_active=True).count(),
+        },
+    )
+
+
+@require_POST
+@login_required
+def benchmark_start(request, course_slug, phase):
+    place = _benchmark_place(request, course_slug, phase)
+    try:
+        benchmark.start(place.enrollment, phase)
+    except quiz_services.AttemptError as exc:
+        messages.error(request, str(exc))
+    return redirect(_benchmark_url(place, phase))
+
+
+@require_POST
+@login_required
+def benchmark_submit(request, course_slug, phase, attempt_id):
+    place = _benchmark_place(request, course_slug, phase)
+    attempt = get_object_or_404(QuizAttempt, pk=attempt_id, user=request.user, phase=phase)
+    try:
+        quiz_services.submit_attempt(attempt, collect_answers(attempt, request.POST))
+    except quiz_services.AttemptError as exc:
+        messages.info(request, str(exc))
+    return redirect(_benchmark_url(place, phase))
 
 
 # --- topic and stage ----------------------------------------------------------------
@@ -263,6 +335,9 @@ def _open_stage(request, course_slug, topic_number, stage_pk):
     """(place, stages) for an open stage, or a response (the «finish … first» page)."""
     place = learning.resolve(request, course_slug, topic_number, stage_pk)
     stages = learning.ordered_stages(place.topic)
+    if not place.preview and benchmark.pretest_required(place.enrollment):
+        messages.info(request, _("Before the first stage, take the short entry knowledge test."))
+        return place, stages, redirect(_benchmark_url(place, benchmark.PRE))
     if not place.preview and not progress.can_access(place.enrollment, place.stage):
         return place, stages, _locked(request, place, place.stage, stages)
     return place, stages, None

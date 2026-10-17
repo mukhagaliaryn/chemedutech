@@ -29,15 +29,16 @@ def is_expired(attempt: QuizAttempt, now=None) -> bool:
     return bool(end and (now or timezone.now()) > end + timedelta(seconds=GRACE_SECONDS))
 
 
-def attempts_used(user, quiz: Quiz) -> int:
-    return QuizAttempt.objects.filter(user=user, quiz=quiz).count()
+def attempts_used(user, quiz: Quiz, phase: str = "") -> int:
+    """Attempts of one phase: a pre/post test counts its pre and post sittings separately."""
+    return QuizAttempt.objects.filter(user=user, quiz=quiz, phase=phase).count()
 
 
-def attempts_left(user, quiz: Quiz) -> int | None:
+def attempts_left(user, quiz: Quiz, phase: str = "") -> int | None:
     """None = unlimited."""
     if quiz.max_attempts is None:
         return None
-    return max(0, quiz.max_attempts - attempts_used(user, quiz))
+    return max(0, quiz.max_attempts - attempts_used(user, quiz, phase))
 
 
 def pick_questions(quiz: Quiz, rng: random.Random) -> tuple[list[int], dict[str, list[int]]]:
@@ -60,17 +61,20 @@ def pick_questions(quiz: Quiz, rng: random.Random) -> tuple[list[int], dict[str,
 
 
 @transaction.atomic
-def start_attempt(user, quiz: Quiz, enrollment=None, rng: random.Random | None = None) -> QuizAttempt:
-    """Resume the unfinished attempt or start a new one within ``max_attempts``.
+def start_attempt(user, quiz: Quiz, enrollment=None, rng: random.Random | None = None, phase: str = "") -> QuizAttempt:
+    """Resume the unfinished attempt or start a new one within ``max_attempts`` (counted per ``phase``;
+    the post-test of a pre/post quiz is its attempt 2).
 
     An unfinished attempt whose time is over is closed first (graded with the answers it has: none).
     """
-    open_attempt = QuizAttempt.objects.select_for_update().filter(user=user, quiz=quiz, finished_at=None).first()
+    open_attempt = (
+        QuizAttempt.objects.select_for_update().filter(user=user, quiz=quiz, phase=phase, finished_at=None).first()
+    )
     if open_attempt:
         if not is_expired(open_attempt):
             return open_attempt
         submit_attempt(open_attempt, {}, allow_late=True)
-    left = attempts_left(user, quiz)
+    left = attempts_left(user, quiz, phase)
     if left == 0:
         raise AttemptError(_("You have used all attempts for this test."))
     question_ids, choice_order = pick_questions(quiz, rng or random.Random())
@@ -80,9 +84,11 @@ def start_attempt(user, quiz: Quiz, enrollment=None, rng: random.Random | None =
         user=user,
         quiz=quiz,
         enrollment=enrollment,
-        attempt_no=attempts_used(user, quiz) + 1,
+        # numbered over all phases: the (user, quiz, attempt_no) constraint stays as it is
+        attempt_no=QuizAttempt.objects.filter(user=user, quiz=quiz).count() + 1,
         question_ids=question_ids,
         choice_order=choice_order,
+        phase=phase,
     )
 
 

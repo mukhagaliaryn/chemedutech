@@ -63,6 +63,15 @@ class Course(TimeStampedModel):
         blank=True,
         verbose_name=_("teachers"),
     )
+    benchmark_quiz = models.ForeignKey(
+        "assessments.Quiz",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="benchmark_for",
+        verbose_name=_("pre/post knowledge test"),
+        help_text=_("Taken once before the first stage (pre) and once after the course (post); not graded"),
+    )
 
     class Meta:
         ordering = ("title",)
@@ -127,6 +136,12 @@ class CourseGroup(TimeStampedModel):
     )
     starts_on = models.DateField(_("starts on"), null=True, blank=True)
     ends_on = models.DateField(_("ends on"), null=True, blank=True)
+    posttest_opened_at = models.DateTimeField(
+        _("post-test opened at"),
+        null=True,
+        blank=True,
+        help_text=_("The teacher opened the post-test for the whole group (otherwise it opens after the course)"),
+    )
 
     class Meta:
         verbose_name = _("course group")

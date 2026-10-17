@@ -3,7 +3,7 @@ from ..models import Quiz, QuizAttempt
 
 def counted_attempt(user, quiz: Quiz) -> QuizAttempt | None:
     """The finished attempt that counts for the grade: best (highest %, earliest on ties), last or first."""
-    finished = QuizAttempt.objects.filter(user=user, quiz=quiz).exclude(finished_at=None)
+    finished = QuizAttempt.objects.filter(user=user, quiz=quiz, phase="").exclude(finished_at=None)
     if quiz.grading == Quiz.Grading.LAST:
         return finished.order_by("-finished_at", "-pk").first()
     if quiz.grading == Quiz.Grading.FIRST:
@@ -12,7 +12,7 @@ def counted_attempt(user, quiz: Quiz) -> QuizAttempt | None:
 
 
 def last_attempt(user, quiz: Quiz) -> QuizAttempt | None:
-    return QuizAttempt.objects.filter(user=user, quiz=quiz).order_by("-attempt_no").first()
+    return QuizAttempt.objects.filter(user=user, quiz=quiz, phase="").order_by("-attempt_no").first()
 
 
 def stage_of_quiz(quiz: Quiz):
@@ -60,9 +60,9 @@ def review_rows(attempt: QuizAttempt) -> list[dict]:
 
 
 def finished_attempts(enrollment):
-    """Finished quiz attempts of one enrolment, newest first."""
+    """Finished quiz attempts of one enrolment, newest first (the pre/post test is not part of the course)."""
     return (
-        QuizAttempt.objects.filter(enrollment=enrollment)
+        QuizAttempt.objects.filter(enrollment=enrollment, phase="")
         .exclude(finished_at=None)
         .select_related("quiz")
         .order_by("-finished_at", "-pk")
@@ -82,7 +82,7 @@ def repeated_failures(enrollment_ids, min_failures=3) -> list[dict]:
     from django.db.models import Count, Q
 
     rows = (
-        QuizAttempt.objects.filter(enrollment_id__in=enrollment_ids)
+        QuizAttempt.objects.filter(enrollment_id__in=enrollment_ids, phase="")
         .exclude(finished_at=None)
         .values("enrollment_id", "quiz_id", "quiz__title")
         .annotate(n=Count("id", filter=Q(passed=False)), passed=Count("id", filter=Q(passed=True)))

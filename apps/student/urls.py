@@ -15,6 +15,17 @@ urlpatterns = [
     path("me/courses/", views.courses, name="courses"),
     path("me/courses/<slug:course_slug>/", views.course, name="course"),
     path("me/courses/<slug:course_slug>/enroll/", views.enroll, name="enroll"),
+    path("me/courses/<slug:course_slug>/knowledge-test/<str:phase>/", views.benchmark_page, name="benchmark"),
+    path(
+        "me/courses/<slug:course_slug>/knowledge-test/<str:phase>/start/",
+        views.benchmark_start,
+        name="benchmark_start",
+    ),
+    path(
+        "me/courses/<slug:course_slug>/knowledge-test/<str:phase>/<int:attempt_id>/submit/",
+        views.benchmark_submit,
+        name="benchmark_submit",
+    ),
     path("learn/<slug:course_slug>/<int:topic_number>/", views.topic, name="topic"),
     path(STAGE, views.stage, name="stage"),
     path(STAGE + "material-done/", views.material_done, name="material_done"),

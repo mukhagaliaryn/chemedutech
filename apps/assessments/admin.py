@@ -105,8 +105,8 @@ class AttemptAnswerInline(TabularInline):
 class QuizAttemptAdmin(ModelAdmin):
     """Research data: read-only, never deleted."""
 
-    list_display = ("user", "quiz", "attempt_no", "percent", "passed", "started_at", "finished_at")
-    list_filter = ("quiz", "passed", "enrollment__research_cohort")
+    list_display = ("user", "quiz", "phase", "attempt_no", "percent", "passed", "started_at", "finished_at")
+    list_filter = ("phase", "quiz", "passed", "enrollment__research_cohort")
     search_fields = ("user__username", "user__last_name", "quiz__title")
     list_select_related = ("user", "quiz")
     inlines = [AttemptAnswerInline]

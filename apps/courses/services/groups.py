@@ -6,6 +6,7 @@ Progress and research data are never removed: a student who leaves a group keeps
 
 from django.contrib.auth import get_user_model
 from django.db import transaction
+from django.utils import timezone
 from django.utils.translation import gettext as _
 
 from apps.core.permissions import STUDENT, TEACHER, has_role
@@ -105,6 +106,16 @@ def attach_course(group: AcademicGroup, course, teacher, starts_on=None, ends_on
 def detach_course(course_group: CourseGroup) -> None:
     """Stop the stream: new members are no longer enrolled; existing enrolments stay."""
     course_group.delete()
+
+
+def set_posttest_open(course_group: CourseGroup, is_open: bool) -> CourseGroup:
+    """The teacher opens (or closes again) the course's post-test for the whole group (STEP-22).
+
+    Closing does not touch attempts already taken; it only stops new ones for students who have not finished.
+    """
+    course_group.posttest_opened_at = timezone.now() if is_open else None
+    course_group.save(update_fields=["posttest_opened_at", "updated_at"])
+    return course_group
 
 
 def new_join_code(group: AcademicGroup) -> str:

@@ -289,9 +289,61 @@ def sample_status(enrollments) -> dict:
     }
 
 
+# --- pre/post knowledge test (STEP-22) ---------------------------------------------------------------
+
+
+def pre_post_scores(enrollments, course) -> dict[int, dict]:
+    """{enrollment_id: {"pre", "post", "gain", "norm_gain"}} from the finished attempts of the course's pre/post test.
+
+    gain = post − pre (p.p.); norm_gain = Hake's (post − pre) / (100 − pre), undefined when pre is 100.
+    """
+    out = {e.pk: {"pre": None, "post": None, "gain": None, "norm_gain": None} for e in enrollments}
+    if not course.benchmark_quiz_id:
+        return out
+    attempts = (
+        QuizAttempt.objects.filter(enrollment_id__in=out, quiz_id=course.benchmark_quiz_id, phase__in=("pre", "post"))
+        .exclude(finished_at=None)
+        .order_by("attempt_no")
+    )
+    for a in attempts:
+        row = out[a.enrollment_id]
+        if row[a.phase] is None:  # the first finished attempt of a phase counts
+            row[a.phase] = float(a.percent)
+    for row in out.values():
+        if row["pre"] is not None and row["post"] is not None:
+            row["gain"] = row["post"] - row["pre"]
+            if row["pre"] < 100:
+                row["norm_gain"] = row["gain"] / (100 - row["pre"])
+    return out
+
+
+def pre_post_table(enrollments, scores) -> list[dict]:
+    """Per cohort (+ everybody): pre and post over all who took them, gain and normalized gain over pairs."""
+    groups = _by_cohort(enrollments)
+    everyone = [e.pk for e in enrollments]
+    rows = []
+    for key, ids in (*((c, groups.get(c, [])) for c in COHORTS), ("all", everyone)):
+        pairs = [scores[pk] for pk in ids if scores[pk]["gain"] is not None]
+        rows.append(
+            {
+                "cohort": key,
+                "students": len(ids),
+                "pre": stats.describe([scores[pk]["pre"] for pk in ids]),
+                "post": stats.describe([scores[pk]["post"] for pk in ids]),
+                "paired": len(pairs),
+                "paired_pre": stats.describe([r["pre"] for r in pairs]),
+                "paired_post": stats.describe([r["post"] for r in pairs]),
+                "gain": stats.describe([r["gain"] for r in pairs]),
+                "norm_gain": stats.describe([r["norm_gain"] for r in pairs]),
+            }
+        )
+    return rows
+
+
 def page(user, course, group=None, topic=None) -> dict:
     enrollments, topics, stages = scope(user, course, group, topic)
     per = measures(enrollments, topics, stages)
+    pre_post = pre_post_scores(enrollments, course)
     return {
         "enrollments": enrollments,
         "topics": topics,
@@ -302,6 +354,9 @@ def page(user, course, group=None, topic=None) -> dict:
         "agreement": ai_agreement(enrollments),
         "sample": sample_status(enrollments),
         "per": per,
+        "benchmark_quiz": course.benchmark_quiz,
+        "pre_post": pre_post,
+        "pre_post_rows": pre_post_table(enrollments, pre_post),
     }
 
 
@@ -310,17 +365,22 @@ def csv_rows(data) -> list[list]:
     header = [
         "enrollment_id", "username", "full_name", "group", "cohort", "topics", "topic_test_mean", "lab_mean",
         "checkpoint_first_passed", "checkpoint_first_total", "topics_completed", "time_spent_s",
+        # STEP-22: appended so that existing scripts keep their column positions
+        "pre_percent", "post_percent", "gain", "normalized_gain",
     ]  # fmt: skip
     rows = [header]
     numbers = ",".join(str(t.number) for t in data["topics"])
     for e in data["enrollments"]:
         m = data["per"][e.pk]
+        pp = data["pre_post"][e.pk]
         rows.append(
             [
                 e.pk, e.student.username, e.student.full_name, e.group.name if e.group else "", e.research_cohort,
                 numbers, round(m["test_mean"], 2) if m["test_mean"] is not None else "",
                 round(m["lab_mean"], 2) if m["lab_mean"] is not None else "", sum(m["checkpoint_first"]),
                 len(m["checkpoint_first"]), m["completed"], m["time_s"],
+                *(round(pp[k], 4 if k == "norm_gain" else 2) if pp[k] is not None else ""
+                  for k in ("pre", "post", "gain", "norm_gain")),
             ]
         )  # fmt: skip
     return rows

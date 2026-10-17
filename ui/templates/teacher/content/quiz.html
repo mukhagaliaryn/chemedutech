@@ -9,6 +9,10 @@
   {% if stage %} / <a href="{% url 'teacher:stage' course.slug stage.pk %}">{{ stage.title }}</a>{% endif %} / {{ quiz.get_kind_display }}
 </p>
 <h1 class="text-h1">{{ quiz.title }}</h1>
+{% if quiz.kind == "benchmark" %}
+  {% translate "The pre/post test of the course: one attempt before the first stage and one after the course; only the overall percent is shown. Keep the questions fixed once students have taken it — a changed test makes pre and post incomparable." as l_bm %}
+  {% include "components/alert.html" with variant="info" text=l_bm class="max-w-3xl" %}
+{% endif %}
 
 <section id="questions" class="flex flex-col gap-3" aria-labelledby="q-title">
   <div class="flex items-center justify-between gap-3">
@@ -41,16 +45,20 @@
     {% csrf_token %}
     {% include "components/input.html" with field=form.title %}
     <div class="grid gap-4 sm:grid-cols-2">
-      {% include "components/input.html" with field=form.pass_percent %}
-      {% include "components/input.html" with field=form.grading %}
-      {% include "components/input.html" with field=form.max_attempts %}
+      {% if quiz.kind != "benchmark" %}
+        {% include "components/input.html" with field=form.pass_percent %}
+        {% include "components/input.html" with field=form.grading %}
+        {% include "components/input.html" with field=form.max_attempts %}
+      {% endif %}
       {% include "components/input.html" with field=form.time_limit_min %}
       {% include "components/input.html" with field=form.questions_per_attempt %}
     </div>
     {% include "components/input.html" with field=form.shuffle_questions %}
     {% include "components/input.html" with field=form.shuffle_choices %}
-    {% include "components/input.html" with field=form.show_answers_after %}
-    {% include "components/input.html" with field=form.instant_feedback %}
+    {% if quiz.kind != "benchmark" %}
+      {% include "components/input.html" with field=form.show_answers_after %}
+      {% include "components/input.html" with field=form.instant_feedback %}
+    {% endif %}
     <button type="submit" class="btn btn-secondary self-start">{% translate "Save the settings" %}</button>
   </form>
 </section>

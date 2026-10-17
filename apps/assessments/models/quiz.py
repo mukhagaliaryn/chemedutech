@@ -13,6 +13,7 @@ class Quiz(TimeStampedModel):
         TOPIC_TEST = "topic_test", _("Topic test")
         MODULE_TEST = "module_test", _("Module test")
         FINAL = "final", _("Final test")
+        BENCHMARK = "benchmark", _("Pre/post knowledge test")
 
     class Grading(models.TextChoices):
         BEST = "best", _("Best attempt")

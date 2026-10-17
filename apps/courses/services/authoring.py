@@ -171,5 +171,11 @@ def attach_checkpoint(stage: Stage, quiz) -> None:
     stage.save(update_fields=["checkpoint_quiz", "updated_at"])
 
 
+def attach_benchmark(course, quiz) -> None:
+    """The course's pre/post knowledge test (STEP-22): one attempt per phase, answers never shown."""
+    course.benchmark_quiz = quiz
+    course.save(update_fields=["benchmark_quiz", "updated_at"])
+
+
 def attach_test(stage: Stage, quiz) -> None:
     ensure_stage_content(stage, quiz=quiz)

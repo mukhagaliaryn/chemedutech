@@ -43,7 +43,7 @@ class CourseTeacherInline(TabularInline):
 class CourseGroupInline(TabularInline):
     model = CourseGroup
     extra = 0
-    fields = ("group", "teacher", "starts_on", "ends_on")
+    fields = ("group", "teacher", "starts_on", "ends_on", "posttest_opened_at")
     autocomplete_fields = ("group", "teacher")
 
 
@@ -61,7 +61,9 @@ class CourseAdmin(ModelAdmin):
             _("Learning and grading"),
             {"fields": ("is_sequential", "passing_score", "certificate_enabled", "stage_kind_weights")},
         ),
+        (_("Research"), {"fields": ("review_sample_percent", "benchmark_quiz")}),
     )
+    autocomplete_fields = ("benchmark_quiz",)
 
     @admin.display(description=_("students"))
     def enrollment_count(self, obj):
@@ -222,7 +224,7 @@ class TheoryContentAdmin(ModelAdmin):
 
 @admin.register(CourseGroup)
 class CourseGroupAdmin(ModelAdmin):
-    list_display = ("group", "course", "teacher", "starts_on", "ends_on")
+    list_display = ("group", "course", "teacher", "starts_on", "ends_on", "posttest_opened_at")
     list_filter = ("course",)
     autocomplete_fields = ("course", "group", "teacher")
     actions = ["sync_enrollments"]

@@ -20,6 +20,7 @@ from .groups import (
     new_join_code,
     remove_student,
     save_group,
+    set_posttest_open,
     set_research_cohort,
 )
 
@@ -33,6 +34,7 @@ __all__ = [
     "cohort_conflicts",
     "delete_group",
     "detach_course",
+    "set_posttest_open",
     "enroll",
     "enroll_by_code",
     "ensure_stage_content",

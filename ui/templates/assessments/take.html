@@ -1,6 +1,8 @@
 {% extends base_template|default:"layouts/student.html" %}
 {% load i18n static %}
 {% block title %}{{ quiz.title }} · ChemEduTech{% endblock %}
+{% block crumb %}{{ back_label }}{% endblock %}
+{% block page_title %}{{ quiz.title }}{% endblock %}
 {% block content %}
 {% if back_url and base_template != "layouts/learn.html" %}
 <nav class="flex flex-wrap items-center gap-2 text-sm" aria-label="{% translate 'Breadcrumbs' %}">
@@ -15,9 +17,10 @@
     <div class="flex flex-wrap items-center justify-between gap-3" x-ref="top">
       <div>
         <p class="text-body-sm font-medium text-ink-soft">
-          {{ quiz.get_kind_display }} ·
+          {% if attempt.phase %}{{ attempt.get_phase_display }} · {% translate "one attempt, not graded" %}
+          {% else %}{{ quiz.get_kind_display }} ·
           {% blocktranslate with n=attempt.attempt_no %}attempt {{ n }}{% endblocktranslate %} ·
-          {% blocktranslate with p=quiz.pass_percent %}pass mark {{ p }}%{% endblocktranslate %}
+          {% blocktranslate with p=quiz.pass_percent %}pass mark {{ p }}%{% endblocktranslate %}{% endif %}
         </p>
         <h1 id="quiz-title" class="mt-0.5 text-h2">{{ quiz.title }}</h1>
       </div>

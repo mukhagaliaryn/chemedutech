@@ -96,7 +96,12 @@ def checkpoint(title, questions, pass_percent=75) -> Quiz:
     quiz, _ = Quiz.objects.get_or_create(
         title=title,
         kind=Quiz.Kind.CHECKPOINT,
-        defaults={"pass_percent": pass_percent, "max_attempts": 3, "show_answers_after": True, "instant_feedback": True},
+        defaults={
+            "pass_percent": pass_percent,
+            "max_attempts": 3,
+            "show_answers_after": True,
+            "instant_feedback": True,
+        },
     )
     fill_quiz(quiz, questions)
     return quiz

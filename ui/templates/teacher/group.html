@@ -169,6 +169,17 @@
           <span class="font-medium">{{ link.course.title }}</span>
           <span class="text-body-sm text-ink-soft">{% if link.teacher %} · {{ link.teacher.full_name }}{% endif %}{% if link.starts_on or link.ends_on %} · {{ link.starts_on|date:"d.m.Y"|default:"…" }} – {{ link.ends_on|date:"d.m.Y"|default:"…" }}{% endif %}</span>
         </span>
+        {% if link.course in courses and link.course.benchmark_quiz_id %}
+        <form method="post" action="{% url 'teacher:group_posttest' group.pk link.pk %}">{% csrf_token %}
+          <input type="hidden" name="open" value="{% if link.posttest_opened_at %}0{% else %}1{% endif %}">
+          {% if link.posttest_opened_at %}
+            <span class="badge badge-success mr-1 font-bold">{% translate "Post-test open" %}</span>
+            <button type="submit" class="btn btn-ghost btn-sm">{% translate "Close the post-test" %}</button>
+          {% else %}
+            <button type="submit" class="btn btn-secondary btn-sm" title="{% translate 'Otherwise it opens for each student after the course' %}">{% translate "Open the post-test" %}</button>
+          {% endif %}
+        </form>
+        {% endif %}
         {% if link.course in courses %}
         <form method="post" action="{% url 'teacher:group_detach' group.pk link.pk %}" x-data="{ sure: false }">{% csrf_token %}
           <button type="button" class="btn btn-ghost btn-sm" x-show="!sure" @click="sure = true">{% translate "Detach" %}</button>

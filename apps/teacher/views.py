@@ -278,6 +278,23 @@ def group_detach(request, pk, link_pk):
     return redirect("teacher:group", group.pk)
 
 
+@require_POST
+@teacher_only
+def group_posttest(request, pk, link_pk):
+    """Open / close the course's post-test for the group before everybody has finished the course."""
+    group = _group(request, pk)
+    link = get_object_or_404(
+        CourseGroup, pk=link_pk, group=group, course__in=course_selectors.teacher_courses(request.user)
+    )
+    is_open = request.POST.get("open") == "1"
+    course_services.set_posttest_open(link, is_open)
+    if is_open:
+        messages.success(request, _("The final knowledge test is open for the group."))
+    else:
+        messages.info(request, _("The final knowledge test is closed; it opens for each student after the course."))
+    return redirect("teacher:group", group.pk)
+
+
 # --- students --------------------------------------------------------------------------------
 
 

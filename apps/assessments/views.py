@@ -50,7 +50,7 @@ def result_context(user, attempt, retry_url, back_url, back_label, base_template
         "attempt": attempt,
         "rows": selectors.review_rows(attempt),
         "counted": selectors.counted_attempt(user, quiz),
-        "history": QuizAttempt.objects.filter(user=user, quiz=quiz).order_by("attempt_no"),
+        "history": QuizAttempt.objects.filter(user=user, quiz=quiz, phase=attempt.phase).order_by("attempt_no"),
         "attempts_left": left,
         "can_retry": left != 0,
         "retry_url": retry_url,

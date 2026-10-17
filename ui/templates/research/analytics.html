@@ -155,6 +155,51 @@ agreement and the random spot-check, then the full descriptive table. Descriptiv
   </section>
 </div>
 
+{# ---- pre/post knowledge test (STEP-22) ---- #}
+<section aria-labelledby="prepost" class="overflow-hidden rounded-card border border-line bg-surface">
+  <div class="flex flex-wrap items-center justify-between gap-3 border-b border-surface-sunken px-6 py-4">
+    <div>
+      <h2 id="prepost" class="text-[17px] font-extrabold">{% translate "Pre/post knowledge test" %}</h2>
+      <p class="text-[13px] text-ink-soft">{% if benchmark_quiz %}{{ benchmark_quiz.title }} · {% translate "the whole course; gain and normalized gain ⟨g⟩ = (post − pre) / (100 − pre) over students with both tests" %}{% else %}{% translate "The course has no pre/post test yet — create it on the course content page." %}{% endif %}</p>
+    </div>
+  </div>
+  {% if benchmark_quiz %}
+  {% partialdef pp_cell %}<td class="text-right">{% if d.n %}<span class="font-bold">{{ d.mean|floatformat:1 }}</span><span class="block text-caption text-ink-faint">{% blocktranslate with m=d.median|floatformat:1 %}median {{ m }}{% endblocktranslate %}</span>{% else %}<span class="font-bold">—</span>{% endif %}<span class="block text-caption text-ink-faint">n = {{ d.n }}</span></td>{% endpartialdef %}
+  <div class="overflow-x-auto">
+    <table class="table">
+      <thead><tr>
+        <th scope="col">{% translate "Group" %}</th>
+        <th scope="col" class="text-right">{% translate "Pre-test, %" %}</th>
+        <th scope="col" class="text-right">{% translate "Post-test, %" %}</th>
+        <th scope="col" class="text-right">{% translate "Pairs" %}</th>
+        <th scope="col" class="text-right">{% translate "Gain, p.p." %}</th>
+        <th scope="col" class="text-right">⟨g⟩</th>
+        <th scope="col" class="min-w-[160px]"><span class="sr-only">{% translate "Pre and post of the pairs" %}</span></th>
+      </tr></thead>
+      <tbody class="num">
+        {% for row in pre_post_rows %}
+          <tr{% if row.cohort == "all" %} class="bg-canvas"{% endif %}>
+            <th scope="row" class="font-semibold">{% if row.cohort == "experimental" %}{% translate "Experimental" %}{% elif row.cohort == "control" %}{% translate "Control" %}{% else %}{% translate "All students" %}{% endif %}
+              <span class="block text-caption font-normal text-ink-faint">{% blocktranslate count n=row.students %}{{ n }} student{% plural %}{{ n }} students{% endblocktranslate %}</span></th>
+            {% with d=row.pre %}{% partial pp_cell %}{% endwith %}
+            {% with d=row.post %}{% partial pp_cell %}{% endwith %}
+            <td class="text-right font-bold">{{ row.paired }}</td>
+            <td class="text-right">{% if row.gain.n %}<span class="font-bold {% if row.gain.mean >= 0 %}text-success-700{% else %}text-danger-700{% endif %}">{% if row.gain.mean >= 0 %}+{% endif %}{{ row.gain.mean|floatformat:1 }}</span><span class="block text-caption text-ink-faint">{% blocktranslate with m=row.gain.median|floatformat:1 %}median {{ m }}{% endblocktranslate %}</span>{% else %}—{% endif %}</td>
+            <td class="text-right font-bold">{% if row.norm_gain.n %}{{ row.norm_gain.mean|floatformat:2 }}{% else %}—{% endif %}</td>
+            <td>{% if row.paired %}
+              <span class="flex flex-col gap-1" aria-hidden="true">
+                <span class="h-2 rounded-full bg-chart-muted" style="width: {{ row.paired_pre.mean|stringformat:'.1f' }}%"></span>
+                <span class="h-2 rounded-full bg-primary-600" style="width: {{ row.paired_post.mean|stringformat:'.1f' }}%"></span>
+              </span>{% endif %}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <p class="border-t border-surface-sunken px-6 py-3 text-caption text-ink-soft"><span class="mr-1 inline-block h-2 w-4 rounded-full bg-chart-muted align-middle"></span>{% translate "pre" %} <span class="mr-1 ml-3 inline-block h-2 w-4 rounded-full bg-primary-600 align-middle"></span>{% translate "post" %} · {% translate "Per-student values are in the CSV (pre_percent, post_percent, gain, normalized_gain)." %}</p>
+  {% endif %}
+</section>
+
 {# ---- full descriptive table ---- #}
 <section aria-labelledby="cmp" class="overflow-hidden rounded-card border border-line bg-surface">
   <div class="flex flex-wrap items-center justify-between gap-3 border-b border-surface-sunken px-6 py-4">

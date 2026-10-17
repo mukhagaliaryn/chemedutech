@@ -35,6 +35,8 @@ module accordion → topic rows (stage dots, status badge) → the topic's stage
   </div>
 </header>
 
+{% include "student/partials/benchmark_card.html" %}
+
 <div x-data="{ filter: 'all' }" class="flex flex-col gap-5">
   <div role="tablist" aria-label="{% translate 'Filter' %}" class="flex flex-wrap gap-2">
     {% translate "All" as f1 %}{% translate "In progress" as f2 %}{% translate "Completed" as f3 %}{% translate "Locked" as f4 %}

@@ -8,6 +8,11 @@ from apps.core.models import TimeStampedModel
 class QuizAttempt(TimeStampedModel):
     """One sitting of a quiz. Research data — never deleted (ARCHITECTURE §9.6)."""
 
+    class Phase(models.TextChoices):
+        NONE = "", _("—")
+        PRE = "pre", _("Pre-test")
+        POST = "post", _("Post-test")
+
     enrollment = models.ForeignKey(
         "courses.Enrollment",
         on_delete=models.PROTECT,
@@ -32,6 +37,15 @@ class QuizAttempt(TimeStampedModel):
     max_score = models.DecimalField(_("max score"), max_digits=7, decimal_places=2, null=True, blank=True)
     percent = models.DecimalField(_("percent"), max_digits=5, decimal_places=2, null=True, blank=True)
     passed = models.BooleanField(_("passed"), default=False)
+    phase = models.CharField(
+        _("pre/post phase"),
+        max_length=4,
+        choices=Phase.choices,
+        default=Phase.NONE,
+        blank=True,
+        db_index=True,
+        help_text=_("For the course's pre/post knowledge test: before or after the course"),
+    )
 
     class Meta:
         ordering = ("-started_at",)

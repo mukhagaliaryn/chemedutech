@@ -160,6 +160,14 @@ class QuizForm(forms.ModelForm):
         )  # fmt: skip
 
 
+class BenchmarkQuizForm(forms.ModelForm):
+    """The pre/post test: one attempt per phase and no answers shown are fixed (STEP-22)."""
+
+    class Meta:
+        model = Quiz
+        fields = ("title", "time_limit_min", "questions_per_attempt", "shuffle_questions", "shuffle_choices")
+
+
 class LinesField(forms.CharField):
     """A JSON list edited as one item per line."""
 

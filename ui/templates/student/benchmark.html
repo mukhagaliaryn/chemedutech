@@ -1,0 +1,54 @@
+{% extends "layouts/student.html" %}
+{% load i18n %}
+{% comment %}
+The course's pre/post knowledge test (STEP-22): intro with the rules → the test page (assessments/take.html)
+→ «done» with the overall percent only. state: open / locked / done / none (progress.services.benchmark).
+{% endcomment %}
+{% block title %}{{ quiz.title }} · ChemEduTech{% endblock %}
+{% block crumb %}{{ course.title }}{% endblock %}
+{% block page_title %}{% if phase == "pre" %}{% translate "Entry knowledge test" %}{% else %}{% translate "Final knowledge test" %}{% endif %}{% endblock %}
+{% block main_class %}max-w-[840px]{% endblock %}
+{% block content %}
+<nav class="flex flex-wrap items-center gap-2 text-sm" aria-label="{% translate 'Breadcrumbs' %}">
+  <a class="link inline-flex items-center gap-1.5 font-semibold" href="{{ course_url }}">{% include "components/icons.html#arrow-left" %}{{ course.title }}</a>
+</nav>
+
+<section class="card flex flex-col gap-5 p-[clamp(22px,4vw,36px)]" aria-labelledby="bm-title">
+  {% if state == "done" %}
+    <div class="flex flex-col items-center gap-2 text-center">
+      <span class="grid size-[72px] place-items-center rounded-[24px] bg-success-50 text-success-600">{% include "components/icons.html#check" with size=34 %}</span>
+      <p class="num mt-2 text-[44px] leading-[48px] font-extrabold">{{ attempt.percent|floatformat:0 }}%</p>
+      <h1 id="bm-title" class="text-[22px] font-extrabold">{% translate "Thank you, the test is done" %}</h1>
+      <p class="max-w-[520px] text-ink-soft">
+        {% if phase == "pre" %}{% translate "This is your starting point. The same test is given again at the end of the course — then you will see how much you have learned." %}
+        {% else %}{% translate "Compare it with your entry result: the difference shows what the course has given you." %}{% endif %}
+        {% translate "The test does not affect your course grade; the answers are not shown so that it stays a fair measure." %}
+      </p>
+      <a class="btn btn-primary mt-4 h-[46px] px-[22px] text-[15px] font-bold" href="{{ course_url }}">{% if phase == "pre" %}{% translate "Start learning" %}{% else %}{% translate "Back to the course" %}{% endif %}{% include "components/icons.html#arrow-right" %}</a>
+    </div>
+  {% else %}
+    <div>
+      <p class="text-[13px] font-semibold text-ink-soft">{% translate "Research of the course" %}</p>
+      <h1 id="bm-title" class="mt-0.5 text-[26px] leading-[34px] font-extrabold">{{ quiz.title }}</h1>
+    </div>
+    <p class="text-ink-soft">
+      {% if phase == "pre" %}{% translate "Before the first stage, answer a few questions on the whole course. Nobody expects you to know everything yet: the test shows your starting point." %}
+      {% else %}{% translate "The same questions as at the start of the course. Answer on your own — the result shows how your knowledge has grown." %}{% endif %}
+    </p>
+    <ul class="grid gap-2.5 sm:grid-cols-3">
+      <li class="flex items-center gap-2.5 rounded-lg bg-canvas px-4 py-3 text-sm font-semibold">{% include "components/icons.html#list" with size=18 %}{% blocktranslate count n=question_count %}{{ n }} question{% plural %}{{ n }} questions{% endblocktranslate %}</li>
+      <li class="flex items-center gap-2.5 rounded-lg bg-canvas px-4 py-3 text-sm font-semibold">{% include "components/icons.html#timer" with size=18 %}{% if quiz.time_limit_min %}{% blocktranslate with m=quiz.time_limit_min %}{{ m }} min{% endblocktranslate %}{% else %}{% translate "no time limit" %}{% endif %}</li>
+      <li class="flex items-center gap-2.5 rounded-lg bg-canvas px-4 py-3 text-sm font-semibold">{% include "components/icons.html#key" with size=18 %}{% translate "one attempt, not graded" %}</li>
+    </ul>
+    {% if state == "open" %}
+      <form method="post" action="{% url 'student:benchmark_start' course.slug phase %}" class="flex justify-end">{% csrf_token %}
+        <button type="submit" class="btn btn-primary h-[46px] px-[22px] text-[15px] font-bold">{% translate "Start the test" %}{% include "components/icons.html#arrow-right" %}</button>
+      </form>
+    {% elif state == "locked" %}
+      {% translate "The final knowledge test opens when you finish the course or when your teacher opens it." as l_locked %}{% include "components/alert.html" with variant="info" text=l_locked %}
+    {% else %}
+      {% translate "This test is not needed any more." as l_none %}{% include "components/alert.html" with variant="info" text=l_none %}
+    {% endif %}
+  {% endif %}
+</section>
+{% endblock %}
