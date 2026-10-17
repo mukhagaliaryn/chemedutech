@@ -9,4 +9,5 @@ urlpatterns = [
     path("<int:pk>/", views.open_notification, name="open"),
     path("read-all/", views.read_all, name="read_all"),
     path("badge/", views.badge, name="badge"),
+    path("menu/", views.menu, name="menu"),
 ]

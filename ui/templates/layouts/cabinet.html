@@ -1,73 +1,79 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% comment %}
-Shared cabinet shell: 240px sidebar (logo, nav, language, user) + content up to 1200px.
-On < lg the sidebar becomes a bottom sheet opened from the top bar.
-Children: layouts/student.html, layouts/teacher.html — they fill {% block nav %} and {% block user_meta %}.
+Shared cabinet shell (mockups «StudentSidebar», «TeacherSidebar», «Topbar»):
+a 264px sidebar that collapses to an 84px rail (state in localStorage) + a sticky 72px top bar
+(crumb and page title, search, language, notifications, profile menu) + content up to 1280px.
+On < lg the sidebar is a drawer opened from the top bar.
+Children (layouts/student.html, layouts/teacher.html) fill {% block sidebar %}, {% block user_meta %},
+{% block search_action %} and {% block search_placeholder %}. Pages fill {% block crumb %} and
+{% block page_title %} (shown in the top bar) and {% block content %}; {% block main_class %} widens
+or narrows the content column (default max-w-[1280px]).
 {% endcomment %}
 {% block body %}
-<a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] btn btn-secondary">{% translate "Skip to content" %}</a>
-<div x-data="{ nav: false }" @keydown.escape.window="nav = false" class="lg:flex">
-  <header class="sticky top-0 z-30 flex items-center gap-3 border-b border-line bg-surface px-4 py-3 lg:hidden">
-    <a href="{% url 'core:home' %}" class="flex items-center gap-2.5 font-bold">
-      {% include "partials/logo.html" %}ChemEduTech
-    </a>
-    {% unread_notifications as unread %}
-    <a href="{% url 'feedback:notifications' %}" class="btn btn-ghost btn-sm relative ml-auto px-2" aria-label="{% translate 'Notifications' %}">
-      {% include "components/icons.html#bell" %}
-      <span id="notif-badge-top" class="num absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-primary-600 px-1 text-[11px] font-semibold text-on-primary{% if not unread %} hidden{% endif %}">{{ unread }}</span>
-    </a>
-    <button type="button" class="btn btn-secondary btn-sm" @click="nav = true"
-            aria-controls="cabinet-nav" :aria-expanded="nav.toString()">
-      {% include "components/icons.html#menu" with size=16 %}{% translate "Menu" %}
+<a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[80] btn btn-secondary">{% translate "Skip to content" %}</a>
+<div x-data="cabinet" @keydown.escape.window="nav = false" class="flex min-h-screen">
+  <div x-show="nav" x-cloak x-transition.opacity class="overlay lg:hidden" @click="nav = false"></div>
+
+  <aside id="cabinet-nav" aria-label="{% translate 'Main menu' %}"
+         :data-open="nav.toString()" :data-collapsed="rail.toString()"
+         class="fixed inset-y-0 left-0 z-[61] w-[264px] -translate-x-full transition-[transform,width] duration-250 ease-out
+                data-[open=true]:translate-x-0 data-[open=true]:shadow-modal
+                lg:sticky lg:top-0 lg:z-auto lg:h-screen lg:shrink-0 lg:translate-x-0 lg:data-[collapsed=true]:w-[84px]">
+    <div class="h-full max-lg:overflow-y-auto">{% block sidebar %}{% endblock %}</div>
+    <button type="button" class="close-btn absolute top-5 -right-12 lg:hidden" x-show="nav" x-cloak @click="nav = false" aria-label="{% translate 'Close menu' %}">
+      {% include "components/icons.html#x" %}
     </button>
-  </header>
-  <div x-show="nav" x-cloak x-transition.opacity class="fixed inset-0 z-40 bg-ink/40 lg:hidden" @click="nav = false"></div>
+  </aside>
 
-  <nav id="cabinet-nav" aria-label="{% translate 'Main menu' %}" :data-open="nav ? 'true' : null"
-       class="z-50 flex flex-col gap-6 bg-surface px-4 py-6
-              max-lg:fixed max-lg:inset-x-0 max-lg:bottom-0 max-lg:max-h-[85vh] max-lg:translate-y-full max-lg:overflow-y-auto
-              max-lg:rounded-t-lg max-lg:shadow-pop max-lg:transition-transform max-lg:data-[open=true]:translate-y-0
-              lg:sticky lg:top-0 lg:h-screen lg:w-60 lg:shrink-0 lg:overflow-y-auto lg:border-r lg:border-line">
-    <div class="flex items-center gap-2">
-      <a href="{% url 'core:home' %}" class="flex items-center gap-2.5 px-2 text-h3 font-bold">
-        {% include "partials/logo.html" %}ChemEduTech
-      </a>
-      <button type="button" class="btn btn-ghost btn-sm ml-auto lg:hidden" @click="nav = false" aria-label="{% translate 'Close menu' %}">
-        {% include "components/icons.html#x" %}
+  <div class="flex min-w-0 flex-1 flex-col">
+    <header class="sticky top-0 z-40 flex h-[72px] items-center gap-3 border-b border-line bg-white/90 px-[clamp(16px,2.4vw,32px)] backdrop-blur-md sm:gap-4">
+      <button type="button" class="btn btn-secondary btn-icon btn-sm lg:hidden" @click="nav = true"
+              aria-controls="cabinet-nav" :aria-expanded="nav.toString()" aria-label="{% translate 'Menu' %}">
+        {% include "components/icons.html#menu" %}
       </button>
-    </div>
-
-    <div class="flex flex-col gap-0.5">
-      {% block nav %}{% endblock %}
-      <a href="{% url 'feedback:notifications' %}" class="nav-item" {% nav_current "feedback:" %}>
-        {% include "components/icons.html#bell" %}<span class="min-w-0 truncate">{% translate "Notifications" %}</span>
-        {% include "feedback/partials/badge.html" %}
-      </a>
-    </div>
-
-    <div class="mt-auto flex flex-col gap-3">
-      {% include "partials/lang_switch.html" %}
-      <div class="flex items-center gap-2.5 p-2">
-        <a href="{% url 'student:profile' %}" class="flex min-w-0 flex-1 items-center gap-2.5 rounded-sm text-ink hover:text-primary-700" title="{% translate 'Profile' %}" {% nav_current "student:profile" %}>
-          {% include "components/avatar.html" with person=user %}
-          <span class="flex min-w-0 flex-1 flex-col leading-[18px]">
-            <span class="truncate text-sm font-semibold">{{ user.get_full_name|default:user.get_username }}</span>
-            <span class="truncate text-caption font-normal text-ink-soft">{% block user_meta %}{% endblock %}</span>
-          </span>
-        </a>
-        <form method="post" action="{% url 'accounts:logout' %}">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-ghost btn-sm px-2 text-ink-soft" title="{% translate 'Log out' %}" aria-label="{% translate 'Log out' %}">
-            {% include "components/icons.html#logout" %}
-          </button>
-        </form>
+      <div class="flex min-w-0 flex-col leading-5">
+        <span class="truncate text-caption font-normal text-ink-faint">{% block crumb %}{% endblock %}</span>
+        <span class="truncate text-[17px] font-bold">{% block page_title %}{% endblock %}</span>
       </div>
-    </div>
-  </nav>
 
-  <main id="main" class="min-w-0 flex-1 px-4 pt-8 pb-12 sm:px-[clamp(16px,3vw,48px)]">
-    <div class="flex max-w-[1200px] flex-col gap-6">{% block content %}{% endblock %}</div>
-  </main>
+      <form action="{% block search_action %}{% endblock %}" method="get" role="search"
+            class="ml-auto hidden h-[42px] min-w-0 flex-[0_1_340px] items-center gap-2 rounded-[12px] border border-line bg-canvas pr-2.5 pl-3 focus-within:border-primary-500 focus-within:shadow-focus md:flex">
+        <span class="text-ink-faint">{% include "components/icons.html#search" %}</span>
+        <input type="search" name="q" value="{{ search_q|default:'' }}" data-search
+               placeholder="{% block search_placeholder %}{% translate 'Search' %}{% endblock %}" aria-label="{% translate 'Search' %}"
+               class="min-w-0 flex-1 border-0 bg-transparent text-sm text-ink outline-0 placeholder:text-ink-faint">
+        <kbd class="kbd max-lg:hidden" aria-hidden="true">⌘K</kbd>
+      </form>
+      <div class="flex shrink-0 items-center gap-2 max-md:ml-auto">
+        {% include "partials/lang_menu.html" %}
+        {% include "partials/shell/notifications_menu.html" %}
+        <div class="relative" x-data="{ open: false }" @click.outside="open = false" @keydown.escape="open = false">
+          <button type="button" @click="open = !open" :aria-expanded="open.toString()" aria-expanded="false" aria-haspopup="true"
+                  aria-label="{% translate 'Account menu' %}"
+                  class="inline-flex h-[42px] items-center gap-2 rounded-[12px] border border-line bg-surface pr-2 pl-1 text-ink-soft transition-colors hover:border-line-strong hover:bg-canvas">
+            {% block topbar_avatar %}{% include "components/avatar.html" with person=user shape="square" size="sm" %}{% endblock %}
+            {% include "components/icons.html#chevron-down" %}
+          </button>
+          <div x-show="open" x-cloak class="menu top-[50px] right-0 w-60" role="menu">
+            <div class="mb-1.5 flex flex-col border-b border-surface-sunken px-3 pt-2.5 pb-3 leading-[19px]">
+              <span class="truncate text-sm font-bold text-ink">{{ user.get_full_name|default:user.get_username }}</span>
+              <span class="truncate text-caption font-normal text-ink-soft">{% block user_meta %}{% endblock %}</span>
+            </div>
+            <a href="{% url 'student:profile' %}" class="menu-item" role="menuitem">{% include "components/icons.html#user" %}{% translate "Profile" %}</a>
+            <a href="{% url 'student:profile' %}#settings" class="menu-item" role="menuitem">{% include "components/icons.html#settings" %}{% translate "Settings" %}</a>
+            <form method="post" action="{% url 'accounts:logout' %}">
+              {% csrf_token %}
+              <button type="submit" class="menu-item menu-item-danger" role="menuitem">{% include "components/icons.html#logout" %}{% translate "Log out" %}</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main id="main" class="mx-auto flex w-full flex-col gap-5 px-[clamp(16px,3vw,40px)] pt-7 pb-14 {% block main_class %}max-w-[1280px]{% endblock %}">
+      {% block content %}{% endblock %}
+    </main>
+  </div>
 </div>
 {% endblock %}

@@ -1,0 +1,33 @@
+{% load i18n teacher_tags %}{% comment %}
+Teacher sidebar (mockup «TeacherSidebar»): dark primary-950 rail, «Work» and «Analysis» groups,
+the grading queue counter. Collapses like the student sidebar.
+{% endcomment %}{% grading_pending as pending %}
+<div class="nav-dark flex h-full flex-col gap-2 bg-primary-950 px-3.5 py-5">
+  <div class="flex h-11 items-center justify-between gap-2 in-data-[collapsed=true]:h-auto in-data-[collapsed=true]:flex-col">
+    <a href="{% url 'teacher:dashboard' %}" class="flex min-w-0 items-center gap-2.5 overflow-hidden text-[17px] font-extrabold whitespace-nowrap text-white">
+      {% include "partials/logo.html" with size=32 inverse=True %}
+      <span class="nav-label flex flex-col leading-[18px]">ChemEduTech<span class="text-[11px] font-semibold text-primary-300">{% translate "Teacher cabinet" %}</span></span>
+    </a>
+    {% include "partials/shell/collapse_button.html" with dark=True %}
+  </div>
+
+  <nav class="flex flex-col gap-1" aria-label="{% translate 'Teacher menu' %}">
+    <p class="nav-section nav-hide">{% translate "Work" %}</p>
+    {% translate "Home" as l %}{% include "components/nav_item.html" with url_name="teacher:dashboard" icon="home" label=l %}
+    {% translate "Course content" as l %}{% include "components/nav_item.html" with url_name="teacher:courses" match="teacher:courses teacher:course_content teacher:course_settings teacher:module_new teacher:module teacher:topic_new teacher:topic teacher:stage_new teacher:stage teacher:item_new teacher:item teacher:quiz teacher:question_new teacher:question" icon="book" label=l %}
+    {% translate "Groups and students" as l %}{% include "components/nav_item.html" with url_name="teacher:groups" match="teacher:groups teacher:group teacher:group_new teacher:group_edit teacher:students teacher:student teacher:lab_log" icon="users" label=l %}
+    {% translate "Checking works" as l %}{% include "components/nav_item.html" with url_name="teacher:grading" match="teacher:grading teacher:grading_detail" icon="check-square" label=l badge=pending %}
+    <p class="nav-section nav-hide">{% translate "Analysis" %}</p>
+    {% translate "Grade register" as l %}{% include "components/nav_item.html" with url_name="teacher:gradebook" match="teacher:gradebook teacher:gradebook_course" icon="grid" label=l %}
+    {% translate "Statistics" as l %}{% include "components/nav_item.html" with url_name="research:analytics" match="research:analytics research:analytics_course" icon="activity" label=l %}
+    {% translate "Research data" as l %}{% include "components/nav_item.html" with url_name="research:dashboard" match="research:dashboard" icon="search" label=l %}
+  </nav>
+
+  <a href="{% url 'student:profile' %}" class="mt-auto flex items-center gap-2.5 rounded-md bg-white/[.06] p-2.5 hover:bg-white/10" title="{% translate 'Profile' %}">
+    {% include "components/avatar.html" with person=user shape="square" tone="inverse" %}
+    <span class="nav-label flex min-w-0 flex-col leading-[18px]">
+      <span class="truncate text-sm font-bold text-white">{{ user.get_full_name|default:user.get_username }}</span>
+      <span class="truncate text-caption font-normal text-on-dark-soft">{% if user.teacher_profile.department %}{{ user.teacher_profile.department }}{% else %}{% translate "teacher" %}{% endif %}</span>
+    </span>
+  </a>
+</div>

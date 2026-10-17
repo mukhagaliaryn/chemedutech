@@ -1,9 +1,16 @@
 {% comment %}
-Dashboard number. label; value; note (one short line below); tone: success (an improvement) |
-neutral (default, a plain fact); class. Use in a grid of 3–4 (desktop) / 2 / 1.
+Dashboard number (mockups «Студент · Басты бет», «Мұғалім · Басты бет»).
+label; value; note (one short line below); tone: success (an improvement) | warning | neutral (default);
+icon (icons.html partial) + icon_class (tile colours, default "bg-primary-50 text-primary-600");
+bar — percent for a thin progress bar under the value; warn — the whole card on warning-50 (queues);
+class. Use in a grid of 4 (desktop) / 2 / 1: grid-cols-[repeat(auto-fit,minmax(220px,1fr))].
 {% endcomment %}
-<div class="card grid gap-1 {{ class }}">
-  <span class="text-label text-ink-soft">{{ label }}</span>
-  <span class="num text-stat">{{ value }}</span>
-  {% if note %}<span class="text-caption {% if tone == 'success' %}text-success-700{% else %}text-ink-soft{% endif %}">{{ note }}</span>{% endif %}
+<div class="card-lift flex flex-col gap-1.5 rounded-[22px] border px-6 py-[22px] {% if warn %}border-warning-50 bg-warning-50{% else %}border-line bg-surface{% endif %} {{ class }}">
+  <span class="flex items-center justify-between gap-3">
+    <span class="text-[13px] font-medium {% if warn %}text-warning-700{% else %}text-ink-soft{% endif %}">{{ label }}</span>
+    {% if icon %}<span class="grid size-8 place-items-center rounded-sm {% if warn %}bg-white text-warning-700{% else %}{{ icon_class|default:'bg-primary-50 text-primary-600' }}{% endif %}">{% include "components/icons.html#"|add:icon with size=16 %}</span>{% endif %}
+  </span>
+  <span class="num text-[28px] leading-[34px] font-extrabold">{{ value }}</span>
+  {% if bar is not None and bar != "" %}<div class="progress"><span style="width: {{ bar|percent_of:100|stringformat:'s' }}%"></span></div>{% endif %}
+  {% if note %}<span class="text-caption {% if tone == 'success' %}font-semibold text-success-700{% elif tone == 'warning' or warn %}text-warning-700{% else %}font-normal text-ink-soft{% endif %}">{{ note }}</span>{% endif %}
 </div>

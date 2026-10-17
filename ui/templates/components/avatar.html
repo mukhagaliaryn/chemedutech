@@ -1,8 +1,12 @@
 {% comment %}
-Round avatar: the photo when person.avatar is set, otherwise initials on primary-100.
-person — a User or a plain name; size: sm (28px) | md (36px, default) | lg (56px).
+Avatar: the photo when person.avatar is set, otherwise initials.
+person — a User or a plain name; size: sm (28px) | md (36px, default) | lg (56px);
+shape: round (default) | square (rounded 12px tile, sidebars and tables);
+tone: primary (default, primary-100) | neutral (surface-sunken) | danger | inverse (white on dark grounds) | dark (primary-900).
 {% endcomment %}{% with initials=person|initials %}
-<span class="grid shrink-0 place-items-center overflow-hidden rounded-full bg-primary-100 font-semibold text-primary-700
+<span class="grid shrink-0 place-items-center overflow-hidden font-bold
+             {% if shape == 'square' %}{% if size == 'lg' %}rounded-[18px]{% else %}rounded-[12px]{% endif %}{% else %}rounded-full{% endif %}
+             {% if tone == 'neutral' %}bg-surface-sunken text-ink{% elif tone == 'danger' %}bg-danger-50 text-danger-700{% elif tone == 'inverse' %}bg-white text-primary-900{% elif tone == 'dark' %}bg-primary-900 text-white{% else %}bg-primary-100 text-primary-700{% endif %}
              {% if size == 'sm' %}size-7 text-[11px]{% elif size == 'lg' %}size-14 text-lg{% else %}size-9 text-[13px]{% endif %}"
       {% if not person.avatar %}aria-hidden="true"{% endif %}>
   {% if person.avatar %}<img src="{{ person.avatar.url }}" alt="{{ person.get_full_name }}" class="size-full object-cover">{% else %}{{ initials }}{% endif %}

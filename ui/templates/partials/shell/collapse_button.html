@@ -1,0 +1,6 @@
+{% load i18n %}{# Collapse / expand the sidebar rail (desktop only). dark — on the teacher's dark ground. #}
+<button type="button" @click="toggleRail()" :aria-label="collapsed ? '{% translate "Expand menu" %}' : '{% translate "Collapse menu" %}'"
+        aria-label="{% translate 'Collapse menu' %}"
+        class="grid size-8 shrink-0 place-items-center rounded-sm border max-lg:hidden {% if dark %}border-white/20 text-primary-100 hover:bg-white/10{% else %}border-line bg-surface text-ink-soft hover:bg-canvas{% endif %}">
+  <span class="transition-transform duration-200" :class="collapsed && 'rotate-180'">{% include "components/icons.html#chevron-left" %}</span>
+</button>

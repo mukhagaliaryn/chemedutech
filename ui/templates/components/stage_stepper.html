@@ -6,17 +6,18 @@ stages — iterable of objects/dicts with: title; kind (theory | video | lab | p
   the title, e.g. "Өтті · 92%", "2 / 4 тәжірибе"; default: the status name); current (bool);
   lock_reason (optional tooltip for locked stages).
 label — aria-label of the list; class.
+Tiles: passed — success-50; current — 2px primary border; locked — canvas, grey lock icon.
 Desktop: one row that scrolls sideways when there are many stages; mobile: a vertical list.
 {% endcomment %}
 {% partialdef step_body %}
-  <span class="flex min-w-0 items-center gap-2">
-    <span class="grid size-7 shrink-0 place-items-center rounded-sm text-white {% if s.status == 'locked' %}bg-line-strong{% else %}stage-{{ s.kind }}{% endif %}">
-      {% include "components/icons.html#"|add:s.kind %}
+  <span class="flex min-w-0 items-center gap-2.5">
+    <span class="tile size-8 rounded-sm {% if s.status == 'locked' %}bg-line-strong{% else %}stage-{{ s.kind }}{% endif %}">
+      {% if s.status == "locked" %}{% include "components/icons.html#lock" %}{% else %}{% include "components/icons.html#"|add:s.kind %}{% endif %}
     </span>
-    <span class="min-w-0 flex-1 truncate text-label font-semibold">{{ forloop.counter }} · {{ s.title }}</span>
+    <span class="min-w-0 flex-1 truncate text-[13px] font-bold">{{ s.title }}</span>
   </span>
-  <span class="num text-caption {% if s.status == 'locked' %}font-normal{% elif s.status == 'passed' %}text-success-700{% elif s.current %}text-primary-700{% else %}text-ink-soft{% endif %}">
-    {% if s.status == "awaiting_check" %}{% translate "Awaiting check" as l_await %}{% include "components/badge.html" with variant="warning" label=s.meta|default:l_await %}
+  <span class="num text-caption font-semibold {% if s.status == 'passed' %}text-success-700{% elif s.current %}text-primary-700{% else %}text-ink-faint{% endif %}">
+    {% if s.status == "awaiting_check" %}{% translate "Awaiting check" as l_await %}{% include "components/badge.html" with variant="warning" label=s.meta|default:l_await class="badge-sm" %}
     {% elif s.meta %}{{ s.meta }}
     {% elif s.status == "passed" %}{% translate "Passed" %}
     {% elif s.status == "locked" %}{% translate "Locked" %}
@@ -27,15 +28,15 @@ Desktop: one row that scrolls sideways when there are many stages; mobile: a ver
 <ol class="flex gap-2 max-sm:flex-col sm:overflow-x-auto sm:pb-1 {{ class }}"{% if label %} aria-label="{{ label }}"{% endif %}>
   {% for s in stages %}
     <li class="sm:min-w-[168px] sm:flex-1">
-      {% with cls="flex h-full flex-col gap-1.5 rounded-md border" %}
+      {% with cls="flex h-full flex-col gap-2 rounded-md border transition-colors" %}
       {% if s.url %}
         <a href="{{ s.url }}"{% if s.current %} aria-current="step"{% endif %}{% if s.status == 'locked' and s.lock_reason %} title="{{ s.lock_reason }}"{% endif %}
-           class="{{ cls }} {% if s.current %}border-2 border-primary-600 bg-surface p-[11px]{% elif s.status == 'passed' %}border-transparent bg-success-50 p-3{% elif s.status == 'locked' %}border-transparent bg-surface-sunken p-3 text-ink-faint{% else %}border-line bg-surface p-3 hover:border-line-strong{% endif %}">
+           class="{{ cls }} {% if s.current %}border-2 border-primary-600 bg-surface p-[13px] shadow-[0_10px_24px_rgba(31,95,209,.15)]{% elif s.status == 'passed' %}border-success-50 bg-success-50 p-3.5 text-ink{% elif s.status == 'locked' %}border-canvas bg-canvas p-3.5 text-ink-faint{% else %}border-line bg-surface p-3.5 hover:border-line-strong{% endif %}">
           {% partial step_body %}
         </a>
       {% else %}
         <div{% if s.current %} aria-current="step"{% endif %}
-             class="{{ cls }} {% if s.current %}border-2 border-primary-600 bg-surface p-[11px]{% elif s.status == 'passed' %}border-transparent bg-success-50 p-3{% elif s.status == 'locked' %}border-transparent bg-surface-sunken p-3 text-ink-faint{% else %}border-line bg-surface p-3{% endif %}">
+             class="{{ cls }} {% if s.current %}border-2 border-primary-600 bg-surface p-[13px]{% elif s.status == 'passed' %}border-success-50 bg-success-50 p-3.5{% elif s.status == 'locked' %}border-canvas bg-canvas p-3.5 text-ink-faint{% else %}border-line bg-surface p-3.5{% endif %}">
           {% partial step_body %}
         </div>
       {% endif %}

@@ -1,16 +1,7 @@
 {% extends "layouts/cabinet.html" %}
 {% load i18n %}
-{% comment %}
-Student cabinet (/me/, /learn/). Nav items whose url name does not exist yet are hidden by
-components/nav_item.html, so the list below is the target menu from the «Студент» mockups.
-{% endcomment %}
-{% block nav %}
-  {% translate "Home" as l_home %}{% include "components/nav_item.html" with url_name="student:dashboard" icon="home" label=l_home %}
-  {% translate "My courses" as l_courses %}{% include "components/nav_item.html" with url_name="student:courses" match="student:courses student:course" icon="book" label=l_courses %}
-  {% translate "Grades" as l_grades %}{% include "components/nav_item.html" with url_name="student:results" icon="chart" label=l_grades %}
-  {% translate "Certificates" as l_certs %}{% include "components/nav_item.html" with url_name="student:certificates" icon="award" label=l_certs %}
-  {% if user.is_teacher or user.is_admin_role %}
-    {% translate "Research data" as l_research %}{% include "components/nav_item.html" with url_name="research:dashboard" match="research:dashboard" icon="search" label=l_research %}
-  {% endif %}
-{% endblock %}
-{% block user_meta %}{% if user.student_profile.group %}{{ user.student_profile.group }} · {% endif %}{% translate "student" %}{% endblock %}
+{% comment %}Student cabinet (/me/, notifications): white sidebar of the «Студент» mockups.{% endcomment %}
+{% block sidebar %}{% include "partials/shell/sidebar_student.html" %}{% endblock %}
+{% block search_action %}{% url 'student:search' %}{% endblock %}
+{% block search_placeholder %}{% translate "Topic or material" %}{% endblock %}
+{% block user_meta %}{% translate "Student" %}{% if user.student_profile.group %} · {{ user.student_profile.group }}{% endif %}{% endblock %}

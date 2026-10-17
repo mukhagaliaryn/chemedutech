@@ -1,17 +1,21 @@
 {% load i18n %}{% comment %}
 Confirmation dialog on the native <dialog> element (focus trap and Esc for free).
 id; title; text; action — URL the confirm button POSTs to (omit for an informational dialog);
-confirm_label; confirm_variant (primary | danger, default primary); cancel_label.
+confirm_label; confirm_variant (primary | danger | success, default primary); cancel_label;
+icon — icons.html partial shown in a tinted tile above the title (centred layout);
+icon_variant — success | danger | warning | info (tile colours, default info).
 Open it from any element: <button type="button" data-open-modal="ID">…</button> (static/js/ui.js).
 Destructive actions always go through this dialog.
 {% endcomment %}
-<dialog id="{{ id }}" aria-labelledby="{{ id }}-title"
-        class="m-auto w-[calc(100%-32px)] max-w-md rounded-lg border border-line bg-surface p-0 text-ink shadow-pop backdrop:bg-ink/40">
-  <form method="post" {% if action %}action="{{ action }}"{% endif %} class="flex flex-col gap-4 p-6">
+<dialog id="{{ id }}" aria-labelledby="{{ id }}-title" class="dialog">
+  <form method="post" {% if action %}action="{{ action }}"{% endif %} class="flex flex-col gap-4 {% if icon %}items-center text-center{% endif %}">
     {% csrf_token %}
-    <h2 id="{{ id }}-title" class="text-h3">{{ title }}</h2>
-    {% if text %}<p class="text-sm text-ink-soft">{{ text }}</p>{% endif %}
-    <div class="flex flex-wrap justify-end gap-2">
+    {% if icon %}
+      <span class="grid size-16 place-items-center rounded-[20px] {% if icon_variant == 'success' %}bg-success-50 text-success-600{% elif icon_variant == 'danger' %}bg-danger-50 text-danger-600{% elif icon_variant == 'warning' %}bg-warning-50 text-warning-500{% else %}bg-primary-50 text-primary-600{% endif %}">{% include "components/icons.html#"|add:icon with size=28 %}</span>
+    {% endif %}
+    <h2 id="{{ id }}-title" class="text-[22px] leading-7 font-extrabold">{{ title }}</h2>
+    {% if text %}<p class="text-ink-soft">{{ text }}</p>{% endif %}
+    <div class="mt-2 flex flex-wrap gap-2.5 {% if icon %}justify-center{% else %}justify-end{% endif %}">
       <button type="submit" formmethod="dialog" formnovalidate class="btn btn-secondary">{{ cancel_label|default:_("Cancel") }}</button>
       {% if action %}<button type="submit" class="btn btn-{{ confirm_variant|default:'primary' }}">{{ confirm_label|default:_("Confirm") }}</button>{% endif %}
     </div>

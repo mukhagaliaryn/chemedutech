@@ -21,5 +21,6 @@ def styleguide(request):
         "table_headers": [_("Student"), _("Group"), _("Score")],
         "table_rows": [["Айгерім Сапарова", "Хим-23-1", "84.6"], ["Нұрлан Әбенов", "Хим-23-1", "71.2"]],
         "select_options": [(1, "Хим-23-1"), (2, "Хим-23-2")],
+        "tabs": [_("Conditions"), _("Hint"), _("Criteria")],
     }
     return render(request, "ui/styleguide.html", context)

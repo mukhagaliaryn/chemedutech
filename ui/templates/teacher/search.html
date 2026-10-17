@@ -1,0 +1,58 @@
+{% extends "layouts/teacher.html" %}
+{% load i18n %}
+{% block title %}{% translate "Search" %} · ChemEduTech{% endblock %}
+{% block crumb %}{% translate "Search" %}{% endblock %}
+{% block page_title %}{% if search_q %}«{{ search_q }}»{% else %}{% translate "Search" %}{% endif %}{% endblock %}
+{% block content %}
+{% if not search_q %}
+  {% translate "What are you looking for?" as l_t %}{% translate "Search for a student, a group or a topic." as l_x %}
+  {% include "components/empty_state.html" with title=l_t text=l_x icon="search" %}
+{% elif students or groups or topics %}
+  <div class="grid items-start gap-4 lg:grid-cols-2">
+    {% if students %}
+      <section class="card flex flex-col gap-1 p-4">
+        <h2 class="px-2 pb-2 text-h3 font-extrabold">{% translate "Students" %}</h2>
+        {% for s in students %}
+          <a href="{% url 'teacher:student' s.pk %}" class="row-link text-ink">
+            {% include "components/avatar.html" with person=s shape="square" tone="neutral" %}
+            <span class="flex min-w-0 flex-col leading-5">
+              <span class="truncate text-sm font-bold">{{ s.get_full_name|default:s.username }}</span>
+              <span class="truncate text-caption font-normal text-ink-soft">{{ s.username }}{% if s.student_profile.group %} · {{ s.student_profile.group }}{% endif %}</span>
+            </span>
+          </a>
+        {% endfor %}
+      </section>
+    {% endif %}
+    <div class="flex flex-col gap-4">
+      {% if groups %}
+        <section class="card flex flex-col gap-1 p-4">
+          <h2 class="px-2 pb-2 text-h3 font-extrabold">{% translate "Groups" %}</h2>
+          {% for g in groups %}
+            <a href="{% url 'teacher:group' g.pk %}" class="row-link text-ink">
+              <span class="tile bg-primary-900 text-caption font-extrabold">{{ g.name|slice:":2" }}</span>
+              <span class="text-sm font-bold">{{ g.name }}</span>
+            </a>
+          {% endfor %}
+        </section>
+      {% endif %}
+      {% if topics %}
+        <section class="card flex flex-col gap-1 p-4">
+          <h2 class="px-2 pb-2 text-h3 font-extrabold">{% translate "Topics" %}</h2>
+          {% for t in topics %}
+            <a href="{% url 'teacher:topic' t.module.course.slug t.pk %}" class="row-link text-ink">
+              <span class="tile num bg-surface-sunken text-sm font-extrabold text-ink">{{ t.number }}</span>
+              <span class="flex min-w-0 flex-col leading-5">
+                <span class="truncate text-sm font-bold">{{ t.title }}</span>
+                <span class="truncate text-caption font-normal text-ink-soft">{{ t.module.course.title }}</span>
+              </span>
+            </a>
+          {% endfor %}
+        </section>
+      {% endif %}
+    </div>
+  </div>
+{% else %}
+  {% translate "Nothing found" as l_t %}{% translate "Check the spelling or try a shorter word." as l_x %}
+  {% include "components/empty_state.html" with title=l_t text=l_x icon="search" %}
+{% endif %}
+{% endblock %}

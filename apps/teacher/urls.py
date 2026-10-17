@@ -42,6 +42,7 @@ urlpatterns = [
     path(C + "<str:what>/<int:pk>/delete/", content.delete, name="delete"),
     path("gradebook/", gradebook.gradebook, name="gradebook"),
     path("gradebook/<slug:course_slug>/", gradebook.gradebook, name="gradebook_course"),
+    path("search/", views.search, name="search"),
     path("students/", views.students, name="students"),
     path("students/<int:pk>/", views.student, name="student"),
     path("students/<int:pk>/stages/<int:stage_pk>/unlock/", views.unlock_stage, name="unlock_stage"),

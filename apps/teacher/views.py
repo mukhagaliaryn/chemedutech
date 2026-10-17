@@ -19,7 +19,7 @@ from django.views.decorators.http import require_POST
 from apps.core.permissions import ADMIN, TEACHER, role_required
 from apps.courses import selectors as course_selectors
 from apps.courses import services as course_services
-from apps.courses.models import CourseGroup, Stage
+from apps.courses.models import CourseGroup, Stage, Topic
 from apps.feedback import selectors as feedback_selectors
 from apps.feedback import services as feedback
 from apps.labs import selectors as lab_selectors
@@ -292,6 +292,34 @@ def students(request):
             "no_group": request.GET.get("no_group") == "1",
         },
     )
+
+
+@teacher_only
+def search(request):
+    """Topbar search: students, groups and topics of the teacher's courses."""
+    q = request.GET.get("q", "").strip()[:100]
+    context = {"search_q": q, "students": [], "groups": [], "topics": []}
+    if q:
+        context["students"] = (
+            course_selectors.teacher_students(request.user)
+            .filter(
+                Q(username__icontains=q)
+                | Q(email__icontains=q)
+                | Q(last_name__icontains=q)
+                | Q(first_name__icontains=q)
+            )
+            .select_related("student_profile__group")
+            .order_by("last_name", "first_name")[:20]
+        )
+        context["groups"] = (
+            course_selectors.teacher_groups(request.user).filter(name__icontains=q).order_by("name")[:10]
+        )
+        context["topics"] = (
+            Topic.objects.filter(module__course__in=course_selectors.teacher_courses(request.user), title__icontains=q)
+            .select_related("module__course")
+            .order_by("module__course__title", "number")[:20]
+        )
+    return render(request, "teacher/search.html", context)
 
 
 def _enrollment(request, student):

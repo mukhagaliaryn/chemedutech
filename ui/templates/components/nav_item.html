@@ -1,9 +1,12 @@
 {% comment %}
 Sidebar link. url_name — Django url name (hidden while the page does not exist yet);
 match — space-separated url names / namespaces ("courses:") that mark it current (default: url_name);
-icon — a partial of components/icons.html; label; badge — optional counter.
+icon — a partial of components/icons.html; label; badge — optional counter; badge_id — id of the counter
+(so HTMX can refresh it out of band). When the sidebar is collapsed only the icon stays and the label
+becomes a tooltip.
 {% endcomment %}{% url_or_empty url_name as href %}{% if href %}
 <a href="{{ href }}" class="nav-item" {% nav_current match|default:url_name %}>
-  {% include "components/icons.html#"|add:icon %}<span class="min-w-0 truncate">{{ label }}</span>
-  {% if badge %}<span class="num ml-auto grid h-5 min-w-5 place-items-center rounded-full bg-primary-600 px-1.5 text-caption font-semibold text-on-primary">{{ badge }}</span>{% endif %}
+  {% include "components/icons.html#"|add:icon with size=20 %}<span class="nav-label min-w-0 flex-1 truncate">{{ label }}</span>
+  {% if badge_id %}<span id="{{ badge_id }}" class="count{% if not badge %} hidden{% endif %}">{{ badge }}</span>{% elif badge %}<span class="count">{{ badge }}</span>{% endif %}
+  <span class="nav-tip" role="tooltip">{{ label }}</span>
 </a>{% endif %}

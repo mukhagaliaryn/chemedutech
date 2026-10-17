@@ -1,0 +1,11 @@
+{% load i18n %}{% comment %}
+Alert / callout (mockup «Ескертулер»). variant: warning (lab safety) | success (observation) | danger (error) |
+info (hint) | ai (AI feedback); title (bold first line, optional); text; icon (icons.html partial; default by variant);
+dismissible — a close button (Alpine); role — "alert" for errors, default "status"; class.
+For rich content use the classes directly: <div class="alert alert-info">…</div>.
+{% endcomment %}
+<div class="alert alert-{{ variant|default:'info' }} {{ class }}" role="{{ role|default:'status' }}"{% if dismissible %} x-data="{ show: true }" x-show="show"{% endif %}>
+  <span class="alert-icon">{% if icon %}{% include "components/icons.html#"|add:icon with size=18 %}{% elif variant == "warning" %}{% include "components/icons.html#warn" with size=18 %}{% elif variant == "success" %}{% include "components/icons.html#check" with size=18 %}{% elif variant == "danger" %}{% include "components/icons.html#x" with size=18 %}{% elif variant == "ai" %}{% include "components/icons.html#sparkle" with size=18 %}{% else %}{% include "components/icons.html#info" with size=18 %}{% endif %}</span>
+  <span class="flex flex-1 flex-col self-center">{% if title %}<span class="alert-title">{{ title }}</span>{% endif %}{% if text %}<span>{{ text }}</span>{% endif %}</span>
+  {% if dismissible %}<button type="button" class="grid size-7 shrink-0 place-items-center rounded-[8px] hover:bg-white/60" @click="show = false" aria-label="{% translate 'Close' %}">{% include "components/icons.html#x" with size=14 %}</button>{% endif %}
+</div>

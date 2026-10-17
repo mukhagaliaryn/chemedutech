@@ -1,0 +1,40 @@
+{% load i18n student_tags %}{% comment %}
+Student sidebar (mockup «StudentSidebar»): white rail, menu, «current topic» card, user card.
+Collapses to an 84px icon rail (layouts/cabinet.html keeps the state in localStorage).
+{% endcomment %}{% unread_notifications as unread %}{% sidebar_topic as card %}
+<div class="flex h-full flex-col gap-3 border-r border-line bg-surface px-3.5 py-5">
+  <div class="flex h-11 items-center justify-between gap-2 in-data-[collapsed=true]:h-auto in-data-[collapsed=true]:flex-col">
+    <a href="{% url 'student:dashboard' %}" class="flex min-w-0 items-center gap-2.5 overflow-hidden text-[17px] font-extrabold whitespace-nowrap text-ink">
+      {% include "partials/logo.html" with size=32 %}<span class="nav-label">ChemEduTech</span>
+    </a>
+    {% include "partials/shell/collapse_button.html" %}
+  </div>
+
+  <p class="nav-section nav-hide">{% translate "Learning" %}</p>
+  <nav class="flex flex-col gap-1" aria-label="{% translate 'Student menu' %}">
+    {% translate "Home" as l %}{% include "components/nav_item.html" with url_name="student:dashboard" icon="home" label=l %}
+    {% translate "My courses" as l %}{% include "components/nav_item.html" with url_name="student:courses" match="student:courses student:course student:topic student:stage" icon="book" label=l %}
+    {% translate "Grades" as l %}{% include "components/nav_item.html" with url_name="student:results" icon="chart" label=l %}
+    {% translate "Certificates" as l %}{% include "components/nav_item.html" with url_name="student:certificates" icon="award" label=l %}
+    {% translate "Notifications" as l %}{% include "components/nav_item.html" with url_name="feedback:notifications" match="feedback:" icon="message" label=l badge=unread badge_id="notif-count" %}
+    {% translate "Profile" as l %}{% include "components/nav_item.html" with url_name="student:profile" icon="user" label=l %}
+  </nav>
+
+  {% if card %}
+    <div class="nav-hide mt-2 flex flex-col gap-2.5 rounded-[18px] bg-primary-50 p-4">
+      <span class="text-caption font-semibold text-primary-700">{% translate "Current topic" %}</span>
+      <span class="text-sm leading-5 font-bold text-ink">{{ card.topic.number }}. {{ card.topic.title }}</span>
+      <div class="progress progress-sm" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ card.percent }}"
+           aria-label="{% blocktranslate with a=card.passed b=card.required %}{{ a }} of {{ b }} stages{% endblocktranslate %}"><span style="width: {{ card.percent }}%"></span></div>
+      <a href="{{ card.url }}" class="link text-[13px] font-bold">{% translate "Continue" %} →</a>
+    </div>
+  {% endif %}
+
+  <a href="{% url 'student:profile' %}" class="mt-auto flex items-center gap-2.5 rounded-md border border-line p-2.5 hover:bg-canvas" title="{% translate 'Profile' %}">
+    {% include "components/avatar.html" with person=user shape="square" %}
+    <span class="nav-label flex min-w-0 flex-col leading-[18px]">
+      <span class="truncate text-sm font-bold text-ink">{{ user.get_full_name|default:user.get_username }}</span>
+      <span class="truncate text-caption font-normal text-ink-soft">{% if user.student_profile.group %}{{ user.student_profile.group }} · {% endif %}{% translate "student" %}</span>
+    </span>
+  </a>
+</div>

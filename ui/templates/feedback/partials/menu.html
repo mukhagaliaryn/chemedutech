@@ -1,0 +1,25 @@
+{% load i18n %}{% comment %}Body of the Topbar notifications dropdown: header, the last notifications, a link to all.{% endcomment %}
+<div class="flex items-center justify-between gap-3 border-b border-surface-sunken px-4 py-3.5">
+  <span class="font-bold">{% translate "Notifications" %}</span>
+  {% if unread %}
+    <button type="button" hx-post="{% url 'feedback:read_all' %}" hx-target="#notif-menu-body"
+            class="text-[13px] font-semibold text-primary-600 hover:text-primary-700">{% translate "Mark all as read" %}</button>
+  {% endif %}
+</div>
+{% for n in items %}
+  <a href="{% url 'feedback:open' n.pk %}" class="flex gap-3 border-b border-canvas px-4 py-3 text-ink transition-colors hover:bg-canvas">
+    <span class="grid size-[34px] shrink-0 place-items-center rounded-sm {% if n.kind == 'returned' %}bg-warning-50 text-warning-700{% elif n.kind == 'graded' or n.kind == 'certificate' %}bg-success-50 text-success-600{% elif n.kind == 'comment' %}bg-primary-50 text-primary-600{% else %}bg-surface-sunken text-ink-soft{% endif %}">
+      {% if n.kind == "certificate" %}{% include "components/icons.html#award" with size=16 %}{% elif n.kind == "unlocked" %}{% include "components/icons.html#unlock" %}{% elif n.kind == "graded" %}{% include "components/icons.html#check" %}{% elif n.kind == "comment" %}{% include "components/icons.html#message" with size=16 %}{% elif n.kind == "returned" %}{% include "components/icons.html#warn" %}{% else %}{% include "components/icons.html#bell" with size=16 %}{% endif %}
+    </span>
+    <span class="flex min-w-0 flex-1 flex-col leading-[19px]">
+      <span class="text-sm font-semibold">{{ n.get_kind_display }}</span>
+      {% if n.title %}<span class="truncate text-[13px] text-ink-soft">{{ n.title }}</span>{% endif %}
+      <time class="mt-0.5 text-caption font-normal text-ink-faint" datetime="{{ n.created_at|date:'c' }}">{{ n.created_at|ago }}</time>
+    </span>
+    {% if not n.is_read %}<span class="mt-1.5 size-2 shrink-0 rounded-full bg-primary-600" aria-label="{% translate 'unread' %}"></span>{% endif %}
+  </a>
+{% empty %}
+  <p class="px-4 py-8 text-center text-sm text-ink-soft">{% translate "No notifications yet" %}</p>
+{% endfor %}
+<a href="{% url 'feedback:notifications' %}" class="block px-4 py-3 text-center text-[13px] font-semibold text-primary-600 hover:bg-canvas">{% translate "All notifications" %}</a>
+{% if request.htmx %}{% include "feedback/partials/badge.html" with oob=True %}{% endif %}

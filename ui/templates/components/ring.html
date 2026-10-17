@@ -1,0 +1,12 @@
+{% comment %}
+Circular progress (score rings). value — 0..100; size — px (default 64); stroke — px (default 8);
+text — centre label (default "<value>%"); color — stroke class of the arc (default stroke-primary-600);
+track — stroke class of the track (default stroke-primary-100); label — accessible name (default text);
+inverse — white text for dark grounds; class.
+{% endcomment %}{% ring_geometry value size|default:64 stroke|default:8 as g %}{% firstof text g.text as center %}{% firstof label center as name %}
+<svg width="{{ g.size }}" height="{{ g.size }}" viewBox="0 0 {{ g.size }} {{ g.size }}" role="img" aria-label="{{ name }}" class="shrink-0 {{ class }}">
+  <circle cx="{{ g.c }}" cy="{{ g.c }}" r="{{ g.r }}" fill="none" stroke-width="{{ g.stroke }}" class="{{ track|default:'stroke-primary-100' }}"/>
+  {% if g.dash %}<circle cx="{{ g.c }}" cy="{{ g.c }}" r="{{ g.r }}" fill="none" stroke-width="{{ g.stroke }}" stroke-linecap="round"
+          stroke-dasharray="{{ g.dash }} {{ g.circumference }}" transform="rotate(-90 {{ g.c }} {{ g.c }})" class="{{ color|default:'stroke-primary-600' }}"/>{% endif %}
+  <text x="50%" y="50%" dy="0.35em" text-anchor="middle" font-weight="800" font-size="{{ g.font }}" class="{% if inverse %}fill-white{% else %}fill-ink{% endif %} font-sans">{{ center }}</text>
+</svg>

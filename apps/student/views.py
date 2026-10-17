@@ -72,6 +72,13 @@ def dashboard(request):
 
 
 @role_required(STUDENT)
+def search(request):
+    q = request.GET.get("q", "").strip()[:100]
+    rows = cabinet.search(cabinet.enrollments_of(request.user), q) if q else []
+    return render(request, "student/search.html", {"search_q": q, "rows": rows})
+
+
+@role_required(STUDENT)
 def results(request):
     enrollments, enrollment = _student_enrollments(request)
     context = {"enrollments": enrollments}

@@ -1,18 +1,19 @@
 {% comment %}
-Django messages as toasts (included once by base.html). Auto-dismiss after 6 s; errors stay until closed.
-Level → colour: success → success, warning → warning, error → danger, info/debug → info.
+Django messages as toasts (included once by base.html): dark pill bottom right, a coloured icon tile.
+Auto-dismiss after 6 s; errors stay until closed.
+Level → icon tile: success → success-600, warning → warning-500, error → danger-600, info/debug → primary-600.
 {% endcomment %}{% load i18n %}{% if messages %}
-<div class="pointer-events-none fixed inset-x-4 bottom-4 z-[70] flex flex-col items-end gap-2 sm:left-auto" aria-live="polite">
+<div class="pointer-events-none fixed inset-x-4 bottom-4 z-[80] flex flex-col items-end gap-2 sm:right-6 sm:bottom-6 sm:left-auto" aria-live="polite">
   {% for m in messages %}
     <div x-data="{ show: true }" x-show="show" x-transition.opacity.duration.200ms
          {% if m.level_tag != "error" %}x-init="setTimeout(() => show = false, 6000)"{% endif %}
-         class="pointer-events-auto flex w-full max-w-sm items-start gap-3 rounded-md border border-line bg-surface p-3 pr-2 text-sm shadow-pop"
+         class="fade pointer-events-auto flex w-full max-w-sm items-center gap-3 rounded-[18px] bg-ink py-3.5 pr-3 pl-4 text-sm font-semibold text-white shadow-modal"
          role="{% if m.level_tag == 'error' %}alert{% else %}status{% endif %}">
-      <span class="mt-0.5 {% if m.level_tag == 'success' %}text-success-600{% elif m.level_tag == 'warning' %}text-warning-500{% elif m.level_tag == 'error' %}text-danger-600{% else %}text-primary-500{% endif %}">
+      <span class="grid size-8 shrink-0 place-items-center rounded-sm text-white {% if m.level_tag == 'success' %}bg-success-600{% elif m.level_tag == 'warning' %}bg-warning-500 text-ink{% elif m.level_tag == 'error' %}bg-danger-600{% else %}bg-primary-600{% endif %}">
         {% if m.level_tag == "success" %}{% include "components/icons.html#check" %}{% elif m.level_tag == "warning" or m.level_tag == "error" %}{% include "components/icons.html#alert" %}{% else %}{% include "components/icons.html#info" %}{% endif %}
       </span>
-      <p class="flex-1">{{ m }}</p>
-      <button type="button" class="btn btn-ghost btn-sm h-6 px-1 text-ink-soft" @click="show = false" aria-label="{% translate 'Close' %}">{% include "components/icons.html#x" with size=14 %}</button>
+      <p class="flex-1 leading-5">{{ m }}</p>
+      <button type="button" class="shrink-0 px-1 text-[13px] font-semibold text-primary-300 hover:text-white" @click="show = false">{% translate "Close" %}</button>
     </div>
   {% endfor %}
 </div>

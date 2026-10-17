@@ -82,7 +82,7 @@
       <div><dt class="text-xs text-ink-soft"><span x-text="ui.anode"></span>, O<sub>2</sub></dt><dd class="text-xl font-semibold"><span x-text="fmt(sc.vO, 1)"></span> <span class="text-sm font-normal" x-text="ui.ml"></span></dd></div>
     </dl>
     <p class="num mt-1 text-xs text-ink-soft"><span x-text="ui.time"></span>: <span x-text="fmt(sc.t / 60, 1)"></span> <span x-text="ui.min"></span></p>
-    <p x-show="sc.compared" class="num mt-2 rounded bg-success-50 px-2 py-1 text-sm font-semibold">
+    <p x-show="sc.compared" class="num mt-2 rounded-xs bg-success-50 px-2 py-1 text-sm font-semibold">
       <span x-text="ui.ratio"></span> H<sub>2</sub> : O<sub>2</sub> = <span x-text="fmt(sc.vH, 1) + ' : ' + fmt(sc.vO, 1)"></span> ≈ 2 : 1
     </p>
   </div>

@@ -39,7 +39,19 @@ def open_notification(request, pk):
 @login_required
 def read_all(request):
     services.mark_all_read(request.user)
+    if request.htmx:
+        return menu(request)
     return redirect("feedback:notifications")
+
+
+@login_required
+def menu(request):
+    """The Topbar dropdown: the last notifications (HTMX, loaded on open)."""
+    return render(
+        request,
+        "feedback/partials/menu.html",
+        {"items": selectors.recent(request.user, 6), "unread": selectors.unread_count(request.user)},
+    )
 
 
 @require_GET

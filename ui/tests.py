@@ -141,3 +141,90 @@ class PageTests(TestCase):
         self.assertDesignSystemPage(response)
         for marker in ("btn-primary", "badge-success", "progress", "<dialog", "stage-lab", 'class="table"'):
             self.assertContains(response, marker)
+
+
+@override_settings(ALLOWED_HOSTS=["testserver"])
+class ShellTests(TestCase):
+    """STEP-15: cabinet shell (sidebars, Topbar), search, notifications dropdown, English."""
+
+    @classmethod
+    def setUpTestData(cls):
+        call_command("seed_course", verbosity=0)
+        cls.student = make_student("student1", group=make_group(name="Хим-23-1"), first_name="Айгерім")
+        cls.teacher = User.objects.create_user("teacher1", "t1@example.kz", "pw-12345", role=User.Role.TEACHER)
+        cls.topic = Topic.objects.filter(is_published=True).select_related("module__course").first()
+        cls.course = cls.topic.module.course
+        services.enroll(cls.student, cls.course, "admin")
+        cls.course.course_teachers.create(teacher=cls.teacher, role="author")
+
+    def test_student_shell(self):
+        self.client.force_login(self.student)
+        r = self.client.get(reverse("student:courses"))
+        self.assertContains(r, 'x-data="cabinet"')
+        self.assertContains(r, reverse("student:search"))
+        self.assertContains(r, 'id="notif-badge"')
+        self.assertContains(r, 'id="notif-count"')
+        self.assertNotContains(r, "nav-dark")
+        card = r.context["request"]._sidebar_topic
+        self.assertEqual(card["topic"], self.topic)
+        self.assertEqual(card["passed"], 0)
+        self.assertContains(r, card["url"])
+
+    def test_teacher_shell_counts_the_grading_queue(self):
+        self.client.force_login(self.teacher)
+        r = self.client.get(reverse("teacher:dashboard"))
+        self.assertContains(r, "nav-dark")
+        self.assertContains(r, reverse("teacher:search"))
+        self.assertContains(r, reverse("teacher:grading"))
+        self.assertEqual(r.context["request"]._grading_pending, 0)
+
+    def test_student_search_finds_only_own_course_stages(self):
+        self.client.force_login(self.student)
+        r = self.client.get(reverse("student:search"), {"q": "Зертханалық"})
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue(r.context["rows"])
+        self.assertTrue(all(row["course"] == self.course for row in r.context["rows"]))
+        self.assertContains(r, "Зертханалық жұмыс")
+        self.assertContains(r, "badge-neutral")  # locked until the theory is passed
+        r = self.client.get(reverse("student:search"), {"q": "жоқ-сөз-123"})
+        self.assertEqual(r.context["rows"], [])
+        self.assertEqual(self.client.get(reverse("teacher:search")).status_code, 403)
+
+    def test_teacher_search(self):
+        self.client.force_login(self.teacher)
+        r = self.client.get(reverse("teacher:search"), {"q": "student1"})
+        self.assertContains(r, reverse("teacher:student", args=[self.student.pk]))
+        r = self.client.get(reverse("teacher:search"), {"q": self.topic.title[:6]})
+        self.assertIn(self.topic, list(r.context["topics"]))
+        self.assertEqual(self.client.get(reverse("student:search")).status_code, 403)
+
+    def test_notifications_dropdown_and_read_all(self):
+        from apps.feedback.models import Notification
+
+        Notification.objects.create(user=self.student, kind="unlocked", title="Видеосабақ ашылды")
+        self.client.force_login(self.student)
+        r = self.client.get(reverse("feedback:menu"), headers={"HX-Request": "true"})
+        self.assertContains(r, "Видеосабақ ашылды")
+        self.assertContains(r, 'hx-swap-oob="true"')
+        self.assertContains(r, reverse("feedback:read_all"))
+        r = self.client.post(reverse("feedback:read_all"), headers={"HX-Request": "true"})
+        self.assertEqual(r.status_code, 200)
+        self.assertNotContains(r, reverse("feedback:read_all"))
+        self.assertFalse(Notification.objects.filter(user=self.student, is_read=False).exists())
+
+    def test_english_interface_but_kazakh_by_default(self):
+        self.client.force_login(self.student)
+        r = self.client.get(reverse("student:courses"), headers={"Accept-Language": "en"})
+        self.assertContains(r, '<html lang="kk">')
+        self.client.cookies["django_language"] = "en"
+        self.student.language = ""
+        self.student.save(update_fields=["language"])
+        r = self.client.get(reverse("student:courses"))
+        self.assertContains(r, '<html lang="en">')
+        self.assertContains(r, "My courses")
+
+    def test_ring_component(self):
+        html = render_to_string("components/ring.html", {"value": 50, "size": 64, "stroke": 8})
+        self.assertIn('stroke-dasharray="87.96 175.93"', html)
+        self.assertIn("50%", html)
+        self.assertIn("B+", render_to_string("components/ring.html", {"value": 84, "text": "B+"}))

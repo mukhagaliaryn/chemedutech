@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ChemEduTech\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 21:06+0500\n"
+"POT-Creation-Date: 2026-10-17 11:36+0500\n"
 "PO-Revision-Date: 2026-10-16 21:00+0500\n"
 "Last-Translator: ChemEduTech\n"
 "Language-Team: ChemEduTech\n"
@@ -90,7 +90,8 @@ msgstr "Кафедра"
 #: apps/accounts/forms.py:56 apps/teacher/gradebook.py:21
 #: ui/templates/research/analytics.html:21 ui/templates/student/profile.html:40
 #: ui/templates/teacher/partials/groups_table.html:6
-#: ui/templates/teacher/students.html:17 ui/views.py:21
+#: ui/templates/teacher/students.html:17 ui/templates/ui/styleguide.html:140
+#: ui/views.py:21
 msgid "Group"
 msgstr "Группа"
 
@@ -140,7 +141,8 @@ msgstr "Отчество"
 msgid "Phone"
 msgstr "Телефон"
 
-#: apps/accounts/forms.py:134 ui/templates/partials/lang_switch.html:2
+#: apps/accounts/forms.py:134 ui/templates/partials/lang_menu.html:7
+#: ui/templates/partials/lang_switch.html:2
 msgid "Interface language"
 msgstr "Язык интерфейса"
 
@@ -152,15 +154,15 @@ msgstr "Используйте только латинские буквы, ци�
 msgid "Administrator"
 msgstr "Администратор"
 
-#: apps/accounts/models/user.py:32
+#: apps/accounts/models/user.py:32 ui/templates/layouts/teacher.html:9
 msgid "Teacher"
 msgstr "Преподаватель"
 
 #: apps/accounts/models/user.py:33 apps/teacher/gradebook.py:19
-#: ui/templates/research/dashboard.html:82
+#: ui/templates/layouts/student.html:8 ui/templates/research/dashboard.html:82
 #: ui/templates/teacher/gradebook.html:33 ui/templates/teacher/grading.html:31
 #: ui/templates/teacher/group.html:83 ui/templates/teacher/students.html:16
-#: ui/views.py:21
+#: ui/templates/ui/styleguide.html:140 ui/views.py:21
 msgid "Student"
 msgstr "Студент"
 
@@ -607,8 +609,8 @@ msgstr "Создать PDF заново"
 msgid "PDF made: %(n)d"
 msgstr "PDF создано: %(n)d"
 
-#: apps/certificates/apps.py:8 config/settings/base.py:283
-#: ui/templates/layouts/student.html:11
+#: apps/certificates/apps.py:8 config/settings/base.py:364
+#: ui/templates/partials/shell/sidebar_student.html:18
 #: ui/templates/student/certificates.html:3
 #: ui/templates/student/certificates.html:6
 msgid "Certificates"
@@ -763,7 +765,7 @@ msgid "This student is already enrolled in the course."
 msgstr "Этот студент уже записан на курс."
 
 #: apps/courses/apps.py:8 apps/research/admin_dashboard.py:38
-#: config/settings/base.py:247 config/settings/base.py:250
+#: config/settings/base.py:275 config/settings/base.py:279
 #: ui/templates/student/partials/course_switch.html:3
 #: ui/templates/teacher/group.html:50 ui/templates/teacher/student.html:23
 msgid "Courses"
@@ -990,7 +992,7 @@ msgstr "Ассистент"
 #: apps/courses/models/course.py:99 apps/courses/models/course.py:126
 #: apps/practice/models/submission.py:132
 #: ui/templates/feedback/partials/comment.html:7
-#: ui/templates/layouts/teacher.html:17
+#: ui/templates/partials/shell/sidebar_teacher.html:30
 msgid "teacher"
 msgstr "преподаватель"
 
@@ -1043,7 +1045,7 @@ msgid "Dropped"
 msgstr "Отчислен"
 
 #: apps/courses/models/enrollment.py:24 apps/labs/models/attempt.py:15
-#: ui/templates/layouts/student.html:16
+#: ui/templates/partials/shell/sidebar_student.html:37
 msgid "student"
 msgstr "студент"
 
@@ -2239,7 +2241,7 @@ msgstr ""
 
 #: apps/labs/models/attempt.py:10 apps/progress/models/progress.py:17
 #: apps/progress/models/progress.py:72 apps/student/cabinet.py:91
-#: apps/student/learning.py:97 ui/templates/components/stage_stepper.html:23
+#: apps/student/learning.py:97 ui/templates/components/stage_stepper.html:24
 #: ui/templates/student/results.html:80 ui/templates/student/topic.html:30
 #: ui/templates/teacher/gradebook.html:50 ui/templates/teacher/student.html:80
 msgid "In progress"
@@ -2367,7 +2369,7 @@ msgid "Wrong choice"
 msgstr "Неверный выбор"
 
 #: apps/labs/models/attempt.py:89 apps/labs/views.py:46
-#: ui/templates/student/partials/practice_field.html:86
+#: ui/templates/student/partials/practice_field.html:86 ui/views.py:24
 msgid "Hint"
 msgstr "Подсказка"
 
@@ -3198,7 +3200,7 @@ msgstr "ошибка"
 msgid "AI grade"
 msgstr "оценка AI"
 
-#: apps/practice/models/submission.py:111 config/settings/base.py:266
+#: apps/practice/models/submission.py:111 config/settings/base.py:327
 msgid "AI grades"
 msgstr "оценки AI"
 
@@ -3393,7 +3395,7 @@ msgstr "Неудовлетворительно"
 
 #: apps/progress/models/progress.py:15 apps/progress/models/progress.py:70
 #: apps/student/cabinet.py:79 apps/student/learning.py:95
-#: ui/templates/components/stage_stepper.html:22
+#: ui/templates/components/stage_stepper.html:23
 #: ui/templates/student/course_map.html:44 ui/templates/student/results.html:80
 #: ui/templates/student/stages/lab.html:23 ui/templates/student/topic.html:30
 #: ui/templates/teacher/student.html:58 ui/templates/teacher/student.html:80
@@ -3401,20 +3403,20 @@ msgid "Locked"
 msgstr "Закрыто"
 
 #: apps/progress/models/progress.py:16 apps/progress/models/progress.py:71
-#: ui/templates/components/stage_stepper.html:24
+#: ui/templates/components/stage_stepper.html:25
 #: ui/templates/student/topic.html:30
 msgid "Available"
 msgstr "Доступно"
 
 #: apps/progress/models/progress.py:18 apps/student/cabinet.py:81
-#: apps/student/cabinet.py:209 ui/templates/components/stage_stepper.html:19
+#: apps/student/cabinet.py:209 ui/templates/components/stage_stepper.html:20
 #: ui/templates/student/results.html:80 ui/templates/student/topic.html:30
 #: ui/templates/teacher/dashboard.html:30 ui/templates/teacher/student.html:80
 msgid "Awaiting check"
 msgstr "Ожидает проверки"
 
 #: apps/progress/models/progress.py:19 apps/progress/models/progress.py:143
-#: apps/student/cabinet.py:77 ui/templates/components/stage_stepper.html:21
+#: apps/student/cabinet.py:77 ui/templates/components/stage_stepper.html:22
 #: ui/templates/student/results.html:80 ui/templates/student/topic.html:30
 #: ui/templates/teacher/student.html:80
 msgid "Passed"
@@ -3578,8 +3580,8 @@ msgstr "события прогресса"
 #: apps/research/admin_dashboard.py:34 ui/templates/research/analytics.html:110
 #: ui/templates/research/dashboard.html:48 ui/templates/teacher/group.html:79
 #: ui/templates/teacher/partials/groups_table.html:8
-#: ui/templates/teacher/students.html:3 ui/templates/teacher/students.html:5
-#: ui/templates/teacher/students.html:6
+#: ui/templates/teacher/search.html:14 ui/templates/teacher/students.html:3
+#: ui/templates/teacher/students.html:5 ui/templates/teacher/students.html:6
 msgid "Students"
 msgstr "Студенты"
 
@@ -3606,7 +3608,7 @@ msgstr "Активные записи"
 msgid "%(n)s completed"
 msgstr "завершено: %(n)s"
 
-#: apps/research/admin_dashboard.py:43 config/settings/base.py:276
+#: apps/research/admin_dashboard.py:43 config/settings/base.py:353
 #: ui/templates/teacher/student.html:104
 msgid "Lab attempts"
 msgstr "Лабораторные попытки"
@@ -3630,18 +3632,21 @@ msgid "Certificates issued"
 msgstr "Выдано сертификатов"
 
 #: apps/research/admin_dashboard.py:53 apps/teacher/apps.py:8
+#: ui/templates/partials/shell/sidebar_teacher.html:9
 msgid "Teacher cabinet"
 msgstr "Кабинет преподавателя"
 
-#: apps/research/admin_dashboard.py:54 ui/templates/layouts/teacher.html:13
+#: apps/research/admin_dashboard.py:54
+#: ui/templates/partials/shell/sidebar_teacher.html:22
 #: ui/templates/research/analytics.html:3
 #: ui/templates/research/analytics.html:6
 #: ui/templates/research/analytics.html:12
 msgid "Statistics"
 msgstr "Статистика"
 
-#: apps/research/admin_dashboard.py:55 ui/templates/layouts/student.html:13
-#: ui/templates/layouts/teacher.html:15 ui/templates/research/dashboard.html:7
+#: apps/research/admin_dashboard.py:55
+#: ui/templates/partials/shell/sidebar_teacher.html:23
+#: ui/templates/research/dashboard.html:7
 msgid "Research data"
 msgstr "Данные исследования"
 
@@ -3759,7 +3764,7 @@ msgstr "Автопроверка и ИИ, подтверждает препод�
 msgid "Quiz · attempt %(n)s"
 msgstr "Тест · попытка %(n)s"
 
-#: apps/student/cabinet.py:184 config/settings/base.py:273
+#: apps/student/cabinet.py:184 config/settings/base.py:349
 msgid "Lab"
 msgstr "Лаборатория"
 
@@ -3777,34 +3782,34 @@ msgstr[3] "%(n)s предупреждений о безопасности"
 msgid "Practice · attempt %(n)s"
 msgstr "Практика · попытка %(n)s"
 
-#: apps/student/views.py:106
+#: apps/student/views.py:113
 msgid "Profile saved."
 msgstr "Профиль сохранён."
 
-#: apps/student/views.py:111
+#: apps/student/views.py:118
 msgid "Password changed."
 msgstr "Пароль изменён."
 
-#: apps/student/views.py:405 ui/templates/student/stages/practice.html:76
+#: apps/student/views.py:412 ui/templates/student/stages/practice.html:76
 msgid "Preview: answers are not saved."
 msgstr "Предпросмотр: ответы не сохраняются."
 
-#: apps/student/views.py:501
+#: apps/student/views.py:508
 msgid ""
 "Experiments open one after another: finish the previous one and send its "
 "analysis."
 msgstr ""
 "Опыты открываются по очереди: завершите предыдущий и отправьте его анализ."
 
-#: apps/student/views.py:576
+#: apps/student/views.py:583
 msgid "Finish the material first — the test opens after it."
 msgstr "Сначала завершите материал — тест откроется после него."
 
-#: apps/student/views.py:655 ui/templates/student/stage.html:19
+#: apps/student/views.py:662 ui/templates/student/stage.html:19
 msgid "Go to the next stage"
 msgstr "Перейти к следующему этапу"
 
-#: apps/student/views.py:657 ui/templates/teacher/content/item.html:58
+#: apps/student/views.py:664 ui/templates/teacher/content/item.html:58
 msgid "Back to the stage"
 msgstr "Вернуться к этапу"
 
@@ -3930,8 +3935,8 @@ msgid "The student signs up first; then add the account here."
 msgstr "Сначала студент регистрируется, затем добавьте его аккаунт здесь."
 
 #: apps/teacher/forms.py:41 ui/templates/certificates/verify.html:15
-#: ui/templates/layouts/teacher.html:14 ui/templates/student/courses.html:11
-#: ui/templates/teacher/gradebook.html:36 ui/templates/teacher/grading.html:20
+#: ui/templates/student/courses.html:11 ui/templates/teacher/gradebook.html:36
+#: ui/templates/teacher/grading.html:20
 msgid "Course"
 msgstr "Курс"
 
@@ -4105,15 +4110,15 @@ msgstr "Группа прикреплена к курсу; её студенты
 msgid "The group is detached. Enrolled students keep the course and progress."
 msgstr "Группа откреплена. У записанных студентов сохраняются курс и прогресс."
 
-#: apps/teacher/views.py:323
+#: apps/teacher/views.py:349
 msgid "The student is not enrolled in your course."
 msgstr "Студент не записан на ваш курс."
 
-#: apps/teacher/views.py:329
+#: apps/teacher/views.py:355
 msgid "This stage cannot be opened: its topic is not published."
 msgstr "Этот этап нельзя открыть: его тема не опубликована."
 
-#: apps/teacher/views.py:331
+#: apps/teacher/views.py:357
 #, python-format
 msgid "«%(stage)s» is open for the student."
 msgstr "«%(stage)s» открыт для студента."
@@ -4134,105 +4139,107 @@ msgstr "Английский"
 msgid "Users"
 msgstr "Пользователи"
 
-#: config/settings/base.py:231
+#: config/settings/base.py:232
 msgid "Student profiles"
 msgstr "Профили студентов"
 
-#: config/settings/base.py:232
+#: config/settings/base.py:237
 msgid "Teacher profiles"
 msgstr "Профили преподавателей"
 
-#: config/settings/base.py:236
+#: config/settings/base.py:244
 msgid "Organisations"
 msgstr "Организации"
 
-#: config/settings/base.py:239
+#: config/settings/base.py:248
 msgid "Universities"
 msgstr "Университеты"
 
-#: config/settings/base.py:240
+#: config/settings/base.py:253
 msgid "Faculties"
 msgstr "Факультеты"
 
-#: config/settings/base.py:241
+#: config/settings/base.py:258
 msgid "Departments"
 msgstr "Кафедры"
 
-#: config/settings/base.py:242
+#: config/settings/base.py:263
 msgid "Specialties"
 msgstr "Образовательные программы"
 
-#: config/settings/base.py:243
+#: config/settings/base.py:268
 msgid "Academic groups"
 msgstr "Академические группы"
 
-#: config/settings/base.py:251
+#: config/settings/base.py:284
 msgid "Modules"
 msgstr "Модули"
 
-#: config/settings/base.py:252
+#: config/settings/base.py:288 ui/templates/teacher/search.html:40
 msgid "Topics"
 msgstr "Темы"
 
-#: config/settings/base.py:253
+#: config/settings/base.py:290
 msgid "Stages"
 msgstr "Этапы"
 
-#: config/settings/base.py:254
+#: config/settings/base.py:295
 msgid "Enrolments"
 msgstr "Записи на курсы"
 
-#: config/settings/base.py:255
+#: config/settings/base.py:300
 msgid "Course groups"
 msgstr "Группы курсов"
 
-#: config/settings/base.py:259
+#: config/settings/base.py:307
 msgid "Assessment"
 msgstr "Оценивание"
 
-#: config/settings/base.py:262
+#: config/settings/base.py:310
 msgid "Quizzes"
 msgstr "Тесты"
 
-#: config/settings/base.py:263 ui/templates/teacher/student.html:135
+#: config/settings/base.py:312 ui/templates/teacher/student.html:135
 msgid "Quiz attempts"
 msgstr "Попытки тестов"
 
-#: config/settings/base.py:264
+#: config/settings/base.py:317
 msgid "Practice tasks"
 msgstr "Практические задания"
 
-#: config/settings/base.py:265
+#: config/settings/base.py:322
 msgid "Practice submissions"
 msgstr "Отправки практических работ"
 
-#: config/settings/base.py:267
+#: config/settings/base.py:332
 msgid "Teacher reviews"
 msgstr "Проверки преподавателей"
 
-#: config/settings/base.py:268
+#: config/settings/base.py:337
 msgid "Stage progress"
 msgstr "Прогресс по этапам"
 
-#: config/settings/base.py:269
+#: config/settings/base.py:342
 msgid "Course results"
 msgstr "Результаты курсов"
 
-#: config/settings/base.py:280
+#: config/settings/base.py:360
 msgid "Certificates and feedback"
 msgstr "Сертификаты и обратная связь"
 
-#: config/settings/base.py:284
+#: config/settings/base.py:369
 msgid "Certificate templates"
 msgstr "Шаблоны сертификатов"
 
-#: config/settings/base.py:285 ui/templates/feedback/partials/thread.html:7
+#: config/settings/base.py:374 ui/templates/feedback/partials/thread.html:7
 msgid "Comments"
 msgstr "Комментарии"
 
-#: config/settings/base.py:286 ui/templates/feedback/notifications.html:3
+#: config/settings/base.py:379 ui/templates/feedback/notifications.html:3
 #: ui/templates/feedback/notifications.html:7
-#: ui/templates/layouts/cabinet.html:16 ui/templates/layouts/cabinet.html:44
+#: ui/templates/feedback/partials/menu.html:4
+#: ui/templates/partials/shell/notifications_menu.html:8
+#: ui/templates/partials/shell/sidebar_student.html:19
 msgid "Notifications"
 msgstr "Уведомления"
 
@@ -4578,7 +4585,7 @@ msgstr "Дата выдачи"
 #: ui/templates/certificates/verify.html:16
 #: ui/templates/student/results.html:62 ui/templates/teacher/group.html:86
 #: ui/templates/teacher/student.html:66 ui/templates/teacher/student.html:110
-#: ui/views.py:21
+#: ui/templates/ui/styleguide.html:140 ui/views.py:21
 msgid "Score"
 msgstr "Балл"
 
@@ -4611,7 +4618,12 @@ msgstr ""
 "Проверьте ссылку или QR-код. Подлинный сертификат всегда открывает эту "
 "страницу с именем владельца."
 
-#: ui/templates/components/modal.html:15
+#: ui/templates/components/alert.html:10 ui/templates/components/toast.html:16
+#: ui/templates/ui/styleguide.html:116
+msgid "Close"
+msgstr "Закрыть"
+
+#: ui/templates/components/modal.html:19
 #: ui/templates/feedback/partials/thread.html:18
 #: ui/templates/teacher/content/course_form.html:38
 #: ui/templates/teacher/content/question.html:57
@@ -4623,13 +4635,9 @@ msgstr ""
 msgid "Cancel"
 msgstr "Отмена"
 
-#: ui/templates/components/modal.html:16
+#: ui/templates/components/modal.html:20
 msgid "Confirm"
 msgstr "Подтвердить"
-
-#: ui/templates/components/toast.html:15
-msgid "Close"
-msgstr "Закрыть"
 
 #: ui/templates/core/home.html:6 ui/templates/layouts/auth.html:25
 msgid "A chemistry lab that is always open"
@@ -4649,7 +4657,7 @@ msgid "Create an account"
 msgstr "Зарегистрироваться"
 
 #: ui/templates/feedback/notifications.html:8
-#: ui/templates/feedback/partials/badge.html:6
+#: ui/templates/feedback/partials/badge.html:7
 #, python-format
 msgid "%(n)s unread"
 msgid_plural "%(n)s unread"
@@ -4659,6 +4667,7 @@ msgstr[2] "%(n)s непрочитанных"
 msgstr[3] "%(n)s непрочитанных"
 
 #: ui/templates/feedback/notifications.html:12
+#: ui/templates/feedback/partials/menu.html:7
 msgid "Mark all as read"
 msgstr "Отметить все как прочитанные"
 
@@ -4675,6 +4684,7 @@ msgid "Older"
 msgstr "Старее"
 
 #: ui/templates/feedback/notifications.html:32
+#: ui/templates/feedback/partials/menu.html:23
 msgid "No notifications yet"
 msgstr "Уведомлений пока нет"
 
@@ -4683,8 +4693,13 @@ msgid "Grades, returned works and opened stages will appear here."
 msgstr "Здесь появятся оценки, возвращённые работы и открытые этапы."
 
 #: ui/templates/feedback/partials/item.html:13
+#: ui/templates/feedback/partials/menu.html:20
 msgid "unread"
 msgstr "непрочитанное"
+
+#: ui/templates/feedback/partials/menu.html:25
+msgid "All notifications"
+msgstr "Все уведомления"
 
 #: ui/templates/feedback/partials/thread.html:12
 #: ui/templates/feedback/partials/thread.html:16
@@ -4725,28 +4740,48 @@ msgstr ""
 "Курс для будущих учителей химии: теория, видеоуроки и виртуальные "
 "лабораторные работы — безопасно и в любое время."
 
-#: ui/templates/layouts/cabinet.html:9 ui/templates/layouts/learn.html:9
+#: ui/templates/layouts/cabinet.html:14 ui/templates/layouts/learn.html:9
 msgid "Skip to content"
 msgstr "Перейти к содержимому"
 
-#: ui/templates/layouts/cabinet.html:22
-msgid "Menu"
-msgstr "Меню"
-
-#: ui/templates/layouts/cabinet.html:27
+#: ui/templates/layouts/cabinet.html:18
 msgid "Main menu"
 msgstr "Главное меню"
 
-#: ui/templates/layouts/cabinet.html:36
+#: ui/templates/layouts/cabinet.html:24
 msgid "Close menu"
 msgstr "Закрыть меню"
 
-#: ui/templates/layouts/cabinet.html:52 ui/templates/student/profile.html:3
-#: ui/templates/teacher/group.html:108
+#: ui/templates/layouts/cabinet.html:32
+msgid "Menu"
+msgstr "Меню"
+
+#: ui/templates/layouts/cabinet.html:44 ui/templates/student/search.html:3
+#: ui/templates/student/search.html:4 ui/templates/student/search.html:5
+#: ui/templates/teacher/search.html:3 ui/templates/teacher/search.html:4
+#: ui/templates/teacher/search.html:5
+msgid "Search"
+msgstr "Поиск"
+
+#: ui/templates/layouts/cabinet.html:53
+msgid "Account menu"
+msgstr "Меню аккаунта"
+
+#: ui/templates/layouts/cabinet.html:63
+#: ui/templates/partials/shell/sidebar_student.html:20
+#: ui/templates/partials/shell/sidebar_student.html:33
+#: ui/templates/partials/shell/sidebar_teacher.html:26
+#: ui/templates/student/profile.html:3 ui/templates/teacher/group.html:108
 msgid "Profile"
 msgstr "Профиль"
 
-#: ui/templates/layouts/cabinet.html:61
+#: ui/templates/layouts/cabinet.html:64
+#: ui/templates/teacher/content/course_form.html:6
+#: ui/templates/ui/styleguide.html:23
+msgid "Settings"
+msgstr "Настройки"
+
+#: ui/templates/layouts/cabinet.html:67
 msgid "Log out"
 msgstr "Выйти"
 
@@ -4778,22 +4813,77 @@ msgstr "Аккаунт"
 msgid "My cabinet"
 msgstr "Личный кабинет"
 
-#: ui/templates/layouts/student.html:8 ui/templates/layouts/teacher.html:8
+#: ui/templates/layouts/student.html:7
+msgid "Topic or material"
+msgstr "Тема или материал"
+
+#: ui/templates/layouts/teacher.html:7
+msgid "Student, group or task"
+msgstr "Студент, группа или задание"
+
+#: ui/templates/partials/shell/collapse_button.html:2
+msgid "Expand menu"
+msgstr "Развернуть меню"
+
+#: ui/templates/partials/shell/collapse_button.html:2
+#: ui/templates/partials/shell/collapse_button.html:3
+msgid "Collapse menu"
+msgstr "Свернуть меню"
+
+#: ui/templates/partials/shell/notifications_menu.html:15
+msgid "Loading…"
+msgstr "Загрузка…"
+
+#: ui/templates/partials/shell/sidebar_student.html:13
+msgid "Learning"
+msgstr "Обучение"
+
+#: ui/templates/partials/shell/sidebar_student.html:14
+msgid "Student menu"
+msgstr "Меню студента"
+
+#: ui/templates/partials/shell/sidebar_student.html:15
+#: ui/templates/partials/shell/sidebar_teacher.html:16
 #: ui/templates/student/dashboard.html:3 ui/templates/teacher/dashboard.html:3
 msgid "Home"
 msgstr "Главная"
 
-#: ui/templates/layouts/student.html:9 ui/templates/student/courses.html:3
-#: ui/templates/student/courses.html:6 ui/templates/student/dashboard.html:16
-#: ui/templates/student/results.html:13
+#: ui/templates/partials/shell/sidebar_student.html:16
+#: ui/templates/student/courses.html:3 ui/templates/student/courses.html:6
+#: ui/templates/student/dashboard.html:16 ui/templates/student/results.html:13
 msgid "My courses"
 msgstr "Мои курсы"
 
-#: ui/templates/layouts/student.html:10 ui/templates/student/dashboard.html:51
+#: ui/templates/partials/shell/sidebar_student.html:17
+#: ui/templates/student/dashboard.html:51
 msgid "Grades"
 msgstr "Оценки"
 
-#: ui/templates/layouts/teacher.html:9
+#: ui/templates/partials/shell/sidebar_student.html:25
+msgid "Current topic"
+msgstr "Текущая тема"
+
+#: ui/templates/partials/shell/sidebar_student.html:28
+#, python-format
+msgid "%(a)s of %(b)s stages"
+msgstr "%(a)s из %(b)s этапов"
+
+#: ui/templates/partials/shell/sidebar_student.html:29
+#: ui/templates/student/courses.html:23 ui/templates/student/topic.html:12
+#: ui/templates/student/topic.html:36
+msgid "Continue"
+msgstr "Продолжить"
+
+#: ui/templates/partials/shell/sidebar_teacher.html:14
+msgid "Teacher menu"
+msgstr "Меню преподавателя"
+
+#: ui/templates/partials/shell/sidebar_teacher.html:15
+#: ui/templates/teacher/grading.html:31 ui/templates/teacher/student.html:159
+msgid "Work"
+msgstr "Работа"
+
+#: ui/templates/partials/shell/sidebar_teacher.html:17
 #: ui/templates/teacher/content/course.html:5
 #: ui/templates/teacher/content/course_form.html:6
 #: ui/templates/teacher/content/courses.html:3
@@ -4802,18 +4892,24 @@ msgstr "Оценки"
 msgid "Course content"
 msgstr "Содержание курсов"
 
-#: ui/templates/layouts/teacher.html:10
+#: ui/templates/partials/shell/sidebar_teacher.html:18
 msgid "Groups and students"
 msgstr "Группы и студенты"
 
-#: ui/templates/layouts/teacher.html:11 ui/templates/teacher/grading.html:3
-#: ui/templates/teacher/grading.html:6
+#: ui/templates/partials/shell/sidebar_teacher.html:19
+#: ui/templates/teacher/grading.html:3 ui/templates/teacher/grading.html:6
 #: ui/templates/teacher/grading_detail.html:5
 msgid "Checking works"
 msgstr "Проверка работ"
 
-#: ui/templates/layouts/teacher.html:12 ui/templates/teacher/gradebook.html:3
-#: ui/templates/teacher/gradebook.html:7 ui/templates/teacher/gradebook.html:30
+#: ui/templates/partials/shell/sidebar_teacher.html:20
+#: ui/templates/teacher/lab_log.html:27
+msgid "Analysis"
+msgstr "Анализ"
+
+#: ui/templates/partials/shell/sidebar_teacher.html:21
+#: ui/templates/teacher/gradebook.html:3 ui/templates/teacher/gradebook.html:7
+#: ui/templates/teacher/gradebook.html:30
 msgid "Grade register"
 msgstr "Журнал оценок"
 
@@ -5275,11 +5371,6 @@ msgstr ""
 msgid "preview"
 msgstr "предпросмотр"
 
-#: ui/templates/student/courses.html:23 ui/templates/student/topic.html:12
-#: ui/templates/student/topic.html:36
-msgid "Continue"
-msgstr "Продолжить"
-
 #: ui/templates/student/courses.html:30
 msgid "No courses yet"
 msgstr "Курсов пока нет"
@@ -5528,6 +5619,7 @@ msgid "pts"
 msgstr "б."
 
 #: ui/templates/student/partials/practice_field.html:15
+#: ui/templates/ui/styleguide.html:38
 msgid "Unit"
 msgstr "Единица"
 
@@ -5735,6 +5827,26 @@ msgid ""
 "topics, the course — of its modules."
 msgstr ""
 "Балл темы — взвешенное среднее её этапов; модуля — тем, курса — модулей."
+
+#: ui/templates/student/search.html:8 ui/templates/teacher/search.html:8
+msgid "What are you looking for?"
+msgstr "Что вы ищете?"
+
+#: ui/templates/student/search.html:8
+msgid "Type a topic or a stage name in the search box above."
+msgstr "Введите название темы или этапа в строке поиска вверху."
+
+#: ui/templates/student/search.html:11
+msgid "Results"
+msgstr "Результаты"
+
+#: ui/templates/student/search.html:24 ui/templates/teacher/search.html:55
+msgid "Nothing found"
+msgstr "Ничего не найдено"
+
+#: ui/templates/student/search.html:24 ui/templates/teacher/search.html:55
+msgid "Check the spelling or try a shorter word."
+msgstr "Проверьте написание или попробуйте более короткое слово."
 
 #: ui/templates/student/stages/lab.html:7
 msgid ""
@@ -5958,10 +6070,6 @@ msgstr ""
 "Перетаскивайте за ⋮⋮ или используйте стрелки. Номера тем следуют порядку; "
 "студенты видят только опубликованные темы."
 
-#: ui/templates/teacher/content/course_form.html:6
-msgid "Settings"
-msgstr "Настройки"
-
 #: ui/templates/teacher/content/course_form.html:18
 msgid "Enrolment and order"
 msgstr "Запись и порядок"
@@ -6028,7 +6136,7 @@ msgstr "Образец ответа"
 msgid "Notes for the grader"
 msgstr "Заметки для проверяющего"
 
-#: ui/templates/teacher/content/item.html:39
+#: ui/templates/teacher/content/item.html:39 ui/views.py:24
 msgid "Criteria"
 msgstr "Критерии"
 
@@ -6412,10 +6520,6 @@ msgstr ""
 msgid "All courses"
 msgstr "Все курсы"
 
-#: ui/templates/teacher/grading.html:31 ui/templates/teacher/student.html:159
-msgid "Work"
-msgstr "Работа"
-
 #: ui/templates/teacher/grading.html:32
 msgid "Sent"
 msgstr "Отправлено"
@@ -6423,6 +6527,7 @@ msgstr "Отправлено"
 #: ui/templates/teacher/grading.html:33 ui/templates/teacher/group.html:89
 #: ui/templates/teacher/partials/groups_table.html:11
 #: ui/templates/teacher/student.html:68 ui/templates/teacher/student.html:112
+#: ui/templates/ui/styleguide.html:100
 msgid "Actions"
 msgstr "Действия"
 
@@ -6523,7 +6628,8 @@ msgstr "Другие попытки"
 
 #: ui/templates/teacher/group.html:5 ui/templates/teacher/group_form.html:5
 #: ui/templates/teacher/groups.html:3 ui/templates/teacher/groups.html:7
-#: ui/templates/teacher/student.html:7 ui/templates/teacher/students.html:5
+#: ui/templates/teacher/search.html:29 ui/templates/teacher/student.html:7
+#: ui/templates/teacher/students.html:5
 msgid "Groups"
 msgstr "Группы"
 
@@ -6734,10 +6840,6 @@ msgstr "Неверное оборудование или реактив"
 msgid "Wrong choices"
 msgstr "Неверные выборы"
 
-#: ui/templates/teacher/lab_log.html:27
-msgid "Analysis"
-msgstr "Анализ"
-
 #: ui/templates/teacher/lab_log.html:34
 msgid "Event"
 msgstr "Событие"
@@ -6763,6 +6865,10 @@ msgid ""
 "Create a group, give the students its join code and attach it to your course."
 msgstr ""
 "Создайте группу, дайте студентам её код и прикрепите группу к вашему курсу."
+
+#: ui/templates/teacher/search.html:8
+msgid "Search for a student, a group or a topic."
+msgstr "Ищите студента, группу или тему."
 
 #: ui/templates/teacher/student.html:29
 msgid "Not enrolled in your courses"
@@ -6844,13 +6950,51 @@ msgstr "Без группы"
 msgid "No students found."
 msgstr "Студенты не найдены."
 
-#: ui/templates/ui/styleguide.html:7
-msgid "Every component of ui/templates/components with sample data."
-msgstr "Все компоненты ui/templates/components с примерами данных."
+#: ui/templates/ui/styleguide.html:8
+msgid "UI components"
+msgstr "UI-компоненты"
 
-#: ui/templates/ui/styleguide.html:29
+#: ui/templates/ui/styleguide.html:9
+msgid ""
+"Every component of ui/templates/components with sample data. Radii: small 10 "
+"· medium 14 · card 20–24 · large 28."
+msgstr "Все компоненты ui/templates/components с примерами. Радиусы: малый 10 · средний 14 · карточка 20–24 · большой 28."
+
+#: ui/templates/ui/styleguide.html:14
+msgid "Buttons"
+msgstr "Кнопки"
+
+#: ui/templates/ui/styleguide.html:27
 msgid "Open dialog"
 msgstr "Открыть диалог"
+
+#: ui/templates/ui/styleguide.html:32
+msgid "Form fields"
+msgstr "Поля формы"
+
+#: ui/templates/ui/styleguide.html:47
+msgid "Alerts"
+msgstr "Уведомления"
+
+#: ui/templates/ui/styleguide.html:56
+msgid "Badge, progress, avatar"
+msgstr "Бейдж, прогресс, аватар"
+
+#: ui/templates/ui/styleguide.html:79
+msgid "Tabs, chips and accordion"
+msgstr "Вкладки, чипы и аккордеон"
+
+#: ui/templates/ui/styleguide.html:108
+msgid "Result dialog"
+msgstr "Окно результата"
+
+#: ui/templates/ui/styleguide.html:109
+msgid "Open drawer"
+msgstr "Открыть панель"
+
+#: ui/templates/ui/styleguide.html:134
+msgid "Stage stepper (any number of stages)"
+msgstr "Шаги этапов (любое количество)"
 
 #: ui/templatetags/ui_tags.py:148
 msgid "just now"
@@ -6877,6 +7021,10 @@ msgstr "Практическая работа 2"
 #: ui/views.py:15
 msgid "Practice 3"
 msgstr "Практическая работа 3"
+
+#: ui/views.py:24
+msgid "Conditions"
+msgstr "Условие"
 
 #, fuzzy, python-format
 #~| msgid "%(m)s min"

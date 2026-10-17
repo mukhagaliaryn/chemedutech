@@ -1,0 +1,18 @@
+{% load i18n %}{% unread_notifications as unread %}{% comment %}
+Topbar bell: unread dot (polls every 60 s via feedback/partials/badge.html) and a dropdown whose list
+is loaded with HTMX on the first open (feedback:menu).
+{% endcomment %}
+<div class="relative shrink-0" x-data="{ open: false }" @click.outside="open = false" @keydown.escape="open = false">
+  <button type="button" @click="open = !open" :aria-expanded="open.toString()" aria-expanded="false"
+          hx-get="{% url 'feedback:menu' %}" hx-target="#notif-menu-body" hx-trigger="click"
+          aria-label="{% translate 'Notifications' %}"
+          class="relative grid size-[42px] place-items-center rounded-[12px] border border-line bg-surface text-ink transition-colors hover:border-line-strong hover:bg-canvas">
+    {% include "components/icons.html#bell" with size=20 %}
+    {% include "feedback/partials/badge.html" %}
+  </button>
+  <div x-show="open" x-cloak class="menu top-[50px] right-0 w-[360px] max-w-[86vw] overflow-hidden p-0">
+    <div id="notif-menu-body" aria-live="polite">
+      <p class="px-4 py-6 text-center text-sm text-ink-soft">{% translate "Loading…" %}</p>
+    </div>
+  </div>
+</div>

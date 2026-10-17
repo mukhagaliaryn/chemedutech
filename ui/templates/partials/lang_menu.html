@@ -1,0 +1,25 @@
+{% load i18n %}{% get_current_language as LANG %}{% get_available_languages as LANGS %}{% comment %}
+Language dropdown (Topbar, landing navbar): a button with ҚАЗ / РУС / ENG and a list that posts to set_language.
+dark — outlined white button for the dark landing hero; class — wrapper extras.
+{% endcomment %}
+<div class="relative shrink-0 {{ class }}" x-data="{ open: false }" @click.outside="open = false" @keydown.escape="open = false">
+  <button type="button" @click="open = !open" :aria-expanded="open.toString()" aria-expanded="false" aria-haspopup="true"
+          aria-label="{% translate 'Interface language' %}"
+          class="inline-flex h-[42px] items-center gap-1.5 rounded-[12px] border px-2.5 text-xs font-bold transition-colors
+                 {% if dark %}border-white/20 text-white hover:bg-white/10{% else %}border-line bg-surface text-ink hover:border-line-strong hover:bg-canvas{% endif %}">
+    {% if dark %}{% include "components/icons.html#globe" %}{% endif %}
+    {% if LANG == "kk" %}ҚАЗ{% elif LANG == "ru" %}РУС{% else %}ENG{% endif %}
+    {% include "components/icons.html#chevron-down" %}
+  </button>
+  <form x-show="open" x-cloak action="{% url 'set_language' %}" method="post" class="menu top-[50px] right-0 w-[168px]">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ request.get_full_path }}">
+    {% for code, name in LANGS %}
+      <button type="submit" name="language" value="{{ code }}" lang="{{ code }}" class="menu-item justify-between font-semibold"
+              {% if code == LANG %}aria-current="true"{% endif %}>
+        {% if code == "kk" %}Қазақша{% elif code == "ru" %}Русский{% else %}English{% endif %}
+        {% if code == LANG %}<span class="text-primary-600">{% include "components/icons.html#check" %}</span>{% endif %}
+      </button>
+    {% endfor %}
+  </form>
+</div>

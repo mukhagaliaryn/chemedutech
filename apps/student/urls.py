@@ -8,6 +8,7 @@ STAGE = "learn/<slug:course_slug>/<int:topic_number>/<int:stage_pk>/"
 
 urlpatterns = [
     path("me/", views.dashboard, name="dashboard"),
+    path("me/search/", views.search, name="search"),
     path("me/results/", views.results, name="results"),
     path("me/certificates/", views.certificates, name="certificates"),
     path("me/profile/", views.profile, name="profile"),

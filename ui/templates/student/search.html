@@ -1,0 +1,27 @@
+{% extends "layouts/student.html" %}
+{% load i18n %}
+{% block title %}{% translate "Search" %} · ChemEduTech{% endblock %}
+{% block crumb %}{% translate "Search" %}{% endblock %}
+{% block page_title %}{% if search_q %}«{{ search_q }}»{% else %}{% translate "Search" %}{% endif %}{% endblock %}
+{% block content %}
+{% if not search_q %}
+  {% translate "What are you looking for?" as l_t %}{% translate "Type a topic or a stage name in the search box above." as l_x %}
+  {% include "components/empty_state.html" with title=l_t text=l_x icon="search" %}
+{% elif rows %}
+  <section class="card flex flex-col gap-1 p-4" aria-label="{% translate 'Results' %}">
+    {% for r in rows %}
+      <a href="{{ r.url }}" class="row-link text-ink">
+        <span class="tile {% if r.status == 'locked' %}bg-line-strong{% else %}stage-{{ r.stage.kind }}{% endif %}">{% include "components/icons.html#"|add:r.stage.kind %}</span>
+        <span class="flex min-w-0 flex-1 flex-col leading-5">
+          <span class="truncate text-sm font-semibold">{{ r.stage.title }}</span>
+          <span class="truncate text-caption font-normal text-ink-soft">{{ r.topic.number }}. {{ r.topic.title }} · {{ r.course.title }}</span>
+        </span>
+        {% include "components/badge.html" with status=r.status label=r.meta|default:r.stage.get_kind_display %}
+      </a>
+    {% endfor %}
+  </section>
+{% else %}
+  {% translate "Nothing found" as l_t %}{% translate "Check the spelling or try a shorter word." as l_x %}
+  {% include "components/empty_state.html" with title=l_t text=l_x icon="search" %}
+{% endif %}
+{% endblock %}

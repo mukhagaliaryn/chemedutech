@@ -201,3 +201,27 @@ def get_item(mapping, key):
 def error_variant(event_type):
     """Lab error type → badge variant (safety is the serious one)."""
     return {"safety_warning": "danger", "order_error": "warning"}.get(str(event_type), "neutral")
+
+
+@register.simple_tag
+def ring_geometry(value, size=64, stroke=8):
+    """Numbers for components/ring.html: radius, circumference and the arc length for ``value`` percent."""
+    import math
+
+    try:
+        pct = max(0.0, min(100.0, float(value)))
+    except (TypeError, ValueError):
+        pct = 0.0
+    size, stroke = int(size), int(stroke)
+    r = (size - stroke) / 2
+    circumference = 2 * math.pi * r
+    return {
+        "size": size,
+        "stroke": stroke,
+        "c": size / 2,
+        "r": round(r, 2),
+        "circumference": round(circumference, 2),
+        "dash": round(circumference * pct / 100, 2),
+        "text": f"{pct:.0f}%",
+        "font": max(11, round(size * 0.22)),
+    }

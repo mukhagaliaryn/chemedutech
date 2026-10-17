@@ -370,3 +370,38 @@ def certificate_rows(enrollments) -> list[dict]:
             }
         )
     return rows
+
+
+# --- search (Topbar) -------------------------------------------------------------------
+
+SEARCH_LIMIT = 30
+
+
+def search(enrollments, q: str) -> list[dict]:
+    """Topics and stages of the student's courses whose title contains ``q``, in course order."""
+    from django.db.models import Q
+
+    from apps.courses.models import Stage
+
+    rows = []
+    for enrollment in enrollments:
+        place = place_of(enrollment)
+        stages = (
+            Stage.objects.filter(topic__module__course=enrollment.course, topic__is_published=True)
+            .filter(Q(title__icontains=q) | Q(topic__title__icontains=q))
+            .select_related("topic__module__course")
+            .order_by("topic__number", "order", "pk")
+        )
+        for stage in stages[:SEARCH_LIMIT]:
+            status = learning.stage_status(place, stage)
+            rows.append(
+                {
+                    "stage": stage,
+                    "topic": stage.topic,
+                    "course": enrollment.course,
+                    "status": status,
+                    "meta": stage_meta(place, stage, status),
+                    "url": learning.stage_url(stage),
+                }
+            )
+    return rows[:SEARCH_LIMIT]
