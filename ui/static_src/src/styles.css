@@ -171,6 +171,13 @@
   [x-cloak] {
     display: none !important;
   }
+  /* absolutely positioned bits inside a scroll box (sr-only labels in table headers, tooltips)
+     must stay inside it — otherwise they widen the page on phones */
+  .overflow-x-auto,
+  .overflow-auto,
+  .table-wrap {
+    position: relative;
+  }
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,

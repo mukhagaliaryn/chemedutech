@@ -12,7 +12,7 @@
       {% if blocking_status == "awaiting_check" %}{% blocktranslate with t=blocking.title %}«{{ t }}» is waiting for the teacher's check. The next topic opens after the check.{% endblocktranslate %}
       {% else %}{% blocktranslate with t=blocking.title %}Finish «{{ t }}» first — then this stage opens.{% endblocktranslate %}{% endif %}
     </p>
-    <a class="btn btn-primary mt-2" href="{{ blocking_url }}">{% blocktranslate with t=blocking.title|truncatechars:40 %}Go to «{{ t }}»{% endblocktranslate %}{% include "components/icons.html#arrow-right" %}</a>
+    <a class="btn btn-primary mt-2 h-auto min-h-11 max-w-full py-3 whitespace-normal" href="{{ blocking_url }}">{% blocktranslate with t=blocking.title|truncatechars:40 %}Go to «{{ t }}»{% endblocktranslate %}{% include "components/icons.html#arrow-right" %}</a>
   {% else %}
     <p class="max-w-md text-ink-soft">{% translate "Stages open one after another. Go back to the course map to see what to do next." %}</p>
     <a class="btn btn-primary mt-2" href="{{ course_url }}">{% translate "Course map" %}</a>

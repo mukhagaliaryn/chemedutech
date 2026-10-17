@@ -78,7 +78,7 @@ and observations · lab journal. All behaviour is labRunner (static/js/lab/engin
         <template x-for="group in itemGroups" :key="group.label">
           <div class="flex flex-col gap-2">
             <h3 class="text-caption font-semibold text-ink-faint" x-text="group.label"></h3>
-            <ul class="grid grid-cols-2 gap-2 lg:grid-cols-1">
+            <ul class="grid gap-2 sm:grid-cols-2 lg:grid-cols-1">
               <template x-for="it in group.items" :key="it.key">
                 <li class="group relative flex touch-none items-center gap-2.5 rounded-md border p-2.5 transition-[border-color,box-shadow,transform]"
                     :class="has(it.key) ? 'border-success-50 bg-[#f3faf7]' : 'cursor-grab border-line bg-surface hover:-translate-y-px hover:border-primary-300 hover:shadow-[0_8px_20px_rgba(20,33,61,.08)]'"

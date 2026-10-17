@@ -45,7 +45,7 @@ agreement and the random spot-check, then the full descriptive table. Descriptiv
 
 <div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
   {# ---- grouped bars by stage ---- #}
-  <section class="card" aria-labelledby="by-stage">
+  <section class="card min-w-0" aria-labelledby="by-stage">
     <div class="flex flex-wrap items-center justify-between gap-3">
       <h2 id="by-stage" class="text-[17px] font-extrabold">{% translate "Average score by stage" %}</h2>
       <div class="flex gap-3.5 text-[13px] text-ink-soft">
@@ -74,7 +74,7 @@ agreement and the random spot-check, then the full descriptive table. Descriptiv
   </section>
 
   {# ---- funnel ---- #}
-  <section class="card" aria-labelledby="funnel">
+  <section class="card min-w-0" aria-labelledby="funnel">
     <h2 id="funnel" class="text-[17px] font-extrabold">{% if topic %}{% blocktranslate with n=topic.number %}Completion funnel · Topic {{ n }}{% endblocktranslate %}{% else %}{% translate "Completion funnel" %}{% endif %}</h2>
     <p class="mt-0.5 mb-4 text-[13px] text-ink-soft">{% blocktranslate count n=enrollments|length %}Students who finished each stage, of {{ n }} student{% plural %}Students who finished each stage, of {{ n }} students{% endblocktranslate %}</p>
     <div class="grid gap-2.5">
@@ -93,7 +93,7 @@ agreement and the random spot-check, then the full descriptive table. Descriptiv
 
 <div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
   {# ---- frequent errors ---- #}
-  <section class="card" aria-labelledby="errs" x-data="{ kind: 'order' }">
+  <section class="card min-w-0" aria-labelledby="errs" x-data="{ kind: 'order' }">
     <div class="mb-3.5 flex flex-wrap items-center justify-between gap-3">
       <div><h2 id="errs" class="text-[17px] font-extrabold">{% translate "Frequent lab errors" %}</h2><p class="text-[13px] text-ink-soft">{% translate "At which step students go wrong — a hint for what to explain again in class." %}</p></div>
       <div class="flex gap-1.5">
@@ -127,7 +127,7 @@ agreement and the random spot-check, then the full descriptive table. Descriptiv
   </section>
 
   {# ---- AI agreement ---- #}
-  <section class="brand-ground flex flex-col gap-4 rounded-card p-6" aria-labelledby="ai">
+  <section class="brand-ground flex min-w-0 flex-col gap-4 rounded-card p-6" aria-labelledby="ai">
     <div class="relative"><h2 id="ai" class="text-[17px] font-extrabold">{% translate "AI ↔ teacher agreement" %}</h2>
       <p class="text-[13px] text-on-dark-soft">{% blocktranslate count n=agreement.answers|default:0 %}Open answers · {{ n }} grade checked by a teacher{% plural %}Open answers · {{ n }} grades checked by a teacher{% endblocktranslate %}</p></div>
     {% if agreement.answers %}

@@ -15,3 +15,7 @@ MIDDLEWARE = [*MIDDLEWARE, "django_browser_reload.middleware.BrowserReloadMiddle
 
 if env_bool("USE_SQLITE", False):
     DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": BASE_DIR / "db.sqlite3"}}  # noqa: F405
+
+# Dev only: lets a page be framed by the same site, so layouts can be checked at phone width
+# in an iframe (production keeps Django's default DENY).
+X_FRAME_OPTIONS = "SAMEORIGIN"
