@@ -86,6 +86,10 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+# Django's default «same-origin» sends no Referer to other sites; embedded YouTube players then refuse to
+# play («Video unavailable», error 153). The browser default sends only the origin cross-site — no paths.
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+
 ROOT_URLCONF = "config.urls"
 
 TEMPLATES = [

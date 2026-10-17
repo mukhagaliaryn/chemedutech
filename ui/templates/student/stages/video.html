@@ -12,6 +12,16 @@
         <div x-ref="youtube" class="size-full"></div>
       {% endif %}
     </div>
+    {% if content.provider == "youtube" %}
+      <div x-show="failed !== null" x-cloak class="alert alert-warning" role="alert">
+        <span class="alert-icon">{% include "components/icons.html#warn" with size=18 %}</span>
+        <div class="flex flex-1 flex-wrap items-center justify-between gap-3">
+          <span x-show="failed === 101 || failed === 150">{% translate "The video's owner does not allow playing it on other sites." %}</span>
+          <span x-show="failed !== 101 && failed !== 150">{% translate "The video cannot be played here." %}</span>
+          <a class="btn btn-secondary btn-sm" href="https://www.youtube.com/watch?v={{ content.youtube_id }}" target="_blank" rel="noopener">{% include "components/icons.html#play" %}{% translate "Watch on YouTube" %}</a>
+        </div>
+      </div>
+    {% endif %}
     {% translate "Watched" as l_watched %}
     <div class="flex flex-col gap-2">
       <div class="flex items-baseline justify-between text-sm">

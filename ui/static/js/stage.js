@@ -113,6 +113,7 @@
       percent: opts.start || 0,
       done: opts.done,
       seen: new Set(),
+      failed: null,
       last: null,
       duration: 0,
       sent: opts.start || 0,
@@ -182,8 +183,12 @@
         const start = () => {
           const player = new YT.Player(this.$refs.youtube, {
             videoId: opts.id,
-            playerVars: { rel: 0, modestbranding: 1 },
+            // origin: the API's postMessage channel must name this page's origin.
+            playerVars: { rel: 0, enablejsapi: 1, origin: window.location.origin },
             events: {
+              onError: (e) => {
+                this.failed = e.data; // 2 bad id · 5 html5 · 100 removed · 101/150 embedding disabled · 153 no referrer
+              },
               onStateChange: (e) => {
                 clearInterval(this.poll);
                 if (e.data === YT.PlayerState.PLAYING) {

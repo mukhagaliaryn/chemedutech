@@ -194,6 +194,9 @@ class VideoAndTestStageTests(StudentFlowBase):
         r = self.client.get(self.url(self.video))
         self.assertContains(r, "videoTracker")
         self.assertContains(r, "dQw4w9WgXcQ")
+        # YouTube refuses embeds without a Referer (error 153): the origin must be sent cross-site
+        self.assertEqual(r["Referrer-Policy"], "strict-origin-when-cross-origin")
+        self.assertContains(r, "https://www.youtube.com/watch?v=dQw4w9WgXcQ")  # fallback link
 
         def post(percent):
             return self.client.post(
