@@ -82,14 +82,14 @@
     {% endwith %}{% endfor %}
 
     <div class="flex flex-wrap items-center justify-between gap-3 border-t border-line pt-5">
-      <button type="button" class="btn btn-secondary" x-cloak x-show="current > 0" @click="go(current - 1)">{% translate "Previous question" %}</button>
+      <button type="button" class="btn btn-secondary" x-cloak x-show="current > 0" @click="go(current - 1)">{% include "components/icons.html#chevron-left" %}{% translate "Previous question" %}</button>
       <span x-cloak x-show="current === 0"></span>
       <div class="flex flex-wrap items-center gap-3">
         {% translate "Unanswered questions:" as l_unanswered %}
         <span class="text-body-sm text-warning-700" x-cloak x-show="current === total - 1 && unanswered > 0"
               x-text="'{{ l_unanswered|escapejs }} ' + unanswered"></span>
-        <button type="button" class="btn btn-primary" x-cloak x-show="current < total - 1" @click="go(current + 1)">{% translate "Next question" %}</button>
-        <button type="submit" class="btn btn-primary" x-show="current === total - 1" :disabled="submitting">{% translate "Submit the test" %}</button>
+        <button type="button" class="btn btn-primary" x-cloak x-show="current < total - 1" @click="go(current + 1)">{% translate "Next question" %}{% include "components/icons.html#chevron-right" %}</button>
+        <button type="submit" class="btn btn-primary" x-show="current === total - 1" :disabled="submitting">{% include "components/icons.html#send" %}{% translate "Submit the test" %}</button>
       </div>
     </div>
   </form>

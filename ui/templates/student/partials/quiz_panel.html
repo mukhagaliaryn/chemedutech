@@ -39,7 +39,7 @@ continue on the test page (tests checked at the end) / the last result + retry.
   {% elif open_attempt %}
     <div class="flex flex-wrap items-center gap-3">
       <p class="flex-1 text-sm text-ink-soft">{% translate "You have an unfinished attempt." %}</p>
-      <a class="btn btn-primary" href="{{ urls.quiz_take }}">{% translate "Continue the test" %}</a>
+      <a class="btn btn-primary" href="{{ urls.quiz_take }}">{% include "components/icons.html#play" %}{% translate "Continue the test" %}</a>
     </div>
   {% elif last_attempt %}
     <div class="flex flex-wrap items-center gap-4 rounded-lg px-5 py-4 {% if last_attempt.passed %}bg-success-50{% else %}bg-danger-50{% endif %}">
@@ -54,10 +54,10 @@ continue on the test page (tests checked at the end) / the last result + retry.
         {% if counted and counted.pk != last_attempt.pk %}<p class="num text-[13px] text-ink-soft">{% blocktranslate with p=counted.percent|floatformat:0 %}Counts for the grade: {{ p }}%{% endblocktranslate %}</p>{% endif %}
       </div>
       <div class="flex flex-wrap gap-2">
-        <a class="btn btn-secondary" href="{% url 'student:quiz_review' course.slug topic.number stage.pk last_attempt.pk %}">{% translate "Review answers" %}</a>
+        <a class="btn btn-secondary" href="{% url 'student:quiz_review' course.slug topic.number stage.pk last_attempt.pk %}">{% include "components/icons.html#eye" %}{% translate "Review answers" %}</a>
         {% if attempts_left != 0 %}
           <form method="post" action="{{ urls.quiz_retry }}">{% csrf_token %}
-            <button type="submit" class="btn {% if last_attempt.passed %}btn-secondary{% else %}btn-primary{% endif %}">{% translate "Retake the test" %}</button>
+            <button type="submit" class="btn {% if last_attempt.passed %}btn-secondary{% else %}btn-primary{% endif %}">{% include "components/icons.html#retry" %}{% translate "Retake the test" %}</button>
           </form>
         {% endif %}
       </div>
@@ -88,12 +88,12 @@ continue on the test page (tests checked at the end) / the last result + retry.
   </p>
   <div class="mt-6 flex flex-wrap justify-center gap-2.5">
     {% if attempts_left != 0 %}
-      <form method="post" action="{{ urls.quiz_retry }}">{% csrf_token %}<button type="submit" class="btn btn-secondary h-[46px]">{% translate "Retake the test" %}</button></form>
+      <form method="post" action="{{ urls.quiz_retry }}">{% csrf_token %}<button type="submit" class="btn btn-secondary h-[46px]">{% include "components/icons.html#retry" %}{% translate "Retake the test" %}</button></form>
     {% else %}
-      <form method="dialog"><button class="btn btn-secondary h-[46px]">{% translate "Close" %}</button></form>
+      <form method="dialog"><button class="btn btn-secondary h-[46px]">{% include "components/icons.html#x" %}{% translate "Close" %}</button></form>
     {% endif %}
     {% if next and status == "passed" %}
-      <a class="btn btn-primary h-[46px]" href="{{ next.0 }}">{% blocktranslate with s=next.1|truncatechars:32 %}Next: {{ s }}{% endblocktranslate %}</a>
+      <a class="btn btn-primary h-[46px]" href="{{ next.0 }}">{% blocktranslate with s=next.1|truncatechars:32 %}Next: {{ s }}{% endblocktranslate %}{% include "components/icons.html#arrow-right" %}</a>
     {% else %}
       <button type="button" class="btn btn-primary h-[46px]" disabled>{% if next %}{% blocktranslate with s=next.1|truncatechars:32 %}Next: {{ s }}{% endblocktranslate %}{% else %}{% translate "Next stage" %}{% endif %}</button>
     {% endif %}

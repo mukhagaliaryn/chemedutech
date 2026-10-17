@@ -10,10 +10,10 @@
       <p class="mt-1 text-ink-soft">{% blocktranslate %}Attempts: {{ total }}, unfinished: {{ unfinished }}.{% endblocktranslate %}</p>
     </div>
     <div class="ml-auto flex flex-wrap gap-2">
-      <a class="btn btn-secondary btn-sm" href="{% url 'research:export_attempts' %}?{{ query }}">{% translate "Download attempts (CSV)" %}</a>
-      <a class="btn btn-secondary btn-sm" href="{% url 'research:export_events' %}?{{ query }}">{% translate "Download action log (CSV)" %}</a>
-      <a class="btn btn-secondary btn-sm" href="{% url 'research:export_quiz_answers' %}">{% translate "Quiz answers (CSV)" %}</a>
-      <a class="btn btn-secondary btn-sm" href="{% url 'research:export_ai_reviews' %}">{% translate "AI ↔ teacher grades (CSV)" %}</a>
+      <a class="btn btn-secondary btn-sm" href="{% url 'research:export_attempts' %}?{{ query }}">{% include "components/icons.html#download" %}{% translate "Download attempts (CSV)" %}</a>
+      <a class="btn btn-secondary btn-sm" href="{% url 'research:export_events' %}?{{ query }}">{% include "components/icons.html#download" %}{% translate "Download action log (CSV)" %}</a>
+      <a class="btn btn-secondary btn-sm" href="{% url 'research:export_quiz_answers' %}">{% include "components/icons.html#download" %}{% translate "Quiz answers (CSV)" %}</a>
+      <a class="btn btn-secondary btn-sm" href="{% url 'research:export_ai_reviews' %}">{% include "components/icons.html#download" %}{% translate "AI ↔ teacher grades (CSV)" %}</a>
     </div>
   </div>
 
@@ -37,7 +37,7 @@
       <span class="label">{% translate "Study group" %}</span>
       <input class="input" name="group" value="{{ request.GET.group }}">
     </label>
-    <button class="btn btn-primary" type="submit">{% translate "Apply" %}</button>
+    <button class="btn btn-primary" type="submit">{% include "components/icons.html#filter" %}{% translate "Apply" %}</button>
   </form>
 
   <h2 class="text-h2">{% translate "Averages by experiment and group (finished attempts)" %}</h2>

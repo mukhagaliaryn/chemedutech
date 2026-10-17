@@ -54,8 +54,8 @@
     {% include "components/input.html" with field=form.is_active %}
   </section>
   <div class="flex flex-wrap gap-2">
-    <button type="submit" class="btn btn-primary">{% translate "Save" %}</button>
-    <button type="submit" name="then" value="new" class="btn btn-secondary">{% translate "Save and add another" %}</button>
+    <button type="submit" class="btn btn-primary">{% include "components/icons.html#save" %}{% translate "Save" %}</button>
+    <button type="submit" name="then" value="new" class="btn btn-secondary">{% include "components/icons.html#plus" %}{% translate "Save and add another" %}</button>
     <a class="btn btn-ghost" href="{% url 'teacher:quiz' course.slug quiz.pk %}#questions">{% translate "Cancel" %}</a>
   </div>
 </form>

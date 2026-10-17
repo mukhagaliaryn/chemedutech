@@ -11,6 +11,54 @@ document.addEventListener("click", (event) => {
   }
 });
 
+// components/confirm.html: a submit button with data-confirm asks in the shared dialog first.
+(() => {
+  const TILES = {
+    danger: "bg-danger-50 text-danger-600",
+    success: "bg-success-50 text-success-600",
+    primary: "bg-primary-50 text-primary-600",
+  };
+  let pending = null;
+  document.addEventListener("click", (event) => {
+    const trigger = event.target.closest("[data-confirm]");
+    if (!trigger || trigger.dataset.confirmed) return;
+    const dialog = document.getElementById("confirm-dialog");
+    if (!dialog || typeof dialog.showModal !== "function") return;
+    event.preventDefault();
+    const variant = trigger.dataset.confirmVariant || "primary";
+    const icon = trigger.dataset.confirmIcon || (variant === "danger" ? "trash" : "help");
+    dialog.querySelector("#confirm-title").textContent = trigger.dataset.confirm;
+    const text = dialog.querySelector("#confirm-text");
+    text.textContent = trigger.dataset.confirmText || "";
+    text.hidden = !text.textContent;
+    const tile = dialog.querySelector("[data-confirm-tile]");
+    tile.className = `grid size-16 place-items-center rounded-[20px] ${TILES[variant] || TILES.primary}`;
+    for (const glyph of dialog.querySelectorAll("[data-confirm-glyph]")) glyph.hidden = glyph.dataset.confirmGlyph !== icon;
+    const ok = dialog.querySelector("[data-confirm-ok]");
+    ok.className = `btn btn-${variant}`;
+    ok.textContent = trigger.dataset.confirmLabel || trigger.textContent.trim();
+    pending = trigger;
+    dialog.showModal();
+    ok.focus();
+  });
+  document.addEventListener("click", (event) => {
+    const dialog = document.getElementById("confirm-dialog");
+    if (!dialog || !dialog.open) return;
+    if (event.target.closest("[data-confirm-cancel]")) {
+      dialog.close();
+      pending = null;
+    } else if (event.target.closest("[data-confirm-ok]") && pending) {
+      const trigger = pending;
+      pending = null;
+      dialog.close();
+      trigger.dataset.confirmed = "1";
+      if (trigger.form) trigger.form.requestSubmit(trigger.type === "submit" ? trigger : undefined);
+      else trigger.click();
+      delete trigger.dataset.confirmed;
+    }
+  });
+})();
+
 // ⌘K / Ctrl+K focuses the Topbar search.
 document.addEventListener("keydown", (event) => {
   if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
@@ -129,10 +177,6 @@ document.addEventListener("alpine:init", () => {
           return false;
         }
       }
-      if (this.step === 1 && document.querySelector('#username-status[data-status="error"]')) {
-        form.elements.username.focus();
-        return false;
-      }
       return true;
     },
     next() {
@@ -148,7 +192,7 @@ document.addEventListener("alpine:init", () => {
       const e = this.$refs.form.elements;
       const text = (select) => (select && select.value ? select.selectedOptions[0].text : "—");
       this.review.name = `${e.first_name.value} ${e.last_name.value}`.trim() || "—";
-      this.review.login = [e.username.value, e.email.value].filter(Boolean).join(" / ") || "—";
+      this.review.login = e.email.value || "—";
       if (this.mode === "code") {
         const found = document.querySelector("#join-code-status b");
         this.review.group = found ? found.textContent : e.join_code.value || "—";

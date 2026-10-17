@@ -13,7 +13,7 @@ Student home (mockup «Студент · Басты бет»): «continue learni
 {% if not enrollment %}
   <h1 class="text-[30px] leading-[38px] font-extrabold tracking-[-0.02em]">{% blocktranslate with name=user.first_name|default:user.get_username %}Hello, {{ name }}!{% endblocktranslate %}</h1>
   {% translate "You are not enrolled in a course yet" as l_title %}{% translate "Choose a course in the catalogue or ask your teacher to add your group." as l_text %}{% translate "My courses" as l_action %}{% url 'student:courses' as courses_url %}
-  {% include "components/empty_state.html" with title=l_title text=l_text action_url=courses_url action_label=l_action %}
+  {% include "components/empty_state.html" with title=l_title text=l_text action_url=courses_url action_label=l_action action_icon="book" %}
 {% else %}
 
 {# ---- hero: continue ---- #}
@@ -153,14 +153,14 @@ Student home (mockup «Студент · Басты бет»): «continue learni
         <h2 id="fb-title" class="text-[17px] font-bold">{% translate "Teacher's comment" %}
           <span class="text-sm font-medium text-ink-faint">{% if c.stage %}· {% blocktranslate with s=c.stage.title %}about «{{ s }}»{% endblocktranslate %}{% endif %} · {{ c.at|ago }}</span></h2>
         <p class="mt-2 text-[15px] leading-[25px] whitespace-pre-line">{{ c.body|truncatechars:600 }}</p>
-        {% if c.stage %}<a class="btn btn-secondary btn-sm mt-3" href="{% url 'student:stage' c.stage.topic.module.course.slug c.stage.topic.number c.stage.pk %}#comments">{% translate "Reply" %}</a>{% endif %}
+        {% if c.stage %}<a class="btn btn-secondary btn-sm mt-3" href="{% url 'student:stage' c.stage.topic.module.course.slug c.stage.topic.number c.stage.pk %}#comments">{% include "components/icons.html#message" %}{% translate "Reply" %}</a>{% endif %}
         {% if comments|length > 1 %}<a class="link ml-3 text-sm font-semibold" href="{% url 'feedback:notifications' %}">{% blocktranslate count n=comments|length|add:"-1" %}{{ n }} more comment{% plural %}{{ n }} more comments{% endblocktranslate %}</a>{% endif %}
       </div>
     {% else %}
       <span class="tile tile-lg bg-surface-sunken text-ink-soft">{% include "components/icons.html#message" with size=22 %}</span>
       <div class="min-w-0 flex-1">
         <h2 id="fb-title" class="text-[17px] font-bold">{% translate "Teacher's comment" %}</h2>
-        <p class="mt-1 text-sm text-ink-soft">{% translate "No comments yet. The teacher's comments on your works will appear here." %}</p>
+        <p class="mt-1 text-sm text-ink-soft">{% translate "No comments yet." %}</p>
       </div>
     {% endif %}
   {% endwith %}

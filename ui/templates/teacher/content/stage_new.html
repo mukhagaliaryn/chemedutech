@@ -12,7 +12,7 @@
     {% for field in form %}{% include "components/input.html" with field=field %}{% endfor %}
     <p class="text-body-sm text-ink-soft">{% translate "The kind cannot be changed later. After a theory or video stage add a checkpoint quiz of 3–4 questions." %}</p>
     <div class="flex gap-2">
-      <button type="submit" class="btn btn-primary">{% translate "Add" %}</button>
+      <button type="submit" class="btn btn-primary">{% include "components/icons.html#plus" %}{% translate "Add" %}</button>
       <a class="btn btn-ghost" href="{% url 'teacher:course_content' course.slug %}#t{{ topic.pk }}">{% translate "Cancel" %}</a>
     </div>
   </form>

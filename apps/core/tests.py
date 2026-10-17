@@ -6,8 +6,8 @@ from django.test import RequestFactory, SimpleTestCase, TestCase
 
 from apps.core.middleware import KazakhFirstLocaleMiddleware
 
-KK_TITLE = "Химияны қауіпсіз зертханада үйреніңіз"
-RU_TITLE = "Изучайте химию в безопасной лаборатории"
+KK_TITLE = "Химияны қауіпсіз зертханада үйрену"
+RU_TITLE = "Химия в безопасной лаборатории"
 
 
 class KazakhFirstLocaleTests(TestCase):

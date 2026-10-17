@@ -1,0 +1,22 @@
+{% load i18n %}{% comment %}
+One shared confirmation dialog (included once in base.html). Any submit button of a form asks first:
+  <button type="submit" data-confirm="Delete the group?" data-confirm-text="…" data-confirm-label="Delete"
+          data-confirm-variant="danger" data-confirm-icon="trash">…</button>
+static/js/ui.js fills the dialog and, on «confirm», submits the button's own form (its action and fields).
+Variants: primary (default) | danger | success. Icon: any icons.html partial name listed in ICONS below.
+{% endcomment %}
+<dialog id="confirm-dialog" class="dialog max-w-[440px]" aria-labelledby="confirm-title" aria-describedby="confirm-text">
+  <div class="flex flex-col items-center gap-3 text-center">
+    <span data-confirm-tile class="grid size-16 place-items-center rounded-[20px] bg-primary-50 text-primary-600">
+      {% for name in "check help trash unlink user-minus refresh retry lock unlock send warn"|split %}
+        <span data-confirm-glyph="{{ name }}" hidden>{% include "components/icons.html#"|add:name with size=28 %}</span>
+      {% endfor %}
+    </span>
+    <h2 id="confirm-title" class="mt-1 text-[22px] leading-7 font-extrabold"></h2>
+    <p id="confirm-text" class="text-ink-soft"></p>
+  </div>
+  <div class="mt-6 flex flex-wrap justify-center gap-2.5">
+    <button type="button" class="btn btn-secondary" data-confirm-cancel>{% translate "Cancel" %}</button>
+    <button type="button" class="btn btn-primary" data-confirm-ok>{% translate "Confirm" %}</button>
+  </div>
+</dialog>

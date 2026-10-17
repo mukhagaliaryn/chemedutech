@@ -15,7 +15,7 @@
     <a class="btn btn-primary mt-2 h-auto min-h-11 max-w-full py-3 whitespace-normal" href="{{ blocking_url }}">{% blocktranslate with t=blocking.title|truncatechars:40 %}Go to «{{ t }}»{% endblocktranslate %}{% include "components/icons.html#arrow-right" %}</a>
   {% else %}
     <p class="max-w-md text-ink-soft">{% translate "Stages open one after another. Go back to the course map to see what to do next." %}</p>
-    <a class="btn btn-primary mt-2" href="{{ course_url }}">{% translate "Course map" %}</a>
+    <a class="btn btn-primary mt-2" href="{{ course_url }}">{% include "components/icons.html#list" %}{% translate "Course map" %}</a>
   {% endif %}
 </section>
 {% if stepper %}{% translate "Topic stages" as l_stages %}{% include "components/stage_stepper.html" with stages=stepper label=l_stages %}{% endif %}

@@ -1,10 +1,10 @@
 {% comment %}
 Nothing to show yet. title; text; icon (icons.html partial, default "book");
-action_url + action_label (one next step); class.
+action_url + action_label (one next step, icon action_icon, default plus); class.
 {% endcomment %}
 <div class="flex flex-col items-center gap-3 rounded-lg border border-dashed border-line-strong bg-surface px-6 py-12 text-center {{ class }}">
   <span class="grid size-12 place-items-center rounded-full bg-surface-sunken text-ink-soft">{% with ic=icon|default:"book" %}{% include "components/icons.html#"|add:ic with size=22 %}{% endwith %}</span>
   <p class="text-h3">{{ title }}</p>
   {% if text %}<p class="max-w-md text-sm text-ink-soft">{{ text }}</p>{% endif %}
-  {% if action_url %}<a class="btn btn-primary mt-2" href="{{ action_url }}">{{ action_label }}</a>{% endif %}
+  {% if action_url %}<a class="btn btn-primary mt-2" href="{{ action_url }}">{% with ai=action_icon|default:"plus" %}{% include "components/icons.html#"|add:ai %}{% endwith %}{{ action_label }}</a>{% endif %}
 </div>

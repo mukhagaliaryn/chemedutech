@@ -31,8 +31,7 @@
   </section>
 
   <section class="card flex flex-col gap-4" x-show="kind === 'open'">
-    <h2 class="text-h3">{% translate "AI grading rubric" %}</h2>
-    <p class="text-body-sm text-ink-soft">{% translate "The AI scores each criterion and explains why; the platform adds the points. The model answer is a reference, not a word-for-word requirement." %}</p>
+    <h2 class="flex items-center gap-1.5 text-h3">{% translate "AI grading rubric" %}{% translate "The AI scores each criterion and explains why; the platform adds the points. The model answer is a reference, not a word-for-word requirement." as h_rubric %}{% include "components/hint.html" with text=h_rubric %}</h2>
     <label class="field"><span class="label">{% translate "Model answer" %}</span>
       <textarea name="model_answer" rows="3" class="input">{{ rubric.model_answer }}</textarea></label>
     <label class="field"><span class="label">{% translate "Notes for the grader" %}</span>
@@ -56,19 +55,19 @@
   </section>
 
   <div class="flex gap-2">
-    <button type="submit" class="btn btn-primary">{% translate "Save" %}</button>
-    <a class="btn btn-ghost" href="{% url 'teacher:stage' course.slug stage.pk %}#items">{% translate "Back to the stage" %}</a>
+    <button type="submit" class="btn btn-primary">{% include "components/icons.html#save" %}{% translate "Save" %}</button>
+    <a class="btn btn-ghost" href="{% url 'teacher:stage' course.slug stage.pk %}#items">{% include "components/icons.html#arrow-left" %}{% translate "Back to the stage" %}</a>
   </div>
 </form>
 
 {% if item %}
 <section class="card flex flex-col gap-3" aria-labelledby="try">
-  <h2 id="try" class="text-h3">{% translate "Try it" %}</h2>
-  <p class="text-body-sm text-ink-soft">{% if item.kind == "open" %}{% translate "Type an answer as a student would: the AI grades it by the rubric (a real request, nothing is saved)." %}{% else %}{% translate "Type an answer as a student would and see how it is checked (nothing is saved). Lists and pairs as JSON." %}{% endif %}</p>
+  {% if item.kind == "open" %}{% translate "Type an answer as a student would: the AI grades it by the rubric (a real request, nothing is saved)." as h_try %}{% else %}{% translate "Type an answer as a student would and see how it is checked (nothing is saved). Lists and pairs as JSON." as h_try %}{% endif %}
+  <h2 id="try" class="flex items-center gap-1.5 text-h3">{% translate "Try it" %}{% include "components/hint.html" with text=h_try %}</h2>
   <form method="post" class="flex flex-col gap-2">
     {% csrf_token %}<input type="hidden" name="action" value="try">
     <textarea name="answer" rows="3" class="input" aria-label="{% translate 'Sample answer' %}">{{ trial.answer }}</textarea>
-    <button type="submit" class="btn btn-secondary self-start">{% translate "Check" %}</button>
+    <button type="submit" class="btn btn-secondary self-start">{% include "components/icons.html#check" %}{% translate "Check" %}</button>
   </form>
   {% if trial %}
     {% if trial.error %}<p class="error-text">{{ trial.error }}</p>{% endif %}

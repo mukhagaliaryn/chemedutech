@@ -15,6 +15,7 @@
       hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
   {% block body %}{% endblock %}
   {% include "components/toast.html" %}
+  {% include "components/confirm.html" %}
   {% block scripts %}{% endblock %}
   <script defer src="{% static 'js/ui.js' %}"></script>
   <script defer src="{% static 'vendor/htmx.min.js' %}"></script>

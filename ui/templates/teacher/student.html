@@ -87,7 +87,7 @@
                   {% if r.status == "locked" and t.topic.is_published %}
                   <form method="post" action="{% url 'teacher:unlock_stage' student.pk r.stage.pk %}">{% csrf_token %}
                     <input type="hidden" name="course" value="{{ enrollment.course.slug }}">
-                    <button type="submit" class="btn btn-secondary btn-sm">{% translate "Open for the student" %}</button>
+                    <button type="submit" class="btn btn-secondary btn-sm">{% include "components/icons.html#unlock" %}{% translate "Open for the student" %}</button>
                   </form>
                   {% endif %}
                 </td>

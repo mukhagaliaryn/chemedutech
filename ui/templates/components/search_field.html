@@ -1,0 +1,9 @@
+{% load i18n %}{% comment %}
+Search box of a list toolbar (list archetype): a GET form that keeps the other filters.
+placeholder; value (current q); keep — list of (name, value) pairs to resend; class (width etc.).
+{% endcomment %}
+<form method="get" role="search" class="{{ class|default:'w-[300px] max-w-full' }}">
+  {% for name, val in keep %}{% if val %}<input type="hidden" name="{{ name }}" value="{{ val }}">{% endif %}{% endfor %}
+  <label class="input-icon w-full"><span class="sr-only">{{ placeholder }}</span>
+    {% include "components/icons.html#search" %}<input type="search" name="q" value="{{ value }}" class="input" placeholder="{{ placeholder }}" autocomplete="off"></label>
+</form>

@@ -22,23 +22,9 @@
     {% include "components/input.html" with field=form.research_cohort %}
     {% include "components/input.html" with field=form.is_active %}
     <div class="flex flex-wrap gap-2">
-      <button type="submit" class="btn btn-primary">{% translate "Save" %}</button>
+      <button type="submit" class="btn btn-primary">{% include "components/icons.html#save" %}{% translate "Save" %}</button>
       <a class="btn btn-ghost" href="{% if group %}{% url 'teacher:group' group.pk %}{% else %}{% url 'teacher:groups' %}{% endif %}">{% translate "Cancel" %}</a>
     </div>
   </form>
 </section>
-{% if group %}
-<section class="card flex max-w-2xl flex-col gap-3 border-danger-50" aria-labelledby="del">
-  <h2 id="del" class="text-h3">{% translate "Delete the group" %}</h2>
-  <p class="text-sm text-ink-soft">{% translate "Only an empty group without courses can be deleted — enrolments remember their group for the research exports. Otherwise make it inactive." %}</p>
-  <form method="post" action="{% url 'teacher:group_delete' group.pk %}" x-data="{ sure: false }">
-    {% csrf_token %}
-    <button type="button" class="btn btn-secondary" x-show="!sure" @click="sure = true">{% translate "Delete" %}</button>
-    <span x-show="sure" x-cloak class="flex flex-wrap items-center gap-2">
-      <button type="submit" class="btn btn-danger">{% translate "Yes, delete" %}</button>
-      <button type="button" class="btn btn-ghost" @click="sure = false">{% translate "Cancel" %}</button>
-    </span>
-  </form>
-</section>
-{% endif %}
 {% endblock %}

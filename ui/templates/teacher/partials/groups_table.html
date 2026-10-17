@@ -1,28 +1,41 @@
-{% load i18n %}{# groups — overview.group_summaries rows (mockup «Менің топтарым»). #}
+{% load i18n %}{% comment %}
+Groups list (dashboard «My groups» and the Groups page) — the list archetype: the whole row opens the group.
+groups — overview.group_summaries rows; empty_text — optional text of the empty state (filters on).
+{% endcomment %}
 {% if groups %}
 <div class="overflow-x-auto">
-  <table class="table min-w-[760px]">
+  <table class="table table-rows min-w-[760px]">
     <thead><tr>
       <th scope="col">{% translate "Group" %}</th>
+      <th scope="col">{% translate "Courses" %}</th>
       <th scope="col">{% translate "Research group" %}</th>
-      <th scope="col">{% translate "Students" %}</th>
-      <th scope="col" class="w-60">{% translate "Progress" %}</th>
-      <th scope="col">{% translate "Average score" %}</th>
-      <th scope="col"><span class="sr-only">{% translate "Actions" %}</span></th>
+      <th scope="col" class="text-right">{% translate "Students" %}</th>
+      <th scope="col" class="w-56">{% translate "Progress" %}</th>
+      <th scope="col" class="text-right">{% translate "Average score" %}</th>
+      <th scope="col" class="w-14"><span class="sr-only">{% translate "Open" %}</span></th>
     </tr></thead>
     <tbody>
       {% for g in groups %}
         <tr{% if not g.group.is_active %} class="text-ink-faint"{% endif %}>
-          <td class="font-extrabold">{{ g.group.name }}{% if not g.group.is_active %} <span class="text-caption font-normal">({% translate "inactive" %})</span>{% endif %}</td>
+          <td>
+            <a class="row-target flex items-center gap-3" href="{% url 'teacher:group' g.group.pk %}">
+              <span class="num grid size-10 shrink-0 place-items-center rounded-[12px] text-[13px] font-extrabold {% if g.group.is_active %}bg-primary-900 text-white{% else %}bg-surface-sunken text-ink-faint{% endif %}">{{ g.group.name|slice:"-4:" }}</span>
+              <span class="flex min-w-0 flex-col leading-5">
+                <span class="font-extrabold">{{ g.group.name }}</span>
+                <span class="truncate text-caption font-normal text-ink-faint">{% if not g.group.is_active %}{% translate "inactive" %} · {% endif %}{% blocktranslate with y=g.group.study_year %}year {{ y }}{% endblocktranslate %}{% if g.group.specialty %} · {{ g.group.specialty }}{% endif %}</span>
+              </span>
+            </a>
+          </td>
+          <td class="max-w-[220px] text-sm">{% for c in g.courses %}<span class="block truncate">{{ c.title }}</span>{% empty %}<span class="text-ink-faint">—</span>{% endfor %}</td>
           <td>{% include "teacher/partials/cohort.html" with cohort=g.group.research_cohort %}</td>
-          <td class="num">{{ g.students }}</td>
+          <td class="num text-right font-semibold">{{ g.students }}</td>
           <td>{% if g.progress is not None %}
             <span class="flex items-center gap-2.5">
               <span class="progress flex-1"><span style="width: {{ g.progress|stringformat:'s' }}%"></span></span>
-              <span class="num text-caption font-bold text-ink-soft">{{ g.progress|floatformat:0 }}%</span>
-            </span>{% else %}—{% endif %}</td>
-          <td class="num font-extrabold">{% if g.score is not None %}{{ g.score|floatformat:1 }}{% else %}—{% endif %}</td>
-          <td><a class="link font-bold" href="{% url 'teacher:group' g.group.pk %}">{% translate "Open" %} →</a></td>
+              <span class="num w-9 text-right text-caption font-bold text-ink-soft">{{ g.progress|floatformat:0 }}%</span>
+            </span>{% else %}<span class="text-ink-faint">—</span>{% endif %}</td>
+          <td class="num text-right font-extrabold">{% if g.score is not None %}{{ g.score|floatformat:1 }}{% else %}<span class="font-normal text-ink-faint">—</span>{% endif %}</td>
+          <td class="text-right"><span class="row-chevron">{% include "components/icons.html#chevron-right" with size=20 %}</span></td>
         </tr>
       {% endfor %}
     </tbody>
@@ -30,7 +43,11 @@
 </div>
 {% else %}
   <div class="p-6">
-  {% translate "No groups yet" as l_title %}{% translate "Create a group, give the students its join code and attach it to your course." as l_text %}{% translate "Create a group" as l_action %}{% url 'teacher:group_new' as new_url %}
-  {% include "components/empty_state.html" with title=l_title text=l_text icon="users" action_url=new_url action_label=l_action %}
+  {% if empty_text %}
+    <p class="py-6 text-center text-ink-soft">{{ empty_text }}</p>
+  {% else %}
+    {% translate "No groups yet" as l_title %}{% translate "A group gets a join code; students enter it when signing up." as l_text %}{% translate "Create a group" as l_action %}{% url 'teacher:group_new' as new_url %}
+    {% include "components/empty_state.html" with title=l_title text=l_text icon="users" action_url=new_url action_label=l_action %}
+  {% endif %}
   </div>
 {% endif %}

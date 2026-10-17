@@ -20,7 +20,7 @@ attention; my groups.
   </div>
   <div class="flex flex-wrap gap-2.5">
     <button type="button" class="btn btn-secondary h-[46px] font-bold" data-open-modal="new-group">{% include "components/icons.html#plus" %}{% translate "Create a group" %}</button>
-    <a class="btn btn-primary h-[46px] font-bold" href="{% url 'teacher:grading' %}">{% translate "Check queue" %}<span class="count bg-white text-primary-600">{{ queue_count }}</span></a>
+    <a class="btn btn-primary h-[46px] font-bold" href="{% url 'teacher:grading' %}">{% include "components/icons.html#check-square" %}{% translate "Check queue" %}<span class="count bg-white text-primary-600">{{ queue_count }}</span></a>
   </div>
 </section>
 
@@ -77,7 +77,7 @@ attention; my groups.
           <span class="truncate text-sm font-bold">{{ row.student.full_name }}{% if row.student.student_profile.group %} · {{ row.student.student_profile.group }}{% endif %}</span>
           <span class="text-caption font-normal text-ink-soft">{{ reason }}</span>
         </span>
-        <a class="btn btn-secondary btn-sm" href="{% url 'teacher:student' row.student.pk %}?course={{ row.enrollment.course.slug }}">{% translate "Open" %}</a>
+        <a class="btn btn-secondary btn-sm" href="{% url 'teacher:student' row.student.pk %}?course={{ row.enrollment.course.slug }}">{% translate "Open" %}{% include "components/icons.html#chevron-right" %}</a>
       </div>
     {% empty %}
       <p class="text-sm text-ink-soft">{% translate "No one is stuck: no repeated fails, risky lab attempts or long breaks." %}</p>
@@ -88,7 +88,7 @@ attention; my groups.
 <section aria-labelledby="groups" class="overflow-hidden rounded-card border border-line bg-surface">
   <div class="flex items-center justify-between gap-3 border-b border-surface-sunken px-6 py-5">
     <h2 id="groups" class="text-[17px] font-extrabold">{% translate "My groups" %}</h2>
-    <a class="link text-sm font-bold" href="{% url 'teacher:groups' %}">{% translate "Manage groups" %}</a>
+    <a class="link inline-flex items-center gap-1 text-sm font-bold" href="{% url 'teacher:groups' %}">{% translate "All groups" %}{% include "components/icons.html#chevron-right" with size=16 %}</a>
   </div>
   {% include "teacher/partials/groups_table.html" %}
 </section>
@@ -111,7 +111,7 @@ attention; my groups.
     <input type="hidden" name="is_active" value="on">
     <div class="flex justify-end gap-2.5">
       <button type="submit" formmethod="dialog" formnovalidate class="btn btn-secondary">{% translate "Cancel" %}</button>
-      <button type="submit" class="btn btn-primary">{% translate "Create a group" %}</button>
+      <button type="submit" class="btn btn-primary">{% include "components/icons.html#plus" %}{% translate "Create a group" %}</button>
     </div>
   </form>
 </dialog>

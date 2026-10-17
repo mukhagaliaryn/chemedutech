@@ -53,12 +53,29 @@ def dashboard(request):
 # --- groups --------------------------------------------------------------------------------
 
 
+GROUP_STATUSES = ("active", "inactive", "all")
+
+
 @teacher_only
 def groups(request):
-    show_all = request.GET.get("all") == "1"
-    qs = course_selectors.teacher_groups(request.user).order_by("-is_active", "name")
-    if not show_all:
-        qs = qs.filter(is_active=True)
+    """The list archetype: search by name, status chips (with counts), research group filter."""
+    q = request.GET.get("q", "").strip()[:100]
+    status = request.GET.get("status") or ("all" if request.GET.get("all") == "1" else "active")
+    status = status if status in GROUP_STATUSES else "active"
+    cohort = request.GET.get("cohort", "")
+    base = course_selectors.teacher_groups(request.user)
+    if q:
+        base = base.filter(name__icontains=q)
+    if cohort in ("experimental", "control", "none"):
+        base = base.filter(research_cohort="" if cohort == "none" else cohort)
+    counts = {
+        "active": base.filter(is_active=True).count(),
+        "inactive": base.filter(is_active=False).count(),
+        "all": base.count(),
+    }
+    qs = base.order_by("-is_active", "name")
+    if status != "all":
+        qs = qs.filter(is_active=status == "active")
     enrollments = course_selectors.teacher_enrollments(request.user).select_related("student__student_profile")
     rows = overview.student_rows(enrollments)
     no_group = {
@@ -69,7 +86,16 @@ def groups(request):
     return render(
         request,
         "teacher/groups.html",
-        {"groups": overview.group_summaries(qs, rows), "show_all": show_all, "no_group": len(no_group)},
+        {
+            "groups": overview.group_summaries(qs, rows),
+            "q": q,
+            "status": status,
+            "cohort": cohort,
+            "counts": counts,
+            "filtered": bool(q or cohort or status != "active"),
+            "keep_filters": [("status", status), ("cohort", cohort)],
+            "no_group": len(no_group),
+        },
     )
 
 
@@ -92,7 +118,7 @@ def group_delete(request, pk):
         course_services.delete_group(group)
     except course_services.GroupError as exc:
         messages.error(request, str(exc))
-        return redirect("teacher:group_edit", group.pk)
+        return redirect("teacher:group", group.pk)
     messages.success(request, _("The group is deleted."))
     return redirect("teacher:groups")
 
@@ -141,7 +167,7 @@ def group(request, pk):
             "q": q,
             "show": show,
             "counts": counts,
-            "cohort_form": CohortForm(initial={"research_cohort": group.research_cohort}),
+            "keep_filters": [("course", course.slug if course else ""), ("show", show)],
             "add_form": AddStudentForm(),
             "attach_form": AttachCourseForm(request.user, group),
         },
@@ -306,7 +332,9 @@ def students(request):
         qs = qs.filter(
             Q(username__icontains=q) | Q(email__icontains=q) | Q(last_name__icontains=q) | Q(first_name__icontains=q)
         )
-    if request.GET.get("no_group") == "1":
+    no_group = request.GET.get("no_group") == "1"
+    counts = {"all": qs.count(), "no_group": qs.filter(student_profile__group=None).count()}
+    if no_group:
         qs = qs.filter(student_profile__group=None)
     return render(
         request,
@@ -314,7 +342,9 @@ def students(request):
         {
             "students": qs.order_by("last_name", "first_name", "username")[:200],
             "q": q,
-            "no_group": request.GET.get("no_group") == "1",
+            "no_group": no_group,
+            "counts": counts,
+            "keep_filters": [("no_group", "1" if no_group else "")],
         },
     )
 
@@ -373,6 +403,10 @@ def student_drawer(request, pk):
     student = _student(request, pk)
     _enrollments, enrollment = _enrollment(request, student)
     context = {"student": student, "enrollment": enrollment}
+    group_pk = request.GET.get("group", "")
+    profile = getattr(student, "student_profile", None)
+    if group_pk.isdigit() and profile and str(profile.group_id) == group_pk:
+        context["group"] = course_selectors.teacher_groups(request.user).filter(pk=group_pk).first()
     if enrollment:
         context.update(
             row=overview.student_rows([enrollment])[0],

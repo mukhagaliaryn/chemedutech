@@ -26,7 +26,7 @@
     {% if quiz and not place.preview %}
       <div x-show="done" x-cloak class="flex flex-wrap items-center gap-3 rounded-md bg-success-50 px-4 py-3">
         <p class="flex-1 text-sm font-medium text-success-700">{% translate "Video watched — the checkpoint quiz is open." %}</p>
-        <a class="btn btn-primary btn-sm" href="{{ urls.quiz_take }}">{% translate "Start the quiz" %}</a>
+        <a class="btn btn-primary btn-sm" href="{{ urls.quiz_take }}">{% include "components/icons.html#play" %}{% translate "Start the quiz" %}</a>
       </div>
     {% endif %}
   </div>
@@ -35,7 +35,7 @@
   {% include "components/empty_state.html" with title=l_title text=l_text icon="video" %}
   {% if not place.preview and not sp.material_done_at %}
     <form method="post" action="{{ urls.material_done }}" class="mt-4 text-center">{% csrf_token %}
-      <button type="submit" class="btn btn-secondary">{% translate "Continue without the video" %}</button>
+      <button type="submit" class="btn btn-secondary">{% translate "Continue without the video" %}{% include "components/icons.html#chevron-right" %}</button>
     </form>
   {% endif %}
 {% endif %}

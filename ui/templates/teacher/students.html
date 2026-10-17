@@ -1,35 +1,48 @@
 {% extends "layouts/teacher.html" %}
 {% load i18n %}
+{% comment %}List archetype (see teacher/groups.html): the whole row opens the student's profile.{% endcomment %}
 {% block title %}{% translate "Students" %} · ChemEduTech{% endblock %}
 {% block crumb %}{% translate "Groups and students" %}{% endblock %}
 {% block page_title %}{% translate "Students" %}{% endblock %}
 {% block content %}
-<p class="text-sm text-ink-soft"><a href="{% url 'teacher:groups' %}">{% translate "Groups" %}</a> / {% translate "Students" %}</p>
-<h1 class="text-h1">{% translate "Students" %}</h1>
-<form method="get" class="flex flex-wrap items-end gap-2" role="search">
-  <label class="sr-only" for="q">{% translate "Search for a student" %}</label>
-  <input id="q" type="search" name="q" value="{{ q }}" class="input h-10 w-72" placeholder="{% translate 'Name, username or email' %}">
-  <label class="flex items-center gap-2 text-sm text-ink-soft"><input type="checkbox" name="no_group" value="1" class="size-4"{% if no_group %} checked{% endif %}>{% translate "Without a group" %}</label>
-  <button type="submit" class="btn btn-secondary">{% translate "Find" %}</button>
-</form>
-<div class="overflow-x-auto rounded-lg border border-line bg-surface">
-  <table class="table">
+<header class="list-head">
+  <div class="flex items-center gap-3">
+    <h1 class="text-h1">{% translate "Students" %}</h1>
+    <span class="count">{{ counts.all }}</span>
+  </div>
+  <a class="btn btn-secondary" href="{% url 'teacher:groups' %}">{% include "components/icons.html#grid" %}{% translate "Groups" %}</a>
+</header>
+
+<div class="list-toolbar">
+  {% translate "Name, username or email" as l_search %}
+  {% include "components/search_field.html" with placeholder=l_search value=q keep=keep_filters %}
+  <nav class="flex flex-wrap gap-2" aria-label="{% translate 'Filter' %}">
+    <a class="chip h-11" href="{% querystring no_group=None %}"{% if not no_group %} aria-current="page"{% endif %}>{% translate "All" %}<span class="chip-count">{{ counts.all }}</span></a>
+    <a class="chip h-11" href="{% querystring no_group='1' %}"{% if no_group %} aria-current="page"{% endif %}>{% translate "Without a group" %}<span class="chip-count">{{ counts.no_group }}</span></a>
+  </nav>
+</div>
+
+<section class="table-wrap" aria-label="{% translate 'Students' %}">
+  <table class="table table-rows min-w-[680px]">
     <thead><tr>
-      <th scope="col">{% translate "Student" %}</th><th scope="col">{% translate "Username" %}</th>
-      <th scope="col">{% translate "Email" %}</th><th scope="col">{% translate "Group" %}</th>
+      <th scope="col">{% translate "Student" %}</th>
+      <th scope="col">{% translate "Email" %}</th>
+      <th scope="col">{% translate "Group" %}</th>
+      <th scope="col" class="w-14"><span class="sr-only">{% translate "Open" %}</span></th>
     </tr></thead>
     <tbody>
       {% for s in students %}
         <tr>
-          <td><a class="flex items-center gap-2.5 font-medium text-ink hover:text-primary-700" href="{% url 'teacher:student' s.pk %}">{% include "components/avatar.html" with person=s size="sm" %}{{ s.full_name }}</a></td>
-          <td class="text-sm text-ink-soft">{{ s.username }}</td>
+          <td><a class="row-target flex items-center gap-3 font-bold" href="{% url 'teacher:student' s.pk %}">{% include "components/avatar.html" with person=s shape="square" tone="neutral" %}
+            <span class="flex min-w-0 flex-col leading-5">{{ s.full_name|default:s.username }}<span class="text-caption font-normal text-ink-faint">{{ s.username }}</span></span></a></td>
           <td class="text-sm text-ink-soft">{{ s.email }}</td>
-          <td class="text-sm">{% with g=s.student_profile.group %}{% if g %}<a href="{% url 'teacher:group' g.pk %}">{{ g }}</a>{% else %}<span class="text-ink-faint">—</span>{% endif %}{% endwith %}</td>
+          <td class="text-sm">{% with g=s.student_profile.group %}{% if g %}{{ g }}{% else %}<span class="text-ink-faint">—</span>{% endif %}{% endwith %}</td>
+          <td class="text-right"><span class="row-chevron">{% include "components/icons.html#chevron-right" with size=20 %}</span></td>
         </tr>
       {% empty %}
-        <tr><td colspan="4" class="py-8 text-center text-sm text-ink-soft">{% translate "No students found." %}</td></tr>
+        <tr><td colspan="4" class="py-10 text-center text-ink-soft">{% translate "No student matches the filter." %}</td></tr>
       {% endfor %}
     </tbody>
   </table>
-</div>
+</section>
 {% endblock %}

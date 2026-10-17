@@ -34,7 +34,7 @@ explanation and «Next question» / «See the result». Lives inside x-data="{ c
       </fieldset>
       {% if error %}{% include "components/alert.html" with variant="danger" text=error role="alert" %}{% endif %}
       <div class="flex justify-end">
-        <button type="submit" class="btn btn-primary h-[46px] px-[22px] text-[15px] font-bold" :disabled="!picked" disabled>{% translate "Check" %}</button>
+        <button type="submit" class="btn btn-primary h-[46px] px-[22px] text-[15px] font-bold" :disabled="!picked" disabled>{% include "components/icons.html#check" %}{% translate "Check" %}</button>
       </div>
     </form>
   {% else %}
@@ -66,7 +66,7 @@ explanation and «Next question» / «See the result». Lives inside x-data="{ c
         <button type="button" class="btn btn-primary h-[46px] px-[22px] text-[15px] font-bold" @click="current = {{ index|add:1 }}">{% translate "Next question" %}{% include "components/icons.html#arrow-right" %}</button>
       {% else %}
         <form method="post" action="{{ submit_url }}">{% csrf_token %}
-          <button type="submit" class="btn btn-primary h-[46px] px-[22px] text-[15px] font-bold">{% translate "See the result" %}</button>
+          <button type="submit" class="btn btn-primary h-[46px] px-[22px] text-[15px] font-bold">{% include "components/icons.html#chart" %}{% translate "See the result" %}</button>
         </form>
       {% endif %}
     </div>

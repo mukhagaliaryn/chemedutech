@@ -36,7 +36,7 @@
     <div class="grid gap-4 sm:grid-cols-5">{% for f in form.weight_fields %}{% include "components/input.html" with field=f %}{% endfor %}</div>
   </section>
   <div class="flex gap-2">
-    <button type="submit" class="btn btn-primary">{% translate "Save" %}</button>
+    <button type="submit" class="btn btn-primary">{% include "components/icons.html#save" %}{% translate "Save" %}</button>
     <a class="btn btn-ghost" href="{% url 'teacher:course_content' course.slug %}">{% translate "Cancel" %}</a>
   </div>
 </form>

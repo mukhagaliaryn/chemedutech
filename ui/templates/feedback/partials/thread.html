@@ -15,7 +15,7 @@ One level of replies; the newest comment form is at the bottom.
         <input type="hidden" name="parent" value="{{ c.pk }}">{% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
         <label class="sr-only" for="reply-{{ c.pk }}">{% translate "Reply" %}</label>
         <textarea id="reply-{{ c.pk }}" name="body" rows="2" class="input min-h-16" required></textarea>
-        <span class="flex gap-2"><button type="submit" class="btn btn-primary btn-sm">{% translate "Send" %}</button><button type="button" class="btn btn-ghost btn-sm" @click="reply = false">{% translate "Cancel" %}</button></span>
+        <span class="flex gap-2"><button type="submit" class="btn btn-primary btn-sm">{% include "components/icons.html#send" %}{% translate "Send" %}</button><button type="button" class="btn btn-ghost btn-sm" @click="reply = false">{% translate "Cancel" %}</button></span>
       </form>
     </article>
   {% empty %}
@@ -26,6 +26,6 @@ One level of replies; the newest comment form is at the bottom.
     {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
     <label class="label" for="comment-{{ target.kind }}-{{ target.id }}">{% translate "New comment" %}</label>
     <textarea id="comment-{{ target.kind }}-{{ target.id }}" name="body" rows="3" class="input min-h-20" required></textarea>
-    <button type="submit" class="btn btn-secondary self-start">{% translate "Send" %}</button>
+    <button type="submit" class="btn btn-secondary self-start">{% include "components/icons.html#send" %}{% translate "Send" %}</button>
   </form>
 </section>

@@ -10,8 +10,8 @@ post open → after the course (or opened by the teacher); done → only the ove
     <div class="min-w-0 flex-[1_1_320px]">
       <h2 id="bm-title" class="text-lg font-extrabold">{% if b.pre == "open" %}{% translate "Entry knowledge test" %}{% else %}{% translate "Final knowledge test" %}{% endif %}</h2>
       <p class="mt-1 text-sm text-ink-soft">
-        {% if b.pre == "open" %}{% translate "Take it before the first stage: it shows what you already know. One attempt, it does not affect your grade." %}
-        {% else %}{% translate "The course is behind you — check how much your knowledge has grown. One attempt, it does not affect your grade." %}{% endif %}
+        {% if b.pre == "open" %}{% translate "Before the first stage · one attempt · not graded" %}
+        {% else %}{% translate "After the course · one attempt · not graded" %}{% endif %}
       </p>
     </div>
     <a class="btn btn-primary h-[46px] px-[22px] text-[15px] font-bold" href="{{ b_url }}">

@@ -34,7 +34,7 @@
         {% include "components/input.html" with field=profile_form.phone %}
       </div>
       <div id="settings" class="scroll-mt-24">{% include "components/input.html" with field=profile_form.language %}</div>
-      <button type="submit" class="btn btn-primary self-start">{% translate "Save" %}</button>
+      <button type="submit" class="btn btn-primary self-start">{% include "components/icons.html#save" %}{% translate "Save" %}</button>
     </form>
   </section>
 
@@ -63,7 +63,7 @@
         {% include "components/input.html" with field=password_form.old_password %}
         {% include "components/input.html" with field=password_form.new_password1 %}
         {% include "components/input.html" with field=password_form.new_password2 %}
-        <button type="submit" class="btn btn-secondary self-start">{% translate "Change the password" %}</button>
+        <button type="submit" class="btn btn-secondary self-start">{% include "components/icons.html#key" %}{% translate "Change the password" %}</button>
       </form>
     </section>
   </div>

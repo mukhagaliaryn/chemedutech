@@ -51,7 +51,7 @@ and observations · lab journal. All behaviour is labRunner (static/js/lab/engin
         {% include "components/icons.html#timer" %}<span x-text="clock">00:00</span>
       </span>
       {% include "partials/lang_menu.html" with dark=True %}
-      <button type="button" class="btn btn-outline-inverse btn-sm h-10 shrink-0" @click="restart()">{% translate "Start again" %}</button>
+      <button type="button" class="btn btn-outline-inverse btn-sm h-10 shrink-0" @click="restart()">{% include "components/icons.html#retry" %}{% translate "Start again" %}</button>
     </div>
   </header>
 

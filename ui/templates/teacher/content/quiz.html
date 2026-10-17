@@ -10,7 +10,7 @@
 </p>
 <h1 class="text-h1">{{ quiz.title }}</h1>
 {% if quiz.kind == "benchmark" %}
-  {% translate "The pre/post test of the course: one attempt before the first stage and one after the course; only the overall percent is shown. Keep the questions fixed once students have taken it — a changed test makes pre and post incomparable." as l_bm %}
+  {% translate "Pre/post test: questions stay fixed once students have taken it — otherwise pre and post are not comparable." as l_bm %}
   {% include "components/alert.html" with variant="info" text=l_bm class="max-w-3xl" %}
 {% endif %}
 
@@ -59,7 +59,7 @@
       {% include "components/input.html" with field=form.show_answers_after %}
       {% include "components/input.html" with field=form.instant_feedback %}
     {% endif %}
-    <button type="submit" class="btn btn-secondary self-start">{% translate "Save the settings" %}</button>
+    <button type="submit" class="btn btn-secondary self-start">{% include "components/icons.html#save" %}{% translate "Save the settings" %}</button>
   </form>
 </section>
 {% endblock %}

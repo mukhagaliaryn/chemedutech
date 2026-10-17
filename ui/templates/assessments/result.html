@@ -31,10 +31,10 @@
   <div class="flex flex-wrap gap-2">
     {% if can_retry %}
       <form method="post" action="{{ retry_url }}">{% csrf_token %}
-        <button type="submit" class="btn {% if attempt.passed %}btn-secondary{% else %}btn-primary{% endif %}">{% translate "Retake the test" %}</button>
+        <button type="submit" class="btn {% if attempt.passed %}btn-secondary{% else %}btn-primary{% endif %}">{% include "components/icons.html#retry" %}{% translate "Retake the test" %}</button>
       </form>
     {% endif %}
-    {% if back_url %}<a class="btn {% if attempt.passed %}btn-primary{% else %}btn-secondary{% endif %}" href="{{ back_url }}">{{ back_button|default:back_label }}</a>{% endif %}
+    {% if back_url %}<a class="btn {% if attempt.passed %}btn-primary{% else %}btn-secondary{% endif %}" href="{{ back_url }}">{% include "components/icons.html#arrow-left" %}{{ back_button|default:back_label }}</a>{% endif %}
   </div>
 </section>
 

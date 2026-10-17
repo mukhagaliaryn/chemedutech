@@ -1,28 +1,51 @@
 {% extends "layouts/teacher.html" %}
 {% load i18n %}
+{% comment %}List archetype: head (title, count, actions) → toolbar (search, status chips, research group) → rows.{% endcomment %}
 {% block title %}{% translate "Groups" %} · ChemEduTech{% endblock %}
 {% block crumb %}{% translate "Groups and students" %}{% endblock %}
 {% block page_title %}{% translate "Groups" %}{% endblock %}
 {% block content %}
-<header class="flex flex-wrap items-end justify-between gap-4">
-  <div>
+<header class="list-head">
+  <div class="flex items-center gap-3">
     <h1 class="text-h1">{% translate "Groups" %}</h1>
-    <p class="mt-1 text-ink-soft">{% translate "Groups you curate and groups attached to your courses." %}</p>
+    <span class="count">{{ counts.all }}</span>
   </div>
   <div class="flex flex-wrap gap-2">
-    <a class="btn btn-secondary" href="{% url 'teacher:students' %}">{% include "components/icons.html#search" %}{% translate "Find a student" %}</a>
+    <a class="btn btn-secondary" href="{% url 'teacher:students' %}">{% include "components/icons.html#users" %}{% translate "Students" %}</a>
     <a class="btn btn-primary" href="{% url 'teacher:group_new' %}">{% include "components/icons.html#plus" %}{% translate "Create a group" %}</a>
   </div>
 </header>
-<nav class="flex gap-2 text-sm" aria-label="{% translate 'Filter' %}">
-  <a class="btn btn-sm {% if not show_all %}btn-primary{% else %}btn-secondary{% endif %}" href="?">{% translate "Active" %}</a>
-  <a class="btn btn-sm {% if show_all %}btn-primary{% else %}btn-secondary{% endif %}" href="?all=1">{% translate "All, inactive too" %}</a>
-</nav>
-{% include "teacher/partials/groups_table.html" %}
+
+<div class="list-toolbar">
+  {% translate "Group name" as l_search %}
+  {% include "components/search_field.html" with placeholder=l_search value=q keep=keep_filters %}
+  <nav class="flex flex-wrap gap-2" aria-label="{% translate 'Status' %}">
+    {% translate "Active" as s1 %}{% translate "Inactive" as s2 %}{% translate "All" as s3 %}
+    {% partialdef status_chip %}<a class="chip h-11" href="{% querystring status=key %}"{% if status == key %} aria-current="page"{% endif %}>{{ label }}<span class="chip-count">{{ n }}</span></a>{% endpartialdef %}
+    {% with key="active" label=s1 n=counts.active %}{% partial status_chip %}{% endwith %}
+    {% with key="inactive" label=s2 n=counts.inactive %}{% partial status_chip %}{% endwith %}
+    {% with key="all" label=s3 n=counts.all %}{% partial status_chip %}{% endwith %}
+  </nav>
+  <form method="get" class="ml-auto" x-data>
+    {% if q %}<input type="hidden" name="q" value="{{ q }}">{% endif %}<input type="hidden" name="status" value="{{ status }}">
+    <label class="sr-only" for="cohort">{% translate "Research group" %}</label>
+    <select id="cohort" name="cohort" class="input h-11 w-auto font-semibold" @change="$el.form.submit()">
+      <option value="">{% translate "All research groups" %}</option>
+      <option value="experimental"{% if cohort == "experimental" %} selected{% endif %}>{% translate "Experimental" %}</option>
+      <option value="control"{% if cohort == "control" %} selected{% endif %}>{% translate "Control" %}</option>
+      <option value="none"{% if cohort == "none" %} selected{% endif %}>{% translate "Not assigned" %}</option>
+    </select>
+    <noscript><button type="submit" class="btn btn-secondary">{% include "components/icons.html#filter" %}</button></noscript>
+  </form>
+</div>
+
+<section class="table-wrap" aria-label="{% translate 'Groups' %}">
+  {% translate "No group matches the filter." as l_empty %}
+  {% if filtered %}{% include "teacher/partials/groups_table.html" with empty_text=l_empty %}{% else %}{% include "teacher/partials/groups_table.html" %}{% endif %}
+</section>
+
 {% if no_group %}
-  <p class="text-sm text-ink-soft">
-    {% blocktranslate count n=no_group %}{{ n }} student of your courses has no group.{% plural %}{{ n }} students of your courses have no group.{% endblocktranslate %}
-    <a class="font-semibold" href="{% url 'teacher:students' %}?no_group=1">{% translate "Show" %}</a>
-  </p>
+  <a class="inline-flex items-center gap-1.5 self-start text-sm font-semibold text-ink-soft hover:text-primary-700" href="{% url 'teacher:students' %}?no_group=1">
+    {% include "components/icons.html#warn" with size=16 %}{% blocktranslate count n=no_group %}{{ n }} student without a group{% plural %}{{ n }} students without a group{% endblocktranslate %}{% include "components/icons.html#chevron-right" with size=14 %}</a>
 {% endif %}
 {% endblock %}

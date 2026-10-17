@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ChemEduTech\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 13:29+0500\n"
+"POT-Creation-Date: 2026-10-17 15:11+0500\n"
 "PO-Revision-Date: 2026-10-16 21:00+0500\n"
 "Last-Translator: ChemEduTech\n"
 "Language-Team: ChemEduTech\n"
@@ -54,24 +54,24 @@ msgstr "Запомнить меня"
 msgid "Wrong username, email or password."
 msgstr "Неверный логин, email или пароль."
 
-#: apps/accounts/forms.py:41 apps/accounts/forms.py:132
+#: apps/accounts/forms.py:41 apps/accounts/forms.py:130
 msgid "First name"
 msgstr "Имя"
 
-#: apps/accounts/forms.py:42 apps/accounts/forms.py:131
+#: apps/accounts/forms.py:42 apps/accounts/forms.py:129
 msgid "Last name"
 msgstr "Фамилия"
 
-#: apps/accounts/forms.py:43 apps/accounts/forms.py:134
-#: ui/templates/teacher/students.html:19
+#: apps/accounts/forms.py:43 apps/accounts/forms.py:132
+#: ui/templates/accounts/signup.html:121 ui/templates/teacher/students.html:30
 msgid "Email"
 msgstr "Email"
 
-#: apps/accounts/forms.py:46 ui/templates/accounts/signup.html:105
+#: apps/accounts/forms.py:46 ui/templates/accounts/signup.html:99
 msgid "Choose from the list"
 msgstr "Выбрать из списка"
 
-#: apps/accounts/forms.py:46 ui/templates/accounts/signup.html:106
+#: apps/accounts/forms.py:46 ui/templates/accounts/signup.html:100
 msgid "I have a group code"
 msgstr "Есть код группы"
 
@@ -83,18 +83,18 @@ msgstr "Университет"
 msgid "Faculty"
 msgstr "Факультет"
 
-#: apps/accounts/forms.py:53 ui/templates/accounts/signup.html:128
+#: apps/accounts/forms.py:53 ui/templates/accounts/signup.html:122
 #: ui/templates/student/profile.html:50
 msgid "Department"
 msgstr "Кафедра"
 
 #: apps/accounts/forms.py:56 apps/teacher/gradebook.py:21
-#: ui/templates/accounts/signup.html:129
+#: ui/templates/accounts/signup.html:123
 #: ui/templates/research/analytics.html:25
-#: ui/templates/research/analytics.html:171
+#: ui/templates/research/analytics.html:169
 #: ui/templates/student/profile.html:49
-#: ui/templates/teacher/partials/groups_table.html:6
-#: ui/templates/teacher/students.html:19 ui/templates/ui/styleguide.html:140
+#: ui/templates/teacher/partials/groups_table.html:9
+#: ui/templates/teacher/students.html:31 ui/templates/ui/styleguide.html:140
 #: ui/views.py:21
 msgid "Group"
 msgstr "Группа"
@@ -109,7 +109,7 @@ msgstr "Код группы"
 
 #: apps/accounts/forms.py:64
 msgid "Ask your teacher for the 8-character code"
-msgstr "Спросите 8-значный код у преподавателя"
+msgstr "8-значный код выдаёт преподаватель"
 
 #: apps/accounts/forms.py:68
 msgid ""
@@ -119,41 +119,36 @@ msgstr ""
 "Я согласен(на), что обезличенные данные о моей учебной деятельности могут "
 "использоваться в педагогическом исследовании."
 
-#: apps/accounts/forms.py:81
-msgid "Latin letters, digits and . _ - characters"
-msgstr "Латинские буквы, цифры и символы . _ -"
-
-#: apps/accounts/forms.py:111 apps/accounts/forms.py:146
+#: apps/accounts/forms.py:109 apps/accounts/forms.py:144
 #: apps/accounts/models/user.py:61
 msgid "A user with this email already exists."
 msgstr "Пользователь с таким email уже существует."
 
-#: apps/accounts/forms.py:119
+#: apps/accounts/forms.py:117
 #: ui/templates/accounts/partials/join_code_status.html:8
 msgid "No active group has this code. Check it with your teacher."
-msgstr ""
-"Активная группа с таким кодом не найдена. Уточните код у преподавателя."
+msgstr "Активная группа с таким кодом не найдена. Код можно уточнить у преподавателя."
 
-#: apps/accounts/forms.py:123
+#: apps/accounts/forms.py:121
 msgid "Choose your group."
-msgstr "Выберите свою группу."
+msgstr "Группа не выбрана."
 
-#: apps/accounts/forms.py:133
+#: apps/accounts/forms.py:131
 msgid "Middle name"
 msgstr "Отчество"
 
-#: apps/accounts/forms.py:135
+#: apps/accounts/forms.py:133
 msgid "Phone"
 msgstr "Телефон"
 
-#: apps/accounts/forms.py:136 ui/templates/partials/lang_menu.html:7
+#: apps/accounts/forms.py:134 ui/templates/partials/lang_menu.html:7
 #: ui/templates/partials/lang_switch.html:2
 msgid "Interface language"
 msgstr "Язык интерфейса"
 
 #: apps/accounts/models/user.py:14
 msgid "Use Latin letters, digits and the characters . _ - only."
-msgstr "Используйте только латинские буквы, цифры и символы . _ -"
+msgstr "Допускаются только латинские буквы, цифры и символы . _ -"
 
 #: apps/accounts/models/user.py:31
 msgid "Administrator"
@@ -165,8 +160,8 @@ msgstr "Преподаватель"
 
 #: apps/accounts/models/user.py:33 apps/teacher/gradebook.py:19
 #: ui/templates/layouts/student.html:8 ui/templates/research/dashboard.html:84
-#: ui/templates/teacher/gradebook.html:35 ui/templates/teacher/group.html:70
-#: ui/templates/teacher/students.html:18 ui/templates/ui/styleguide.html:140
+#: ui/templates/teacher/gradebook.html:35 ui/templates/teacher/group.html:118
+#: ui/templates/teacher/students.html:29 ui/templates/ui/styleguide.html:140
 #: ui/views.py:21
 msgid "Student"
 msgstr "Студент"
@@ -222,17 +217,9 @@ msgstr "пользователь"
 msgid "users"
 msgstr "пользователи"
 
-#: apps/accounts/views.py:52
+#: apps/accounts/views.py:48
 msgid "You are signed up! Enrol in a course and start with the first topic."
-msgstr "Вы зарегистрированы! Запишитесь на курс и начните с первой темы."
-
-#: apps/accounts/views.py:87
-msgid "This username is already taken."
-msgstr "Этот логин уже занят."
-
-#: apps/accounts/views.py:89
-msgid "The username is free ✓"
-msgstr "Логин свободен ✓"
+msgstr "Регистрация завершена. Следующий шаг — запись на курс и первая тема."
 
 #: apps/assessments/admin.py:24 apps/assessments/admin.py:81
 #: apps/assessments/models/attempt.py:70 apps/assessments/models/quiz.py:75
@@ -241,7 +228,7 @@ msgstr "Логин свободен ✓"
 msgid "question"
 msgstr "вопрос"
 
-#: apps/assessments/admin.py:38 ui/templates/assessments/result.html:81
+#: apps/assessments/admin.py:38 ui/templates/assessments/result.html:83
 #: ui/templates/research/dashboard.html:51 ui/templates/student/results.html:73
 #: ui/templates/student/stages/test.html:9 ui/templates/teacher/student.html:67
 msgid "Attempts"
@@ -371,7 +358,7 @@ msgstr "числовой ответ"
 
 #: apps/assessments/models/attempt.py:77 apps/assessments/models/quiz.py:137
 #: apps/practice/models/submission.py:73
-#: ui/templates/assessments/result.html:61
+#: ui/templates/assessments/result.html:63
 #: ui/templates/teacher/content/question.html:36
 msgid "correct"
 msgstr "верно"
@@ -381,7 +368,7 @@ msgstr "верно"
 #: apps/practice/models/submission.py:74 apps/practice/models/task.py:60
 #: apps/practice/models/task.py:117
 #: ui/templates/admin/practice/practiceitem/try.html:6
-#: ui/templates/teacher/content/item.html:47
+#: ui/templates/teacher/content/item.html:46
 msgid "points"
 msgstr "баллы"
 
@@ -394,13 +381,13 @@ msgstr "ответ"
 msgid "answers"
 msgstr "ответы"
 
-#: apps/assessments/models/quiz.py:12 ui/templates/core/home.html:94
-#: ui/templates/teacher/content/stage.html:60
+#: apps/assessments/models/quiz.py:12 ui/templates/core/home.html:100
+#: ui/templates/teacher/content/stage.html:59
 msgid "Checkpoint quiz"
 msgstr "Закрепляющий тест"
 
 #: apps/assessments/models/quiz.py:13 apps/courses/models/structure.py:71
-#: ui/templates/teacher/content/stage.html:60 ui/views.py:16
+#: ui/templates/teacher/content/stage.html:59 ui/views.py:16
 msgid "Topic test"
 msgstr "Тест по теме"
 
@@ -412,7 +399,7 @@ msgstr "Тест по модулю"
 msgid "Final test"
 msgstr "Итоговый тест"
 
-#: apps/assessments/models/quiz.py:16 ui/templates/research/analytics.html:162
+#: apps/assessments/models/quiz.py:16 ui/templates/research/analytics.html:160
 #: ui/templates/teacher/content/course.html:25
 msgid "Pre/post knowledge test"
 msgstr "Входной/итоговый тест знаний"
@@ -529,7 +516,7 @@ msgid "Chemical formula"
 msgstr "Химическая формула"
 
 #: apps/assessments/models/quiz.py:70 apps/labs/views.py:55
-#: apps/practice/models/task.py:46 ui/templates/assessments/take.html:65
+#: apps/practice/models/task.py:46 ui/templates/assessments/take.html:67
 #: ui/templates/student/partials/quiz_question.html:28
 msgid "Reaction equation"
 msgstr "Уравнение реакции"
@@ -583,11 +570,11 @@ msgstr "Выведенные вопросы остаются в старых п�
 
 #: apps/assessments/models/quiz.py:113
 msgid "Enter the correct number."
-msgstr "Введите правильное число."
+msgstr "Некорректное число."
 
 #: apps/assessments/models/quiz.py:118
 msgid "Enter a list of correct answers, e.g. [\"H2O\"]."
-msgstr "Введите список правильных ответов, например [\"H2O\"]."
+msgstr "Нужен список правильных ответов, например [\"H2O\"]."
 
 #: apps/assessments/models/quiz.py:125
 #, python-format
@@ -619,7 +606,7 @@ msgstr "варианты ответа"
 
 #: apps/assessments/services/attempts.py:79
 msgid "You have used all attempts for this test."
-msgstr "Вы использовали все попытки этого теста."
+msgstr "Все попытки этого теста использованы."
 
 #: apps/assessments/services/attempts.py:82
 msgid "This test has no questions yet."
@@ -640,11 +627,11 @@ msgstr "Время на этот тест истекло."
 
 #: apps/assessments/services/attempts.py:123
 msgid "This question is not in your attempt."
-msgstr "Этого вопроса нет в вашей попытке."
+msgstr "Этого вопроса нет в попытке."
 
 #: apps/assessments/services/authoring.py:42
 msgid "Give at least two options."
-msgstr "Укажите не менее двух вариантов."
+msgstr "Нужно не менее двух вариантов."
 
 #: apps/assessments/services/authoring.py:44
 msgid "Mark exactly one correct option."
@@ -658,14 +645,12 @@ msgstr "Отметьте хотя бы один верный вариант."
 msgid ""
 "An option students have chosen cannot be deleted. Retire the question "
 "instead."
-msgstr ""
-"Вариант, который выбирали студенты, удалить нельзя. Вместо этого выведите "
-"вопрос из использования."
+msgstr "Вариант, который выбирали студенты, удалить нельзя. Вместо этого вопрос можно вывести из использования."
 
 #: apps/assessments/services/authoring.py:77
 #: apps/courses/services/authoring.py:26 apps/practice/services/authoring.py:77
 msgid "The list has changed. Reload the page and try again."
-msgstr "Список изменился. Обновите страницу и повторите."
+msgstr "Список изменился. Нужно обновить страницу и повторить действие."
 
 #: apps/certificates/admin.py:32
 msgid "Make the PDF again"
@@ -789,7 +774,7 @@ msgstr "изменено"
 
 #: apps/core/uploads.py:25
 msgid "You do not have permission to upload files."
-msgstr "У вас нет прав на загрузку файлов."
+msgstr "Нет прав на загрузку файлов."
 
 #: apps/courses/admin.py:59
 msgid "Enrolment"
@@ -800,7 +785,7 @@ msgid "Learning and grading"
 msgstr "Обучение и оценивание"
 
 #: apps/courses/admin.py:64 apps/research/apps.py:8
-#: ui/templates/core/home.html:28 ui/templates/research/dashboard.html:3
+#: ui/templates/core/home.html:33 ui/templates/research/dashboard.html:3
 msgid "Research"
 msgstr "Исследование"
 
@@ -840,7 +825,9 @@ msgstr "Этот студент уже записан на курс."
 #: apps/courses/apps.py:8 apps/research/admin_dashboard.py:38
 #: config/settings/base.py:275 config/settings/base.py:279
 #: ui/templates/student/partials/course_switch.html:3
-#: ui/templates/teacher/group.html:43 ui/templates/teacher/student.html:25
+#: ui/templates/teacher/group.html:99
+#: ui/templates/teacher/partials/groups_table.html:10
+#: ui/templates/teacher/student.html:25
 msgid "Courses"
 msgstr "Курсы"
 
@@ -912,7 +899,7 @@ msgstr "Это не ссылка на видео Vimeo."
 
 #: apps/courses/models/content.py:94
 msgid "Upload the video file."
-msgstr "Загрузите видеофайл."
+msgstr "Требуется видеофайл."
 
 #: apps/courses/models/content.py:96
 msgid "Paste the video link."
@@ -942,7 +929,7 @@ msgstr "лабораторные работы"
 #: apps/courses/models/content.py:131
 #, python-format
 msgid "Use experiment keys of this lab: %(keys)s"
-msgstr "Используйте ключи опытов этой лаборатории: %(keys)s"
+msgstr "Допустимые ключи опытов этой лаборатории: %(keys)s"
 
 #: apps/courses/models/content.py:161
 msgid "instructions"
@@ -1058,7 +1045,9 @@ msgstr "входной/итоговый тест знаний"
 msgid ""
 "Taken once before the first stage (pre) and once after the course (post); "
 "not graded"
-msgstr "Проходится один раз перед первым этапом (до) и один раз после курса (после); не оценивается"
+msgstr ""
+"Проходится один раз перед первым этапом (до) и один раз после курса (после); "
+"не оценивается"
 
 #: apps/courses/models/course.py:79
 msgid "courses"
@@ -1102,7 +1091,9 @@ msgstr "итоговый тест открыт"
 msgid ""
 "The teacher opened the post-test for the whole group (otherwise it opens "
 "after the course)"
-msgstr "Преподаватель открыл итоговый тест для всей группы (иначе он открывается после курса)"
+msgstr ""
+"Преподаватель открыл итоговый тест для всей группы (иначе он открывается "
+"после курса)"
 
 #: apps/courses/models/course.py:147
 msgid "course group"
@@ -1124,7 +1115,7 @@ msgstr "Через группу"
 msgid "Added by the administrator"
 msgstr "Добавлен администратором"
 
-#: apps/courses/models/enrollment.py:19 ui/templates/teacher/groups.html:18
+#: apps/courses/models/enrollment.py:19 ui/templates/teacher/groups.html:24
 msgid "Active"
 msgstr "Активна"
 
@@ -1224,12 +1215,12 @@ msgstr "темы"
 msgid "This course already has a topic with this number."
 msgstr "В курсе уже есть тема с таким номером."
 
-#: apps/courses/models/structure.py:67 ui/templates/core/home.html:191
+#: apps/courses/models/structure.py:67 ui/templates/core/home.html:197
 #: ui/views.py:10
 msgid "Theory"
 msgstr "Теория"
 
-#: apps/courses/models/structure.py:68 ui/templates/core/home.html:192
+#: apps/courses/models/structure.py:68 ui/templates/core/home.html:198
 #: ui/views.py:11
 msgid "Video lesson"
 msgstr "Видеоурок"
@@ -1267,19 +1258,17 @@ msgstr "3–4 вопроса после этапа теории или виде�
 
 #: apps/courses/services/authoring.py:71
 msgid "Delete or move the topics of the module first."
-msgstr "Сначала удалите или перенесите темы модуля."
+msgstr "Сначала нужно удалить или перенести темы модуля."
 
 #: apps/courses/services/authoring.py:109
 msgid "Delete the stages of the topic first, or unpublish it."
-msgstr "Сначала удалите этапы темы или снимите её с публикации."
+msgstr "Сначала нужно удалить этапы темы или снять её с публикации."
 
 #: apps/courses/services/authoring.py:160
 msgid ""
 "Students have already worked on this stage. Make it optional or unpublish "
 "the topic instead."
-msgstr ""
-"Студенты уже работали с этим этапом. Вместо удаления сделайте его "
-"необязательным или снимите тему с публикации."
+msgstr "Студенты уже работали с этим этапом. Вместо удаления его можно сделать необязательным или снять тему с публикации."
 
 #: apps/courses/services/enrollment.py:36
 msgid "This course is not open for enrolment."
@@ -1287,7 +1276,7 @@ msgstr "Запись на этот курс закрыта."
 
 #: apps/courses/services/enrollment.py:50
 msgid "No course has this code. Check it with your teacher."
-msgstr "Курс с таким кодом не найден. Уточните код у преподавателя."
+msgstr "Курс с таким кодом не найден. Код можно уточнить у преподавателя."
 
 #: apps/courses/services/groups.py:79
 msgid "Only students can be added to a group."
@@ -1302,9 +1291,7 @@ msgstr "%(name)s уже в этой группе."
 #, python-format
 msgid ""
 "%(name)s is in the group %(group)s. Ask its teacher to move the student."
-msgstr ""
-"%(name)s состоит в группе %(group)s. Попросите её преподавателя перевести "
-"студента."
+msgstr "%(name)s состоит в группе %(group)s. Перевести студента может преподаватель этой группы."
 
 #: apps/courses/services/groups.py:99
 msgid "The student is not in this group."
@@ -1312,8 +1299,7 @@ msgstr "Студента нет в этой группе."
 
 #: apps/courses/services/groups.py:129
 msgid "Only an empty group can be deleted. Make it inactive instead."
-msgstr ""
-"Удалить можно только пустую группу. Вместо этого сделайте её неактивной."
+msgstr "Удалить можно только пустую группу. Вместо этого её можно сделать неактивной."
 
 #: apps/feedback/apps.py:8 ui/templates/admin/practice/practiceitem/try.html:21
 #: ui/templates/admin/practice/practiceitem/try.html:30
@@ -1354,11 +1340,11 @@ msgstr "комментарии"
 
 #: apps/feedback/models/notification.py:14
 msgid "Your work is graded"
-msgstr "Ваша работа оценена"
+msgstr "Работа оценена"
 
 #: apps/feedback/models/notification.py:15
 msgid "The teacher returned your work"
-msgstr "Преподаватель вернул вашу работу"
+msgstr "Преподаватель вернул работу"
 
 #: apps/feedback/models/notification.py:16
 #: ui/templates/feedback/partials/thread.html:27
@@ -1367,7 +1353,7 @@ msgstr "Новый комментарий"
 
 #: apps/feedback/models/notification.py:17
 msgid "The teacher opened a stage for you"
-msgstr "Преподаватель открыл вам этап"
+msgstr "Преподаватель открыл этап"
 
 #: apps/feedback/models/notification.py:18
 msgid "Certificate issued"
@@ -1387,7 +1373,7 @@ msgstr "уведомления"
 
 #: apps/feedback/services.py:59
 msgid "Write the comment first."
-msgstr "Сначала напишите комментарий."
+msgstr "Комментарий пуст."
 
 #: apps/feedback/services.py:62
 msgid "This work is not part of a course."
@@ -1514,7 +1500,7 @@ msgstr "На аноде выделялся бы хлор, а не кислоро
 
 #: apps/labs/experiments/t01/electrolysis.py:73
 msgid "Select the electrolyzer first."
-msgstr "Сначала выберите электролизёр."
+msgstr "Сначала нужно выбрать электролизёр."
 
 #: apps/labs/experiments/t01/electrolysis.py:77
 msgid "Connect the electrodes"
@@ -1526,7 +1512,7 @@ msgstr "Отмечены катод (−) и анод (+)."
 
 #: apps/labs/experiments/t01/electrolysis.py:80
 msgid "Fill the electrolyzer with the electrolyte first."
-msgstr "Сначала заполните электролизёр электролитом."
+msgstr "Сначала нужно заполнить электролизёр электролитом."
 
 #: apps/labs/experiments/t01/electrolysis.py:84
 msgid "Switch on the DC source"
@@ -1538,7 +1524,7 @@ msgstr "Начинается электролиз: на обоих электр�
 
 #: apps/labs/experiments/t01/electrolysis.py:88
 msgid "Connect the electrodes first."
-msgstr "Сначала подключите электроды."
+msgstr "Сначала нужно подключить электроды."
 
 #: apps/labs/experiments/t01/electrolysis.py:92
 msgid "Run the time"
@@ -1550,7 +1536,7 @@ msgstr "Объёмы газов меняются; строится график 
 
 #: apps/labs/experiments/t01/electrolysis.py:95
 msgid "Switch on the power supply first."
-msgstr "Сначала включите источник тока."
+msgstr "Сначала нужно включить источник тока."
 
 #: apps/labs/experiments/t01/electrolysis.py:99
 msgid "Compare the gas volumes"
@@ -1562,7 +1548,7 @@ msgstr "Определено отношение H₂ : O₂ = 2 : 1."
 
 #: apps/labs/experiments/t01/electrolysis.py:102
 msgid "Let the electrolysis run first."
-msgstr "Сначала проведите электролиз."
+msgstr "Сначала нужно провести электролиз."
 
 #: apps/labs/experiments/t01/electrolysis.py:104
 msgid "Draw a conclusion"
@@ -1570,7 +1556,7 @@ msgstr "Сделать вывод"
 
 #: apps/labs/experiments/t01/electrolysis.py:104
 msgid "Write the electrode reactions."
-msgstr "Запишите электродные реакции."
+msgstr "Записать электродные реакции."
 
 #: apps/labs/experiments/t01/electrolysis.py:107
 #: apps/labs/experiments/t01/hydrogen.py:89
@@ -1588,7 +1574,7 @@ msgstr "Результаты сохраняются, открывается за
 #: apps/labs/experiments/t01/hydrogen.py:92
 #: apps/labs/experiments/t01/oxygen.py:105 apps/labs/experiments/t01/rate.py:87
 msgid "Fill in the lab journal first."
-msgstr "Сначала заполните лабораторный журнал."
+msgstr "Сначала нужно заполнить лабораторный журнал."
 
 #: apps/labs/experiments/t01/electrolysis.py:114
 msgid "Volume of gas at the cathode"
@@ -1680,7 +1666,7 @@ msgstr "Чтобы получить больше водорода из NaOH"
 msgid ""
 "How would you show the class which tube contains hydrogen and which contains "
 "oxygen?"
-msgstr "Как бы вы показали классу, в какой трубке водород, а в какой кислород?"
+msgstr "Как показать классу, в какой трубке водород, а в какой кислород?"
 
 #: apps/labs/experiments/t01/hydrogen.py:14
 msgid "Obtaining and collecting hydrogen"
@@ -1768,7 +1754,7 @@ msgstr "Присоединены пробка, трубка и система с
 
 #: apps/labs/experiments/t01/hydrogen.py:57
 msgid "Put zinc into the flask before closing it with the stopper."
-msgstr "Положите цинк в колбу до того, как закрыть её пробкой."
+msgstr "Цинк нужно положить в колбу до того, как закрыть её пробкой."
 
 #: apps/labs/experiments/t01/hydrogen.py:58
 msgid ""
@@ -1788,9 +1774,7 @@ msgstr "Реакция начинается, появляются пузырьк
 msgid ""
 "Assemble the gas delivery system first: otherwise hydrogen escapes into the "
 "room, and a mixture of hydrogen with air is explosive."
-msgstr ""
-"Сначала соберите газоотводную систему: иначе водород уйдёт в помещение, а "
-"смесь водорода с воздухом взрывоопасна."
+msgstr "Сначала нужно собрать газоотводную систему: иначе водород уйдёт в помещение, а смесь водорода с воздухом взрывоопасна."
 
 #: apps/labs/experiments/t01/hydrogen.py:74
 msgid "Collect the gas"
@@ -1802,7 +1786,7 @@ msgstr "Водород вытесняет воду из цилиндра."
 
 #: apps/labs/experiments/t01/hydrogen.py:77
 msgid "There is no gas to collect yet: start the reaction first."
-msgstr "Собирать пока нечего: сначала начните реакцию."
+msgstr "Собирать пока нечего: сначала нужно начать реакцию."
 
 #: apps/labs/experiments/t01/hydrogen.py:81
 msgid "Observe the result"
@@ -1822,11 +1806,11 @@ msgstr "Записать в лабораторный журнал"
 
 #: apps/labs/experiments/t01/hydrogen.py:86
 msgid "Record your observations."
-msgstr "Запишите свои наблюдения."
+msgstr "Записать наблюдения."
 
 #: apps/labs/experiments/t01/hydrogen.py:96
 msgid "What did you observe in the flask after adding the acid?"
-msgstr "Что вы наблюдали в колбе после добавления кислоты?"
+msgstr "Что наблюдалось в колбе после добавления кислоты?"
 
 #: apps/labs/experiments/t01/hydrogen.py:97
 msgid "Volume of hydrogen collected"
@@ -1915,9 +1899,7 @@ msgstr "Магний"
 msgid ""
 "How would you explain to school students why hydrogen must be tested for "
 "purity before it is ignited?"
-msgstr ""
-"Как бы вы объяснили школьникам, почему водород перед поджиганием нужно "
-"проверять на чистоту?"
+msgstr "Как объяснить школьникам, почему водород перед поджиганием нужно проверять на чистоту?"
 
 #: apps/labs/experiments/t01/oxygen.py:28
 msgid "Obtaining oxygen"
@@ -1989,7 +1971,7 @@ msgstr "Газоотводная трубка подведена к газосб
 
 #: apps/labs/experiments/t01/oxygen.py:68
 msgid "Pour the solution into the test tube first."
-msgstr "Сначала налейте раствор в пробирку."
+msgstr "Сначала нужно налить раствор в пробирку."
 
 #: apps/labs/experiments/t01/oxygen.py:72
 msgid "Start the reaction without a catalyst"
@@ -2005,7 +1987,7 @@ msgstr ""
 
 #: apps/labs/experiments/t01/oxygen.py:75
 msgid "Attach the gas collector first, otherwise the gas will be lost."
-msgstr "Сначала присоедините газосборник, иначе газ будет потерян."
+msgstr "Сначала нужно присоединить газосборник, иначе газ будет потерян."
 
 #: apps/labs/experiments/t01/oxygen.py:79
 msgid "Add the MnO₂ catalyst"
@@ -2019,9 +2001,7 @@ msgstr "В раствор добавлен чёрный порошок ката�
 msgid ""
 "First observe the reaction without a catalyst, otherwise you will have "
 "nothing to compare with."
-msgstr ""
-"Сначала понаблюдайте реакцию без катализатора, иначе не с чем будет "
-"сравнивать."
+msgstr "Сначала нужно понаблюдать реакцию без катализатора, иначе не с чем будет сравнивать."
 
 #: apps/labs/experiments/t01/oxygen.py:87
 msgid "Start the reaction"
@@ -2055,7 +2035,7 @@ msgstr "Зафиксировать результат"
 
 #: apps/labs/experiments/t01/oxygen.py:99
 msgid "Fill in the observation journal."
-msgstr "Заполните журнал наблюдений."
+msgstr "Заполнить журнал наблюдений."
 
 #: apps/labs/experiments/t01/oxygen.py:109
 msgid "Average rate without a catalyst"
@@ -2146,9 +2126,7 @@ msgstr "Известковая вода мутнеет"
 msgid ""
 "Suggest a way to show students that the catalyst is not consumed in the "
 "reaction."
-msgstr ""
-"Предложите способ показать ученикам, что катализатор не расходуется в "
-"реакции."
+msgstr "Каким способом можно показать ученикам, что катализатор не расходуется в реакции?"
 
 #: apps/labs/experiments/t01/rate.py:14
 msgid "Rate of hydrogen peroxide decomposition"
@@ -2188,9 +2166,7 @@ msgstr "Газовые шприцы"
 msgid ""
 "Heating would also speed up the reaction and mix two factors. Change only "
 "one variable: the catalyst."
-msgstr ""
-"Нагревание тоже ускорит реакцию, и два фактора смешаются. Меняйте только "
-"одну переменную — катализатор."
+msgstr "Нагревание тоже ускорит реакцию, и два фактора смешаются. Меняться должна только одна переменная — катализатор."
 
 #: apps/labs/experiments/t01/rate.py:40
 msgid "Select two test tubes"
@@ -2214,7 +2190,7 @@ msgstr "В обе пробирки наливается одинаковое и�
 
 #: apps/labs/experiments/t01/rate.py:52
 msgid "Place both test tubes first."
-msgstr "Сначала установите обе пробирки."
+msgstr "Сначала нужно установить обе пробирки."
 
 #: apps/labs/experiments/t01/rate.py:56
 msgid "Add MnO₂"
@@ -2226,7 +2202,7 @@ msgstr "Катализатор добавлен только в пробирку
 
 #: apps/labs/experiments/t01/rate.py:60
 msgid "Pour H₂O₂ into both tubes first."
-msgstr "Сначала налейте H₂O₂ в обе пробирки."
+msgstr "Сначала нужно налить H₂O₂ в обе пробирки."
 
 #: apps/labs/experiments/t01/rate.py:64
 msgid "Start the timer"
@@ -2250,7 +2226,7 @@ msgstr "Построена зависимость объёма выделивш�
 
 #: apps/labs/experiments/t01/rate.py:74
 msgid "Start the timer first."
-msgstr "Сначала запустите таймер."
+msgstr "Сначала нужно запустить таймер."
 
 #: apps/labs/experiments/t01/rate.py:78
 msgid "Write a conclusion"
@@ -2258,7 +2234,7 @@ msgstr "Записать вывод"
 
 #: apps/labs/experiments/t01/rate.py:79
 msgid "Explain the effect of the catalyst on the reaction rate."
-msgstr "Объясните влияние катализатора на скорость реакции."
+msgstr "Как катализатор влияет на скорость реакции?"
 
 #: apps/labs/experiments/t01/rate.py:91
 msgid "V(O₂) in tube A after 2 min"
@@ -2288,7 +2264,7 @@ msgstr "Катализатор замедляет реакцию"
 
 #: apps/labs/experiments/t01/rate.py:103
 msgid "Explain the effect of the catalyst in your own words"
-msgstr "Объясните действие катализатора своими словами"
+msgstr "Действие катализатора — своими словами"
 
 #: apps/labs/experiments/t01/rate.py:108
 msgid ""
@@ -2330,9 +2306,7 @@ msgstr "Концентрация H₂O₂"
 msgid ""
 "Using the idea of activation energy, explain why MnO₂ speeds up the "
 "decomposition."
-msgstr ""
-"Используя понятие энергии активации, объясните, почему MnO₂ ускоряет "
-"разложение."
+msgstr "Почему MnO₂ ускоряет разложение? Объяснение — через понятие энергии активации."
 
 #: apps/labs/models/attempt.py:10 apps/progress/models/progress.py:17
 #: apps/progress/models/progress.py:72 apps/student/cabinet.py:94
@@ -2343,7 +2317,7 @@ msgstr ""
 msgid "In progress"
 msgstr "В процессе"
 
-#: apps/labs/models/attempt.py:11 ui/templates/assessments/result.html:84
+#: apps/labs/models/attempt.py:11 ui/templates/assessments/result.html:86
 #: ui/templates/teacher/student.html:140
 msgid "Finished"
 msgstr "Завершено"
@@ -2531,11 +2505,11 @@ msgstr "Виртуальный рабочий стол"
 
 #: apps/labs/views.py:35
 msgid "Drag equipment here or use the commands below."
-msgstr "Перетащите оборудование сюда или используйте команды ниже."
+msgstr "Оборудование можно перетащить сюда или выбрать в командах ниже."
 
 #: apps/labs/views.py:36
 msgid "Release to place on the bench"
-msgstr "Отпустите, чтобы поставить на стол"
+msgstr "Отпустить, чтобы поставить на стол"
 
 #: apps/labs/views.py:37
 msgid "Add to bench"
@@ -2551,7 +2525,7 @@ msgstr "Предупреждения и наблюдения"
 
 #: apps/labs/views.py:40
 msgid "Messages about your actions will appear here."
-msgstr "Здесь появятся сообщения о ваших действиях."
+msgstr "Здесь появятся сообщения о действиях."
 
 #: apps/labs/views.py:41
 msgid "Lab journal"
@@ -2567,7 +2541,7 @@ msgstr "Журнал сохранён."
 
 #: apps/labs/views.py:44
 msgid "Fill in all fields of the journal."
-msgstr "Заполните все поля журнала."
+msgstr "Не все поля журнала заполнены."
 
 #: apps/labs/views.py:45
 #, python-format
@@ -2582,7 +2556,7 @@ msgstr "Выполнено"
 msgid "In progress…"
 msgstr "Идёт…"
 
-#: apps/labs/views.py:49 ui/templates/accounts/signup.html:136
+#: apps/labs/views.py:49 ui/templates/accounts/signup.html:130
 msgid "Next"
 msgstr "Далее"
 
@@ -2633,7 +2607,7 @@ msgstr "Объём"
 msgid "min"
 msgstr "мин"
 
-#: apps/labs/views.py:61 ui/templates/research/analytics.html:122
+#: apps/labs/views.py:61 ui/templates/research/analytics.html:121
 msgid "s"
 msgstr "с"
 
@@ -2657,10 +2631,10 @@ msgstr "Задание на анализ"
 msgid "Submit answers"
 msgstr "Отправить ответы"
 
-#: apps/labs/views.py:69 ui/templates/assessments/take.html:75
+#: apps/labs/views.py:69 ui/templates/assessments/take.html:77
 #: ui/templates/student/partials/quiz_question.html:32
 msgid "Your answer"
-msgstr "Ваш ответ"
+msgstr "Ответ"
 
 #: apps/labs/views.py:70
 msgid "Experiment complete"
@@ -2708,8 +2682,8 @@ msgid ""
 msgstr ""
 "Начать опыт заново? Текущий прогресс сохранится как незавершённая попытка."
 
-#: apps/labs/views.py:82 ui/templates/core/home.html:84
-#: ui/templates/research/analytics.html:101
+#: apps/labs/views.py:82 ui/templates/core/home.html:90
+#: ui/templates/research/analytics.html:100
 msgid "Safety"
 msgstr "Безопасность"
 
@@ -2771,8 +2745,7 @@ msgstr "Пробирка A — контрольная: она должна ос�
 
 #: apps/labs/views.py:97
 msgid "Connection problem. Your actions are kept and will be sent again."
-msgstr ""
-"Проблема со связью. Ваши действия сохранены и будут отправлены повторно."
+msgstr "Проблема со связью. Действия сохранены и будут отправлены повторно."
 
 #: apps/organizations/admin.py:76 apps/organizations/models/structure.py:16
 #: apps/organizations/models/structure.py:25
@@ -2796,7 +2769,7 @@ msgstr[3] "%(n)d кодов обновлено."
 msgid "Organizations"
 msgstr "Организации"
 
-#: apps/organizations/models/group.py:22
+#: apps/organizations/models/group.py:22 ui/templates/teacher/groups.html:37
 #: ui/templates/teacher/partials/cohort.html:4
 msgid "Not assigned"
 msgstr "Не назначена"
@@ -2997,7 +2970,7 @@ msgstr "Подтвердить оценки"
 msgid "Confirmed: %(n)d"
 msgstr "Подтверждено: %(n)d"
 
-#: apps/practice/admin.py:150 ui/templates/teacher/grading_detail.html:126
+#: apps/practice/admin.py:150
 msgid "Return to the student"
 msgstr "Вернуть студенту"
 
@@ -3012,7 +2985,7 @@ msgstr "Правильный ответ должен быть JSON-объект�
 
 #: apps/practice/checkers.py:91
 msgid "Give the correct number: {\"value\": 2.24}"
-msgstr "Укажите правильное число: {\"value\": 2.24}"
+msgstr "Нужно правильное число: {\"value\": 2.24}"
 
 #: apps/practice/checkers.py:94
 #, python-format
@@ -3029,11 +3002,11 @@ msgstr "Правильное уравнение не уравнено."
 
 #: apps/practice/checkers.py:105
 msgid "List the accepted answers: {\"accepted\": [\"…\"]}"
-msgstr "Перечислите принимаемые ответы: {\"accepted\": [\"…\"]}"
+msgstr "Нужен список принимаемых ответов: {\"accepted\": [\"…\"]}"
 
 #: apps/practice/checkers.py:109
 msgid "List the correct answers: {\"correct\": [\"…\"]}"
-msgstr "Перечислите правильные ответы: {\"correct\": [\"…\"]}"
+msgstr "Нужен список правильных ответов: {\"correct\": [\"…\"]}"
 
 #: apps/practice/checkers.py:112
 msgid "Every correct answer must be one of the options."
@@ -3045,11 +3018,11 @@ msgstr "Для выбора нужны варианты: {\"options\": [\"…\"]
 
 #: apps/practice/checkers.py:118
 msgid "Give at least two pairs: {\"pairs\": {\"left\": \"right\"}}"
-msgstr "Укажите не менее двух пар: {\"pairs\": {\"left\": \"right\"}}"
+msgstr "Нужно не менее двух пар: {\"pairs\": {\"left\": \"right\"}}"
 
 #: apps/practice/checkers.py:122
 msgid "Give at least two different steps: {\"order\": [\"…\", \"…\"]}"
-msgstr "Укажите не менее двух разных шагов: {\"order\": [\"…\", \"…\"]}"
+msgstr "Нужно не менее двух разных шагов: {\"order\": [\"…\", \"…\"]}"
 
 #: apps/practice/checkers.py:124
 #, python-format
@@ -3093,7 +3066,7 @@ msgstr "Ответ не удалось прочитать. Проверьте з
 
 #: apps/practice/checkers.py:150
 msgid "Write a number, e.g. 2,24."
-msgstr "Напишите число, например 2,24."
+msgstr "Требуется число, например 2,24."
 
 #: apps/practice/checkers.py:156
 msgid "Check the unit."
@@ -3451,12 +3424,12 @@ msgstr "Сначала добавьте рубрику с критериями."
 
 #: apps/practice/services/submissions.py:50
 msgid "Your previous answer is still being graded."
-msgstr "Ваш предыдущий ответ ещё оценивается."
+msgstr "Предыдущий ответ ещё оценивается."
 
 #: apps/practice/services/submissions.py:52
 #: ui/templates/student/stages/practice.html:48
 msgid "You have used all attempts for this work."
-msgstr "Вы использовали все попытки этой работы."
+msgstr "Все попытки этой работы использованы."
 
 #: apps/progress/admin.py:30
 msgid "Open the selected stages for the student"
@@ -3475,8 +3448,8 @@ msgstr "Пересчитать"
 msgid "Recalculated."
 msgstr "Пересчитано."
 
-#: apps/progress/apps.py:8 ui/templates/teacher/group.html:72
-#: ui/templates/teacher/partials/groups_table.html:9
+#: apps/progress/apps.py:8 ui/templates/teacher/group.html:120
+#: ui/templates/teacher/partials/groups_table.html:13
 #: ui/templates/teacher/partials/student_drawer.html:15
 msgid "Progress"
 msgstr "Прогресс"
@@ -3706,23 +3679,23 @@ msgstr "Неизвестный тест."
 
 #: apps/progress/services/benchmark.py:100
 msgid "You have already taken this test."
-msgstr "Вы уже прошли этот тест."
+msgstr "Этот тест уже пройден."
 
 #: apps/progress/services/benchmark.py:103
 msgid "The final knowledge test opens when you finish the course."
-msgstr "Итоговый тест откроется, когда вы закончите курс."
+msgstr "Итоговый тест откроется после завершения курса."
 
 #: apps/progress/services/benchmark.py:105
-#: ui/templates/student/benchmark.html:50
+#: ui/templates/student/benchmark.html:49
 msgid "This test is not needed any more."
 msgstr "Этот тест больше не нужен."
 
 #: apps/research/admin_dashboard.py:34 ui/templates/research/dashboard.html:50
-#: ui/templates/teacher/group.html:66
-#: ui/templates/teacher/partials/groups_table.html:8
-#: ui/templates/teacher/search.html:14 ui/templates/teacher/students.html:3
-#: ui/templates/teacher/students.html:5 ui/templates/teacher/students.html:7
-#: ui/templates/teacher/students.html:8
+#: ui/templates/teacher/group.html:115 ui/templates/teacher/groups.html:15
+#: ui/templates/teacher/partials/groups_table.html:12
+#: ui/templates/teacher/search.html:14 ui/templates/teacher/students.html:5
+#: ui/templates/teacher/students.html:7 ui/templates/teacher/students.html:11
+#: ui/templates/teacher/students.html:26
 msgid "Students"
 msgstr "Студенты"
 
@@ -3779,7 +3752,7 @@ msgstr "Выдано сертификатов"
 msgid "Teacher cabinet"
 msgstr "Кабинет преподавателя"
 
-#: apps/research/admin_dashboard.py:54 ui/templates/core/home.html:287
+#: apps/research/admin_dashboard.py:54 ui/templates/core/home.html:293
 #: ui/templates/partials/shell/sidebar_teacher.html:22
 #: ui/templates/research/analytics.html:8
 msgid "Statistics"
@@ -3798,7 +3771,7 @@ msgid "%(h)s h %(m)s min"
 msgstr "%(h)s ч %(m)s мин"
 
 #: apps/research/analytics.py:83 apps/student/cabinet.py:57
-#: ui/templates/student/benchmark.html:40
+#: ui/templates/student/benchmark.html:39
 #: ui/templates/student/stages/test.html:8
 #, python-format
 msgid "%(m)s min"
@@ -3865,10 +3838,11 @@ msgstr[3] "%(a)s / %(b)s опытов"
 #: apps/student/cabinet.py:95 ui/templates/labs/run.html:202
 #: ui/templates/student/results.html:92 ui/templates/student/topic.html:43
 #: ui/templates/teacher/content/course.html:32
-#: ui/templates/teacher/content/courses.html:23
-#: ui/templates/teacher/dashboard.html:80
-#: ui/templates/teacher/partials/groups_table.html:25
-#: ui/templates/teacher/student.html:82
+#: ui/templates/teacher/content/courses.html:22
+#: ui/templates/teacher/dashboard.html:80 ui/templates/teacher/group.html:79
+#: ui/templates/teacher/group.html:124
+#: ui/templates/teacher/partials/groups_table.html:15
+#: ui/templates/teacher/student.html:82 ui/templates/teacher/students.html:32
 msgid "Open"
 msgstr "Открыть"
 
@@ -3908,8 +3882,8 @@ msgid "Quiz · attempt %(n)s"
 msgstr "Тест · попытка %(n)s"
 
 #: apps/student/cabinet.py:187 config/settings/base.py:349
-#: ui/templates/core/home.html:26 ui/templates/core/home.html:193
-#: ui/templates/core/home.html:353
+#: ui/templates/core/home.html:31 ui/templates/core/home.html:199
+#: ui/templates/core/home.html:359
 msgid "Lab"
 msgstr "Лаборатория"
 
@@ -3942,7 +3916,7 @@ msgstr "Пароль изменён."
 
 #: apps/student/views.py:339
 msgid "Before the first stage, take the short entry knowledge test."
-msgstr "Перед первым этапом пройдите короткий входной тест знаний."
+msgstr "Перед первым этапом — короткий входной тест знаний."
 
 #: apps/student/views.py:524 ui/templates/student/stages/practice.html:41
 msgid "Preview: answers are not saved."
@@ -3952,18 +3926,17 @@ msgstr "Предпросмотр: ответы не сохраняются."
 msgid ""
 "Experiments open one after another: finish the previous one and send its "
 "analysis."
-msgstr ""
-"Опыты открываются по очереди: завершите предыдущий и отправьте его анализ."
+msgstr "Опыты открываются по очереди: следующий доступен после завершения предыдущего и отправки его анализа."
 
 #: apps/student/views.py:714
 msgid "Finish the material first — the test opens after it."
-msgstr "Сначала завершите материал — тест откроется после него."
+msgstr "Тест откроется после завершения материала."
 
 #: apps/student/views.py:835 ui/templates/student/stage.html:50
 msgid "Go to the next stage"
 msgstr "Перейти к следующему этапу"
 
-#: apps/student/views.py:837 ui/templates/teacher/content/item.html:60
+#: apps/student/views.py:837 ui/templates/teacher/content/item.html:59
 msgid "Back to the stage"
 msgstr "Вернуться к этапу"
 
@@ -4010,7 +3983,7 @@ msgstr "Удалено."
 
 #: apps/teacher/content.py:285
 msgid "The stage is added. Now fill in its content."
-msgstr "Этап добавлен. Теперь заполните его содержание."
+msgstr "Этап добавлен. Осталось заполнить его содержание."
 
 #: apps/teacher/content.py:308
 msgid "The stage is saved."
@@ -4035,13 +4008,13 @@ msgstr "Поле ответа сохранено."
 
 #: apps/teacher/content_forms.py:52
 msgid "Set a course code for enrolment by code."
-msgstr "Задайте код курса для записи по коду."
+msgstr "Для записи по коду нужен код курса."
 
 #: apps/teacher/content_forms.py:87
 msgid "Kind"
 msgstr "Тип"
 
-#: apps/teacher/content_forms.py:107 ui/templates/core/home.html:222
+#: apps/teacher/content_forms.py:107 ui/templates/core/home.html:228
 #: ui/templates/labs/run.html:34
 msgid "Experiments"
 msgstr "Опыты"
@@ -4089,8 +4062,8 @@ msgstr ""
 
 #: apps/teacher/forms.py:29 apps/teacher/gradebook.py:22
 #: ui/templates/research/dashboard.html:29
-#: ui/templates/research/dashboard.html:49 ui/templates/teacher/group.html:33
-#: ui/templates/teacher/partials/groups_table.html:7
+#: ui/templates/research/dashboard.html:49 ui/templates/teacher/groups.html:32
+#: ui/templates/teacher/partials/groups_table.html:11
 msgid "Research group"
 msgstr "Исследовательская группа"
 
@@ -4115,7 +4088,7 @@ msgstr "Окончание"
 msgid "The end is before the start."
 msgstr "Дата окончания раньше даты начала."
 
-#: apps/teacher/gradebook.py:20 ui/templates/teacher/students.html:18
+#: apps/teacher/gradebook.py:20
 msgid "Username"
 msgstr "Логин"
 
@@ -4140,14 +4113,14 @@ msgstr "На проверку"
 msgid "Spot-check"
 msgstr "Выборка"
 
-#: apps/teacher/grading.py:28 ui/templates/research/analytics.html:148
+#: apps/teacher/grading.py:28 ui/templates/research/analytics.html:146
 #: ui/templates/student/partials/practice_field.html:113
 msgid "Graded by AI"
 msgstr "Оценено AI"
 
 #: apps/teacher/grading.py:121
 msgid "The AI is still grading this work. Try again in a minute."
-msgstr "ИИ ещё оценивает эту работу. Повторите через минуту."
+msgstr "ИИ ещё оценивает эту работу. Повторить можно через минуту."
 
 #: apps/teacher/grading.py:126
 msgid "The work is returned to the student; the attempt is given back."
@@ -4180,7 +4153,7 @@ msgstr[1] "%(n)s предупреждения о безопасности в о�
 msgstr[2] "%(n)s предупреждений о безопасности в опыте «%(exp)s»"
 msgstr[3] "%(n)s предупреждений о безопасности в опыте «%(exp)s»"
 
-#: apps/teacher/overview.py:96 ui/templates/teacher/group.html:90
+#: apps/teacher/overview.py:96 ui/templates/teacher/group.html:138
 #, python-format
 msgid "%(n)s day inactive"
 msgid_plural "%(n)s days inactive"
@@ -4198,19 +4171,19 @@ msgstr "Ещё не начал"
 msgid "experiment %(n)s"
 msgstr "опыт %(n)s"
 
-#: apps/teacher/views.py:82
+#: apps/teacher/views.py:108
 msgid "The group is saved."
 msgstr "Группа сохранена."
 
-#: apps/teacher/views.py:96
+#: apps/teacher/views.py:122
 msgid "The group is deleted."
 msgstr "Группа удалена."
 
-#: apps/teacher/views.py:184
+#: apps/teacher/views.py:210
 msgid "The research group is saved."
 msgstr "Исследовательская группа сохранена."
 
-#: apps/teacher/views.py:188
+#: apps/teacher/views.py:214
 #, python-format
 msgid "%(n)s enrolment got it now."
 msgid_plural "%(n)s enrolments got it now."
@@ -4219,7 +4192,7 @@ msgstr[1] "%(n)s записям она присвоена сейчас."
 msgstr[2] "%(n)s записям она присвоена сейчас."
 msgstr[3] "%(n)s записям она присвоена сейчас."
 
-#: apps/teacher/views.py:194
+#: apps/teacher/views.py:220
 #, python-format
 msgid ""
 "%(n)s enrolment keeps its earlier research group (the research snapshot)."
@@ -4238,16 +4211,16 @@ msgstr[3] ""
 "%(n)s записей сохраняют прежнюю исследовательскую группу (зафиксированное "
 "значение)."
 
-#: apps/teacher/views.py:211
+#: apps/teacher/views.py:237
 msgid "No student account with this username or email."
 msgstr "Нет студента с таким логином или email."
 
-#: apps/teacher/views.py:218
+#: apps/teacher/views.py:244
 #, python-format
 msgid "%(name)s is added to the group."
 msgstr "%(name)s добавлен(а) в группу."
 
-#: apps/teacher/views.py:223
+#: apps/teacher/views.py:249
 #, python-format
 msgid "Enrolled in %(n)s course of the group."
 msgid_plural "Enrolled in %(n)s courses of the group."
@@ -4256,42 +4229,42 @@ msgstr[1] "Записан на %(n)s курса группы."
 msgstr[2] "Записан на %(n)s курсов группы."
 msgstr[3] "Записан на %(n)s курсов группы."
 
-#: apps/teacher/views.py:241
+#: apps/teacher/views.py:267
 #, python-format
 msgid "%(name)s is removed from the group. Courses and progress stay."
 msgstr "%(name)s исключён(а) из группы. Курсы и прогресс сохраняются."
 
-#: apps/teacher/views.py:251
+#: apps/teacher/views.py:277
 msgid "A new join code is made; the old one no longer works."
 msgstr "Создан новый код; старый больше не действует."
 
-#: apps/teacher/views.py:263
+#: apps/teacher/views.py:289
 msgid "The group is attached to the course; its students are enrolled."
 msgstr "Группа прикреплена к курсу; её студенты записаны."
 
-#: apps/teacher/views.py:277
+#: apps/teacher/views.py:303
 msgid "The group is detached. Enrolled students keep the course and progress."
 msgstr "Группа откреплена. У записанных студентов сохраняются курс и прогресс."
 
-#: apps/teacher/views.py:292
+#: apps/teacher/views.py:318
 msgid "The final knowledge test is open for the group."
 msgstr "Итоговый тест открыт для группы."
 
-#: apps/teacher/views.py:294
+#: apps/teacher/views.py:320
 msgid ""
 "The final knowledge test is closed; it opens for each student after the "
 "course."
 msgstr "Итоговый тест закрыт; он откроется каждому студенту после курса."
 
-#: apps/teacher/views.py:391
+#: apps/teacher/views.py:425
 msgid "The student is not enrolled in your course."
-msgstr "Студент не записан на ваш курс."
+msgstr "Студент не записан на курс."
 
-#: apps/teacher/views.py:397
+#: apps/teacher/views.py:431
 msgid "This stage cannot be opened: its topic is not published."
 msgstr "Этот этап нельзя открыть: его тема не опубликована."
 
-#: apps/teacher/views.py:399
+#: apps/teacher/views.py:433
 #, python-format
 msgid "«%(stage)s» is open for the student."
 msgstr "«%(stage)s» открыт для студента."
@@ -4429,20 +4402,14 @@ msgid ""
 "Someone (hopefully you) asked to reset the password of your ChemEduTech "
 "account.\n"
 "Open the link to set a new password:"
-msgstr ""
-"Здравствуйте, %(user)s!\n"
-"\n"
-"Поступил запрос на сброс пароля вашего аккаунта ChemEduTech.\n"
-"Чтобы задать новый пароль, откройте ссылку:"
+msgstr "Добрый день, %(user)s!\n\nПоступил запрос на сброс пароля аккаунта ChemEduTech.\nСсылка для установки нового пароля:"
 
 #: ui/templates/accounts/email/password_reset.txt:8
 #, python-format
 msgid ""
 "Your username: %(username)s\n"
 "If you did not ask for this, just ignore the email."
-msgstr ""
-"Ваш логин: %(username)s\n"
-"Если вы не запрашивали сброс, просто проигнорируйте письмо."
+msgstr "Логин: %(username)s\nЕсли сброс не запрашивался, письмо можно проигнорировать."
 
 #: ui/templates/accounts/email/password_reset_subject.txt:1
 msgid "ChemEduTech: password reset"
@@ -4450,8 +4417,8 @@ msgstr "ChemEduTech: сброс пароля"
 
 #: ui/templates/accounts/login.html:3 ui/templates/accounts/login.html:46
 #: ui/templates/accounts/password_reset_complete.html:9
-#: ui/templates/accounts/signup.html:16 ui/templates/core/home.html:35
-#: ui/templates/core/home.html:112 ui/templates/core/home.html:354
+#: ui/templates/accounts/signup.html:16 ui/templates/core/home.html:40
+#: ui/templates/core/home.html:118 ui/templates/core/home.html:360
 #: ui/templates/layouts/public.html:14
 msgid "Log in"
 msgstr "Войти"
@@ -4462,7 +4429,7 @@ msgstr "С возвращением!"
 
 #: ui/templates/accounts/login.html:10
 msgid "Log in with your username or email."
-msgstr "Войдите по логину или email."
+msgstr "Вход по логину или email."
 
 #: ui/templates/accounts/login.html:16
 msgid "Could not log in."
@@ -4489,7 +4456,7 @@ msgid "or"
 msgstr "или"
 
 #: ui/templates/accounts/login.html:49 ui/templates/accounts/signup.html:9
-#: ui/templates/accounts/signup.html:28 ui/templates/core/home.html:341
+#: ui/templates/accounts/signup.html:28 ui/templates/core/home.html:347
 msgid "Sign up as a student"
 msgstr "Зарегистрироваться как студент"
 
@@ -4521,7 +4488,7 @@ msgstr "Ссылка недействительна"
 
 #: ui/templates/accounts/password_reset_confirm.html:17
 msgid "It has already been used or has expired. Request a new one."
-msgstr "Она уже использована или устарела. Запросите новую."
+msgstr "Она уже использована или устарела. Можно запросить новую."
 
 #: ui/templates/accounts/password_reset_confirm.html:18
 msgid "Request a new link"
@@ -4554,9 +4521,7 @@ msgstr "Вернуться ко входу"
 msgid ""
 "Enter the email you signed up with — we will send a link to set a new "
 "password."
-msgstr ""
-"Введите email, указанный при регистрации, — мы пришлём ссылку для нового "
-"пароля."
+msgstr "На email, указанный при регистрации, придёт ссылка для установки нового пароля."
 
 #: ui/templates/accounts/password_reset_form.html:13
 msgid "Send the link"
@@ -4584,11 +4549,11 @@ msgstr "Пароль: надёжный"
 
 #: ui/templates/accounts/signup.html:24
 msgid "Fill in this field."
-msgstr "Заполните это поле."
+msgstr "Обязательное поле."
 
 #: ui/templates/accounts/signup.html:29
 msgid "Three short steps — then enrol in a course and start learning."
-msgstr "Три коротких шага — затем запишитесь на курс и начните учиться."
+msgstr "Три коротких шага — затем запись на курс и начало обучения."
 
 #: ui/templates/accounts/signup.html:32 ui/templates/accounts/signup.html:66
 msgid "Personal details"
@@ -4622,46 +4587,42 @@ msgstr ""
 
 #: ui/templates/accounts/signup.html:66
 msgid "This is how your name will appear on the certificate."
-msgstr "Так ваше имя будет указано в сертификате."
+msgstr "Так имя будет указано в сертификате."
 
-#: ui/templates/accounts/signup.html:89
+#: ui/templates/accounts/signup.html:83
 msgid "At least 8 characters, a capital letter and a digit"
 msgstr "Не менее 8 символов, заглавная буква и цифра"
 
-#: ui/templates/accounts/signup.html:102
+#: ui/templates/accounts/signup.html:96
 msgid "University and group"
 msgstr "Вуз и группа"
 
-#: ui/templates/accounts/signup.html:102
+#: ui/templates/accounts/signup.html:96
 msgid "Your teacher adds you to the course through your group."
-msgstr "Преподаватель добавит вас на курс через вашу группу."
+msgstr "Преподаватель добавляет студента на курс через группу."
 
-#: ui/templates/accounts/signup.html:104
+#: ui/templates/accounts/signup.html:98
 msgid "How to find your group"
 msgstr "Как указать группу"
 
-#: ui/templates/accounts/signup.html:124
+#: ui/templates/accounts/signup.html:118
 msgid "Check and confirm"
-msgstr "Проверьте и подтвердите"
+msgstr "Проверка и подтверждение"
 
-#: ui/templates/accounts/signup.html:124
+#: ui/templates/accounts/signup.html:118
 msgid "Are your details correct?"
-msgstr "Ваши данные верны?"
+msgstr "Данные верны?"
 
-#: ui/templates/accounts/signup.html:126
+#: ui/templates/accounts/signup.html:120
 msgid "Full name"
 msgstr "ФИО"
 
-#: ui/templates/accounts/signup.html:127
-msgid "Username / email"
-msgstr "Логин / email"
-
-#: ui/templates/accounts/signup.html:135
+#: ui/templates/accounts/signup.html:129
 msgid "Back"
 msgstr "Назад"
 
-#: ui/templates/accounts/signup.html:137 ui/templates/core/home.html:36
-#: ui/templates/core/home.html:113 ui/templates/core/home.html:354
+#: ui/templates/accounts/signup.html:131 ui/templates/core/home.html:41
+#: ui/templates/core/home.html:119 ui/templates/core/home.html:360
 #: ui/templates/layouts/public.html:15
 msgid "Sign up"
 msgstr "Зарегистрироваться"
@@ -4680,7 +4641,7 @@ msgstr ""
 
 #: ui/templates/admin/practice/practiceitem/try.html:15
 #: ui/templates/student/partials/quiz_question.html:37
-#: ui/templates/teacher/content/item.html:71
+#: ui/templates/teacher/content/item.html:70
 #: ui/templates/teacher/dashboard.html:64
 msgid "Check"
 msgstr "Проверить"
@@ -4697,158 +4658,156 @@ msgstr "Уверенность"
 msgid "calls"
 msgstr "вызовов"
 
-#: ui/templates/assessments/result.html:6 ui/templates/assessments/take.html:6
+#: ui/templates/assessments/result.html:8 ui/templates/assessments/take.html:8
 #: ui/templates/student/benchmark.html:12
 msgid "Breadcrumbs"
 msgstr "Навигационная цепочка"
 
-#: ui/templates/assessments/result.html:11
-#: ui/templates/assessments/take.html:20
+#: ui/templates/assessments/result.html:13
+#: ui/templates/assessments/take.html:22
 #: ui/templates/student/partials/quiz_panel.html:13
 #: ui/templates/teacher/grading_detail.html:23
-#: ui/templates/teacher/grading_detail.html:146
+#: ui/templates/teacher/grading_detail.html:141
 #, python-format
 msgid "attempt %(n)s"
 msgstr "попытка %(n)s"
 
-#: ui/templates/assessments/result.html:19
+#: ui/templates/assessments/result.html:21
 #: ui/templates/student/partials/quiz_panel.html:49
 msgid "Test passed"
 msgstr "Тест сдан"
 
-#: ui/templates/assessments/result.html:21
+#: ui/templates/assessments/result.html:23
 #: ui/templates/student/partials/practice_result.html:16
 #: ui/templates/student/partials/quiz_panel.html:51
 #, python-format
 msgid "Below the pass mark (%(p)s%%)"
 msgstr "Ниже проходного порога (%(p)s%%)"
 
-#: ui/templates/assessments/result.html:24
+#: ui/templates/assessments/result.html:26
 #, python-format
 msgid "%(s)s of %(m)s points."
 msgstr "%(s)s из %(m)s баллов."
 
-#: ui/templates/assessments/result.html:25
+#: ui/templates/assessments/result.html:27
 #, python-format
 msgid "Attempts left: %(n)s."
 msgstr "Осталось попыток: %(n)s."
 
-#: ui/templates/assessments/result.html:26
+#: ui/templates/assessments/result.html:28
 #: ui/templates/student/partials/quiz_panel.html:52
 msgid "Read the material again and retake the test."
-msgstr "Перечитайте материал и пересдайте тест."
+msgstr "Рекомендуется перечитать материал и пересдать тест."
 
-#: ui/templates/assessments/result.html:32
+#: ui/templates/assessments/result.html:34
 #: ui/templates/student/partials/quiz_panel.html:60
 #: ui/templates/student/partials/quiz_panel.html:91
 msgid "Retake the test"
 msgstr "Пересдать тест"
 
-#: ui/templates/assessments/result.html:40
+#: ui/templates/assessments/result.html:42
 msgid "Your answers"
-msgstr "Ваши ответы"
+msgstr "Ответы"
 
-#: ui/templates/assessments/result.html:48
+#: ui/templates/assessments/result.html:50
 msgid "Correct"
 msgstr "Верно"
 
-#: ui/templates/assessments/result.html:48
+#: ui/templates/assessments/result.html:50
 msgid "Wrong"
 msgstr "Неверно"
 
-#: ui/templates/assessments/result.html:50
+#: ui/templates/assessments/result.html:52
 #, python-format
 msgid "%(p)s of %(m)s points"
 msgstr "%(p)s из %(m)s баллов"
 
-#: ui/templates/assessments/result.html:60
+#: ui/templates/assessments/result.html:62
 #: ui/templates/student/partials/quiz_question.html:48
 #: ui/templates/student/partials/quiz_question.html:53
 msgid "your answer"
-msgstr "ваш ответ"
-
-#: ui/templates/assessments/result.html:66
-msgid "Your answer:"
-msgstr "Ваш ответ:"
+msgstr "ответ"
 
 #: ui/templates/assessments/result.html:68
+msgid "Your answer:"
+msgstr "Ответ:"
+
+#: ui/templates/assessments/result.html:70
 msgid "correct:"
 msgstr "правильно:"
 
-#: ui/templates/assessments/result.html:91
+#: ui/templates/assessments/result.html:93
 msgid "Counts for the grade"
 msgstr "Идёт в оценку"
 
-#: ui/templates/assessments/take.html:18 ui/templates/student/benchmark.html:41
+#: ui/templates/assessments/take.html:20 ui/templates/student/benchmark.html:40
 msgid "one attempt, not graded"
 msgstr "одна попытка, без оценки"
 
-#: ui/templates/assessments/take.html:21
+#: ui/templates/assessments/take.html:23
 #: ui/templates/student/partials/quiz_panel.html:12
 #, python-format
 msgid "pass mark %(p)s%%"
 msgstr "порог %(p)s%%"
 
-#: ui/templates/assessments/take.html:29
+#: ui/templates/assessments/take.html:31
 msgid "Time left"
 msgstr "Осталось времени"
 
-#: ui/templates/assessments/take.html:46
+#: ui/templates/assessments/take.html:48
 #, python-format
 msgid "Question %(n)s"
 msgstr "Вопрос %(n)s"
 
-#: ui/templates/assessments/take.html:50
+#: ui/templates/assessments/take.html:52
 #: ui/templates/student/partials/practice_field.html:64
 #: ui/templates/student/partials/quiz_question.html:15
 msgid "Choose all correct options."
-msgstr "Выберите все правильные варианты."
-
-#: ui/templates/assessments/take.html:59
-#: ui/templates/student/partials/quiz_question.html:24
-msgid "Your answer (a number)"
-msgstr "Ваш ответ (число)"
+msgstr "Нужно выбрать все правильные варианты."
 
 #: ui/templates/assessments/take.html:61
+#: ui/templates/student/partials/quiz_question.html:24
+msgid "Your answer (a number)"
+msgstr "Ответ (число)"
+
+#: ui/templates/assessments/take.html:63
 #: ui/templates/student/partials/quiz_question.html:26
 msgid "A comma or a dot may be used: 2,24"
 msgstr "Можно через запятую или точку: 2,24"
 
-#: ui/templates/assessments/take.html:65
+#: ui/templates/assessments/take.html:67
 #: ui/templates/student/partials/quiz_question.html:28
 msgid "Formula"
 msgstr "Формула"
 
-#: ui/templates/assessments/take.html:69
+#: ui/templates/assessments/take.html:71
 #: ui/templates/student/partials/quiz_question.html:30
 msgid ""
 "Indices as plain digits: H2SO4, Ca(OH)2, CuSO4·5H2O; ions: Zn2+, SO4^2-."
 msgstr ""
 "Индексы обычными цифрами: H2SO4, Ca(OH)2, CuSO4·5H2O; ионы: Zn2+, SO4^2-."
 
-#: ui/templates/assessments/take.html:70
+#: ui/templates/assessments/take.html:72
 #: ui/templates/student/partials/quiz_question.html:30
 msgid ""
 "Arrow: -> or =; write the coefficients: 2H2 + O2 -> 2H2O. ↑ and ↓ may be "
 "left out."
-msgstr ""
-"Стрелка: -> или =; пишите коэффициенты: 2H2 + O2 -> 2H2O. ↑ и ↓ можно не "
-"писать."
+msgstr "Стрелка: -> или =; коэффициенты обязательны: 2H2 + O2 -> 2H2O. ↑ и ↓ можно не писать."
 
-#: ui/templates/assessments/take.html:83
+#: ui/templates/assessments/take.html:85
 msgid "Previous question"
 msgstr "Предыдущий вопрос"
 
-#: ui/templates/assessments/take.html:86
+#: ui/templates/assessments/take.html:88
 msgid "Unanswered questions:"
 msgstr "Вопросов без ответа:"
 
-#: ui/templates/assessments/take.html:89
+#: ui/templates/assessments/take.html:91
 #: ui/templates/student/partials/quiz_question.html:66
 msgid "Next question"
 msgstr "Следующий вопрос"
 
-#: ui/templates/assessments/take.html:90
+#: ui/templates/assessments/take.html:92
 msgid "Submit the test"
 msgstr "Отправить тест"
 
@@ -4863,7 +4822,7 @@ msgstr "Дата выдачи"
 
 #: ui/templates/certificates/pdf.html:45
 #: ui/templates/certificates/verify.html:16
-#: ui/templates/student/results.html:74 ui/templates/teacher/group.html:73
+#: ui/templates/student/results.html:74 ui/templates/teacher/group.html:121
 #: ui/templates/teacher/partials/student_drawer.html:14
 #: ui/templates/teacher/student.html:68 ui/templates/teacher/student.html:112
 #: ui/templates/ui/styleguide.html:140 ui/views.py:21
@@ -4884,7 +4843,7 @@ msgid "The certificate is real: it was issued by ChemEduTech."
 msgstr "Сертификат подлинный: он выдан ChemEduTech."
 
 #: ui/templates/certificates/verify.html:10
-#: ui/templates/certificates/verify.html:12 ui/templates/core/home.html:58
+#: ui/templates/certificates/verify.html:12 ui/templates/core/home.html:64
 #: ui/templates/student/partials/certificate_card.html:10
 msgid "Certificate"
 msgstr "Сертификат"
@@ -4908,27 +4867,28 @@ msgstr ""
 "страницу с именем владельца."
 
 #: ui/templates/components/alert.html:10 ui/templates/components/toast.html:16
-#: ui/templates/core/home.html:108 ui/templates/layouts/learn.html:49
+#: ui/templates/core/home.html:114 ui/templates/layouts/learn.html:49
 #: ui/templates/student/partials/quiz_panel.html:93
-#: ui/templates/teacher/dashboard.html:101 ui/templates/teacher/group.html:151
+#: ui/templates/teacher/dashboard.html:101 ui/templates/teacher/group.html:77
+#: ui/templates/teacher/group.html:182 ui/templates/teacher/group.html:199
 #: ui/templates/teacher/partials/student_drawer.html:10
 #: ui/templates/ui/styleguide.html:116
 msgid "Close"
 msgstr "Закрыть"
 
+#: ui/templates/components/confirm.html:19
 #: ui/templates/components/modal.html:19
 #: ui/templates/feedback/partials/thread.html:18
 #: ui/templates/teacher/content/course_form.html:40
 #: ui/templates/teacher/content/question.html:59
 #: ui/templates/teacher/content/simple_form.html:17
 #: ui/templates/teacher/content/stage_new.html:16
-#: ui/templates/teacher/dashboard.html:113
-#: ui/templates/teacher/grading_detail.html:130
-#: ui/templates/teacher/group.html:156 ui/templates/teacher/group_form.html:26
-#: ui/templates/teacher/group_form.html:39
+#: ui/templates/teacher/dashboard.html:113 ui/templates/teacher/group.html:187
+#: ui/templates/teacher/group.html:208 ui/templates/teacher/group_form.html:26
 msgid "Cancel"
 msgstr "Отмена"
 
+#: ui/templates/components/confirm.html:20
 #: ui/templates/components/modal.html:20
 msgid "Confirm"
 msgstr "Подтвердить"
@@ -4937,34 +4897,34 @@ msgstr "Подтвердить"
 msgid "virtual chemistry lab"
 msgstr "виртуальная химическая лаборатория"
 
-#: ui/templates/core/home.html:23
+#: ui/templates/core/home.html:28
 msgid "Main"
 msgstr "Основное"
 
-#: ui/templates/core/home.html:25 ui/templates/core/home.html:132
-#: ui/templates/core/home.html:353
+#: ui/templates/core/home.html:30 ui/templates/core/home.html:138
+#: ui/templates/core/home.html:359
 msgid "Features"
 msgstr "Возможности"
 
-#: ui/templates/core/home.html:27 ui/templates/core/home.html:185
+#: ui/templates/core/home.html:32 ui/templates/core/home.html:191
 msgid "Learning path"
 msgstr "Путь обучения"
 
-#: ui/templates/core/home.html:29 ui/templates/core/home.html:353
+#: ui/templates/core/home.html:34 ui/templates/core/home.html:359
 #: ui/templates/student/stages/test.html:6
 #: ui/templates/teacher/content/quiz.html:19
 msgid "Questions"
 msgstr "Вопросы"
 
-#: ui/templates/core/home.html:37
+#: ui/templates/core/home.html:42
 msgid "Open menu"
 msgstr "Открыть меню"
 
-#: ui/templates/core/home.html:46
+#: ui/templates/core/home.html:52
 msgid "New"
 msgstr "Новое"
 
-#: ui/templates/core/home.html:47
+#: ui/templates/core/home.html:53
 #, python-format
 msgid "Topic %(n)s: %(k)s virtual experiment ready"
 msgid_plural "Topic %(n)s: %(k)s virtual experiments ready"
@@ -4973,11 +4933,11 @@ msgstr[1] "Тема %(n)s: готовы %(k)s виртуальных опыта"
 msgstr[2] "Тема %(n)s: готово %(k)s виртуальных опытов"
 msgstr[3] "Тема %(n)s: готово %(k)s виртуальных опытов"
 
-#: ui/templates/core/home.html:50
+#: ui/templates/core/home.html:56
 msgid "Learn chemistry in a safe lab"
-msgstr "Изучайте химию в безопасной лаборатории"
+msgstr "Химия в безопасной лаборатории"
 
-#: ui/templates/core/home.html:51
+#: ui/templates/core/home.html:57
 msgid ""
 "An online course for future chemistry teachers: theory, video lessons, an "
 "interactive virtual lab and automatic grading — on one platform, in Kazakh."
@@ -4986,80 +4946,78 @@ msgstr ""
 "виртуальная лаборатория и автоматическая проверка — на одной платформе, на "
 "казахском языке."
 
-#: ui/templates/core/home.html:53
+#: ui/templates/core/home.html:59
 msgid "Start for free"
 msgstr "Начать бесплатно"
 
-#: ui/templates/core/home.html:55
+#: ui/templates/core/home.html:61
 msgid "See the lab"
 msgstr "Посмотреть лабораторию"
 
-#: ui/templates/core/home.html:58
+#: ui/templates/core/home.html:64
 msgid "Kazakh · Russian · English"
 msgstr "Казахский · русский · английский"
 
-#: ui/templates/core/home.html:58
+#: ui/templates/core/home.html:64
 msgid "In the browser, nothing to install"
 msgstr "В браузере, без установки"
 
-#: ui/templates/core/home.html:85
+#: ui/templates/core/home.html:91
 msgid "First assemble the gas delivery system."
-msgstr "Сначала соберите газоотводную систему."
+msgstr "Сначала нужно собрать газоотводную систему."
 
-#: ui/templates/core/home.html:89
+#: ui/templates/core/home.html:95
 msgid "ml"
 msgstr "мл"
 
-#: ui/templates/core/home.html:94
+#: ui/templates/core/home.html:100
 msgid "Stage completed"
 msgstr "Этап завершён"
 
-#: ui/templates/core/home.html:106
+#: ui/templates/core/home.html:112
 msgid "Mobile menu"
 msgstr "Мобильное меню"
 
-#: ui/templates/core/home.html:120
+#: ui/templates/core/home.html:126
 msgid "About the course"
 msgstr "О курсе"
 
-#: ui/templates/core/home.html:122
+#: ui/templates/core/home.html:128
 msgid "modules and topics"
 msgstr "модулей и тем"
 
-#: ui/templates/core/home.html:123
+#: ui/templates/core/home.html:129
 msgid "virtual lab experiments"
 msgstr "виртуальных лабораторных опытов"
 
-#: ui/templates/core/home.html:124
+#: ui/templates/core/home.html:130
 msgid "kinds of stages: from theory to the test"
 msgstr "видов этапов: от теории до теста"
 
-#: ui/templates/core/home.html:125
+#: ui/templates/core/home.html:131
 msgid "the lab is open at any time"
 msgstr "лаборатория открыта в любое время"
 
-#: ui/templates/core/home.html:133
+#: ui/templates/core/home.html:139
 msgid "Just like a real lab, but safe and repeatable"
 msgstr "Как в настоящей лаборатории, но безопасно и можно повторить"
 
-#: ui/templates/core/home.html:139
+#: ui/templates/core/home.html:145
 msgid "Interactive 2D lab"
 msgstr "Интерактивная 2D-лаборатория"
 
-#: ui/templates/core/home.html:140
+#: ui/templates/core/home.html:146
 msgid ""
 "Drag the equipment onto the bench, add reagents and watch the gas being "
 "collected. The system warns at once about a wrong order and dangerous "
 "actions."
-msgstr ""
-"Перетащите оборудование на стол, добавьте реактивы и наблюдайте за сбором "
-"газа. Система сразу предупреждает о неверном порядке и опасных действиях."
+msgstr "Оборудование перетаскивается на стол, затем добавляются реактивы и наблюдается сбор газа. Система сразу предупреждает о неверном порядке и опасных действиях."
 
-#: ui/templates/core/home.html:154
+#: ui/templates/core/home.html:160
 msgid "Step-by-step learning"
 msgstr "Поэтапное обучение"
 
-#: ui/templates/core/home.html:155
+#: ui/templates/core/home.html:161
 msgid ""
 "The next stage opens only when the previous one is finished. Theory and "
 "video end with a short 3–4 question checkpoint quiz."
@@ -5067,11 +5025,11 @@ msgstr ""
 "Следующий этап открывается только после завершения предыдущего. После теории "
 "и видео — короткий закрепляющий тест из 3–4 вопросов."
 
-#: ui/templates/core/home.html:159
+#: ui/templates/core/home.html:165
 msgid "Automatic and AI grading"
 msgstr "Автоматическая и AI-проверка"
 
-#: ui/templates/core/home.html:160
+#: ui/templates/core/home.html:166
 msgid ""
 "Formulas and equations are checked by meaning; open answers are graded by AI "
 "against criteria and confirmed by the teacher."
@@ -5079,11 +5037,11 @@ msgstr ""
 "Формулы и уравнения проверяются по смыслу; открытые ответы оценивает AI по "
 "критериям, а подтверждает преподаватель."
 
-#: ui/templates/core/home.html:164
+#: ui/templates/core/home.html:170
 msgid "Analytics for the teacher"
 msgstr "Аналитика для преподавателя"
 
-#: ui/templates/core/home.html:165
+#: ui/templates/core/home.html:171
 msgid ""
 "Groups, the grade register, frequent mistakes and time on each stage — all "
 "in one cabinet."
@@ -5091,11 +5049,11 @@ msgstr ""
 "Группы, журнал оценок, частые ошибки и время на этапах — всё в одном "
 "кабинете."
 
-#: ui/templates/core/home.html:169
+#: ui/templates/core/home.html:175
 msgid "Certificate and grade book"
 msgstr "Сертификат и зачётная книжка"
 
-#: ui/templates/core/home.html:170
+#: ui/templates/core/home.html:176
 msgid ""
 "Stage → topic → module → course scores are calculated automatically. When "
 "the course is finished you get a certificate verifiable by its QR code."
@@ -5103,11 +5061,11 @@ msgstr ""
 "Баллы этапа → темы → модуля → курса считаются автоматически. По окончании "
 "курса выдаётся сертификат, проверяемый по QR-коду."
 
-#: ui/templates/core/home.html:186
+#: ui/templates/core/home.html:192
 msgid "Every topic is a full cycle of stages"
 msgstr "Каждая тема — полный цикл этапов"
 
-#: ui/templates/core/home.html:188
+#: ui/templates/core/home.html:194
 msgid ""
 "The author decides how many stages a topic has: one topic may contain "
 "several practice works."
@@ -5115,40 +5073,40 @@ msgstr ""
 "Автор сам решает, сколько этапов в теме: в одной теме может быть несколько "
 "практических работ."
 
-#: ui/templates/core/home.html:191
+#: ui/templates/core/home.html:197
 msgid "Text with formulas and pictures + a checkpoint quiz"
 msgstr "Текст с формулами и рисунками + закрепляющий тест"
 
-#: ui/templates/core/home.html:192
+#: ui/templates/core/home.html:198
 msgid "Watching is tracked + a checkpoint quiz"
 msgstr "Просмотр отслеживается + закрепляющий тест"
 
-#: ui/templates/core/home.html:193
+#: ui/templates/core/home.html:199
 msgid "Virtual experiments, journal, analysis"
 msgstr "Виртуальные опыты, журнал, анализ"
 
-#: ui/templates/core/home.html:194
+#: ui/templates/core/home.html:200
 msgid "Practice"
 msgstr "Практика"
 
-#: ui/templates/core/home.html:194
+#: ui/templates/core/home.html:200
 msgid "Problems: automatic and AI grading"
 msgstr "Задачи: автопроверка и AI-оценка"
 
-#: ui/templates/core/home.html:195
+#: ui/templates/core/home.html:201
 msgid "Test"
 msgstr "Тест"
 
-#: ui/templates/core/home.html:195
+#: ui/templates/core/home.html:201
 msgid "The final test of the topic"
 msgstr "Итоговый тест темы"
 
-#: ui/templates/core/home.html:219
+#: ui/templates/core/home.html:225
 #, python-format
 msgid "Lab work of topic %(n)s"
 msgstr "Лабораторная работа темы %(n)s"
 
-#: ui/templates/core/home.html:237
+#: ui/templates/core/home.html:243
 #, python-format
 msgid "%(n)s step with order checks and safety warnings"
 msgid_plural "%(n)s steps with order checks and safety warnings"
@@ -5157,11 +5115,11 @@ msgstr[1] "%(n)s шага с проверкой порядка и предупр
 msgstr[2] "%(n)s шагов с проверкой порядка и предупреждениями безопасности"
 msgstr[3] "%(n)s шагов с проверкой порядка и предупреждениями безопасности"
 
-#: ui/templates/core/home.html:238
+#: ui/templates/core/home.html:244
 msgid "Equipment:"
 msgstr "Оборудование:"
 
-#: ui/templates/core/home.html:239
+#: ui/templates/core/home.html:245
 #, python-format
 msgid "Lab journal: %(n)s field"
 msgid_plural "Lab journal: %(n)s fields"
@@ -5170,93 +5128,88 @@ msgstr[1] "Лабораторный журнал: %(n)s поля"
 msgstr[2] "Лабораторный журнал: %(n)s полей"
 msgstr[3] "Лабораторный журнал: %(n)s полей"
 
-#: ui/templates/core/home.html:241
+#: ui/templates/core/home.html:247
 msgid "Try the experiment"
 msgstr "Открыть опыт"
 
-#: ui/templates/core/home.html:266
+#: ui/templates/core/home.html:272
 msgid "Convenient for students and teachers alike"
 msgstr "Удобно и студентам, и преподавателям"
 
-#: ui/templates/core/home.html:267
+#: ui/templates/core/home.html:273
 msgid "For whom"
 msgstr "Для кого"
 
-#: ui/templates/core/home.html:268
+#: ui/templates/core/home.html:274
 msgid "For students"
 msgstr "Студентам"
 
-#: ui/templates/core/home.html:269
+#: ui/templates/core/home.html:275
 msgid "For teachers"
 msgstr "Преподавателям"
 
-#: ui/templates/core/home.html:280
+#: ui/templates/core/home.html:286
 msgid "A clear path"
 msgstr "Понятный путь"
 
-#: ui/templates/core/home.html:280
+#: ui/templates/core/home.html:286
 msgid ""
 "What to do next is always visible: «Continue learning» is one button away."
 msgstr "Что делать дальше, всегда видно: «Продолжить обучение» — одна кнопка."
 
-#: ui/templates/core/home.html:281
+#: ui/templates/core/home.html:287
 msgid "Mistakes without risk"
 msgstr "Ошибки без риска"
 
-#: ui/templates/core/home.html:281
+#: ui/templates/core/home.html:287
 msgid ""
 "When you make a mistake the system explains why — without the danger of a "
 "real lab."
 msgstr ""
 "При ошибке система объясняет причину — без опасности настоящей лаборатории."
 
-#: ui/templates/core/home.html:282
+#: ui/templates/core/home.html:288
 msgid "A fair grade"
 msgstr "Честная оценка"
 
-#: ui/templates/core/home.html:282
+#: ui/templates/core/home.html:288
 msgid "Every stage score and how it was calculated is shown in the grade book."
 msgstr "Балл каждого этапа и способ его расчёта видны в зачётной книжке."
 
-#: ui/templates/core/home.html:285
+#: ui/templates/core/home.html:291
 msgid "Group management"
 msgstr "Управление группами"
 
-#: ui/templates/core/home.html:285
+#: ui/templates/core/home.html:291
 msgid ""
 "Create a group, share the join code and assign the research group (control / "
 "experimental)."
-msgstr ""
-"Создайте группу, раздайте код присоединения и назначьте исследовательскую "
-"группу (контрольная / экспериментальная)."
+msgstr "Создание группы, раздача кода присоединения и назначение исследовательской группы (контрольная / экспериментальная)."
 
-#: ui/templates/core/home.html:286
+#: ui/templates/core/home.html:292
 msgid "AI assistant"
 msgstr "AI-помощник"
 
-#: ui/templates/core/home.html:286
+#: ui/templates/core/home.html:292
 msgid ""
 "AI grades open answers of practice works against the criteria — you only "
 "confirm."
-msgstr ""
-"Открытые ответы практических работ AI оценивает по критериям — вы только "
-"подтверждаете."
+msgstr "Открытые ответы практических работ AI оценивает по критериям — преподавателю остаётся только подтвердить."
 
-#: ui/templates/core/home.html:287
+#: ui/templates/core/home.html:293
 msgid ""
 "See at which step students make mistakes most often and adapt the lesson."
-msgstr ""
-"Смотрите, на каком шаге студенты ошибаются чаще всего, и адаптируйте занятие."
+msgstr "Видно, на каком шаге студенты ошибаются чаще всего, — занятие можно скорректировать."
 
-#: ui/templates/core/home.html:295
+#: ui/templates/core/home.html:301
 msgid "Pedagogical research"
 msgstr "Педагогическое исследование"
 
-#: ui/templates/core/home.html:296
+#: ui/templates/core/home.html:302
 msgid "Every action is evidence"
 msgstr "Каждое действие — доказательство"
 
-#: ui/templates/core/home.html:297
+#: ui/templates/core/home.html:303
 msgid ""
 "The platform records every step of a student in the lab, quiz answers and "
 "time spent. Comparing control and experimental groups takes one click."
@@ -5265,74 +5218,71 @@ msgstr ""
 "затраченное время. Сравнение контрольной и экспериментальной групп — в один "
 "клик."
 
-#: ui/templates/core/home.html:299
+#: ui/templates/core/home.html:305
 msgid "Action log: order errors, safety warnings, time on each step"
 msgstr ""
 "Журнал действий: ошибки порядка, предупреждения безопасности, время на "
 "каждом шаге"
 
-#: ui/templates/core/home.html:299
+#: ui/templates/core/home.html:305
 msgid "Group comparison: mean, median, n"
 msgstr "Сравнение групп: среднее, медиана, n"
 
-#: ui/templates/core/home.html:299
+#: ui/templates/core/home.html:305
 msgid "CSV export (UTF-8, ready for Excel)"
 msgstr "Экспорт CSV (UTF-8, готов для Excel)"
 
-#: ui/templates/core/home.html:304
+#: ui/templates/core/home.html:310
 msgid "Average score by stage (example)"
 msgstr "Средний балл по этапам (пример)"
 
-#: ui/templates/core/home.html:310 ui/templates/research/analytics.html:41
+#: ui/templates/core/home.html:316 ui/templates/research/analytics.html:41
 #: ui/templates/research/analytics.html:61
-#: ui/templates/research/analytics.html:182
-#: ui/templates/research/analytics.html:213
+#: ui/templates/research/analytics.html:180
+#: ui/templates/research/analytics.html:211 ui/templates/teacher/groups.html:35
 #: ui/templates/teacher/partials/cohort.html:2
 msgid "Experimental"
 msgstr "Экспериментальная"
 
-#: ui/templates/core/home.html:310 ui/templates/research/analytics.html:41
+#: ui/templates/core/home.html:316 ui/templates/research/analytics.html:41
 #: ui/templates/research/analytics.html:62
-#: ui/templates/research/analytics.html:182
-#: ui/templates/research/analytics.html:214
+#: ui/templates/research/analytics.html:180
+#: ui/templates/research/analytics.html:212 ui/templates/teacher/groups.html:36
 #: ui/templates/teacher/partials/cohort.html:3
 msgid "Control"
 msgstr "Контрольная"
 
-#: ui/templates/core/home.html:317
+#: ui/templates/core/home.html:323
 msgid "Frequently asked questions"
 msgstr "Частые вопросы"
 
-#: ui/templates/core/home.html:325
+#: ui/templates/core/home.html:331
 msgid "Who is the platform for?"
 msgstr "Для кого платформа?"
 
-#: ui/templates/core/home.html:325
+#: ui/templates/core/home.html:331
 msgid ""
 "For students of pedagogical universities training to become chemistry "
 "teachers."
 msgstr ""
 "Для студентов педагогических университетов, обучающихся на учителей химии."
 
-#: ui/templates/core/home.html:326
+#: ui/templates/core/home.html:332
 msgid "How does the virtual lab work?"
 msgstr "Как работает виртуальная лаборатория?"
 
-#: ui/templates/core/home.html:326
+#: ui/templates/core/home.html:332
 msgid ""
 "It opens in the browser, nothing to install. You drag the equipment onto the "
 "bench and carry out the commands in order; the reaction is animated and you "
 "record the result in the journal."
-msgstr ""
-"Открывается в браузере, ничего устанавливать не нужно. Вы перетаскиваете "
-"оборудование на стол и выполняете команды по порядку; реакция показана "
-"анимацией, результат вы записываете в журнал."
+msgstr "Открывается в браузере, ничего устанавливать не нужно. Оборудование перетаскивается на стол, команды выполняются по порядку; реакция показана анимацией, результат записывается в журнал."
 
-#: ui/templates/core/home.html:327
+#: ui/templates/core/home.html:333
 msgid "Why does the next stage not open?"
 msgstr "Почему не открывается следующий этап?"
 
-#: ui/templates/core/home.html:327
+#: ui/templates/core/home.html:333
 msgid ""
 "Each stage opens when the previous one is finished. After the theory and the "
 "video you need to pass a 3–4 question checkpoint quiz."
@@ -5340,11 +5290,11 @@ msgstr ""
 "Каждый этап открывается после завершения предыдущего. После теории и видео "
 "нужно пройти закрепляющий тест из 3–4 вопросов."
 
-#: ui/templates/core/home.html:328
+#: ui/templates/core/home.html:334
 msgid "Who grades the practice works?"
 msgstr "Кто оценивает практические работы?"
 
-#: ui/templates/core/home.html:328
+#: ui/templates/core/home.html:334
 msgid ""
 "Numbers, formulas and equations are checked automatically. Free text is "
 "graded by AI against the criteria and confirmed by the teacher."
@@ -5352,11 +5302,11 @@ msgstr ""
 "Числа, формулы и уравнения проверяются автоматически. Свободный текст "
 "оценивает AI по критериям, подтверждает преподаватель."
 
-#: ui/templates/core/home.html:329
+#: ui/templates/core/home.html:335
 msgid "How do I sign up as a teacher?"
 msgstr "Как зарегистрироваться преподавателю?"
 
-#: ui/templates/core/home.html:329
+#: ui/templates/core/home.html:335
 msgid ""
 "Teacher accounts are created by the platform administrator. Contact the "
 "administrator."
@@ -5364,16 +5314,15 @@ msgstr ""
 "Аккаунты преподавателей создаёт администратор платформы. Обратитесь к "
 "администратору."
 
-#: ui/templates/core/home.html:338
+#: ui/templates/core/home.html:344
 msgid "Try your first experiment today"
-msgstr "Проведите первый опыт уже сегодня"
+msgstr "Первый опыт — уже сегодня"
 
-#: ui/templates/core/home.html:339
+#: ui/templates/core/home.html:345
 msgid "Signing up takes a minute. Ask your teacher for your group's join code."
-msgstr ""
-"Регистрация займёт минуту. Код присоединения группы спросите у преподавателя."
+msgstr "Регистрация займёт минуту. Код присоединения группы выдаёт преподаватель."
 
-#: ui/templates/core/home.html:350
+#: ui/templates/core/home.html:356
 msgid ""
 "A virtual lab and an online course for future chemistry teachers. A doctoral "
 "dissertation project."
@@ -5381,11 +5330,11 @@ msgstr ""
 "Виртуальная лаборатория и онлайн-курс для будущих учителей химии. Проект "
 "докторской диссертации."
 
-#: ui/templates/core/home.html:353
+#: ui/templates/core/home.html:359
 msgid "Platform"
 msgstr "Платформа"
 
-#: ui/templates/core/home.html:354 ui/templates/layouts/public.html:9
+#: ui/templates/core/home.html:360 ui/templates/layouts/public.html:9
 msgid "Account"
 msgstr "Аккаунт"
 
@@ -5450,6 +5399,7 @@ msgid "Send"
 msgstr "Отправить"
 
 #: ui/templates/feedback/partials/thread.html:22
+#: ui/templates/student/dashboard.html:163
 msgid "No comments yet."
 msgstr "Комментариев пока нет."
 
@@ -5483,7 +5433,7 @@ msgstr "Ошибки"
 
 #: ui/templates/labs/run.html:104
 msgid "Drag an item to the bench or press «+»."
-msgstr "Перетащите предмет на стол или нажмите «+»."
+msgstr "Предмет можно перетащить на стол или нажать «+»."
 
 #: ui/templates/layouts/auth.html:18
 msgid "About ChemEduTech"
@@ -5566,6 +5516,7 @@ msgstr "Меню аккаунта"
 #: ui/templates/partials/shell/sidebar_student.html:33
 #: ui/templates/partials/shell/sidebar_teacher.html:26
 #: ui/templates/student/profile.html:5 ui/templates/student/profile.html:7
+#: ui/templates/teacher/partials/student_drawer.html:39
 msgid "Profile"
 msgstr "Профиль"
 
@@ -5634,7 +5585,7 @@ msgid "Collapse menu"
 msgstr "Свернуть меню"
 
 #: ui/templates/partials/shell/notifications_menu.html:15
-#: ui/templates/teacher/group.html:140
+#: ui/templates/teacher/group.html:171
 msgid "Loading…"
 msgstr "Загрузка…"
 
@@ -5710,8 +5661,8 @@ msgstr "Содержание курсов"
 
 #: ui/templates/partials/shell/sidebar_teacher.html:18
 #: ui/templates/teacher/group.html:4 ui/templates/teacher/group_form.html:4
-#: ui/templates/teacher/groups.html:4 ui/templates/teacher/lab_log.html:9
-#: ui/templates/teacher/student.html:4 ui/templates/teacher/students.html:4
+#: ui/templates/teacher/groups.html:6 ui/templates/teacher/lab_log.html:9
+#: ui/templates/teacher/student.html:4 ui/templates/teacher/students.html:6
 msgid "Groups and students"
 msgstr "Группы и студенты"
 
@@ -5734,7 +5685,7 @@ msgid "Grade register"
 msgstr "Журнал оценок"
 
 #: ui/templates/research/analytics.html:9
-#: ui/templates/research/analytics.html:206
+#: ui/templates/research/analytics.html:204
 msgid "Control and experimental groups"
 msgstr "Контрольная и экспериментальная группы"
 
@@ -5743,21 +5694,22 @@ msgid "Research analytics"
 msgstr "Исследовательская аналитика"
 
 #: ui/templates/research/analytics.html:13
-#: ui/templates/teacher/content/courses.html:27
+#: ui/templates/teacher/content/courses.html:26
 #: ui/templates/teacher/gradebook.html:21
 msgid "You are not assigned to a course yet."
-msgstr "Вы пока не назначены ни на один курс."
+msgstr "Назначенных курсов пока нет."
 
 #: ui/templates/research/analytics.html:18
 msgid "Whole course"
 msgstr "Весь курс"
 
 #: ui/templates/research/analytics.html:27
+#: ui/templates/teacher/dashboard.html:91
 #: ui/templates/teacher/gradebook.html:26
 msgid "All groups"
 msgstr "Все группы"
 
-#: ui/templates/research/analytics.html:30 ui/templates/teacher/groups.html:25
+#: ui/templates/research/analytics.html:30
 msgid "Show"
 msgstr "Показать"
 
@@ -5774,6 +5726,13 @@ msgstr "Основные показатели"
 msgid "Average score by stage"
 msgstr "Средний балл по этапам"
 
+#: ui/templates/research/analytics.html:50
+msgid ""
+"Descriptive statistics only. Test significance (t-test, Mann–Whitney) on the "
+"downloaded data. The research group of an enrolment is the value at "
+"enrolment."
+msgstr "Только описательная статистика. Значимость (t-тест, Манна–Уитни) проверяется по скачанным данным. Исследовательская группа записи — значение на момент записи."
+
 #: ui/templates/research/analytics.html:52
 #, python-format
 msgid "Experimental (n = %(n)s)"
@@ -5785,31 +5744,21 @@ msgid "Control (n = %(n)s)"
 msgstr "Контрольная (n = %(n)s)"
 
 #: ui/templates/research/analytics.html:71
-#: ui/templates/research/analytics.html:88
+#: ui/templates/research/analytics.html:87
 #: ui/templates/teacher/content/course.html:82
 msgid "No stages yet."
 msgstr "Этапов пока нет."
 
-#: ui/templates/research/analytics.html:73
-msgid ""
-"Descriptive statistics only. Test significance (t-test, Mann–Whitney) on the "
-"downloaded data. The research group of an enrolment is the value at "
-"enrolment."
-msgstr ""
-"Только описательная статистика. Значимость (t-тест, Манна–Уитни) проверяйте "
-"по скачанным данным. Исследовательская группа записи — значение на момент "
-"записи."
-
-#: ui/templates/research/analytics.html:78
+#: ui/templates/research/analytics.html:77
 #, python-format
 msgid "Completion funnel · Topic %(n)s"
 msgstr "Воронка прохождения · Тема %(n)s"
 
-#: ui/templates/research/analytics.html:78
+#: ui/templates/research/analytics.html:77
 msgid "Completion funnel"
 msgstr "Воронка прохождения"
 
-#: ui/templates/research/analytics.html:79
+#: ui/templates/research/analytics.html:78
 #, python-format
 msgid "Students who finished each stage, of %(n)s student"
 msgid_plural "Students who finished each stage, of %(n)s students"
@@ -5818,41 +5767,41 @@ msgstr[1] "Завершили каждый этап, из %(n)s студенто
 msgstr[2] "Завершили каждый этап, из %(n)s студентов"
 msgstr[3] "Завершили каждый этап, из %(n)s студентов"
 
-#: ui/templates/research/analytics.html:98
+#: ui/templates/research/analytics.html:97
 msgid "Frequent lab errors"
 msgstr "Частые ошибки в лаборатории"
 
-#: ui/templates/research/analytics.html:98
+#: ui/templates/research/analytics.html:97
 msgid ""
 "At which step students go wrong — a hint for what to explain again in class."
 msgstr ""
 "На каком шаге студенты ошибаются — подсказка, что объяснить ещё раз на "
 "занятии."
 
-#: ui/templates/research/analytics.html:100
+#: ui/templates/research/analytics.html:99
 msgid "Order"
 msgstr "Порядок"
 
-#: ui/templates/research/analytics.html:102
+#: ui/templates/research/analytics.html:101
 msgid "Equipment or choice"
 msgstr "Оборудование или выбор"
 
-#: ui/templates/research/analytics.html:109
+#: ui/templates/research/analytics.html:108
 #, python-format
 msgid "%(t)s s on the step"
 msgstr "%(t)s с на шаге"
 
-#: ui/templates/research/analytics.html:115
+#: ui/templates/research/analytics.html:114
 msgid "No lab errors logged yet."
 msgstr "Ошибок в лаборатории пока нет."
 
-#: ui/templates/research/analytics.html:118
+#: ui/templates/research/analytics.html:117
 msgid "Average time per step"
 msgstr "Среднее время по шагам"
 
-#: ui/templates/research/analytics.html:121
-#: ui/templates/research/analytics.html:183
-#: ui/templates/teacher/dashboard.html:17 ui/templates/teacher/group.html:15
+#: ui/templates/research/analytics.html:120
+#: ui/templates/research/analytics.html:181
+#: ui/templates/teacher/dashboard.html:17 ui/templates/teacher/group.html:24
 #, python-format
 msgid "%(n)s student"
 msgid_plural "%(n)s students"
@@ -5861,52 +5810,19 @@ msgstr[1] "%(n)s студента"
 msgstr[2] "%(n)s студентов"
 msgstr[3] "%(n)s студентов"
 
-#: ui/templates/research/analytics.html:122
-#: ui/templates/research/analytics.html:167
-#: ui/templates/research/analytics.html:187
-#: ui/templates/research/analytics.html:223
+#: ui/templates/research/analytics.html:121
+#: ui/templates/research/analytics.html:165
+#: ui/templates/research/analytics.html:185
+#: ui/templates/research/analytics.html:221
 #, python-format
 msgid "median %(m)s"
 msgstr "медиана %(m)s"
 
-#: ui/templates/research/analytics.html:131
+#: ui/templates/research/analytics.html:130
 msgid "AI ↔ teacher agreement"
 msgstr "Согласие ИИ ↔ преподаватель"
 
-#: ui/templates/research/analytics.html:132
-#, python-format
-msgid "Open answers · %(n)s grade checked by a teacher"
-msgid_plural "Open answers · %(n)s grades checked by a teacher"
-msgstr[0] "Открытые ответы · %(n)s оценка проверена преподавателем"
-msgstr[1] "Открытые ответы · %(n)s оценки проверены преподавателем"
-msgstr[2] "Открытые ответы · %(n)s оценок проверено преподавателем"
-msgstr[3] "Открытые ответы · %(n)s оценок проверено преподавателем"
-
-#: ui/templates/research/analytics.html:137
-msgid "Exact agreement on criteria"
-msgstr "Точное совпадение по критериям"
-
-#: ui/templates/research/analytics.html:137
-msgid "exact agreement on criteria"
-msgstr "полное совпадение по критериям"
-
-#: ui/templates/research/analytics.html:138
-msgid "Correlation (Pearson r)"
-msgstr "Корреляция (r Пирсона)"
-
-#: ui/templates/research/analytics.html:138
-msgid "Pearson r"
-msgstr "r Пирсона"
-
-#: ui/templates/research/analytics.html:139
-msgid "Mean absolute difference"
-msgstr "Средняя абсолютная разница"
-
-#: ui/templates/research/analytics.html:139
-msgid "p.p. mean absolute difference"
-msgstr "п.п. средняя абсолютная разница"
-
-#: ui/templates/research/analytics.html:142
+#: ui/templates/research/analytics.html:130
 #, python-format
 msgid ""
 "κ ≥ 0.80 — almost perfect agreement (Landis & Koch). Points as %% of the "
@@ -5915,99 +5831,134 @@ msgstr ""
 "κ ≥ 0.80 — почти полное согласие (Landis & Koch). Баллы в %% от баллов поля; "
 "учитывается последняя проверка ответа."
 
-#: ui/templates/research/analytics.html:144
+#: ui/templates/research/analytics.html:131
+#, python-format
+msgid "Open answers · %(n)s grade checked by a teacher"
+msgid_plural "Open answers · %(n)s grades checked by a teacher"
+msgstr[0] "Открытые ответы · %(n)s оценка проверена преподавателем"
+msgstr[1] "Открытые ответы · %(n)s оценки проверены преподавателем"
+msgstr[2] "Открытые ответы · %(n)s оценок проверено преподавателем"
+msgstr[3] "Открытые ответы · %(n)s оценок проверено преподавателем"
+
+#: ui/templates/research/analytics.html:136
+msgid "Exact agreement on criteria"
+msgstr "Точное совпадение по критериям"
+
+#: ui/templates/research/analytics.html:136
+msgid "exact agreement on criteria"
+msgstr "полное совпадение по критериям"
+
+#: ui/templates/research/analytics.html:137
+msgid "Correlation (Pearson r)"
+msgstr "Корреляция (r Пирсона)"
+
+#: ui/templates/research/analytics.html:137
+msgid "Pearson r"
+msgstr "r Пирсона"
+
+#: ui/templates/research/analytics.html:138
+msgid "Mean absolute difference"
+msgstr "Средняя абсолютная разница"
+
+#: ui/templates/research/analytics.html:138
+msgid "p.p. mean absolute difference"
+msgstr "п.п. средняя абсолютная разница"
+
+#: ui/templates/research/analytics.html:142
 msgid ""
 "No AI grade has been checked by a teacher yet. Draw a sample and check it."
-msgstr ""
-"Преподаватель ещё не проверил ни одной оценки ИИ. Сделайте выборку и "
-"проверьте её."
+msgstr "Преподаватель ещё не проверил ни одной оценки ИИ. Нужно сделать выборку и проверить её."
 
-#: ui/templates/research/analytics.html:147
+#: ui/templates/research/analytics.html:145
 msgid "Random spot-check"
 msgstr "Случайная выборочная проверка"
 
-#: ui/templates/research/analytics.html:148
+#: ui/templates/research/analytics.html:146
 msgid "Drawn"
 msgstr "Выбрано"
 
-#: ui/templates/research/analytics.html:148
+#: ui/templates/research/analytics.html:146
 msgid "Checked"
 msgstr "Проверено"
 
-#: ui/templates/research/analytics.html:150
+#: ui/templates/research/analytics.html:148
 msgid "Draw the sample"
 msgstr "Сделать выборку"
 
-#: ui/templates/research/analytics.html:151
+#: ui/templates/research/analytics.html:149
 msgid "Check the drawn works"
 msgstr "Проверить выбранные работы"
 
-#: ui/templates/research/analytics.html:154
+#: ui/templates/research/analytics.html:152
 #: ui/templates/research/dashboard.html:16
 msgid "AI ↔ teacher grades (CSV)"
 msgstr "Оценки ИИ ↔ преподавателя (CSV)"
 
-#: ui/templates/research/analytics.html:163
+#: ui/templates/research/analytics.html:160
 msgid ""
 "the whole course; gain and normalized gain ⟨g⟩ = (post − pre) / (100 − pre) "
 "over students with both tests"
-msgstr "весь курс; прирост и нормализованный прирост ⟨g⟩ = (после − до) / (100 − до) по студентам с обоими тестами"
+msgstr ""
+"весь курс; прирост и нормализованный прирост ⟨g⟩ = (после − до) / (100 − до) "
+"по студентам с обоими тестами"
 
-#: ui/templates/research/analytics.html:163
+#: ui/templates/research/analytics.html:161
 msgid ""
 "The course has no pre/post test yet — create it on the course content page."
-msgstr "У курса пока нет входного/итогового теста — создайте его на странице содержания курса."
+msgstr "У курса пока нет входного/итогового теста — он создаётся на странице содержания курса."
 
-#: ui/templates/research/analytics.html:172
+#: ui/templates/research/analytics.html:170
 #, python-format
 msgid "Pre-test, %%"
 msgstr "Входной тест, %%"
 
-#: ui/templates/research/analytics.html:173
+#: ui/templates/research/analytics.html:171
 #, python-format
 msgid "Post-test, %%"
 msgstr "Итоговый тест, %%"
 
-#: ui/templates/research/analytics.html:174
+#: ui/templates/research/analytics.html:172
 msgid "Pairs"
 msgstr "Пары"
 
-#: ui/templates/research/analytics.html:175
+#: ui/templates/research/analytics.html:173
 msgid "Gain, p.p."
 msgstr "Прирост, п.п."
 
-#: ui/templates/research/analytics.html:177
+#: ui/templates/research/analytics.html:175
 msgid "Pre and post of the pairs"
 msgstr "До и после по парам"
 
-#: ui/templates/research/analytics.html:182
+#: ui/templates/research/analytics.html:180
 msgid "All students"
 msgstr "Все студенты"
 
-#: ui/templates/research/analytics.html:199
+#: ui/templates/research/analytics.html:197
 msgid "pre"
 msgstr "до"
 
-#: ui/templates/research/analytics.html:199
+#: ui/templates/research/analytics.html:197
 msgid "post"
 msgstr "после"
 
-#: ui/templates/research/analytics.html:199
+#: ui/templates/research/analytics.html:197
 msgid ""
 "Per-student values are in the CSV (pre_percent, post_percent, gain, "
 "normalized_gain)."
-msgstr "Значения по каждому студенту — в CSV (pre_percent, post_percent, gain, normalized_gain)."
+msgstr ""
+"Значения по каждому студенту — в CSV (pre_percent, post_percent, gain, "
+"normalized_gain)."
 
-#: ui/templates/research/analytics.html:207
+#: ui/templates/research/analytics.html:205
 #, python-format
 msgid "not assigned: %(n)s"
 msgstr "не назначено: %(n)s"
 
-#: ui/templates/research/analytics.html:212
+#: ui/templates/research/analytics.html:210
 msgid "Measure"
 msgstr "Показатель"
 
-#: ui/templates/research/analytics.html:215
+#: ui/templates/research/analytics.html:213
 msgid "Difference"
 msgstr "Разница"
 
@@ -6071,6 +6022,7 @@ msgid "Latest attempts"
 msgstr "Последние попытки"
 
 #: ui/templates/research/dashboard.html:86 ui/templates/student/results.html:75
+#: ui/templates/teacher/groups.html:23
 #: ui/templates/teacher/partials/grading_queue.html:7
 #: ui/templates/teacher/student.html:69 ui/templates/teacher/student.html:111
 #: ui/templates/teacher/student.html:161
@@ -6095,49 +6047,43 @@ msgstr "Спасибо, тест пройден"
 msgid ""
 "This is your starting point. The same test is given again at the end of the "
 "course — then you will see how much you have learned."
-msgstr "Это ваша отправная точка. В конце курса тот же тест дадут снова — тогда вы увидите, сколько узнали."
+msgstr "Это отправная точка. В конце курса тот же тест будет дан снова — и станет видно, насколько выросли знания."
 
 #: ui/templates/student/benchmark.html:24
 msgid ""
 "Compare it with your entry result: the difference shows what the course has "
 "given you."
-msgstr "Сравните его с входным результатом: разница показывает, что вам дал курс."
+msgstr "Сравнение со входным результатом показывает, что дал курс."
 
-#: ui/templates/student/benchmark.html:25
-msgid ""
-"The test does not affect your course grade; the answers are not shown so "
-"that it stays a fair measure."
-msgstr "Тест не влияет на оценку за курс; ответы не показываются, чтобы измерение оставалось честным."
-
-#: ui/templates/student/benchmark.html:27
+#: ui/templates/student/benchmark.html:26
 msgid "Start learning"
 msgstr "Начать обучение"
 
-#: ui/templates/student/benchmark.html:27
-#: ui/templates/teacher/content/stage.html:53
+#: ui/templates/student/benchmark.html:26
+#: ui/templates/teacher/content/stage.html:52
 msgid "Back to the course"
 msgstr "Назад к курсу"
 
-#: ui/templates/student/benchmark.html:31
+#: ui/templates/student/benchmark.html:30
 msgid "Research of the course"
 msgstr "Исследование курса"
 
-#: ui/templates/student/benchmark.html:35
+#: ui/templates/student/benchmark.html:34
 msgid ""
 "Before the first stage, answer a few questions on the whole course. Nobody "
 "expects you to know everything yet: the test shows your starting point."
-msgstr "Перед первым этапом ответьте на несколько вопросов по всему курсу. Никто не ждёт, что вы уже всё знаете: тест показывает вашу отправную точку."
+msgstr "Перед первым этапом — несколько вопросов по всему курсу. Знать всё заранее не требуется: тест показывает отправную точку."
 
-#: ui/templates/student/benchmark.html:36
+#: ui/templates/student/benchmark.html:35
 msgid ""
 "The same questions as at the start of the course. Answer on your own — the "
 "result shows how your knowledge has grown."
-msgstr "Те же вопросы, что и в начале курса. Отвечайте самостоятельно — результат покажет, как выросли ваши знания."
+msgstr "Те же вопросы, что и в начале курса. Отвечать нужно самостоятельно — результат покажет рост знаний."
 
-#: ui/templates/student/benchmark.html:39
+#: ui/templates/student/benchmark.html:38
 #: ui/templates/student/partials/quiz_panel.html:20
 #: ui/templates/teacher/content/course.html:27
-#: ui/templates/teacher/content/stage.html:62
+#: ui/templates/teacher/content/stage.html:61
 #, python-format
 msgid "%(n)s question"
 msgid_plural "%(n)s questions"
@@ -6146,21 +6092,21 @@ msgstr[1] "%(n)s вопроса"
 msgstr[2] "%(n)s вопросов"
 msgstr[3] "%(n)s вопросов"
 
-#: ui/templates/student/benchmark.html:40
+#: ui/templates/student/benchmark.html:39
 msgid "no time limit"
 msgstr "без ограничения времени"
 
-#: ui/templates/student/benchmark.html:45
+#: ui/templates/student/benchmark.html:44
 #: ui/templates/student/partials/benchmark_card.html:18
 #: ui/templates/student/partials/quiz_panel.html:72
 msgid "Start the test"
 msgstr "Начать тест"
 
-#: ui/templates/student/benchmark.html:48
+#: ui/templates/student/benchmark.html:47
 msgid ""
 "The final knowledge test opens when you finish the course or when your "
 "teacher opens it."
-msgstr "Итоговый тест откроется, когда вы закончите курс или когда его откроет преподаватель."
+msgstr "Итоговый тест откроется после завершения курса или когда его откроет преподаватель."
 
 #: ui/templates/student/certificates.html:8
 msgid ""
@@ -6175,7 +6121,7 @@ msgstr "Сертификатов пока нет"
 
 #: ui/templates/student/certificates.html:12
 msgid "Complete a course and its certificate will appear here."
-msgstr "Завершите курс — его сертификат появится здесь."
+msgstr "После завершения курса здесь появится его сертификат."
 
 #: ui/templates/student/course_map.html:20
 #, python-format
@@ -6216,13 +6162,15 @@ msgstr "этапов пройдено"
 msgid "Continue learning"
 msgstr "Продолжить обучение"
 
-#: ui/templates/student/course_map.html:41 ui/templates/teacher/groups.html:17
+#: ui/templates/student/course_map.html:41 ui/templates/teacher/group.html:107
+#: ui/templates/teacher/students.html:20
 msgid "Filter"
 msgstr "Фильтр"
 
 #: ui/templates/student/course_map.html:42
 #: ui/templates/student/dashboard.html:129
-#: ui/templates/teacher/dashboard.html:56 ui/templates/teacher/group.html:55
+#: ui/templates/teacher/dashboard.html:56 ui/templates/teacher/group.html:108
+#: ui/templates/teacher/groups.html:24 ui/templates/teacher/students.html:21
 msgid "All"
 msgstr "Все"
 
@@ -6283,9 +6231,7 @@ msgstr "Сертификат курса"
 msgid ""
 "Complete every topic with a course score of at least %(p)s and the "
 "certificate is issued automatically."
-msgstr ""
-"Завершите все темы с баллом курса не ниже %(p)s — сертификат выдаётся "
-"автоматически."
+msgstr "При завершении всех тем с баллом курса не ниже %(p)s сертификат выдаётся автоматически."
 
 #: ui/templates/student/courses.html:15
 msgid "preview"
@@ -6306,7 +6252,7 @@ msgstr "Курсов пока нет"
 
 #: ui/templates/student/courses.html:35
 msgid "The course appears here when your teacher assigns it to your group."
-msgstr "Курс появится здесь, когда преподаватель назначит его вашей группе."
+msgstr "Курс появится здесь, когда преподаватель назначит его группе."
 
 #: ui/templates/student/courses.html:42
 msgid "Courses open for enrolment"
@@ -6321,21 +6267,20 @@ msgstr "Записаться"
 #: ui/templates/teacher/dashboard.html:14
 #, python-format
 msgid "Hello, %(name)s!"
-msgstr "Здравствуйте, %(name)s!"
+msgstr "Добрый день, %(name)s!"
 
 #: ui/templates/student/dashboard.html:15
 msgid "You are not enrolled in a course yet"
-msgstr "Вы ещё не записаны ни на один курс"
+msgstr "Записей на курсы пока нет"
 
 #: ui/templates/student/dashboard.html:15
 msgid "Choose a course in the catalogue or ask your teacher to add your group."
-msgstr ""
-"Выберите курс в каталоге или попросите преподавателя добавить вашу группу."
+msgstr "Курс можно выбрать в каталоге или попросить преподавателя добавить группу."
 
 #: ui/templates/student/dashboard.html:32
 #, python-format
 msgid "Hello, %(name)s! Where you stopped:"
-msgstr "Здравствуйте, %(name)s! Вы остановились здесь:"
+msgstr "Добрый день, %(name)s! Продолжить с места остановки:"
 
 #: ui/templates/student/dashboard.html:33
 #, python-format
@@ -6361,7 +6306,7 @@ msgstr "Ожидание следующего шага"
 
 #: ui/templates/student/dashboard.html:61
 msgid "Your works are being checked or the next topic is not published yet."
-msgstr "Ваши работы проверяются или следующая тема ещё не опубликована."
+msgstr "Работы проверяются или следующая тема ещё не опубликована."
 
 #: ui/templates/student/dashboard.html:68
 #: ui/templates/teacher/dashboard.html:27 ui/templates/teacher/student.html:35
@@ -6477,12 +6422,6 @@ msgstr[1] "ещё %(n)s комментария"
 msgstr[2] "ещё %(n)s комментариев"
 msgstr[3] "ещё %(n)s комментариев"
 
-#: ui/templates/student/dashboard.html:163
-msgid "No comments yet. The teacher's comments on your works will appear here."
-msgstr ""
-"Комментариев пока нет. Здесь появятся комментарии преподавателя к вашим "
-"работам."
-
 #: ui/templates/student/locked.html:5
 msgid "Not open yet"
 msgstr "Пока закрыто"
@@ -6499,7 +6438,7 @@ msgstr ""
 #: ui/templates/student/locked.html:14
 #, python-format
 msgid "Finish «%(t)s» first — then this stage opens."
-msgstr "Сначала завершите «%(t)s» — затем откроется этот этап."
+msgstr "Этот этап откроется после завершения «%(t)s»."
 
 #: ui/templates/student/locked.html:16
 #, python-format
@@ -6510,23 +6449,19 @@ msgstr "Перейти к «%(t)s»"
 msgid ""
 "Stages open one after another. Go back to the course map to see what to do "
 "next."
-msgstr "Этапы открываются по очереди. Следующий шаг смотрите на карте курса."
+msgstr "Этапы открываются по очереди. Следующий шаг — на карте курса."
 
 #: ui/templates/student/locked.html:22 ui/templates/student/topic.html:29
 msgid "Topic stages"
 msgstr "Этапы темы"
 
 #: ui/templates/student/partials/benchmark_card.html:13
-msgid ""
-"Take it before the first stage: it shows what you already know. One attempt, "
-"it does not affect your grade."
-msgstr "Пройдите его перед первым этапом: он покажет, что вы уже знаете. Одна попытка, на оценку не влияет."
+msgid "Before the first stage · one attempt · not graded"
+msgstr "До первого этапа · одна попытка · без оценки"
 
 #: ui/templates/student/partials/benchmark_card.html:14
-msgid ""
-"The course is behind you — check how much your knowledge has grown. One "
-"attempt, it does not affect your grade."
-msgstr "Курс позади — проверьте, насколько выросли ваши знания. Одна попытка, на оценку не влияет."
+msgid "After the course · one attempt · not graded"
+msgstr "После курса · одна попытка · без оценки"
 
 #: ui/templates/student/partials/benchmark_card.html:18
 #: ui/templates/student/partials/quiz_panel.html:42
@@ -6555,7 +6490,6 @@ msgid "Download the PDF"
 msgstr "Скачать PDF"
 
 #: ui/templates/student/partials/certificate_card.html:18
-#: ui/templates/teacher/group.html:25
 msgid "Copied ✓"
 msgstr "Скопировано ✓"
 
@@ -6567,8 +6501,7 @@ msgstr "Скопировать ссылку для проверки"
 msgid ""
 "The course is completed. The certificate is being issued — refresh the page "
 "in a minute."
-msgstr ""
-"Курс завершён. Сертификат выпускается — обновите страницу через минуту."
+msgstr "Курс завершён. Сертификат выпускается — страницу можно обновить через минуту."
 
 #: ui/templates/student/partials/certificate_card.html:25
 #, python-format
@@ -6684,7 +6617,7 @@ msgstr "Очистить"
 
 #: ui/templates/student/partials/practice_field.html:49
 #: ui/templates/teacher/content/course.html:14
-#: ui/templates/teacher/content/courses.html:22
+#: ui/templates/teacher/content/courses.html:21
 #: ui/templates/teacher/content/stage.html:15
 msgid "Preview"
 msgstr "Предпросмотр"
@@ -6696,6 +6629,10 @@ msgstr "Поставьте номер у каждого шага: 1 — перв
 #: ui/templates/student/partials/practice_field.html:88
 msgid "Position"
 msgstr "Место"
+
+#: ui/templates/student/partials/practice_field.html:100
+msgid "AI grading"
+msgstr "Оценка AI"
 
 #: ui/templates/student/partials/practice_field.html:100
 msgid ""
@@ -6774,7 +6711,7 @@ msgstr "Сначала отметьте, что прочитали теорию.
 
 #: ui/templates/student/partials/quiz_panel.html:41
 msgid "You have an unfinished attempt."
-msgstr "У вас есть незавершённая попытка."
+msgstr "Есть незавершённая попытка."
 
 #: ui/templates/student/partials/quiz_panel.html:57
 msgid "Review answers"
@@ -6782,14 +6719,13 @@ msgstr "Посмотреть ответы"
 
 #: ui/templates/student/partials/quiz_panel.html:68
 msgid "Answer the questions one by one: each answer is checked at once."
-msgstr "Отвечайте на вопросы по одному: каждый ответ проверяется сразу."
+msgstr "Вопросы идут по одному: каждый ответ проверяется сразу."
 
 #: ui/templates/student/partials/quiz_panel.html:69
 #, python-format
 msgid ""
 "You will have %(m)s min; the test is sent automatically when the time is up."
-msgstr ""
-"У вас будет %(m)s мин; по истечении времени тест отправится автоматически."
+msgstr "На тест отводится %(m)s мин; по истечении времени он отправится автоматически."
 
 #: ui/templates/student/partials/quiz_panel.html:70
 msgid "The answers are checked when you submit the test."
@@ -6824,10 +6760,10 @@ msgid ""
 "Look through the material again and retake the test. %(n)s attempt left."
 msgid_plural ""
 "Look through the material again and retake the test. %(n)s attempts left."
-msgstr[0] "Повторите материал и пройдите тест снова. Осталась %(n)s попытка."
-msgstr[1] "Повторите материал и пройдите тест снова. Осталось %(n)s попытки."
-msgstr[2] "Повторите материал и пройдите тест снова. Осталось %(n)s попыток."
-msgstr[3] "Повторите материал и пройдите тест снова. Осталось %(n)s попыток."
+msgstr[0] "Стоит повторить материал и пройти тест снова. Осталась %(n)s попытка."
+msgstr[1] "Стоит повторить материал и пройти тест снова. Осталось %(n)s попытки."
+msgstr[2] "Стоит повторить материал и пройти тест снова. Осталось %(n)s попыток."
+msgstr[3] "Стоит повторить материал и пройти тест снова. Осталось %(n)s попыток."
 
 #: ui/templates/student/partials/quiz_panel.html:87
 msgid "No attempts are left — your teacher will look at this stage."
@@ -6874,11 +6810,11 @@ msgstr "Личные данные"
 
 #: ui/templates/student/profile.html:38
 #: ui/templates/teacher/content/course_form.html:39
-#: ui/templates/teacher/content/item.html:59
+#: ui/templates/teacher/content/item.html:58
 #: ui/templates/teacher/content/question.html:57
 #: ui/templates/teacher/content/simple_form.html:16
-#: ui/templates/teacher/content/stage.html:52
-#: ui/templates/teacher/group.html:37 ui/templates/teacher/group_form.html:25
+#: ui/templates/teacher/content/stage.html:51
+#: ui/templates/teacher/group_form.html:25
 msgid "Save"
 msgstr "Сохранить"
 
@@ -6896,7 +6832,7 @@ msgstr "Номер зачётной книжки"
 
 #: ui/templates/student/profile.html:56
 msgid "The group is changed by your teacher."
-msgstr "Группу меняет ваш преподаватель."
+msgstr "Группу меняет преподаватель."
 
 #: ui/templates/student/profile.html:61
 msgid "Password"
@@ -6916,7 +6852,7 @@ msgstr "Оценок пока нет"
 
 #: ui/templates/student/results.html:16
 msgid "Enrol in a course and your grades will appear here."
-msgstr "Запишитесь на курс — здесь появятся ваши оценки."
+msgstr "После записи на курс здесь появятся оценки."
 
 #: ui/templates/student/results.html:20
 msgid "Course summary"
@@ -6995,24 +6931,24 @@ msgstr[3] "Ещё %(n)s тем пока не открыты."
 msgid "Grading scale"
 msgstr "Шкала оценивания"
 
-#: ui/templates/student/results.html:121
+#: ui/templates/student/results.html:115
 msgid ""
 "A topic score is the weighted average of its stages; a module — of its "
 "topics, the course — of its modules."
 msgstr ""
 "Балл темы — взвешенное среднее её этапов; модуля — тем, курса — модулей."
 
-#: ui/templates/student/results.html:129
+#: ui/templates/student/results.html:128
 msgid "This course has no certificate"
 msgstr "У этого курса нет сертификата"
 
 #: ui/templates/student/search.html:8 ui/templates/teacher/search.html:8
 msgid "What are you looking for?"
-msgstr "Что вы ищете?"
+msgstr "Что найти?"
 
 #: ui/templates/student/search.html:8
 msgid "Type a topic or a stage name in the search box above."
-msgstr "Введите название темы или этапа в строке поиска вверху."
+msgstr "Поиск по названию темы или этапа — в строке вверху."
 
 #: ui/templates/student/search.html:11
 msgid "Results"
@@ -7024,7 +6960,7 @@ msgstr "Ничего не найдено"
 
 #: ui/templates/student/search.html:24 ui/templates/teacher/search.html:55
 msgid "Check the spelling or try a shorter word."
-msgstr "Проверьте написание или попробуйте более короткое слово."
+msgstr "Стоит проверить написание или попробовать слово короче."
 
 #: ui/templates/student/stage.html:12
 msgid "Read"
@@ -7043,11 +6979,18 @@ msgstr "Откроется после %(p)s%% в тесте."
 msgid "Opens when this stage is completed."
 msgstr "Откроется после завершения этого этапа."
 
+#: ui/templates/student/stages/lab.html:6
+msgid ""
+"The stage score is the average of your best attempt in every experiment: "
+"actions in the right order, the journal and the analysis."
+msgstr ""
+"Балл этапа — среднее лучших попыток по каждому опыту: правильный порядок "
+"действий, журнал и анализ."
+
 #: ui/templates/student/stages/lab.html:7
 msgid ""
 "Do the experiments in order, fill in the lab journal and send the analysis."
-msgstr ""
-"Выполните опыты по порядку, заполните лабораторный журнал и отправьте анализ."
+msgstr "Опыты выполняются по порядку, затем заполняется лабораторный журнал и отправляется анализ."
 
 #: ui/templates/student/stages/lab.html:16
 msgid "Opens after the previous experiment"
@@ -7057,15 +7000,7 @@ msgstr "Откроется после предыдущего опыта"
 msgid "The lab is not set up yet."
 msgstr "Лаборатория ещё не настроена."
 
-#: ui/templates/student/stages/lab.html:31
-msgid ""
-"The stage score is the average of your best attempt in every experiment: "
-"actions in the right order, the journal and the analysis."
-msgstr ""
-"Балл этапа — среднее лучших попыток по каждому опыту: правильный порядок "
-"действий, журнал и анализ."
-
-#: ui/templates/student/stages/lab.html:35
+#: ui/templates/student/stages/lab.html:34
 #, python-format
 msgid "Teacher's comments · %(e)s"
 msgstr "Комментарии преподавателя · %(e)s"
@@ -7148,7 +7083,7 @@ msgstr "Материалы"
 
 #: ui/templates/student/stages/theory.html:12
 msgid "You have read the theory."
-msgstr "Вы прочитали теорию."
+msgstr "Теория прочитана."
 
 #: ui/templates/student/stages/theory.html:16
 #: ui/templates/student/stages/theory.html:18
@@ -7222,7 +7157,15 @@ msgstr "Настройки курса"
 
 #: ui/templates/teacher/content/course.html:21
 msgid "You are an assistant of this course: the content is read-only."
-msgstr "Вы ассистент этого курса: содержание доступно только для просмотра."
+msgstr "Роль — ассистент курса: содержание доступно только для просмотра."
+
+#: ui/templates/teacher/content/course.html:25
+msgid ""
+"One test for the research: students take it before the first stage and again "
+"after the course. It is not graded and its answers are not shown."
+msgstr ""
+"Один тест для исследования: студенты проходят его перед первым этапом и "
+"снова после курса. Не оценивается, ответы не показываются."
 
 #: ui/templates/teacher/content/course.html:27
 #, python-format
@@ -7230,15 +7173,13 @@ msgid "taken: pre %(a)s, post %(b)s"
 msgstr "прошли: до %(a)s, после %(b)s"
 
 #: ui/templates/teacher/content/course.html:28
-msgid ""
-"One test for the research: students take it before the first stage and again "
-"after the course. It is not graded and its answers are not shown."
-msgstr "Один тест для исследования: студенты проходят его перед первым этапом и снова после курса. Не оценивается, ответы не показываются."
+msgid "Not created yet."
+msgstr "Ещё не создан."
 
 #: ui/templates/teacher/content/course.html:32
 #: ui/templates/teacher/content/course.html:49
 #: ui/templates/teacher/content/course.html:67
-#: ui/templates/teacher/content/courses.html:23
+#: ui/templates/teacher/content/courses.html:22
 msgid "Edit"
 msgstr "Изменить"
 
@@ -7270,14 +7211,6 @@ msgstr "Модулей пока нет"
 msgid "Add a module, then topics and their stages."
 msgstr "Добавьте модуль, затем темы и их этапы."
 
-#: ui/templates/teacher/content/course.html:96
-msgid ""
-"Drag by ⋮⋮ or use the arrows. Topic numbers follow the order; students see "
-"published topics only."
-msgstr ""
-"Перетаскивайте за ⋮⋮ или используйте стрелки. Номера тем следуют порядку; "
-"студенты видят только опубликованные темы."
-
 #: ui/templates/teacher/content/course_form.html:20
 msgid "Enrolment and order"
 msgstr "Запись и порядок"
@@ -7295,18 +7228,12 @@ msgstr ""
 "учитываются, остальные перенормируются; несколько этапов одного типа делят "
 "его долю."
 
-#: ui/templates/teacher/content/courses.html:9
-msgid ""
-"Modules, topics and stages; theory, video, lab, practice fields and quizzes."
-msgstr ""
-"Модули, темы и этапы; теория, видео, лаборатория, поля практики и тесты."
-
-#: ui/templates/teacher/content/courses.html:18
+#: ui/templates/teacher/content/courses.html:17
 #, python-format
 msgid "%(m)s modules · %(t)s topics (%(p)s published) · %(s)s stages"
 msgstr "Модулей: %(m)s · тем: %(t)s (опубликовано %(p)s) · этапов: %(s)s"
 
-#: ui/templates/teacher/content/courses.html:27
+#: ui/templates/teacher/content/courses.html:26
 msgid "The administrator adds teachers to courses."
 msgstr "Преподавателей на курсы добавляет администратор."
 
@@ -7328,7 +7255,7 @@ msgstr ""
 msgid "AI grading rubric"
 msgstr "Рубрика оценивания ИИ"
 
-#: ui/templates/teacher/content/item.html:35
+#: ui/templates/teacher/content/item.html:34
 msgid ""
 "The AI scores each criterion and explains why; the platform adds the points. "
 "The model answer is a reference, not a word-for-word requirement."
@@ -7336,87 +7263,87 @@ msgstr ""
 "ИИ оценивает каждый критерий и объясняет почему; баллы суммирует платформа. "
 "Образец ответа — ориентир, а не дословное требование."
 
-#: ui/templates/teacher/content/item.html:36
+#: ui/templates/teacher/content/item.html:35
 #: ui/templates/teacher/grading_detail.html:97
 msgid "Model answer"
 msgstr "Образец ответа"
 
-#: ui/templates/teacher/content/item.html:38
+#: ui/templates/teacher/content/item.html:37
 msgid "Notes for the grader"
 msgstr "Заметки для проверяющего"
 
-#: ui/templates/teacher/content/item.html:41 ui/views.py:24
+#: ui/templates/teacher/content/item.html:40 ui/views.py:24
 msgid "Criteria"
 msgstr "Критерии"
 
-#: ui/templates/teacher/content/item.html:46
+#: ui/templates/teacher/content/item.html:45
 msgid "e.g. The reaction equation is right and balanced"
 msgstr "например, Уравнение реакции верно и уравнено"
 
-#: ui/templates/teacher/content/item.html:49
+#: ui/templates/teacher/content/item.html:48
 #: ui/templates/teacher/content/question.html:39
 msgid "delete"
 msgstr "удалить"
 
-#: ui/templates/teacher/content/item.html:53
+#: ui/templates/teacher/content/item.html:52
 msgid "Criterion"
 msgstr "Критерий"
 
-#: ui/templates/teacher/content/item.html:54
+#: ui/templates/teacher/content/item.html:53
 msgid "The field's points should equal the sum of its criteria."
 msgstr "Баллы поля должны равняться сумме критериев."
 
-#: ui/templates/teacher/content/item.html:67
+#: ui/templates/teacher/content/item.html:65
 msgid ""
 "Type an answer as a student would: the AI grades it by the rubric (a real "
 "request, nothing is saved)."
-msgstr ""
-"Введите ответ как студент: ИИ оценит его по рубрике (реальный запрос, ничего "
-"не сохраняется)."
+msgstr "Ответ вводится так, как написал бы студент: ИИ оценит его по рубрике (реальный запрос, ничего не сохраняется)."
 
-#: ui/templates/teacher/content/item.html:67
+#: ui/templates/teacher/content/item.html:65
 msgid ""
 "Type an answer as a student would and see how it is checked (nothing is "
 "saved). Lists and pairs as JSON."
-msgstr ""
-"Введите ответ как студент и посмотрите, как он проверяется (ничего не "
-"сохраняется). Списки и пары — в JSON."
+msgstr "Ответ вводится так, как написал бы студент, — видно, как он проверяется (ничего не сохраняется). Списки и пары — в JSON."
 
-#: ui/templates/teacher/content/item.html:70
+#: ui/templates/teacher/content/item.html:69
 msgid "Sample answer"
 msgstr "Пример ответа"
 
-#: ui/templates/teacher/content/item.html:77
+#: ui/templates/teacher/content/item.html:76
 #, python-format
 msgid "Share of the points: %(f)s"
 msgstr "Доля баллов: %(f)s"
 
-#: ui/templates/teacher/content/item.html:85
+#: ui/templates/teacher/content/item.html:84
 msgid "AI"
 msgstr "ИИ"
 
-#: ui/templates/teacher/content/item.html:93
+#: ui/templates/teacher/content/item.html:92
 msgid "Answered fields cannot be deleted."
 msgstr "Поля с ответами удалить нельзя."
 
-#: ui/templates/teacher/content/item.html:93
+#: ui/templates/teacher/content/item.html:92
 #: ui/templates/teacher/content/question.html:64
 msgid "No student has answered it yet."
 msgstr "Пока никто из студентов не ответил."
 
 #: ui/templates/teacher/content/partials/delete.html:4
-#: ui/templates/teacher/group_form.html:36
+#: ui/templates/teacher/content/partials/delete.html:5
+#: ui/templates/teacher/group.html:44
 msgid "Delete"
 msgstr "Удалить"
 
 #: ui/templates/teacher/content/partials/delete.html:5
-#: ui/templates/teacher/group_form.html:38
-msgid "Yes, delete"
-msgstr "Да, удалить"
+msgid "Delete it?"
+msgstr "Удалить?"
+
+#: ui/templates/teacher/content/partials/delete.html:5
+msgid "Items students have already worked on are retired instead of deleted."
+msgstr "Элементы, с которыми студенты уже работали, не удаляются, а выводятся из употребления."
 
 #: ui/templates/teacher/content/partials/move.html:3
 msgid "Drag to move"
-msgstr "Перетащите, чтобы переместить"
+msgstr "Перетащить"
 
 #: ui/templates/teacher/content/partials/move.html:4
 msgid "Move up"
@@ -7445,9 +7372,7 @@ msgstr "Новый вопрос"
 msgid ""
 "Students have answered this question. Fix typos only; to change its meaning, "
 "retire it and add a new one."
-msgstr ""
-"Студенты уже отвечали на этот вопрос. Исправляйте только опечатки; чтобы "
-"изменить смысл, выведите его из использования и добавьте новый."
+msgstr "Студенты уже отвечали на этот вопрос. Допустимо исправлять только опечатки; чтобы изменить смысл, вопрос нужно вывести из использования и добавить новый."
 
 #: ui/templates/teacher/content/question.html:30
 msgid "— mark one correct"
@@ -7483,11 +7408,9 @@ msgstr ""
 
 #: ui/templates/teacher/content/quiz.html:13
 msgid ""
-"The pre/post test of the course: one attempt before the first stage and one "
-"after the course; only the overall percent is shown. Keep the questions "
-"fixed once students have taken it — a changed test makes pre and post "
-"incomparable."
-msgstr "Входной/итоговый тест курса: одна попытка перед первым этапом и одна после курса; показывается только общий процент. Не меняйте вопросы после того, как студенты начали его проходить — изменённый тест делает «до» и «после» несравнимыми."
+"Pre/post test: questions stay fixed once students have taken it — otherwise "
+"pre and post are not comparable."
+msgstr "Входной/итоговый тест: после первых прохождений вопросы не меняются — иначе результаты «до» и «после» несравнимы."
 
 #: ui/templates/teacher/content/quiz.html:33
 msgid "retired"
@@ -7519,11 +7442,7 @@ msgstr "студенты уже начали"
 msgid "Content"
 msgstr "Содержание"
 
-#: ui/templates/teacher/content/stage.html:40
-msgid "Choose a lab and save to pick its experiments."
-msgstr "Выберите лабораторию и сохраните, чтобы выбрать её опыты."
-
-#: ui/templates/teacher/content/stage.html:45
+#: ui/templates/teacher/content/stage.html:36
 msgid ""
 "Labs are written in code (apps/labs/experiments); here you choose which one "
 "this stage uses."
@@ -7531,31 +7450,35 @@ msgstr ""
 "Лаборатории написаны в коде (apps/labs/experiments); здесь выбирается, какую "
 "использует этот этап."
 
-#: ui/templates/teacher/content/stage.html:64
+#: ui/templates/teacher/content/stage.html:40
+msgid "Choose a lab and save to pick its experiments."
+msgstr "Опыты станут доступны для выбора после выбора и сохранения лаборатории."
+
+#: ui/templates/teacher/content/stage.html:63
 msgid "The test has no questions yet."
 msgstr "В тесте пока нет вопросов."
 
-#: ui/templates/teacher/content/stage.html:64
+#: ui/templates/teacher/content/stage.html:63
 msgid "Theory and video stages end with a checkpoint quiz of 3–4 questions."
 msgstr "Этапы теории и видео заканчиваются контрольным тестом из 3–4 вопросов."
 
-#: ui/templates/teacher/content/stage.html:68
+#: ui/templates/teacher/content/stage.html:67
 msgid "Edit the questions"
 msgstr "Изменить вопросы"
 
-#: ui/templates/teacher/content/stage.html:71
+#: ui/templates/teacher/content/stage.html:70
 msgid "Create the quiz"
 msgstr "Создать тест"
 
-#: ui/templates/teacher/content/stage.html:80
+#: ui/templates/teacher/content/stage.html:79
 msgid "Answer fields"
 msgstr "Поля ответа"
 
-#: ui/templates/teacher/content/stage.html:81
+#: ui/templates/teacher/content/stage.html:80
 msgid "Field"
 msgstr "Поле"
 
-#: ui/templates/teacher/content/stage.html:93
+#: ui/templates/teacher/content/stage.html:92
 msgid ""
 "No answer fields yet: add the numbers, formulas, equations and open answers "
 "the student fills in."
@@ -7563,19 +7486,17 @@ msgstr ""
 "Полей ответа пока нет: добавьте числа, формулы, уравнения и открытые ответы, "
 "которые заполняет студент."
 
-#: ui/templates/teacher/content/stage.html:101
+#: ui/templates/teacher/content/stage.html:100
 msgid "Delete the stage"
 msgstr "Удалить этап"
 
-#: ui/templates/teacher/content/stage.html:102
+#: ui/templates/teacher/content/stage.html:101
 msgid ""
 "Students have already worked on this stage, so it cannot be deleted. Make it "
 "optional or unpublish the topic."
-msgstr ""
-"Студенты уже работали с этим этапом, поэтому удалить его нельзя. Сделайте "
-"его необязательным или снимите тему с публикации."
+msgstr "Студенты уже работали с этим этапом, поэтому удалить его нельзя. Его можно сделать необязательным или снять тему с публикации."
 
-#: ui/templates/teacher/content/stage.html:102
+#: ui/templates/teacher/content/stage.html:101
 msgid "No student has started it yet."
 msgstr "Пока никто из студентов не начал."
 
@@ -7594,7 +7515,7 @@ msgstr ""
 "тест из 3–4 вопросов."
 
 #: ui/templates/teacher/content/stage_new.html:15
-#: ui/templates/teacher/group.html:157
+#: ui/templates/teacher/group.html:188
 msgid "Add"
 msgstr "Добавить"
 
@@ -7617,8 +7538,8 @@ msgstr[2] "сегодня занимались %(n)s студентов"
 msgstr[3] "сегодня занимались %(n)s студентов"
 
 #: ui/templates/teacher/dashboard.html:22
-#: ui/templates/teacher/dashboard.html:114 ui/templates/teacher/groups.html:14
-#: ui/templates/teacher/partials/groups_table.html:33
+#: ui/templates/teacher/dashboard.html:114 ui/templates/teacher/groups.html:16
+#: ui/templates/teacher/partials/groups_table.html:49
 msgid "Create a group"
 msgstr "Создать группу"
 
@@ -7649,7 +7570,7 @@ msgid "required stages passed"
 msgstr "пройдено обязательных этапов"
 
 #: ui/templates/teacher/dashboard.html:46
-#: ui/templates/teacher/partials/groups_table.html:10
+#: ui/templates/teacher/partials/groups_table.html:14
 msgid "Average score"
 msgstr "Средний балл"
 
@@ -7682,7 +7603,7 @@ msgid ""
 msgstr ""
 "Проверять нечего. Здесь появятся работы, которые ИИ не смог уверенно оценить."
 
-#: ui/templates/teacher/dashboard.html:72 ui/templates/teacher/group.html:56
+#: ui/templates/teacher/dashboard.html:72 ui/templates/teacher/group.html:109
 #: ui/templates/teacher/student.html:47
 msgid "Needs attention"
 msgstr "Требует внимания"
@@ -7697,10 +7618,6 @@ msgstr ""
 msgid "My groups"
 msgstr "Мои группы"
 
-#: ui/templates/teacher/dashboard.html:91
-msgid "Manage groups"
-msgstr "Управление группами"
-
 #: ui/templates/teacher/dashboard.html:100
 #: ui/templates/teacher/group_form.html:3
 #: ui/templates/teacher/group_form.html:5
@@ -7708,9 +7625,12 @@ msgstr "Управление группами"
 msgid "New group"
 msgstr "Новая группа"
 
-#: ui/templates/teacher/gradebook.html:10
-msgid "topic scores of completed topics; in-progress topics are shown greyed"
-msgstr "баллы завершённых тем; темы в работе показаны серым"
+#: ui/templates/teacher/gradebook.html:9
+msgid ""
+"T — topic, M — module (current score over completed topics; topics in "
+"progress are greyed). The letter follows the current course score; the final "
+"grade is set when every topic is completed."
+msgstr "Т — тема, М — модуль (текущий балл по завершённым темам; незавершённые — серым). Буква — по текущему баллу курса; итоговая оценка выставляется после всех тем."
 
 #: ui/templates/teacher/gradebook.html:36
 #, python-format
@@ -7726,15 +7646,6 @@ msgstr "М%(n)s"
 msgid "No students in this course yet."
 msgstr "На этом курсе пока нет студентов."
 
-#: ui/templates/teacher/gradebook.html:66
-msgid ""
-"T — topic, M — module (current score over completed topics). The letter "
-"follows the current course score; the final grade is set when every topic is "
-"completed."
-msgstr ""
-"Т — тема, М — модуль (текущий балл по завершённым темам). Буква — по "
-"текущему баллу курса; итоговая оценка ставится, когда завершены все темы."
-
 #: ui/templates/teacher/grading.html:6
 #: ui/templates/teacher/grading_detail.html:10
 msgid "Confirming AI grades"
@@ -7742,17 +7653,9 @@ msgstr "Подтверждение оценок AI"
 
 #: ui/templates/teacher/grading.html:14
 msgid "Choose a work in the queue"
-msgstr "Выберите работу в очереди"
+msgstr "Работа из очереди не выбрана"
 
 #: ui/templates/teacher/grading.html:15
-msgid ""
-"Practice works the AI could not grade with confidence, AI grades to spot-"
-"check and returned works."
-msgstr ""
-"Практические работы, которые ИИ не смог уверенно оценить, оценки ИИ для "
-"выборочной проверки и возвращённые работы."
-
-#: ui/templates/teacher/grading.html:16
 msgid "Open the first one"
 msgstr "Открыть первую"
 
@@ -7801,7 +7704,7 @@ msgstr "уверенно"
 
 #: ui/templates/teacher/grading_detail.html:60
 msgid "No AI grade: grade it yourself."
-msgstr "Оценки ИИ нет: оцените сами."
+msgstr "Оценки ИИ нет: оценку ставит преподаватель."
 
 #: ui/templates/teacher/grading_detail.html:63
 #, python-format
@@ -7813,8 +7716,15 @@ msgid "Grade by the rubric"
 msgstr "Оценка по рубрике"
 
 #: ui/templates/teacher/grading_detail.html:66
+msgid ""
+"Your decision is saved as a teacher review and is used to compute the "
+"agreement between the AI and the teachers (Cohen's kappa). The student sees "
+"the grade after it is confirmed."
+msgstr "Решение сохраняется как проверка преподавателя и используется для расчёта согласия AI и преподавателей (каппа Коэна). Студент увидит оценку после подтверждения."
+
+#: ui/templates/teacher/grading_detail.html:66
 msgid "AI suggestion → your decision"
-msgstr "Предложение AI → ваше решение"
+msgstr "Предложение AI → решение преподавателя"
 
 #: ui/templates/teacher/grading_detail.html:85
 msgid "Agree with the AI"
@@ -7838,9 +7748,7 @@ msgstr "Комментарий студенту"
 
 #: ui/templates/teacher/grading_detail.html:110
 msgid "Shown with the result. For a conversation use the comments below."
-msgstr ""
-"Показывается вместе с результатом. Для переписки используйте комментарии "
-"ниже."
+msgstr "Показывается вместе с результатом. Для переписки — комментарии ниже."
 
 #: ui/templates/teacher/grading_detail.html:114
 msgid "The AI is still grading this work."
@@ -7862,258 +7770,266 @@ msgstr "изменено"
 msgid "Skip"
 msgstr "Пропустить"
 
-#: ui/templates/teacher/grading_detail.html:128
+#: ui/templates/teacher/grading_detail.html:127
+msgid "Return the work to the student?"
+msgstr "Вернуть работу студенту?"
+
+#: ui/templates/teacher/grading_detail.html:127
 msgid "The attempt is given back and the stage reopens."
 msgstr "Попытка возвращается, этап снова открывается."
 
-#: ui/templates/teacher/grading_detail.html:129
+#: ui/templates/teacher/grading_detail.html:127
 msgid "Return"
 msgstr "Вернуть"
 
-#: ui/templates/teacher/grading_detail.html:133
+#: ui/templates/teacher/grading_detail.html:129
 msgid "Change and confirm"
 msgstr "Изменить и подтвердить"
 
-#: ui/templates/teacher/grading_detail.html:133
+#: ui/templates/teacher/grading_detail.html:129
 msgid "Confirm the grade"
 msgstr "Подтвердить оценку"
 
-#: ui/templates/teacher/grading_detail.html:140
-msgid ""
-"Your decision is saved as a teacher review and is used to compute the "
-"agreement between the AI and the teachers (Cohen's kappa). The student sees "
-"the grade after it is confirmed."
-msgstr ""
-"Ваше решение сохраняется как проверка преподавателя и используется для "
-"расчёта согласия AI и преподавателей (каппа Коэна). Студент увидит оценку "
-"после подтверждения."
-
-#: ui/templates/teacher/grading_detail.html:144
+#: ui/templates/teacher/grading_detail.html:139
 msgid "Other attempts"
 msgstr "Другие попытки"
 
-#: ui/templates/teacher/group.html:11
-#: ui/templates/teacher/partials/groups_table.html:16
+#: ui/templates/teacher/group.html:18
+#: ui/templates/teacher/partials/groups_table.html:25
 msgid "inactive"
 msgstr "неактивна"
 
-#: ui/templates/teacher/group.html:14
+#: ui/templates/teacher/group.html:23
+#: ui/templates/teacher/partials/groups_table.html:25
 #, python-format
 msgid "year %(y)s"
 msgstr "%(y)s курс"
 
-#: ui/templates/teacher/group.html:16 ui/templates/teacher/group_form.html:5
-#: ui/templates/teacher/group_form.html:8
-msgid "Edit the group"
-msgstr "Редактировать группу"
+#: ui/templates/teacher/group.html:29
+msgid "Students enter this code when signing up"
+msgstr "Студенты вводят этот код при регистрации"
 
-#: ui/templates/teacher/group.html:22
+#: ui/templates/teacher/group.html:30
 msgid "Join code"
 msgstr "Код для вступления"
 
-#: ui/templates/teacher/group.html:25
-msgid "Copy"
-msgstr "Копировать"
+#: ui/templates/teacher/group.html:32
+msgid "Copy the join code"
+msgstr "Скопировать код"
 
-#: ui/templates/teacher/group.html:27
-msgid "Make a new code; the old one stops working"
-msgstr "Создать новый код; старый перестанет работать"
-
-#: ui/templates/teacher/group.html:27
-msgid "New code"
-msgstr "Новый код"
-
-#: ui/templates/teacher/group.html:52 ui/templates/teacher/group.html:53
-#: ui/templates/teacher/students.html:10
-msgid "Search for a student"
-msgstr "Поиск студента"
-
-#: ui/templates/teacher/group.html:57
-msgid "Inactive"
-msgstr "Неактивные"
-
-#: ui/templates/teacher/group.html:61
-msgid "CSV export"
-msgstr "Экспорт CSV"
-
-#: ui/templates/teacher/group.html:62 ui/templates/teacher/group.html:150
+#: ui/templates/teacher/group.html:34 ui/templates/teacher/group.html:181
 msgid "Add a student"
 msgstr "Добавить студента"
 
-#: ui/templates/teacher/group.html:71
+#: ui/templates/teacher/group.html:36
+msgid "Group actions"
+msgstr "Действия с группой"
+
+#: ui/templates/teacher/group.html:38
+msgid "Group settings"
+msgstr "Настройки группы"
+
+#: ui/templates/teacher/group.html:40
+msgid "Make a new join code?"
+msgstr "Создать новый код группы?"
+
+#: ui/templates/teacher/group.html:40
+msgid ""
+"The current code stops working; students who have not joined yet need the "
+"new one."
+msgstr "Текущий код перестанет работать; ещё не присоединившимся студентам понадобится новый."
+
+#: ui/templates/teacher/group.html:40
+msgid "New code"
+msgstr "Новый код"
+
+#: ui/templates/teacher/group.html:40
+msgid "New join code"
+msgstr "Новый код группы"
+
+#: ui/templates/teacher/group.html:44
+#, python-format
+msgid "Delete the group %(g)s?"
+msgstr "Удалить группу %(g)s?"
+
+#: ui/templates/teacher/group.html:44
+msgid ""
+"Only an empty group without courses can be deleted; otherwise make it "
+"inactive in the settings."
+msgstr "Удалить можно только пустую группу без курсов; иначе её можно сделать неактивной в настройках."
+
+#: ui/templates/teacher/group.html:44
+msgid "Delete the group"
+msgstr "Удалить группу"
+
+#: ui/templates/teacher/group.html:53
+msgid "Courses of the group"
+msgstr "Курсы группы"
+
+#: ui/templates/teacher/group.html:55 ui/templates/teacher/group.html:198
+msgid "Attach a course"
+msgstr "Прикрепить курс"
+
+#: ui/templates/teacher/group.html:67
+msgid "Post-test open"
+msgstr "Итоговый тест открыт"
+
+#: ui/templates/teacher/group.html:70
+msgid "Course actions"
+msgstr "Действия с курсом"
+
+#: ui/templates/teacher/group.html:72
+msgid "Students in this course"
+msgstr "Студенты этого курса"
+
+#: ui/templates/teacher/group.html:77
+msgid "Close the post-test?"
+msgstr "Закрыть итоговый тест?"
+
+#: ui/templates/teacher/group.html:77
+msgid ""
+"It opens again for each student after the course. Results already taken stay."
+msgstr "Он снова откроется каждому студенту после курса. Полученные результаты сохранятся."
+
+#: ui/templates/teacher/group.html:77
+msgid "Close the post-test"
+msgstr "Закрыть итоговый тест"
+
+#: ui/templates/teacher/group.html:79
+msgid "Open the post-test for the whole group?"
+msgstr "Открыть итоговый тест для всей группы?"
+
+#: ui/templates/teacher/group.html:79
+msgid ""
+"Every student of the group can take it once, even before finishing the "
+"course."
+msgstr "Каждый студент группы сможет пройти его один раз, даже до окончания курса."
+
+#: ui/templates/teacher/group.html:79
+msgid "Open the post-test"
+msgstr "Открыть итоговый тест"
+
+#: ui/templates/teacher/group.html:85
+msgid "Detach the group from the course?"
+msgstr "Открепить группу от курса?"
+
+#: ui/templates/teacher/group.html:85
+msgid ""
+"New members are no longer enrolled. Enrolled students keep the course and "
+"their progress."
+msgstr "Новые участники больше не записываются. Записанные студенты сохраняют курс и прогресс."
+
+#: ui/templates/teacher/group.html:85
+msgid "Detach"
+msgstr "Открепить"
+
+#: ui/templates/teacher/group.html:85
+msgid "Detach from the course"
+msgstr "Открепить от курса"
+
+#: ui/templates/teacher/group.html:94
+msgid "No courses yet."
+msgstr "Курсов пока нет."
+
+#: ui/templates/teacher/group.html:105
+msgid "Search for a student"
+msgstr "Поиск студента"
+
+#: ui/templates/teacher/group.html:110 ui/templates/teacher/groups.html:24
+msgid "Inactive"
+msgstr "Неактивные"
+
+#: ui/templates/teacher/group.html:112
+msgid "Download the table as CSV"
+msgstr "Скачать таблицу в CSV"
+
+#: ui/templates/teacher/group.html:119
 msgid "Now"
 msgstr "Сейчас"
 
-#: ui/templates/teacher/group.html:74 ui/templates/teacher/group.html:96
-#: ui/templates/teacher/student.html:113
+#: ui/templates/teacher/group.html:122
+msgid "Lab errors"
+msgstr "Ошибки в лаборатории"
+
+#: ui/templates/teacher/group.html:122 ui/templates/teacher/student.html:113
 msgid "order errors · safety warnings · wrong equipment or choice"
 msgstr ""
 "ошибки порядка · предупреждения о безопасности · неверное оборудование или "
 "выбор"
 
-#: ui/templates/teacher/group.html:74
-msgid "Lab errors"
-msgstr "Ошибки в лаборатории"
-
-#: ui/templates/teacher/group.html:75
+#: ui/templates/teacher/group.html:123
 msgid "Activity"
 msgstr "Активность"
 
-#: ui/templates/teacher/group.html:76 ui/templates/teacher/group.html:99
-#: ui/templates/teacher/partials/groups_table.html:11
-#: ui/templates/teacher/student.html:70 ui/templates/teacher/student.html:114
-#: ui/templates/ui/styleguide.html:100
-msgid "Actions"
-msgstr "Действия"
-
-#: ui/templates/teacher/group.html:89
+#: ui/templates/teacher/group.html:137
 msgid "Practice awaiting check"
 msgstr "Практика на проверке"
 
-#: ui/templates/teacher/group.html:101
-#: ui/templates/teacher/partials/student_drawer.html:39
-msgid "Open the profile"
-msgstr "Открыть профиль"
-
-#: ui/templates/teacher/group.html:102
-msgid "Open a stage by hand"
-msgstr "Открыть этап вручную"
-
-#: ui/templates/teacher/group.html:106
-msgid "Remove from the group"
-msgstr "Исключить из группы"
-
-#: ui/templates/teacher/group.html:107 ui/templates/teacher/group.html:121
-msgid "Remove from the group?"
-msgstr "Исключить из группы?"
-
-#: ui/templates/teacher/group.html:117
+#: ui/templates/teacher/group.html:157
 msgid "Not enrolled in this course"
 msgstr "Не записан на этот курс"
 
-#: ui/templates/teacher/group.html:117
+#: ui/templates/teacher/group.html:157
 msgid "The group has no course yet"
 msgstr "У группы пока нет курса"
 
-#: ui/templates/teacher/group.html:120
-msgid "Remove"
-msgstr "Исключить"
-
-#: ui/templates/teacher/group.html:130
+#: ui/templates/teacher/group.html:164 ui/templates/teacher/students.html:44
 msgid "No student matches the filter."
 msgstr "Нет студентов, подходящих под фильтр."
 
-#: ui/templates/teacher/group.html:130
-msgid "No students yet. Give them the join code or add their accounts."
-msgstr ""
-"Студентов пока нет. Дайте им код для вступления или добавьте их аккаунты."
+#: ui/templates/teacher/group.html:164
+msgid "No students yet."
+msgstr "Студентов пока нет."
 
-#: ui/templates/teacher/group.html:133
-msgid "Lab errors: order errors · safety warnings · wrong equipment or choice."
-msgstr ""
-"Ошибки в лаборатории: ошибки порядка · предупреждения о безопасности · "
-"неверное оборудование или выбор."
-
-#: ui/templates/teacher/group.html:133
-msgid "Click a student's name to see their profile."
-msgstr "Нажмите на имя студента, чтобы открыть профиль."
-
-#: ui/templates/teacher/group.html:139
+#: ui/templates/teacher/group.html:170
 msgid "Student profile"
 msgstr "Профиль студента"
 
-#: ui/templates/teacher/group.html:154
+#: ui/templates/teacher/group.html:185
 #, python-format
-msgid ""
-"Or give the student the join code <b class=\"num tracking-[.1em]\">%(code)s</"
-"b> — they join the group when signing up."
-msgstr ""
-"Или дайте студенту код присоединения <b class=\"num tracking-"
-"[.1em]\">%(code)s</b> — при регистрации он сам попадёт в группу."
+msgid "Join code: <b class=\"num tracking-[.1em]\">%(code)s</b>"
+msgstr "Код группы: <b class=\"num tracking-[.1em]\">%(code)s</b>"
 
-#: ui/templates/teacher/group.html:163
-msgid "Courses of the group"
-msgstr "Курсы группы"
+#: ui/templates/teacher/group.html:206
+msgid "The group's students are enrolled at once."
+msgstr "Студенты группы будут записаны сразу."
 
-#: ui/templates/teacher/group.html:176
-msgid "Post-test open"
-msgstr "Итоговый тест открыт"
-
-#: ui/templates/teacher/group.html:177
-msgid "Close the post-test"
-msgstr "Закрыть итоговый тест"
-
-#: ui/templates/teacher/group.html:179
-msgid "Otherwise it opens for each student after the course"
-msgstr "Иначе он откроется каждому студенту после курса"
-
-#: ui/templates/teacher/group.html:179
-msgid "Open the post-test"
-msgstr "Открыть итоговый тест"
-
-#: ui/templates/teacher/group.html:185 ui/templates/teacher/group.html:188
-msgid "Detach"
-msgstr "Открепить"
-
-#: ui/templates/teacher/group.html:187
-msgid "Enrolled students keep the course."
-msgstr "У записанных студентов курс сохраняется."
-
-#: ui/templates/teacher/group.html:202
+#: ui/templates/teacher/group.html:209
 msgid "Attach"
 msgstr "Прикрепить"
 
-#: ui/templates/teacher/group.html:204
-msgid ""
-"Students of the group are enrolled at once; students who join later are "
-"enrolled when they open the platform."
-msgstr ""
-"Студенты группы записываются сразу; присоединившиеся позже — при входе на "
-"платформу."
+#: ui/templates/teacher/group_form.html:5
+#: ui/templates/teacher/group_form.html:8
+msgid "Edit the group"
+msgstr "Редактировать группу"
 
-#: ui/templates/teacher/group.html:206
-msgid "You have no course to attach yet."
-msgstr "У вас пока нет курса для прикрепления."
-
-#: ui/templates/teacher/group_form.html:7 ui/templates/teacher/groups.html:3
-#: ui/templates/teacher/groups.html:5 ui/templates/teacher/groups.html:9
-#: ui/templates/teacher/search.html:29 ui/templates/teacher/student.html:9
-#: ui/templates/teacher/students.html:7
+#: ui/templates/teacher/group_form.html:7 ui/templates/teacher/groups.html:5
+#: ui/templates/teacher/groups.html:7 ui/templates/teacher/groups.html:11
+#: ui/templates/teacher/groups.html:43 ui/templates/teacher/search.html:29
+#: ui/templates/teacher/student.html:9 ui/templates/teacher/students.html:14
 msgid "Groups"
 msgstr "Группы"
 
-#: ui/templates/teacher/group_form.html:32
-msgid "Delete the group"
-msgstr "Удалить группу"
+#: ui/templates/teacher/groups.html:21
+msgid "Group name"
+msgstr "Название группы"
 
-#: ui/templates/teacher/group_form.html:33
-msgid ""
-"Only an empty group without courses can be deleted — enrolments remember "
-"their group for the research exports. Otherwise make it inactive."
-msgstr ""
-"Удалить можно только пустую группу без курсов — записи хранят свою группу "
-"для исследовательских выгрузок. Иначе сделайте её неактивной."
+#: ui/templates/teacher/groups.html:34
+msgid "All research groups"
+msgstr "Все исследовательские группы"
 
-#: ui/templates/teacher/groups.html:10
-msgid "Groups you curate and groups attached to your courses."
-msgstr "Группы, которые вы курируете, и группы, прикреплённые к вашим курсам."
+#: ui/templates/teacher/groups.html:44
+msgid "No group matches the filter."
+msgstr "Нет групп по фильтру."
 
-#: ui/templates/teacher/groups.html:13
-msgid "Find a student"
-msgstr "Найти студента"
-
-#: ui/templates/teacher/groups.html:19
-msgid "All, inactive too"
-msgstr "Все, включая неактивные"
-
-#: ui/templates/teacher/groups.html:24
+#: ui/templates/teacher/groups.html:50
 #, python-format
-msgid "%(n)s student of your courses has no group."
-msgid_plural "%(n)s students of your courses have no group."
-msgstr[0] "У %(n)s студента ваших курсов нет группы."
-msgstr[1] "У %(n)s студентов ваших курсов нет группы."
-msgstr[2] "У %(n)s студентов ваших курсов нет группы."
-msgstr[3] "У %(n)s студентов ваших курсов нет группы."
+msgid "%(n)s student without a group"
+msgid_plural "%(n)s students without a group"
+msgstr[0] "%(n)s студент без группы"
+msgstr[1] "%(n)s студента без группы"
+msgstr[2] "%(n)s студентов без группы"
+msgstr[3] "%(n)s студента без группы"
 
 #: ui/templates/teacher/lab_log.html:5 ui/templates/teacher/lab_log.html:55
 msgid "Comments to the student"
@@ -8164,15 +8080,13 @@ msgstr "Все курсы"
 msgid "Nothing here."
 msgstr "Здесь ничего нет."
 
-#: ui/templates/teacher/partials/groups_table.html:33
+#: ui/templates/teacher/partials/groups_table.html:49
 msgid "No groups yet"
 msgstr "Групп пока нет"
 
-#: ui/templates/teacher/partials/groups_table.html:33
-msgid ""
-"Create a group, give the students its join code and attach it to your course."
-msgstr ""
-"Создайте группу, дайте студентам её код и прикрепите группу к вашему курсу."
+#: ui/templates/teacher/partials/groups_table.html:49
+msgid "A group gets a join code; students enter it when signing up."
+msgstr "Группа получает код; студенты вводят его при регистрации."
 
 #: ui/templates/teacher/partials/student_drawer.html:22
 #: ui/templates/teacher/student.html:180
@@ -8186,7 +8100,25 @@ msgstr "Пока ничего не произошло."
 
 #: ui/templates/teacher/partials/student_drawer.html:36
 msgid "The student is not enrolled in your course yet."
-msgstr "Студент ещё не записан на ваш курс."
+msgstr "Студент ещё не записан на курс."
+
+#: ui/templates/teacher/partials/student_drawer.html:43
+#, python-format
+msgid "Remove the student from %(g)s?"
+msgstr "Исключить студента из группы %(g)s?"
+
+#: ui/templates/teacher/partials/student_drawer.html:43
+msgid ""
+"Enrolments and results stay; the student is no longer listed in the group."
+msgstr "Записи на курсы и результаты сохранятся; студент исчезнет из списка группы."
+
+#: ui/templates/teacher/partials/student_drawer.html:43
+msgid "Remove"
+msgstr "Исключить"
+
+#: ui/templates/teacher/partials/student_drawer.html:43
+msgid "Remove from the group"
+msgstr "Исключить из группы"
 
 #: ui/templates/teacher/search.html:8
 msgid "Search for a student, a group or a topic."
@@ -8194,11 +8126,11 @@ msgstr "Ищите студента, группу или тему."
 
 #: ui/templates/teacher/student.html:31
 msgid "Not enrolled in your courses"
-msgstr "Не записан на ваши курсы"
+msgstr "Не записан на курсы"
 
 #: ui/templates/teacher/student.html:31
 msgid "Attach the student's group to a course to see the progress here."
-msgstr "Прикрепите группу студента к курсу, чтобы видеть здесь прогресс."
+msgstr "Чтобы здесь отображался прогресс, группу студента нужно прикрепить к курсу."
 
 #: ui/templates/teacher/student.html:38
 msgid "after the first completed topic"
@@ -8218,7 +8150,7 @@ msgstr "Последняя активность"
 
 #: ui/templates/teacher/student.html:48
 msgid "A practice work awaits your check."
-msgstr "Практическая работа ждёт вашей проверки."
+msgstr "Практическая работа ждёт проверки."
 
 #: ui/templates/teacher/student.html:54
 msgid "Stages and scores"
@@ -8228,6 +8160,11 @@ msgstr "Этапы и баллы"
 #, python-format
 msgid "In progress · %(a)s / %(b)s"
 msgstr "В процессе · %(a)s / %(b)s"
+
+#: ui/templates/teacher/student.html:70 ui/templates/teacher/student.html:114
+#: ui/templates/ui/styleguide.html:100
+msgid "Actions"
+msgstr "Действия"
 
 #: ui/templates/teacher/student.html:84
 msgid "attempts ran out"
@@ -8265,21 +8202,13 @@ msgstr "Практические работы"
 msgid "No practice works yet."
 msgstr "Практических работ пока нет."
 
-#: ui/templates/teacher/students.html:11
+#: ui/templates/teacher/students.html:18
 msgid "Name, username or email"
 msgstr "Имя, логин или email"
 
-#: ui/templates/teacher/students.html:12
+#: ui/templates/teacher/students.html:22
 msgid "Without a group"
 msgstr "Без группы"
-
-#: ui/templates/teacher/students.html:13
-msgid "Find"
-msgstr "Найти"
-
-#: ui/templates/teacher/students.html:30
-msgid "No students found."
-msgstr "Студенты не найдены."
 
 #: ui/templates/ui/styleguide.html:8
 msgid "UI components"
@@ -8358,6 +8287,160 @@ msgstr "Практическая работа 3"
 #: ui/views.py:24
 msgid "Conditions"
 msgstr "Условие"
+
+#~ msgid "Latin letters, digits and . _ - characters"
+#~ msgstr "Латинские буквы, цифры и символы . _ -"
+
+#~ msgid "This username is already taken."
+#~ msgstr "Этот логин уже занят."
+
+#~ msgid "The username is free ✓"
+#~ msgstr "Логин свободен ✓"
+
+#~ msgid "Username / email"
+#~ msgstr "Логин / email"
+
+#~ msgid ""
+#~ "The test does not affect your course grade; the answers are not shown so "
+#~ "that it stays a fair measure."
+#~ msgstr ""
+#~ "Тест не влияет на оценку за курс; ответы не показываются, чтобы измерение "
+#~ "оставалось честным."
+
+#~ msgid ""
+#~ "No comments yet. The teacher's comments on your works will appear here."
+#~ msgstr ""
+#~ "Комментариев пока нет. Здесь появятся комментарии преподавателя к вашим "
+#~ "работам."
+
+#~ msgid ""
+#~ "Take it before the first stage: it shows what you already know. One "
+#~ "attempt, it does not affect your grade."
+#~ msgstr ""
+#~ "Пройдите его перед первым этапом: он покажет, что вы уже знаете. Одна "
+#~ "попытка, на оценку не влияет."
+
+#~ msgid ""
+#~ "The course is behind you — check how much your knowledge has grown. One "
+#~ "attempt, it does not affect your grade."
+#~ msgstr ""
+#~ "Курс позади — проверьте, насколько выросли ваши знания. Одна попытка, на "
+#~ "оценку не влияет."
+
+#~ msgid ""
+#~ "Drag by ⋮⋮ or use the arrows. Topic numbers follow the order; students "
+#~ "see published topics only."
+#~ msgstr ""
+#~ "Перетаскивайте за ⋮⋮ или используйте стрелки. Номера тем следуют порядку; "
+#~ "студенты видят только опубликованные темы."
+
+#~ msgid ""
+#~ "Modules, topics and stages; theory, video, lab, practice fields and "
+#~ "quizzes."
+#~ msgstr ""
+#~ "Модули, темы и этапы; теория, видео, лаборатория, поля практики и тесты."
+
+#~ msgid "Yes, delete"
+#~ msgstr "Да, удалить"
+
+#~ msgid ""
+#~ "The pre/post test of the course: one attempt before the first stage and "
+#~ "one after the course; only the overall percent is shown. Keep the "
+#~ "questions fixed once students have taken it — a changed test makes pre "
+#~ "and post incomparable."
+#~ msgstr ""
+#~ "Входной/итоговый тест курса: одна попытка перед первым этапом и одна "
+#~ "после курса; показывается только общий процент. Не меняйте вопросы после "
+#~ "того, как студенты начали его проходить — изменённый тест делает «до» и "
+#~ "«после» несравнимыми."
+
+#~ msgid "Manage groups"
+#~ msgstr "Управление группами"
+
+#~ msgid ""
+#~ "topic scores of completed topics; in-progress topics are shown greyed"
+#~ msgstr "баллы завершённых тем; темы в работе показаны серым"
+
+#~ msgid ""
+#~ "Practice works the AI could not grade with confidence, AI grades to spot-"
+#~ "check and returned works."
+#~ msgstr ""
+#~ "Практические работы, которые ИИ не смог уверенно оценить, оценки ИИ для "
+#~ "выборочной проверки и возвращённые работы."
+
+#~ msgid "Copy"
+#~ msgstr "Копировать"
+
+#~ msgid "Make a new code; the old one stops working"
+#~ msgstr "Создать новый код; старый перестанет работать"
+
+#~ msgid "CSV export"
+#~ msgstr "Экспорт CSV"
+
+#~ msgid "Open the profile"
+#~ msgstr "Открыть профиль"
+
+#~ msgid "Open a stage by hand"
+#~ msgstr "Открыть этап вручную"
+
+#~ msgid "Remove from the group?"
+#~ msgstr "Исключить из группы?"
+
+#~ msgid "No students yet. Give them the join code or add their accounts."
+#~ msgstr ""
+#~ "Студентов пока нет. Дайте им код для вступления или добавьте их аккаунты."
+
+#~ msgid ""
+#~ "Lab errors: order errors · safety warnings · wrong equipment or choice."
+#~ msgstr ""
+#~ "Ошибки в лаборатории: ошибки порядка · предупреждения о безопасности · "
+#~ "неверное оборудование или выбор."
+
+#~ msgid "Click a student's name to see their profile."
+#~ msgstr "Нажмите на имя студента, чтобы открыть профиль."
+
+#~ msgid "Enrolled students keep the course."
+#~ msgstr "У записанных студентов курс сохраняется."
+
+#~ msgid ""
+#~ "Students of the group are enrolled at once; students who join later are "
+#~ "enrolled when they open the platform."
+#~ msgstr ""
+#~ "Студенты группы записываются сразу; присоединившиеся позже — при входе на "
+#~ "платформу."
+
+#~ msgid "You have no course to attach yet."
+#~ msgstr "У вас пока нет курса для прикрепления."
+
+#~ msgid ""
+#~ "Only an empty group without courses can be deleted — enrolments remember "
+#~ "their group for the research exports. Otherwise make it inactive."
+#~ msgstr ""
+#~ "Удалить можно только пустую группу без курсов — записи хранят свою группу "
+#~ "для исследовательских выгрузок. Иначе сделайте её неактивной."
+
+#~ msgid "Groups you curate and groups attached to your courses."
+#~ msgstr ""
+#~ "Группы, которые вы курируете, и группы, прикреплённые к вашим курсам."
+
+#~ msgid "Find a student"
+#~ msgstr "Найти студента"
+
+#~ msgid "All, inactive too"
+#~ msgstr "Все, включая неактивные"
+
+#~ msgid ""
+#~ "Create a group, give the students its join code and attach it to your "
+#~ "course."
+#~ msgstr ""
+#~ "Создайте группу, дайте студентам её код и прикрепите группу к вашему "
+#~ "курсу."
+
+#~ msgid "Find"
+#~ msgstr "Найти"
+
+#~ msgid "No students found."
+#~ msgstr "Студенты не найдены."
 
 #~ msgid "The whole course"
 #~ msgstr "Весь курс"

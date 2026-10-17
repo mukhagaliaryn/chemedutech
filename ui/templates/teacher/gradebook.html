@@ -6,13 +6,13 @@
 {% block content %}
 <header class="flex flex-wrap items-end justify-between gap-4">
   <div>
-    <h1 class="text-h1">{% translate "Grade register" %}</h1>
-    {% if course %}<p class="mt-1 text-ink-soft">{{ course.title }} · {% translate "topic scores of completed topics; in-progress topics are shown greyed" %}</p>{% endif %}
+    <h1 class="flex items-center gap-2 text-h1">{% translate "Grade register" %}{% translate "T — topic, M — module (current score over completed topics; topics in progress are greyed). The letter follows the current course score; the final grade is set when every topic is completed." as h_gb %}{% include "components/hint.html" with text=h_gb %}</h1>
+    {% if course %}<p class="mt-1 text-ink-soft">{{ course.title }}</p>{% endif %}
   </div>
   {% if course %}
   <div class="flex flex-wrap gap-2">
-    <a class="btn btn-secondary" href="?{% if group %}group={{ group.pk }}&amp;{% endif %}format=csv">CSV</a>
-    <a class="btn btn-secondary" href="?{% if group %}group={{ group.pk }}&amp;{% endif %}format=xlsx">Excel (XLSX)</a>
+    <a class="btn btn-secondary" href="?{% if group %}group={{ group.pk }}&amp;{% endif %}format=csv">{% include "components/icons.html#download" %}CSV</a>
+    <a class="btn btn-secondary" href="?{% if group %}group={{ group.pk }}&amp;{% endif %}format=xlsx">{% include "components/icons.html#download" %}Excel (XLSX)</a>
   </div>
   {% endif %}
 </header>
@@ -63,6 +63,5 @@
     </tbody>
   </table>
 </div>
-<p class="text-caption text-ink-soft">{% translate "T — topic, M — module (current score over completed topics). The letter follows the current course score; the final grade is set when every topic is completed." %}</p>
 {% endif %}
 {% endblock %}

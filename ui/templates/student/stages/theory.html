@@ -15,7 +15,7 @@
         <label class="flex cursor-pointer items-center gap-2.5 text-[15px] font-semibold">
           <input type="checkbox" class="size-5" @change="$el.form.requestSubmit()">{% translate "I have read the theory" %}
         </label>
-        <noscript><button type="submit" class="btn btn-primary mt-2">{% translate "I have read the theory" %}</button></noscript>
+        <noscript><button type="submit" class="btn btn-primary mt-2">{% include "components/icons.html#check" %}{% translate "I have read the theory" %}</button></noscript>
       </form>
     {% endif %}
     {% if quiz and not sp.material_done_at %}<span class="text-[13px] text-ink-faint">{% translate "When you mark it, the checkpoint quiz opens" %}</span>{% endif %}

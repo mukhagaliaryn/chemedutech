@@ -10,7 +10,6 @@ urlpatterns = [
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
     path("signup/", views.signup, name="signup"),
     path("signup/cascade/", views.signup_cascade, name="signup_cascade"),
-    path("signup/username/", views.username_check, name="username_check"),
     path("signup/join-code/", views.join_code_check, name="join_code_check"),
     path(
         "password-reset/",

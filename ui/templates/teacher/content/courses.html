@@ -6,7 +6,6 @@
 {% block content %}
 <header>
   <h1 class="text-h1">{% translate "Course content" %}</h1>
-  <p class="mt-1 text-ink-soft">{% translate "Modules, topics and stages; theory, video, lab, practice fields and quizzes." %}</p>
 </header>
 {% for r in rows %}
   <section class="card flex flex-wrap items-center gap-5">
@@ -19,8 +18,8 @@
       </p>
     </div>
     <div class="flex flex-wrap gap-2">
-      <a class="btn btn-secondary" href="{% url 'student:course' r.course.slug %}">{% translate "Preview" %}</a>
-      <a class="btn btn-primary" href="{% url 'teacher:course_content' r.course.slug %}">{% if r.can_edit %}{% translate "Edit" %}{% else %}{% translate "Open" %}{% endif %}</a>
+      <a class="btn btn-secondary" href="{% url 'student:course' r.course.slug %}">{% include "components/icons.html#eye" %}{% translate "Preview" %}</a>
+      <a class="btn btn-primary" href="{% url 'teacher:course_content' r.course.slug %}">{% if r.can_edit %}{% include "components/icons.html#edit" %}{% translate "Edit" %}{% else %}{% translate "Open" %}{% include "components/icons.html#chevron-right" %}{% endif %}</a>
     </div>
   </section>
 {% empty %}

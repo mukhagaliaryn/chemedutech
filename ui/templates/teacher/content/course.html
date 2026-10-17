@@ -11,9 +11,9 @@
     <p class="mt-1 text-ink-soft">{{ course.get_status_display }} · {% if course.is_sequential %}{% translate "stages open in order" %}{% else %}{% translate "everything is open" %}{% endif %}</p>
   </div>
   <div class="flex flex-wrap gap-2">
-    <a class="btn btn-secondary" href="{% url 'student:course' course.slug %}">{% translate "Preview" %}</a>
+    <a class="btn btn-secondary" href="{% url 'student:course' course.slug %}">{% include "components/icons.html#eye" %}{% translate "Preview" %}</a>
     {% if course.can_edit %}
-      <a class="btn btn-secondary" href="{% url 'teacher:course_settings' course.slug %}">{% translate "Course settings" %}</a>
+      <a class="btn btn-secondary" href="{% url 'teacher:course_settings' course.slug %}">{% include "components/icons.html#settings" %}{% translate "Course settings" %}</a>
       <a class="btn btn-primary" href="{% url 'teacher:module_new' course.slug %}">{% include "components/icons.html#plus" %}{% translate "Module" %}</a>
     {% endif %}
   </div>
@@ -22,14 +22,14 @@
 <section class="flex flex-wrap items-center gap-4 rounded-lg border border-line bg-surface px-5 py-4" aria-labelledby="bm-title">
   <span class="tile bg-primary-50 text-primary-600">{% include "components/icons.html#check-square" with size=20 %}</span>
   <div class="min-w-0 flex-[1_1_320px]">
-    <h2 id="bm-title" class="text-h3">{% translate "Pre/post knowledge test" %}</h2>
+    <h2 id="bm-title" class="flex items-center gap-1.5 text-h3">{% translate "Pre/post knowledge test" %}{% translate "One test for the research: students take it before the first stage and again after the course. It is not graded and its answers are not shown." as h_bm %}{% include "components/hint.html" with text=h_bm %}</h2>
     <p class="text-sm text-ink-soft">
       {% if benchmark %}{% blocktranslate count n=benchmark.questions %}{{ n }} question{% plural %}{{ n }} questions{% endblocktranslate %} · {% blocktranslate with a=benchmark.pre b=benchmark.post %}taken: pre {{ a }}, post {{ b }}{% endblocktranslate %}
-      {% else %}{% translate "One test for the research: students take it before the first stage and again after the course. It is not graded and its answers are not shown." %}{% endif %}
+      {% else %}{% translate "Not created yet." %}{% endif %}
     </p>
   </div>
   {% if benchmark %}
-    <a class="btn btn-secondary btn-sm" href="{% url 'teacher:quiz' course.slug benchmark.quiz.pk %}">{% if course.can_edit %}{% translate "Edit" %}{% else %}{% translate "Open" %}{% endif %}</a>
+    <a class="btn btn-secondary btn-sm" href="{% url 'teacher:quiz' course.slug benchmark.quiz.pk %}">{% if course.can_edit %}{% include "components/icons.html#edit" %}{% translate "Edit" %}{% else %}{% translate "Open" %}{% endif %}</a>
   {% elif course.can_edit %}
     <form method="post" action="{% url 'teacher:benchmark_create' course.slug %}">{% csrf_token %}
       <button type="submit" class="btn btn-primary btn-sm">{% include "components/icons.html#plus" %}{% translate "Create the test" %}</button>
@@ -46,7 +46,7 @@
         {% if course.can_edit %}{% include "teacher/content/partials/move.html" %}{% endif %}
         <h2 class="min-w-0 flex-1 text-h3">{% blocktranslate with n=m.module.order %}Module {{ n }}{% endblocktranslate %} · {{ m.module.title }}</h2>
         {% if course.can_edit %}
-          <a class="btn btn-ghost btn-sm" href="{% url 'teacher:module' course.slug m.module.pk %}">{% translate "Edit" %}</a>
+          <a class="btn btn-ghost btn-sm" href="{% url 'teacher:module' course.slug m.module.pk %}">{% include "components/icons.html#edit" %}{% translate "Edit" %}</a>
           <a class="btn btn-secondary btn-sm" href="{% url 'teacher:topic_new' course.slug %}?module={{ m.module.pk }}">{% include "components/icons.html#plus" %}{% translate "Topic" %}</a>
           {% if not m.topics %}{% include "teacher/content/partials/delete.html" with what="module" pk=m.module.pk %}{% endif %}
         {% endif %}
@@ -62,9 +62,9 @@
               {% if course.can_edit %}
                 <form method="post" action="{% url 'teacher:topic_publish' course.slug t.topic.pk %}">{% csrf_token %}
                   <input type="hidden" name="published" value="{% if t.topic.is_published %}0{% else %}1{% endif %}">
-                  <button type="submit" class="btn btn-ghost btn-sm">{% if t.topic.is_published %}{% translate "Unpublish" %}{% else %}{% translate "Publish" %}{% endif %}</button>
+                  <button type="submit" class="btn btn-ghost btn-sm">{% if t.topic.is_published %}{% include "components/icons.html#eye-off" %}{% translate "Unpublish" %}{% else %}{% include "components/icons.html#eye" %}{% translate "Publish" %}{% endif %}</button>
                 </form>
-                <a class="btn btn-ghost btn-sm" href="{% url 'teacher:topic' course.slug t.topic.pk %}">{% translate "Edit" %}</a>
+                <a class="btn btn-ghost btn-sm" href="{% url 'teacher:topic' course.slug t.topic.pk %}">{% include "components/icons.html#edit" %}{% translate "Edit" %}</a>
                 <a class="btn btn-secondary btn-sm" href="{% url 'teacher:stage_new' course.slug %}?topic={{ t.topic.pk }}">{% include "components/icons.html#plus" %}{% translate "Stage" %}</a>
                 {% if not t.stages %}{% include "teacher/content/partials/delete.html" with what="topic" pk=t.topic.pk %}{% endif %}
               {% endif %}
@@ -93,6 +93,5 @@
     <li>{% include "components/empty_state.html" with title=l_title text=l_text icon="book" %}</li>
   {% endfor %}
 </ol>
-<p class="text-caption text-ink-soft">{% translate "Drag by ⋮⋮ or use the arrows. Topic numbers follow the order; students see published topics only." %}</p>
 {% endblock %}
 {% block scripts %}<script src="{% static 'js/sortable.js' %}" defer></script>{% endblock %}

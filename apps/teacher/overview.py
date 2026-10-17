@@ -199,6 +199,7 @@ def group_summaries(groups, rows) -> list[dict]:
             {
                 "group": g,
                 "students": g.students.count(),
+                "courses": [link.course for link in g.course_links.select_related("course")],
                 "progress": mean(r["share"] for r in members),
                 "score": mean(r["score"] for r in members),
             }

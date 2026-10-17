@@ -1,0 +1,3 @@
+{% comment %}
+Info tooltip (ⓘ) beside a heading, label or figure: keeps explanations off the page. text; size (default 16).
+{% endcomment %}<span class="tip inline-flex shrink-0 cursor-help align-middle text-ink-faint transition-colors hover:text-primary-600 focus-visible:text-primary-600" tabindex="0" role="note" aria-label="{{ text }}"><span aria-hidden="true">{% include "components/icons.html#help" with size=size|default:16 %}</span><span class="tipbox font-medium normal-case" aria-hidden="true">{{ text }}</span></span>

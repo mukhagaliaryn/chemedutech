@@ -97,7 +97,7 @@ graded answer of this field) + «criteria» (AI scores of an open answer); gradi
   {% else %}{# open #}
     <label class="sr-only" for="{{ name }}">{{ item.label }}</label>
     <textarea id="{{ name }}" class="input text-base leading-[26px]" name="{{ name }}" rows="5" maxlength="4000">{{ row.value }}</textarea>
-    <p class="flex items-center gap-2 text-[13px] text-ai-700">{% include "components/icons.html#sparkle" %}{% translate "This answer is graded by AI against the author's criteria and confirmed by the teacher." %}</p>
+    <p class="flex items-center gap-1.5 text-[13px] font-semibold text-ai-700">{% include "components/icons.html#sparkle" %}{% translate "AI grading" %}{% translate "This answer is graded by AI against the author's criteria and confirmed by the teacher." as h_ai %}{% include "components/hint.html" with text=h_ai %}</p>
     {% if grading %}
       <div class="grid gap-2" aria-hidden="true"><span class="shimmer h-3.5 rounded-[8px]"></span><span class="shimmer h-3.5 w-4/5 rounded-[8px]"></span><span class="shimmer h-3.5 w-3/5 rounded-[8px]"></span></div>
     {% elif row.criteria %}

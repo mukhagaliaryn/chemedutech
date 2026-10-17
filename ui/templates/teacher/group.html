@@ -4,40 +4,96 @@
 {% block crumb %}{% translate "Groups and students" %}{% endblock %}
 {% block page_title %}{{ group.name }}{% endblock %}
 {% block content %}
+{% comment %}
+Group page: header (identity, join code, «Add a student», ⋯ menu with settings / new code / delete),
+courses of the group (⋯ per course: post-test, detach), then the students list (list archetype: the row opens
+the student drawer). Every destructive or irreversible action asks in the shared confirm dialog.
+{% endcomment %}
 <header class="flex flex-wrap items-center justify-between gap-6 rounded-xl border border-line bg-surface p-6">
   <div class="flex min-w-0 flex-[1_1_360px] items-center gap-4">
-    <span class="grid size-[60px] shrink-0 place-items-center rounded-[20px] bg-primary-900 text-lg font-extrabold text-white">{{ group.name|slice:"-4:" }}</span>
+    <span class="num grid size-[60px] shrink-0 place-items-center rounded-[20px] {% if group.is_active %}bg-primary-900 text-white{% else %}bg-surface-sunken text-ink-faint{% endif %} text-lg font-extrabold">{{ group.name|slice:"-4:" }}</span>
     <div class="min-w-0">
-      <h1 class="text-[26px] leading-8 font-extrabold tracking-[-0.02em]">{{ group.name }}{% if not group.is_active %} <span class="text-base font-medium text-ink-faint">({% translate "inactive" %})</span>{% endif %}</h1>
-      <p class="mt-0.5 text-sm text-ink-soft">
+      <div class="flex flex-wrap items-center gap-2.5">
+        <h1 class="text-[26px] leading-8 font-extrabold tracking-[-0.02em]">{{ group.name }}</h1>
+        {% if not group.is_active %}<span class="badge font-bold">{% translate "inactive" %}</span>{% endif %}
+        {% include "teacher/partials/cohort.html" with cohort=group.research_cohort %}
+      </div>
+      <p class="mt-1 text-sm text-ink-soft">
         {% if group.specialty %}{{ group.specialty }} · {% endif %}{{ group.department }} ·
         {% blocktranslate with y=group.study_year %}year {{ y }}{% endblocktranslate %} ·
         {% blocktranslate count n=members %}{{ n }} student{% plural %}{{ n }} students{% endblocktranslate %}
-        · <a class="link font-semibold" href="{% url 'teacher:group_edit' group.pk %}">{% translate "Edit the group" %}</a>
       </p>
     </div>
   </div>
-  <div class="flex flex-wrap items-end gap-4">
-    <div class="flex flex-col gap-1.5">
-      <span class="text-caption font-semibold text-ink-soft">{% translate "Join code" %}</span>
-      <span class="flex gap-1.5">
-        <span class="num inline-flex h-[42px] items-center rounded-[12px] border border-dashed border-line-strong bg-canvas px-3.5 font-extrabold tracking-[.12em]">{{ group.join_code }}</span>
-        <button type="button" class="btn btn-secondary btn-sm h-[42px]" data-copy="{{ group.join_code }}" data-copied-label="{% translate 'Copied ✓' %}"><span data-copy-label>{% translate "Copy" %}</span></button>
+  <div class="flex flex-wrap items-center gap-2.5">
+    <span class="flex items-center gap-1.5" title="{% translate 'Students enter this code when signing up' %}">
+      <span class="sr-only">{% translate "Join code" %}</span>
+      <span class="num inline-flex h-11 items-center gap-2 rounded-[12px] border border-dashed border-line-strong bg-canvas px-3.5 font-extrabold tracking-[.12em]">{% include "components/icons.html#key" with size=16 icon_class="text-ink-faint" %}{{ group.join_code }}</span>
+      <button type="button" class="btn btn-secondary btn-icon" data-copy="{{ group.join_code }}" data-copied-label="✓" aria-label="{% translate 'Copy the join code' %}" title="{% translate 'Copy the join code' %}"><span data-copy-label>{% include "components/icons.html#copy" %}</span></button>
+    </span>
+    <button type="button" class="btn btn-primary" data-open-modal="add-student">{% include "components/icons.html#user-plus" %}{% translate "Add a student" %}</button>
+    <div class="relative" x-data="{ menu: false }" @click.outside="menu = false" @keydown.escape="menu = false">
+      <button type="button" class="btn btn-secondary btn-icon" @click="menu = !menu" :aria-expanded="menu.toString()" aria-haspopup="menu" aria-label="{% translate 'Group actions' %}">{% include "components/icons.html#more" %}</button>
+      <div x-show="menu" x-cloak class="menu top-12 right-0 w-64" role="menu">
+        <a class="menu-item" role="menuitem" href="{% url 'teacher:group_edit' group.pk %}">{% include "components/icons.html#edit" %}{% translate "Group settings" %}</a>
         <form method="post" action="{% url 'teacher:group_join_code' group.pk %}">{% csrf_token %}
-          <button type="submit" class="btn btn-ghost btn-sm h-[42px]" title="{% translate 'Make a new code; the old one stops working' %}">{% translate "New code" %}</button>
+          <button type="submit" class="menu-item" role="menuitem" data-confirm="{% translate 'Make a new join code?' %}" data-confirm-text="{% translate 'The current code stops working; students who have not joined yet need the new one.' %}" data-confirm-label="{% translate 'New code' %}" data-confirm-icon="refresh">{% include "components/icons.html#refresh" %}{% translate "New join code" %}</button>
         </form>
-      </span>
+        <div class="menu-sep"></div>
+        <form method="post" action="{% url 'teacher:group_delete' group.pk %}">{% csrf_token %}
+          <button type="submit" class="menu-item menu-item-danger" role="menuitem" data-confirm="{% blocktranslate with g=group.name %}Delete the group {{ g }}?{% endblocktranslate %}" data-confirm-text="{% translate 'Only an empty group without courses can be deleted; otherwise make it inactive in the settings.' %}" data-confirm-label="{% translate 'Delete' %}" data-confirm-variant="danger">{% include "components/icons.html#trash" %}{% translate "Delete the group" %}</button>
+        </form>
+      </div>
     </div>
-    <form method="post" action="{% url 'teacher:group_cohort' group.pk %}" class="flex flex-col gap-1.5" x-data>
-      {% csrf_token %}
-      <label class="text-caption font-semibold text-ink-soft" for="cohort">{% translate "Research group" %}</label>
-      <select id="cohort" name="research_cohort" class="input h-[42px] w-auto rounded-[12px] font-semibold" @change="$el.form.requestSubmit()">
-        {% for value, label in cohort_form.fields.research_cohort.choices %}<option value="{{ value }}"{% if value == group.research_cohort %} selected{% endif %}>{{ label }}</option>{% endfor %}
-      </select>
-      <noscript><button type="submit" class="btn btn-secondary btn-sm">{% translate "Save" %}</button></noscript>
-    </form>
   </div>
 </header>
+
+<section aria-labelledby="streams" class="rounded-card border border-line bg-surface">
+  <div class="flex flex-wrap items-center justify-between gap-3 px-6 pt-5 pb-3">
+    <h2 id="streams" class="text-[17px] font-extrabold">{% translate "Courses of the group" %}</h2>
+    {% if attach_form.fields.course.queryset.exists %}
+      <button type="button" class="btn btn-secondary btn-sm" data-open-modal="attach-course">{% include "components/icons.html#link" %}{% translate "Attach a course" %}</button>
+    {% endif %}
+  </div>
+  {% if links %}
+  <ul class="flex flex-col px-3 pb-3">
+    {% for link in links %}
+      <li class="flex flex-wrap items-center gap-3 rounded-lg px-3 py-2.5 hover:bg-canvas">
+        <span class="grid size-9 shrink-0 place-items-center rounded-[10px] bg-primary-50 text-primary-600">{% include "components/icons.html#book" with size=16 %}</span>
+        <span class="flex min-w-0 flex-1 flex-col leading-5">
+          <span class="truncate font-semibold">{{ link.course.title }}</span>
+          <span class="truncate text-caption font-normal text-ink-faint">{% if link.teacher %}{{ link.teacher.full_name }}{% endif %}{% if link.starts_on or link.ends_on %}{% if link.teacher %} · {% endif %}{{ link.starts_on|date:"d.m.Y"|default:"…" }} – {{ link.ends_on|date:"d.m.Y"|default:"…" }}{% endif %}</span>
+        </span>
+        {% if link.course.benchmark_quiz_id and link.posttest_opened_at %}<span class="badge badge-success font-bold">{% translate "Post-test open" %}</span>{% endif %}
+        {% if link.course in courses %}
+        <div class="relative" x-data="{ menu: false }" @click.outside="menu = false" @keydown.escape="menu = false">
+          <button type="button" class="btn btn-ghost btn-icon btn-sm" @click="menu = !menu" :aria-expanded="menu.toString()" aria-haspopup="menu" aria-label="{% translate 'Course actions' %}">{% include "components/icons.html#more" %}</button>
+          <div x-show="menu" x-cloak class="menu top-10 right-0 w-72" role="menu">
+            <a class="menu-item" role="menuitem" href="?course={{ link.course.slug }}">{% include "components/icons.html#users" %}{% translate "Students in this course" %}</a>
+            {% if link.course.benchmark_quiz_id %}
+              <form method="post" action="{% url 'teacher:group_posttest' group.pk link.pk %}">{% csrf_token %}
+                <input type="hidden" name="open" value="{% if link.posttest_opened_at %}0{% else %}1{% endif %}">
+                {% if link.posttest_opened_at %}
+                  <button type="submit" class="menu-item" role="menuitem" data-confirm="{% translate 'Close the post-test?' %}" data-confirm-text="{% translate 'It opens again for each student after the course. Results already taken stay.' %}" data-confirm-label="{% translate 'Close' %}" data-confirm-icon="lock">{% include "components/icons.html#lock" %}{% translate "Close the post-test" %}</button>
+                {% else %}
+                  <button type="submit" class="menu-item" role="menuitem" data-confirm="{% translate 'Open the post-test for the whole group?' %}" data-confirm-text="{% translate 'Every student of the group can take it once, even before finishing the course.' %}" data-confirm-label="{% translate 'Open' %}" data-confirm-icon="unlock">{% include "components/icons.html#unlock" %}{% translate "Open the post-test" %}</button>
+                {% endif %}
+              </form>
+            {% endif %}
+            <div class="menu-sep"></div>
+            <form method="post" action="{% url 'teacher:group_detach' group.pk link.pk %}">{% csrf_token %}
+              <button type="submit" class="menu-item menu-item-danger" role="menuitem" data-confirm="{% translate 'Detach the group from the course?' %}" data-confirm-text="{% translate 'New members are no longer enrolled. Enrolled students keep the course and their progress.' %}" data-confirm-label="{% translate 'Detach' %}" data-confirm-variant="danger" data-confirm-icon="unlink">{% include "components/icons.html#unlink" %}{% translate "Detach from the course" %}</button>
+            </form>
+          </div>
+        </div>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p class="px-6 pb-5 text-sm text-ink-soft">{% translate "No courses yet." %}</p>
+  {% endif %}
+</section>
 
 {% if courses|length > 1 %}
 <nav class="flex flex-wrap gap-2" aria-label="{% translate 'Courses' %}">
@@ -45,93 +101,68 @@
 </nav>
 {% endif %}
 
-<div class="flex flex-wrap items-center justify-between gap-3" x-data>
-  <form method="get" class="flex flex-wrap items-center gap-2" role="search">
-    {% if course %}<input type="hidden" name="course" value="{{ course.slug }}">{% endif %}
-    {% if show %}<input type="hidden" name="show" value="{{ show }}">{% endif %}
-    <label class="input-icon w-[280px] max-w-full"><span class="sr-only">{% translate "Search for a student" %}</span>
-      {% include "components/icons.html#search" %}<input type="search" name="q" value="{{ q }}" class="input" placeholder="{% translate 'Search for a student' %}"></label>
-    {% with base=course.slug|default:"" %}
-      <a class="chip h-11 rounded-md" href="?course={{ base }}"{% if not show %} aria-current="page"{% endif %}>{% translate "All" %}<span class="chip-count">{{ counts.all }}</span></a>
-      <a class="chip h-11 rounded-md" href="?course={{ base }}&amp;show=attention"{% if show == "attention" %} aria-current="page"{% endif %}>{% translate "Needs attention" %}<span class="chip-count">{{ counts.attention }}</span></a>
-      <a class="chip h-11 rounded-md" href="?course={{ base }}&amp;show=inactive"{% if show == "inactive" %} aria-current="page"{% endif %}>{% translate "Inactive" %}<span class="chip-count">{{ counts.inactive }}</span></a>
-    {% endwith %}
-  </form>
-  <div class="flex gap-2">
-    {% if course %}<a class="btn btn-secondary" href="?course={{ course.slug }}&amp;format=csv">{% include "components/icons.html#download" %}{% translate "CSV export" %}</a>{% endif %}
-    <button type="button" class="btn btn-primary" data-open-modal="add-student">{% include "components/icons.html#plus" %}{% translate "Add a student" %}</button>
-  </div>
+<div class="list-toolbar">
+  {% translate "Search for a student" as l_search %}
+  {% include "components/search_field.html" with placeholder=l_search value=q keep=keep_filters %}
+  <nav class="flex flex-wrap gap-2" aria-label="{% translate 'Filter' %}">
+    <a class="chip h-11" href="{% querystring show=None %}"{% if not show %} aria-current="page"{% endif %}>{% translate "All" %}<span class="chip-count">{{ counts.all }}</span></a>
+    <a class="chip h-11" href="{% querystring show='attention' %}"{% if show == "attention" %} aria-current="page"{% endif %}>{% translate "Needs attention" %}<span class="chip-count">{{ counts.attention }}</span></a>
+    <a class="chip h-11" href="{% querystring show='inactive' %}"{% if show == "inactive" %} aria-current="page"{% endif %}>{% translate "Inactive" %}<span class="chip-count">{{ counts.inactive }}</span></a>
+  </nav>
+  {% if course %}<a class="btn btn-secondary ml-auto" href="{% querystring format='csv' %}" title="{% translate 'Download the table as CSV' %}">{% include "components/icons.html#download" %}CSV</a>{% endif %}
 </div>
 
-<section aria-label="{% translate 'Students' %}" class="rounded-card border border-line bg-surface" x-data="{ drawer: false }" @keydown.escape.window="drawer = false">
-  <div class="overflow-x-auto rounded-card">
-    <table class="table min-w-[940px]">
-      <thead><tr>
-        <th scope="col">{% translate "Student" %}</th>
-        <th scope="col">{% translate "Now" %}</th>
-        <th scope="col" class="w-[180px]">{% translate "Progress" %}</th>
-        <th scope="col">{% translate "Score" %}</th>
-        <th scope="col" title="{% translate 'order errors · safety warnings · wrong equipment or choice' %}">{% translate "Lab errors" %}</th>
-        <th scope="col">{% translate "Activity" %}</th>
-        <th scope="col"><span class="sr-only">{% translate "Actions" %}</span></th>
-      </tr></thead>
-      <tbody>
-        {% for r in rows %}{% with risky=r.attention %}
-          <tr{% if risky %} class="[&>td]:bg-[#fff8f7]"{% endif %}>
-            <td>
-              <button type="button" class="flex items-center gap-3 text-left font-bold text-ink hover:text-primary-700"
-                      hx-get="{% url 'teacher:student_drawer' r.student.pk %}?course={{ course.slug }}" hx-target="#student-drawer" @click="drawer = true">
-                {% if risky %}{% include "components/avatar.html" with person=r.student shape="square" tone="danger" %}{% else %}{% include "components/avatar.html" with person=r.student shape="square" tone="neutral" %}{% endif %}
-                {{ r.student.full_name|default:r.student.username }}
-              </button>
-            </td>
-            <td>
-              {% if r.position.awaiting %}<span class="badge badge-warning font-bold">{% translate "Practice awaiting check" %}</span>
-              {% elif r.inactive_days is not None and r.inactive_days >= 7 %}<span class="badge badge-danger font-bold">{{ r.position.text|default:"—" }} · {% blocktranslate count n=r.inactive_days %}{{ n }} day inactive{% plural %}{{ n }} days inactive{% endblocktranslate %}</span>
-              {% elif r.position.text %}<span class="badge {% if r.position.stage %}badge-info{% else %}badge-success{% endif %} font-bold">{{ r.position.text }}</span>
-              {% else %}—{% endif %}
-            </td>
-            <td>{% include "teacher/partials/progress_cell.html" with row=r %}</td>
-            <td class="num font-extrabold">{% if r.score is not None %}{{ r.score|floatformat:1 }}{% else %}—{% endif %}</td>
-            <td class="num" title="{% translate 'order errors · safety warnings · wrong equipment or choice' %}">{% if r.errors %}{{ r.errors.order }} · {{ r.errors.safety }} · {{ r.errors.wrong }}{% else %}—{% endif %}</td>
-            <td class="text-ink-soft">{% if r.last %}{{ r.last|ago }}{% else %}—{% endif %}</td>
-            <td class="relative" x-data="{ menu: false }" @click.outside="menu = false">
-              <button type="button" class="btn btn-secondary btn-icon btn-sm" @click="menu = !menu" :aria-expanded="menu.toString()" aria-label="{% translate 'Actions' %}">{% include "components/icons.html#more" %}</button>
-              <div x-show="menu" x-cloak class="menu top-12 right-6 w-56" role="menu">
-                <a class="menu-item" role="menuitem" href="{% url 'teacher:student' r.student.pk %}?course={{ course.slug }}">{% translate "Open the profile" %}</a>
-                <a class="menu-item" role="menuitem" href="{% url 'teacher:student' r.student.pk %}?course={{ course.slug }}#stages">{% translate "Open a stage by hand" %}</a>
-                {% if r.student.student_profile.group_id == group.pk %}
-                  <div class="menu-sep"></div>
-                  <form method="post" action="{% url 'teacher:group_remove_student' group.pk r.student.pk %}" x-data="{ sure: false }">{% csrf_token %}
-                    <button type="button" class="menu-item menu-item-danger" x-show="!sure" @click="sure = true">{% translate "Remove from the group" %}</button>
-                    <button type="submit" class="menu-item menu-item-danger font-bold" x-show="sure" x-cloak>{% translate "Remove from the group?" %}</button>
-                  </form>
-                {% endif %}
-              </div>
-            </td>
-          </tr>
-        {% endwith %}{% endfor %}
-        {% for m in missing %}
-          <tr class="text-ink-soft">
-            <td><a href="{% url 'teacher:student' m.pk %}" class="flex items-center gap-3 font-bold">{% include "components/avatar.html" with person=m shape="square" tone="neutral" %}{{ m.full_name|default:m.username }}</a></td>
-            <td colspan="5" class="text-sm">{% if course %}{% translate "Not enrolled in this course" %}{% else %}{% translate "The group has no course yet" %}{% endif %}</td>
-            <td>
-              <form method="post" action="{% url 'teacher:group_remove_student' group.pk m.pk %}" x-data="{ sure: false }">{% csrf_token %}
-                <button type="button" class="text-sm hover:text-danger-600" x-show="!sure" @click="sure = true">{% translate "Remove" %}</button>
-                <button type="submit" class="text-sm font-semibold text-danger-600" x-show="sure" x-cloak>{% translate "Remove from the group?" %}</button>
-              </form>
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
+<section aria-label="{% translate 'Students' %}" class="table-wrap" x-data="{ drawer: false }" @keydown.escape.window="drawer = false">
+  <table class="table table-rows min-w-[900px]">
+    <thead><tr>
+      <th scope="col">{% translate "Student" %}</th>
+      <th scope="col">{% translate "Now" %}</th>
+      <th scope="col" class="w-[180px]">{% translate "Progress" %}</th>
+      <th scope="col" class="text-right">{% translate "Score" %}</th>
+      <th scope="col"><span class="tip inline-flex items-center gap-1" tabindex="0">{% translate "Lab errors" %}{% include "components/icons.html#help" with size=14 %}<span class="tipbox">{% translate "order errors · safety warnings · wrong equipment or choice" %}</span></span></th>
+      <th scope="col">{% translate "Activity" %}</th>
+      <th scope="col" class="w-14"><span class="sr-only">{% translate "Open" %}</span></th>
+    </tr></thead>
+    <tbody>
+      {% for r in rows %}{% with risky=r.attention %}
+        <tr{% if risky %} class="[&>td]:bg-danger-50/40"{% endif %}>
+          <td>
+            <button type="button" class="row-target flex items-center gap-3 font-bold"
+                    hx-get="{% url 'teacher:student_drawer' r.student.pk %}?course={{ course.slug }}&amp;group={{ group.pk }}" hx-target="#student-drawer" @click="drawer = true">
+              {% if risky %}{% include "components/avatar.html" with person=r.student shape="square" tone="danger" %}{% else %}{% include "components/avatar.html" with person=r.student shape="square" tone="neutral" %}{% endif %}
+              {{ r.student.full_name|default:r.student.username }}
+            </button>
+          </td>
+          <td>
+            {% if r.position.awaiting %}<span class="badge badge-warning font-bold">{% translate "Practice awaiting check" %}</span>
+            {% elif r.inactive_days is not None and r.inactive_days >= 7 %}<span class="badge badge-danger font-bold">{{ r.position.text|default:"—" }} · {% blocktranslate count n=r.inactive_days %}{{ n }} day inactive{% plural %}{{ n }} days inactive{% endblocktranslate %}</span>
+            {% elif r.position.text %}<span class="badge {% if r.position.stage %}badge-info{% else %}badge-success{% endif %} font-bold">{{ r.position.text }}</span>
+            {% else %}<span class="text-ink-faint">—</span>{% endif %}
+          </td>
+          <td>{% include "teacher/partials/progress_cell.html" with row=r %}</td>
+          <td class="num text-right font-extrabold">{% if r.score is not None %}{{ r.score|floatformat:1 }}{% else %}<span class="font-normal text-ink-faint">—</span>{% endif %}</td>
+          <td class="num">{% if r.errors %}{{ r.errors.order }} · {{ r.errors.safety }} · {{ r.errors.wrong }}{% else %}<span class="text-ink-faint">—</span>{% endif %}</td>
+          <td class="text-ink-soft">{% if r.last %}{{ r.last|ago }}{% else %}—{% endif %}</td>
+          <td class="text-right"><span class="row-chevron">{% include "components/icons.html#chevron-right" with size=20 %}</span></td>
+        </tr>
+      {% endwith %}{% endfor %}
+      {% for m in missing %}
+        <tr class="text-ink-soft">
+          <td>
+            <button type="button" class="row-target flex items-center gap-3 font-bold"
+                    hx-get="{% url 'teacher:student_drawer' m.pk %}?group={{ group.pk }}" hx-target="#student-drawer" @click="drawer = true">
+              {% include "components/avatar.html" with person=m shape="square" tone="neutral" %}{{ m.full_name|default:m.username }}
+            </button>
+          </td>
+          <td colspan="5" class="text-sm">{% if course %}{% translate "Not enrolled in this course" %}{% else %}{% translate "The group has no course yet" %}{% endif %}</td>
+          <td class="text-right"><span class="row-chevron">{% include "components/icons.html#chevron-right" with size=20 %}</span></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
   {% if not rows and not missing %}
-    <p class="p-8 text-center text-ink-soft">{% if q or show %}{% translate "No student matches the filter." %}{% else %}{% translate "No students yet. Give them the join code or add their accounts." %}{% endif %}</p>
+    <p class="p-8 text-center text-ink-soft">{% if q or show %}{% translate "No student matches the filter." %}{% else %}{% translate "No students yet." %}{% endif %}</p>
   {% endif %}
-  <p class="border-t border-surface-sunken px-6 py-3 text-caption font-normal text-ink-faint">
-    {% translate "Lab errors: order errors · safety warnings · wrong equipment or choice." %} {% translate "Click a student's name to see their profile." %}
-  </p>
 
   <template x-teleport="body">
     <div x-show="drawer" x-cloak>
@@ -151,59 +182,33 @@
       <button type="submit" formmethod="dialog" formnovalidate class="close-btn" aria-label="{% translate 'Close' %}">{% include "components/icons.html#x" %}</button>
     </div>
     {% include "components/input.html" with field=add_form.query %}
-    <div class="rounded-lg bg-primary-50 px-4 py-3.5 text-sm leading-[21px] text-primary-900">{% blocktranslate with code=group.join_code %}Or give the student the join code <b class="num tracking-[.1em]">{{ code }}</b> — they join the group when signing up.{% endblocktranslate %}</div>
+    <p class="flex items-center gap-2 rounded-lg bg-primary-50 px-4 py-3 text-sm text-primary-900">{% include "components/icons.html#key" with size=16 %}{% blocktranslate with code=group.join_code %}Join code: <b class="num tracking-[.1em]">{{ code }}</b>{% endblocktranslate %}</p>
     <div class="flex justify-end gap-2.5">
       <button type="submit" formmethod="dialog" formnovalidate class="btn btn-secondary">{% translate "Cancel" %}</button>
-      <button type="submit" class="btn btn-primary">{% translate "Add" %}</button>
+      <button type="submit" class="btn btn-primary">{% include "components/icons.html#user-plus" %}{% translate "Add" %}</button>
     </div>
   </form>
 </dialog>
 
-<section aria-labelledby="streams" class="card flex flex-col gap-4">
-  <h2 id="streams" class="text-[17px] font-extrabold">{% translate "Courses of the group" %}</h2>
-  {% if links %}
-  <ul class="flex flex-col">
-    {% for link in links %}
-      <li class="flex flex-wrap items-center gap-3 border-surface-sunken py-2.5 not-last:border-b">
-        <span class="min-w-0 flex-1">
-          <span class="font-medium">{{ link.course.title }}</span>
-          <span class="text-body-sm text-ink-soft">{% if link.teacher %} · {{ link.teacher.full_name }}{% endif %}{% if link.starts_on or link.ends_on %} · {{ link.starts_on|date:"d.m.Y"|default:"…" }} – {{ link.ends_on|date:"d.m.Y"|default:"…" }}{% endif %}</span>
-        </span>
-        {% if link.course in courses and link.course.benchmark_quiz_id %}
-        <form method="post" action="{% url 'teacher:group_posttest' group.pk link.pk %}">{% csrf_token %}
-          <input type="hidden" name="open" value="{% if link.posttest_opened_at %}0{% else %}1{% endif %}">
-          {% if link.posttest_opened_at %}
-            <span class="badge badge-success mr-1 font-bold">{% translate "Post-test open" %}</span>
-            <button type="submit" class="btn btn-ghost btn-sm">{% translate "Close the post-test" %}</button>
-          {% else %}
-            <button type="submit" class="btn btn-secondary btn-sm" title="{% translate 'Otherwise it opens for each student after the course' %}">{% translate "Open the post-test" %}</button>
-          {% endif %}
-        </form>
-        {% endif %}
-        {% if link.course in courses %}
-        <form method="post" action="{% url 'teacher:group_detach' group.pk link.pk %}" x-data="{ sure: false }">{% csrf_token %}
-          <button type="button" class="btn btn-ghost btn-sm" x-show="!sure" @click="sure = true">{% translate "Detach" %}</button>
-          <span x-show="sure" x-cloak class="flex items-center gap-2 text-body-sm">
-            {% translate "Enrolled students keep the course." %}
-            <button type="submit" class="btn btn-secondary btn-sm">{% translate "Detach" %}</button>
-          </span>
-        </form>
-        {% endif %}
-      </li>
-    {% endfor %}
-  </ul>
-  {% endif %}
-  {% if attach_form.fields.course.queryset.exists %}
-  <form method="post" action="{% url 'teacher:group_attach' group.pk %}" class="grid items-end gap-3 sm:grid-cols-[2fr_1fr_1fr_auto]">
+{% if attach_form.fields.course.queryset.exists %}
+<dialog id="attach-course" class="dialog max-w-[560px]" aria-labelledby="attach-course-title">
+  <form method="post" action="{% url 'teacher:group_attach' group.pk %}" class="flex flex-col gap-4">
     {% csrf_token %}
+    <div class="flex items-center justify-between gap-3">
+      <h2 id="attach-course-title" class="text-[22px] font-extrabold">{% translate "Attach a course" %}</h2>
+      <button type="submit" formmethod="dialog" formnovalidate class="close-btn" aria-label="{% translate 'Close' %}">{% include "components/icons.html#x" %}</button>
+    </div>
     {% include "components/input.html" with field=attach_form.course %}
-    {% include "components/input.html" with field=attach_form.starts_on %}
-    {% include "components/input.html" with field=attach_form.ends_on %}
-    <button type="submit" class="btn btn-primary">{% translate "Attach" %}</button>
+    <div class="grid gap-4 sm:grid-cols-2">
+      {% include "components/input.html" with field=attach_form.starts_on %}
+      {% include "components/input.html" with field=attach_form.ends_on %}
+    </div>
+    <p class="text-sm text-ink-soft">{% translate "The group's students are enrolled at once." %}</p>
+    <div class="flex justify-end gap-2.5">
+      <button type="submit" formmethod="dialog" formnovalidate class="btn btn-secondary">{% translate "Cancel" %}</button>
+      <button type="submit" class="btn btn-primary">{% include "components/icons.html#link" %}{% translate "Attach" %}</button>
+    </div>
   </form>
-  <p class="text-body-sm text-ink-soft">{% translate "Students of the group are enrolled at once; students who join later are enrolled when they open the platform." %}</p>
-  {% elif not links %}
-  <p class="text-sm text-ink-soft">{% translate "You have no course to attach yet." %}</p>
-  {% endif %}
-</section>
+</dialog>
+{% endif %}
 {% endblock %}

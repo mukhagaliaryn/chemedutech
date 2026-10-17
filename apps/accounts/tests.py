@@ -15,7 +15,6 @@ def signup_data(group, /, **overrides):
         "first_name": "Айгерім",
         "last_name": "Сапарова",
         "email": "Aigerim@Example.kz",
-        "username": "aigerim.s",
         "password1": "Chem-lab-2026!",
         "password2": "Chem-lab-2026!",
         "group_mode": "list",
@@ -114,7 +113,7 @@ class SignupTests(TestCase):
     def test_signup_from_list_creates_student_with_profile(self):
         r = self.client.post(reverse("accounts:signup"), signup_data(self.group, research_consent="on"))
         self.assertRedirects(r, reverse("student:dashboard"), fetch_redirect_response=False)
-        user = User.objects.get(username="aigerim.s")
+        user = User.objects.get(username="aigerim")
         self.assertEqual(user.role, User.Role.STUDENT)
         self.assertFalse(user.is_staff)
         profile = user.student_profile
@@ -128,7 +127,7 @@ class SignupTests(TestCase):
         data = signup_data(self.group, group_mode="code", join_code=f" {self.group.join_code.lower()} ")
         data.update(university="", faculty="", department="", group="")
         self.client.post(reverse("accounts:signup"), data)
-        profile = User.objects.get(username="aigerim.s").student_profile
+        profile = User.objects.get(username="aigerim").student_profile
         self.assertEqual(profile.group, self.group)
         self.assertFalse(profile.research_consent)
         self.assertIsNone(profile.research_consent_at)
@@ -159,7 +158,7 @@ class SignupTests(TestCase):
     def test_teacher_cannot_sign_up_themselves(self):
         data = signup_data(self.group, role="teacher", is_staff="on", is_superuser="on")
         self.client.post(reverse("accounts:signup"), data)
-        user = User.objects.get(username="aigerim.s")
+        user = User.objects.get(username="aigerim")
         self.assertEqual(user.role, User.Role.STUDENT)
         self.assertFalse(user.is_staff or user.is_superuser)
 
@@ -168,9 +167,20 @@ class SignupTests(TestCase):
         r = self.client.post(reverse("accounts:signup"), signup_data(self.group))
         self.assertTrue(r.context["form"].has_error("email"))
 
-    def test_username_cannot_contain_at_sign(self):
-        r = self.client.post(reverse("accounts:signup"), signup_data(self.group, username="a@b"))
-        self.assertTrue(r.context["form"].has_error("username"))
+    def test_login_is_made_from_the_email_and_kept_unique(self):
+        make_student("aigerim", email="first@example.kz")
+        make_student("Aigerim-2", email="second@example.kz")
+        self.client.post(reverse("accounts:signup"), signup_data(self.group, username="ignored"))
+        user = User.objects.get(email__iexact="aigerim@example.kz")
+        self.assertEqual(user.username, "aigerim-3")
+        self.assertFalse(User.objects.filter(username="ignored").exists())
+
+    def test_username_from_email_keeps_allowed_characters_only(self):
+        from apps.accounts.services.registration import username_from_email
+
+        self.assertEqual(username_from_email("Ай.Gerim+lab@uni.kz"), "gerimlab")
+        self.assertEqual(username_from_email("Әсем@uni.kz"), "user")
+        self.assertEqual(username_from_email("a.b_c-d@uni.kz"), "a.b_c-d")
 
     def test_signed_in_user_is_redirected(self):
         self.client.force_login(make_student("s"))

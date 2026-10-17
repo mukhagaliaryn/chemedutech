@@ -22,7 +22,6 @@ The course's pre/post knowledge test (STEP-22): intro with the rules → the tes
       <p class="max-w-[520px] text-ink-soft">
         {% if phase == "pre" %}{% translate "This is your starting point. The same test is given again at the end of the course — then you will see how much you have learned." %}
         {% else %}{% translate "Compare it with your entry result: the difference shows what the course has given you." %}{% endif %}
-        {% translate "The test does not affect your course grade; the answers are not shown so that it stays a fair measure." %}
       </p>
       <a class="btn btn-primary mt-4 h-[46px] px-[22px] text-[15px] font-bold" href="{{ course_url }}">{% if phase == "pre" %}{% translate "Start learning" %}{% else %}{% translate "Back to the course" %}{% endif %}{% include "components/icons.html#arrow-right" %}</a>
     </div>

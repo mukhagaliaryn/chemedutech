@@ -3,7 +3,7 @@
   <div class="flex items-center gap-3">
     <span class="stage-lab grid size-9 place-items-center rounded-md text-white">{% include "components/icons.html#lab" with size=18 %}</span>
     <div>
-      <h2 class="text-h3">{% translate "Virtual lab" %}</h2>
+      <h2 class="flex items-center gap-1.5 text-h3">{% translate "Virtual lab" %}{% translate "The stage score is the average of your best attempt in every experiment: actions in the right order, the journal and the analysis." as h_lab %}{% include "components/hint.html" with text=h_lab %}</h2>
       <p class="text-body-sm text-ink-soft">{% translate "Do the experiments in order, fill in the lab journal and send the analysis." %}</p>
     </div>
   </div>
@@ -28,7 +28,6 @@
       <li class="text-ink-soft">{% translate "The lab is not set up yet." %}</li>
     {% endfor %}
   </ol>
-  <p class="text-body-sm text-ink-soft">{% translate "The stage score is the average of your best attempt in every experiment: actions in the right order, the journal and the analysis." %}</p>
   {% if lab_threads %}
     {% url 'student:comment' place.course.slug place.topic.number stage.pk as comment_url %}
     {% for t in lab_threads %}

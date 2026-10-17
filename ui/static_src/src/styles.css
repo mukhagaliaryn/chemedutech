@@ -735,6 +735,70 @@
     background: var(--color-surface);
   }
 
+  /* Clickable rows (list archetype): the row's main <a>/<button class="row-target"> is stretched over the
+     whole row; extra controls get .row-action to stay on top. Hover tint + a chevron that nudges right. */
+  .table-rows tbody tr {
+    position: relative;
+  }
+  .table-rows tbody tr:has(.row-target) {
+    cursor: pointer;
+  }
+  .table-rows .row-target {
+    color: inherit;
+    text-align: left;
+  }
+  .table-rows .row-target::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+  .table-rows .row-target:focus-visible {
+    outline: none;
+  }
+  .table-rows tbody tr:has(.row-target:focus-visible) {
+    outline: 2px solid var(--color-primary-600);
+    outline-offset: -2px;
+  }
+  .table-rows tbody tr:hover td {
+    background: var(--color-primary-50);
+  }
+  .table-rows .row-action {
+    position: relative;
+    z-index: 1;
+  }
+  .row-chevron {
+    display: inline-grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    color: var(--color-ink-faint);
+    transition:
+      transform 0.15s,
+      color 0.15s,
+      background-color 0.15s;
+  }
+  .table-rows tbody tr:hover .row-chevron {
+    color: var(--color-primary-600);
+    background: var(--color-surface);
+    transform: translateX(3px);
+  }
+  /* List archetype: page head (title + count + actions) → toolbar (search, filter chips, extra actions)
+     → .table-wrap card with .table.table-rows. */
+  .list-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .list-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+
   /* ---- Sidebar navigation ---------------------------------------------- */
   .nav-item {
     position: relative;

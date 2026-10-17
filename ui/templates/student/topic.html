@@ -36,10 +36,10 @@
       {% if row.status == "passed" %}{% translate "Passed" as l %}{% elif row.status == "awaiting_check" %}{% translate "Awaiting check" as l %}{% elif row.status == "in_progress" %}{% translate "In progress" as l %}{% elif row.status == "locked" %}{% translate "Locked" as l %}{% else %}{% translate "Available" as l %}{% endif %}
       {% include "components/badge.html" with status=row.status label=l dot=True class="font-bold" %}
       {% if row.status == "locked" %}
-        <a class="btn btn-ghost btn-sm" href="{{ row.url }}">{% translate "Why locked?" %}</a>
+        <a class="btn btn-ghost btn-sm" href="{{ row.url }}">{% include "components/icons.html#lock" %}{% translate "Why locked?" %}</a>
       {% else %}
         <a class="btn {% if row.status == 'passed' %}btn-secondary{% else %}btn-primary{% endif %} btn-sm" href="{{ row.url }}">
-          {% if row.status == "passed" %}{% translate "Review" %}{% elif row.status == "in_progress" %}{% translate "Continue" %}{% else %}{% translate "Open" %}{% endif %}
+          {% if row.status == "passed" %}{% include "components/icons.html#eye" %}{% translate "Review" %}{% elif row.status == "in_progress" %}{% include "components/icons.html#play" %}{% translate "Continue" %}{% else %}{% include "components/icons.html#play" %}{% translate "Open" %}{% endif %}
         </a>
       {% endif %}
     </li>

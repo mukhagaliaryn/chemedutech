@@ -36,6 +36,11 @@
   <p class="text-sm text-ink-soft">{% translate "The student is not enrolled in your course yet." %}</p>
 {% endif %}
 <div class="mt-auto grid gap-2">
-  <a class="btn btn-primary" href="{% url 'teacher:student' student.pk %}{% if enrollment %}?course={{ enrollment.course.slug }}{% endif %}">{% translate "Open the profile" %}</a>
-  <a class="btn btn-secondary" href="{% url 'teacher:student' student.pk %}{% if enrollment %}?course={{ enrollment.course.slug }}{% endif %}#lab">{% translate "Lab attempts" %}</a>
+  <a class="btn btn-primary" href="{% url 'teacher:student' student.pk %}{% if enrollment %}?course={{ enrollment.course.slug }}{% endif %}">{% include "components/icons.html#user" %}{% translate "Profile" %}</a>
+  <a class="btn btn-secondary" href="{% url 'teacher:student' student.pk %}{% if enrollment %}?course={{ enrollment.course.slug }}{% endif %}#lab">{% include "components/icons.html#lab" %}{% translate "Lab attempts" %}</a>
+  {% if group %}
+    <form method="post" action="{% url 'teacher:group_remove_student' group.pk student.pk %}" class="grid">{% csrf_token %}
+      <button type="submit" class="btn btn-ghost text-danger-700" data-confirm="{% blocktranslate with g=group.name %}Remove the student from {{ g }}?{% endblocktranslate %}" data-confirm-text="{% translate 'Enrolments and results stay; the student is no longer listed in the group.' %}" data-confirm-label="{% translate 'Remove' %}" data-confirm-variant="danger" data-confirm-icon="user-minus">{% include "components/icons.html#user-minus" %}{% translate "Remove from the group" %}</button>
+    </form>
+  {% endif %}
 </div>

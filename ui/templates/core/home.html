@@ -9,7 +9,8 @@ Numbers come from the database and the lab registry ({% landing_facts %}), never
 {% block body_class %}bg-surface{% endblock %}
 {% block body %}
 {% landing_facts as facts %}
-<div class="overflow-x-hidden text-base leading-[26px]" x-data="{ menu: false, exp: 0, aud: 'student' }" @keydown.escape.window="menu = false">
+<div class="overflow-x-hidden text-base leading-[26px]" x-data="{ menu: false, exp: 0, aud: 'student', scrolled: window.scrollY > 24 }"
+     @keydown.escape.window="menu = false" @scroll.window.throttle.50ms="scrolled = window.scrollY > 24">
 
   {# ============ HERO + NAVBAR ============ #}
   <section class="brand-ground brand-ground-plain relative">
@@ -17,8 +18,12 @@ Numbers come from the database and the lab registry ({% landing_facts %}), never
     <div aria-hidden="true" class="glow pointer-events-none absolute -top-[200px] -right-[160px] size-[720px] rounded-full bg-[radial-gradient(closest-side,rgba(31,95,209,.55),rgba(31,95,209,0))]"></div>
     <div aria-hidden="true" class="glow pointer-events-none absolute -bottom-[260px] -left-[200px] size-[520px] rounded-full bg-[radial-gradient(closest-side,rgba(11,122,122,.45),rgba(11,122,122,0))]"></div>
 
-    <header class="relative z-10 mx-auto max-w-[1240px] px-4 py-[18px] sm:px-6">
-      <div class="flex h-[60px] items-center gap-4 rounded-[18px] border border-white/[.12] bg-white/[.07] pr-2.5 pl-[18px] backdrop-blur-md">
+    {# fixed navbar: glass over the hero, solid brand bar once the page is scrolled #}
+    <div aria-hidden="true" class="h-24"></div>
+    <header class="fixed inset-x-0 top-0 z-50 transition-[padding] duration-200" :class="scrolled ? 'py-2' : 'py-[18px]'">
+      <div class="mx-auto max-w-[1240px] px-4 sm:px-6">
+      <div class="flex h-[60px] items-center gap-4 rounded-[18px] border pr-2.5 pl-[18px] backdrop-blur-md transition-[background-color,border-color,box-shadow] duration-200"
+           :class="scrolled ? 'border-white/10 bg-primary-950/90 shadow-modal' : 'border-white/[.12] bg-white/[.07]'">
         <a href="{% url 'core:home' %}" class="flex items-center gap-2.5 text-lg font-bold text-white">{% include "partials/logo.html" with size=32 inverse=True %}ChemEduTech</a>
         <nav class="ml-5 flex gap-0.5 max-[880px]:hidden" aria-label="{% translate 'Main' %}">
           {% partialdef navlinks %}
@@ -33,9 +38,10 @@ Numbers come from the database and the lab registry ({% landing_facts %}), never
         <div class="ml-auto flex items-center gap-2">
           {% include "partials/lang_menu.html" with dark=True class="max-[880px]:hidden" %}
           <a href="{% url 'accounts:login' %}" class="landing-link h-10 font-semibold text-white max-[880px]:hidden">{% translate "Log in" %}</a>
-          <a href="{% url 'accounts:signup' %}" class="btn btn-inverse btn-sm h-10 max-[880px]:hidden">{% translate "Sign up" %}</a>
+          <a href="{% url 'accounts:signup' %}" class="btn btn-inverse btn-sm h-10 max-[880px]:hidden">{% include "components/icons.html#user-plus" %}{% translate "Sign up" %}</a>
           <button type="button" class="grid size-11 place-items-center rounded-[12px] border border-white/20 text-white min-[881px]:hidden" @click="menu = true" aria-label="{% translate 'Open menu' %}" :aria-expanded="menu.toString()">{% include "components/icons.html#menu" with size=20 %}</button>
         </div>
+      </div>
       </div>
     </header>
 
@@ -109,8 +115,8 @@ Numbers come from the database and the lab registry ({% landing_facts %}), never
         <nav class="flex flex-col [&>a]:rounded-[12px] [&>a]:p-3 [&>a]:font-semibold [&>a]:text-ink [&>a:hover]:bg-canvas" @click="menu = false">{% partial navlinks %}</nav>
         {% include "partials/lang_menu.html" with class="mt-2 self-start" %}
         <div class="mt-auto grid gap-2">
-          <a href="{% url 'accounts:login' %}" class="btn btn-secondary btn-lg">{% translate "Log in" %}</a>
-          <a href="{% url 'accounts:signup' %}" class="btn btn-primary btn-lg">{% translate "Sign up" %}</a>
+          <a href="{% url 'accounts:login' %}" class="btn btn-secondary btn-lg">{% include "components/icons.html#login" %}{% translate "Log in" %}</a>
+          <a href="{% url 'accounts:signup' %}" class="btn btn-primary btn-lg">{% include "components/icons.html#user-plus" %}{% translate "Sign up" %}</a>
         </div>
       </aside>
     </div>
@@ -213,7 +219,7 @@ Numbers come from the database and the lab registry ({% landing_facts %}), never
 
   {# ============ LAB SHOWCASE ============ #}
   {% if facts.lab %}
-  <section id="lab" class="mt-28 scroll-mt-6 bg-canvas">
+  <section id="lab" class="mt-28 scroll-mt-[76px] bg-canvas">
     <div class="mx-auto max-w-[1240px] px-4 py-24 sm:px-6">
       <div class="max-w-[720px]">
         <p class="text-sm font-bold text-stage-lab">{% blocktranslate with n=facts.lab.topic_number %}Lab work of topic {{ n }}{% endblocktranslate %}</p>
@@ -338,7 +344,7 @@ Numbers come from the database and the lab registry ({% landing_facts %}), never
         <h2 class="text-[clamp(28px,3.4vw,40px)] leading-[1.15] font-extrabold tracking-[-0.03em]">{% translate "Try your first experiment today" %}</h2>
         <p class="mt-3 text-primary-100">{% translate "Signing up takes a minute. Ask your teacher for your group's join code." %}</p>
       </div>
-      <a href="{% url 'accounts:signup' %}" class="btn btn-inverse relative h-14 rounded-lg px-7 text-base font-extrabold">{% translate "Sign up as a student" %}</a>
+      <a href="{% url 'accounts:signup' %}" class="btn btn-inverse relative h-14 rounded-lg px-7 text-base font-extrabold">{% include "components/icons.html#user-plus" %}{% translate "Sign up as a student" %}</a>
     </div>
   </section>
 

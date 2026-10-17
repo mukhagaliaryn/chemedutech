@@ -63,7 +63,7 @@ teacher.grading._decisions.
             {% if row.review %}<p class="text-[13px] text-ink-soft">{% blocktranslate with t=row.review.teacher.full_name p=row.review.teacher_points|floatformat:"-2" %}Last checked by {{ t }}: {{ p }} points.{% endblocktranslate %}</p>{% endif %}
 
             {% if row.criteria %}
-              <div class="flex items-center justify-between gap-3"><h2 class="text-[17px] font-extrabold">{% translate "Grade by the rubric" %}</h2><span class="text-[13px] text-ink-soft">{% translate "AI suggestion → your decision" %}</span></div>
+              <div class="flex items-center justify-between gap-3"><h2 class="flex items-center gap-1.5 text-[17px] font-extrabold">{% translate "Grade by the rubric" %}{% translate "Your decision is saved as a teacher review and is used to compute the agreement between the AI and the teachers (Cohen's kappa). The student sees the grade after it is confirmed." as h_review %}{% include "components/hint.html" with text=h_review %}</h2><span class="text-[13px] text-ink-soft">{% translate "AI suggestion → your decision" %}</span></div>
               <div class="grid gap-2.5">
                 {% for c in row.criteria %}
                   <fieldset class="grid gap-2.5 rounded-[18px] border border-line p-4" x-data="{ v: '{% if c.value is not None %}{{ c.value|floatformat:"-2" }}{% endif %}', ai: '{% if c.ai_points is not None %}{{ c.ai_points|floatformat:"-2" }}{% endif %}' }">
@@ -113,7 +113,7 @@ teacher.grading._decisions.
         {% if submission.status == "grading" %}
           <p class="text-sm text-warning-700">{% translate "The AI is still grading this work." %}</p>
         {% else %}
-          <div class="flex flex-wrap items-center justify-between gap-3" x-data="{ sure: false }">
+          <div class="flex flex-wrap items-center justify-between gap-3">
             <div class="num flex items-baseline gap-2">
               <span class="text-[13px] text-ink-soft">{% translate "Total" %}</span>
               <span class="text-[30px] font-extrabold tracking-[-0.02em]" x-text="total">{{ submission.score|floatformat:"-2" }}</span>
@@ -121,23 +121,18 @@ teacher.grading._decisions.
               <span class="text-[13px] font-bold text-warning-700" x-show="total !== ai" x-cloak>{% translate "AI:" %} <span x-text="ai"></span> → {% translate "changed" %}</span>
             </div>
             <div class="flex flex-wrap items-center gap-2">
-              <a class="btn btn-secondary h-12" href="{% url 'teacher:grading' %}?status={{ status }}">{% translate "Skip" %}</a>
+              <a class="btn btn-ghost h-12" href="{% url 'teacher:grading' %}?status={{ status }}">{% translate "Skip" %}{% include "components/icons.html#chevron-right" %}</a>
               {% if submission.status != "returned" %}
-                <button type="button" class="btn btn-danger h-12" x-show="!sure" @click="sure = true">{% translate "Return to the student" %}</button>
-                <span x-show="sure" x-cloak class="flex flex-wrap items-center gap-2 text-sm text-ink-soft">
-                  {% translate "The attempt is given back and the stage reopens." %}
-                  <button type="submit" class="btn btn-danger btn-sm" @click="action = 'return'">{% translate "Return" %}</button>
-                  <button type="button" class="btn btn-ghost btn-sm" @click="sure = false">{% translate "Cancel" %}</button>
-                </span>
+                <button type="submit" class="btn btn-secondary h-12 text-danger-700" @click="action = 'return'"
+                        data-confirm="{% translate 'Return the work to the student?' %}" data-confirm-text="{% translate 'The attempt is given back and the stage reopens.' %}" data-confirm-label="{% translate 'Return' %}" data-confirm-variant="danger" data-confirm-icon="retry">{% include "components/icons.html#retry" %}{% translate "Return" %}</button>
               {% endif %}
-              <button type="submit" class="btn btn-success h-12 px-[22px] font-bold" @click="action = 'confirm'" x-text="total !== ai ? '{% translate "Change and confirm" %}' : '{% translate "Confirm the grade" %}'">{% translate "Confirm the grade" %}</button>
+              <button type="submit" class="btn btn-success h-12 px-[22px] font-bold" @click="action = 'confirm'">{% include "components/icons.html#check" %}<span x-text="total !== ai ? '{% translate "Change and confirm" %}' : '{% translate "Confirm the grade" %}'">{% translate "Confirm the grade" %}</span></button>
             </div>
           </div>
         {% endif %}
       </article>
     </form>
 
-    <p class="rounded-[18px] bg-primary-50 px-[18px] py-3.5 text-[13px] leading-5 text-primary-900">{% translate "Your decision is saved as a teacher review and is used to compute the agreement between the AI and the teachers (Cohen's kappa). The student sees the grade after it is confirmed." %}</p>
 
     {% if others %}
       <section class="flex flex-col gap-2" aria-labelledby="others">

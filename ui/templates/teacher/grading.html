@@ -11,7 +11,6 @@
   <section class="flex flex-col items-center gap-3 rounded-card border border-dashed border-line-strong bg-surface px-8 py-16 text-center">
     <span class="tile tile-lg bg-ai-50 text-ai-700">{% include "components/icons.html#sparkle" with size=22 %}</span>
     <h1 class="text-[22px] font-extrabold">{% translate "Choose a work in the queue" %}</h1>
-    <p class="max-w-md text-ink-soft">{% translate "Practice works the AI could not grade with confidence, AI grades to spot-check and returned works." %}</p>
     {% if submissions %}<a class="btn btn-primary mt-2" href="{% url 'teacher:grading_detail' submissions.0.pk %}?status={{ status }}{% if course %}&amp;course={{ course.slug }}{% endif %}">{% translate "Open the first one" %}{% include "components/icons.html#arrow-right" %}</a>{% endif %}
   </section>
 </div>

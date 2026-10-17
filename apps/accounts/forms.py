@@ -71,18 +71,16 @@ class SignUpForm(UserCreationForm):
 
     CASCADE = ("university", "faculty", "department", "group")
     field_order = (
-        "first_name", "last_name", "email", "username", "password1", "password2",
+        "first_name", "last_name", "email", "password1", "password2",
         "group_mode", *CASCADE, "join_code", "research_consent",
     )  # fmt: skip
 
     class Meta:
         model = User
-        fields = ("first_name", "last_name", "email", "username")
-        help_texts = {"username": _("Latin letters, digits and . _ - characters")}
+        fields = ("first_name", "last_name", "email")  # the login is made from the email
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["username"].widget.attrs.pop("autofocus", None)  # the wizard starts with the first name
         self.fields["first_name"].widget.attrs["autofocus"] = True
         self.fields["university"].queryset = active_universities()
         self._narrow_cascade()

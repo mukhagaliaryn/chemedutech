@@ -4,7 +4,7 @@
 Student sign-up — a 3-step wizard (mockup «Тіркелу»): 1 personal data, 2 university and group (cascade or
 join code), 3 review + research consent. One form, one POST: the steps are only shown/hidden (Alpine
 signupWizard in static/js/ui.js); after a server error the wizard opens on the first step with an error
-(context «step»). The login is checked as you type (accounts:username_check), the join code too.
+(context «step»). No login field: it is made from the email. The join code is checked as you type.
 {% endcomment %}
 {% block title %}{% translate "Sign up as a student" %} · ChemEduTech{% endblock %}
 {% block body %}
@@ -66,18 +66,12 @@ signupWizard in static/js/ui.js); after a server error the wizard opens on the f
           <div><h2 class="text-2xl font-extrabold tracking-[-0.015em]">{% translate "Personal details" %}</h2><p class="mt-1 text-ink-soft">{% translate "This is how your name will appear on the certificate." %}</p></div>
           <div class="grid gap-4 sm:grid-cols-2">
             {% for name in "first_name last_name email"|split %}{% with field=form|get_field:name %}
-              <div class="field">
+              <div class="field{% if name == 'email' %} sm:col-span-2{% endif %}">
                 <label class="label" for="{{ field.id_for_label }}">{{ field.label }}</label>
                 {% field_widget field "input input-lg" required="required" %}
                 {% for e in field.errors %}<p class="error-text" id="{{ field.auto_id }}_error">{{ e }}</p>{% endfor %}
               </div>
             {% endwith %}{% endfor %}
-            <div class="field">
-              <label class="label" for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
-              {% url 'accounts:username_check' as check_url %}
-              {% field_widget form.username "input input-lg" required="required" hx_get=check_url hx_trigger="input changed delay:400ms" hx_target="#username-status" hx_swap="outerHTML" %}
-              {% for e in form.username.errors %}<p class="error-text" id="{{ form.username.auto_id }}_error">{{ e }}</p>{% empty %}<span id="username-status" class="help">{{ form.username.help_text }}</span>{% endfor %}
-            </div>
           </div>
           <div class="grid gap-4 sm:grid-cols-2">
             <div class="field">
@@ -124,7 +118,7 @@ signupWizard in static/js/ui.js); after a server error the wizard opens on the f
           <div><h2 class="text-2xl font-extrabold tracking-[-0.015em]">{% translate "Check and confirm" %}</h2><p class="mt-1 text-ink-soft">{% translate "Are your details correct?" %}</p></div>
           <dl class="grid overflow-hidden rounded-[18px] border border-line sm:grid-cols-2 [&>div]:border-surface-sunken [&>div]:px-[18px] [&>div]:py-3.5 [&>div:nth-child(-n+2)]:border-b">
             <div><dt class="text-caption font-normal text-ink-faint">{% translate "Full name" %}</dt><dd class="mt-0.5 font-semibold" x-text="review.name">—</dd></div>
-            <div><dt class="text-caption font-normal text-ink-faint">{% translate "Username / email" %}</dt><dd class="mt-0.5 font-semibold break-all" x-text="review.login">—</dd></div>
+            <div><dt class="text-caption font-normal text-ink-faint">{% translate "Email" %}</dt><dd class="mt-0.5 font-semibold break-all" x-text="review.login">—</dd></div>
             <div><dt class="text-caption font-normal text-ink-faint">{% translate "Department" %}</dt><dd class="mt-0.5 font-semibold" x-text="review.department">—</dd></div>
             <div><dt class="text-caption font-normal text-ink-faint">{% translate "Group" %}</dt><dd class="mt-0.5 font-semibold" x-text="review.group">—</dd></div>
           </dl>
@@ -132,7 +126,7 @@ signupWizard in static/js/ui.js); after a server error the wizard opens on the f
         </section>
 
         <div class="mt-auto flex justify-between gap-3 border-t border-surface-sunken pt-2">
-          <button type="button" class="btn btn-secondary h-12 px-5 text-[15px]" @click="back()" :disabled="step === 1" disabled>{% translate "Back" %}</button>
+          <button type="button" class="btn btn-secondary h-12 px-5 text-[15px]" @click="back()" :disabled="step === 1" disabled>{% include "components/icons.html#arrow-left" %}{% translate "Back" %}</button>
           <button type="button" class="btn btn-primary h-12 px-6 text-[15px] font-bold" x-show="step < 3" @click="next()">{% translate "Next" %}{% include "components/icons.html#arrow-right" %}</button>
           <button type="submit" class="btn btn-primary h-12 px-6 text-[15px] font-bold" x-show="step === 3" x-cloak :disabled="busy">{% translate "Sign up" %}{% include "components/icons.html#arrow-right" %}</button>
         </div>

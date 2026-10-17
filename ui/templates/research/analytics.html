@@ -27,7 +27,7 @@ agreement and the random spot-check, then the full descriptive table. Descriptiv
       <option value="">{% translate "All groups" %}</option>
       {% for g in groups %}<option value="{{ g.pk }}"{% if g == group %} selected{% endif %}>{{ g.name }}</option>{% endfor %}
     </select>
-    <noscript><button type="submit" class="btn btn-secondary">{% translate "Show" %}</button></noscript>
+    <noscript><button type="submit" class="btn btn-secondary">{% include "components/icons.html#eye" %}{% translate "Show" %}</button></noscript>
     <a class="btn btn-secondary" href="?{{ query }}{% if query %}&amp;{% endif %}format=csv">{% include "components/icons.html#download" %}{% translate "Download data (CSV)" %}</a>
   </form>
 </div>
@@ -47,7 +47,7 @@ agreement and the random spot-check, then the full descriptive table. Descriptiv
   {# ---- grouped bars by stage ---- #}
   <section class="card min-w-0" aria-labelledby="by-stage">
     <div class="flex flex-wrap items-center justify-between gap-3">
-      <h2 id="by-stage" class="text-[17px] font-extrabold">{% translate "Average score by stage" %}</h2>
+      <h2 id="by-stage" class="flex items-center gap-1.5 text-[17px] font-extrabold">{% translate "Average score by stage" %}{% translate "Descriptive statistics only. Test significance (t-test, Mann–Whitney) on the downloaded data. The research group of an enrolment is the value at enrolment." as h_stats %}{% include "components/hint.html" with text=h_stats %}</h2>
       <div class="flex gap-3.5 text-[13px] text-ink-soft">
         <span class="inline-flex items-center gap-1.5"><span class="size-3 rounded-[4px] bg-primary-600"></span>{% blocktranslate with n=cohorts.n.experimental %}Experimental (n = {{ n }}){% endblocktranslate %}</span>
         <span class="inline-flex items-center gap-1.5"><span class="size-3 rounded-[4px] bg-chart-muted"></span>{% blocktranslate with n=cohorts.n.control %}Control (n = {{ n }}){% endblocktranslate %}</span>
@@ -70,7 +70,6 @@ agreement and the random spot-check, then the full descriptive table. Descriptiv
     {% else %}
       <p class="mt-4 text-sm text-ink-soft">{% translate "No stages yet." %}</p>
     {% endif %}
-    <p class="mt-4 rounded-md bg-primary-50 px-3.5 py-3 text-[13px] leading-5 text-primary-900">{% translate "Descriptive statistics only. Test significance (t-test, Mann–Whitney) on the downloaded data. The research group of an enrolment is the value at enrolment." %}</p>
   </section>
 
   {# ---- funnel ---- #}
@@ -128,7 +127,7 @@ agreement and the random spot-check, then the full descriptive table. Descriptiv
 
   {# ---- AI agreement ---- #}
   <section class="brand-ground flex min-w-0 flex-col gap-4 rounded-card p-6" aria-labelledby="ai">
-    <div class="relative"><h2 id="ai" class="text-[17px] font-extrabold">{% translate "AI ↔ teacher agreement" %}</h2>
+    <div class="relative"><h2 id="ai" class="flex items-center gap-1.5 text-[17px] font-extrabold">{% translate "AI ↔ teacher agreement" %}{% translate "κ ≥ 0.80 — almost perfect agreement (Landis & Koch). Points as % of the field's points; the latest check of an answer is used." as h_kappa %}<span class="text-on-dark-soft">{% include "components/hint.html" with text=h_kappa %}</span></h2>
       <p class="text-[13px] text-on-dark-soft">{% blocktranslate count n=agreement.answers|default:0 %}Open answers · {{ n }} grade checked by a teacher{% plural %}Open answers · {{ n }} grades checked by a teacher{% endblocktranslate %}</p></div>
     {% if agreement.answers %}
       <div class="num relative flex flex-wrap items-center gap-5">
@@ -139,7 +138,6 @@ agreement and the random spot-check, then the full descriptive table. Descriptiv
           <div><dt class="sr-only">{% translate "Mean absolute difference" %}</dt><dd><b class="text-lg">{% if agreement.mean_abs_diff is not None %}{{ agreement.mean_abs_diff|floatformat:1 }}{% else %}—{% endif %}</b> <span class="text-on-dark-soft">{% translate "p.p. mean absolute difference" %}</span></dd></div>
         </dl>
       </div>
-      <p class="relative rounded-lg bg-white/[.08] px-4 py-3.5 text-[13px] leading-5 text-primary-100">{% translate "κ ≥ 0.80 — almost perfect agreement (Landis & Koch). Points as % of the field's points; the latest check of an answer is used." %}</p>
     {% else %}
       <p class="relative text-sm text-on-dark-soft">{% translate "No AI grade has been checked by a teacher yet. Draw a sample and check it." %}</p>
     {% endif %}
@@ -147,8 +145,8 @@ agreement and the random spot-check, then the full descriptive table. Descriptiv
       <p class="font-bold">{% translate "Random spot-check" %} · {{ course.review_sample_percent }}%</p>
       <p class="num text-on-dark-soft">{% translate "Graded by AI" %} {{ sample.ai_graded }} · {% translate "Drawn" %} {{ sample.sampled }} · {% translate "Checked" %} {{ sample.checked }}</p>
       <div class="mt-1 flex flex-wrap gap-2">
-        <form method="post" action="{% url 'research:draw_sample' course.slug %}">{% csrf_token %}<button type="submit" class="btn btn-inverse btn-sm">{% translate "Draw the sample" %}</button></form>
-        <a class="btn btn-outline-inverse btn-sm" href="{% url 'teacher:grading' %}?status=sample&amp;course={{ course.slug }}">{% translate "Check the drawn works" %}</a>
+        <form method="post" action="{% url 'research:draw_sample' course.slug %}">{% csrf_token %}<button type="submit" class="btn btn-inverse btn-sm">{% include "components/icons.html#refresh" %}{% translate "Draw the sample" %}</button></form>
+        <a class="btn btn-outline-inverse btn-sm" href="{% url 'teacher:grading' %}?status=sample&amp;course={{ course.slug }}">{% include "components/icons.html#check-square" %}{% translate "Check the drawn works" %}</a>
       </div>
     </div>
     <a class="link relative text-sm font-bold !text-primary-200" href="{% url 'research:export_ai_reviews' %}">{% translate "AI ↔ teacher grades (CSV)" %}</a>
@@ -159,8 +157,8 @@ agreement and the random spot-check, then the full descriptive table. Descriptiv
 <section aria-labelledby="prepost" class="overflow-hidden rounded-card border border-line bg-surface">
   <div class="flex flex-wrap items-center justify-between gap-3 border-b border-surface-sunken px-6 py-4">
     <div>
-      <h2 id="prepost" class="text-[17px] font-extrabold">{% translate "Pre/post knowledge test" %}</h2>
-      <p class="text-[13px] text-ink-soft">{% if benchmark_quiz %}{{ benchmark_quiz.title }} · {% translate "the whole course; gain and normalized gain ⟨g⟩ = (post − pre) / (100 − pre) over students with both tests" %}{% else %}{% translate "The course has no pre/post test yet — create it on the course content page." %}{% endif %}</p>
+      <h2 id="prepost" class="flex items-center gap-1.5 text-[17px] font-extrabold">{% translate "Pre/post knowledge test" %}{% if benchmark_quiz %}{% translate "the whole course; gain and normalized gain ⟨g⟩ = (post − pre) / (100 − pre) over students with both tests" as h_gain %}{% include "components/hint.html" with text=h_gain %}{% endif %}</h2>
+      <p class="text-[13px] text-ink-soft">{% if benchmark_quiz %}{{ benchmark_quiz.title }}{% else %}{% translate "The course has no pre/post test yet — create it on the course content page." %}{% endif %}</p>
     </div>
   </div>
   {% if benchmark_quiz %}

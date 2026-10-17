@@ -211,7 +211,7 @@ class GroupTests(TeacherBase):
         self.assertTrue(CourseGroup.objects.filter(group=self.g1, course=self.course, teacher=self.teacher).exists())
         # a group with students cannot be deleted
         r = self.client.post(reverse("teacher:group_delete", args=[self.g1.pk]))
-        self.assertRedirects(r, reverse("teacher:group_edit", args=[self.g1.pk]), fetch_redirect_response=False)
+        self.assertRedirects(r, reverse("teacher:group", args=[self.g1.pk]), fetch_redirect_response=False)
         self.assertTrue(AcademicGroup.objects.filter(pk=self.g1.pk).exists())
         empty = make_group(name="Бос", curator=self.teacher, department=self.g1.department)
         self.client.post(reverse("teacher:group_delete", args=[empty.pk]))

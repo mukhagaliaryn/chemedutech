@@ -14,7 +14,7 @@ the grading scale.
 
 {% if not enrollment %}
   {% translate "No grades yet" as l_title %}{% translate "Enrol in a course and your grades will appear here." as l_text %}{% translate "My courses" as l_action %}{% url 'student:courses' as courses_url %}
-  {% include "components/empty_state.html" with title=l_title text=l_text icon="chart" action_url=courses_url action_label=l_action %}
+  {% include "components/empty_state.html" with title=l_title text=l_text icon="chart" action_url=courses_url action_label=l_action action_icon="book" %}
 {% else %}
 
 <section aria-label="{% translate 'Course summary' %}" class="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-4">
@@ -112,13 +112,12 @@ the grading scale.
     {% endif %}
 
     <section aria-labelledby="scale" class="card flex flex-col gap-3 py-[22px]">
-      <h2 id="scale" class="text-base font-extrabold">{% translate "Grading scale" %}</h2>
+      <h2 id="scale" class="flex items-center gap-1.5 text-base font-extrabold">{% translate "Grading scale" %}{% translate "A topic score is the weighted average of its stages; a module — of its topics, the course — of its modules." as h_scale %}{% include "components/hint.html" with text=h_scale %}</h2>
       <div class="num flex flex-wrap gap-1.5">
         {% for g in scale %}
           <span class="badge h-8 px-3 text-[13px] font-bold {% if g.current %}badge-solid shadow-primary{% else %}badge-{{ g.tone }}{% endif %}"{% if g.current %} aria-current="true"{% endif %}>{{ g.letter }} {{ g.range }}</span>
         {% endfor %}
       </div>
-      <p class="text-[13px] text-ink-soft">{% translate "A topic score is the weighted average of its stages; a module — of its topics, the course — of its modules." %}</p>
     </section>
   </div>
 
