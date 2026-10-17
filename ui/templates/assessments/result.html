@@ -72,7 +72,7 @@
         </p>
       {% endif %}
       {% if quiz.show_answers_after and q.explanation %}
-        <p class="ml-9 rounded-md bg-canvas px-3 py-2 text-sm text-ink-soft">{{ q.explanation }}</p>
+        <div class="ml-9 rounded-md bg-canvas px-3 py-2 text-sm text-ink-soft">{{ q.explanation|rich }}</div>
       {% endif %}
     </article>
   {% endwith %}{% endfor %}

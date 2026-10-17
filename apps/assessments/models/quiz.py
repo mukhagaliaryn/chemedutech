@@ -76,7 +76,7 @@ class Question(TimeStampedModel):
     points = models.DecimalField(
         _("points"), max_digits=5, decimal_places=2, default=1, validators=[MinValueValidator(0)]
     )
-    explanation = models.TextField(_("explanation"), blank=True, help_text=_("Shown after the attempt"))
+    explanation = CKEditor5Field(_("explanation"), blank=True, config_name="compact", help_text=_("Shown after the attempt"))
     numeric_answer = models.DecimalField(_("correct number"), max_digits=14, decimal_places=4, null=True, blank=True)
     numeric_tolerance = models.DecimalField(
         _("allowed deviation"),

@@ -1,0 +1,6 @@
+{% load static %}{% comment %}
+CKEditor 5 for editors created in JS (see ui/static/js/richtext.js). Rendered by {% rich_text_assets %}.
+{% endcomment %}{% if bundle %}<link rel="stylesheet" href="{% static 'django_ckeditor_5/dist/styles.css' %}">
+<script defer src="{% static 'django_ckeditor_5/dist/bundle.js' %}"></script>{% endif %}
+{{ configs|json_script:"rt-configs" }}
+<script defer src="{% static 'js/richtext.js' %}"></script>

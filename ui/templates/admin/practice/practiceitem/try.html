@@ -4,7 +4,7 @@
 <div class="flex flex-col gap-6 max-w-3xl">
   <div>
     <p class="text-sm text-base-500">{{ item.task }} · {{ item.get_kind_display }} · {{ item.points }} {% translate "points" %}</p>
-    {% if item.prompt %}<p class="mt-2">{{ item.prompt }}</p>{% endif %}
+    {% if item.prompt %}<div class="mt-2">{{ item.prompt|rich }}</div>{% endif %}
     <pre class="mt-2 text-xs bg-base-50 dark:bg-base-900 p-3 rounded">{{ item.answer_spec }}</pre>
   </div>
   <form method="post" class="flex flex-col gap-3">

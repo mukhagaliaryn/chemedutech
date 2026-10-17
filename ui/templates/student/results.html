@@ -99,7 +99,7 @@ the grading scale.
             </table>
             <p class="mt-2 flex items-center gap-2 text-[13px] text-ink-soft">{% translate "Topic score = Σ(weight × score) / Σ weight" %}
               <span class="tip inline-flex"><span tabindex="0" class="grid size-[22px] cursor-help place-items-center rounded-full bg-surface-sunken text-caption font-extrabold" aria-describedby="tip-{{ t.topic.pk }}">?</span>
-                <span id="tip-{{ t.topic.pk }}" role="tooltip" class="tipbox w-[260px]">{% translate "A kind's share is split equally between the stages of that kind (e.g. three practice works share the practice weight). Unfinished stages do not count in the current score." %}</span></span>
+                <span id="tip-{{ t.topic.pk }}" role="tooltip" class="tipbox w-[260px]">{% translate "A kind's share is split between the stages of that kind by their weights, equally by default (e.g. three practice works share the practice weight). Unfinished stages do not count in the current score." %}</span></span>
             </p>
           </div>
         </details>

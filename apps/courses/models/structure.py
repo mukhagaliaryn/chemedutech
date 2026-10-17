@@ -77,9 +77,8 @@ class Stage(TimeStampedModel):
     is_required = models.BooleanField(_("required"), default=True)
     weight = models.DecimalField(
         _("weight"),
-        null=True,
-        blank=True,
-        help_text=_("Leave empty to use the course share of this stage kind"),
+        default=1,
+        help_text=_("Relative weight among the stages of the same kind: the course share of the kind is split in this proportion"),
         **WEIGHT,
     )
     pass_percent = models.PositiveSmallIntegerField(

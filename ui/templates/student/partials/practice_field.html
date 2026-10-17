@@ -18,7 +18,7 @@ graded answer of this field) + «criteria» (AI scores of an open answer); gradi
       <span class="badge badge-neutral font-bold">{% translate "Auto-check" %}</span>
     {% endif %}
   </div>
-  {% if item.prompt %}<p class="text-sm text-ink-soft">{{ item.prompt }}</p>{% endif %}
+  {% if item.prompt %}<div class="text-sm text-ink-soft">{{ item.prompt|rich }}</div>{% endif %}
 
   {% if item.kind == "numeric" %}
     <div class="flex flex-wrap items-center gap-2">
@@ -96,8 +96,8 @@ graded answer of this field) + «criteria» (AI scores of an open answer); gradi
 
   {% else %}{# open #}
     <label class="sr-only" for="{{ name }}">{{ item.label }}</label>
-    <textarea id="{{ name }}" class="input text-base leading-[26px]" name="{{ name }}" rows="5" maxlength="4000">{{ row.value }}</textarea>
-    <p class="flex items-center gap-1.5 text-[13px] font-semibold text-ai-700">{% include "components/icons.html#sparkle" %}{% translate "AI grading" %}{% translate "This answer is graded by AI against the author's criteria and confirmed by the teacher." as h_ai %}{% include "components/hint.html" with text=h_ai %}</p>
+    <textarea id="{{ name }}" class="input text-base leading-[26px]" name="{{ name }}" rows="5" x-rich.answer="{% if not can_submit and not place.preview %}true{% else %}false{% endif %}" data-rt="long">{{ row.value }}</textarea>
+    <p class="flex items-center gap-1.5 text-[13px] font-semibold text-ai-700">{% include "components/icons.html#sparkle" %}{% translate "AI grading" %}{% translate "This answer is graded by AI against the author's criteria." as h_ai %}{% include "components/hint.html" with text=h_ai %}</p>
     {% if grading %}
       <div class="grid gap-2" aria-hidden="true"><span class="shimmer h-3.5 rounded-[8px]"></span><span class="shimmer h-3.5 w-4/5 rounded-[8px]"></span><span class="shimmer h-3.5 w-3/5 rounded-[8px]"></span></div>
     {% elif row.criteria %}
@@ -118,6 +118,6 @@ graded answer of this field) + «criteria» (AI scores of an open answer); gradi
   {% if a and a.feedback and not grading and item.kind != "open" %}
     <p class="fade rounded-md px-3.5 py-3 text-sm {% if a.is_correct %}bg-success-50 text-success-700{% else %}bg-warning-50 text-warning-700{% endif %}">{{ a.feedback }}</p>
   {% endif %}
-  {% if item.hint %}<details class="text-[13px] text-ink-soft"><summary class="cursor-pointer font-semibold text-primary-700">{% translate "Hint" %}</summary><p class="mt-1">{{ item.hint }}</p></details>{% endif %}
+  {% if item.hint %}<details class="text-[13px] text-ink-soft"><summary class="cursor-pointer font-semibold text-primary-700">{% translate "Hint" %}</summary><div class="mt-1">{{ item.hint|rich }}</div></details>{% endif %}
 </section>
 {% endwith %}

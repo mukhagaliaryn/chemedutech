@@ -6,10 +6,11 @@ from .models import PracticeSubmission
 
 
 @task
-def grade_submission(submission_id: int) -> None:
-    """AI-grade the open answers of a submission, then total it and record the stage result."""
+def grade_submission(submission_id: int, retry: int = 0) -> None:
+    """AI-grade the open answers of a submission, then total it and record the stage result.
+    retry — how many times the AI could not be reached before (the service schedules the next run)."""
     from .services.submissions import grade_open_answers
 
     submission = PracticeSubmission.objects.filter(pk=submission_id, status=PracticeSubmission.Status.GRADING).first()
     if submission is not None:
-        grade_open_answers(submission)
+        grade_open_answers(submission, retry=retry)

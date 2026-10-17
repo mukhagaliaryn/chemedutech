@@ -16,9 +16,11 @@ from decimal import ROUND_HALF_UP, Decimal
 import anthropic
 from django.conf import settings
 
+from apps.core.html import html_to_text
+
 from ..models import AIGrade, PracticeAnswer, PracticeItem
 
-PROMPT_VERSION = "practice-open-v1"
+PROMPT_VERSION = "practice-open-v2"  # v2: rich text (answer, question, model answer) sent as plain text
 MAX_CALLS = 3  # the first call + 2 retries
 MAX_TOKENS = 4000
 # Models that accept the server-side refusal fallback on the Claude API ("default" routing).
@@ -95,14 +97,14 @@ def build_messages(item: PracticeItem, answer_text: str) -> tuple[str, list[dict
     context = (
         f"Task: {item.task.title}\n"
         f"Answer field: {item.label}\n"
-        f"Question: {item.prompt or item.label}\n\n"
+        f"Question: {html_to_text(item.prompt) or item.label}\n\n"
         f"Criteria:\n{criteria}\n\n"
-        f"Model answer:\n{rubric.model_answer}\n"
+        f"Model answer:\n{html_to_text(rubric.model_answer)}\n"
     )
     if rubric.notes:
         context += f"\nNotes from the author:\n{rubric.notes}\n"
     # Neutralise tags so the answer cannot close its own block.
-    student = answer_text.replace("<", "‹").replace(">", "›")
+    student = html_to_text(answer_text).replace("<", "‹").replace(">", "›")
     user = f"{context}\n<student_answer>\n{student}\n</student_answer>\n\nGrade the answer by the criteria."
     return SYSTEM_PROMPT, [{"role": "user", "content": user}]
 
@@ -215,6 +217,10 @@ def run_grading(item: PracticeItem, answer_text: str, client=None) -> dict:
 
 
 def grade_open_answer(answer: PracticeAnswer, client=None) -> AIGrade:
-    """Grade one open answer and store the AIGrade (a failure is stored with ``error`` → needs review)."""
+    """Grade one open answer and store the AIGrade (a failure is stored with ``error``; a background re-try
+    overwrites it, ``calls`` keeps counting every request made for the answer)."""
     fields = run_grading(answer.item, answer.raw_value, client=client)
+    earlier = AIGrade.objects.filter(answer=answer).values_list("calls", flat=True).first()
+    if earlier:
+        fields["calls"] = fields.get("calls", 0) + earlier
     return AIGrade.objects.update_or_create(answer=answer, defaults=fields)[0]

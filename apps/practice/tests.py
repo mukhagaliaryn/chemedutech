@@ -21,6 +21,7 @@ from apps.progress.models import StageProgress
 from . import checkers, services
 from .models import AIGrade, PracticeItem, PracticeSubmission, TeacherReview
 from .services import ai_grading
+from .services.submissions import AI_RETRY_DELAYS_MIN
 
 S = StageProgress.Status
 
@@ -232,7 +233,7 @@ class AIGradingTests(PracticeBase):
         grade = AIGrade.objects.get(answer__submission=submission)
         self.assertEqual(
             (grade.confidence, grade.calls, grade.input_tokens, grade.prompt_version),
-            ("high", 1, 1500, "practice-open-v1"),
+            ("high", 1, 1500, "practice-open-v2"),
         )
         self.assertEqual(self.status(self.p1), S.PASSED)
         request = client.requests[0]
@@ -261,13 +262,41 @@ class AIGradingTests(PracticeBase):
         self.assertEqual(AIGrade.objects.get(answer__submission=submission).calls, 2)
         self.assertEqual(submission.status, "graded")
 
-    def test_low_confidence_needs_review_with_provisional_points(self):
+    def test_low_confidence_grade_is_final(self):
+        # STEP-26: the AI grade is final; a low confidence is only recorded for the research
         submission = self.submit_with_ai(FakeClient(self.grade(points=(1, 0), confidence="low")))
-        self.assertEqual(submission.status, "needs_review")
+        self.assertEqual(submission.status, "graded")
         answer = submission.answers.get(item=self.open_item)
-        self.assertEqual(answer.points, Decimal("1.00"))
-        self.assertIsNone(answer.is_correct)
-        self.assertEqual(self.status(self.p1), S.AWAITING_CHECK)
+        self.assertEqual((answer.points, answer.is_correct), (Decimal("1.00"), False))
+        self.assertEqual(AIGrade.objects.get(answer=answer).confidence, "low")
+        self.assertNotEqual(self.status(self.p1), S.AWAITING_CHECK)
+
+    def test_unreachable_ai_is_retried_in_the_background(self):
+        timeouts = [anthropic.APITimeoutError(request=REQUEST) for _ in range(3)]
+        with (
+            mock.patch("apps.practice.services.submissions._can_defer", return_value=True),
+            mock.patch("apps.practice.tasks.grade_submission") as task,
+        ):
+            submission = self.submit_with_ai(FakeClient(*timeouts))
+        self.assertEqual(submission.status, "grading")  # waits for the next run, not for a teacher
+        self.assertIsNotNone(task.using.call_args.kwargs["run_after"])
+        task.using.return_value.enqueue.assert_called_once_with(submission.pk, 1)
+        # the next run reaches the AI: the call count goes on, the grade is final
+        services.grade_open_answers(submission, client=FakeClient(self.grade()), retry=1)
+        submission.refresh_from_db()
+        self.assertEqual(submission.status, "graded")
+        self.assertEqual(AIGrade.objects.get(answer__submission=submission).calls, 4)
+
+    def test_last_retry_leaves_the_work_to_the_teacher(self):
+        timeouts = [anthropic.APITimeoutError(request=REQUEST) for _ in range(3)]
+        submission = self.submit_with_ai(FakeClient(*timeouts))
+        submission.status = "grading"
+        submission.save()
+        submission.answers.filter(item=self.open_item).update(is_correct=None)
+        with mock.patch("apps.practice.services.submissions._can_defer", return_value=True):
+            services.grade_open_answers(submission, client=FakeClient(*timeouts), retry=len(AI_RETRY_DELAYS_MIN))
+        submission.refresh_from_db()
+        self.assertEqual(submission.status, "needs_review")
 
     def test_invalid_json_and_mismatched_criteria_are_retried(self):
         wrong_ids = response(
@@ -354,8 +383,9 @@ class SubmissionFlowTests(PracticeBase):
         with self.assertRaises(progress.StageLocked):
             services.submit(e2, self.task2, {})
 
-    def test_teacher_confirms_a_needs_review_submission(self):
+    def test_teacher_may_change_an_ai_grade(self):
         submission = self.submit_with_ai(FakeClient(self.grade(points=(1, 0), confidence="low")))
+        self.assertEqual(submission.status, "graded")
         services.review_answer(submission.answers.get(item=self.open_item), self.teacher, 2, reason="толық жауап")
         services.confirm_submission(submission, self.teacher, comment="Жақсы")
         submission.refresh_from_db()
@@ -489,8 +519,9 @@ class NotificationTests(PracticeBase):
         self.assertEqual(note.url, f"/learn/chemistry/1/{self.p1.pk}/")
 
     def test_needs_review_waits_for_the_teacher(self):
+        timeouts = [anthropic.APITimeoutError(request=REQUEST) for _ in range(3)]
         with self.captureOnCommitCallbacks(execute=True):
-            submission = self.submit_with_ai(FakeClient(self.grade(points=(1, 0), confidence="low")))
+            submission = self.submit_with_ai(FakeClient(*timeouts))
         self.assertNotIn("graded", self.kinds())
         with self.captureOnCommitCallbacks(execute=True):
             services.confirm_submission(submission, self.teacher)

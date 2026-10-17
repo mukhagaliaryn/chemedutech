@@ -291,14 +291,27 @@ class ScoringTests(Base):
         services.complete_stage(e, t1[1], 60)
         self.assertEqual(TopicResult.objects.get(enrollment=e).score_percent, Decimal("80.00"))
 
-    def test_author_weight_overrides_the_share(self):
+    def test_stage_weight_is_relative_within_its_kind(self):
+        course, (t1,) = build_course([["lab", "practice", "practice"]])
+        self.assertEqual(t1[1].weight, Decimal("1"))  # default: equal parts of the kind share
+        t1[2].weight = Decimal("3")  # the second practice weighs three times the first
+        t1[2].save()
+        weights = services.stage_weights(course, t1)
+        self.assertEqual([weights[s.pk] for s in t1], [Decimal("40"), Decimal("5"), Decimal("15")])
+        e = self.enrol(course)
+        for stage, score in zip(t1, (100, 0, 100), strict=True):
+            services.complete_stage(e, stage, score, passed=True)
+        # (40·100 + 5·0 + 15·100) / 60
+        self.assertEqual(TopicResult.objects.get(enrollment=e).score_percent, Decimal("91.67"))
+
+    def test_zero_weight_drops_a_stage_from_the_score(self):
         course, (t1,) = build_course([["lab", "test"]])
-        t1[1].weight = Decimal("40")  # test now weighs as much as the lab
+        t1[1].weight = Decimal("0")
         t1[1].save()
         e = self.enrol(course)
         services.complete_stage(e, t1[0], 100)
-        services.complete_stage(e, t1[1], 60)
-        self.assertEqual(TopicResult.objects.get(enrollment=e).score_percent, Decimal("80.00"))
+        services.complete_stage(e, t1[1], 0, passed=True)
+        self.assertEqual(TopicResult.objects.get(enrollment=e).score_percent, Decimal("100.00"))
 
     def test_module_and_course_weighted_averages_and_letter(self):
         course, (t1, t2, t3) = build_course([["test"], ["test"]], [["test"]])

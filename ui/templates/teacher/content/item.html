@@ -3,6 +3,8 @@
 {% block title %}{% if item %}{{ item.label }}{% else %}{% translate "New answer field" %}{% endif %} · ChemEduTech{% endblock %}
 {% block crumb %}{% translate "Course content" %}{% endblock %}
 {% block page_title %}{% if item %}{{ item.label }}{% else %}{% translate "New answer field" %}{% endif %}{% endblock %}
+{% block head %}{{ form.media }}{% endblock %}
+{% block scripts %}{% rich_text_assets bundle=False %}{% endblock %}
 {% block content %}
 <p class="text-sm text-ink-soft"><a href="{% url 'teacher:course_content' course.slug %}">{{ course.title }}</a> / <a href="{% url 'teacher:stage' course.slug stage.pk %}#items">{{ stage.title }}</a></p>
 <h1 class="text-h1">{% if item %}{{ item.label }}{% else %}{% translate "New answer field" %}{% endif %}</h1>
@@ -32,8 +34,8 @@
 
   <section class="card flex flex-col gap-4" x-show="kind === 'open'">
     <h2 class="flex items-center gap-1.5 text-h3">{% translate "AI grading rubric" %}{% translate "The AI scores each criterion and explains why; the platform adds the points. The model answer is a reference, not a word-for-word requirement." as h_rubric %}{% include "components/hint.html" with text=h_rubric %}</h2>
-    <label class="field"><span class="label">{% translate "Model answer" %}</span>
-      <textarea name="model_answer" rows="3" class="input">{{ rubric.model_answer }}</textarea></label>
+    <div class="field"><label class="label" for="model_answer">{% translate "Model answer" %}</label>
+      <textarea id="model_answer" name="model_answer" rows="3" class="input" x-rich.compact data-rt="short">{{ rubric.model_answer }}</textarea></div>
     <label class="field"><span class="label">{% translate "Notes for the grader" %}</span>
       <textarea name="notes" rows="2" class="input">{{ rubric.notes }}</textarea></label>
     <fieldset class="flex flex-col gap-2">
@@ -66,7 +68,7 @@
   <h2 id="try" class="flex items-center gap-1.5 text-h3">{% translate "Try it" %}{% include "components/hint.html" with text=h_try %}</h2>
   <form method="post" class="flex flex-col gap-2">
     {% csrf_token %}<input type="hidden" name="action" value="try">
-    <textarea name="answer" rows="3" class="input" aria-label="{% translate 'Sample answer' %}">{{ trial.answer }}</textarea>
+    <div x-data><textarea name="answer" rows="3" class="input" aria-label="{% translate 'Sample answer' %}"{% if item.kind == "open" %} x-rich.answer data-rt="long"{% endif %}>{{ trial.answer }}</textarea></div>
     <button type="submit" class="btn btn-secondary self-start">{% include "components/icons.html#check" %}{% translate "Check" %}</button>
   </form>
   {% if trial %}

@@ -4,6 +4,8 @@ from django.db import transaction
 from django.db.models import Max
 from django.utils.translation import gettext as _
 
+from apps.core.html import inline_html
+
 from ..models import Choice, Question, Quiz
 
 
@@ -35,7 +37,9 @@ def save_question(quiz: Quiz, question: Question, choices: list[dict]) -> Questi
     if question.pk is None:
         question.quiz = quiz
         question.order = (quiz.questions.aggregate(m=Max("order"))["m"] or 0) + 1
-    keep = [c for c in choices if not c["delete"] and c["text"].strip()]
+    for c in choices:
+        c["text"] = inline_html(c["text"])  # the option editor gives <p>…</p>: one line of inline marks
+    keep = [c for c in choices if not c["delete"] and c["text"]]
     if question.kind in (Question.Kind.SINGLE, Question.Kind.MULTIPLE):
         correct = sum(1 for c in keep if c["is_correct"])
         if len(keep) < 2:
@@ -54,7 +58,7 @@ def save_question(quiz: Quiz, question: Question, choices: list[dict]) -> Questi
                 c["choice"].delete()
         for order, c in enumerate(keep, start=1):
             choice = c["choice"] or Choice(question=question)
-            choice.order, choice.text, choice.is_correct = order, c["text"].strip(), c["is_correct"]
+            choice.order, choice.text, choice.is_correct = order, c["text"], c["is_correct"]
             choice.save()
     return question
 

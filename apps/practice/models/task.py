@@ -54,7 +54,7 @@ class PracticeItem(TimeStampedModel):
     task = models.ForeignKey(PracticeTask, on_delete=models.CASCADE, related_name="items", verbose_name=_("task"))
     order = models.PositiveSmallIntegerField(_("order"), default=1)
     label = models.CharField(_("label"), max_length=120, help_text=_("e.g. V(H₂) or «Reaction equation»"))
-    prompt = models.TextField(_("question"), blank=True)
+    prompt = CKEditor5Field(_("question"), blank=True, config_name="compact")
     kind = models.CharField(_("kind"), max_length=16, choices=Kind.choices)
     points = models.DecimalField(
         _("points"), max_digits=5, decimal_places=2, default=1, validators=[MinValueValidator(0)]
@@ -65,7 +65,7 @@ class PracticeItem(TimeStampedModel):
         blank=True,
         help_text=_("Depends on the kind — see the examples in the documentation (ARCHITECTURE §3.6)"),
     )
-    hint = models.CharField(_("hint"), max_length=300, blank=True)
+    hint = CKEditor5Field(_("hint"), blank=True, config_name="compact")
 
     class Meta:
         ordering = ("task", "order", "pk")
@@ -96,7 +96,9 @@ class GradingRubric(TimeStampedModel):
         limit_choices_to={"kind": "open"},
         verbose_name=_("answer field"),
     )
-    model_answer = models.TextField(_("model answer"), help_text=_("A reference, not a word-for-word requirement"))
+    model_answer = CKEditor5Field(
+        _("model answer"), config_name="compact", help_text=_("A reference, not a word-for-word requirement")
+    )
     notes = models.TextField(_("notes for the grader"), blank=True)
 
     class Meta:

@@ -118,6 +118,11 @@ class AIGrade(models.Model):
         return not self.error and self.confidence == self.Confidence.HIGH
 
     @property
+    def usable(self):
+        """The AI scored every criterion: its grade is final (a low confidence is only recorded for the research)."""
+        return not self.error and bool(self.criteria_scores)
+
+    @property
     def points(self):
         return sum((c.get("points") or 0) for c in self.criteria_scores)
 

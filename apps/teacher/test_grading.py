@@ -42,10 +42,13 @@ class GradingBase(TeacherBase):
 class QueueTests(GradingBase):
     def test_queue_and_scope(self):
         r = self.client.get(reverse("teacher:grading"))
+        self.assertEqual(r.context["status"], "graded")  # STEP-26: the list opens on the works graded by AI
+        r = self.client.get(reverse("teacher:grading") + "?status=needs_review")
         self.assertEqual(list(r.context["submissions"]), [self.submission])
-        self.assertEqual(r.context["tabs"][0]["count"], 1)
+        self.assertEqual(r.context["tabs"][1]["count"], 1)
         self.client.force_login(self.other)
-        self.assertEqual(list(self.client.get(reverse("teacher:grading")).context["submissions"]), [])
+        url = reverse("teacher:grading") + "?status=needs_review"
+        self.assertEqual(list(self.client.get(url).context["submissions"]), [])
         self.assertEqual(self.client.get(self.url()).status_code, 404)
 
     def test_detail_shows_the_ai_suggestion(self):

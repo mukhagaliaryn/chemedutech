@@ -1,6 +1,7 @@
 """Forms of the course content editor (teacher cabinet, STEP-11)."""
 
 import json
+from decimal import Decimal
 
 from django import forms
 from django.utils.translation import gettext_lazy as _
@@ -22,6 +23,28 @@ from apps.practice import checkers
 from apps.practice.models import PracticeItem, PracticeTask
 
 KIND_LABELS = dict(Stage.Kind.choices)
+
+
+class OptionalWeightMixin:
+    """«weight» may be left empty: it is then 1.00 (equal parts), so nothing has to be typed."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        field = self.fields["weight"]
+        field.required = False
+        field.widget.attrs.setdefault("placeholder", "1.00")
+        if not self.is_bound and self.instance.pk is None:
+            self.initial.setdefault("weight", Decimal("1.00"))
+
+    def clean_weight(self):
+        weight = self.cleaned_data.get("weight")
+        return Decimal("1") if weight is None else weight
+
+
+def rich_size(form, **sizes):
+    """Height of CKEditor fields by content: line (an option, a hint), short (3–4 lines), long (an answer)."""
+    for name, size in sizes.items():
+        form.fields[name].widget.attrs["data-rt"] = size
 
 
 class CourseForm(forms.ModelForm):
@@ -54,14 +77,14 @@ class CourseForm(forms.ModelForm):
         return cleaned
 
 
-class ModuleForm(forms.ModelForm):
+class ModuleForm(OptionalWeightMixin, forms.ModelForm):
     class Meta:
         model = Module
         fields = ("title", "description", "weight")
         widgets = {"description": forms.Textarea(attrs={"rows": 3})}
 
 
-class TopicForm(forms.ModelForm):
+class TopicForm(OptionalWeightMixin, forms.ModelForm):
     class Meta:
         model = Topic
         fields = ("module", "title", "summary", "cover", "estimated_minutes", "weight", "is_published")
@@ -77,7 +100,7 @@ class TopicForm(forms.ModelForm):
         super()._post_clean()
 
 
-class StageForm(forms.ModelForm):
+class StageForm(OptionalWeightMixin, forms.ModelForm):
     class Meta:
         model = Stage
         fields = ("title", "is_required", "weight", "pass_percent")
@@ -199,7 +222,10 @@ class QuestionForm(forms.ModelForm):
             "accepted_answers",
             "is_active",
         )
-        widgets = {"explanation": forms.Textarea(attrs={"rows": 2})}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        rich_size(self, text="short", explanation="short")
 
 
 class PracticeItemForm(forms.ModelForm):
@@ -215,10 +241,10 @@ class PracticeItemForm(forms.ModelForm):
     class Meta:
         model = PracticeItem
         fields = ("label", "prompt", "kind", "points", "answer_spec", "hint")
-        widgets = {"prompt": forms.Textarea(attrs={"rows": 2})}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        rich_size(self, prompt="short", hint="line")
         if not self.is_bound:
             self.initial["answer_spec"] = json.dumps(self.instance.answer_spec or {}, ensure_ascii=False, indent=1)
 

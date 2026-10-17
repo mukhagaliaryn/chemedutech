@@ -59,7 +59,7 @@ explanation and «Next question» / «See the result». Lives inside x-data="{ c
     </fieldset>
     <div class="fade rounded-lg px-4 py-3.5 text-[15px] leading-[23px] {% if a.is_correct %}bg-success-50 text-success-700{% else %}bg-danger-50 text-danger-700{% endif %}" role="status">
       <b>{% if a.is_correct %}{% translate "Correct!" %}{% else %}{% translate "Wrong." %}{% endif %}</b>
-      {% if q.explanation %}<span class="text-ink">{{ q.explanation }}</span>{% endif %}
+      {% if q.explanation %}<span class="text-ink">{{ q.explanation|rich }}</span>{% endif %}
     </div>
     <div class="flex justify-end">
       {% if index|add:1 < total %}

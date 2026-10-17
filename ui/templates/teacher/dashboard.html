@@ -20,7 +20,7 @@ attention; my groups.
   </div>
   <div class="flex flex-wrap gap-2.5">
     <button type="button" class="btn btn-secondary h-[46px] font-bold" data-open-modal="new-group">{% include "components/icons.html#plus" %}{% translate "Create a group" %}</button>
-    <a class="btn btn-primary h-[46px] font-bold" href="{% url 'teacher:grading' %}">{% include "components/icons.html#check-square" %}{% translate "Check queue" %}<span class="count bg-white text-primary-600">{{ queue_count }}</span></a>
+    <a class="btn btn-primary h-[46px] font-bold" href="{% url 'teacher:grading' %}">{% include "components/icons.html#check-square" %}{% translate "Practice works" %}{% if queue_count %}<span class="count bg-white text-primary-600">{{ queue_count }}</span>{% endif %}</a>
   </div>
 </section>
 
@@ -53,7 +53,7 @@ attention; my groups.
 
 <div class="grid items-start gap-4 grid-cols-[repeat(auto-fit,minmax(min(380px,100%),1fr))]">
   <section aria-labelledby="queue" class="card flex flex-col gap-1">
-    <div class="mb-2 flex items-center justify-between gap-3"><h2 id="queue" class="text-[17px] font-extrabold">{% translate "Check queue" %}</h2><a class="link text-sm font-bold" href="{% url 'teacher:grading' %}">{% translate "All" %}</a></div>
+    <div class="mb-2 flex items-center justify-between gap-3"><h2 id="queue" class="text-[17px] font-extrabold">{% translate "AI could not grade" %}</h2><a class="link text-sm font-bold" href="{% url 'teacher:grading' %}">{% translate "All works" %}</a></div>
     {% for s in queue %}
       <a href="{% url 'teacher:grading_detail' s.pk %}" class="row-link text-ink">
         {% include "components/avatar.html" with person=s.enrollment.student shape="square" tone="neutral" %}
@@ -61,10 +61,10 @@ attention; my groups.
           <span class="truncate text-sm font-bold">{{ s.enrollment.student.full_name }}{% if s.enrollment.group %} · {{ s.enrollment.group }}{% endif %}</span>
           <span class="truncate text-caption font-normal text-ink-soft">{{ s.stage.topic.number }}. {{ s.stage.title }}{% if s.percent is not None %} · {% blocktranslate with p=s.percent|floatformat:0 %}AI: {{ p }}%{% endblocktranslate %}{% endif %} · {{ s.submitted_at|ago }}</span>
         </span>
-        <span class="badge badge-warning font-bold">{% translate "Check" %}</span>
+        <span class="badge badge-warning font-bold">{% translate "Grade" %}</span>
       </a>
     {% empty %}
-      <p class="text-sm text-ink-soft">{% translate "Nothing to check. Works the AI could not grade with confidence will appear here." %}</p>
+      <p class="text-sm text-ink-soft">{% translate "Every practice work is graded by the AI. A work it could not reach after several tries would appear here." %}</p>
     {% endfor %}
   </section>
 

@@ -1,6 +1,10 @@
 """Helpers for the component templates in ui/templates/components/ (registered as a builtin)."""
 
+import re
+
 from django import template
+from django.conf import settings
+from django.template.defaultfilters import linebreaksbr
 from django.urls import NoReverseMatch, reverse
 from django.utils import timezone
 from django.utils.formats import date_format
@@ -11,6 +15,7 @@ from apps.core.html import clean_html
 from apps.feedback import selectors as notification_selectors
 
 register = template.Library()
+RICH_MARKUP = re.compile(r"<(?:p|br|sub|sup|strong|em|b|i|u|s|ul|ol|li)\b", re.I)
 
 # Design-system status mapping, shared by badges, steppers and tables.
 STATUS_VARIANTS = {
@@ -128,6 +133,15 @@ def get_field(form, name):
 def sanitize(html):
     """{{ content.body|sanitize }} — CKEditor HTML made safe for students (nh3 allow-list)."""
     return mark_safe(clean_html(str(html or "")))  # cleaned by nh3 above
+
+
+@register.filter
+def rich(text):
+    """{{ answer.raw_value|rich }} — rich text from an editor (sanitised) or older plain text (line breaks kept)."""
+    text = str(text or "")
+    if RICH_MARKUP.search(text):
+        return mark_safe(clean_html(text))  # cleaned by nh3
+    return linebreaksbr(text, autoescape=True)
 
 
 @register.filter
@@ -290,3 +304,12 @@ def point_options(maximum):
         values.append(v)
         v += step
     return values
+
+
+@register.inclusion_tag("components/rich_text_assets.html")
+def rich_text_assets(bundle=True):
+    """{% rich_text_assets %} in {% block scripts %} — CKEditor 5 for editors created in JS
+    (ui/static/js/richtext.js: <textarea x-rich="answer" data-rt="long">). bundle=False when the page already has
+    {{ form.media }} (a form with a CKEditor5Field)."""
+    configs = {name: settings.CKEDITOR_5_CONFIGS[name] for name in settings.RICH_TEXT_CONFIGS}
+    return {"bundle": bundle, "configs": configs}

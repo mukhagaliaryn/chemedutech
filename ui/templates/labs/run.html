@@ -1,9 +1,12 @@
 {% extends "base.html" %}
 {% load static i18n %}
 {% comment %}
-Virtual lab (mockup «Студент · Зертханалық жұмыс»): dark top bar (back, lab, experiment tabs, timer), the
-experiment title with step / error pills, «Equipment and reagents» + the bench, then commands · warnings
-and observations · lab journal. All behaviour is labRunner (static/js/lab/engine.js) — only the layout lives here.
+Virtual lab — one full-screen workspace (STEP-27). Dark top bar (back, lab, experiment tabs, timer); below it
+three columns on wide screens: equipment rail (collapsible) · the bench with the current step under it ·
+side panel with tabs (steps · journal · messages). The phases follow each other in the same area:
+«intro» (goal, equipment, safety) → «work» → «result» (summary and the analysis task).
+Small screens: the page scrolls, the bench is full width, the equipment opens as a bottom sheet.
+All behaviour is labRunner (static/js/lab/engine.js) — only the layout lives here.
 {% endcomment %}
 {% block title %}{{ experiment.title }} · ChemEduTech{% endblock %}
 {% block body_class %}bg-canvas{% endblock %}
@@ -14,142 +17,239 @@ and observations · lab journal. All behaviour is labRunner (static/js/lab/engin
 {% if config.urls.ping %}<div x-data="stagePing('{{ config.urls.ping }}')" hidden></div>{% endif %}
 
 <div x-data="labRunner(JSON.parse(document.getElementById('lab-config').textContent))"
-     class="pb-10" :class="drag ? 'cursor-grabbing select-none' : ''">
+     class="flex min-h-dvh flex-col lg:h-dvh lg:overflow-hidden" :class="drag ? 'cursor-grabbing select-none' : ''">
 
   {# ---------- dark top bar ---------- #}
-  <header class="sticky top-0 z-30 bg-primary-950 text-white">
-    <div class="mx-auto flex min-h-[68px] max-w-[1440px] flex-wrap items-center gap-3 px-[clamp(16px,2vw,28px)] py-2 lg:flex-nowrap">
+  <header class="sticky top-0 z-30 shrink-0 bg-primary-950 text-white">
+    <div class="flex min-h-[60px] flex-wrap items-center gap-2.5 px-[clamp(12px,1.6vw,24px)] py-2 lg:flex-nowrap">
       <a href="{% if back_url %}{{ back_url }}{% elif topic %}{{ topic.get_absolute_url }}{% else %}{% url 'student:courses' %}{% endif %}"
          class="grid size-10 shrink-0 place-items-center rounded-[12px] border border-white/20 text-white hover:bg-white/10" aria-label="{% translate 'Back to the topic' %}">
         {% include "components/icons.html#arrow-left" with size=18 %}
       </a>
-      <span class="flex min-w-0 items-center gap-2.5">
-        <span class="tile size-9 rounded-[12px] bg-stage-lab">{% include "components/icons.html#lab" with size=18 %}</span>
+      <span class="flex min-w-0 flex-1 items-center gap-2.5 lg:flex-none">
+        <span class="tile size-9 shrink-0 rounded-[12px] bg-stage-lab">{% include "components/icons.html#lab" with size=18 %}</span>
         <span class="flex min-w-0 flex-col leading-[18px]">
-          <span class="truncate text-caption font-normal text-primary-300">{% if topic %}{% blocktranslate with n=topic.number %}Topic {{ n }}{% endblocktranslate %} · {% endif %}{% translate "Lab work" %}</span>
-          <span class="truncate text-[15px] font-bold">{{ lab.title }}</span>
+          <span class="truncate text-caption font-normal text-primary-300">{% if topic %}{% blocktranslate with n=topic.number %}Topic {{ n }}{% endblocktranslate %} · {% endif %}{{ lab.title }}</span>
+          <span class="truncate text-[15px] font-bold">{% blocktranslate with n=experiment.number %}Experiment {{ n }}{% endblocktranslate %}. {{ experiment.title }}</span>
         </span>
       </span>
 
-      <nav class="flex min-w-0 gap-1 overflow-x-auto rounded-md bg-white/[.08] p-1 lg:ml-auto" aria-label="{% translate 'Experiments' %}">
+      <nav class="order-last flex w-full min-w-0 gap-1 overflow-x-auto rounded-md bg-white/[.08] p-1 lg:order-none lg:ml-auto lg:w-auto" aria-label="{% translate 'Experiments' %}">
         {% for e in nav %}
           {% if e.url %}
             <a href="{{ e.url }}" title="{{ e.title }}" {% if e.current %}aria-current="page"{% endif %}
-               class="inline-flex h-9 shrink-0 items-center gap-2 rounded-sm px-3 text-[13px] font-bold whitespace-nowrap {% if e.current %}bg-white text-primary-900{% else %}text-primary-100 hover:bg-white/10{% endif %}">
+               class="inline-flex h-8 shrink-0 items-center gap-2 rounded-sm px-3 text-[13px] font-bold whitespace-nowrap {% if e.current %}bg-white text-primary-900{% else %}text-primary-100 hover:bg-white/10{% endif %}">
               <span class="size-2 rounded-full {% if e.done %}bg-mint{% elif e.current %}bg-primary-500{% else %}bg-primary-300{% endif %}" aria-hidden="true"></span>
-              <span class="num">{{ e.number }}</span>{% if e.current %}<span class="max-md:hidden">· {{ e.title|truncatechars:24 }}</span>{% endif %}
+              <span class="num">{{ e.number }}</span>
             </a>
           {% else %}
-            <span title="{{ e.title }} · {% translate 'locked' %}" class="inline-flex h-9 shrink-0 cursor-not-allowed items-center gap-2 rounded-sm px-3 text-[13px] font-bold whitespace-nowrap text-[#6b80a8]">
-              {% include "components/icons.html#lock" with size=12 %}<span class="num">{{ e.number }}</span>{% if e.current %}<span class="max-md:hidden">· {{ e.title|truncatechars:24 }}</span>{% endif %}
+            <span title="{{ e.title }} · {% translate 'locked' %}" class="inline-flex h-8 shrink-0 cursor-not-allowed items-center gap-2 rounded-sm px-3 text-[13px] font-bold whitespace-nowrap text-[#6b80a8]">
+              {% include "components/icons.html#lock" with size=12 %}<span class="num">{{ e.number }}</span>
             </span>
           {% endif %}
         {% endfor %}
       </nav>
 
-      <span class="num inline-flex h-10 shrink-0 items-center gap-2 rounded-[12px] bg-white/[.08] px-3.5 font-bold" aria-label="{% translate 'Time' %}">
+      <span class="num inline-flex h-10 shrink-0 items-center gap-2 rounded-[12px] bg-white/[.08] px-3 font-bold" aria-label="{% translate 'Time' %}">
         {% include "components/icons.html#timer" %}<span x-text="clock">00:00</span>
       </span>
-      {% include "partials/lang_menu.html" with dark=True %}
-      <button type="button" class="btn btn-outline-inverse btn-sm h-10 shrink-0" @click="restart()">{% include "components/icons.html#retry" %}{% translate "Start again" %}</button>
+      <span class="max-sm:hidden">{% include "partials/lang_menu.html" with dark=True %}</span>
+      <button type="button" class="btn btn-outline-inverse btn-sm h-10 shrink-0 max-sm:px-2.5" @click="restart()" :title="ui.restart">
+        {% include "components/icons.html#retry" %}<span class="max-md:sr-only">{% translate "Start again" %}</span>
+      </button>
+    </div>
+    {# step progress: one segment per command #}
+    <div class="flex h-1 gap-px bg-primary-900" aria-hidden="true">
+      <template x-for="(s, i) in exp.steps" :key="s.key">
+        <span class="flex-1 transition-colors" :class="stepState(i) === 'done' ? 'bg-mint' : (i === current && phase === 'work' ? 'bg-primary-400' : 'bg-transparent')"></span>
+      </template>
     </div>
   </header>
 
-  <main class="mx-auto flex max-w-[1440px] flex-col gap-4 px-[clamp(16px,2vw,28px)] pt-5">
-    <div class="flex flex-wrap items-end justify-between gap-3">
-      <div class="min-w-0">
-        <h1 class="text-[26px] leading-[34px] font-extrabold tracking-[-0.02em]">{% blocktranslate with n=experiment.number %}Experiment {{ n }}{% endblocktranslate %}. {{ experiment.title }}</h1>
-        <p class="mt-0.5 max-w-3xl text-ink-soft">{{ experiment.goal }}</p>
-      </div>
-      <span class="flex flex-wrap gap-2">
-        <span class="num inline-flex h-8 items-center rounded-full border border-line bg-surface px-3 text-[13px] font-semibold">
-          {% translate "Step" %}&nbsp;<span x-text="Math.min(current + 1, exp.steps.length)">1</span>&nbsp;/&nbsp;<span x-text="exp.steps.length"></span>
-        </span>
-        <span class="num inline-flex h-8 items-center rounded-full bg-danger-50 px-3 text-[13px] font-semibold text-danger-700">
-          {% translate "Errors" %}:&nbsp;<span x-text="messages.filter(m => m.kind === 'error' || m.kind === 'safety').length">0</span>
-        </span>
-      </span>
-    </div>
+  <div class="relative flex min-h-0 flex-1 flex-col lg:flex-row">
 
-    {# ---------- tools + bench ---------- #}
-    <div class="flex flex-wrap items-stretch gap-4">
-      <aside class="flex max-w-full flex-[1_1_240px] select-none flex-col gap-2.5 rounded-card border border-line bg-surface p-[18px] lg:max-w-[280px]" aria-labelledby="tools-title">
-        <h2 id="tools-title" class="mb-1 text-[15px] font-extrabold" x-text="ui.tools"></h2>
+    {# ---------- equipment rail (wide screens) / bottom sheet (small screens) ---------- #}
+    <div x-show="toolsOpen" x-cloak x-transition.opacity class="fixed inset-0 z-40 bg-[rgba(13,33,73,.45)] lg:hidden" @click="toolsOpen = false"></div>
+    <aside class="lab-tools flex select-none flex-col border-line bg-surface max-lg:fixed max-lg:inset-x-0 max-lg:bottom-0 max-lg:z-50 max-lg:max-h-[70dvh] max-lg:rounded-t-[24px] max-lg:shadow-modal max-lg:transition-transform lg:shrink-0 lg:border-r"
+           :class="[toolsOpen ? 'max-lg:translate-y-0' : 'max-lg:translate-y-full', toolsCollapsed ? 'lg:w-[72px]' : 'lg:w-[272px]']"
+           aria-labelledby="tools-title">
+      <div class="flex shrink-0 items-center justify-between gap-2 px-4 pt-4 pb-2" :class="toolsCollapsed && 'lg:justify-center lg:px-2'">
+        <h2 id="tools-title" class="text-[15px] font-extrabold" :class="toolsCollapsed && 'lg:sr-only'" x-text="ui.tools"></h2>
+        <button type="button" class="grid size-8 place-items-center rounded-[10px] text-ink-soft hover:bg-canvas max-lg:hidden"
+                @click="toolsCollapsed = !toolsCollapsed" :aria-label="toolsCollapsed ? ui.expand : ui.collapse" :title="toolsCollapsed ? ui.expand : ui.collapse">
+          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" :class="toolsCollapsed && 'rotate-180'"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button type="button" class="grid size-8 place-items-center rounded-[10px] text-ink-soft hover:bg-canvas lg:hidden" @click="toolsOpen = false" :aria-label="ui.close">
+          {% include "components/icons.html#x" %}
+        </button>
+      </div>
+      <div class="min-h-0 flex-1 overflow-y-auto px-4 pb-4" :class="toolsCollapsed && 'lg:px-2'">
         <template x-for="group in itemGroups" :key="group.label">
-          <div class="flex flex-col gap-2">
-            <h3 class="text-caption font-semibold text-ink-faint" x-text="group.label"></h3>
+          <div class="mb-3 flex flex-col gap-2">
+            <h3 class="text-caption font-semibold text-ink-faint" :class="toolsCollapsed && 'lg:sr-only'" x-text="group.label"></h3>
             <ul class="grid gap-2 sm:grid-cols-2 lg:grid-cols-1">
               <template x-for="it in group.items" :key="it.key">
-                <li class="group relative flex touch-none items-center gap-2.5 rounded-md border p-2.5 transition-[border-color,box-shadow,transform]"
-                    :class="has(it.key) ? 'border-success-50 bg-[#f3faf7]' : 'cursor-grab border-line bg-surface hover:-translate-y-px hover:border-primary-300 hover:shadow-[0_8px_20px_rgba(20,33,61,.08)]'"
-                    @pointerdown="!has(it.key) && startDrag($event, it.key)">
+                <li class="group relative flex touch-none items-center gap-2.5 rounded-md border p-2 transition-[border-color,box-shadow,transform]"
+                    :class="[has(it.key) ? 'border-success-50 bg-[#f3faf7]' : 'cursor-grab border-line bg-surface hover:-translate-y-px hover:border-primary-300 hover:shadow-[0_8px_20px_rgba(20,33,61,.08)]', toolsCollapsed && 'lg:justify-center lg:p-1.5']"
+                    :title="toolsCollapsed ? it.name : null"
+                    @pointerdown="!has(it.key) && (toolsOpen = false, startDrag($event, it.key))">
                   <span class="grid size-[38px] shrink-0 place-items-center rounded-[12px]" :class="has(it.key) ? 'bg-success-50 text-success-600' : 'bg-canvas text-lab-glass'">
                     <svg class="size-7" aria-hidden="true"><use :href="'#i-' + it.icon"></use></svg>
                   </span>
-                  <span class="min-w-0 flex-1 text-sm leading-[19px] font-semibold">
+                  <span class="min-w-0 flex-1 text-sm leading-[19px] font-semibold" :class="toolsCollapsed && 'lg:hidden'">
                     <span x-text="it.name"></span>
                     <span x-show="it.formula" class="ml-0.5 font-bold" x-text="it.formula"></span>
                   </span>
                   <button type="button" class="grid size-[30px] shrink-0 place-items-center rounded-[9px] bg-primary-50 text-primary-700 hover:bg-primary-100"
-                          x-show="!has(it.key)" @pointerdown.stop @click="place(it.key, 'button')"
+                          x-show="!has(it.key)" :class="toolsCollapsed && 'lg:hidden'" @pointerdown.stop @click="place(it.key, 'button'); toolsOpen = false"
                           :aria-label="ui.add + ': ' + it.name" :title="ui.add">
                     <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2"/></svg>
                   </button>
-                  <svg x-show="has(it.key)" class="size-[18px] shrink-0 text-success-600" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2.2"/></svg>
+                  <svg x-show="has(it.key)" class="size-[18px] shrink-0 text-success-600" :class="toolsCollapsed && 'lg:hidden'" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2.2"/></svg>
                 </li>
               </template>
             </ul>
           </div>
         </template>
-        <p class="mt-auto pt-2 text-caption leading-[18px] font-normal text-ink-faint">{% translate "Drag an item to the bench or press «+»." %}</p>
-      </aside>
+        <p class="pt-1 text-caption leading-[18px] font-normal text-ink-faint" :class="toolsCollapsed && 'lg:hidden'">{% translate "Drag an item to the bench or press «+»." %}</p>
+      </div>
+    </aside>
 
-      <section class="bench relative min-h-[460px] min-w-0 flex-[999_1_640px] select-none overflow-hidden rounded-card border border-line transition-shadow"
-               :class="drag && drag.over ? 'ring-2 ring-primary-600' : ''"
+    {# ---------- centre: bench + current step ---------- #}
+    <main class="relative flex min-w-0 flex-col lg:min-h-0 lg:flex-1">
+      <section class="bench relative min-w-0 select-none overflow-hidden transition-shadow lg:min-h-0 lg:flex-1"
+               :class="drag && drag.over ? 'ring-2 ring-inset ring-primary-600' : ''"
                data-drop="bench" aria-labelledby="bench-title">
         <h2 id="bench-title" class="sr-only" x-text="ui.bench"></h2>
-        <div class="pointer-events-none absolute inset-x-0 top-1/2 z-0 -translate-y-1/2 text-center font-medium text-ink-faint"
-             x-show="!placed.length && !drag" x-text="ui.bench_empty"></div>
-        <div class="pointer-events-none absolute inset-x-0 top-4 z-20 text-center" x-show="drag" x-cloak>
-          <span class="rounded-full bg-ink px-3 py-1 text-sm text-white" x-text="ui.drop_here"></span>
+        <button type="button" class="btn btn-secondary btn-sm absolute top-3 left-3 z-20 h-10 shadow-pop lg:hidden" x-show="phase === 'work'" @click="toolsOpen = true">
+          <svg class="size-5" aria-hidden="true"><use href="#i-flask"></use></svg><span x-text="ui.tools_toggle"></span>
+        </button>
+        <div class="lab-scene relative h-full">
+          <div class="pointer-events-none absolute inset-x-0 top-1/2 z-0 -translate-y-1/2 px-6 text-center font-medium text-ink-faint"
+               x-show="!placed.length && !drag" x-text="ui.bench_empty"></div>
+          <div class="pointer-events-none absolute inset-x-0 top-4 z-20 text-center" x-show="drag" x-cloak>
+            <span class="rounded-full bg-ink px-3 py-1 text-sm text-white" x-text="ui.drop_here"></span>
+          </div>
+
+          {% include experiment.scene_template %}
         </div>
 
-        {% include experiment.scene_template %}
-
-        {# equation strip: appears when the scene reveals the result #}
-        <div x-show="sc.revealEquation" x-cloak x-transition.opacity
-             class="graph-paper relative z-10 grid gap-x-8 gap-y-2 border-t border-line px-5 py-4 md:grid-cols-[auto_minmax(0,1fr)]">
-          <div>
-            <p class="text-caption font-normal text-ink-soft" x-text="ui.equation"></p>
-            <p class="mt-1 text-xl font-bold" x-html="exp.equation"></p>
-            <template x-for="row in exp.extra_equations">
-              <p class="mt-1 text-sm"><span class="text-ink-soft" x-text="row[0] + ':'"></span> <span x-html="row[1]"></span></p>
-            </template>
-          </div>
-          <div>
-            <p class="text-caption font-normal text-ink-soft" x-text="ui.explanation"></p>
-            <p class="mt-1 max-w-[62ch] text-sm leading-relaxed" x-text="exp.explanation"></p>
-          </div>
+        {# the latest message floats over the bench for a moment; the whole feed is in the «messages» tab #}
+        <div class="pointer-events-none absolute inset-x-3 bottom-3 z-20 flex justify-center" aria-live="polite">
+          <template x-if="toast">
+            <button type="button" class="appear pointer-events-auto flex max-w-xl items-start gap-2.5 rounded-lg px-4 py-3 text-left text-sm leading-5 shadow-pop ring-1"
+                    :class="{ safety: 'bg-warning-50 ring-warning-500/40', error: 'bg-danger-50 ring-danger-600/30', observation: 'bg-success-50 ring-success-600/30', info: 'bg-surface ring-line' }[toast.kind]"
+                    @click="toast = null; setPanel('log')">
+              <span class="mt-1.5 size-2 shrink-0 rounded-full" aria-hidden="true"
+                    :class="{safety: 'bg-warning-500', error: 'bg-danger-600', observation: 'bg-success-600', info: 'bg-primary-500'}[toast.kind]"></span>
+              <span><span class="font-bold" x-text="{safety: ui.safety, error: ui.error, observation: ui.observation, info: ui.info}[toast.kind] + ': '"></span><span x-text="toast.text"></span></span>
+            </button>
+          </template>
         </div>
       </section>
-    </div>
 
-    {# ---------- commands · messages · journal ---------- #}
-    <div class="grid items-start gap-4 grid-cols-[repeat(auto-fit,minmax(min(320px,100%),1fr))]">
-
-      <section class="flex flex-col gap-1.5 rounded-card border border-line bg-surface p-[18px]" aria-labelledby="cmd-title">
-        <div class="mb-1.5 flex items-center justify-between">
-          <h2 id="cmd-title" class="text-[15px] font-extrabold" x-text="ui.commands"></h2>
-          <button type="button" class="btn btn-soft btn-sm h-8 px-3" x-show="!finished" @click="hint()" x-text="ui.hint"></button>
+      {# reaction equation: appears when the scene reveals the result #}
+      <div x-show="sc.revealEquation" x-cloak x-transition.opacity x-data="{ more: false }"
+           class="graph-paper shrink-0 border-t border-line px-5 py-3">
+        <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+          <span class="text-caption font-normal text-ink-soft" x-text="ui.equation"></span>
+          <span class="text-lg font-bold" x-html="exp.equation"></span>
+          <button type="button" class="link ml-auto text-[13px] font-bold" @click="more = !more" :aria-expanded="more" x-text="ui.show_explanation"></button>
         </div>
-        <ol class="flex flex-col gap-1.5">
+        <div x-show="more" x-cloak class="mt-2 grid gap-1 text-sm">
+          <template x-for="row in exp.extra_equations">
+            <p><span class="text-ink-soft" x-text="row[0] + ':'"></span> <span x-html="row[1]"></span></p>
+          </template>
+          <p class="max-w-[70ch] leading-relaxed" x-text="exp.explanation"></p>
+        </div>
+      </div>
+
+      {# ---------- current step ---------- #}
+      <section class="shrink-0 border-t border-line bg-surface px-[clamp(12px,1.6vw,24px)] py-3" aria-labelledby="now-title" x-show="phase === 'work'">
+        <template x-if="step">
+          <div class="flex flex-col gap-2.5 lg:flex-row lg:items-center lg:gap-4">
+            <div class="flex min-w-0 items-center gap-3">
+              <span class="num grid size-10 shrink-0 place-items-center rounded-[12px] bg-primary-600 text-sm font-extrabold text-white" :class="busy ? '' : 'pulse'" x-text="(current + 1) + '/' + exp.steps.length"></span>
+              <span class="flex min-w-0 flex-1 flex-col leading-5">
+                <span id="now-title" class="text-caption font-semibold text-ink-faint" x-text="ui.now"></span>
+                <span class="text-[15px] font-extrabold" x-text="step.command"></span>
+              </span>
+              <button type="button" class="btn btn-soft btn-sm h-9 shrink-0 px-2.5 lg:hidden" @click="hint()" :aria-label="ui.hint" :title="ui.hint">{% include "components/icons.html#info" %}</button>
+            </div>
+
+            {# what to do depends on the kind of the step #}
+            <div class="flex min-w-0 flex-1 flex-wrap items-center gap-2">
+              <template x-if="step.kind === 'place' && !busy">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="text-[13px] text-ink-soft max-sm:hidden" x-text="ui.drag_or_add"></span>
+                  <template x-for="it in missingItems" :key="it.key">
+                    <button type="button" class="inline-flex h-9 items-center gap-1.5 rounded-full border border-line bg-surface pr-3 pl-1.5 text-[13px] font-semibold hover:border-primary-300 hover:bg-primary-50"
+                            @click="place(it.key, 'button')" :aria-label="ui.add + ': ' + it.name">
+                      <svg class="size-6 text-lab-glass" aria-hidden="true"><use :href="'#i-' + it.icon"></use></svg>
+                      <span x-text="it.formula || it.name"></span>
+                      <svg width="12" height="12" viewBox="0 0 14 14" class="text-primary-700" aria-hidden="true"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2"/></svg>
+                    </button>
+                  </template>
+                </div>
+              </template>
+              <template x-if="(step.kind === 'action' || step.kind === 'process') && !busy">
+                <button type="button" class="btn btn-primary h-10" @click="command(current)">{% include "components/icons.html#play" %}<span x-text="ui.run"></span></button>
+              </template>
+              <template x-if="busy">
+                <span class="inline-flex h-10 items-center gap-2 rounded-full bg-primary-50 px-4 text-sm font-semibold text-primary-700"><span class="size-2 animate-ping rounded-full bg-primary-500"></span><span x-text="ui.running"></span></span>
+              </template>
+              <template x-if="step.kind === 'choice' && !busy">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="text-[13px] text-ink-soft" x-text="ui.choose_one"></span>
+                  <template x-for="opt in step.options" :key="opt.key">
+                    <button type="button" class="min-h-9 rounded-full border border-line bg-surface px-3.5 py-1.5 text-left text-[13px] font-semibold hover:border-primary-600 hover:bg-primary-50" @click="choose(opt)" x-text="opt.label"></button>
+                  </template>
+                </div>
+              </template>
+              <template x-if="step.kind === 'journal'">
+                <button type="button" class="btn btn-primary h-10" @click="command(current)">{% include "components/icons.html#edit" %}<span x-text="ui.open_journal"></span></button>
+              </template>
+              <template x-if="step.kind === 'finish'">
+                <button type="button" class="btn btn-success h-10 font-bold" @click="command(current)">{% include "components/icons.html#check" %}<span x-text="ui.finish_experiment"></span></button>
+              </template>
+            </div>
+            <button type="button" class="btn btn-soft btn-sm h-10 shrink-0 max-lg:hidden" x-show="!finished" @click="hint()">{% include "components/icons.html#info" %}<span x-text="ui.hint"></span></button>
+          </div>
+        </template>
+        <template x-if="!step"><p class="text-sm font-semibold text-success-700" x-text="ui.all_done"></p></template>
+      </section>
+    </main>
+
+    {# ---------- side panel: steps · journal · messages ---------- #}
+    <aside class="flex min-h-0 flex-col border-line bg-surface max-lg:border-t lg:w-[360px] lg:shrink-0 lg:border-l xl:w-[380px]" aria-label="{% translate 'Lab panel' %}">
+      <div class="flex shrink-0 gap-1 border-b border-line p-2" role="tablist">
+        <button type="button" role="tab" class="flex h-9 flex-1 items-center justify-center gap-1.5 rounded-[10px] text-[13px] font-bold"
+                :class="panel === 'steps' ? 'bg-primary-50 text-primary-700' : 'text-ink-soft hover:bg-canvas'" :aria-selected="panel === 'steps'" @click="setPanel('steps')">
+          <span x-text="ui.steps"></span><span class="num text-ink-faint" x-text="done.length + '/' + exp.steps.length"></span>
+        </button>
+        <button type="button" role="tab" class="flex h-9 flex-1 items-center justify-center gap-1.5 rounded-[10px] text-[13px] font-bold"
+                :class="panel === 'journal' ? 'bg-primary-50 text-primary-700' : 'text-ink-soft hover:bg-canvas'" :aria-selected="panel === 'journal'" @click="setPanel('journal')">
+          <template x-if="!journalOpen"><span class="text-ink-faint">{% include "components/icons.html#lock" with size=12 %}</span></template>
+          <span x-text="ui.journal_tab"></span>
+          <svg x-show="journalSaved" class="size-3.5 text-success-600" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2.4"/></svg>
+        </button>
+        <button type="button" role="tab" class="flex h-9 flex-1 items-center justify-center gap-1.5 rounded-[10px] text-[13px] font-bold"
+                :class="panel === 'log' ? 'bg-primary-50 text-primary-700' : 'text-ink-soft hover:bg-canvas'" :aria-selected="panel === 'log'" @click="setPanel('log')">
+          <span x-text="ui.log"></span>
+          <span x-show="unread > 0" x-cloak class="num grid h-5 min-w-5 place-items-center rounded-full bg-danger-600 px-1.5 text-[11px] text-white" x-text="unread"></span>
+        </button>
+      </div>
+
+      <div class="min-h-0 flex-1 overflow-y-auto p-4 max-lg:max-h-[70dvh]">
+        {# commands: clicking a command out of order is a logged mistake (research data) #}
+        <ol x-show="panel === 'steps'" class="flex flex-col gap-1.5" :aria-label="ui.commands">
           <template x-for="(s, i) in exp.steps" :key="s.key">
             <li>
               <button type="button" @click="command(i)"
                       class="flex w-full items-center gap-3 rounded-md px-2.5 py-[9px] text-left text-sm font-semibold transition-[transform,background-color] hover:translate-x-0.5"
                       :class="{
                         'bg-success-50 text-success-700': stepState(i) === 'done',
-                        'bg-primary-600 text-white pulse': stepState(i) === 'current',
+                        'bg-primary-600 text-white': stepState(i) === 'current',
                         'bg-primary-50 text-primary-700': stepState(i) === 'running',
                         'bg-canvas text-ink-soft hover:text-ink': stepState(i) === 'locked',
                       }"
@@ -162,8 +262,8 @@ and observations · lab journal. All behaviour is labRunner (static/js/lab/engin
                 <span class="flex-1" x-text="s.command"></span>
                 <span class="text-caption font-medium" x-show="stepState(i) === 'running'" x-text="ui.running"></span>
               </button>
-
-              {# inline options for a choice step #}
+              <p x-show="stepState(i) === 'done'" class="mt-0.5 mb-1 pl-[46px] text-[13px] leading-[18px] text-ink-soft" x-text="s.result"></p>
+              {# options of a choice step pressed in the list #}
               <div x-show="choiceOpen && stepState(i) === 'current' && s.kind === 'choice'" x-cloak
                    class="mt-1.5 flex flex-col gap-1.5 border-l-2 border-primary-600 pl-3">
                 <template x-for="opt in s.options" :key="opt.key">
@@ -174,66 +274,176 @@ and observations · lab journal. All behaviour is labRunner (static/js/lab/engin
             </li>
           </template>
         </ol>
-      </section>
 
-      <section class="flex flex-col gap-2 rounded-card border border-line bg-surface p-[18px]" aria-labelledby="msg-title">
-        <h2 id="msg-title" class="mb-1.5 text-[15px] font-extrabold" x-text="ui.messages"></h2>
-        <p x-show="netError" x-cloak class="rounded-md bg-warning-50 px-3 py-2 text-sm text-warning-700" x-text="ui.network_error"></p>
-        <p x-show="!messages.length" class="text-sm text-ink-faint" x-text="ui.no_messages"></p>
-        <ul class="flex max-h-[380px] flex-col gap-2 overflow-y-auto pr-1" aria-live="polite">
-          <template x-for="m in messages" :key="m.id">
-            <li class="appear rounded-md px-3 py-2.5 text-sm leading-5"
-                :class="{ 'bg-warning-50': m.kind === 'safety', 'bg-danger-50': m.kind === 'error', 'bg-success-50': m.kind === 'observation', 'bg-primary-50': m.kind === 'info' }">
-              <p class="mb-0.5 flex items-center gap-2 text-caption font-bold">
-                <span class="size-2 shrink-0 rounded-full" aria-hidden="true"
-                      :class="{safety: 'bg-warning-500', error: 'bg-danger-600', observation: 'bg-success-600', info: 'bg-primary-500'}[m.kind]"></span>
-                <span x-text="{safety: ui.safety, error: ui.error, observation: ui.observation, info: ui.info}[m.kind]"></span>
-                <span class="num font-medium text-ink-faint" x-text="m.at"></span>
-              </p>
-              <p x-text="m.text"></p>
-            </li>
-          </template>
-        </ul>
-      </section>
+        {# lab journal: opens at its own step #}
+        <section x-show="panel === 'journal'" x-cloak id="lab-journal" class="flex flex-col gap-3" aria-labelledby="journal-title">
+          <div class="flex items-center justify-between gap-2">
+            <h2 id="journal-title" class="text-[15px] font-extrabold" x-text="ui.journal"></h2>
+            <span class="badge font-bold" :class="journalOpen ? 'badge-success' : 'badge-neutral'" x-text="journalOpen ? '{% translate "Open" %}' : '{% translate "Locked" %}'"></span>
+          </div>
+          <p x-show="!journalOpen" class="rounded-md bg-canvas px-3 py-2.5 text-[13px] text-ink-soft" x-text="ui.journal_locked.replace('%(step)s', journalStep ? journalStep.command : '')"></p>
+          <form @submit.prevent="saveJournal()" class="graph-paper flex flex-col gap-3 rounded-lg p-3.5 ring-1 ring-line" :class="journalOpen ? '' : 'opacity-55'">
+            <fieldset :disabled="!journalOpen || finished" class="flex min-w-0 flex-col gap-3.5">
+              <template x-for="f in exp.journal" :key="f.key">
+                <div class="flex min-w-0 flex-col gap-1.5">
+                  <label class="text-[13px] font-semibold" :for="'j-' + f.key" x-text="f.label"></label>
+                  <template x-if="f.kind === 'text'">
+                    <textarea class="input min-h-[3.5rem] rounded-[12px] text-sm" rows="2" :id="'j-' + f.key" x-model="journal[f.key]"
+                              x-rich.answer="!journalOpen || finished" data-rt="short"></textarea>
+                  </template>
+                  <template x-if="f.kind === 'number'">
+                    <div class="flex items-center gap-2">
+                      <input class="input num h-10 max-w-[9rem] rounded-[12px] text-sm" type="number" step="any" min="0" :id="'j-' + f.key" x-model="journal[f.key]">
+                      <span class="text-[13px] text-ink-soft" x-text="f.unit"></span>
+                    </div>
+                  </template>
+                  <template x-if="f.kind === 'choice'">
+                    <select class="input h-10 rounded-[12px] text-sm" :id="'j-' + f.key" x-model="journal[f.key]">
+                      <option value="">—</option>
+                      <template x-for="o in f.options" :key="o.key"><option :value="o.key" x-text="o.label"></option></template>
+                    </select>
+                  </template>
+                </div>
+              </template>
+              <p x-show="journalError" class="text-sm font-semibold text-danger-700" x-text="journalError"></p>
+              <button type="submit" class="btn btn-primary btn-sm self-start">{% include "components/icons.html#save" %}<span x-text="journalSaved ? ui.journal_saved : ui.save_journal"></span></button>
+            </fieldset>
+          </form>
+        </section>
 
-      <section id="lab-journal" class="graph-paper flex flex-col gap-3 rounded-card border border-line p-[18px]" aria-labelledby="journal-title">
-        <div class="flex items-center justify-between gap-2">
-          <h2 id="journal-title" class="text-[15px] font-extrabold" x-text="ui.journal"></h2>
-          <span class="badge font-bold" :class="journalOpen ? 'badge-success' : 'badge-neutral'" x-text="journalOpen ? '{% translate "Open" %}' : '{% translate "Locked" %}'"></span>
-        </div>
-        <p x-show="!journalOpen" class="text-[13px] text-ink-soft" x-text="ui.journal_locked.replace('%(step)s', journalStep ? journalStep.command : '')"></p>
-        <form @submit.prevent="saveJournal()" class="flex flex-col gap-3" :class="journalOpen ? '' : 'opacity-55'">
-          <fieldset :disabled="!journalOpen || finished" class="flex flex-col gap-3">
-            <template x-for="f in exp.journal" :key="f.key">
-              <div class="flex flex-col gap-1.5">
-                <label class="text-[13px] font-semibold" :for="'j-' + f.key" x-text="f.label"></label>
-                <template x-if="f.kind === 'text'">
-                  <textarea class="input min-h-[3.5rem] rounded-[12px] text-sm" rows="2" :id="'j-' + f.key" x-model="journal[f.key]"></textarea>
-                </template>
-                <template x-if="f.kind === 'number'">
-                  <div class="flex items-center gap-2">
-                    <input class="input num h-10 max-w-[9rem] rounded-[12px] text-sm" type="number" step="any" min="0" :id="'j-' + f.key" x-model="journal[f.key]">
-                    <span class="text-[13px] text-ink-soft" x-text="f.unit"></span>
-                  </div>
-                </template>
-                <template x-if="f.kind === 'choice'">
-                  <select class="input h-10 rounded-[12px] text-sm" :id="'j-' + f.key" x-model="journal[f.key]">
-                    <option value="">—</option>
-                    <template x-for="o in f.options" :key="o.key"><option :value="o.key" x-text="o.label"></option></template>
-                  </select>
-                </template>
-              </div>
+        {# every warning and observation #}
+        <section x-show="panel === 'log'" x-cloak class="flex flex-col gap-2" aria-labelledby="msg-title">
+          <h2 id="msg-title" class="sr-only" x-text="ui.messages"></h2>
+          <p x-show="netError" x-cloak class="rounded-md bg-warning-50 px-3 py-2 text-sm text-warning-700" x-text="ui.network_error"></p>
+          <p x-show="!messages.length" class="text-sm text-ink-faint" x-text="ui.no_messages"></p>
+          <ul class="flex flex-col gap-2">
+            <template x-for="m in messages" :key="m.id">
+              <li class="rounded-md px-3 py-2.5 text-sm leading-5"
+                  :class="{ 'bg-warning-50': m.kind === 'safety', 'bg-danger-50': m.kind === 'error', 'bg-success-50': m.kind === 'observation', 'bg-primary-50': m.kind === 'info' }">
+                <p class="mb-0.5 flex items-center gap-2 text-caption font-bold">
+                  <span class="size-2 shrink-0 rounded-full" aria-hidden="true"
+                        :class="{safety: 'bg-warning-500', error: 'bg-danger-600', observation: 'bg-success-600', info: 'bg-primary-500'}[m.kind]"></span>
+                  <span x-text="{safety: ui.safety, error: ui.error, observation: ui.observation, info: ui.info}[m.kind]"></span>
+                  <span class="num font-medium text-ink-faint" x-text="m.at"></span>
+                </p>
+                <p x-text="m.text"></p>
+              </li>
             </template>
-            <p x-show="journalError" class="text-sm font-semibold text-danger-700" x-text="journalError"></p>
-            <button type="submit" class="btn btn-primary btn-sm self-start" x-text="journalSaved ? ui.journal_saved : ui.save_journal"></button>
-          </fieldset>
-        </form>
-      </section>
-    </div>
-  </main>
+          </ul>
+        </section>
+      </div>
+    </aside>
+
+    {# ---------- briefing: before the first step ---------- #}
+    <section x-show="phase === 'intro'" x-transition.opacity class="absolute inset-0 z-40 overflow-y-auto bg-canvas/95 backdrop-blur-sm max-lg:fixed max-lg:z-[45]" aria-labelledby="intro-title">
+      <div class="mx-auto flex min-h-full max-w-3xl flex-col justify-center gap-5 px-4 py-8">
+        <div>
+          <p class="text-caption font-bold tracking-[.06em] text-stage-lab uppercase" x-text="ui.experiment_n.replace('%(n)s', exp.number)"></p>
+          <h1 id="intro-title" class="mt-1 text-[28px] leading-9 font-extrabold tracking-[-0.02em]" x-text="exp.title"></h1>
+          <p class="mt-2 max-w-[65ch] text-[17px] leading-relaxed text-ink-soft"><span class="font-bold text-ink" x-text="ui.goal + ': '"></span><span x-text="exp.goal"></span></p>
+        </div>
+        <div class="grid gap-3 md:grid-cols-2">
+          <div class="rounded-card border border-line bg-surface p-5">
+            <h2 class="mb-3 text-[15px] font-extrabold" x-text="ui.tools"></h2>
+            <ul class="grid gap-2">
+              <template x-for="it in requiredItems" :key="it.key">
+                <li class="flex items-center gap-2.5 text-sm">
+                  <span class="grid size-8 shrink-0 place-items-center rounded-[10px] bg-canvas text-lab-glass"><svg class="size-6" aria-hidden="true"><use :href="'#i-' + it.icon"></use></svg></span>
+                  <span><span x-text="it.name"></span> <span x-show="it.formula" class="font-bold" x-text="it.formula"></span></span>
+                </li>
+              </template>
+            </ul>
+          </div>
+          <div class="flex flex-col gap-3">
+            <div class="rounded-card border border-line bg-surface p-5">
+              <h2 class="mb-2.5 text-[15px] font-extrabold" x-text="ui.how_title"></h2>
+              <ol class="grid gap-2 text-sm leading-5">
+                <template x-for="(t, i) in [ui.how_1, ui.how_2, ui.how_3]" :key="i">
+                  <li class="flex gap-2.5"><span class="num grid size-6 shrink-0 place-items-center rounded-[8px] bg-primary-50 text-caption font-extrabold text-primary-700" x-text="i + 1"></span><span x-text="t"></span></li>
+                </template>
+              </ol>
+            </div>
+            <div class="rounded-card bg-warning-50 p-5">
+              <h2 class="mb-2 flex items-center gap-2 text-[15px] font-extrabold text-warning-700">{% include "components/icons.html#warn" %}<span x-text="ui.safety"></span></h2>
+              <ul class="grid gap-1.5 text-sm leading-5 text-ink">
+                <template x-for="(t, i) in safetyNotes" :key="i"><li x-text="t"></li></template>
+                <li class="text-ink-soft" x-text="ui.safety_generic"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-wrap items-center gap-3">
+          <button type="button" class="btn btn-primary h-12 px-6 text-base font-bold" @click="begin()">{% include "components/icons.html#play" %}<span x-text="ui.start"></span></button>
+          <span class="text-sm text-ink-soft" x-text="ui.steps_total.replace('%(n)s', exp.steps.length)"></span>
+        </div>
+      </div>
+    </section>
+
+    {# ---------- result and analysis: after «finish» ---------- #}
+    <section x-show="phase === 'result'" x-cloak x-transition.opacity class="absolute inset-0 z-40 overflow-y-auto bg-canvas max-lg:fixed max-lg:z-[45]" aria-labelledby="an-title">
+      <div class="mx-auto flex max-w-3xl flex-col gap-6 px-4 py-8">
+        <div>
+          <p class="text-caption font-bold tracking-[.06em] text-stage-lab uppercase" x-text="ui.experiment_n.replace('%(n)s', exp.number)"></p>
+          <h1 id="an-title" class="mt-1 text-[28px] leading-9 font-extrabold tracking-[-0.02em]" x-text="ui.result_title"></h1>
+        </div>
+        <dl class="grid grid-cols-2 gap-2.5 sm:grid-cols-4" x-show="summary">
+          <div class="rounded-md border border-line bg-surface p-3"><dt class="text-caption font-normal text-ink-soft" x-text="ui.result_time"></dt><dd class="num mt-1 text-lg font-extrabold" x-text="summary && formatDuration(summary.duration_s)"></dd></div>
+          <div class="rounded-md border border-line bg-surface p-3"><dt class="text-caption font-normal text-ink-soft" x-text="ui.result_errors"></dt><dd class="num mt-1 text-lg font-extrabold" x-text="summary && summary.order_errors"></dd></div>
+          <div class="rounded-md border border-line bg-surface p-3"><dt class="text-caption font-normal text-ink-soft" x-text="ui.result_warnings"></dt><dd class="num mt-1 text-lg font-extrabold" x-text="summary && summary.safety_warnings"></dd></div>
+          <div class="rounded-md border border-line bg-surface p-3"><dt class="text-caption font-normal text-ink-soft" x-text="ui.result_wrong"></dt><dd class="num mt-1 text-lg font-extrabold" x-text="summary && summary.wrong"></dd></div>
+        </dl>
+        <div class="graph-paper rounded-card p-5 ring-1 ring-line">
+          <p class="text-caption font-normal text-ink-soft" x-text="ui.equation"></p>
+          <p class="mt-1 text-xl font-bold" x-html="exp.equation"></p>
+          <template x-for="row in exp.extra_equations">
+            <p class="mt-1 text-sm"><span class="text-ink-soft" x-text="row[0] + ':'"></span> <span x-html="row[1]"></span></p>
+          </template>
+          <p class="mt-3 max-w-[70ch] text-sm leading-relaxed" x-text="exp.explanation"></p>
+        </div>
+
+        <div class="rounded-card border border-line bg-surface p-6">
+          <h2 class="text-lg font-extrabold" x-text="ui.analysis"></h2>
+          <form class="mt-4 flex flex-col gap-5" @submit.prevent="submitAnalysis()">
+            <fieldset :disabled="!!analysisResult" class="flex min-w-0 flex-col gap-5">
+              <template x-for="(q, qi) in exp.questions" :key="q.key">
+                <div>
+                  <p class="mb-2 font-semibold"><span class="num text-ink-faint" x-text="(qi + 1) + '. '"></span><span x-text="q.text"></span></p>
+                  <template x-if="q.options.length">
+                    <div class="flex flex-col gap-1.5">
+                      <template x-for="o in q.options" :key="o.key">
+                        <label class="flex cursor-pointer items-start gap-2.5 rounded-md border-2 border-line bg-surface px-3.5 py-2.5 text-sm has-[:checked]:border-primary-600 has-[:checked]:bg-primary-50"
+                               :class="analysisResult ? (o.correct ? '!border-success-600 !bg-success-50' : (analysis[q.key] === o.key ? '!border-danger-600 !bg-danger-50' : '')) : ''">
+                          <input type="radio" class="mt-0.5" :name="'q-' + q.key" :value="o.key" x-model="analysis[q.key]">
+                          <span x-text="o.label"></span>
+                        </label>
+                      </template>
+                    </div>
+                  </template>
+                  <template x-if="!q.options.length">
+                    <textarea class="input text-sm" rows="3" :placeholder="ui.answer_placeholder" x-model="analysis[q.key]"
+                              x-rich.answer="!!analysisResult" data-rt="short" :aria-label="q.text"></textarea>
+                  </template>
+                </div>
+              </template>
+              <button type="submit" class="btn btn-primary self-start" x-show="!analysisResult">{% include "components/icons.html#send" %}<span x-text="ui.submit_analysis"></span></button>
+            </fieldset>
+          </form>
+
+          <div x-show="analysisResult" x-cloak class="mt-6 rounded-lg bg-success-50 p-4">
+            <p class="font-bold text-success-700"><span x-text="ui.result_score"></span>:
+              <span class="num" x-text="analysisResult && (analysisResult.correct + ' / ' + analysisResult.total)"></span></p>
+            <div class="mt-4 flex flex-wrap gap-2">
+              <a class="btn btn-primary" x-show="cfg.urls.next" :href="cfg.urls.next">{% include "components/icons.html#chevron-right" %}<span x-text="ui.next_experiment"></span></a>
+              <a class="btn btn-secondary" :href="cfg.urls.topic">{% include "components/icons.html#arrow-left" %}<span x-text="ui.back_to_topic"></span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 
   {# ---------- drag ghost ---------- #}
-  <div x-show="drag && drag.moved" x-cloak class="pointer-events-none fixed z-50 flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 rounded-lg bg-white px-3 py-2 shadow-pop ring-1 ring-primary-300"
+  <div x-show="drag && drag.moved" x-cloak class="pointer-events-none fixed z-[60] flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 rounded-lg bg-white px-3 py-2 shadow-pop ring-1 ring-primary-300"
        :style="drag ? `left:${drag.x}px; top:${drag.y}px` : ''">
     <template x-if="drag">
       <span class="flex items-center gap-2 text-sm font-semibold">
@@ -242,59 +452,12 @@ and observations · lab journal. All behaviour is labRunner (static/js/lab/engin
       </span>
     </template>
   </div>
-
-  {# ---------- analysis task ---------- #}
-  <div x-show="analysisOpen" x-cloak class="fixed inset-0 z-[70] overflow-y-auto bg-[rgba(13,33,73,.5)] p-3 backdrop-blur-sm sm:p-8" role="dialog" aria-modal="true" aria-labelledby="an-title">
-    <div class="mx-auto max-w-2xl rounded-xl bg-surface p-6 shadow-modal sm:p-8" @keydown.escape.window="analysisOpen = false" style="animation: pop .22s ease-out both">
-      <h2 id="an-title" class="text-[24px] font-extrabold" x-text="ui.result_title"></h2>
-      <dl class="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-4" x-show="summary">
-        <div class="rounded-md bg-canvas p-3"><dt class="text-caption font-normal text-ink-soft" x-text="ui.result_time"></dt><dd class="num mt-1 text-lg font-extrabold" x-text="summary && formatDuration(summary.duration_s)"></dd></div>
-        <div class="rounded-md bg-canvas p-3"><dt class="text-caption font-normal text-ink-soft" x-text="ui.result_errors"></dt><dd class="num mt-1 text-lg font-extrabold" x-text="summary && summary.order_errors"></dd></div>
-        <div class="rounded-md bg-canvas p-3"><dt class="text-caption font-normal text-ink-soft" x-text="ui.result_warnings"></dt><dd class="num mt-1 text-lg font-extrabold" x-text="summary && summary.safety_warnings"></dd></div>
-        <div class="rounded-md bg-canvas p-3"><dt class="text-caption font-normal text-ink-soft" x-text="ui.result_wrong"></dt><dd class="num mt-1 text-lg font-extrabold" x-text="summary && summary.wrong"></dd></div>
-      </dl>
-
-      <h3 class="mt-7 text-lg font-extrabold" x-text="ui.analysis"></h3>
-      <form class="mt-3 flex flex-col gap-5" @submit.prevent="submitAnalysis()">
-        <fieldset :disabled="!!analysisResult" class="flex flex-col gap-5">
-          <template x-for="(q, qi) in exp.questions" :key="q.key">
-            <div>
-              <p class="mb-2 font-semibold"><span class="num text-ink-faint" x-text="(qi + 1) + '. '"></span><span x-text="q.text"></span></p>
-              <template x-if="q.options.length">
-                <div class="flex flex-col gap-1.5">
-                  <template x-for="o in q.options" :key="o.key">
-                    <label class="flex cursor-pointer items-start gap-2.5 rounded-md border-2 border-line bg-surface px-3.5 py-2.5 text-sm has-[:checked]:border-primary-600 has-[:checked]:bg-primary-50"
-                           :class="analysisResult ? (o.correct ? '!border-success-600 !bg-success-50' : (analysis[q.key] === o.key ? '!border-danger-600 !bg-danger-50' : '')) : ''">
-                      <input type="radio" class="mt-0.5" :name="'q-' + q.key" :value="o.key" x-model="analysis[q.key]">
-                      <span x-text="o.label"></span>
-                    </label>
-                  </template>
-                </div>
-              </template>
-              <template x-if="!q.options.length">
-                <textarea class="input text-sm" rows="3" :placeholder="ui.answer_placeholder" x-model="analysis[q.key]"></textarea>
-              </template>
-            </div>
-          </template>
-          <button type="submit" class="btn btn-primary self-start" x-show="!analysisResult" x-text="ui.submit_analysis"></button>
-        </fieldset>
-      </form>
-
-      <div x-show="analysisResult" x-cloak class="mt-6 rounded-lg bg-success-50 p-4">
-        <p class="font-bold text-success-700"><span x-text="ui.result_score"></span>:
-          <span class="num" x-text="analysisResult && (analysisResult.correct + ' / ' + analysisResult.total)"></span></p>
-        <div class="mt-4 flex flex-wrap gap-2">
-          <a class="btn btn-primary" x-show="cfg.urls.next" :href="cfg.urls.next" x-text="ui.next_experiment"></a>
-          <a class="btn btn-secondary" :href="cfg.urls.topic" x-text="ui.back_to_topic"></a>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
 {% if config.urls.ping %}<script defer src="{% static 'js/stage.js' %}"></script>{% endif %}
+{% rich_text_assets %}
 <script defer src="{% static 'js/lab/engine.js' %}"></script>
 <script defer src="{% static experiment.scene_script %}"></script>
 {% endblock %}

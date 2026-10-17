@@ -4,6 +4,7 @@
 {% block crumb %}{% translate "Course content" %}{% endblock %}
 {% block page_title %}{% if question %}{% translate "Edit the question" %}{% else %}{% translate "New question" %}{% endif %}{% endblock %}
 {% block head %}{{ form.media }}{% endblock %}
+{% block scripts %}{% rich_text_assets bundle=False %}{% endblock %}
 {% block content %}
 <p class="text-sm text-ink-soft"><a href="{% url 'teacher:course_content' course.slug %}">{{ course.title }}</a> / <a href="{% url 'teacher:quiz' course.slug quiz.pk %}">{{ quiz.title }}</a></p>
 <h1 class="text-h1">{% if question %}{% translate "Edit the question" %}{% else %}{% translate "New question" %}{% endif %}</h1>
@@ -26,16 +27,16 @@
     </div>
     {% include "components/input.html" with field=form.text %}
 
-    <fieldset x-show="kind === 'single' || kind === 'multiple'" class="flex flex-col gap-2">
+    <fieldset x-show="kind === 'single' || kind === 'multiple'" class="flex min-w-0 flex-col gap-2">
       {% translate "— mark one correct" as l_one %}{% translate "— mark every correct one" as l_many %}
       <legend class="label">{% translate "Options" %} <span class="font-normal text-ink-soft" x-text="kind === 'single' ? '{{ l_one|escapejs }}' : '{{ l_many|escapejs }}'"></span></legend>
       <input type="hidden" name="choices-count" :value="rows.length">
       <template x-for="(row, i) in rows" :key="i">
-        <div class="flex items-center gap-2" :class="row.delete && 'opacity-50'">
+        <div class="flex items-start gap-2" :class="row.delete && 'opacity-50'">
           <input type="hidden" :name="`choices-${i}-id`" :value="row.id">
-          <input type="checkbox" class="size-4" :name="`choices-${i}-correct`" x-model="row.correct" aria-label="{% translate 'correct' %}">
-          <input type="text" class="input flex-1" :name="`choices-${i}-text`" x-model="row.text" maxlength="500" placeholder="{% translate 'Option text (H<sub>2</sub>O is allowed)' %}">
-          <label class="flex items-center gap-1 text-caption text-ink-soft" x-show="row.id && !row.in_use">
+          <input type="checkbox" class="mt-[42px] size-4 shrink-0" :name="`choices-${i}-correct`" x-model="row.correct" aria-label="{% translate 'correct' %}">
+          <div class="min-w-0 flex-1"><textarea class="input" rows="1" :name="`choices-${i}-text`" x-model="row.text" x-rich.compact data-rt="line" :aria-label="`{% translate 'Option' %} ${i + 1}`"></textarea></div>
+          <label class="mt-[38px] flex items-center gap-1 text-caption text-ink-soft" x-show="row.id && !row.in_use">
             <input type="checkbox" class="size-4" :name="`choices-${i}-delete`" x-model="row.delete">{% translate "delete" %}
           </label>
         </div>

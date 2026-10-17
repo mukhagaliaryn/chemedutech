@@ -25,7 +25,7 @@ AttemptAnswer) without an explicit migration plan agreed with the user.
 - A topic's stages are an ordered list of any length and any mix of kinds (typically 1 theory, 1 video, 1 lab,
   several practice works, 1 test). Never assume a single stage of a kind; gating follows list order.
 - Practice works are auto-graded: exact fields by checkers (`assessments/chem.py` for formulas/equations),
-  open answers by AI (`practice/services/ai_grading.py`, Anthropic SDK) with teacher confirmation. Never compare answers 1:1 as raw strings.
+  open answers by AI (`practice/services/ai_grading.py`, Anthropic SDK) — the AI grade is final, a teacher may change it. Never compare answers 1:1 as raw strings.
   Tests must mock the Anthropic client — no network in tests.
 - Reply to the user in Kazakh.
 

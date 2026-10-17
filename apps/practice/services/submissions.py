@@ -3,12 +3,14 @@
 from __future__ import annotations
 
 import json
+from datetime import timedelta
 from decimal import ROUND_HALF_UP, Decimal
 
 from django.db import transaction
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
+from apps.core.html import html_to_text
 from apps.courses.selectors import stage_url
 from apps.feedback import services as feedback
 from apps.progress import services as progress
@@ -62,7 +64,7 @@ def submit(enrollment, task: PracticeTask, answers: dict, file=None) -> Practice
         answer = PracticeAnswer(submission=submission, item=item, raw_value=_raw_text(raw or ""))
         if item.kind == PracticeItem.Kind.OPEN:
             has_open = True
-            if not answer.raw_value.strip():  # nothing to grade
+            if not html_to_text(answer.raw_value).strip():  # nothing to grade (an empty editor too)
                 answer.is_correct, answer.points, answer.feedback = False, Decimal(0), _("The answer is empty.")
         else:
             result = checkers.check(item.kind, item.answer_spec, raw)
@@ -82,27 +84,45 @@ def submit(enrollment, task: PracticeTask, answers: dict, file=None) -> Practice
     return finalize(submission)
 
 
-def grade_open_answers(submission: PracticeSubmission, client=None) -> None:
-    """Run the AI on every open answer that has text and no grade yet (called by the background task)."""
+# Background re-tries after the AI could not be reached (minutes after the failed run); then a teacher grades it.
+AI_RETRY_DELAYS_MIN = (5, 30, 120)
+
+
+def _can_defer() -> bool:
+    from django.tasks import default_task_backend
+
+    return default_task_backend.supports_defer
+
+
+def grade_open_answers(submission: PracticeSubmission, client=None, retry: int = 0) -> None:
+    """Run the AI on every open answer that has text and no grade yet (called by the background task).
+
+    The AI's grade is final. When the AI cannot be reached the work stays «grading» and the task runs again later
+    (AI_RETRY_DELAYS_MIN); only after the last re-try does the work wait for a teacher (§5.6)."""
     from .ai_grading import grade_open_answer
 
     pending = submission.answers.filter(item__kind=PracticeItem.Kind.OPEN, is_correct__isnull=True).select_related(
         "item__rubric", "submission__stage__practice_task"
     )
+    failed = False
     for answer in pending:
         if not hasattr(answer.item, "rubric"):
             continue  # no rubric → a teacher grades it
         grade = grade_open_answer(answer, client=client)
-        if grade.ok:
+        if grade.usable:
             top = sum(c.points for c in answer.item.rubric.criteria.all())
             answer.points = q2(grade.points)
             answer.is_correct = top > 0 and answer.points >= top
             answer.feedback = grade.feedback_kk
             answer.save(update_fields=["points", "is_correct", "feedback", "updated_at"])
-        elif grade.criteria_scores:  # low confidence: provisional points, the teacher decides
-            answer.points = q2(grade.points)
-            answer.feedback = grade.feedback_kk
-            answer.save(update_fields=["points", "feedback", "updated_at"])
+        else:
+            failed = True
+    if failed and retry < len(AI_RETRY_DELAYS_MIN) and _can_defer():
+        from ..tasks import grade_submission
+
+        run_after = timezone.now() + timedelta(minutes=AI_RETRY_DELAYS_MIN[retry])
+        grade_submission.using(run_after=run_after).enqueue(submission.pk, retry + 1)
+        return
     submission = finalize(submission)
     if submission.status == S.GRADED:  # graded in the background: the student may have left the page
         _notify(submission, feedback.Kind.GRADED)
@@ -116,10 +136,10 @@ def _notify(submission: PracticeSubmission, kind) -> None:
 def _needs_review(submission) -> bool:
     open_answers = submission.answers.filter(item__kind=PracticeItem.Kind.OPEN).select_related("ai_grade")
     for answer in open_answers:
-        if answer.is_correct is False and not answer.raw_value.strip():
+        if answer.is_correct is False and not html_to_text(answer.raw_value).strip():
             continue  # empty open answer: 0 points, nothing to review
         grade = getattr(answer, "ai_grade", None)
-        if grade is None or not grade.ok:
+        if grade is None or not grade.usable:
             return True
     return False
 

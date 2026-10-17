@@ -1,6 +1,6 @@
 """Score arithmetic (ARCHITECTURE §5). Pure functions over model instances, no queries."""
 
-from collections import Counter
+from collections import defaultdict
 from decimal import ROUND_HALF_UP, Decimal
 
 from apps.courses.models import DEFAULT_STAGE_KIND_WEIGHTS
@@ -15,19 +15,20 @@ def q2(value) -> Decimal:
 def stage_weights(course, stages) -> dict[int, Decimal]:
     """Weights of the required stages of one topic (§5.2).
 
-    A kind's share (course.stage_kind_weights, defaults for missing kinds) is split equally between the
-    stages of that kind; Stage.weight set by the author wins. Kinds absent from the topic simply do not
-    appear, so dividing by the total later normalises the rest.
+    A kind's share (course.stage_kind_weights, defaults for missing kinds) is split between the stages of that
+    kind in proportion to Stage.weight — the stage's relative weight within its kind (default 1: equal parts).
+    Kinds absent from the topic simply do not appear, so dividing by the total later normalises the rest.
     """
     shares = {**DEFAULT_STAGE_KIND_WEIGHTS, **(course.stage_kind_weights or {})}
     required = [s for s in stages if s.is_required]
-    auto_count = Counter(s.kind for s in required if s.weight is None)
+    kind_total = defaultdict(Decimal)
+    for s in required:
+        kind_total[s.kind] += Decimal(s.weight)
     weights = {}
     for s in required:
-        if s.weight is not None:
-            weights[s.pk] = Decimal(s.weight)
-        else:
-            weights[s.pk] = Decimal(str(shares.get(s.kind, 0))) / auto_count[s.kind]
+        total = kind_total[s.kind]
+        share = Decimal(str(shares.get(s.kind, 0)))
+        weights[s.pk] = share * Decimal(s.weight) / total if total else Decimal(0)
     return weights
 
 

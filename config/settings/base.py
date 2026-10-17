@@ -211,10 +211,20 @@ CKEDITOR_5_CONFIGS = {
         "table": {"contentToolbar": ["tableColumn", "tableRow", "mergeTableCells"]},
         "mediaEmbed": {"previewsInData": False},
     },
-    "compact": {  # question and answer text: formulas need sub/sup
+    "compact": {  # teacher's short texts: question, option, explanation, prompt, hint — formulas need sub/sup
         "toolbar": {"items": ["bold", "italic", "subscript", "superscript", *_CK_SPECIAL, "|", "undo", "redo"]},
     },
+    "answer": {  # student's free-text answers (practice, lab journal and analysis)
+        "toolbar": {
+            "items": [
+                "bold", "italic", "subscript", "superscript", *_CK_SPECIAL, "|", "bulletedList", "numberedList",
+                "|", "undo", "redo",
+            ],  # fmt: skip
+        },
+    },
 }
+# Configs the pages create editors from in JS (ui/static/js/richtext.js, {% rich_text_assets %}).
+RICH_TEXT_CONFIGS = ("compact", "answer")
 
 # --- Admin (django-unfold); full navigation/dashboard in STEP-14 ----------
 UNFOLD = {

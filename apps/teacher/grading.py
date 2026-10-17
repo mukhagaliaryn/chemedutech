@@ -1,4 +1,7 @@
-"""Teacher: the practice grading queue, the grading page and comments on works (STEP-11)."""
+"""Teacher: practice works graded by the AI, the page to change a grade, and comments on works (STEP-11, STEP-26).
+
+The AI grade is final; a teacher changes it only if they want to. «AI could not grade» lists the rare works the AI
+could not reach after its background re-tries; «Spot-check» is the optional research sample (§5.6)."""
 
 from decimal import Decimal, InvalidOperation
 
@@ -23,9 +26,9 @@ from .views import teacher_only
 
 S = PracticeSubmission.Status
 TABS = (
-    (S.NEEDS_REVIEW, gettext_lazy("To check")),
-    (practice_selectors.SAMPLE, gettext_lazy("Spot-check")),
     (S.GRADED, gettext_lazy("Graded by AI")),
+    (S.NEEDS_REVIEW, gettext_lazy("AI could not grade")),
+    (practice_selectors.SAMPLE, gettext_lazy("Spot-check")),
     (S.RETURNED, gettext_lazy("Returned")),
 )
 
@@ -34,9 +37,9 @@ def _enrollment_ids(request, course=None):
     return list(course_selectors.teacher_enrollments(request.user, course).values_list("pk", flat=True))
 
 
-def _queue_context(request) -> dict:
+def _queue_context(request, default=S.GRADED) -> dict:
     """The queue column: tabs with counts, the chosen course and the works of the chosen tab."""
-    status = request.GET.get("status") or S.NEEDS_REVIEW
+    status = request.GET.get("status") or default
     if status not in dict(TABS):
         raise Http404
     courses = list(course_selectors.teacher_courses(request.user))
@@ -107,6 +110,7 @@ def _decisions(request, rows) -> dict:
 
 
 def _next_in_queue(request, submission):
+    """After a work the AI could not grade comes the next such work; otherwise back to the list."""
     ids = _enrollment_ids(request)
     nxt = practice_selectors.grading_queue(ids, S.NEEDS_REVIEW).exclude(pk=submission.pk).first()
     return reverse("teacher:grading_detail", args=[nxt.pk]) if nxt else reverse("teacher:grading")
@@ -126,7 +130,7 @@ def detail(request, pk):
             messages.success(request, _("The work is returned to the student; the attempt is given back."))
         else:
             practice.teacher_grade(submission, request.user, _decisions(request, rows), comment)
-            messages.success(request, _("The grade is confirmed."))
+            messages.success(request, _("The grade is saved."))
         return redirect(_next_in_queue(request, submission))
     feedback.mark_thread_read(request.user, submission)
     auto_points = sum((r["answer"].points for r in rows if not r["open"]), Decimal(0))
@@ -144,7 +148,7 @@ def detail(request, pk):
         request,
         "teacher/grading_detail.html",
         {
-            **_queue_context(request),
+            **_queue_context(request, submission.status if submission.status in dict(TABS) else S.GRADED),
             "submission": submission,
             "student": submission.enrollment.student,
             "auto_points": auto_points,

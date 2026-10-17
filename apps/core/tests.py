@@ -71,3 +71,27 @@ class StatsTests(SimpleTestCase):
         self.assertEqual(stats.cohen_kappa([("1", "1"), ("1", "1")]), 1.0)
         self.assertIsNone(stats.cohen_kappa([]))
         self.assertEqual(stats.label(Decimal("1.50")), "1.5")
+
+
+class RichTextTests(SimpleTestCase):
+    """STEP-25: answer options keep inline marks only; rich answers reach the AI as plain text."""
+
+    def test_inline_html_keeps_marks_on_one_line(self):
+        from apps.core.html import inline_html
+
+        self.assertEqual(inline_html("<p>H<sub>2</sub>SO<sub>4</sub></p>"), "H<sub>2</sub>SO<sub>4</sub>")
+        self.assertEqual(inline_html("<p>a</p><p>b <script>x()</script></p>"), "a<br>b")
+        self.assertEqual(inline_html("<p>&nbsp;</p>"), "")
+
+    def test_html_to_text_uses_unicode_indices(self):
+        from apps.core.html import html_to_text
+
+        self.assertEqual(html_to_text("<p>SO<sub>4</sub><sup>2-</sup> &amp; Zn<sup>2+</sup></p>"), "SO₄²⁻ & Zn²⁺")
+        self.assertEqual(html_to_text("<ul><li>a</li><li>b</li></ul>"), "• a\n• b")
+        self.assertEqual(html_to_text("plain 2 < 3"), "plain 2 < 3")
+
+    def test_rich_filter_sanitises_html_and_keeps_old_plain_text(self):
+        from ui.templatetags.ui_tags import rich
+
+        self.assertEqual(rich("<p>H<sub>2</sub>O<script>x</script></p>"), "<p>H<sub>2</sub>O</p>")
+        self.assertEqual(rich("line 1\nline <2>"), "line 1<br>line &lt;2&gt;")

@@ -5,6 +5,9 @@
  * (pointer drag & drop + buttons), warnings, the message feed, the lab
  * journal, finishing, the analysis task and the research event log.
  *
+ * The page is one workspace shown in phases (STEP-27): «intro» (goal, equipment, safety) → «work» (bench, the
+ * current step, the side panel with steps / journal / messages) → «result» (summary and the analysis task).
+ *
  * Experiment-specific behaviour lives in a "scene" registered with
  *   ChemLab.scene("hydrogen", (runner) => ({ ...state, onPlace, actions, tick }))
  * Scene methods are called as runner.sc.method(), so `this` inside them is the
@@ -81,6 +84,14 @@
       netError: false,
       sc: {},
       reduceMotion: window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+      phase: "intro", // intro → work → result
+      panel: "steps", // side panel tab: steps | journal | log
+      toolsOpen: false, // the equipment sheet on small screens
+      toolsCollapsed: false, // the equipment rail on wide screens
+      toast: null,
+      toastTimer: null,
+      said: 0, // messages so far (the feed keeps the last 40)
+      seen: 0, // … of which seen in the «messages» tab
 
       init() {
         const factory = scenes[this.exp.scene];
@@ -106,6 +117,30 @@
       // ---------- helpers used by templates ----------
       get step() {
         return this.exp.steps[this.current] || null;
+      },
+      get unread() {
+        return this.panel === "log" ? 0 : this.said - this.seen;
+      },
+      get errorCount() {
+        return this.messages.filter((m) => m.kind === "error" || m.kind === "safety").length;
+      },
+      /** Items of the current «place» step that are not on the bench yet. */
+      get missingItems() {
+        const s = this.step;
+        return s && s.kind === "place" ? s.items.filter((k) => !this.has(k)).map((k) => this.item(k)) : [];
+      },
+      get requiredItems() {
+        return this.exp.items.filter((i) => i.required);
+      },
+      get safetyNotes() {
+        return this.exp.steps.filter((s) => s.safety && s.early_warning).map((s) => s.early_warning);
+      },
+      begin() {
+        this.phase = "work";
+      },
+      setPanel(name) {
+        this.panel = name;
+        if (name === "log") this.seen = this.said;
       },
       has(key) {
         return this.placed.includes(key);
@@ -143,8 +178,15 @@
       // ---------- messages & research log ----------
       say(kind, text) {
         if (!text) return;
-        this.messages.unshift({ id: this.seq + "-" + Math.random(), kind, text, at: this.clock });
+        const message = { id: this.seq + "-" + Math.random(), kind, text, at: this.clock };
+        this.messages.unshift(message);
         this.messages = this.messages.slice(0, 40);
+        this.said += 1;
+        if (this.panel === "log") this.seen = this.said;
+        // the latest message floats over the bench for a moment; mistakes stay longer
+        clearTimeout(this.toastTimer);
+        this.toast = message;
+        this.toastTimer = setTimeout(() => (this.toast = null), kind === "error" || kind === "safety" ? 7000 : 4500);
       },
       log(type, step = "", payload = {}) {
         this.seq += 1;
@@ -190,6 +232,7 @@
         if (this.sc.onStepDone) this.sc.onStepDone(step.key);
         this.current = Math.min(this.current + 1, this.exp.steps.length);
         this.choiceOpen = this.step && this.step.kind === "choice" ? false : this.choiceOpen;
+        if (this.step && this.step.kind === "journal") this.setPanel("journal");
       },
 
       /** Item dropped on the bench or added with the button. */
@@ -314,12 +357,14 @@
         return !!s && (this.done.includes(s.key) || (this.step && this.step.key === s.key && !this.busy));
       },
       openJournal() {
-        const el = document.getElementById("lab-journal");
-        if (el) {
+        this.setPanel("journal");
+        this.$nextTick(() => {
+          const el = document.getElementById("lab-journal");
+          if (!el) return;
           el.scrollIntoView({ behavior: this.reduceMotion ? "auto" : "smooth", block: "nearest" });
-          const first = el.querySelector("input, select, textarea");
+          const first = el.querySelector("input, select, .ck-editor__editable, textarea");
           if (first) first.focus({ preventScroll: true });
-        }
+        });
       },
       async saveJournal() {
         const missing = this.exp.journal.filter((f) => f.required && String(this.journal[f.key]).trim() === "");
@@ -355,6 +400,7 @@
         this.complete(step);
         this.finished = true;
         this.analysisOpen = true;
+        this.phase = "result";
       },
       async submitAnalysis() {
         try {

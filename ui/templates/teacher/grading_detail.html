@@ -1,14 +1,15 @@
 {% extends "layouts/teacher.html" %}
 {% load i18n %}
 {% comment %}
-Grading one practice work (mockup «Мұғалім · Тексеру: AI бағасын растау»): the queue on the left; the work —
-each answer, for open answers the rubric with point buttons (the AI suggestion is dashed), a comment,
-the total and «Confirm» / «Return». Field names (c_<answer>_<criterion>, p_<answer>, r_<answer>) are read by
+One practice work (mockup «Мұғалім · Тексеру: AI бағасын растау»): the list on the left; the work — each answer,
+for open answers the rubric with point buttons (the AI grade is dashed), a comment, the total and «Save» / «Return».
+The AI grade is final: «Save» appears for an AI-graded work only when the teacher changes points (or in the
+research spot-check, where saving unchanged points records the agreement). Field names (c_<answer>_<criterion>, p_<answer>, r_<answer>) are read by
 teacher.grading._decisions.
 {% endcomment %}
 {% block title %}{{ submission.stage.title }} · {{ student.full_name }} · ChemEduTech{% endblock %}
-{% block crumb %}{% translate "Confirming AI grades" %}{% endblock %}
-{% block page_title %}{% translate "Checking works" %}{% endblock %}
+{% block crumb %}{% translate "Practice works" %}{% endblock %}
+{% block page_title %}{% translate "Practice works" %}{% endblock %}
 {% block main_class %}max-w-[1360px]{% endblock %}
 {% block content %}
 <div class="grid items-start gap-5 lg:grid-cols-[340px_minmax(0,1fr)]">
@@ -39,10 +40,10 @@ teacher.grading._decisions.
             <p id="item-{{ a.pk }}" class="text-caption font-bold tracking-[.06em] text-stage-practice-700 uppercase">{{ forloop.counter }}. {{ item.label }}</p>
             <span class="num text-[13px] font-semibold text-ink-faint">{% if row.open %}{% blocktranslate with m=item.points|floatformat:"-2" %}max. {{ m }}{% endblocktranslate %}{% else %}{{ a.points|floatformat:"-2" }} / {{ item.points|floatformat:"-2" }}{% endif %}</span>
           </div>
-          {% if item.prompt %}<p class="-mt-2 font-semibold">{{ item.prompt }}</p>{% endif %}
+          {% if item.prompt %}<div class="-mt-2 font-semibold">{{ item.prompt|rich }}</div>{% endif %}
           <div>
             <p class="mb-1.5 text-caption font-bold tracking-[.06em] text-ink-soft uppercase">{% translate "Student's answer" %}</p>
-            <blockquote class="rounded-[18px] border border-surface-sunken bg-[#f8fafc] px-[18px] py-4 text-[15px] leading-[25px] whitespace-pre-line">{% if item.kind == "formula" or item.kind == "equation" %}{{ a.raw_value|chem }}{% else %}{{ a.raw_value|default:"—" }}{% endif %}</blockquote>
+            <blockquote class="rounded-[18px] border border-surface-sunken bg-[#f8fafc] px-[18px] py-4 text-[15px] leading-[25px] [&_p]:my-1">{% if item.kind == "formula" or item.kind == "equation" %}{{ a.raw_value|chem }}{% else %}{{ a.raw_value|rich|default:"—" }}{% endif %}</blockquote>
           </div>
           {% if not row.open %}
             <p class="flex items-center gap-2 text-sm font-semibold {% if a.is_correct %}text-success-700{% elif a.points > 0 %}text-warning-700{% else %}text-danger-700{% endif %}">
@@ -51,10 +52,10 @@ teacher.grading._decisions.
             </p>
           {% else %}
             <div class="flex flex-wrap items-center gap-2 text-[13px]">
-              <span class="font-bold">{% translate "AI suggestion" %}</span>
+              <span class="font-bold">{% translate "AI grade" %}</span>
               {% if row.grade %}
                 {% if row.grade.error %}<span class="badge badge-danger font-bold">{% translate "AI error" %}</span>
-                {% elif row.grade.confidence == "low" %}<span class="badge badge-danger font-bold">needs_review · {% translate "low confidence" %}</span>
+                {% elif row.grade.confidence == "low" %}<span class="badge badge-warning font-bold">{% translate "low confidence" %}</span>
                 {% else %}<span class="badge badge-info font-bold">{% translate "confident" %}</span>{% endif %}
                 <span class="text-ink-faint">{{ row.grade.model }}</span>
               {% else %}<span class="text-ink-soft">{% translate "No AI grade: grade it yourself." %}</span>{% endif %}
@@ -94,7 +95,7 @@ teacher.grading._decisions.
               </label>
             {% endif %}
             {% if row.rubric.model_answer %}
-              <details class="text-sm"><summary class="cursor-pointer font-semibold text-primary-700">{% translate "Model answer" %}</summary><p class="mt-2 whitespace-pre-line text-ink-soft">{{ row.rubric.model_answer }}</p></details>
+              <details class="text-sm"><summary class="cursor-pointer font-semibold text-primary-700">{% translate "Model answer" %}</summary><div class="mt-2 text-ink-soft">{{ row.rubric.model_answer|rich }}</div></details>
             {% endif %}
             <label class="field">
               <span class="label">{% translate "Why the points changed (for the research, optional)" %}</span>
@@ -126,7 +127,7 @@ teacher.grading._decisions.
                 <button type="submit" class="btn btn-secondary h-12 text-danger-700" @click="action = 'return'"
                         data-confirm="{% translate 'Return the work to the student?' %}" data-confirm-text="{% translate 'The attempt is given back and the stage reopens.' %}" data-confirm-label="{% translate 'Return' %}" data-confirm-variant="danger" data-confirm-icon="retry">{% include "components/icons.html#retry" %}{% translate "Return" %}</button>
               {% endif %}
-              <button type="submit" class="btn btn-success h-12 px-[22px] font-bold" @click="action = 'confirm'">{% include "components/icons.html#check" %}<span x-text="total !== ai ? '{% translate "Change and confirm" %}' : '{% translate "Confirm the grade" %}'">{% translate "Confirm the grade" %}</span></button>
+              <button type="submit" class="btn btn-success h-12 px-[22px] font-bold" @click="action = 'confirm'"{% if submission.status == "graded" and not submission.sampled_at %} x-show="total !== ai" x-cloak{% endif %}>{% include "components/icons.html#save" %}{% if submission.status == "graded" and submission.sampled_at %}<span x-text="total !== ai ? '{% translate "Change the grade" %}' : '{% translate "Agree with the AI" %}'">{% translate "Agree with the AI" %}</span>{% else %}{% translate "Save the grade" %}{% endif %}</button>
             </div>
           </div>
         {% endif %}

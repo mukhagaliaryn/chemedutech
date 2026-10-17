@@ -58,4 +58,4 @@ Practice works render their own cards (student/stages/practice.html) and their r
   </aside>
 </div>
 {% endblock %}
-{% block scripts %}<script defer src="{% static 'js/stage.js' %}"></script>{% endblock %}
+{% block scripts %}<script defer src="{% static 'js/stage.js' %}"></script>{% if stage.kind == "practice" %}{% rich_text_assets %}{% endif %}{% endblock %}
