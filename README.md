@@ -50,6 +50,8 @@ python manage.py runserver
 
 ## Production
 
+Ubuntu 24.04 серверіне қадамдық нұсқаулық: **[DEPLOY.md](DEPLOY.md)** (PostgreSQL, Gunicorn, db_worker, Nginx, HTTPS, сақтық көшірме).
+
 `.env` (`config.settings.prod`):
 
 | Айнымалы | Мәні |
