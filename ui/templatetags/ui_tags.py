@@ -240,3 +240,21 @@ def ring_geometry(value, size=64, stroke=8):
         "text": f"{pct:.0f}%",
         "font": max(11, round(size * 0.22)),
     }
+
+
+@register.filter
+def reading_minutes(html, words_per_minute=150):
+    """{{ content.body|reading_minutes }} → about how many minutes the text takes to read (at least 1)."""
+    from django.utils.html import strip_tags
+
+    words = len(strip_tags(str(html or "")).split())
+    return max(1, round(words / int(words_per_minute))) if words else 0
+
+
+@register.filter
+def letter(index):
+    """{{ forloop.counter0|letter }} → A, B, C … (option marks in quizzes)."""
+    try:
+        return "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[int(index)]
+    except (ValueError, TypeError, IndexError):
+        return ""

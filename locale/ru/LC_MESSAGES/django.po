@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ChemEduTech\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 12:03+0500\n"
+"POT-Creation-Date: 2026-10-17 12:19+0500\n"
 "PO-Revision-Date: 2026-10-16 21:00+0500\n"
 "Last-Translator: ChemEduTech\n"
 "Language-Team: ChemEduTech\n"
@@ -232,32 +232,32 @@ msgstr "Этот логин уже занят."
 msgid "The username is free ✓"
 msgstr "Логин свободен ✓"
 
-#: apps/assessments/admin.py:24 apps/assessments/admin.py:80
-#: apps/assessments/models/attempt.py:56 apps/assessments/models/quiz.py:66
-#: apps/assessments/models/quiz.py:94 apps/assessments/models/quiz.py:125
+#: apps/assessments/admin.py:24 apps/assessments/admin.py:81
+#: apps/assessments/models/attempt.py:56 apps/assessments/models/quiz.py:74
+#: apps/assessments/models/quiz.py:102 apps/assessments/models/quiz.py:133
 #: apps/practice/models/task.py:57
 msgid "question"
 msgstr "вопрос"
 
 #: apps/assessments/admin.py:38 ui/templates/assessments/result.html:81
 #: ui/templates/research/dashboard.html:49 ui/templates/student/results.html:73
-#: ui/templates/teacher/student.html:65
+#: ui/templates/student/stages/test.html:9 ui/templates/teacher/student.html:65
 msgid "Attempts"
 msgstr "Попытки"
 
-#: apps/assessments/admin.py:53 apps/assessments/models/quiz.py:95
+#: apps/assessments/admin.py:54 apps/assessments/models/quiz.py:103
 msgid "questions"
 msgstr "вопросы"
 
-#: apps/assessments/admin.py:75
+#: apps/assessments/admin.py:76
 msgid "Number answer"
 msgstr "Числовой ответ"
 
-#: apps/assessments/admin.py:76
+#: apps/assessments/admin.py:77
 msgid "Accepted answers (short text, formula, equation)"
 msgstr "Принимаемые ответы (краткий текст, формула, уравнение)"
 
-#: apps/assessments/admin.py:98 apps/assessments/models/attempt.py:59
+#: apps/assessments/admin.py:99 apps/assessments/models/attempt.py:59
 msgid "chosen options"
 msgstr "выбранные варианты"
 
@@ -279,8 +279,8 @@ msgstr "способ записи"
 msgid "Empty for a teacher's preview"
 msgstr "Пусто при предпросмотре преподавателем"
 
-#: apps/assessments/models/attempt.py:24 apps/assessments/models/quiz.py:47
-#: apps/assessments/models/quiz.py:63 apps/courses/models/content.py:159
+#: apps/assessments/models/attempt.py:24 apps/assessments/models/quiz.py:55
+#: apps/assessments/models/quiz.py:71 apps/courses/models/content.py:159
 msgid "quiz"
 msgstr "тест"
 
@@ -347,14 +347,14 @@ msgstr "текстовый ответ"
 msgid "number answer"
 msgstr "числовой ответ"
 
-#: apps/assessments/models/attempt.py:63 apps/assessments/models/quiz.py:128
+#: apps/assessments/models/attempt.py:63 apps/assessments/models/quiz.py:136
 #: apps/practice/models/submission.py:73
 #: ui/templates/assessments/result.html:61
 #: ui/templates/teacher/content/question.html:34
 msgid "correct"
 msgstr "верно"
 
-#: apps/assessments/models/attempt.py:64 apps/assessments/models/quiz.py:68
+#: apps/assessments/models/attempt.py:64 apps/assessments/models/quiz.py:76
 #: apps/practice/admin.py:119 apps/practice/admin.py:176
 #: apps/practice/models/submission.py:74 apps/practice/models/task.py:60
 #: apps/practice/models/task.py:117
@@ -378,7 +378,6 @@ msgid "Checkpoint quiz"
 msgstr "Закрепляющий тест"
 
 #: apps/assessments/models/quiz.py:13 apps/courses/models/structure.py:71
-#: ui/templates/student/stages/test.html:3
 #: ui/templates/teacher/content/stage.html:58 ui/views.py:16
 msgid "Topic test"
 msgstr "Тест по теме"
@@ -411,7 +410,7 @@ msgstr "Первая попытка"
 msgid "title"
 msgstr "название"
 
-#: apps/assessments/models/quiz.py:23 apps/assessments/models/quiz.py:65
+#: apps/assessments/models/quiz.py:23 apps/assessments/models/quiz.py:73
 #: apps/courses/models/structure.py:75 apps/feedback/models/notification.py:23
 #: apps/practice/models/task.py:58
 msgid "kind"
@@ -465,68 +464,79 @@ msgstr "показывать правильные ответы"
 msgid "Show correct answers and explanations after an attempt"
 msgstr "Показывать правильные ответы и пояснения после попытки"
 
-#: apps/assessments/models/quiz.py:48
+#: apps/assessments/models/quiz.py:46
+msgid "check each answer at once"
+msgstr "проверять каждый ответ сразу"
+
+#: apps/assessments/models/quiz.py:49
+msgid ""
+"The student checks every question as they go and sees the correct answer and "
+"the explanation; a checked answer cannot be changed. For checkpoint quizzes."
+msgstr "Студент проверяет каждый вопрос сразу и видит правильный ответ с объяснением; проверенный ответ изменить нельзя. Для закрепляющих тестов."
+
+#: apps/assessments/models/quiz.py:56
 msgid "quizzes"
 msgstr "тесты"
 
-#: apps/assessments/models/quiz.py:56
+#: apps/assessments/models/quiz.py:64
 msgid "One correct option"
 msgstr "Один правильный вариант"
 
-#: apps/assessments/models/quiz.py:57
+#: apps/assessments/models/quiz.py:65
 msgid "Several correct options"
 msgstr "Несколько правильных вариантов"
 
-#: apps/assessments/models/quiz.py:58 ui/templates/certificates/pdf.html:43
+#: apps/assessments/models/quiz.py:66 ui/templates/certificates/pdf.html:43
 #: ui/templates/certificates/verify.html:18
 msgid "Number"
 msgstr "Число"
 
-#: apps/assessments/models/quiz.py:59
+#: apps/assessments/models/quiz.py:67
 msgid "Short text"
 msgstr "Краткий текст"
 
-#: apps/assessments/models/quiz.py:60 apps/practice/models/task.py:45
+#: apps/assessments/models/quiz.py:68 apps/practice/models/task.py:45
 msgid "Chemical formula"
 msgstr "Химическая формула"
 
-#: apps/assessments/models/quiz.py:61 apps/labs/views.py:55
+#: apps/assessments/models/quiz.py:69 apps/labs/views.py:55
 #: apps/practice/models/task.py:46 ui/templates/assessments/take.html:64
+#: ui/templates/student/partials/quiz_question.html:28
 msgid "Reaction equation"
 msgstr "Уравнение реакции"
 
-#: apps/assessments/models/quiz.py:64 apps/assessments/models/quiz.py:126
+#: apps/assessments/models/quiz.py:72 apps/assessments/models/quiz.py:134
 #: apps/courses/models/content.py:33 apps/courses/models/structure.py:16
 #: apps/courses/models/structure.py:34 apps/courses/models/structure.py:74
 #: apps/practice/models/task.py:55 apps/practice/models/task.py:114
 msgid "order"
 msgstr "порядок"
 
-#: apps/assessments/models/quiz.py:70
+#: apps/assessments/models/quiz.py:78
 msgid "explanation"
 msgstr "пояснение"
 
-#: apps/assessments/models/quiz.py:70
+#: apps/assessments/models/quiz.py:78
 msgid "Shown after the attempt"
 msgstr "Показывается после попытки"
 
-#: apps/assessments/models/quiz.py:71
+#: apps/assessments/models/quiz.py:79
 msgid "correct number"
 msgstr "правильное число"
 
-#: apps/assessments/models/quiz.py:73
+#: apps/assessments/models/quiz.py:81
 msgid "allowed deviation"
 msgstr "допустимое отклонение"
 
-#: apps/assessments/models/quiz.py:77
+#: apps/assessments/models/quiz.py:85
 msgid "Absolute, in the units of the answer (0 = exact)"
 msgstr "Абсолютное, в единицах ответа (0 = точно)"
 
-#: apps/assessments/models/quiz.py:80
+#: apps/assessments/models/quiz.py:88
 msgid "accepted answers"
 msgstr "принимаемые ответы"
 
-#: apps/assessments/models/quiz.py:84
+#: apps/assessments/models/quiz.py:92
 msgid ""
 "Short text: accepted spellings; formula or equation: correct answers, e.g. "
 "[\"ZnCl2\"] or [\"Zn + 2HCl -> ZnCl2 + H2\"]"
@@ -534,47 +544,47 @@ msgstr ""
 "Краткий текст: принимаемые написания; формула или уравнение: правильные "
 "ответы, например [\"ZnCl2\"] или [\"Zn + 2HCl -> ZnCl2 + H2\"]"
 
-#: apps/assessments/models/quiz.py:89
+#: apps/assessments/models/quiz.py:97
 msgid "in use"
 msgstr "используется"
 
-#: apps/assessments/models/quiz.py:89
+#: apps/assessments/models/quiz.py:97
 msgid "Retired questions stay in old attempts but are not asked again"
 msgstr "Выведенные вопросы остаются в старых попытках, но больше не задаются"
 
-#: apps/assessments/models/quiz.py:104
+#: apps/assessments/models/quiz.py:112
 msgid "Enter the correct number."
 msgstr "Введите правильное число."
 
-#: apps/assessments/models/quiz.py:109
+#: apps/assessments/models/quiz.py:117
 msgid "Enter a list of correct answers, e.g. [\"H2O\"]."
 msgstr "Введите список правильных ответов, например [\"H2O\"]."
 
-#: apps/assessments/models/quiz.py:116
+#: apps/assessments/models/quiz.py:124
 #, python-format
 msgid "The equation %(eq)s is not balanced."
 msgstr "Уравнение %(eq)s не уравнено."
 
-#: apps/assessments/models/quiz.py:120
+#: apps/assessments/models/quiz.py:128
 #, python-format
 msgid "Cannot read %(answer)s: %(error)s"
 msgstr "Не удалось прочитать %(answer)s: %(error)s"
 
-#: apps/assessments/models/quiz.py:127
+#: apps/assessments/models/quiz.py:135
 #: apps/certificates/models/certificate.py:20 apps/courses/models/content.py:19
 #: apps/feedback/models/comment.py:30
 msgid "text"
 msgstr "текст"
 
-#: apps/assessments/models/quiz.py:127
+#: apps/assessments/models/quiz.py:135
 msgid "<sub> and <sup> are allowed: H<sub>2</sub>O"
 msgstr "Можно использовать <sub> и <sup>: H<sub>2</sub>O"
 
-#: apps/assessments/models/quiz.py:132
+#: apps/assessments/models/quiz.py:140
 msgid "answer option"
 msgstr "вариант ответа"
 
-#: apps/assessments/models/quiz.py:133
+#: apps/assessments/models/quiz.py:141
 msgid "answer options"
 msgstr "варианты ответа"
 
@@ -586,9 +596,22 @@ msgstr "Вы использовали все попытки этого тест�
 msgid "This test has no questions yet."
 msgstr "В этом тесте пока нет вопросов."
 
-#: apps/assessments/services/attempts.py:102
+#: apps/assessments/services/attempts.py:111
+msgid "Answers of this test are checked at the end."
+msgstr "Ответы этого теста проверяются в конце."
+
+#: apps/assessments/services/attempts.py:113
+#: apps/assessments/services/attempts.py:138
 msgid "This attempt has already been submitted."
 msgstr "Эта попытка уже отправлена."
+
+#: apps/assessments/services/attempts.py:115
+msgid "The time for this test is over."
+msgstr "Время на этот тест истекло."
+
+#: apps/assessments/services/attempts.py:117
+msgid "This question is not in your attempt."
+msgstr "Этого вопроса нет в вашей попытке."
 
 #: apps/assessments/services/authoring.py:37
 msgid "Give at least two options."
@@ -2262,7 +2285,7 @@ msgstr ""
 #: apps/progress/models/progress.py:72 apps/student/cabinet.py:94
 #: apps/student/learning.py:97 ui/templates/components/stage_stepper.html:24
 #: ui/templates/student/course_map.html:40 ui/templates/student/results.html:92
-#: ui/templates/student/topic.html:30 ui/templates/teacher/gradebook.html:50
+#: ui/templates/student/topic.html:37 ui/templates/teacher/gradebook.html:50
 #: ui/templates/teacher/student.html:80
 msgid "In progress"
 msgstr "В процессе"
@@ -2389,7 +2412,7 @@ msgid "Wrong choice"
 msgstr "Неверный выбор"
 
 #: apps/labs/models/attempt.py:89 apps/labs/views.py:46
-#: ui/templates/student/partials/practice_field.html:86 ui/views.py:24
+#: ui/templates/student/partials/practice_field.html:121 ui/views.py:24
 msgid "Hint"
 msgstr "Подсказка"
 
@@ -2540,7 +2563,7 @@ msgid "Measurements"
 msgstr "Измерения"
 
 #: apps/labs/views.py:58 ui/templates/labs/run.html:46
-#: ui/templates/teacher/lab_log.html:33
+#: ui/templates/student/stages/test.html:8 ui/templates/teacher/lab_log.html:33
 msgid "Time"
 msgstr "Время"
 
@@ -2551,6 +2574,8 @@ msgstr "Объём"
 #: apps/labs/views.py:60 ui/templates/student/course_map.html:74
 #: ui/templates/student/dashboard.html:108
 #: ui/templates/student/dashboard.html:110
+#: ui/templates/student/partials/kind_pill.html:4
+#: ui/templates/student/topic.html:10
 msgid "min"
 msgstr "мин"
 
@@ -2580,6 +2605,7 @@ msgid "Submit answers"
 msgstr "Отправить ответы"
 
 #: apps/labs/views.py:69 ui/templates/assessments/take.html:74
+#: ui/templates/student/partials/quiz_question.html:32
 msgid "Your answer"
 msgstr "Ваш ответ"
 
@@ -2610,6 +2636,7 @@ msgid "Analysis: correct answers"
 msgstr "Анализ: верные ответы"
 
 #: apps/labs/views.py:76 ui/templates/labs/run.html:17
+#: ui/templates/layouts/learn.html:14
 msgid "Back to the topic"
 msgstr "Вернуться к теме"
 
@@ -3373,7 +3400,7 @@ msgid "Your previous answer is still being graded."
 msgstr "Ваш предыдущий ответ ещё оценивается."
 
 #: apps/practice/services/submissions.py:52
-#: ui/templates/student/stages/practice.html:80
+#: ui/templates/student/stages/practice.html:48
 msgid "You have used all attempts for this work."
 msgstr "Вы использовали все попытки этой работы."
 
@@ -3437,28 +3464,28 @@ msgstr "учебные дни"
 #: ui/templates/student/course_map.html:40
 #: ui/templates/student/course_map.html:81
 #: ui/templates/student/course_map.html:91 ui/templates/student/results.html:92
-#: ui/templates/student/stages/lab.html:23 ui/templates/student/topic.html:30
+#: ui/templates/student/stages/lab.html:23 ui/templates/student/topic.html:37
 #: ui/templates/teacher/student.html:58 ui/templates/teacher/student.html:80
 msgid "Locked"
 msgstr "Закрыто"
 
 #: apps/progress/models/progress.py:16 apps/progress/models/progress.py:71
 #: ui/templates/components/stage_stepper.html:25
-#: ui/templates/student/topic.html:30
+#: ui/templates/student/topic.html:37
 msgid "Available"
 msgstr "Доступно"
 
 #: apps/progress/models/progress.py:18 apps/student/cabinet.py:84
 #: apps/student/cabinet.py:212 ui/templates/components/stage_stepper.html:20
-#: ui/templates/student/course_map.html:96 ui/templates/student/results.html:92
-#: ui/templates/student/topic.html:30 ui/templates/teacher/dashboard.html:30
-#: ui/templates/teacher/student.html:80
+#: ui/templates/layouts/learn.html:56 ui/templates/student/course_map.html:96
+#: ui/templates/student/results.html:92 ui/templates/student/topic.html:37
+#: ui/templates/teacher/dashboard.html:30 ui/templates/teacher/student.html:80
 msgid "Awaiting check"
 msgstr "Ожидает проверки"
 
 #: apps/progress/models/progress.py:19 apps/progress/models/progress.py:143
 #: apps/student/cabinet.py:80 ui/templates/components/stage_stepper.html:22
-#: ui/templates/student/results.html:92 ui/templates/student/topic.html:30
+#: ui/templates/student/results.html:92 ui/templates/student/topic.html:37
 #: ui/templates/teacher/student.html:80
 msgid "Passed"
 msgstr "Пройдено"
@@ -3577,7 +3604,7 @@ msgid "Confirmed by the teacher"
 msgstr "Подтверждено преподавателем"
 
 #: apps/progress/models/progress.py:147
-#: ui/templates/student/stages/practice.html:22
+#: ui/templates/student/partials/practice_result.html:16
 msgid "Returned by the teacher"
 msgstr "Возвращено преподавателем"
 
@@ -3697,6 +3724,7 @@ msgid "%(h)s h %(m)s min"
 msgstr "%(h)s ч %(m)s мин"
 
 #: apps/research/analytics.py:83 apps/student/cabinet.py:57
+#: ui/templates/student/stages/test.html:8
 #, python-format
 msgid "%(m)s min"
 msgstr "%(m)s мин"
@@ -3765,7 +3793,7 @@ msgstr[2] "%(a)s / %(b)s опытов"
 msgstr[3] "%(a)s / %(b)s опытов"
 
 #: apps/student/cabinet.py:95 ui/templates/student/results.html:92
-#: ui/templates/student/topic.html:36
+#: ui/templates/student/topic.html:43
 #: ui/templates/teacher/content/courses.html:21
 #: ui/templates/teacher/dashboard.html:61 ui/templates/teacher/grading.html:44
 #: ui/templates/teacher/partials/groups_table.html:25
@@ -3833,34 +3861,34 @@ msgstr "Практика · попытка %(n)s"
 msgid "Week %(n)s"
 msgstr "%(n)s-я неделя"
 
-#: apps/student/views.py:113
+#: apps/student/views.py:114
 msgid "Profile saved."
 msgstr "Профиль сохранён."
 
-#: apps/student/views.py:118
+#: apps/student/views.py:119
 msgid "Password changed."
 msgstr "Пароль изменён."
 
-#: apps/student/views.py:415 ui/templates/student/stages/practice.html:76
+#: apps/student/views.py:449 ui/templates/student/stages/practice.html:41
 msgid "Preview: answers are not saved."
 msgstr "Предпросмотр: ответы не сохраняются."
 
-#: apps/student/views.py:511
+#: apps/student/views.py:562
 msgid ""
 "Experiments open one after another: finish the previous one and send its "
 "analysis."
 msgstr ""
 "Опыты открываются по очереди: завершите предыдущий и отправьте его анализ."
 
-#: apps/student/views.py:586
+#: apps/student/views.py:637
 msgid "Finish the material first — the test opens after it."
 msgstr "Сначала завершите материал — тест откроется после него."
 
-#: apps/student/views.py:665 ui/templates/student/stage.html:19
+#: apps/student/views.py:758 ui/templates/student/stage.html:50
 msgid "Go to the next stage"
 msgstr "Перейти к следующему этапу"
 
-#: apps/student/views.py:667 ui/templates/teacher/content/item.html:58
+#: apps/student/views.py:760 ui/templates/teacher/content/item.html:58
 msgid "Back to the stage"
 msgstr "Вернуться к этапу"
 
@@ -4029,7 +4057,7 @@ msgid "Spot-check"
 msgstr "Выборка"
 
 #: apps/teacher/grading.py:28 ui/templates/research/analytics.html:164
-#: ui/templates/student/stages/practice.html:43
+#: ui/templates/student/partials/practice_field.html:113
 msgid "Graded by AI"
 msgstr "Оценено AI"
 
@@ -4557,6 +4585,7 @@ msgstr ""
 "сопоставление: JSON-объект. Остальное: обычный текст."
 
 #: ui/templates/admin/practice/practiceitem/try.html:15
+#: ui/templates/student/partials/quiz_question.html:37
 #: ui/templates/teacher/content/item.html:69
 msgid "Check"
 msgstr "Проверить"
@@ -4579,6 +4608,7 @@ msgstr "Навигационная цепочка"
 
 #: ui/templates/assessments/result.html:11
 #: ui/templates/assessments/take.html:19
+#: ui/templates/student/partials/quiz_panel.html:13
 #: ui/templates/teacher/grading_detail.html:11
 #: ui/templates/teacher/grading_detail.html:122
 #, python-format
@@ -4586,42 +4616,39 @@ msgid "attempt %(n)s"
 msgstr "попытка %(n)s"
 
 #: ui/templates/assessments/result.html:19
-#: ui/templates/student/partials/quiz_panel.html:28
+#: ui/templates/student/partials/quiz_panel.html:49
 msgid "Test passed"
 msgstr "Тест сдан"
 
 #: ui/templates/assessments/result.html:21
-#: ui/templates/student/partials/quiz_panel.html:30
-#: ui/templates/student/stages/practice.html:24
+#: ui/templates/student/partials/practice_result.html:16
+#: ui/templates/student/partials/quiz_panel.html:51
 #, python-format
 msgid "Below the pass mark (%(p)s%%)"
 msgstr "Ниже проходного порога (%(p)s%%)"
 
 #: ui/templates/assessments/result.html:24
-#: ui/templates/student/stages/practice.html:25
 #, python-format
 msgid "%(s)s of %(m)s points."
 msgstr "%(s)s из %(m)s баллов."
 
 #: ui/templates/assessments/result.html:25
-#: ui/templates/student/stages/practice.html:25
-#: ui/templates/student/stages/practice.html:71
 #, python-format
 msgid "Attempts left: %(n)s."
 msgstr "Осталось попыток: %(n)s."
 
 #: ui/templates/assessments/result.html:26
-#: ui/templates/student/partials/quiz_panel.html:31
+#: ui/templates/student/partials/quiz_panel.html:52
 msgid "Read the material again and retake the test."
 msgstr "Перечитайте материал и пересдайте тест."
 
 #: ui/templates/assessments/result.html:32
-#: ui/templates/student/partials/quiz_panel.html:39
+#: ui/templates/student/partials/quiz_panel.html:60
+#: ui/templates/student/partials/quiz_panel.html:91
 msgid "Retake the test"
 msgstr "Пересдать тест"
 
 #: ui/templates/assessments/result.html:40
-#: ui/templates/student/stages/practice.html:61
 msgid "Your answers"
 msgstr "Ваши ответы"
 
@@ -4639,6 +4666,8 @@ msgid "%(p)s of %(m)s points"
 msgstr "%(p)s из %(m)s баллов"
 
 #: ui/templates/assessments/result.html:60
+#: ui/templates/student/partials/quiz_question.html:48
+#: ui/templates/student/partials/quiz_question.html:53
 msgid "your answer"
 msgstr "ваш ответ"
 
@@ -4655,7 +4684,7 @@ msgid "Counts for the grade"
 msgstr "Идёт в оценку"
 
 #: ui/templates/assessments/take.html:20
-#: ui/templates/student/partials/quiz_panel.html:5
+#: ui/templates/student/partials/quiz_panel.html:12
 #, python-format
 msgid "pass mark %(p)s%%"
 msgstr "порог %(p)s%%"
@@ -4670,29 +4699,35 @@ msgid "Question %(n)s"
 msgstr "Вопрос %(n)s"
 
 #: ui/templates/assessments/take.html:49
-#: ui/templates/student/partials/practice_field.html:48
+#: ui/templates/student/partials/practice_field.html:64
+#: ui/templates/student/partials/quiz_question.html:15
 msgid "Choose all correct options."
 msgstr "Выберите все правильные варианты."
 
 #: ui/templates/assessments/take.html:58
+#: ui/templates/student/partials/quiz_question.html:24
 msgid "Your answer (a number)"
 msgstr "Ваш ответ (число)"
 
 #: ui/templates/assessments/take.html:60
+#: ui/templates/student/partials/quiz_question.html:26
 msgid "A comma or a dot may be used: 2,24"
 msgstr "Можно через запятую или точку: 2,24"
 
 #: ui/templates/assessments/take.html:64
+#: ui/templates/student/partials/quiz_question.html:28
 msgid "Formula"
 msgstr "Формула"
 
 #: ui/templates/assessments/take.html:68
+#: ui/templates/student/partials/quiz_question.html:30
 msgid ""
 "Indices as plain digits: H2SO4, Ca(OH)2, CuSO4·5H2O; ions: Zn2+, SO4^2-."
 msgstr ""
 "Индексы обычными цифрами: H2SO4, Ca(OH)2, CuSO4·5H2O; ионы: Zn2+, SO4^2-."
 
 #: ui/templates/assessments/take.html:69
+#: ui/templates/student/partials/quiz_question.html:30
 msgid ""
 "Arrow: -> or =; write the coefficients: 2H2 + O2 -> 2H2O. ↑ and ↓ may be "
 "left out."
@@ -4709,6 +4744,7 @@ msgid "Unanswered questions:"
 msgstr "Вопросов без ответа:"
 
 #: ui/templates/assessments/take.html:88
+#: ui/templates/student/partials/quiz_question.html:66
 msgid "Next question"
 msgstr "Следующий вопрос"
 
@@ -4771,7 +4807,9 @@ msgstr ""
 "страницу с именем владельца."
 
 #: ui/templates/components/alert.html:10 ui/templates/components/toast.html:16
-#: ui/templates/core/home.html:108 ui/templates/ui/styleguide.html:116
+#: ui/templates/core/home.html:108 ui/templates/layouts/learn.html:49
+#: ui/templates/student/partials/quiz_panel.html:93
+#: ui/templates/ui/styleguide.html:116
 msgid "Close"
 msgstr "Закрыть"
 
@@ -4809,6 +4847,7 @@ msgid "Learning path"
 msgstr "Путь обучения"
 
 #: ui/templates/core/home.html:29 ui/templates/core/home.html:353
+#: ui/templates/student/stages/test.html:6
 #: ui/templates/teacher/content/quiz.html:13
 msgid "Questions"
 msgstr "Вопросы"
@@ -5304,8 +5343,10 @@ msgstr "Отправить"
 msgid "No comments yet."
 msgstr "Комментариев пока нет."
 
-#: ui/templates/labs/run.html:22 ui/templates/research/analytics.html:13
-#: ui/templates/research/analytics.html:19 ui/templates/teacher/student.html:56
+#: ui/templates/labs/run.html:22 ui/templates/layouts/learn.html:23
+#: ui/templates/research/analytics.html:13
+#: ui/templates/research/analytics.html:19 ui/templates/student/locked.html:9
+#: ui/templates/student/topic.html:10 ui/templates/teacher/student.html:56
 #: ui/templates/teacher/student.html:185
 #, python-format
 msgid "Topic %(n)s"
@@ -5370,7 +5411,7 @@ msgstr "Факт %(n)s"
 msgid "Next fact"
 msgstr "Следующий факт"
 
-#: ui/templates/layouts/cabinet.html:14 ui/templates/layouts/learn.html:9
+#: ui/templates/layouts/cabinet.html:14 ui/templates/layouts/learn.html:10
 msgid "Skip to content"
 msgstr "Перейти к содержимому"
 
@@ -5416,24 +5457,38 @@ msgstr "Настройки"
 msgid "Log out"
 msgstr "Выйти"
 
-#: ui/templates/layouts/learn.html:13 ui/templates/student/course_map.html:9
-#: ui/templates/student/courses.html:28 ui/templates/student/locked.html:18
-msgid "Course map"
-msgstr "Карта курса"
+#: ui/templates/layouts/learn.html:14
+msgid "Back to the course map"
+msgstr "К карте курса"
 
-#: ui/templates/layouts/learn.html:18
+#: ui/templates/layouts/learn.html:17
+msgid "Contents"
+msgstr "Содержание"
+
+#: ui/templates/layouts/learn.html:23
 #, python-format
-msgid "Module %(m)s · Topic %(n)s"
-msgstr "Модуль %(m)s · Тема %(n)s"
+msgid "stage %(a)s / %(b)s"
+msgstr "этап %(a)s / %(b)s"
 
-#: ui/templates/layouts/learn.html:22
+#: ui/templates/layouts/learn.html:31 ui/templates/student/course_map.html:58
+#: ui/templates/student/results.html:59
 #, python-format
-msgid "Topic: %(a)s / %(b)s stages"
-msgstr "Тема: %(a)s / %(b)s этапов"
+msgid "%(a)s / %(b)s stages"
+msgstr "%(a)s / %(b)s этапов"
 
-#: ui/templates/layouts/learn.html:31 ui/templates/student/course_map.html:12
+#: ui/templates/layouts/learn.html:39 ui/templates/student/course_map.html:12
 msgid "Preview: everything is open and nothing is recorded."
 msgstr "Предпросмотр: всё открыто, ничего не записывается."
+
+#: ui/templates/layouts/learn.html:48
+#, python-format
+msgid "Stages of topic %(n)s"
+msgstr "Этапы темы %(n)s"
+
+#: ui/templates/layouts/learn.html:59 ui/templates/student/course_map.html:9
+#: ui/templates/student/courses.html:28 ui/templates/student/locked.html:19
+msgid "Course map"
+msgstr "Карта курса"
 
 #: ui/templates/layouts/public.html:12
 msgid "My cabinet"
@@ -5497,8 +5552,8 @@ msgid "%(a)s of %(b)s stages"
 msgstr "%(a)s из %(b)s этапов"
 
 #: ui/templates/partials/shell/sidebar_student.html:29
-#: ui/templates/student/courses.html:27 ui/templates/student/topic.html:12
-#: ui/templates/student/topic.html:36
+#: ui/templates/student/courses.html:27 ui/templates/student/topic.html:20
+#: ui/templates/student/topic.html:43
 msgid "Continue"
 msgstr "Продолжить"
 
@@ -5868,7 +5923,6 @@ msgstr[2] "%(n)s тем"
 msgstr[3] "%(n)s тем"
 
 #: ui/templates/student/course_map.html:23
-#: ui/templates/student/stages/practice.html:28
 msgid "Teacher:"
 msgstr "Преподаватель:"
 
@@ -5880,7 +5934,7 @@ msgstr "Этапы открываются по порядку"
 msgid "current score"
 msgstr "текущий балл"
 
-#: ui/templates/student/course_map.html:31
+#: ui/templates/student/course_map.html:31 ui/templates/student/topic.html:18
 msgid "stages passed"
 msgstr "этапов пройдено"
 
@@ -5915,11 +5969,6 @@ msgstr "Тема %(a)s"
 #, python-format
 msgid "Topics %(a)s–%(b)s"
 msgstr "Темы %(a)s–%(b)s"
-
-#: ui/templates/student/course_map.html:58 ui/templates/student/results.html:59
-#, python-format
-msgid "%(a)s / %(b)s stages"
-msgstr "%(a)s / %(b)s этапов"
 
 #: ui/templates/student/course_map.html:74
 #, python-format
@@ -6136,6 +6185,7 @@ msgstr "Здесь появятся результаты тестов, опыт�
 
 #: ui/templates/student/dashboard.html:151
 #: ui/templates/student/dashboard.html:160
+#: ui/templates/student/stages/practice.html:20
 msgid "Teacher's comment"
 msgstr "Комментарий преподавателя"
 
@@ -6159,20 +6209,11 @@ msgstr ""
 "Комментариев пока нет. Здесь появятся комментарии преподавателя к вашим "
 "работам."
 
-#: ui/templates/student/locked.html:3
+#: ui/templates/student/locked.html:5
 msgid "Not open yet"
 msgstr "Пока закрыто"
 
-#: ui/templates/student/locked.html:6 ui/templates/student/stage.html:9
-#: ui/templates/student/topic.html:20
-msgid "Topic stages"
-msgstr "Этапы темы"
-
-#: ui/templates/student/locked.html:7
-msgid "This stage is not open yet"
-msgstr "Этот этап пока закрыт"
-
-#: ui/templates/student/locked.html:10
+#: ui/templates/student/locked.html:13
 #, python-format
 msgid ""
 "«%(t)s» is waiting for the teacher's check. The next topic opens after the "
@@ -6181,21 +6222,25 @@ msgstr ""
 "«%(t)s» ожидает проверки преподавателем. Следующая тема откроется после "
 "проверки."
 
-#: ui/templates/student/locked.html:12
+#: ui/templates/student/locked.html:14
 #, python-format
 msgid "Finish «%(t)s» first — then this stage opens."
 msgstr "Сначала завершите «%(t)s» — затем откроется этот этап."
 
-#: ui/templates/student/locked.html:14
+#: ui/templates/student/locked.html:16
 #, python-format
 msgid "Go to «%(t)s»"
 msgstr "Перейти к «%(t)s»"
 
-#: ui/templates/student/locked.html:17
+#: ui/templates/student/locked.html:18
 msgid ""
 "Stages open one after another. Go back to the course map to see what to do "
 "next."
 msgstr "Этапы открываются по очереди. Следующий шаг смотрите на карте курса."
+
+#: ui/templates/student/locked.html:22 ui/templates/student/topic.html:29
+msgid "Topic stages"
+msgstr "Этапы темы"
 
 #: ui/templates/student/partials/certificate_card.html:17
 msgid "Download the PDF"
@@ -6246,16 +6291,16 @@ msgstr "Текущий балл %(c)s; для сертификата нужно 
 msgid "To complete the stage"
 msgstr "Условия завершения этапа"
 
-#: ui/templates/student/partials/conditions.html:8
+#: ui/templates/student/partials/conditions.html:11
 msgid "Read the theory to the end"
 msgstr "Прочитать теорию до конца"
 
-#: ui/templates/student/partials/conditions.html:8
+#: ui/templates/student/partials/conditions.html:13
 #, python-format
 msgid "Watch at least %(p)s%% of the video"
 msgstr "Посмотреть не менее %(p)s%% видео"
 
-#: ui/templates/student/partials/conditions.html:15
+#: ui/templates/student/partials/conditions.html:16
 #, python-format
 msgid "Score at least %(p)s%% in the test (%(n)s question)"
 msgid_plural "Score at least %(p)s%% in the test (%(n)s questions)"
@@ -6264,11 +6309,11 @@ msgstr[1] "Набрать не менее %(p)s%% в тесте (%(n)s вопр�
 msgstr[2] "Набрать не менее %(p)s%% в тесте (%(n)s вопросов)"
 msgstr[3] "Набрать не менее %(p)s%% в тесте (%(n)s вопросов)"
 
-#: ui/templates/student/partials/conditions.html:18
+#: ui/templates/student/partials/conditions.html:19
 msgid "Finish every experiment and send its analysis."
 msgstr "Завершить все опыты и отправить анализ."
 
-#: ui/templates/student/partials/conditions.html:20
+#: ui/templates/student/partials/conditions.html:21
 #, python-format
 msgid "Send the work and get at least %(p)s%%."
 msgstr "Отправить работу и получить не менее %(p)s%%."
@@ -6277,51 +6322,88 @@ msgstr "Отправить работу и получить не менее %(p)
 msgid "Stage passed"
 msgstr "Этап пройден"
 
-#: ui/templates/student/partials/conditions.html:26
+#: ui/templates/student/partials/conditions.html:25
 msgid ""
 "The attempts ran out below the pass mark — your teacher will look at this "
 "stage."
 msgstr "Попытки закончились ниже порога — преподаватель посмотрит этот этап."
 
-#: ui/templates/student/partials/conditions.html:28
+#: ui/templates/student/partials/conditions.html:27
 msgid "Waiting for the teacher's check. You can go on to the next stage."
 msgstr "Ожидает проверки преподавателем. Можно переходить к следующему этапу."
 
-#: ui/templates/student/partials/conditions.html:30
+#: ui/templates/student/partials/kind_pill.html:4
+#: ui/templates/student/results.html:84 ui/templates/student/topic.html:35
+#: ui/templates/teacher/content/course.html:58
+msgid "optional"
+msgstr "необязательный"
+
+#: ui/templates/student/partials/practice_field.html:9
 #, python-format
-msgid "Then «%(t)s» opens."
-msgstr "Затем откроется «%(t)s»."
+msgid "%(p)s pts"
+msgstr "%(p)s б."
 
-#: ui/templates/student/partials/practice_field.html:6
-msgid "pts"
-msgstr "б."
+#: ui/templates/student/partials/practice_field.html:16
+msgid "AI is grading…"
+msgstr "AI оценивает…"
 
-#: ui/templates/student/partials/practice_field.html:15
+#: ui/templates/student/partials/practice_field.html:16
+msgid "graded by AI"
+msgstr "оценивает AI"
+
+#: ui/templates/student/partials/practice_field.html:18
+msgid "Auto-check"
+msgstr "Автопроверка"
+
+#: ui/templates/student/partials/practice_field.html:29
 #: ui/templates/ui/styleguide.html:38
 msgid "Unit"
 msgstr "Единица"
 
-#: ui/templates/student/partials/practice_field.html:28
+#: ui/templates/student/partials/practice_field.html:36
+msgid "A comma or a dot may be used; units are converted automatically."
+msgstr "Можно писать через запятую или точку; единицы переводятся автоматически."
+
+#: ui/templates/student/partials/practice_field.html:43
 msgid "Chemistry keyboard"
 msgstr "Химическая клавиатура"
 
-#: ui/templates/student/partials/practice_field.html:33
-msgid "Preview:"
-msgstr "Вид:"
+#: ui/templates/student/partials/practice_field.html:47
+msgid "Clear"
+msgstr "Очистить"
 
-#: ui/templates/student/partials/practice_field.html:68
+#: ui/templates/student/partials/practice_field.html:49
+#: ui/templates/teacher/content/course.html:12
+#: ui/templates/teacher/content/courses.html:20
+#: ui/templates/teacher/content/stage.html:13
+msgid "Preview"
+msgstr "Предпросмотр"
+
+#: ui/templates/student/partials/practice_field.html:85
 msgid "Put a number next to each step: 1 is the first."
 msgstr "Поставьте номер у каждого шага: 1 — первый."
 
-#: ui/templates/student/partials/practice_field.html:71
+#: ui/templates/student/partials/practice_field.html:88
 msgid "Position"
 msgstr "Место"
 
-#: ui/templates/student/partials/practice_field.html:83
+#: ui/templates/student/partials/practice_field.html:100
 msgid ""
-"Write in your own words — the answer is graded by its meaning against the "
-"criteria."
-msgstr "Пишите своими словами — ответ оценивается по смыслу по критериям."
+"This answer is graded by AI against the author's criteria and confirmed by "
+"the teacher."
+msgstr "Этот ответ AI оценивает по критериям автора, преподаватель подтверждает."
+
+#: ui/templates/student/partials/practice_field.html:112
+msgid "AI feedback:"
+msgstr "Отзыв AI:"
+
+#: ui/templates/student/partials/practice_field.html:113
+msgid "Checked by the teacher"
+msgstr "Проверено преподавателем"
+
+#: ui/templates/student/partials/practice_field.html:113
+msgid "Preliminary AI grade — the teacher will check it"
+msgstr "Предварительная оценка AI — проверит преподаватель"
 
 #: ui/templates/student/partials/practice_grading.html:4
 msgid "Graded — refreshing…"
@@ -6332,8 +6414,44 @@ msgid ""
 "Being graded… The open answers are checked by AI, usually in under a minute."
 msgstr "Оценивается… Открытые ответы проверяет AI, обычно меньше минуты."
 
-#: ui/templates/student/partials/quiz_panel.html:6
-#: ui/templates/student/stages/test.html:7
+#: ui/templates/student/partials/practice_result.html:3
+msgid "Result"
+msgstr "Результат"
+
+#: ui/templates/student/partials/practice_result.html:5
+msgid ""
+"After you send the answers, the points and a comment for every field appear "
+"here."
+msgstr "После отправки ответов здесь появятся баллы и комментарий по каждому полю."
+
+#: ui/templates/student/partials/practice_result.html:7
+msgid "Being graded…"
+msgstr "Идёт оценка…"
+
+#: ui/templates/student/partials/practice_result.html:16
+msgid "Waiting for the teacher's check"
+msgstr "Ожидает проверки преподавателем"
+
+#: ui/templates/student/partials/practice_result.html:16
+msgid "Passed · the next stage is open"
+msgstr "Пройдено · следующий этап открыт"
+
+#: ui/templates/student/partials/practice_result.html:23
+msgid "Waiting for the teacher's confirmation"
+msgstr "Ждёт подтверждения преподавателя"
+
+#: ui/templates/student/partials/practice_result.html:24
+#: ui/templates/student/partials/quiz_panel.html:54
+#, python-format
+msgid "Counts for the grade: %(p)s%%"
+msgstr "Идёт в оценку: %(p)s%%"
+
+#: ui/templates/student/partials/quiz_panel.html:13
+#, python-format
+msgid "attempts left: %(n)s"
+msgstr "осталось попыток: %(n)s"
+
+#: ui/templates/student/partials/quiz_panel.html:20
 #: ui/templates/teacher/content/stage.html:60
 #, python-format
 msgid "%(n)s question"
@@ -6343,47 +6461,110 @@ msgstr[1] "%(n)s вопроса"
 msgstr[2] "%(n)s вопросов"
 msgstr[3] "%(n)s вопросов"
 
-#: ui/templates/student/partials/quiz_panel.html:7
-#, python-format
-msgid "attempts left: %(n)s"
-msgstr "осталось попыток: %(n)s"
-
-#: ui/templates/student/partials/quiz_panel.html:15
+#: ui/templates/student/partials/quiz_panel.html:27
 #, python-format
 msgid "The quiz opens after you watch at least %(p)s%% of the video."
 msgstr "Тест откроется после просмотра не менее %(p)s%% видео."
 
-#: ui/templates/student/partials/quiz_panel.html:16
-msgid "The quiz opens after you mark the theory as read."
-msgstr "Тест откроется, когда вы отметите теорию прочитанной."
+#: ui/templates/student/partials/quiz_panel.html:28
+msgid "First mark that you have read the theory."
+msgstr "Сначала отметьте, что прочитали теорию."
 
-#: ui/templates/student/partials/quiz_panel.html:20
+#: ui/templates/student/partials/quiz_panel.html:41
 msgid "You have an unfinished attempt."
 msgstr "У вас есть незавершённая попытка."
 
-#: ui/templates/student/partials/quiz_panel.html:21
+#: ui/templates/student/partials/quiz_panel.html:42
 msgid "Continue the test"
 msgstr "Продолжить тест"
 
-#: ui/templates/student/partials/quiz_panel.html:33
-#, python-format
-msgid "Counts for the grade: %(p)s%%"
-msgstr "Идёт в оценку: %(p)s%%"
-
-#: ui/templates/student/partials/quiz_panel.html:36
+#: ui/templates/student/partials/quiz_panel.html:57
 msgid "Review answers"
 msgstr "Посмотреть ответы"
 
-#: ui/templates/student/partials/quiz_panel.html:46
+#: ui/templates/student/partials/quiz_panel.html:68
+msgid "Answer the questions one by one: each answer is checked at once."
+msgstr "Отвечайте на вопросы по одному: каждый ответ проверяется сразу."
+
+#: ui/templates/student/partials/quiz_panel.html:69
 #, python-format
 msgid ""
 "You will have %(m)s min; the test is sent automatically when the time is up."
 msgstr ""
 "У вас будет %(m)s мин; по истечении времени тест отправится автоматически."
 
-#: ui/templates/student/partials/quiz_panel.html:47
+#: ui/templates/student/partials/quiz_panel.html:70
+msgid "The answers are checked when you submit the test."
+msgstr "Ответы проверяются при отправке теста."
+
+#: ui/templates/student/partials/quiz_panel.html:72
 msgid "Start the test"
 msgstr "Начать тест"
+
+#: ui/templates/student/partials/quiz_panel.html:83
+msgid "Stage completed!"
+msgstr "Этап завершён!"
+
+#: ui/templates/student/partials/quiz_panel.html:83
+msgid "The pass mark is not reached"
+msgstr "Проходной балл не набран"
+
+#: ui/templates/student/partials/quiz_panel.html:85
+#, python-format
+msgid "Correct answers: %(c)s / %(t)s."
+msgstr "Правильных ответов: %(c)s / %(t)s."
+
+#: ui/templates/student/partials/quiz_panel.html:86
+#, python-format
+msgid "«%(s)s» is open."
+msgstr "Этап «%(s)s» открыт."
+
+#: ui/templates/student/partials/quiz_panel.html:87
+#, python-format
+msgid "The pass mark is %(p)s%%."
+msgstr "Проходной балл — %(p)s%%."
+
+#: ui/templates/student/partials/quiz_panel.html:87
+#, python-format
+msgid ""
+"Look through the material again and retake the test. %(n)s attempt left."
+msgid_plural ""
+"Look through the material again and retake the test. %(n)s attempts left."
+msgstr[0] "Повторите материал и пройдите тест снова. Осталась %(n)s попытка."
+msgstr[1] "Повторите материал и пройдите тест снова. Осталось %(n)s попытки."
+msgstr[2] "Повторите материал и пройдите тест снова. Осталось %(n)s попыток."
+msgstr[3] "Повторите материал и пройдите тест снова. Осталось %(n)s попыток."
+
+#: ui/templates/student/partials/quiz_panel.html:87
+msgid "No attempts are left — your teacher will look at this stage."
+msgstr "Попыток не осталось — преподаватель посмотрит этот этап."
+
+#: ui/templates/student/partials/quiz_panel.html:96
+#: ui/templates/student/partials/quiz_panel.html:98
+#, python-format
+msgid "Next: %(s)s"
+msgstr "Далее: %(s)s"
+
+#: ui/templates/student/partials/quiz_panel.html:98
+#: ui/templates/student/stage.html:47
+msgid "Next stage"
+msgstr "Следующий этап"
+
+#: ui/templates/student/partials/quiz_question.html:56
+msgid "Correct answer:"
+msgstr "Правильный ответ:"
+
+#: ui/templates/student/partials/quiz_question.html:61
+msgid "Correct!"
+msgstr "Верно!"
+
+#: ui/templates/student/partials/quiz_question.html:61
+msgid "Wrong."
+msgstr "Неверно."
+
+#: ui/templates/student/partials/quiz_question.html:69
+msgid "See the result"
+msgstr "Посмотреть результат"
 
 #: ui/templates/student/partials/stage_tile.html:2
 msgid "awaiting check"
@@ -6489,12 +6670,6 @@ msgstr "Способ оценивания"
 msgid "Weight"
 msgstr "Вес"
 
-#: ui/templates/student/results.html:84 ui/templates/student/stage.html:6
-#: ui/templates/student/topic.html:28
-#: ui/templates/teacher/content/course.html:58
-msgid "optional"
-msgstr "необязательный"
-
 #: ui/templates/student/results.html:100
 msgid "Topic score = Σ(weight × score) / Σ weight"
 msgstr "Балл темы = Σ(вес × балл) / Σ вес"
@@ -6504,7 +6679,10 @@ msgid ""
 "A kind's share is split equally between the stages of that kind (e.g. three "
 "practice works share the practice weight). Unfinished stages do not count in "
 "the current score."
-msgstr "Доля вида этапа делится поровну между этапами этого вида (например, вес практики — между тремя практиками). Незавершённые этапы в текущий балл не входят."
+msgstr ""
+"Доля вида этапа делится поровну между этапами этого вида (например, вес "
+"практики — между тремя практиками). Незавершённые этапы в текущий балл не "
+"входят."
 
 #: ui/templates/student/results.html:107
 msgid "Grades appear when you open the first topic."
@@ -6554,6 +6732,23 @@ msgstr "Ничего не найдено"
 msgid "Check the spelling or try a shorter word."
 msgstr "Проверьте написание или попробуйте более короткое слово."
 
+#: ui/templates/student/stage.html:12
+msgid "Read"
+msgstr "Прочитано"
+
+#: ui/templates/student/stage.html:34 ui/templates/student/stage.html:35
+msgid "On this page"
+msgstr "На этой странице"
+
+#: ui/templates/student/stage.html:52
+#, python-format
+msgid "Opens after you score %(p)s%% in the test."
+msgstr "Откроется после %(p)s%% в тесте."
+
+#: ui/templates/student/stage.html:54
+msgid "Opens when this stage is completed."
+msgstr "Откроется после завершения этого этапа."
+
 #: ui/templates/student/stages/lab.html:7
 msgid ""
 "Do the experiments in order, fill in the lab journal and send the analysis."
@@ -6581,72 +6776,73 @@ msgstr ""
 msgid "Teacher's comments · %(e)s"
 msgstr "Комментарии преподавателя · %(e)s"
 
-#: ui/templates/student/stages/practice.html:3
+#: ui/templates/student/stages/practice.html:8
 msgid "The practice task is being prepared"
 msgstr "Практическая работа готовится"
 
-#: ui/templates/student/stages/practice.html:3
+#: ui/templates/student/stages/practice.html:8
 msgid "The task with its answer fields appears here soon."
 msgstr "Задание с полями ответа скоро появится здесь."
 
-#: ui/templates/student/stages/practice.html:14
+#: ui/templates/student/stages/practice.html:16
 #, python-format
-msgid "Attempt %(n)s"
-msgstr "Попытка %(n)s"
+msgid "%(n)s answer field"
+msgid_plural "%(n)s answer fields"
+msgstr[0] "%(n)s поле ответа"
+msgstr[1] "%(n)s поля ответа"
+msgstr[2] "%(n)s полей ответа"
+msgstr[3] "%(n)s полей ответа"
 
-#: ui/templates/student/stages/practice.html:21
-msgid "Waiting for the teacher's check"
-msgstr "Ожидает проверки преподавателем"
+#: ui/templates/student/stages/practice.html:16
+#, python-format
+msgid "%(p)s points"
+msgstr "%(p)s балла"
 
-#: ui/templates/student/stages/practice.html:21
-msgid ""
-"Part of the answer is checked by the teacher. You can go on to the next "
-"stage."
-msgstr ""
-"Часть ответа проверит преподаватель. Можно переходить к следующему этапу."
-
-#: ui/templates/student/stages/practice.html:23
-msgid "Work accepted"
-msgstr "Работа принята"
-
-#: ui/templates/student/stages/practice.html:43
-msgid "Checked by the teacher"
-msgstr "Проверено преподавателем"
-
-#: ui/templates/student/stages/practice.html:43
-msgid "Preliminary AI grade — the teacher will check it"
-msgstr "Предварительная оценка AI — проверит преподаватель"
-
-#: ui/templates/student/stages/practice.html:53
-msgid "Comments with the teacher"
-msgstr "Переписка с преподавателем"
-
-#: ui/templates/student/stages/practice.html:61
-msgid "Send again"
-msgstr "Отправить снова"
-
-#: ui/templates/student/stages/practice.html:65
+#: ui/templates/student/stages/practice.html:29
 msgid "Photo or file of your solution (not graded)"
 msgstr "Фото или файл решения (не оценивается)"
 
-#: ui/templates/student/stages/practice.html:70
-msgid "Send the work"
-msgstr "Отправить работу"
-
-#: ui/templates/student/stages/test.html:8
+#: ui/templates/student/stages/practice.html:37
 #, python-format
-msgid "Pass mark: %(p)s%%"
-msgstr "Порог: %(p)s%%"
+msgid "Attempt: <b>%(n)s / %(m)s</b>"
+msgstr "Попытка: <b>%(n)s / %(m)s</b>"
 
-#: ui/templates/student/stages/test.html:9
+#: ui/templates/student/stages/practice.html:37
 #, python-format
-msgid "Time: %(m)s min; the test is sent automatically when the time is up"
-msgstr "Время: %(m)s мин; по истечении времени тест отправится автоматически"
+msgid "Attempts: %(m)s"
+msgstr "Попыток: %(m)s"
 
-#: ui/templates/student/stages/test.html:10
-#, python-format
-msgid "Attempts: %(n)s"
-msgstr "Попыток: %(n)s"
+#: ui/templates/student/stages/practice.html:38
+msgid "the best result counts"
+msgstr "засчитывается лучший результат"
+
+#: ui/templates/student/stages/practice.html:38
+msgid "the last result counts"
+msgstr "засчитывается последний результат"
+
+#: ui/templates/student/stages/practice.html:38
+msgid "the first result counts"
+msgstr "засчитывается первый результат"
+
+#: ui/templates/student/stages/practice.html:45
+msgid "Send again"
+msgstr "Отправить снова"
+
+#: ui/templates/student/stages/practice.html:45
+msgid "Send the answers"
+msgstr "Отправить ответы"
+
+#: ui/templates/student/stages/practice.html:55
+msgid "Comments with the teacher"
+msgstr "Переписка с преподавателем"
+
+#: ui/templates/student/stages/test.html:7
+msgid "Pass mark"
+msgstr "Проходной балл"
+
+#: ui/templates/student/stages/test.html:11
+msgid "The test is sent automatically when the time is up."
+msgstr "Когда время выйдет, тест отправится автоматически."
 
 #: ui/templates/student/stages/test.html:13
 msgid "The test has not been set up yet."
@@ -6660,13 +6856,14 @@ msgstr "Материалы"
 msgid "You have read the theory."
 msgstr "Вы прочитали теорию."
 
-#: ui/templates/student/stages/theory.html:15
+#: ui/templates/student/stages/theory.html:16
+#: ui/templates/student/stages/theory.html:18
 msgid "I have read the theory"
 msgstr "Я прочитал(а) теорию"
 
-#: ui/templates/student/stages/theory.html:17
-msgid "Then the checkpoint quiz opens."
-msgstr "Затем откроется закрепляющий тест."
+#: ui/templates/student/stages/theory.html:21
+msgid "When you mark it, the checkpoint quiz opens"
+msgstr "После отметки откроется закрепляющий тест"
 
 #: ui/templates/student/stages/video.html:15
 msgid "Watched"
@@ -6701,16 +6898,16 @@ msgstr "Преподаватель добавит его позже. Пока м
 msgid "Continue without the video"
 msgstr "Продолжить без видео"
 
-#: ui/templates/student/topic.html:15
+#: ui/templates/student/topic.html:22
 #, python-format
 msgid "Topic completed · %(s)s"
 msgstr "Тема завершена · %(s)s"
 
-#: ui/templates/student/topic.html:33
+#: ui/templates/student/topic.html:40
 msgid "Why locked?"
 msgstr "Почему закрыто?"
 
-#: ui/templates/student/topic.html:36
+#: ui/templates/student/topic.html:43
 msgid "Review"
 msgstr "Просмотр"
 
@@ -6721,12 +6918,6 @@ msgstr "этапы открываются по порядку"
 #: ui/templates/teacher/content/course.html:9
 msgid "everything is open"
 msgstr "всё открыто"
-
-#: ui/templates/teacher/content/course.html:12
-#: ui/templates/teacher/content/courses.html:20
-#: ui/templates/teacher/content/stage.html:13
-msgid "Preview"
-msgstr "Предпросмотр"
 
 #: ui/templates/teacher/content/course.html:14
 #: ui/templates/teacher/content/course_form.html:3
@@ -6990,7 +7181,7 @@ msgstr "Вопросов пока нет."
 msgid "Quiz settings"
 msgstr "Настройки теста"
 
-#: ui/templates/teacher/content/quiz.html:51
+#: ui/templates/teacher/content/quiz.html:52
 msgid "Save the settings"
 msgstr "Сохранить настройки"
 
@@ -7747,6 +7938,48 @@ msgstr "Практическая работа 3"
 #: ui/views.py:24
 msgid "Conditions"
 msgstr "Условие"
+
+#, python-format
+#~ msgid "Module %(m)s · Topic %(n)s"
+#~ msgstr "Модуль %(m)s · Тема %(n)s"
+
+#, python-format
+#~ msgid "Topic: %(a)s / %(b)s stages"
+#~ msgstr "Тема: %(a)s / %(b)s этапов"
+
+#~ msgid "This stage is not open yet"
+#~ msgstr "Этот этап пока закрыт"
+
+#~ msgid "pts"
+#~ msgstr "б."
+
+#~ msgid "Preview:"
+#~ msgstr "Вид:"
+
+#~ msgid ""
+#~ "Write in your own words — the answer is graded by its meaning against the "
+#~ "criteria."
+#~ msgstr "Пишите своими словами — ответ оценивается по смыслу по критериям."
+
+#~ msgid "The quiz opens after you mark the theory as read."
+#~ msgstr "Тест откроется, когда вы отметите теорию прочитанной."
+
+#, python-format
+#~ msgid "Attempt %(n)s"
+#~ msgstr "Попытка %(n)s"
+
+#~ msgid ""
+#~ "Part of the answer is checked by the teacher. You can go on to the next "
+#~ "stage."
+#~ msgstr ""
+#~ "Часть ответа проверит преподаватель. Можно переходить к следующему этапу."
+
+#~ msgid "Work accepted"
+#~ msgstr "Работа принята"
+
+#, python-format
+#~ msgid "Pass mark: %(p)s%%"
+#~ msgstr "Порог: %(p)s%%"
 
 #, python-format
 #~ msgid "№ %(n)s · issued %(d)s · %(s)s (%(g)s)"

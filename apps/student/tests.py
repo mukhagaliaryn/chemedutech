@@ -244,3 +244,48 @@ class PreviewTests(StudentFlowBase):
         teacher = User.objects.create_user("t", "t@example.kz", "x", role=User.Role.TEACHER)
         self.client.force_login(teacher)
         self.assertEqual(self.client.get(self.url(self.theory)).status_code, 404)
+
+
+class InlineQuizTests(StudentFlowBase):
+    """STEP-18: the checkpoint quiz is played on the theory page, question by question."""
+
+    def test_inline_quiz_flow(self):
+        quiz = self.theory.checkpoint_quiz
+        self.assertTrue(quiz.instant_feedback)
+        self.client.post(self.url(self.theory, "student:material_done"))
+        r = self.client.get(self.url(self.theory, "student:quiz_take"))
+        self.assertRedirects(r, self.url(self.theory) + "#quiz", fetch_redirect_response=False)
+        attempt = QuizAttempt.objects.get(user=self.student, quiz=quiz)
+        r = self.client.get(self.url(self.theory))
+        rows = r.context["inline_rows"]
+        self.assertEqual(len(rows), len(attempt.question_ids))
+        self.assertEqual(r.context["inline_current"], 0)
+        self.assertContains(r, rows[0]["check_url"])
+        # check every question with its correct option
+        right = answers(attempt, correct=True)
+        for row in rows:
+            key = f"q{row['question'].pk}"
+            r = self.client.post(row["check_url"], {key: right[key]}, headers={"HX-Request": "true"})
+            self.assertContains(r, "bg-success-50")
+        self.assertContains(r, self.url(self.theory, "student:quiz_submit", attempt.pk))  # «See the result»
+        r = self.client.post(self.url(self.theory, "student:quiz_submit", attempt.pk))
+        self.assertRedirects(r, self.url(self.theory) + f"?result={attempt.pk}#quiz", fetch_redirect_response=False)
+        attempt.refresh_from_db()
+        self.assertTrue(attempt.passed)
+        self.assertEqual(self.status(self.theory), S.PASSED)
+        r = self.client.get(self.url(self.theory), {"result": attempt.pk})
+        self.assertEqual(r.context["result_dialog"]["correct"], len(rows))
+        self.assertContains(r, "<dialog")
+        self.assertContains(r, self.url(self.video))  # «Next: …»
+
+    def test_check_needs_the_open_quiz_and_own_attempt(self):
+        self.client.post(self.url(self.theory, "student:material_done"))
+        self.client.get(self.url(self.theory, "student:quiz_take"))
+        attempt = QuizAttempt.objects.get(user=self.student)
+        qid = attempt.question_ids[0]
+        other = make_student("s2")
+        enroll(other, self.course, "admin")
+        self.client.force_login(other)
+        self.client.post(self.url(self.theory, "student:material_done"))
+        r = self.client.post(self.url(self.theory, "student:quiz_check", attempt.pk, qid), {})
+        self.assertEqual(r.status_code, 404)

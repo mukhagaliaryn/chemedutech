@@ -2,7 +2,7 @@
 {% if content.has_source %}
   <div x-data="videoTracker({ provider: '{{ content.provider }}', id: '{{ content.youtube_id|default:content.vimeo_id }}', url: '{{ urls.watch }}', min: {{ content.min_watch_percent }}, done: {% if sp.material_done_at or place.preview %}true{% else %}false{% endif %}, start: {{ sp.material_percent|default:0 }} })"
        class="flex flex-col gap-4">
-    <div class="relative aspect-video overflow-hidden rounded-md bg-ink">
+    <div class="relative aspect-video overflow-hidden rounded-lg bg-ink">
       {% if content.provider == "file" %}
         <video x-ref="video" class="size-full" controls preload="metadata" src="{{ content.file.url }}"></video>
       {% elif content.provider == "vimeo" %}

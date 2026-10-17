@@ -1,14 +1,14 @@
 {% load i18n %}
-<div class="flex flex-col gap-3">
-  <h2 class="text-h3">{% if quiz %}{{ quiz.title }}{% else %}{% translate "Topic test" %}{% endif %}</h2>
-  {% if content.instructions %}<p class="whitespace-pre-line text-ink-soft">{{ content.instructions }}</p>{% endif %}
+<div class="flex flex-col gap-4">
+  {% if content.instructions %}<p class="whitespace-pre-line text-[17px] leading-7 text-ink-soft">{{ content.instructions }}</p>{% endif %}
   {% if quiz %}
-    <ul class="num flex list-disc flex-col gap-1 pl-5 text-sm text-ink-soft">
-      <li>{% blocktranslate count n=question_count %}{{ n }} question{% plural %}{{ n }} questions{% endblocktranslate %}</li>
-      <li>{% blocktranslate with p=quiz.pass_percent %}Pass mark: {{ p }}%{% endblocktranslate %}</li>
-      {% if quiz.time_limit_min %}<li>{% blocktranslate with m=quiz.time_limit_min %}Time: {{ m }} min; the test is sent automatically when the time is up{% endblocktranslate %}</li>{% endif %}
-      {% if quiz.max_attempts %}<li>{% blocktranslate with n=quiz.max_attempts %}Attempts: {{ n }}{% endblocktranslate %}</li>{% endif %}
-    </ul>
+    <dl class="num grid gap-2 sm:grid-cols-2">
+      <div class="rounded-md bg-canvas px-4 py-3"><dt class="text-caption font-normal text-ink-faint">{% translate "Questions" %}</dt><dd class="mt-0.5 text-lg font-extrabold">{{ question_count }}</dd></div>
+      <div class="rounded-md bg-canvas px-4 py-3"><dt class="text-caption font-normal text-ink-faint">{% translate "Pass mark" %}</dt><dd class="mt-0.5 text-lg font-extrabold">{{ quiz.pass_percent }}%</dd></div>
+      {% if quiz.time_limit_min %}<div class="rounded-md bg-canvas px-4 py-3"><dt class="text-caption font-normal text-ink-faint">{% translate "Time" %}</dt><dd class="mt-0.5 text-lg font-extrabold">{% blocktranslate with m=quiz.time_limit_min %}{{ m }} min{% endblocktranslate %}</dd></div>{% endif %}
+      {% if quiz.max_attempts %}<div class="rounded-md bg-canvas px-4 py-3"><dt class="text-caption font-normal text-ink-faint">{% translate "Attempts" %}</dt><dd class="mt-0.5 text-lg font-extrabold">{{ quiz.max_attempts }}</dd></div>{% endif %}
+    </dl>
+    {% if quiz.time_limit_min %}<p class="text-[13px] text-ink-soft">{% translate "The test is sent automatically when the time is up." %}</p>{% endif %}
   {% else %}
     <p class="text-ink-soft">{% translate "The test has not been set up yet." %}</p>
   {% endif %}

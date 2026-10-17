@@ -28,5 +28,6 @@ urlpatterns = [
     path(STAGE + "quiz/", views.quiz_take, name="quiz_take"),
     path(STAGE + "quiz/retry/", views.quiz_retry, name="quiz_retry"),
     path(STAGE + "quiz/<int:attempt_id>/submit/", views.quiz_submit, name="quiz_submit"),
+    path(STAGE + "quiz/<int:attempt_id>/check/<int:question_id>/", views.quiz_check, name="quiz_check"),
     path(STAGE + "quiz/<int:attempt_id>/", views.quiz_review, name="quiz_review"),
 ]

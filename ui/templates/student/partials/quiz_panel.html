@@ -1,20 +1,41 @@
-{% load i18n %}{# The quiz of a stage: locked until the material is done, then start / continue / result + retry. #}
-<section id="quiz" class="card flex max-w-[840px] flex-col gap-4 p-[clamp(20px,4vw,32px)]" aria-labelledby="quiz-title">
-  <div>
-    <p class="text-body-sm font-medium text-ink-soft">
-      {{ quiz.get_kind_display }} · {% blocktranslate with p=quiz.pass_percent %}pass mark {{ p }}%{% endblocktranslate %} ·
-      {% blocktranslate count n=question_count %}{{ n }} question{% plural %}{{ n }} questions{% endblocktranslate %}
-      {% if attempts_left is not None %} · {% blocktranslate with n=attempts_left %}attempts left: {{ n }}{% endblocktranslate %}{% endif %}
-    </p>
-    <h2 id="quiz-title" class="mt-0.5 text-h2">{{ quiz.title }}</h2>
+{% load i18n %}{% comment %}
+The quiz of a stage (mockup «Теория + бекіту тесті»): locked until the material is done, then start /
+the inline question-by-question player (instant feedback, student/partials/quiz_question.html) /
+continue on the test page (tests checked at the end) / the last result + retry.
+{% endcomment %}
+<section id="quiz" aria-labelledby="quiz-title"
+         class="flex scroll-mt-24 flex-col gap-[18px] rounded-xl bg-surface p-[clamp(22px,3vw,32px)] {% if quiz_open %}border-2 border-primary-600 shadow-[0_16px_40px_rgba(31,95,209,.12)]{% else %}border border-line{% endif %}"
+         {% if inline_rows %}x-data="{ current: {{ inline_current }}, results: [{% for r in inline_rows %}{% if r.answer %}{% if r.answer.is_correct %}true{% else %}false{% endif %}{% else %}null{% endif %}{% if not forloop.last %}, {% endif %}{% endfor %}] }"{% endif %}>
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <div>
+      <p class="text-[13px] font-semibold text-ink-soft">
+        {{ quiz.get_kind_display }} · {% blocktranslate with p=quiz.pass_percent %}pass mark {{ p }}%{% endblocktranslate %}
+        {% if open_attempt %} · {% blocktranslate with n=open_attempt.attempt_no %}attempt {{ n }}{% endblocktranslate %}{% elif attempts_left is not None %} · {% blocktranslate with n=attempts_left %}attempts left: {{ n }}{% endblocktranslate %}{% endif %}
+      </p>
+      <h2 id="quiz-title" class="mt-0.5 text-[22px] leading-[30px] font-extrabold">{{ quiz.title }}</h2>
+    </div>
+    {% if inline_rows %}
+      <span class="num inline-flex h-8 items-center rounded-full bg-surface-sunken px-3 text-[13px] font-bold" x-text="(current + 1) + ' / {{ inline_rows|length }}'">{{ inline_current|add:1 }} / {{ inline_rows|length }}</span>
+    {% else %}
+      <span class="num inline-flex h-8 items-center rounded-full bg-surface-sunken px-3 text-[13px] font-bold">{% blocktranslate count n=question_count %}{{ n }} question{% plural %}{{ n }} questions{% endblocktranslate %}</span>
+    {% endif %}
   </div>
 
   {% if not quiz_open %}
-    <p class="flex items-center gap-2 rounded-md bg-surface-sunken px-4 py-3 text-sm text-ink-soft">
-      {% include "components/icons.html#lock" %}
+    <p class="flex items-center gap-2.5 rounded-lg bg-canvas p-4 text-ink-soft">
+      {% include "components/icons.html#key" %}
       {% if stage.kind == "video" %}{% blocktranslate with p=content.min_watch_percent %}The quiz opens after you watch at least {{ p }}% of the video.{% endblocktranslate %}
-      {% else %}{% translate "The quiz opens after you mark the theory as read." %}{% endif %}
+      {% else %}{% translate "First mark that you have read the theory." %}{% endif %}
     </p>
+  {% elif inline_rows %}
+    <div class="grid gap-1.5" style="grid-template-columns: repeat({{ inline_rows|length }}, minmax(0, 1fr))" aria-hidden="true">
+      {% for r in inline_rows %}
+        <span class="h-1.5 rounded-full transition-colors" :class="results[{{ forloop.counter0 }}] === true ? 'bg-success-600' : results[{{ forloop.counter0 }}] === false ? 'bg-danger-600' : current === {{ forloop.counter0 }} ? 'bg-primary-600' : 'bg-line'"></span>
+      {% endfor %}
+    </div>
+    {% for row in inline_rows %}
+      {% include "student/partials/quiz_question.html" with index=forloop.counter0 total=inline_rows|length %}
+    {% endfor %}
   {% elif open_attempt %}
     <div class="flex flex-wrap items-center gap-3">
       <p class="flex-1 text-sm text-ink-soft">{% translate "You have an unfinished attempt." %}</p>
@@ -22,15 +43,15 @@
     </div>
   {% elif last_attempt %}
     <div class="flex flex-wrap items-center gap-4 rounded-lg px-5 py-4 {% if last_attempt.passed %}bg-success-50{% else %}bg-danger-50{% endif %}">
-      <span class="num text-stat {% if last_attempt.passed %}text-success-700{% else %}text-danger-700{% endif %}">{{ last_attempt.percent|floatformat:0 }}%</span>
+      <span class="num text-[32px] leading-9 font-extrabold {% if last_attempt.passed %}text-success-700{% else %}text-danger-700{% endif %}">{{ last_attempt.percent|floatformat:0 }}%</span>
       <div class="min-w-0 flex-[1_1_240px]">
         {% if last_attempt.passed %}
-          <p class="font-semibold text-success-700">{% translate "Test passed" %}</p>
+          <p class="font-bold text-success-700">{% translate "Test passed" %}</p>
         {% else %}
-          <p class="font-semibold text-danger-700">{% blocktranslate with p=quiz.pass_percent %}Below the pass mark ({{ p }}%){% endblocktranslate %}</p>
+          <p class="font-bold text-danger-700">{% blocktranslate with p=quiz.pass_percent %}Below the pass mark ({{ p }}%){% endblocktranslate %}</p>
           {% if attempts_left != 0 %}<p class="text-sm">{% translate "Read the material again and retake the test." %}</p>{% endif %}
         {% endif %}
-        {% if counted and counted.pk != last_attempt.pk %}<p class="num text-body-sm text-ink-soft">{% blocktranslate with p=counted.percent|floatformat:0 %}Counts for the grade: {{ p }}%{% endblocktranslate %}</p>{% endif %}
+        {% if counted and counted.pk != last_attempt.pk %}<p class="num text-[13px] text-ink-soft">{% blocktranslate with p=counted.percent|floatformat:0 %}Counts for the grade: {{ p }}%{% endblocktranslate %}</p>{% endif %}
       </div>
       <div class="flex flex-wrap gap-2">
         <a class="btn btn-secondary" href="{% url 'student:quiz_review' course.slug topic.number stage.pk last_attempt.pk %}">{% translate "Review answers" %}</a>
@@ -42,9 +63,40 @@
       </div>
     </div>
   {% else %}
-    <div class="flex flex-wrap items-center gap-3">
-      {% if quiz.time_limit_min %}<p class="flex-1 text-sm text-ink-soft">{% blocktranslate with m=quiz.time_limit_min %}You will have {{ m }} min; the test is sent automatically when the time is up.{% endblocktranslate %}</p>{% endif %}
-      <a class="btn btn-primary" href="{{ urls.quiz_take }}">{% translate "Start the test" %}</a>
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <p class="text-sm text-ink-soft">
+        {% if quiz.instant_feedback %}{% translate "Answer the questions one by one: each answer is checked at once." %}
+        {% elif quiz.time_limit_min %}{% blocktranslate with m=quiz.time_limit_min %}You will have {{ m }} min; the test is sent automatically when the time is up.{% endblocktranslate %}
+        {% else %}{% translate "The answers are checked when you submit the test." %}{% endif %}
+      </p>
+      <a class="btn btn-primary h-[46px] px-[22px] text-[15px] font-bold" href="{{ urls.quiz_take }}">{% translate "Start the test" %}{% include "components/icons.html#arrow-right" %}</a>
     </div>
   {% endif %}
 </section>
+
+{% if result_dialog %}{% with r=result_dialog a=result_dialog.attempt %}
+<dialog class="dialog text-center" x-data x-init="$el.showModal()" aria-labelledby="res-title">
+  <span class="mx-auto grid size-[72px] place-items-center rounded-[24px] {% if a.passed %}bg-success-50 text-success-600{% else %}bg-danger-50 text-danger-600{% endif %}">
+    {% if a.passed %}{% include "components/icons.html#check" with size=34 %}{% else %}{% include "components/icons.html#error" with size=34 %}{% endif %}
+  </span>
+  <p class="num mt-4 text-[44px] leading-[48px] font-extrabold">{{ a.percent|floatformat:0 }}%</p>
+  <h3 id="res-title" class="mt-1.5 text-[22px] font-extrabold">{% if a.passed %}{% translate "Stage completed!" %}{% else %}{% translate "The pass mark is not reached" %}{% endif %}</h3>
+  <p class="mt-2 text-ink-soft">
+    {% blocktranslate with c=r.correct t=r.total %}Correct answers: {{ c }} / {{ t }}.{% endblocktranslate %}
+    {% if a.passed %}{% if next %}{% blocktranslate with s=next.1 %}«{{ s }}» is open.{% endblocktranslate %}{% endif %}
+    {% else %}{% blocktranslate with p=quiz.pass_percent %}The pass mark is {{ p }}%.{% endblocktranslate %} {% if attempts_left %}{% blocktranslate count n=attempts_left %}Look through the material again and retake the test. {{ n }} attempt left.{% plural %}Look through the material again and retake the test. {{ n }} attempts left.{% endblocktranslate %}{% elif attempts_left == 0 %}{% translate "No attempts are left — your teacher will look at this stage." %}{% endif %}{% endif %}
+  </p>
+  <div class="mt-6 flex flex-wrap justify-center gap-2.5">
+    {% if attempts_left != 0 %}
+      <form method="post" action="{{ urls.quiz_retry }}">{% csrf_token %}<button type="submit" class="btn btn-secondary h-[46px]">{% translate "Retake the test" %}</button></form>
+    {% else %}
+      <form method="dialog"><button class="btn btn-secondary h-[46px]">{% translate "Close" %}</button></form>
+    {% endif %}
+    {% if next and status == "passed" %}
+      <a class="btn btn-primary h-[46px]" href="{{ next.0 }}">{% blocktranslate with s=next.1|truncatechars:32 %}Next: {{ s }}{% endblocktranslate %}</a>
+    {% else %}
+      <button type="button" class="btn btn-primary h-[46px]" disabled>{% if next %}{% blocktranslate with s=next.1|truncatechars:32 %}Next: {{ s }}{% endblocktranslate %}{% else %}{% translate "Next stage" %}{% endif %}</button>
+    {% endif %}
+  </div>
+</dialog>
+{% endwith %}{% endif %}

@@ -17,6 +17,44 @@
     });
 
   document.addEventListener("alpine:init", () => {
+    // Theory: how much of the text has scrolled past the bottom of the screen (header progress bar).
+    Alpine.data("readProgress", () => ({
+      percent: 0,
+      init() {
+        const text = document.querySelector("[data-reading]");
+        if (!text) return;
+        const update = () => {
+          const box = text.getBoundingClientRect();
+          const seen = window.innerHeight - box.top;
+          this.percent = Math.max(0, Math.min(100, Math.round((seen / box.height) * 100)));
+        };
+        update();
+        window.addEventListener("scroll", update, { passive: true });
+        window.addEventListener("resize", update);
+      },
+    }));
+
+    // Theory: «On this page» — the h2 headings of the text, the one being read is highlighted.
+    Alpine.data("tocNav", () => ({
+      items: [],
+      active: "",
+      init() {
+        const headings = [...document.querySelectorAll("[data-reading] h2")];
+        headings.forEach((h, i) => {
+          if (!h.id) h.id = `section-${i + 1}`;
+          h.classList.add("scroll-mt-24");
+        });
+        this.items = headings.map((h) => ({ id: h.id, text: h.textContent.trim() }));
+        if (!headings.length) return;
+        this.active = headings[0].id;
+        const observer = new IntersectionObserver(
+          (entries) => entries.forEach((e) => e.isIntersecting && (this.active = e.target.id)),
+          { rootMargin: "-80px 0px -65% 0px" },
+        );
+        headings.forEach((h) => observer.observe(h));
+      },
+    }));
+
     // A beat every 30 s while the page is visible → StageProgress.time_spent_s.
     Alpine.data("stagePing", (url) => ({
       init() {

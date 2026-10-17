@@ -1,20 +1,23 @@
 {% load i18n %}
-<div class="prose-theory">{{ content.body|sanitize }}</div>
+<div class="prose-theory" data-reading>{{ content.body|sanitize }}</div>
 {% with files=content.attachments.all %}{% if files %}
   <div class="mt-8 flex flex-col gap-2">
-    <h2 class="text-h3">{% translate "Materials" %}</h2>
-    {% for f in files %}<a class="link inline-flex items-center gap-2 text-sm" href="{{ f.file.url }}" download>{% include "components/icons.html#book" with size=16 %}{{ f.title }}</a>{% endfor %}
+    <h2 class="text-lg font-bold">{% translate "Materials" %}</h2>
+    {% for f in files %}<a class="link inline-flex items-center gap-2 text-sm" href="{{ f.file.url }}" download>{% include "components/icons.html#download" %}{{ f.title }}</a>{% endfor %}
   </div>
 {% endif %}{% endwith %}
 {% if not place.preview %}
-  <div class="mt-10 flex flex-wrap items-center gap-3 border-t border-line pt-6">
+  <div class="mt-7 flex flex-wrap items-center justify-between gap-3 border-t border-surface-sunken pt-5">
     {% if sp.material_done_at %}
-      <p class="flex items-center gap-2 text-sm font-medium text-success-700">{% include "components/icons.html#check" %}{% translate "You have read the theory." %}</p>
+      <p class="flex items-center gap-2.5 text-[15px] font-semibold text-success-700">{% include "components/icons.html#check" with size=20 %}{% translate "You have read the theory." %}</p>
     {% else %}
-      <form method="post" action="{{ urls.material_done }}">{% csrf_token %}
-        <button type="submit" class="btn btn-primary">{% translate "I have read the theory" %}</button>
+      <form method="post" action="{{ urls.material_done }}" x-data>{% csrf_token %}
+        <label class="flex cursor-pointer items-center gap-2.5 text-[15px] font-semibold">
+          <input type="checkbox" class="size-5" @change="$el.form.requestSubmit()">{% translate "I have read the theory" %}
+        </label>
+        <noscript><button type="submit" class="btn btn-primary mt-2">{% translate "I have read the theory" %}</button></noscript>
       </form>
-      <span class="text-body-sm text-ink-soft">{% if quiz %}{% translate "Then the checkpoint quiz opens." %}{% endif %}</span>
     {% endif %}
+    {% if quiz and not sp.material_done_at %}<span class="text-[13px] text-ink-faint">{% translate "When you mark it, the checkpoint quiz opens" %}</span>{% endif %}
   </div>
 {% endif %}

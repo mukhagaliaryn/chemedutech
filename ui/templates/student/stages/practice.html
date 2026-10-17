@@ -1,83 +1,58 @@
-{% load i18n %}
+{% load i18n %}{% comment %}
+Practice work (mockup «Практикалық жұмыс»): the task card, one card per answer field (its last result as a
+badge, feedback, the AI criteria of open answers), the attempts line and «Send». The result sits in the aside
+(student/partials/practice_result.html).
+{% endcomment %}
 {% if not task %}
-  {% translate "The practice task is being prepared" as l_title %}{% translate "The task with its answer fields appears here soon." as l_text %}
-  {% include "components/empty_state.html" with title=l_title text=l_text icon="practice" %}
-{% else %}
-<div class="flex flex-col gap-6">
-  <div>
-    <h2 class="text-h2">{{ task.title }}</h2>
-    <div class="prose-theory mt-3">{{ task.instructions|sanitize }}</div>
+  <div class="rounded-xl border border-line bg-surface p-8">
+    {% translate "The practice task is being prepared" as l_title %}{% translate "The task with its answer fields appears here soon." as l_text %}
+    {% include "components/empty_state.html" with title=l_title text=l_text icon="practice" %}
   </div>
+{% else %}
+<section class="rounded-xl border border-line bg-surface p-[clamp(22px,3vw,32px)]">
+  {% include "student/partials/kind_pill.html" %}
+  <h1 class="mt-3.5 text-[28px] leading-9 font-extrabold tracking-[-0.02em]">{{ task.title }}</h1>
+  <div class="prose-theory mt-3">{{ task.instructions|sanitize }}</div>
+  <p class="num mt-3 text-sm text-ink-soft">{% blocktranslate count n=rows|length %}{{ n }} answer field{% plural %}{{ n }} answer fields{% endblocktranslate %} · {% blocktranslate with p=max_points|floatformat:"-2" %}{{ p }} points{% endblocktranslate %}</p>
+</section>
 
-  {% if latest %}
-  <section id="result" class="flex flex-col gap-3" aria-labelledby="result-title">
-    <h3 id="result-title" class="text-h3">{% blocktranslate with n=latest.attempt_no %}Attempt {{ n }}{% endblocktranslate %}</h3>
-    {% if grading %}
-      {% include "student/partials/practice_grading.html" with status_url=practice_urls.status %}
-    {% else %}
-      <div class="flex flex-wrap items-center gap-4 rounded-lg px-5 py-4 {% if latest.status == 'needs_review' %}bg-warning-50{% elif latest.percent >= stage.pass_percent %}bg-success-50{% else %}bg-danger-50{% endif %}">
-        <span class="num text-stat {% if latest.status == 'needs_review' %}text-warning-700{% elif latest.percent >= stage.pass_percent %}text-success-700{% else %}text-danger-700{% endif %}">{{ latest.percent|floatformat:0 }}%</span>
-        <div class="min-w-0 flex-[1_1_240px] text-sm">
-          {% if latest.status == "needs_review" %}<p class="font-semibold text-warning-700">{% translate "Waiting for the teacher's check" %}</p><p>{% translate "Part of the answer is checked by the teacher. You can go on to the next stage." %}</p>
-          {% elif latest.status == "returned" %}<p class="font-semibold text-danger-700">{% translate "Returned by the teacher" %}</p>
-          {% elif latest.percent >= stage.pass_percent %}<p class="font-semibold text-success-700">{% translate "Work accepted" %}</p>
-          {% else %}<p class="font-semibold text-danger-700">{% blocktranslate with p=stage.pass_percent %}Below the pass mark ({{ p }}%){% endblocktranslate %}</p>{% endif %}
-          <p class="num">{% blocktranslate with s=latest.score|floatformat:"-2" m=latest.max_score|floatformat:"-2" %}{{ s }} of {{ m }} points.{% endblocktranslate %} {% blocktranslate with n=practice_left %}Attempts left: {{ n }}.{% endblocktranslate %}</p>
-        </div>
-      </div>
-      {% if latest.teacher_comment %}<p class="rounded-md bg-surface-sunken px-4 py-3 text-sm"><span class="font-semibold">{% translate "Teacher:" %}</span> {{ latest.teacher_comment }}</p>{% endif %}
-      <ol class="flex flex-col gap-2">
-        {% for a in latest_answers %}
-          <li class="flex items-start gap-3 rounded-md border border-line px-4 py-3">
-            <span class="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full text-white {% if a.is_correct %}bg-success-600{% elif a.is_correct is None %}bg-warning-500{% elif a.points > 0 %}bg-primary-500{% else %}bg-danger-600{% endif %}">
-              {% if a.is_correct %}{% include "components/icons.html#check" with size=14 %}{% elif a.is_correct is None %}…{% elif a.points > 0 %}½{% else %}{% include "components/icons.html#x" with size=14 %}{% endif %}
-            </span>
-            <div class="min-w-0 flex-1 text-sm">
-              <p class="flex flex-wrap justify-between gap-2"><span class="font-semibold">{{ a.item.label }}</span><span class="num text-ink-soft">{{ a.points|floatformat:"-2" }} / {{ a.item.points|floatformat:"-2" }}</span></p>
-              {% if a.item.kind == "formula" or a.item.kind == "equation" %}<p class="text-ink-soft">{{ a.raw_value|chem }}</p>{% elif a.item.kind == "open" %}<p class="whitespace-pre-line text-ink-soft">{{ a.raw_value|truncatechars:400 }}</p>{% endif %}
-              {% if a.feedback %}<p class="mt-1">{{ a.feedback }}</p>{% endif %}
-              {% if a.item.kind == "open" and a.ai_grade.criteria_scores %}
-                <ul class="mt-2 flex flex-col gap-1 text-body-sm text-ink-soft">
-                  {% for c in a.ai_grade.criteria_scores %}<li class="num">· {{ c.points }} — {{ c.reason }}</li>{% endfor %}
-                </ul>
-                <p class="mt-1 text-caption text-ink-faint">{% if a.ai_grade.ok and not a.teacher_reviews.exists %}{% translate "Graded by AI" %}{% elif a.teacher_reviews.exists %}{% translate "Checked by the teacher" %}{% else %}{% translate "Preliminary AI grade — the teacher will check it" %}{% endif %}</p>
-              {% endif %}
-            </div>
-          </li>
-        {% endfor %}
-      </ol>
+{% if latest and latest.teacher_comment %}
+  {% translate "Teacher's comment" as l_t %}{% include "components/alert.html" with variant="info" title=l_t text=latest.teacher_comment icon="message" %}
+{% endif %}
+
+<form method="post" action="{{ practice_urls.submit }}" enctype="multipart/form-data" id="result" class="flex scroll-mt-24 flex-col gap-4" x-data="{ busy: false }" @submit="busy = true">
+  {% csrf_token %}
+  <fieldset class="contents" {% if not can_submit and not place.preview %}disabled{% endif %}>
+    {% for row in rows %}{% include "student/partials/practice_field.html" %}{% endfor %}
+    {% if task.allow_file %}
+      <section class="flex flex-col gap-2 rounded-card border border-line bg-surface p-6">
+        <label class="text-base font-extrabold" for="practice-file">{% translate "Photo or file of your solution (not graded)" %}</label>
+        <input id="practice-file" type="file" name="file" class="text-sm" accept="image/*,application/pdf">
+      </section>
     {% endif %}
-  </section>
-  {% if comment_target and not place.preview %}
-    {% url 'student:comment' place.course.slug place.topic.number stage.pk as comment_url %}
-    {% translate "Comments with the teacher" as l_comments %}
-    {% include "feedback/partials/thread.html" with action=comment_url target=comment_target title=l_comments %}
-  {% endif %}
-  {% endif %}
+  </fieldset>
+  {% if grading %}{% include "student/partials/practice_grading.html" with status_url=practice_urls.status %}{% endif %}
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <span class="num text-sm text-ink-soft">
+      {% if latest %}{% blocktranslate with n=latest.attempt_no m=task.max_attempts %}Attempt: <b>{{ n }} / {{ m }}</b>{% endblocktranslate %}{% else %}{% blocktranslate with m=task.max_attempts %}Attempts: {{ m }}{% endblocktranslate %}{% endif %}
+      · {% if task.grading == "best" %}{% translate "the best result counts" %}{% elif task.grading == "last" %}{% translate "the last result counts" %}{% else %}{% translate "the first result counts" %}{% endif %}
+    </span>
+    {% if place.preview %}
+      <span class="badge badge-warning">{% translate "Preview: answers are not saved." %}</span>
+    {% elif can_submit %}
+      <button type="submit" class="btn btn-primary btn-lg rounded-lg" :disabled="busy">
+        <svg x-show="busy" x-cloak class="animate-spin" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 1.5a6.5 6.5 0 1 1-6.5 6.5"/></svg>
+        {% if latest %}{% translate "Send again" %}{% else %}{% translate "Send the answers" %}{% endif %}
+      </button>
+    {% elif not grading and practice_left == 0 %}
+      <span class="text-sm text-ink-soft">{% translate "You have used all attempts for this work." %}</span>
+    {% endif %}
+  </div>
+</form>
 
-  {% if can_submit %}
-    <form method="post" action="{{ practice_urls.submit }}" enctype="multipart/form-data" class="flex flex-col gap-5 rounded-lg border border-line p-[clamp(16px,3vw,28px)]">
-      {% csrf_token %}
-      <h3 class="text-h3">{% if latest %}{% translate "Send again" %}{% else %}{% translate "Your answers" %}{% endif %}</h3>
-      {% for row in rows %}{% include "student/partials/practice_field.html" %}{% endfor %}
-      {% if task.allow_file %}
-        <div class="field max-w-md border-t border-line pt-5">
-          <label class="label" for="practice-file">{% translate "Photo or file of your solution (not graded)" %}</label>
-          <input id="practice-file" type="file" name="file" class="text-sm" accept="image/*,application/pdf">
-        </div>
-      {% endif %}
-      <div class="flex flex-wrap items-center gap-3 border-t border-line pt-5">
-        <button type="submit" class="btn btn-primary">{% translate "Send the work" %}</button>
-        <span class="text-body-sm text-ink-soft">{% blocktranslate with n=practice_left %}Attempts left: {{ n }}.{% endblocktranslate %}</span>
-      </div>
-    </form>
-  {% elif place.preview %}
-    <div class="flex flex-col gap-5 rounded-lg border border-dashed border-line-strong p-6">
-      <p class="text-body-sm text-warning-700">{% translate "Preview: answers are not saved." %}</p>
-      {% for row in rows %}{% include "student/partials/practice_field.html" %}{% endfor %}
-    </div>
-  {% elif not grading and practice_left == 0 %}
-    <p class="text-sm text-ink-soft">{% translate "You have used all attempts for this work." %}</p>
-  {% endif %}
-</div>
+{% if comment_target and not place.preview %}
+  {% url 'student:comment' place.course.slug place.topic.number stage.pk as comment_url %}
+  {% translate "Comments with the teacher" as l_comments %}
+  <div id="comments" class="scroll-mt-24">{% include "feedback/partials/thread.html" with action=comment_url target=comment_target title=l_comments %}</div>
+{% endif %}
 {% endif %}

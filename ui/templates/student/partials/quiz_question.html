@@ -1,0 +1,75 @@
+{% load i18n %}{% comment %}
+One question of an instant-feedback quiz (inline on the stage page; returned by student:quiz_check).
+row (assessments review row + check_url), index, total, quiz, submit_url, error.
+Unanswered: a form that HTMX-posts the answer; checked: the options with the correct one marked, the
+explanation and «Next question» / «See the result». Lives inside x-data="{ current, results }".
+{% endcomment %}{% with q=row.question a=row.answer %}
+<div id="q-{{ q.pk }}" x-show="current === {{ index }}" {% if index %}x-cloak{% endif %} class="flex flex-col gap-4"
+     {% if a %}x-init="results[{{ index }}] = {% if a.is_correct %}true{% else %}false{% endif %}"{% endif %}>
+  {% if not a %}
+    <form hx-post="{{ row.check_url }}" hx-target="#q-{{ q.pk }}" hx-swap="outerHTML" class="flex flex-col gap-4" x-data="{ picked: false }"
+          @change="picked = true" @input="picked = $event.target.value !== ''">
+      <fieldset class="flex flex-col gap-2.5">
+        <legend class="mb-3.5 p-0 text-lg leading-[27px] font-bold">{{ q.text|sanitize }}</legend>
+        {% if q.kind == "single" or q.kind == "multiple" %}
+          {% if q.kind == "multiple" %}<p class="-mt-2 text-[13px] text-ink-soft">{% translate "Choose all correct options." %}</p>{% endif %}
+          {% for opt in row.choices %}
+            <label class="group flex cursor-pointer items-center gap-3.5 rounded-lg border-2 border-line bg-surface px-4 py-3.5 text-base font-medium transition-[border-color,background-color,transform] hover:translate-x-0.5 has-checked:border-primary-600 has-checked:bg-primary-50">
+              <input type="{% if q.kind == 'single' %}radio{% else %}checkbox{% endif %}" name="q{{ q.pk }}" value="{{ opt.choice.pk }}" class="sr-only">
+              <span class="grid size-8 shrink-0 place-items-center rounded-sm bg-surface-sunken text-sm font-extrabold text-ink-soft group-has-checked:bg-primary-600 group-has-checked:text-white">{{ forloop.counter0|letter }}</span>
+              <span class="flex-1">{{ opt.choice.text|sanitize }}</span>
+            </label>
+          {% endfor %}
+        {% elif q.kind == "numeric" %}
+          <label class="field max-w-xs"><span class="label">{% translate "Your answer (a number)" %}</span>
+            <input class="input input-lg num" name="q{{ q.pk }}" inputmode="decimal" autocomplete="off">
+            <span class="help">{% translate "A comma or a dot may be used: 2,24" %}</span></label>
+        {% elif q.kind == "formula" or q.kind == "equation" %}
+          <label class="field max-w-xl"><span class="label">{% if q.kind == "formula" %}{% translate "Formula" %}{% else %}{% translate "Reaction equation" %}{% endif %}</span>
+            <input class="input input-lg font-medium" name="q{{ q.pk }}" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="{% if q.kind == 'formula' %}AB2{% else %}A + 2B -> AB2{% endif %}">
+            <span class="help">{% if q.kind == "formula" %}{% translate "Indices as plain digits: H2SO4, Ca(OH)2, CuSO4·5H2O; ions: Zn2+, SO4^2-." %}{% else %}{% translate "Arrow: -> or =; write the coefficients: 2H2 + O2 -> 2H2O. ↑ and ↓ may be left out." %}{% endif %}</span></label>
+        {% else %}
+          <label class="field max-w-md"><span class="label">{% translate "Your answer" %}</span><input class="input input-lg" name="q{{ q.pk }}" autocomplete="off"></label>
+        {% endif %}
+      </fieldset>
+      {% if error %}{% include "components/alert.html" with variant="danger" text=error role="alert" %}{% endif %}
+      <div class="flex justify-end">
+        <button type="submit" class="btn btn-primary h-[46px] px-[22px] text-[15px] font-bold" :disabled="!picked" disabled>{% translate "Check" %}</button>
+      </div>
+    </form>
+  {% else %}
+    <fieldset class="flex flex-col gap-2.5" disabled>
+      <legend class="mb-3.5 p-0 text-lg leading-[27px] font-bold">{{ q.text|sanitize }}</legend>
+      {% if q.kind == "single" or q.kind == "multiple" %}
+        {% for opt in row.choices %}{% with right=opt.choice.is_correct mine=opt.chosen %}
+          <div class="flex items-center gap-3.5 rounded-lg border-2 px-4 py-3.5 text-base font-medium {% if right %}border-success-600 bg-success-50{% elif mine %}border-danger-600 bg-danger-50{% else %}border-line bg-surface text-ink-soft{% endif %}">
+            <span class="grid size-8 shrink-0 place-items-center rounded-sm text-sm font-extrabold {% if right %}bg-success-600 text-white{% elif mine %}bg-danger-600 text-white{% else %}bg-surface-sunken text-ink-soft{% endif %}">{{ forloop.counter0|letter }}</span>
+            <span class="flex-1">{{ opt.choice.text|sanitize }}</span>
+            {% if mine %}<span class="text-caption font-bold {% if right %}text-success-700{% else %}text-danger-700{% endif %}">{% translate "your answer" %}</span>{% endif %}
+          </div>
+        {% endwith %}{% endfor %}
+      {% else %}
+        <p class="rounded-lg border-2 px-4 py-3.5 font-medium {% if a.is_correct %}border-success-600 bg-success-50{% else %}border-danger-600 bg-danger-50{% endif %}">
+          <span class="text-caption font-bold text-ink-soft">{% translate "your answer" %}:</span> {% if a.text_value %}{% if q.kind == "formula" or q.kind == "equation" %}{{ a.text_value|chem }}{% else %}{{ a.text_value }}{% endif %}{% elif a.numeric_value is not None %}{{ a.numeric_value|floatformat:"-4" }}{% else %}—{% endif %}
+        </p>
+        {% if not a.is_correct %}
+          <p class="text-sm text-ink-soft">{% translate "Correct answer:" %} <b class="text-ink">{% if q.kind == "numeric" %}{{ q.numeric_answer|floatformat:"-4" }}{% elif q.accepted_answers %}{% if q.kind == "formula" or q.kind == "equation" %}{{ q.accepted_answers.0|chem }}{% else %}{{ q.accepted_answers.0 }}{% endif %}{% endif %}</b></p>
+        {% endif %}
+      {% endif %}
+    </fieldset>
+    <div class="fade rounded-lg px-4 py-3.5 text-[15px] leading-[23px] {% if a.is_correct %}bg-success-50 text-success-700{% else %}bg-danger-50 text-danger-700{% endif %}" role="status">
+      <b>{% if a.is_correct %}{% translate "Correct!" %}{% else %}{% translate "Wrong." %}{% endif %}</b>
+      {% if q.explanation %}<span class="text-ink">{{ q.explanation }}</span>{% endif %}
+    </div>
+    <div class="flex justify-end">
+      {% if index|add:1 < total %}
+        <button type="button" class="btn btn-primary h-[46px] px-[22px] text-[15px] font-bold" @click="current = {{ index|add:1 }}">{% translate "Next question" %}{% include "components/icons.html#arrow-right" %}</button>
+      {% else %}
+        <form method="post" action="{{ submit_url }}">{% csrf_token %}
+          <button type="submit" class="btn btn-primary h-[46px] px-[22px] text-[15px] font-bold">{% translate "See the result" %}</button>
+        </form>
+      {% endif %}
+    </div>
+  {% endif %}
+</div>
+{% endwith %}

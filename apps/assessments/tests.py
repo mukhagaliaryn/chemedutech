@@ -278,3 +278,42 @@ class QuizViewTests(TestCase):
             reverse("admin:assessments_quizattempt_changelist"),
         ):
             self.assertEqual(self.client.get(url).status_code, 200, url)
+
+
+class InstantFeedbackTests(TestCase):
+    """STEP-18: checkpoint quizzes check every answer at once; a checked answer is final."""
+
+    def setUp(self):
+        self.user = make_student("s1")
+        self.quiz = make_quiz(max_attempts=2, pass_percent=50, instant_feedback=True)
+        self.q1, self.c1 = single(self.quiz, order=1)
+        self.q2, self.c2 = single(self.quiz, order=2, points=3)
+        self.attempt = services.start_attempt(self.user, self.quiz)
+
+    def test_checked_answer_is_stored_and_final(self):
+        a = services.check_answer(self.attempt, self.q1.pk, self.c1[1].pk)
+        self.assertFalse(a.is_correct)
+        again = services.check_answer(self.attempt, self.q1.pk, self.c1[0].pk)  # a second try changes nothing
+        self.assertEqual((again.pk, again.is_correct), (a.pk, False))
+        self.assertEqual(AttemptAnswer.objects.filter(attempt=self.attempt).count(), 1)
+
+    def test_submit_uses_the_checked_answers(self):
+        services.check_answer(self.attempt, self.q2.pk, self.c2[0].pk)  # right, 3 points
+        services.submit_attempt(self.attempt, {self.q1.pk: self.c1[0].pk, self.q2.pk: self.c2[1].pk})
+        self.attempt.refresh_from_db()
+        self.assertEqual((self.attempt.score, self.attempt.percent), (Decimal("4.00"), Decimal("100.00")))
+        self.assertEqual(AttemptAnswer.objects.filter(attempt=self.attempt).count(), 2)
+
+    def test_rules(self):
+        other = make_quiz()
+        q_other, _choices = single(other)
+        with self.assertRaises(services.AttemptError):
+            services.check_answer(self.attempt, q_other.pk, None)  # not in the attempt
+        services.submit_attempt(self.attempt, {})
+        with self.assertRaises(services.AttemptError):
+            services.check_answer(self.attempt, self.q1.pk, self.c1[0].pk)  # already submitted
+        plain = make_quiz()
+        q, choices = single(plain)
+        attempt = services.start_attempt(self.user, plain)
+        with self.assertRaises(services.AttemptError):
+            services.check_answer(attempt, q.pk, choices[0].pk)  # checked only at the end

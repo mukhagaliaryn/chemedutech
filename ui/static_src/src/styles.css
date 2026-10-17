@@ -114,18 +114,18 @@
   --text-display: 40px;
   --text-display--line-height: 48px;
   --text-display--letter-spacing: -0.02em;
-  --text-display--font-weight: 700;
+  --text-display--font-weight: 800;
   --text-h1: 30px;
   --text-h1--line-height: 38px;
   --text-h1--letter-spacing: -0.015em;
-  --text-h1--font-weight: 700;
+  --text-h1--font-weight: 800;
   --text-h2: 22px;
   --text-h2--line-height: 30px;
   --text-h2--letter-spacing: -0.01em;
-  --text-h2--font-weight: 600;
+  --text-h2--font-weight: 800;
   --text-h3: 17px;
   --text-h3--line-height: 24px;
-  --text-h3--font-weight: 600;
+  --text-h3--font-weight: 700;
   --text-body: 15px;
   --text-body--line-height: 24px;
   --text-body-sm: 13px;
@@ -1292,7 +1292,7 @@
   .prose-theory h2 {
     font-size: var(--text-h2);
     line-height: var(--text-h2--line-height);
-    font-weight: 600;
+    font-weight: 800;
     margin: 2rem 0 0.75rem;
   }
   .prose-theory h3 {
@@ -1337,12 +1337,12 @@
   }
   .prose-theory .formula {
     display: block;
-    margin: 1rem 0;
-    padding: 14px 18px;
-    border-radius: var(--radius-md);
+    margin: 0 0 20px;
+    padding: 18px 22px;
+    border-radius: var(--radius-lg);
     background: var(--color-canvas);
-    font-size: 19px;
-    font-weight: 600;
+    font-size: 21px;
+    font-weight: 800;
   }
 
   /* the same look inside the CKEditor 5 editing area (the teacher sees what students will see) */

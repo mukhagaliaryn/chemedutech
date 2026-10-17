@@ -4,6 +4,7 @@ from .attempts import (
     AttemptError,
     attempts_left,
     attempts_used,
+    check_answer,
     deadline,
     is_expired,
     pick_questions,
@@ -26,5 +27,6 @@ __all__ = [
     "parse_number",
     "pick_questions",
     "start_attempt",
+    "check_answer",
     "submit_attempt",
 ]

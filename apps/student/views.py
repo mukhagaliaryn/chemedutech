@@ -5,6 +5,7 @@ Teachers and admins see the same pages in preview mode (everything open, nothing
 """
 
 import json
+from decimal import Decimal
 
 from django.conf import settings
 from django.contrib import messages
@@ -378,11 +379,19 @@ def _practice_context(place, stage):
     latest = submissions[0] if submissions else None
     left = practice.attempts_left(place.enrollment, task) if place.enrollment else task.max_attempts
     grading = latest is not None and latest.status == PracticeSubmission.Status.GRADING
+    answers = list(latest.answers.select_related("item", "ai_grade").order_by("item__order")) if latest else []
+    rows = practice_forms.widget_rows(task, latest)
+    by_item = {a.item_id: a for a in answers}
+    for row in rows:
+        row["answer"] = by_item.get(row["item"].pk)
+        if row["answer"] is not None and row["item"].kind == "open":
+            row["criteria"] = _criteria_rows(row["answer"])
     return {
         "task": task,
-        "rows": practice_forms.widget_rows(task, latest),
+        "rows": rows,
+        "max_points": sum(r["item"].points for r in rows),
         "latest": latest,
-        "latest_answers": latest.answers.select_related("item", "ai_grade").order_by("item__order") if latest else [],
+        "latest_answers": answers,
         "practice_left": left,
         "grading": grading,
         "can_submit": not place.preview and not grading and left > 0,
@@ -399,6 +408,31 @@ def _practice_context(place, stage):
             else "",
         },
     }
+
+
+def _criteria_rows(answer) -> list[dict]:
+    """The AI's points per rubric criterion of an open answer, with the criterion text and its maximum."""
+    grade = getattr(answer, "ai_grade", None)
+    rubric = getattr(answer.item, "rubric", None)
+    if grade is None or rubric is None:
+        return []
+    criteria = {c.pk: c for c in rubric.criteria.all()}
+    rows = []
+    for score in grade.criteria_scores:
+        criterion = criteria.get(score.get("criterion_id"))
+        if criterion is None:
+            continue
+        points = Decimal(str(score.get("points") or 0))
+        rows.append(
+            {
+                "text": criterion.text,
+                "reason": score.get("reason", ""),
+                "points": points,
+                "max": criterion.points,
+                "tone": "ok" if points >= criterion.points else ("part" if points > 0 else "no"),
+            }
+        )
+    return rows
 
 
 @require_POST
@@ -440,14 +474,31 @@ def practice_status(request, course_slug, topic_number, stage_pk, submission_id)
 def _quiz_panel(request, place, stage, quiz, sp):
     user = request.user
     last = quiz_selectors.last_attempt(user, quiz)
-    return {
+    open_attempt = last if last and not last.is_finished else None
+    last_attempt = last if last and last.is_finished else None
+    context = {
         "quiz_open": place.preview or progress.quiz_is_open(place.enrollment, stage, sp),
-        "open_attempt": last if last and not last.is_finished else None,
-        "last_attempt": last if last and last.is_finished else None,
+        "open_attempt": open_attempt,
+        "last_attempt": last_attempt,
         "counted": quiz_selectors.counted_attempt(user, quiz),
         "attempts_left": quiz_services.attempts_left(user, quiz),
         "question_count": quiz.questions_per_attempt or quiz.questions.filter(is_active=True).count(),
     }
+    if quiz.instant_feedback and open_attempt and not quiz_services.is_expired(open_attempt):
+        rows = _inline_rows(place, open_attempt)
+        context.update(
+            inline_rows=rows,
+            inline_current=next((i for i, r in enumerate(rows) if r["answer"] is None), len(rows) - 1),
+            submit_url=_quiz_submit_url(place, open_attempt),
+        )
+    if last_attempt and request.GET.get("result") == str(last_attempt.pk):
+        rows = quiz_selectors.review_rows(last_attempt)
+        context["result_dialog"] = {
+            "attempt": last_attempt,
+            "correct": sum(1 for r in rows if r["answer"] and r["answer"].is_correct),
+            "total": len(rows),
+        }
+    return context
 
 
 @require_POST
@@ -602,6 +653,8 @@ def quiz_take(request, course_slug, topic_number, stage_pk):
     except quiz_services.AttemptError as exc:
         messages.error(request, str(exc))
         return redirect(stage_page)
+    if quiz.instant_feedback:
+        return redirect(f"{stage_page}#quiz")  # played inline, question by question
     submit_url = reverse(
         "student:quiz_submit", args=[place.course.slug, place.topic.number, place.stage.pk, attempt.pk]
     )
@@ -644,7 +697,47 @@ def quiz_submit(request, course_slug, topic_number, stage_pk, attempt_id):
         messages.info(request, str(exc))
     if not place.preview:
         progress.record_quiz_result(place.enrollment, place.stage, quiz)
+    if quiz.instant_feedback:
+        return redirect(f"{learning.stage_url(place.stage)}?result={attempt.pk}#quiz")
     return redirect("student:quiz_review", place.course.slug, place.topic.number, place.stage.pk, attempt.pk)
+
+
+@require_POST
+@login_required
+def quiz_check(request, course_slug, topic_number, stage_pk, attempt_id, question_id):
+    """Instant feedback (HTMX): grade one answer, store it and show the question in its checked state."""
+    place, quiz, denied = _quiz_stage(request, course_slug, topic_number, stage_pk)
+    if denied:
+        return denied
+    attempt = _stage_attempt(request, quiz, attempt_id)
+    error = ""
+    try:
+        quiz_services.check_answer(attempt, question_id, collect_answers(attempt, request.POST).get(question_id))
+    except quiz_services.AttemptError as exc:
+        error = str(exc)
+    rows = _inline_rows(place, attempt)
+    index = next((i for i, r in enumerate(rows) if r["question"].pk == question_id), None)
+    if index is None:
+        raise Http404
+    return render(
+        request,
+        "student/partials/quiz_question.html",
+        {"row": rows[index], "index": index, "total": len(rows), "attempt": attempt, "quiz": quiz, "error": error,
+         "submit_url": _quiz_submit_url(place, attempt)},
+    )  # fmt: skip
+
+
+def _quiz_submit_url(place, attempt):
+    return reverse("student:quiz_submit", args=[place.course.slug, place.topic.number, place.stage.pk, attempt.pk])
+
+
+def _inline_rows(place, attempt):
+    """Questions of an instant-feedback attempt with the URL that checks each one."""
+    rows = quiz_selectors.review_rows(attempt)
+    args = [place.course.slug, place.topic.number, place.stage.pk, attempt.pk]
+    for row in rows:
+        row["check_url"] = reverse("student:quiz_check", args=[*args, row["question"].pk])
+    return rows
 
 
 @login_required

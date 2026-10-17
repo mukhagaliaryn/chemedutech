@@ -45,6 +45,7 @@ class QuizAdmin(ModelAdmin):
                     "shuffle_questions",
                     "shuffle_choices",
                     "show_answers_after",
+                    "instant_feedback",
                 )
             },  # fmt: skip
         ),

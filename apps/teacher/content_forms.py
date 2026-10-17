@@ -156,7 +156,7 @@ class QuizForm(forms.ModelForm):
         model = Quiz
         fields = (
             "title", "pass_percent", "time_limit_min", "max_attempts", "questions_per_attempt", "shuffle_questions",
-            "shuffle_choices", "grading", "show_answers_after",
+            "shuffle_choices", "grading", "show_answers_after", "instant_feedback",
         )  # fmt: skip
 
 

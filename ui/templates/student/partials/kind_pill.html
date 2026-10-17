@@ -1,0 +1,5 @@
+{% load i18n %}{# «Теория · ~12 мин» — the stage kind on its tint (stage, content). #}
+<span class="inline-flex h-[30px] items-center gap-2 rounded-full pr-3 pl-1.5 text-[13px] font-bold {% if stage.kind == 'test' %}bg-success-50 text-success-700{% elif stage.kind == 'practice' %}bg-stage-practice-50 text-stage-practice-700{% else %}bg-stage-{{ stage.kind }}-50 text-stage-{{ stage.kind }}{% endif %}">
+  <span class="tile size-5 rounded-[7px] stage-{{ stage.kind }}">{% include "components/icons.html#"|add:stage.kind with size=12 %}</span>
+  {{ stage.get_kind_display }}{% if stage.kind == "theory" and content.body %} · ~{{ content.body|reading_minutes }} {% translate "min" %}{% endif %}{% if not stage.is_required %} · {% translate "optional" %}{% endif %}
+</span>

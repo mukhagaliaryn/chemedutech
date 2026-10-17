@@ -1,37 +1,69 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% comment %}
-Learning pages (topic, stage player, quiz): no sidebar, a top bar with the way back and the topic
-progress — mockup «Тақырып кезеңі». Context: course, topic, course_url, topic_passed, topic_required,
-place.preview.
+Learning pages (topic, stage player, quiz) — mockup «Студент · Теория + бекіту тесті»: no sidebar; a sticky
+top bar with the way back, «Contents» (a drawer with every stage of the topic), the topic and stage number
+and a progress bar ({% block header_progress %}: topic progress by default, reading progress on theory).
+Context: course, topic, course_url, stepper, topic_passed, topic_required, place.preview, stage (optional).
 {% endcomment %}
 {% block body %}
-<a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] btn btn-secondary">{% translate "Skip to content" %}</a>
-<header class="border-b border-line bg-surface">
-  <div class="mx-auto flex max-w-[1200px] flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3.5 sm:px-[clamp(16px,3vw,48px)]">
-    <a href="{{ course_url }}" class="link inline-flex items-center gap-1.5 text-sm font-semibold">
-      {% include "components/icons.html#arrow-left" %}{% translate "Course map" %}
-    </a>
-    {% if topic %}
-      <span class="text-line-strong" aria-hidden="true">/</span>
-      <a href="{{ topic.get_absolute_url }}" class="text-sm text-ink-soft hover:text-ink">
-        {% blocktranslate with m=topic.module.order n=topic.number %}Module {{ m }} · Topic {{ n }}{% endblocktranslate %}
-      </a>
-      {% if topic_required %}
-        <span class="ml-auto inline-flex items-center gap-2.5 text-body-sm text-ink-soft">
-          <span class="num">{% blocktranslate with a=topic_passed b=topic_required %}Topic: {{ a }} / {{ b }} stages{% endblocktranslate %}</span>
-          <span class="w-[120px]">{% include "components/progress_bar.html" with value=topic_passed max=topic_required size="sm" %}</span>
-        </span>
-      {% endif %}
+<a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[80] btn btn-secondary">{% translate "Skip to content" %}</a>
+<div x-data="{ contents: false }" @keydown.escape.window="contents = false">
+<header class="sticky top-0 z-30 border-b border-line bg-white/90 backdrop-blur-md">
+  <div class="mx-auto flex h-[68px] max-w-[1240px] items-center gap-3 px-[clamp(16px,3vw,32px)]">
+    <a href="{% if topic and stage %}{{ topic.get_absolute_url }}{% else %}{{ course_url }}{% endif %}" class="close-btn shrink-0" aria-label="{% if topic and stage %}{% translate 'Back to the topic' %}{% else %}{% translate 'Back to the course map' %}{% endif %}">{% include "components/icons.html#arrow-left" with size=18 %}</a>
+    {% if stepper %}
+      <button type="button" class="btn btn-secondary h-10 shrink-0 rounded-[12px] px-3.5 max-sm:w-10 max-sm:px-0" @click="contents = true" :aria-expanded="contents.toString()" aria-controls="topic-contents">
+        {% include "components/icons.html#list" %}<span class="max-sm:sr-only">{% translate "Contents" %}</span>
+      </button>
     {% endif %}
+    {% if topic %}
+      <span class="ml-1 flex min-w-0 flex-col leading-[18px]">
+        <span class="num truncate text-caption font-normal text-ink-faint">
+          {% blocktranslate with n=topic.number %}Topic {{ n }}{% endblocktranslate %}{% if stage %}{% for s in stepper %}{% if s.current %} · {% blocktranslate with a=forloop.counter b=stepper|length %}stage {{ a }} / {{ b }}{% endblocktranslate %}{% endif %}{% endfor %}{% endif %}
+        </span>
+        <span class="truncate text-[15px] font-bold">{{ topic.title }}</span>
+      </span>
+    {% endif %}
+    <span class="ml-auto flex shrink-0 items-center gap-2.5 max-sm:hidden">
+      {% block header_progress %}
+        {% if topic_required %}
+          <span class="num text-[13px] font-semibold text-ink-soft">{% blocktranslate with a=topic_passed b=topic_required %}{{ a }} / {{ b }} stages{% endblocktranslate %}</span>
+          <span class="progress progress-sm progress-muted block w-[120px]"><span style="width: {{ topic_passed|percent_of:topic_required }}%"></span></span>
+        {% endif %}
+      {% endblock %}
+    </span>
   </div>
 </header>
 {% if place.preview %}
-  <div class="border-b border-warning-500/40 bg-warning-50 px-4 py-2 text-center text-body-sm text-warning-700">
-    {% translate "Preview: everything is open and nothing is recorded." %}
-  </div>
+  <div class="border-b border-warning-500/40 bg-warning-50 px-4 py-2 text-center text-[13px] text-warning-700">{% translate "Preview: everything is open and nothing is recorded." %}</div>
 {% endif %}
-<main id="main" class="mx-auto flex max-w-[1200px] flex-col gap-6 px-4 pt-7 pb-16 sm:px-[clamp(16px,3vw,48px)]">
+
+{% if stepper %}
+<template x-teleport="body">
+  <div x-show="contents" x-cloak>
+    <div class="overlay" @click="contents = false"></div>
+    <aside id="topic-contents" class="drawer drawer-left w-[min(92vw,380px)] gap-2.5" role="dialog" aria-modal="true" aria-labelledby="contents-title">
+      <div class="mb-1.5 flex items-center justify-between gap-3">
+        <h2 id="contents-title" class="text-lg font-extrabold">{% blocktranslate with n=topic.number %}Stages of topic {{ n }}{% endblocktranslate %}</h2>
+        <button type="button" class="close-btn" @click="contents = false" aria-label="{% translate 'Close' %}">{% include "components/icons.html#x" %}</button>
+      </div>
+      {% for s in stepper %}
+        <a href="{{ s.url }}" {% if s.current %}aria-current="step"{% endif %}
+           class="flex items-center gap-3 rounded-md px-3.5 py-3 text-sm {% if s.current %}bg-primary-50 text-ink shadow-[inset_0_0_0_2px_var(--color-primary-600)]{% elif s.status == 'passed' %}bg-success-50 text-success-700{% elif s.status == 'locked' %}bg-canvas text-ink-faint{% else %}bg-canvas text-ink{% endif %}">
+          <span class="size-3 shrink-0 rounded-[4px] {% if s.status == 'locked' %}bg-line-strong{% else %}stage-{{ s.kind }}{% endif %}"></span>
+          <span class="flex-1 font-semibold">{{ s.title }}</span>
+          <span class="num shrink-0 text-caption font-semibold opacity-80">{% if s.status == "awaiting_check" %}{% translate "Awaiting check" %}{% else %}{{ s.meta }}{% endif %}</span>
+        </a>
+      {% endfor %}
+      <a href="{{ course_url }}" class="link mt-auto text-sm font-bold">{% translate "Course map" %} →</a>
+    </aside>
+  </div>
+</template>
+{% endif %}
+
+<main id="main" class="mx-auto flex max-w-[1240px] flex-col gap-6 px-[clamp(16px,3vw,32px)] pt-7 pb-16">
   {% block content %}{% endblock %}
 </main>
+</div>
 {% endblock %}

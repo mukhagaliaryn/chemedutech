@@ -1,54 +1,71 @@
-{% load i18n %}{# One answer field of a practice task. row: see apps/practice/forms.py widget_rows. #}
-{% with item=row.item name=row.name %}
-<fieldset class="flex flex-col gap-2 border-t border-line pt-5 first:border-t-0 first:pt-0">
-  <legend class="flex w-full flex-wrap items-baseline justify-between gap-2 p-0">
-    <span class="font-semibold">{{ forloop.counter }}. {{ item.label }}</span>
-    <span class="num text-caption text-ink-soft">{{ item.points|floatformat:"-2" }} {% translate "pts" %}</span>
-  </legend>
+{% load i18n %}{% comment %}
+One answer field of a practice task as a card. row: apps/practice/forms.py widget_rows + «answer» (the last
+graded answer of this field) + «criteria» (AI scores of an open answer); grading — the AI is working.
+{% endcomment %}{% with item=row.item name=row.name a=row.answer %}
+<section class="flex flex-col gap-3.5 rounded-card bg-surface p-6 transition-colors
+                {% if a and not grading %}{% if a.is_correct %}border-2 border-success-600{% elif a.is_correct is None %}border-2 border-ai-700/40{% elif a.points > 0 %}border-2 border-warning-500{% else %}border-2 border-danger-600{% endif %}{% else %}border border-line{% endif %}">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <h2 class="text-base font-extrabold">{{ forloop.counter }}. {{ item.label }}
+      <span class="font-medium text-ink-faint">· {% blocktranslate with p=item.points|floatformat:"-2" %}{{ p }} pts{% endblocktranslate %} · {{ item.get_kind_display }}</span></h2>
+    {% if a and not grading %}
+      {% if a.is_correct %}<span class="badge badge-success font-bold">✓ {{ a.points|floatformat:"-2" }} / {{ item.points|floatformat:"-2" }}</span>
+      {% elif a.is_correct is None %}<span class="badge badge-ai font-bold">{{ a.points|floatformat:"-2" }} / {{ item.points|floatformat:"-2" }} · AI</span>
+      {% elif a.points > 0 %}<span class="badge badge-warning font-bold">{{ a.points|floatformat:"-2" }} / {{ item.points|floatformat:"-2" }}</span>
+      {% else %}<span class="badge badge-danger font-bold">✗ 0 / {{ item.points|floatformat:"-2" }}</span>{% endif %}
+    {% elif item.kind == "open" %}
+      <span class="badge badge-ai font-bold">{% if grading %}{% translate "AI is grading…" %}{% else %}{% translate "graded by AI" %}{% endif %}</span>
+    {% else %}
+      <span class="badge badge-neutral font-bold">{% translate "Auto-check" %}</span>
+    {% endif %}
+  </div>
   {% if item.prompt %}<p class="text-sm text-ink-soft">{{ item.prompt }}</p>{% endif %}
 
   {% if item.kind == "numeric" %}
     <div class="flex flex-wrap items-center gap-2">
       <label class="sr-only" for="{{ name }}_value">{{ item.label }}</label>
-      <input id="{{ name }}_value" class="input num w-40" name="{{ name }}_value" value="{{ row.value }}" inputmode="decimal" autocomplete="off" placeholder="0,0">
       {% if row.units|length > 1 %}
-        <label class="sr-only" for="{{ name }}_unit">{% translate "Unit" %}</label>
-        <select id="{{ name }}_unit" class="input w-28" name="{{ name }}_unit">
-          {% for u in row.units %}<option value="{{ u }}"{% if u == row.unit %} selected{% endif %}>{{ u }}</option>{% endfor %}
-        </select>
-      {% elif row.units %}<span class="text-sm text-ink-soft">{{ row.units.0 }}</span><input type="hidden" name="{{ name }}_unit" value="{{ row.units.0 }}">{% endif %}
+        <span class="input-unit w-[260px] max-w-full">
+          <input id="{{ name }}_value" class="num text-base font-medium" name="{{ name }}_value" value="{{ row.value }}" inputmode="decimal" autocomplete="off" placeholder="0,0">
+          <select aria-label="{% translate 'Unit' %}" name="{{ name }}_unit">{% for u in row.units %}<option value="{{ u }}"{% if u == row.unit %} selected{% endif %}>{{ u }}</option>{% endfor %}</select>
+        </span>
+      {% else %}
+        <input id="{{ name }}_value" class="input input-lg num w-48 text-base font-medium" name="{{ name }}_value" value="{{ row.value }}" inputmode="decimal" autocomplete="off" placeholder="0,0">
+        {% if row.units %}<span class="text-sm font-semibold text-ink-soft">{{ row.units.0 }}</span><input type="hidden" name="{{ name }}_unit" value="{{ row.units.0 }}">{% endif %}
+      {% endif %}
     </div>
+    <p class="text-[13px] text-ink-faint">{% translate "A comma or a dot may be used; units are converted automatically." %}</p>
 
   {% elif item.kind == "formula" or item.kind == "equation" %}
-    <div x-data="chemInput()" class="flex flex-col gap-2">
+    <div x-data="chemInput()" class="flex flex-col gap-3">
       <label class="sr-only" for="{{ name }}">{{ item.label }}</label>
-      <input id="{{ name }}" x-ref="input" x-model="value" x-init="value = $el.value" class="input font-medium" name="{{ name }}" value="{{ row.value }}"
-             autocomplete="off" autocapitalize="none" spellcheck="false"
-             placeholder="{% if item.kind == 'formula' %}AB2{% else %}A + 2B -> AB2{% endif %}">
-      <div class="flex flex-wrap gap-1" role="group" aria-label="{% translate 'Chemistry keyboard' %}">
-        {% for ch in "₂ ₃ ₄ ⁺ ⁻ ² ³ → ↑ ↓ ⇌ ( ) ·"|split %}
-          <button type="button" class="btn btn-secondary btn-sm h-8 min-w-8 px-2 text-base" @click="insert('{{ ch }}')" title="{{ ch }}">{{ ch }}</button>
+      <input id="{{ name }}" x-ref="input" x-model="value" x-init="value = $el.value" class="input h-[52px] text-lg font-medium tracking-[.01em]" name="{{ name }}" value="{{ row.value }}"
+             autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="{% if item.kind == 'formula' %}AB2{% else %}A + 2B -> AB2{% endif %}">
+      <div class="flex flex-wrap gap-1.5" role="group" aria-label="{% translate 'Chemistry keyboard' %}">
+        {% for ch in "₂ ₃ ₄ ⁺ ⁻ → ⇌ ↑ ↓ · ( )"|split %}
+          <button type="button" class="h-[38px] min-w-10 rounded-sm border border-line bg-surface px-2.5 text-base font-semibold transition-[background-color,transform] hover:bg-primary-50 active:scale-95" @click="insert('{{ ch }}')" title="{{ ch }}">{{ ch }}</button>
         {% endfor %}
+        <button type="button" class="h-[38px] rounded-sm border border-line bg-surface px-3 text-[13px] font-semibold text-danger-700 hover:bg-danger-50" @click="value = ''; $refs.input.value = ''; $refs.input.focus()">{% translate "Clear" %}</button>
       </div>
-      <p class="text-body-sm text-ink-soft" x-show="value" x-cloak>{% translate "Preview:" %} <span class="font-semibold text-ink" x-text="preview"></span></p>
+      <div class="flex items-center gap-3 rounded-md bg-canvas px-4 py-3"><span class="text-caption font-semibold text-ink-faint">{% translate "Preview" %}</span><span class="text-xl font-bold" x-text="preview || '—'">—</span></div>
     </div>
 
   {% elif item.kind == "text_short" or item.kind == "blank" and not row.options %}
     <label class="sr-only" for="{{ name }}">{{ item.label }}</label>
-    <input id="{{ name }}" class="input max-w-md" name="{{ name }}" value="{{ row.value }}" autocomplete="off">
+    <input id="{{ name }}" class="input input-lg max-w-md" name="{{ name }}" value="{{ row.value }}" autocomplete="off">
 
   {% elif item.kind == "blank" %}
     <label class="sr-only" for="{{ name }}">{{ item.label }}</label>
-    <select id="{{ name }}" class="input max-w-md" name="{{ name }}">
+    <select id="{{ name }}" class="input input-lg max-w-md" name="{{ name }}">
       <option value="">—</option>
       {% for o in row.options %}<option value="{{ o }}"{% if o in row.chosen %} selected{% endif %}>{{ o }}</option>{% endfor %}
     </select>
 
   {% elif item.kind == "choice" %}
-    {% if row.multiple %}<p class="text-body-sm text-ink-soft">{% translate "Choose all correct options." %}</p>{% endif %}
+    {% if row.multiple %}<p class="text-[13px] text-ink-soft">{% translate "Choose all correct options." %}</p>{% endif %}
     {% for o in row.options %}
-      <label class="flex cursor-pointer items-center gap-3 rounded-md border border-line px-4 py-3 has-checked:border-primary-600 has-checked:bg-primary-50">
-        <input type="{% if row.multiple %}checkbox{% else %}radio{% endif %}" name="{{ name }}" value="{{ o }}"{% if o in row.chosen %} checked{% endif %} class="size-[18px]">
+      <label class="group flex cursor-pointer items-center gap-3.5 rounded-lg border-2 border-line px-4 py-3 has-checked:border-primary-600 has-checked:bg-primary-50">
+        <input type="{% if row.multiple %}checkbox{% else %}radio{% endif %}" name="{{ name }}" value="{{ o }}"{% if o in row.chosen %} checked{% endif %} class="sr-only">
+        <span class="grid size-8 shrink-0 place-items-center rounded-sm bg-surface-sunken text-sm font-extrabold text-ink-soft group-has-checked:bg-primary-600 group-has-checked:text-white">{{ forloop.counter0|letter }}</span>
         <span>{{ o }}</span>
       </label>
     {% endfor %}
@@ -65,7 +82,7 @@
     </div>
 
   {% elif item.kind == "ordering" %}
-    <p class="text-body-sm text-ink-soft">{% translate "Put a number next to each step: 1 is the first." %}</p>
+    <p class="text-[13px] text-ink-soft">{% translate "Put a number next to each step: 1 is the first." %}</p>
     {% for s in row.steps %}
       <div class="flex items-center gap-3">
         <label class="sr-only" for="{{ name }}_o{{ s.index }}">{% translate "Position" %}</label>
@@ -79,10 +96,28 @@
 
   {% else %}{# open #}
     <label class="sr-only" for="{{ name }}">{{ item.label }}</label>
-    <textarea id="{{ name }}" class="input" name="{{ name }}" rows="5" maxlength="4000">{{ row.value }}</textarea>
-    <p class="help">{% translate "Write in your own words — the answer is graded by its meaning against the criteria." %}</p>
+    <textarea id="{{ name }}" class="input text-base leading-[26px]" name="{{ name }}" rows="5" maxlength="4000">{{ row.value }}</textarea>
+    <p class="flex items-center gap-2 text-[13px] text-ai-700">{% include "components/icons.html#sparkle" %}{% translate "This answer is graded by AI against the author's criteria and confirmed by the teacher." %}</p>
+    {% if grading %}
+      <div class="grid gap-2" aria-hidden="true"><span class="shimmer h-3.5 rounded-[8px]"></span><span class="shimmer h-3.5 w-4/5 rounded-[8px]"></span><span class="shimmer h-3.5 w-3/5 rounded-[8px]"></span></div>
+    {% elif row.criteria %}
+      <div class="fade grid gap-2">
+        {% for c in row.criteria %}
+          <div class="flex items-center gap-3 rounded-md bg-[#f8fafc] px-3.5 py-3">
+            <span class="grid size-7 shrink-0 place-items-center rounded-[9px] text-sm font-extrabold {% if c.tone == 'ok' %}bg-success-50 text-success-600{% elif c.tone == 'part' %}bg-warning-50 text-warning-700{% else %}bg-danger-50 text-danger-600{% endif %}">{% if c.tone == "ok" %}✓{% elif c.tone == "part" %}½{% else %}✗{% endif %}</span>
+            <span class="flex flex-1 flex-col leading-5"><span class="text-sm font-bold">{{ c.text }}</span>{% if c.reason %}<span class="text-[13px] text-ink-soft">{{ c.reason }}</span>{% endif %}</span>
+            <span class="num text-sm font-extrabold">{{ c.points|floatformat:"-2" }} / {{ c.max|floatformat:"-2" }}</span>
+          </div>
+        {% endfor %}
+        {% if a.ai_grade.feedback_kk %}<div class="rounded-lg bg-ai-50 px-4 py-3.5 text-sm leading-[22px] text-ai-900"><b>{% translate "AI feedback:" %}</b> {{ a.ai_grade.feedback_kk }}</div>{% endif %}
+        <p class="text-caption font-normal text-ink-faint">{% if a.teacher_reviews.exists %}{% translate "Checked by the teacher" %}{% elif a.is_correct is None %}{% translate "Preliminary AI grade — the teacher will check it" %}{% else %}{% translate "Graded by AI" %}{% endif %}</p>
+      </div>
+    {% endif %}
   {% endif %}
 
-  {% if item.hint %}<details class="text-body-sm text-ink-soft"><summary class="cursor-pointer text-primary-700">{% translate "Hint" %}</summary><p class="mt-1">{{ item.hint }}</p></details>{% endif %}
-</fieldset>
+  {% if a and a.feedback and not grading and item.kind != "open" %}
+    <p class="fade rounded-md px-3.5 py-3 text-sm {% if a.is_correct %}bg-success-50 text-success-700{% else %}bg-warning-50 text-warning-700{% endif %}">{{ a.feedback }}</p>
+  {% endif %}
+  {% if item.hint %}<details class="text-[13px] text-ink-soft"><summary class="cursor-pointer font-semibold text-primary-700">{% translate "Hint" %}</summary><p class="mt-1">{{ item.hint }}</p></details>{% endif %}
+</section>
 {% endwith %}

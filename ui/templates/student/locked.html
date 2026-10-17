@@ -1,21 +1,22 @@
 {% extends "layouts/learn.html" %}
 {% load i18n %}
+{% comment %}A locked stage explains itself: what to finish first and a link to it — never a dead click.{% endcomment %}
 {% block title %}{% translate "Not open yet" %} · ChemEduTech{% endblock %}
 {% block content %}
-<h1 class="text-h1">{% if stage %}{{ stage.title }}{% else %}{{ topic.title }}{% endif %}</h1>
-{% if stepper %}{% translate "Topic stages" as l_stages %}{% include "components/stage_stepper.html" with stages=stepper label=l_stages %}{% endif %}
-{% translate "This stage is not open yet" as l_title %}
-{% if blocking %}
-  {% if blocking_status == "awaiting_check" %}
-    {% blocktranslate with t=blocking.title asvar l_text %}«{{ t }}» is waiting for the teacher's check. The next topic opens after the check.{% endblocktranslate %}
+<section class="mx-auto flex w-full max-w-[640px] flex-col items-center gap-4 rounded-xl border border-line bg-surface px-8 py-12 text-center">
+  <span class="grid size-16 place-items-center rounded-[20px] bg-surface-sunken text-ink-soft">{% include "components/icons.html#key" with size=28 %}</span>
+  <p class="text-[13px] font-semibold text-ink-faint">{% if stage %}{{ stage.get_kind_display }}{% else %}{% blocktranslate with n=topic.number %}Topic {{ n }}{% endblocktranslate %}{% endif %}</p>
+  <h1 class="-mt-2 text-[26px] leading-8 font-extrabold tracking-[-0.02em]">{% if stage %}{{ stage.title }}{% else %}{{ topic.title }}{% endif %}</h1>
+  {% if blocking %}
+    <p class="max-w-md text-ink-soft">
+      {% if blocking_status == "awaiting_check" %}{% blocktranslate with t=blocking.title %}«{{ t }}» is waiting for the teacher's check. The next topic opens after the check.{% endblocktranslate %}
+      {% else %}{% blocktranslate with t=blocking.title %}Finish «{{ t }}» first — then this stage opens.{% endblocktranslate %}{% endif %}
+    </p>
+    <a class="btn btn-primary mt-2" href="{{ blocking_url }}">{% blocktranslate with t=blocking.title|truncatechars:40 %}Go to «{{ t }}»{% endblocktranslate %}{% include "components/icons.html#arrow-right" %}</a>
   {% else %}
-    {% blocktranslate with t=blocking.title asvar l_text %}Finish «{{ t }}» first — then this stage opens.{% endblocktranslate %}
+    <p class="max-w-md text-ink-soft">{% translate "Stages open one after another. Go back to the course map to see what to do next." %}</p>
+    <a class="btn btn-primary mt-2" href="{{ course_url }}">{% translate "Course map" %}</a>
   {% endif %}
-  {% blocktranslate with t=blocking.title|truncatechars:40 asvar l_action %}Go to «{{ t }}»{% endblocktranslate %}
-  {% include "components/lock_state.html" with title=l_title text=l_text action_url=blocking_url action_label=l_action %}
-{% else %}
-  {% translate "Stages open one after another. Go back to the course map to see what to do next." as l_text %}
-  {% translate "Course map" as l_action %}
-  {% include "components/lock_state.html" with title=l_title text=l_text action_url=course_url action_label=l_action %}
-{% endif %}
+</section>
+{% if stepper %}{% translate "Topic stages" as l_stages %}{% include "components/stage_stepper.html" with stages=stepper label=l_stages %}{% endif %}
 {% endblock %}

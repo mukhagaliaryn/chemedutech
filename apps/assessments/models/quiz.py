@@ -42,6 +42,14 @@ class Quiz(TimeStampedModel):
     show_answers_after = models.BooleanField(
         _("show correct answers"), default=False, help_text=_("Show correct answers and explanations after an attempt")
     )
+    instant_feedback = models.BooleanField(
+        _("check each answer at once"),
+        default=False,
+        help_text=_(
+            "The student checks every question as they go and sees the correct answer and the explanation; "
+            "a checked answer cannot be changed. For checkpoint quizzes."
+        ),
+    )
 
     class Meta:
         verbose_name = _("quiz")

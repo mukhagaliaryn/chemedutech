@@ -86,6 +86,42 @@ def start_attempt(user, quiz: Quiz, enrollment=None, rng: random.Random | None =
     )
 
 
+def _save_answer(attempt: QuizAttempt, question: Question, raw) -> AttemptAnswer:
+    graded = grade(question, raw)
+    answer = AttemptAnswer.objects.create(
+        attempt=attempt,
+        question=question,
+        text_value=graded.text_value,
+        numeric_value=graded.numeric_value,
+        is_correct=graded.is_correct,
+        points=graded.points,
+    )
+    AttemptAnswerChoice.objects.bulk_create(
+        [AttemptAnswerChoice(answer=answer, choice_id=cid) for cid in graded.choice_ids]
+    )
+    return answer
+
+
+@transaction.atomic
+def check_answer(attempt: QuizAttempt, question_id: int, raw) -> AttemptAnswer:
+    """Instant feedback: grade and store one answer of an unfinished attempt. A checked answer is final —
+    checking again returns the stored one. The attempt is closed later by submit_attempt as usual."""
+    attempt = QuizAttempt.objects.select_for_update().select_related("quiz").get(pk=attempt.pk)
+    if not attempt.quiz.instant_feedback:
+        raise AttemptError(_("Answers of this test are checked at the end."))
+    if attempt.is_finished:
+        raise AttemptError(_("This attempt has already been submitted."))
+    if is_expired(attempt):
+        raise AttemptError(_("The time for this test is over."))
+    if question_id not in attempt.question_ids:
+        raise AttemptError(_("This question is not in your attempt."))
+    existing = attempt.answers.filter(question_id=question_id).first()
+    if existing:
+        return existing
+    question = Question.objects.prefetch_related("choices").get(pk=question_id)
+    return _save_answer(attempt, question, raw)
+
+
 def _quantize(value: Decimal) -> Decimal:
     return value.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
@@ -103,25 +139,16 @@ def submit_attempt(attempt: QuizAttempt, answers: dict, allow_late: bool = False
     if is_expired(attempt) and not allow_late:
         answers = {}  # time is over: whatever arrives this late is not counted
     questions = Question.objects.filter(pk__in=attempt.question_ids).prefetch_related("choices").in_bulk()
+    checked = {a.question_id: a for a in attempt.answers.all()}  # instant feedback: answers saved one by one
     score = max_score = Decimal("0")
     for qid in attempt.question_ids:
         question = questions.get(qid)
         if question is None:
             continue
-        raw = answers.get(qid, answers.get(str(qid)))
-        graded = grade(question, raw)
-        answer = AttemptAnswer.objects.create(
-            attempt=attempt,
-            question=question,
-            text_value=graded.text_value,
-            numeric_value=graded.numeric_value,
-            is_correct=graded.is_correct,
-            points=graded.points,
-        )
-        AttemptAnswerChoice.objects.bulk_create(
-            [AttemptAnswerChoice(answer=answer, choice_id=cid) for cid in graded.choice_ids]
-        )
-        score += graded.points
+        answer = checked.get(qid)
+        if answer is None:
+            answer = _save_answer(attempt, question, answers.get(qid, answers.get(str(qid))))
+        score += answer.points
         max_score += question.points
     attempt.score = _quantize(score)
     attempt.max_score = _quantize(max_score)

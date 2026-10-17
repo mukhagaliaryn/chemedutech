@@ -113,7 +113,8 @@ class PageTests(TestCase):
         services.enroll(self.student, topic.module.course, "admin")
         response = self.client.get(topic.get_absolute_url())
         self.assertDesignSystemPage(response)
-        self.assertContains(response, "stage-lab")  # stage stepper
+        self.assertContains(response, "topic-contents")  # the «Contents» drawer with every stage
+        self.assertContains(response, "stage-theory")
 
     def test_teacher_layout_on_research_page(self):
         self.client.force_login(self.teacher)

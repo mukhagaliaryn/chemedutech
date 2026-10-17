@@ -1,36 +1,42 @@
 {% extends "layouts/learn.html" %}
 {% load i18n %}
+{% comment %}Topic page: the topic card with «Continue», then every stage in order (any number and mix of kinds).{% endcomment %}
 {% block title %}{{ topic.title }} · ChemEduTech{% endblock %}
 {% block content %}
-<header class="flex flex-wrap items-end justify-between gap-4">
-  <div class="min-w-0">
-    <h1 class="text-h1">{{ topic.title }}</h1>
-    {% if topic.summary %}<p class="mt-2 max-w-3xl text-ink-soft">{{ topic.summary }}</p>{% endif %}
+<header class="flex flex-wrap overflow-hidden rounded-xl border border-line bg-surface">
+  <div class="flex min-w-0 flex-[3_1_480px] flex-wrap items-center justify-between gap-6 p-7">
+    <div class="min-w-0 flex-[1_1_320px]">
+      <span class="badge badge-info font-bold">{% blocktranslate with n=topic.number %}Topic {{ n }}{% endblocktranslate %}{% if topic.estimated_minutes %} · ~{{ topic.estimated_minutes }} {% translate "min" %}{% endif %}</span>
+      <h1 class="mt-2.5 text-[28px] leading-9 font-extrabold tracking-[-0.02em]">{{ topic.title }}</h1>
+      {% if topic.summary %}<p class="mt-2 max-w-3xl text-ink-soft">{{ topic.summary }}</p>{% endif %}
+    </div>
+    <div class="flex items-center gap-4">
+      {% include "components/ring.html" with value=topic_passed|percent_of:topic_required size=88 stroke=9 %}
+      <span class="flex flex-col gap-2 leading-5">
+        <span class="num text-lg font-extrabold">{{ topic_passed }} / {{ topic_required }}</span>
+        <span class="text-[13px] text-ink-soft">{% translate "stages passed" %}</span>
+        {% if target %}
+          <a class="btn btn-primary mt-1" href="{% url 'student:stage' course.slug topic.number target.pk %}">{% translate "Continue" %}{% include "components/icons.html#arrow-right" %}</a>
+        {% elif result.status == "completed" %}
+          <span class="badge badge-success font-bold">{% blocktranslate with s=result.score_percent|floatformat:1 %}Topic completed · {{ s }}{% endblocktranslate %}</span>
+        {% endif %}
+      </span>
+    </div>
   </div>
-  {% if target %}
-    <a class="btn btn-primary btn-lg" href="{% url 'student:stage' course.slug topic.number target.pk %}">
-      {% translate "Continue" %}: {{ target.title|truncatechars:40 }}{% include "components/icons.html#arrow-right" %}
-    </a>
-  {% elif result.status == "completed" %}
-    {% blocktranslate with s=result.score_percent|floatformat:1 asvar l_done %}Topic completed · {{ s }}{% endblocktranslate %}
-    {% include "components/badge.html" with variant="success" label=l_done class="h-8 px-3 text-sm" %}
-  {% endif %}
 </header>
 
-{% translate "Topic stages" as l_stages %}{% include "components/stage_stepper.html" with stages=stepper label=l_stages %}
-
-<ol class="flex flex-col gap-2">
+<ol class="flex flex-col gap-2" aria-label="{% translate 'Topic stages' %}">
   {% for row in rows %}{% with s=row.stage %}
-    <li class="card card-compact flex flex-wrap items-center gap-4">
-      <span class="stage-{{ s.kind }} grid size-9 shrink-0 place-items-center rounded-md text-white {% if row.status == 'locked' %}opacity-40{% endif %}">{% include "components/icons.html#"|add:s.kind with size=18 %}</span>
-      <span class="flex min-w-0 flex-[1_1_260px] flex-col">
-        <span class="font-semibold {% if row.status == 'locked' %}text-ink-soft{% endif %}">{{ forloop.counter }}. {{ s.title }}</span>
-        <span class="text-body-sm text-ink-soft">{{ s.get_kind_display }}{% if not s.is_required %} · {% translate "optional" %}{% endif %}{% if row.sp.score_percent is not None %} · <span class="num">{{ row.sp.score_percent|floatformat:0 }}%</span>{% endif %}</span>
+    <li class="flex flex-wrap items-center gap-4 rounded-card border p-4 {% if row.status == 'locked' %}border-transparent bg-[#f8fafc] text-ink-soft{% elif row.status == 'passed' %}border-success-50 bg-success-50{% elif row.status == 'awaiting_check' %}border-warning-50 bg-warning-50{% else %}border-2 border-primary-600 bg-surface p-[15px]{% endif %}">
+      <span class="tile size-11 rounded-md {% if row.status == 'locked' %}bg-line-strong{% else %}stage-{{ s.kind }}{% endif %}">{% if row.status == "locked" %}{% include "components/icons.html#lock" %}{% else %}{% include "components/icons.html#"|add:s.kind with size=18 %}{% endif %}</span>
+      <span class="flex min-w-0 flex-[1_1_260px] flex-col leading-[21px]">
+        <span class="font-bold">{{ forloop.counter }}. {{ s.title }}</span>
+        <span class="text-[13px] opacity-80">{{ s.get_kind_display }}{% if not s.is_required %} · {% translate "optional" %}{% endif %}{% if row.sp.score_percent is not None %} · <span class="num">{{ row.sp.score_percent|floatformat:0 }}%</span>{% endif %}</span>
       </span>
       {% if row.status == "passed" %}{% translate "Passed" as l %}{% elif row.status == "awaiting_check" %}{% translate "Awaiting check" as l %}{% elif row.status == "in_progress" %}{% translate "In progress" as l %}{% elif row.status == "locked" %}{% translate "Locked" as l %}{% else %}{% translate "Available" as l %}{% endif %}
-      {% include "components/badge.html" with status=row.status label=l dot=True %}
+      {% include "components/badge.html" with status=row.status label=l dot=True class="font-bold" %}
       {% if row.status == "locked" %}
-        <a class="btn btn-ghost btn-sm" href="{{ row.url }}">{% include "components/icons.html#lock" %}{% translate "Why locked?" %}</a>
+        <a class="btn btn-ghost btn-sm" href="{{ row.url }}">{% translate "Why locked?" %}</a>
       {% else %}
         <a class="btn {% if row.status == 'passed' %}btn-secondary{% else %}btn-primary{% endif %} btn-sm" href="{{ row.url }}">
           {% if row.status == "passed" %}{% translate "Review" %}{% elif row.status == "in_progress" %}{% translate "Continue" %}{% else %}{% translate "Open" %}{% endif %}

@@ -1,26 +1,61 @@
 {% extends "layouts/learn.html" %}
 {% load i18n static %}
+{% comment %}
+Stage player (mockup «Теория + бекіту тесті»): the stage card (kind pill, title, content by kind) and the
+quiz card below it; the aside — «On this page» (theory), how to complete the stage, the next stage.
+Practice works render their own cards (student/stages/practice.html) and their result in the aside.
+{% endcomment %}
 {% block title %}{{ stage.title }} · ChemEduTech{% endblock %}
+{% block header_progress %}
+  {% if stage.kind == "theory" %}
+    <span class="contents" x-data="readProgress">
+      <span class="num text-[13px] font-semibold text-ink-soft">{% translate "Read" %} <span x-text="percent">{% if sp.material_done_at %}100{% else %}0{% endif %}</span>%</span>
+      <span class="progress progress-sm progress-muted block w-[120px]"><span :style="`width: ${percent}%`" style="width: {% if sp.material_done_at %}100{% else %}0{% endif %}%"></span></span>
+    </span>
+  {% else %}{{ block.super }}{% endif %}
+{% endblock %}
 {% block content %}
-<header>
-  <p class="text-body-sm font-medium text-ink-soft">{{ stage.get_kind_display }}{% if not stage.is_required %} · {% translate "optional" %}{% endif %}</p>
-  <h1 class="text-h1">{{ stage.title }}</h1>
-</header>
-{% translate "Topic stages" as l_stages %}{% include "components/stage_stepper.html" with stages=stepper label=l_stages %}
-
 <div class="flex flex-wrap items-start gap-6" {% if not place.preview %}x-data="stagePing('{{ urls.ping }}')"{% endif %}>
-  <article class="card min-w-0 flex-[999_1_560px] p-[clamp(20px,4vw,48px)]">
-    {% with tpl="student/stages/"|add:stage.kind|add:".html" %}{% include tpl %}{% endwith %}
+  <article class="flex min-w-0 flex-[999_1_600px] flex-col gap-5">
+    {% if stage.kind == "practice" %}
+      {% include "student/stages/practice.html" %}
+    {% else %}
+      <div class="rounded-xl border border-line bg-surface p-[clamp(24px,4vw,48px)]">
+        {% include "student/partials/kind_pill.html" %}
+        <h1 class="mt-4 text-[clamp(28px,3vw,36px)] leading-[1.2] font-extrabold tracking-[-0.025em]">{{ stage.title }}</h1>
+        <div class="mt-6">{% with tpl="student/stages/"|add:stage.kind|add:".html" %}{% include tpl %}{% endwith %}</div>
+      </div>
+    {% endif %}
+    {% if quiz %}{% include "student/partials/quiz_panel.html" %}{% endif %}
   </article>
 
-  <aside class="flex min-w-0 flex-[1_1_300px] flex-col gap-4 lg:sticky lg:top-6">
+  <aside class="flex min-w-0 flex-[1_1_280px] flex-col gap-4 lg:sticky lg:top-[92px]">
+    {% if stage.kind == "theory" %}
+      <nav x-data="tocNav" x-show="items.length" x-cloak aria-label="{% translate 'On this page' %}" class="rounded-[22px] border border-line bg-surface p-5">
+        <p class="mb-2.5 text-[13px] font-bold text-ink-soft">{% translate "On this page" %}</p>
+        <template x-for="item in items" :key="item.id">
+          <a :href="'#' + item.id" x-text="item.text" class="block rounded-sm px-3 py-2 text-sm transition-colors"
+             :class="active === item.id ? 'bg-primary-50 font-semibold text-primary-700' : 'font-medium text-ink-soft hover:bg-canvas'"></a>
+        </template>
+        {% if quiz %}<a href="#quiz" class="block rounded-sm px-3 py-2 text-sm font-medium text-ink-soft hover:bg-canvas">{{ quiz.get_kind_display }}</a>{% endif %}
+      </nav>
+    {% endif %}
+    {% if stage.kind == "practice" %}{% include "student/partials/practice_result.html" %}{% endif %}
     {% include "student/partials/conditions.html" %}
-    {% if status == "passed" and next %}
-      <a class="btn btn-primary btn-lg w-full" href="{{ next.0 }}">{% translate "Go to the next stage" %}{% include "components/icons.html#arrow-right" %}</a>
+    {% if next %}
+      <div class="rounded-[22px] bg-primary-950 p-5 text-white">
+        <p class="text-[13px] font-semibold text-primary-300">{% translate "Next stage" %}</p>
+        <p class="mt-1 text-base font-bold">{{ next.1 }}</p>
+        {% if status == "passed" or status == "awaiting_check" %}
+          <a class="btn btn-inverse btn-sm mt-3" href="{{ next.0 }}">{% translate "Go to the next stage" %}{% include "components/icons.html#arrow-right" %}</a>
+        {% elif quiz %}
+          <p class="mt-2 text-[13px] text-on-dark-soft">{% blocktranslate with p=quiz.pass_percent %}Opens after you score {{ p }}% in the test.{% endblocktranslate %}</p>
+        {% else %}
+          <p class="mt-2 text-[13px] text-on-dark-soft">{% translate "Opens when this stage is completed." %}</p>
+        {% endif %}
+      </div>
     {% endif %}
   </aside>
 </div>
-
-{% if quiz %}{% include "student/partials/quiz_panel.html" %}{% endif %}
 {% endblock %}
 {% block scripts %}<script defer src="{% static 'js/stage.js' %}"></script>{% endblock %}

@@ -1,0 +1,26 @@
+{% load i18n %}{# Aside of a practice stage: the result of the last attempt by field, or what will appear here. #}
+<div class="flex flex-col gap-3.5 rounded-card border border-line bg-surface p-6">
+  <span class="text-[13px] font-bold text-ink-soft">{% translate "Result" %}</span>
+  {% if not latest %}
+    <p class="text-sm text-ink-soft">{% translate "After you send the answers, the points and a comment for every field appear here." %}</p>
+  {% elif grading %}
+    <p class="text-sm text-ink-soft">{% translate "Being graded…" %}</p>
+  {% else %}
+    <div class="fade flex items-center gap-4">
+      {% if latest.status == "needs_review" %}{% include "components/ring.html" with value=latest.percent size=88 stroke=9 color="stroke-warning-500" track="stroke-warning-50" %}
+      {% elif latest.percent >= stage.pass_percent %}{% include "components/ring.html" with value=latest.percent size=88 stroke=9 color="stroke-success-600" track="stroke-success-50" %}
+      {% else %}{% include "components/ring.html" with value=latest.percent size=88 stroke=9 color="stroke-danger-600" track="stroke-danger-50" %}{% endif %}
+      <span class="flex flex-col leading-5">
+        <span class="num text-xl font-extrabold">{{ latest.score|floatformat:"-2" }} / {{ latest.max_score|floatformat:"-2" }}</span>
+        <span class="text-[13px] font-semibold {% if latest.status == 'needs_review' %}text-warning-700{% elif latest.percent >= stage.pass_percent %}text-success-700{% else %}text-danger-700{% endif %}">
+          {% if latest.status == "needs_review" %}{% translate "Waiting for the teacher's check" %}{% elif latest.status == "returned" %}{% translate "Returned by the teacher" %}{% elif latest.percent >= stage.pass_percent %}{% translate "Passed · the next stage is open" %}{% else %}{% blocktranslate with p=stage.pass_percent %}Below the pass mark ({{ p }}%){% endblocktranslate %}{% endif %}
+        </span>
+      </span>
+    </div>
+    <div class="num grid gap-1.5 text-sm">
+      {% for a in latest_answers %}<span class="flex justify-between gap-3"><span class="truncate">{{ a.item.label }}</span><b class="shrink-0">{{ a.points|floatformat:"-2" }} / {{ a.item.points|floatformat:"-2" }}</b></span>{% endfor %}
+    </div>
+    {% if latest.status == "needs_review" %}<span class="badge badge-warning self-start font-bold">{% translate "Waiting for the teacher's confirmation" %}</span>{% endif %}
+    {% if counted and counted.pk != latest.pk %}<p class="num text-[13px] text-ink-soft">{% blocktranslate with p=counted.percent|floatformat:0 %}Counts for the grade: {{ p }}%{% endblocktranslate %}</p>{% endif %}
+  {% endif %}
+</div>
