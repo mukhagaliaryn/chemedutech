@@ -228,3 +228,57 @@ class ShellTests(TestCase):
         self.assertIn('stroke-dasharray="87.96 175.93"', html)
         self.assertIn("50%", html)
         self.assertIn("B+", render_to_string("components/ring.html", {"value": 84, "text": "B+"}))
+
+
+@override_settings(ALLOWED_HOSTS=["testserver"])
+class PublicPagesTests(TestCase):
+    """STEP-16: landing, login, the sign-up wizard."""
+
+    @classmethod
+    def setUpTestData(cls):
+        call_command("seed_course", verbosity=0)
+        cls.group = make_group(name="Хим-23-1")
+        cls.student = make_student("taken.name", group=cls.group)
+
+    def test_landing_uses_real_numbers(self):
+        r = self.client.get(reverse("core:home"))
+        facts = r.context["facts"]
+        self.assertEqual((facts["modules"], facts["topics"]), (2, 15))
+        self.assertEqual(facts["experiments"], len(get_lab("t01").experiments))
+        self.assertEqual(len(facts["lab"]["experiments"]), facts["experiments"])
+        self.assertContains(r, 'id="lab"')
+        self.assertContains(r, reverse("accounts:signup"))
+        self.assertContains(r, "Zn + 2HCl → ZnCl<sub>2</sub>")  # equation HTML from the lab spec
+
+    def test_login_page(self):
+        r = self.client.get(reverse("accounts:login"))
+        self.assertContains(r, "brand-ground")
+        r = self.client.post(reverse("accounts:login"), {"username": "taken.name", "password": "wrong"})
+        self.assertContains(r, 'role="alert"')
+        self.assertContains(r, "shake")
+
+    def test_username_check(self):
+        url = reverse("accounts:username_check")
+        self.assertContains(self.client.get(url, {"username": "Taken.Name"}), 'data-status="error"')
+        self.assertContains(self.client.get(url, {"username": "free.name"}), 'data-status="ok"')
+        self.assertContains(self.client.get(url, {"username": "bad@name"}), 'data-status="error"')
+        self.assertContains(self.client.get(url, {"username": ""}), 'data-status=""')
+
+    def test_join_code_check(self):
+        url = reverse("accounts:join_code_check")
+        self.assertContains(self.client.get(url, {"join_code": self.group.join_code}), "Хим-23-1")
+        self.assertContains(self.client.get(url, {"join_code": "XXXX-0000"}), "error-text")
+
+    def test_wizard_opens_on_the_step_with_the_error(self):
+        url = reverse("accounts:signup")
+        self.assertEqual(self.client.get(url).context["step"], 1)
+        base = {
+            "first_name": "Айгерім", "last_name": "Сапарова", "email": "a@example.kz", "username": "aigerim",
+            "password1": "Chem-2026-x", "password2": "Chem-2026-x", "group_mode": "code",
+        }  # fmt: skip
+        r = self.client.post(url, {**base, "join_code": "XXXX-0000"})
+        self.assertEqual(r.context["step"], 2)
+        r = self.client.post(url, {**base, "username": "taken.name", "join_code": "XXXX-0000"})
+        self.assertEqual(r.context["step"], 1)
+        r = self.client.post(url, {**base, "join_code": self.group.join_code})
+        self.assertRedirects(r, reverse("student:dashboard"), fetch_redirect_response=False)

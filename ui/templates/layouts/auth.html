@@ -1,36 +1,56 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% comment %}Login / password reset: brand panel (primary-900) on the left, form on the right. Mockup: «Кіру».{% endcomment %}
+{% comment %}
+Login / password reset (mockup «Кіру»): the form on the left (logo and language on top, content centred,
+max 420px), a dark brand panel on the right with an animated flask and a carousel of chemistry facts.
+{% endcomment %}
 {% block body_class %}bg-surface{% endblock %}
 {% block body %}
 <div class="flex min-h-screen flex-wrap">
-  <section aria-label="ChemEduTech"
-           class="relative flex min-h-80 flex-[1_1_420px] flex-col justify-between gap-12 overflow-hidden bg-primary-900 px-6 py-12 text-white sm:px-[clamp(24px,5vw,72px)]">
-    <svg width="360" height="520" viewBox="0 0 360 520" aria-hidden="true" class="pointer-events-none absolute -right-10 -bottom-5">
-      <rect x="120" y="260" width="200" height="300" rx="16" class="fill-stage-lab"/>
-      <rect x="230" y="120" width="140" height="124" rx="16" class="fill-primary-600"/>
-      <circle cx="160" cy="470" r="16" class="fill-lab-water"/>
-      <circle cx="210" cy="420" r="11" class="fill-lab-water"/>
-      <circle cx="176" cy="372" r="8" class="fill-lab-water"/>
-      <circle cx="230" cy="330" r="6" class="fill-lab-water"/>
-      <circle cx="190" cy="292" r="4" class="fill-lab-water"/>
-      <circle cx="96" cy="230" r="5" class="fill-primary-500"/>
-      <circle cx="70" cy="190" r="3" class="fill-primary-500"/>
-    </svg>
-    <a href="{% url 'core:home' %}" class="relative flex items-center gap-2.5 text-lg font-bold">
-      {% include "partials/logo.html" with inverse=True size=32 %}ChemEduTech
-    </a>
-    <div class="relative max-w-[400px]">
-      <p class="text-display">{% translate "A chemistry lab that is always open" %}</p>
-      <p class="mt-4 text-base leading-relaxed text-primary-100">
-        {% translate "A course for future chemistry teachers: theory, video lessons and virtual lab work — safe and available at any time." %}
-      </p>
+  <main class="flex min-h-screen flex-[1_1_520px] flex-col px-[clamp(20px,5vw,80px)] py-8">
+    <div class="flex items-center justify-between gap-4">
+      <a href="{% url 'core:home' %}" class="flex items-center gap-2.5 text-lg font-extrabold text-ink">{% include "partials/logo.html" with size=32 %}ChemEduTech</a>
+      {% include "partials/lang_menu.html" %}
     </div>
-  </section>
-
-  <main class="flex flex-[1_1_480px] flex-col gap-8 px-6 py-10 sm:px-[clamp(24px,5vw,72px)]">
-    <div class="flex justify-end">{% include "partials/lang_switch.html" %}</div>
-    <div class="m-auto w-full max-w-[400px]">{% block content %}{% endblock %}</div>
+    <div class="m-auto w-full max-w-[420px] py-10">{% block content %}{% endblock %}</div>
   </main>
+
+  <aside aria-label="{% translate 'About ChemEduTech' %}" x-data="{ fact: 0, n: 3 }"
+         class="brand-ground relative m-4 flex min-h-[640px] flex-[1_1_520px] flex-col justify-end overflow-hidden rounded-[32px] p-[clamp(28px,4vw,56px)] max-lg:hidden">
+    <svg aria-hidden="true" viewBox="0 0 320 340" class="absolute top-12 right-10 w-[300px]">
+      <defs><clipPath id="auth-flask"><path d="M130,40 V120 L60,270 Q52,290 74,292 H246 Q268,290 260,270 L190,120 V40 Z"/></clipPath></defs>
+      <g clip-path="url(#auth-flask)">
+        <g class="wave"><path d="M40,200 q30,-12 60,0 t60,0 t60,0 t60,0 t60,0 t60,0 V320 H40 Z" class="fill-stage-lab"/></g>
+        <circle class="bubble" cx="140" cy="276" r="6" fill="#cde7f5" style="--rise:-120px;--dur:3.4s"/>
+        <circle class="bubble" cx="172" cy="280" r="4" fill="#cde7f5" style="--rise:-120px;--dur:3.4s;--delay:.9s"/>
+        <circle class="bubble" cx="196" cy="274" r="6" fill="#cde7f5" style="--rise:-120px;--dur:3.4s;--delay:1.8s"/>
+      </g>
+      <path d="M130,40 V120 L60,270 Q52,290 74,292 H246 Q268,290 260,270 L190,120 V40" fill="rgba(255,255,255,.05)" stroke="#d9e6ff" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M120,40 H200" stroke="#d9e6ff" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+    <div class="relative max-w-[460px]">
+      {% translate "Today's experiment" as t1 %}{% translate "Pure hydrogen burns with a quiet «pop» — in the lab its purity is checked before it is lit." as x1 %}
+      {% translate "Catalysis" as t2 %}{% translate "MnO₂ speeds up the decomposition of hydrogen peroxide but does not change the total amount of oxygen formed." as x2 %}
+      {% translate "Electrolysis" as t3 %}{% translate "In the electrolysis of water hydrogen is released at the cathode and oxygen at the anode — in a 2 : 1 volume ratio." as x3 %}
+      {% partialdef fact %}
+        <div x-show="fact === {{ i }}" {% if i %}x-cloak{% endif %} class="fade rounded-card border border-white/[.14] bg-white/[.08] p-6 backdrop-blur-md">
+          <p class="text-[13px] font-bold text-mint">{{ tag }}</p>
+          <p class="mt-2 text-xl leading-[30px] font-semibold">{{ text }}</p>
+          <p class="mt-3 text-base font-bold text-primary-100">{{ eq }}</p>
+        </div>
+      {% endpartialdef %}
+      {% with i=0 tag=t1 text=x1 eq="Zn + 2HCl → ZnCl₂ + H₂↑" %}{% partial fact %}{% endwith %}
+      {% with i=1 tag=t2 text=x2 eq="2H₂O₂ → 2H₂O + O₂↑" %}{% partial fact %}{% endwith %}
+      {% with i=2 tag=t3 text=x3 eq="2H₂O → 2H₂↑ + O₂↑" %}{% partial fact %}{% endwith %}
+      <div class="mt-[18px] flex items-center gap-2.5">
+        {% for i in 3|times %}
+          <button type="button" @click="fact = {{ i }}" aria-label="{% blocktranslate with n=forloop.counter %}Fact {{ n }}{% endblocktranslate %}"
+                  class="h-2 rounded-full transition-all duration-250" :class="fact === {{ i }} ? 'w-7 bg-white' : 'w-2 bg-white/35'"></button>
+        {% endfor %}
+        <button type="button" @click="fact = (fact + 1) % n" aria-label="{% translate 'Next fact' %}"
+                class="ml-auto grid size-11 place-items-center rounded-[14px] border border-white/20 text-white hover:bg-white/10">{% include "components/icons.html#arrow-right" with size=18 %}</button>
+      </div>
+    </div>
+  </aside>
 </div>
 {% endblock %}

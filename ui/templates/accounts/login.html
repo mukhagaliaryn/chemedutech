@@ -2,31 +2,51 @@
 {% load i18n %}
 {% block title %}{% translate "Log in" %} · ChemEduTech{% endblock %}
 {% block content %}
-<form method="post" class="flex flex-col gap-5" novalidate>
+<form method="post" class="flex flex-col gap-5" novalidate x-data="{ show: false, busy: false }" @submit="busy = true">
   {% csrf_token %}
   <div>
-    <h1 class="text-h1">{% translate "Log in" %}</h1>
-    <p class="mt-1.5 text-ink-soft">{% translate "Enter your username or email." %}</p>
+    <span class="tile size-14 rounded-[18px] bg-primary-50 text-primary-600">{% include "components/icons.html#login" with size=28 %}</span>
+    <h1 class="mt-5 text-[34px] leading-[42px] font-extrabold tracking-[-0.025em]">{% translate "Welcome back!" %}</h1>
+    <p class="mt-1.5 text-ink-soft">{% translate "Log in with your username or email." %}</p>
   </div>
+
   {% if form.non_field_errors %}
-    <p class="rounded-md bg-danger-50 px-3.5 py-3 text-sm text-danger-700" role="alert">{{ form.non_field_errors|join:" " }}</p>
+    <div class="alert alert-danger fade" role="alert">
+      <span class="alert-icon">{% include "components/icons.html#error" with size=18 %}</span>
+      <span class="self-center"><b>{% translate "Could not log in." %}</b> {{ form.non_field_errors|join:" " }}</span>
+    </div>
   {% endif %}
-  {% include "components/input.html" with field=form.username %}
+
+  <div class="field">
+    <label class="label" for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+    <span class="input-icon">{% include "components/icons.html#user" %}{{ form.username|with_attrs:"input input-lg" }}</span>
+    {% for e in form.username.errors %}<p class="error-text">{{ e }}</p>{% endfor %}
+  </div>
   <div class="field">
     <span class="flex items-baseline justify-between gap-3">
       <label class="label" for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
-      <a class="link text-label" href="{% url 'accounts:password_reset' %}">{% translate "Forgot your password?" %}</a>
+      <a class="link text-[13px] font-semibold" href="{% url 'accounts:password_reset' %}">{% translate "Forgot your password?" %}</a>
     </span>
-    {{ form.password|with_attrs:"input" }}
+    <span class="input-icon {% if form.non_field_errors %}shake{% endif %}">
+      {% include "components/icons.html#key" %}
+      {{ form.password|with_attrs:"input input-lg pr-12" }}
+      <button type="button" @click="show = !show; $el.previousElementSibling.type = show ? 'text' : 'password'"
+              :aria-label="show ? '{% translate "Hide password" %}' : '{% translate "Show password" %}'" aria-label="{% translate 'Show password' %}"
+              class="absolute top-1.5 right-1.5 grid size-9 place-items-center rounded-sm text-ink-soft hover:bg-canvas">
+        <span x-show="!show">{% include "components/icons.html#eye" %}</span><span x-show="show" x-cloak>{% include "components/icons.html#eye-off" %}</span>
+      </button>
+    </span>
   </div>
-  {% include "components/input.html" with field=form.remember %}
+  <label class="flex cursor-pointer items-center gap-2.5 text-sm text-ink-soft" for="{{ form.remember.id_for_label }}">
+    {{ form.remember|with_attrs:"size-[18px]" }}{{ form.remember.label }}
+  </label>
   <input type="hidden" name="next" value="{{ next }}">
-  <button class="btn btn-primary btn-lg w-full" type="submit">{% translate "Log in" %}</button>
-  <p class="text-center text-sm text-ink-soft">
-    {% translate "No account yet?" %} <a class="link font-semibold" href="{% url 'accounts:signup' %}">{% translate "Sign up as a student" %}</a>
-  </p>
-  <p class="mt-2 rounded-md bg-primary-50 px-3.5 py-3 text-body-sm text-primary-700">
-    {% translate "Teacher accounts are created by the platform administrator. Ask the administrator for your login details." %}
-  </p>
+  <button class="btn btn-primary btn-lg w-full rounded-md" type="submit" :disabled="busy">
+    <svg x-show="busy" x-cloak class="animate-spin" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 1.5a6.5 6.5 0 1 1-6.5 6.5"/></svg>
+    <span x-text="busy ? '{% translate "Logging in…" %}' : '{% translate "Log in" %}'">{% translate "Log in" %}</span>
+  </button>
+  <div class="flex items-center gap-3 text-[13px] text-ink-faint"><span class="h-px flex-1 bg-line"></span>{% translate "or" %}<span class="h-px flex-1 bg-line"></span></div>
+  <a class="btn btn-secondary btn-lg w-full rounded-md" href="{% url 'accounts:signup' %}">{% translate "Sign up as a student" %}</a>
+  <p class="text-center text-[13px] leading-5 text-ink-soft">{% translate "Teacher accounts are created by the platform administrator." %}</p>
 </form>
 {% endblock %}

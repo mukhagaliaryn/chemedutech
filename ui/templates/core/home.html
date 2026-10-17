@@ -1,28 +1,360 @@
-{% extends "layouts/public.html" %}
-{% load i18n %}
-{% block content %}
-<section class="grid items-center gap-10 py-14 lg:grid-cols-[1.1fr_1fr] lg:py-20">
-  <div>
-    <h1 class="text-display">{% translate "A chemistry lab that is always open" %}</h1>
-    <p class="mt-5 max-w-xl text-lg leading-relaxed text-ink-soft">
-      {% translate "Run laboratory experiments on a virtual bench: choose glassware and reagents, follow the procedure, observe the reaction and keep a lab journal." %}
-    </p>
-    <div class="mt-8 flex flex-wrap gap-3">
-      <a class="btn btn-primary btn-lg" href="{% url 'accounts:signup' %}">{% translate "Create an account" %}</a>
-      <a class="btn btn-secondary btn-lg" href="{% url 'accounts:login' %}">{% translate "Log in" %}</a>
+{% extends "base.html" %}
+{% load i18n catalog_tags %}
+{% comment %}
+Landing (mockup «Лэндинг»): dark hero with a glass navbar, facts strip, bento features, learning path,
+lab showcase (experiments of the first code lab), audience tabs, research block, FAQ, CTA, footer.
+Numbers come from the database and the lab registry ({% landing_facts %}), never invented.
+{% endcomment %}
+{% block title %}ChemEduTech — {% translate "virtual chemistry lab" %}{% endblock %}
+{% block body_class %}bg-surface{% endblock %}
+{% block body %}
+{% landing_facts as facts %}
+<div class="overflow-x-hidden text-base leading-[26px]" x-data="{ menu: false, exp: 0, aud: 'student' }" @keydown.escape.window="menu = false">
+
+  {# ============ HERO + NAVBAR ============ #}
+  <section class="brand-ground brand-ground-plain relative">
+    <div aria-hidden="true" class="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:56px_56px]"></div>
+    <div aria-hidden="true" class="glow pointer-events-none absolute -top-[200px] -right-[160px] size-[720px] rounded-full bg-[radial-gradient(closest-side,rgba(31,95,209,.55),rgba(31,95,209,0))]"></div>
+    <div aria-hidden="true" class="glow pointer-events-none absolute -bottom-[260px] -left-[200px] size-[520px] rounded-full bg-[radial-gradient(closest-side,rgba(11,122,122,.45),rgba(11,122,122,0))]"></div>
+
+    <header class="relative z-10 mx-auto max-w-[1240px] px-4 py-[18px] sm:px-6">
+      <div class="flex h-[60px] items-center gap-4 rounded-[18px] border border-white/[.12] bg-white/[.07] pr-2.5 pl-[18px] backdrop-blur-md">
+        <a href="{% url 'core:home' %}" class="flex items-center gap-2.5 text-lg font-bold text-white">{% include "partials/logo.html" with size=32 inverse=True %}ChemEduTech</a>
+        <nav class="ml-5 flex gap-0.5 max-[880px]:hidden" aria-label="{% translate 'Main' %}">
+          {% partialdef navlinks %}
+            <a href="#features" class="landing-link">{% translate "Features" %}</a>
+            <a href="#lab" class="landing-link">{% translate "Lab" %}</a>
+            <a href="#how" class="landing-link">{% translate "Learning path" %}</a>
+            <a href="#research" class="landing-link">{% translate "Research" %}</a>
+            <a href="#faq" class="landing-link">{% translate "Questions" %}</a>
+          {% endpartialdef %}
+          {% partial navlinks %}
+        </nav>
+        <div class="ml-auto flex items-center gap-2">
+          {% include "partials/lang_menu.html" with dark=True class="max-[880px]:hidden" %}
+          <a href="{% url 'accounts:login' %}" class="landing-link h-10 font-semibold text-white max-[880px]:hidden">{% translate "Log in" %}</a>
+          <a href="{% url 'accounts:signup' %}" class="btn btn-inverse btn-sm h-10 max-[880px]:hidden">{% translate "Sign up" %}</a>
+          <button type="button" class="grid size-11 place-items-center rounded-[12px] border border-white/20 text-white min-[881px]:hidden" @click="menu = true" aria-label="{% translate 'Open menu' %}" :aria-expanded="menu.toString()">{% include "components/icons.html#menu" with size=20 %}</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="relative z-[2] mx-auto flex max-w-[1240px] flex-wrap items-center gap-12 px-4 pt-14 pb-28 sm:px-6">
+      <div class="min-w-0 flex-[1_1_480px]">
+        {% if facts.experiments %}
+          <span class="rise inline-flex h-8 items-center gap-2 rounded-full border border-white/[.14] bg-white/[.08] pr-3.5 pl-1.5 text-[13px] font-medium text-primary-100">
+            <span class="inline-flex h-[22px] items-center rounded-full bg-stage-lab px-2 text-caption font-semibold text-white">{% translate "New" %}</span>
+            {% blocktranslate with n=facts.lab.topic_number count k=facts.experiments %}Topic {{ n }}: {{ k }} virtual experiment ready{% plural %}Topic {{ n }}: {{ k }} virtual experiments ready{% endblocktranslate %}
+          </span>
+        {% endif %}
+        <h1 class="rise rise-2 mt-[22px] text-[clamp(40px,5.6vw,68px)] leading-[1.04] font-extrabold tracking-[-0.035em]">{% translate "Learn chemistry in a safe lab" %}</h1>
+        <p class="rise rise-3 mt-[22px] max-w-[540px] text-lg leading-[30px] text-on-dark-soft">{% translate "An online course for future chemistry teachers: theory, video lessons, an interactive virtual lab and automatic grading — on one platform, in Kazakh." %}</p>
+        <div class="rise rise-3 mt-8 flex flex-wrap gap-3">
+          <a href="{% url 'accounts:signup' %}" class="btn btn-inverse btn-lg shadow-[0_10px_30px_rgba(0,0,0,.25)]">{% translate "Start for free" %}{% include "components/icons.html#arrow-right" with size=18 %}</a>
+          <a href="#lab" class="btn btn-outline-inverse btn-lg font-semibold">
+            <span class="pulse grid size-[26px] place-items-center rounded-full bg-primary-600"><svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M2.5 1.5v7l6-3.5z" fill="#fff"/></svg></span>{% translate "See the lab" %}</a>
+        </div>
+        <ul class="rise rise-3 mt-10 flex flex-wrap gap-7 text-sm text-on-dark-soft">
+          {% translate "Kazakh · Russian · English" as l1 %}{% translate "In the browser, nothing to install" as l2 %}{% translate "Certificate" as l3 %}
+          {% for l in l1|add:"|"|add:l2|add:"|"|add:l3|split:"|" %}<li class="inline-flex items-center gap-2"><span class="text-mint">{% include "components/icons.html#check" with size=18 %}</span>{{ l }}</li>{% endfor %}
+        </ul>
+      </div>
+
+      {# hero visual #}
+      <div class="relative h-[520px] min-w-0 flex-[1_1_440px] max-sm:h-[440px]" aria-hidden="true">
+        <div class="absolute inset-x-[30px] inset-y-5 rounded-[32px] border border-white/[.14] bg-[linear-gradient(160deg,rgba(255,255,255,.12),rgba(255,255,255,.03))] backdrop-blur-sm"></div>
+        <svg viewBox="0 0 420 460" class="absolute top-1/2 left-1/2 w-[380px] max-w-[86%] -translate-x-1/2 -translate-y-[48%]">
+          <defs>
+            <clipPath id="hero-flask"><path d="M168,70 V170 L84,352 Q74,376 100,380 H320 Q346,376 336,352 L252,170 V70 Z"/></clipPath>
+            <linearGradient id="hero-liquid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3570df"/><stop offset="1" stop-color="#0b7a7a"/></linearGradient>
+          </defs>
+          <g clip-path="url(#hero-flask)">
+            <g class="wave"><path d="M60,260 q30,-14 60,0 t60,0 t60,0 t60,0 t60,0 t60,0 t60,0 V400 H60 Z" fill="url(#hero-liquid)" opacity=".92"/></g>
+            {% for b in "170,360,7,0 210,366,5,.7 244,358,8,1.4 196,364,4,2.1 230,368,6,2.6"|split %}{% with p=b|split:"," %}
+              <circle class="bubble" cx="{{ p.0 }}" cy="{{ p.1 }}" r="{{ p.2 }}" fill="#cde7f5" style="--rise:-150px;--dur:3.2s;--delay:{{ p.3 }}s"/>
+            {% endwith %}{% endfor %}
+          </g>
+          <path d="M168,70 V170 L84,352 Q74,376 100,380 H320 Q346,376 336,352 L252,170 V70" fill="rgba(255,255,255,.06)" stroke="#d9e6ff" stroke-width="5" stroke-linejoin="round"/>
+          <path d="M156,70 H264" stroke="#d9e6ff" stroke-width="5" stroke-linecap="round"/>
+          <path d="M120,300 L176,180" stroke="rgba(255,255,255,.35)" stroke-width="6" stroke-linecap="round"/>
+          <rect x="190" y="38" width="40" height="34" rx="6" fill="#7a4a35"/>
+          <path d="M210,38 V10" stroke="#d9e6ff" stroke-width="5"/>
+        </svg>
+        <div class="float absolute top-[70px] left-0 w-[236px] rounded-[18px] bg-white px-4 py-3.5 text-ink shadow-[0_24px_50px_rgba(0,0,0,.28)]">
+          <p class="flex items-center gap-2 text-caption font-bold text-warning-700"><span class="grid size-[22px] place-items-center rounded-[8px] bg-warning-50 text-warning-500">{% include "components/icons.html#warn" with size=12 %}</span>{% translate "Safety" %}</p>
+          <p class="mt-1.5 text-[13px] leading-[19px]">{% translate "First assemble the gas delivery system." %}</p>
+        </div>
+        <div class="float float-2 absolute top-[150px] right-0 w-[188px] rounded-[18px] bg-white px-4 py-3.5 text-ink shadow-[0_24px_50px_rgba(0,0,0,.28)]">
+          <p class="text-caption font-medium text-ink-soft">V(H₂)</p>
+          <p class="num mt-0.5 text-[28px] leading-8 font-extrabold">224 <span class="text-[15px] font-medium text-ink-soft">{% translate "ml" %}</span></p>
+          <div class="progress progress-sm mt-2"><span class="!bg-primary-500" style="width: 90%"></span></div>
+        </div>
+        <div class="float float-3 absolute bottom-9 left-10 flex items-center gap-3 rounded-[18px] bg-white px-4 py-3 text-ink shadow-[0_24px_50px_rgba(0,0,0,.28)]">
+          <span class="grid size-10 place-items-center rounded-[12px] bg-success-50 text-success-600">{% include "components/icons.html#check" with size=20 %}</span>
+          <span class="flex flex-col leading-[18px]"><span class="text-sm font-bold">{% translate "Stage completed" %}</span><span class="num text-caption font-normal text-ink-soft">{% translate "Checkpoint quiz" %} · 4 / 4</span></span>
+        </div>
+        <div class="float absolute right-6 bottom-24 rounded-[14px] border border-white/20 bg-white/[.12] px-3.5 py-2.5 text-[15px] font-bold text-white backdrop-blur-sm">Zn + 2HCl → ZnCl₂ + H₂↑</div>
+      </div>
     </div>
-  </div>
-  <figure class="bench relative aspect-[4/3] overflow-hidden rounded-lg border border-line" aria-hidden="true">
-    <svg viewBox="0 0 400 300" class="h-full w-full">
-      <path d="M150,70 V120 L95,240 Q91,252 104,252 H246 Q259,252 255,240 L200,120 V70" fill="#ffffff" fill-opacity=".5" stroke="#6b8ba0" stroke-width="3" stroke-linejoin="round"/>
-      <path d="M143,70 H207" stroke="#6b8ba0" stroke-width="3" stroke-linecap="round"/>
-      <path d="M118,200 H232 L251,240 Q254,249 245,249 H105 Q96,249 99,240 Z" class="fill-stage-lab" opacity=".85"/>
-      <circle cx="160" cy="220" r="4" fill="#fff" class="bubble" style="--rise:-40px;--dur:1.6s"/>
-      <circle cx="185" cy="232" r="3" fill="#fff" class="bubble" style="--rise:-50px;--dur:1.9s;--delay:.5s"/>
-      <circle cx="205" cy="226" r="3.5" fill="#fff" class="bubble" style="--rise:-45px;--dur:1.4s;--delay:.9s"/>
-      <rect x="290" y="80" width="40" height="170" rx="8" fill="#ffffff" fill-opacity=".5" stroke="#6b8ba0" stroke-width="3"/>
-      <rect x="293" y="150" width="34" height="97" rx="5" class="fill-lab-water"/>
-    </svg>
-  </figure>
-</section>
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true" class="absolute -bottom-px left-0 h-20 w-full"><path d="M0,80 C360,10 1080,10 1440,80 Z" class="fill-white"/></svg>
+  </section>
+
+  {# mobile drawer #}
+  <template x-teleport="body">
+    <div x-show="menu" x-cloak>
+      <div class="overlay" @click="menu = false"></div>
+      <aside class="drawer drawer-right w-[min(86vw,340px)] gap-1.5" aria-label="{% translate 'Mobile menu' %}">
+        <div class="mb-3 flex items-center justify-between"><span class="text-lg font-bold">ChemEduTech</span>
+          <button type="button" class="close-btn size-11" @click="menu = false" aria-label="{% translate 'Close' %}">{% include "components/icons.html#x" %}</button></div>
+        <nav class="flex flex-col [&>a]:rounded-[12px] [&>a]:p-3 [&>a]:font-semibold [&>a]:text-ink [&>a:hover]:bg-canvas" @click="menu = false">{% partial navlinks %}</nav>
+        {% include "partials/lang_menu.html" with class="mt-2 self-start" %}
+        <div class="mt-auto grid gap-2">
+          <a href="{% url 'accounts:login' %}" class="btn btn-secondary btn-lg">{% translate "Log in" %}</a>
+          <a href="{% url 'accounts:signup' %}" class="btn btn-primary btn-lg">{% translate "Sign up" %}</a>
+        </div>
+      </aside>
+    </div>
+  </template>
+
+  {# ============ FACTS STRIP ============ #}
+  <section aria-label="{% translate 'About the course' %}" class="mx-auto max-w-[1240px] px-4 pt-6 sm:px-6">
+    <div class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] overflow-hidden rounded-card border border-line bg-surface [&>div]:border-line [&>div:not(:last-child)]:border-r max-sm:[&>div:not(:last-child)]:border-r-0 max-sm:[&>div:not(:last-child)]:border-b">
+      <div class="px-7 py-6"><p class="num text-4xl leading-10 font-extrabold tracking-[-0.02em] text-primary-900">{{ facts.modules }} · {{ facts.topics }}</p><p class="mt-1 text-sm text-ink-soft">{% translate "modules and topics" %}</p></div>
+      <div class="px-7 py-6"><p class="num text-4xl leading-10 font-extrabold tracking-[-0.02em] text-stage-lab">{{ facts.experiments }}</p><p class="mt-1 text-sm text-ink-soft">{% translate "virtual lab experiments" %}</p></div>
+      <div class="px-7 py-6"><p class="num text-4xl leading-10 font-extrabold tracking-[-0.02em] text-stage-video">5</p><p class="mt-1 text-sm text-ink-soft">{% translate "kinds of stages: from theory to the test" %}</p></div>
+      <div class="px-7 py-6"><p class="num text-4xl leading-10 font-extrabold tracking-[-0.02em] text-primary-600">24/7</p><p class="mt-1 text-sm text-ink-soft">{% translate "the lab is open at any time" %}</p></div>
+    </div>
+  </section>
+
+  {# ============ FEATURES (BENTO) ============ #}
+  <section id="features" class="mx-auto max-w-[1240px] scroll-mt-6 px-4 pt-28 sm:px-6">
+    <div class="max-w-[720px]">
+      <p class="text-sm font-bold text-primary-600">{% translate "Features" %}</p>
+      <h2 class="landing-h2">{% translate "Just like a real lab, but safe and repeatable" %}</h2>
+    </div>
+    <div class="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <article class="card-lift bench relative min-h-[300px] overflow-hidden rounded-xl border border-line p-8 md:col-span-2">
+        <div class="relative max-w-[380px] rounded-lg bg-lab-bench/90 p-1">
+          <span class="tile tile-lg bg-stage-lab">{% include "components/icons.html#lab" with size=24 %}</span>
+          <h3 class="mt-[18px] text-2xl leading-[30px] font-bold tracking-[-0.01em]">{% translate "Interactive 2D lab" %}</h3>
+          <p class="mt-2.5 text-ink-soft">{% translate "Drag the equipment onto the bench, add reagents and watch the gas being collected. The system warns at once about a wrong order and dangerous actions." %}</p>
+        </div>
+        <svg viewBox="0 0 300 220" aria-hidden="true" class="absolute right-6 bottom-0 w-[300px] max-md:opacity-30">
+          <path d="M70,40 V90 L30,190 Q26,204 40,204 H140 Q154,204 150,190 L110,90 V40" fill="rgba(255,255,255,.6)" stroke="#6b8ba0" stroke-width="4" stroke-linejoin="round"/>
+          <path d="M44,160 H136 L148,190 Q150,200 140,200 H40 Q30,200 32,190 Z" fill="#cde7f5"/>
+          <circle class="bubble" cx="80" cy="190" r="4" fill="#fff" stroke="#8fc3dc" style="--rise:-60px;--dur:3.2s"/><circle class="bubble" cx="98" cy="194" r="3" fill="#fff" stroke="#8fc3dc" style="--rise:-60px;--dur:3.2s;--delay:1s"/>
+          <rect x="62" y="28" width="56" height="16" rx="4" fill="#7a4a35"/>
+          <path d="M90,28 V10 H230 V200" fill="none" stroke="#6b8ba0" stroke-width="5" stroke-linejoin="round"/>
+          <rect x="206" y="60" width="48" height="150" rx="8" fill="rgba(255,255,255,.7)" stroke="#6b8ba0" stroke-width="4"/>
+          <rect x="210" y="64" width="40" height="70" fill="#fff"/><rect x="210" y="134" width="40" height="72" fill="#cde7f5"/>
+        </svg>
+      </article>
+      <article class="card card-lift rounded-xl p-7">
+        <span class="tile tile-lg bg-primary-50 text-primary-600">{% include "components/icons.html#key" with size=24 %}</span>
+        <h3 class="mt-[18px] text-xl leading-7 font-bold">{% translate "Step-by-step learning" %}</h3>
+        <p class="mt-2 text-[15px] leading-6 text-ink-soft">{% translate "The next stage opens only when the previous one is finished. Theory and video end with a short 3–4 question checkpoint quiz." %}</p>
+      </article>
+      <article class="card card-lift rounded-xl p-7">
+        <span class="tile tile-lg bg-ai-50 text-stage-video">{% include "components/icons.html#sparkle" with size=24 %}</span>
+        <h3 class="mt-[18px] text-xl leading-7 font-bold">{% translate "Automatic and AI grading" %}</h3>
+        <p class="mt-2 text-[15px] leading-6 text-ink-soft">{% translate "Formulas and equations are checked by meaning; open answers are graded by AI against criteria and confirmed by the teacher." %}</p>
+      </article>
+      <article class="card card-lift rounded-xl p-7 md:col-span-2">
+        <span class="tile tile-lg bg-success-50 text-success-600">{% include "components/icons.html#chart" with size=24 %}</span>
+        <h3 class="mt-[18px] text-xl leading-7 font-bold">{% translate "Analytics for the teacher" %}</h3>
+        <p class="mt-2 text-[15px] leading-6 text-ink-soft">{% translate "Groups, the grade register, frequent mistakes and time on each stage — all in one cabinet." %}</p>
+      </article>
+      <article class="card-lift flex flex-wrap items-center gap-6 rounded-xl bg-primary-900 px-8 py-7 text-white md:col-span-2">
+        <div class="flex-[1_1_280px]">
+          <h3 class="text-[22px] leading-[30px] font-bold">{% translate "Certificate and grade book" %}</h3>
+          <p class="mt-2 text-[15px] leading-6 text-on-dark-soft">{% translate "Stage → topic → module → course scores are calculated automatically. When the course is finished you get a certificate verifiable by its QR code." %}</p>
+        </div>
+        <div class="num flex flex-wrap gap-2 font-bold">
+          <span class="rounded-md bg-white/10 px-3.5 py-2.5">A 95–100</span>
+          <span class="rounded-md bg-white px-3.5 py-2.5 font-extrabold text-primary-900">B+ 85–89</span>
+          <span class="rounded-md bg-white/10 px-3.5 py-2.5">C 65–69</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  {# ============ HOW IT WORKS ============ #}
+  <section id="how" class="mx-auto max-w-[1240px] scroll-mt-6 px-4 pt-28 sm:px-6">
+    <div class="flex flex-wrap items-end justify-between gap-6">
+      <div class="max-w-[640px]">
+        <p class="text-sm font-bold text-primary-600">{% translate "Learning path" %}</p>
+        <h2 class="landing-h2">{% translate "Every topic is a full cycle of stages" %}</h2>
+      </div>
+      <p class="max-w-[380px] text-ink-soft">{% translate "The author decides how many stages a topic has: one topic may contain several practice works." %}</p>
+    </div>
+    <ol class="mt-12 grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4">
+      {% translate "Theory" as k1 %}{% translate "Text with formulas and pictures + a checkpoint quiz" as d1 %}
+      {% translate "Video lesson" as k2 %}{% translate "Watching is tracked + a checkpoint quiz" as d2 %}
+      {% translate "Lab" as k3 %}{% translate "Virtual experiments, journal, analysis" as d3 %}
+      {% translate "Practice" as k4 %}{% translate "Problems: automatic and AI grading" as d4 %}
+      {% translate "Test" as k5 %}{% translate "The final test of the topic" as d5 %}
+      {% partialdef path_step %}
+        <li class="card-lift rounded-card border p-6 {% if kind == 'lab' %}border-2 border-stage-lab bg-stage-lab-50{% else %}border-line bg-surface{% endif %}">
+          <span class="flex items-center justify-between">
+            <span class="tile size-11 rounded-md stage-{{ kind }}">{% include "components/icons.html#"|add:kind with size=22 %}</span>
+            <span class="num text-[13px] font-bold {% if kind == 'lab' %}text-stage-lab{% else %}text-line-strong{% endif %}">0{{ n }}</span>
+          </span>
+          <h3 class="mt-4 text-lg font-bold">{{ title }}</h3>
+          <p class="mt-1.5 text-sm leading-[22px] text-ink-soft">{{ text }}</p>
+        </li>
+      {% endpartialdef %}
+      {% with kind="theory" n=1 title=k1 text=d1 %}{% partial path_step %}{% endwith %}
+      {% with kind="video" n=2 title=k2 text=d2 %}{% partial path_step %}{% endwith %}
+      {% with kind="lab" n=3 title=k3 text=d3 %}{% partial path_step %}{% endwith %}
+      {% with kind="practice" n=4 title=k4 text=d4 %}{% partial path_step %}{% endwith %}
+      {% with kind="test" n=5 title=k5 text=d5 %}{% partial path_step %}{% endwith %}
+    </ol>
+  </section>
+
+  {# ============ LAB SHOWCASE ============ #}
+  {% if facts.lab %}
+  <section id="lab" class="mt-28 scroll-mt-6 bg-canvas">
+    <div class="mx-auto max-w-[1240px] px-4 py-24 sm:px-6">
+      <div class="max-w-[720px]">
+        <p class="text-sm font-bold text-stage-lab">{% blocktranslate with n=facts.lab.topic_number %}Lab work of topic {{ n }}{% endblocktranslate %}</p>
+        <h2 class="landing-h2">{{ facts.lab.title }}</h2>
+      </div>
+      <div role="tablist" aria-label="{% translate 'Experiments' %}" class="mt-9 flex flex-wrap gap-2">
+        {% for e in facts.lab.experiments %}
+          <button type="button" role="tab" @click="exp = {{ forloop.counter0 }}" :aria-selected="(exp === {{ forloop.counter0 }}).toString()" aria-controls="exp-panel"
+                  class="exp-tab inline-flex h-12 items-center gap-2.5 rounded-md border border-line bg-surface pr-[18px] pl-2 text-[15px] font-semibold text-ink transition-all aria-selected:border-stage-lab aria-selected:bg-stage-lab aria-selected:text-white aria-selected:shadow-[0_10px_24px_rgba(11,122,122,.25)]">
+            <span class="num grid size-8 place-items-center rounded-sm bg-surface-sunken text-[13px] font-bold">{{ e.number }}</span>{{ e.title }}
+          </button>
+        {% endfor %}
+      </div>
+      <div id="exp-panel" class="mt-5 flex flex-wrap items-stretch gap-5" role="tabpanel">
+        {% for e in facts.lab.experiments %}
+          <div x-show="exp === {{ forloop.counter0 }}" {% if not forloop.first %}x-cloak{% endif %} class="fade flex min-w-0 flex-[1_1_380px] flex-col gap-4 rounded-xl border border-line bg-surface p-9 max-sm:p-6">
+            <h3 class="text-[26px] leading-[34px] font-extrabold tracking-[-0.02em]">{{ e.title }}</h3>
+            <p class="text-ink-soft">{{ e.goal }}</p>
+            <p class="rounded-lg bg-canvas px-[18px] py-4 text-xl font-bold">{{ e.equation }}</p>
+            <ul class="grid gap-2.5 text-[15px]">
+              <li class="flex gap-2.5"><span class="mt-[3px] text-stage-lab">{% include "components/icons.html#check" with size=20 %}</span>{% blocktranslate count n=e.steps %}{{ n }} step with order checks and safety warnings{% plural %}{{ n }} steps with order checks and safety warnings{% endblocktranslate %}</li>
+              {% if e.items %}<li class="flex gap-2.5"><span class="mt-[3px] text-stage-lab">{% include "components/icons.html#check" with size=20 %}</span>{% translate "Equipment:" %} {{ e.items|join:", " }}</li>{% endif %}
+              {% if e.journal %}<li class="flex gap-2.5"><span class="mt-[3px] text-stage-lab">{% include "components/icons.html#check" with size=20 %}</span>{% blocktranslate count n=e.journal %}Lab journal: {{ n }} field{% plural %}Lab journal: {{ n }} fields{% endblocktranslate %}</li>{% endif %}
+            </ul>
+            <a href="{% url 'accounts:signup' %}" class="btn btn-lg mt-auto self-start bg-stage-lab text-white hover:shadow-lift">{% translate "Try the experiment" %}{% include "components/icons.html#arrow-right" %}</a>
+          </div>
+        {% endfor %}
+        <div aria-hidden="true" class="bench relative grid min-h-[420px] min-w-0 flex-[1.3_1_460px] place-items-center overflow-hidden rounded-xl border border-line max-sm:min-h-[300px]">
+          <svg viewBox="0 0 400 300" class="w-[86%]">
+            <path d="M120,40 V100 L70,230 Q64,248 82,248 H198 Q216,248 210,230 L160,100 V40" fill="rgba(255,255,255,.7)" stroke="#6b8ba0" stroke-width="5" stroke-linejoin="round"/>
+            <path d="M82,190 H198 L210,230 Q214,244 198,244 H82 Q66,244 70,230 Z" fill="#cde7f5"/>
+            <circle class="bubble" cx="120" cy="236" r="5" fill="#fff" stroke="#8fc3dc" style="--rise:-80px;--dur:3s"/>
+            <circle class="bubble" cx="146" cy="240" r="4" fill="#fff" stroke="#8fc3dc" style="--rise:-80px;--dur:3s;--delay:.8s"/>
+            <circle class="bubble" cx="168" cy="236" r="5" fill="#fff" stroke="#8fc3dc" style="--rise:-80px;--dur:3s;--delay:1.6s"/>
+            <rect x="110" y="28" width="60" height="18" rx="5" fill="#7a4a35"/>
+            <path d="M140,28 V12 H300 V250" fill="none" stroke="#6b8ba0" stroke-width="6" stroke-linejoin="round"/>
+            <rect x="272" y="80" width="56" height="180" rx="10" fill="rgba(255,255,255,.8)" stroke="#6b8ba0" stroke-width="5"/>
+            <rect x="277" y="85" width="46" height="92" fill="#fff"/>
+          </svg>
+          {% for e in facts.lab.experiments %}<div x-show="exp === {{ forloop.counter0 }}" {% if not forloop.first %}x-cloak{% endif %} class="absolute bottom-5 left-5 rounded-[14px] bg-white px-3.5 py-2.5 text-[13px] font-semibold shadow-lift">{{ e.equation }}</div>{% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+  {# ============ AUDIENCE ============ #}
+  <section class="mx-auto max-w-[1240px] px-4 pt-28 sm:px-6">
+    <div class="flex flex-wrap items-end justify-between gap-6">
+      <h2 class="landing-h2 m-0 max-w-[620px]">{% translate "Convenient for students and teachers alike" %}</h2>
+      <div class="segmented" role="tablist" aria-label="{% translate 'For whom' %}">
+        <button type="button" role="tab" class="h-11 px-[18px] text-[15px]" @click="aud = 'student'" :aria-selected="(aud === 'student').toString()">{% translate "For students" %}</button>
+        <button type="button" role="tab" class="h-11 px-[18px] text-[15px]" @click="aud = 'teacher'" :aria-selected="(aud === 'teacher').toString()">{% translate "For teachers" %}</button>
+      </div>
+    </div>
+    {% partialdef aud_card %}
+      <article class="card card-lift p-7">
+        <span class="tile size-11 rounded-md bg-primary-50 text-primary-600">{% include "components/icons.html#"|add:icon with size=22 %}</span>
+        <h3 class="mt-4 text-[19px] leading-[26px] font-bold">{{ title }}</h3>
+        <p class="mt-2 text-[15px] leading-6 text-ink-soft">{{ text }}</p>
+      </article>
+    {% endpartialdef %}
+    <div class="mt-9 grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-4" x-show="aud === 'student'">
+      {% translate "A clear path" as t %}{% translate "What to do next is always visible: «Continue learning» is one button away." as x %}{% with icon="book" title=t text=x %}{% partial aud_card %}{% endwith %}
+      {% translate "Mistakes without risk" as t %}{% translate "When you make a mistake the system explains why — without the danger of a real lab." as x %}{% with icon="lab" title=t text=x %}{% partial aud_card %}{% endwith %}
+      {% translate "A fair grade" as t %}{% translate "Every stage score and how it was calculated is shown in the grade book." as x %}{% with icon="chart" title=t text=x %}{% partial aud_card %}{% endwith %}
+    </div>
+    <div class="mt-9 grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-4" x-show="aud === 'teacher'" x-cloak>
+      {% translate "Group management" as t %}{% translate "Create a group, share the join code and assign the research group (control / experimental)." as x %}{% with icon="users" title=t text=x %}{% partial aud_card %}{% endwith %}
+      {% translate "AI assistant" as t %}{% translate "AI grades open answers of practice works against the criteria — you only confirm." as x %}{% with icon="sparkle" title=t text=x %}{% partial aud_card %}{% endwith %}
+      {% translate "Statistics" as t %}{% translate "See at which step students make mistakes most often and adapt the lesson." as x %}{% with icon="activity" title=t text=x %}{% partial aud_card %}{% endwith %}
+    </div>
+  </section>
+
+  {# ============ RESEARCH ============ #}
+  <section id="research" class="mx-auto max-w-[1240px] scroll-mt-6 px-4 pt-28 sm:px-6">
+    <div class="brand-ground flex flex-wrap items-center gap-12 rounded-xl p-[clamp(28px,5vw,64px)]">
+      <div class="relative flex-[1_1_380px]">
+        <p class="text-sm font-bold text-primary-300">{% translate "Pedagogical research" %}</p>
+        <h2 class="mt-2.5 text-[clamp(30px,3.6vw,42px)] leading-[1.15] font-extrabold tracking-[-0.03em]">{% translate "Every action is evidence" %}</h2>
+        <p class="mt-4 text-on-dark-soft">{% translate "The platform records every step of a student in the lab, quiz answers and time spent. Comparing control and experimental groups takes one click." %}</p>
+        <ul class="mt-6 grid gap-3 text-primary-100">
+          {% translate "Action log: order errors, safety warnings, time on each step" as r1 %}{% translate "Group comparison: mean, median, n" as r2 %}{% translate "CSV export (UTF-8, ready for Excel)" as r3 %}
+          {% for r in r1|add:"|"|add:r2|add:"|"|add:r3|split:"|" %}<li class="flex gap-2.5"><span class="mt-[3px] text-mint">{% include "components/icons.html#check" with size=20 %}</span>{{ r }}</li>{% endfor %}
+        </ul>
+      </div>
+      <div aria-hidden="true" class="relative flex-[1_1_360px] rounded-card border border-white/[.12] bg-white/[.06] p-6">
+        <p class="mb-4 text-[13px] text-on-dark-soft">{% translate "Average score by stage (example)" %}</p>
+        <div class="grid gap-3.5 text-[13px]">
+          {% for row in "88,78 82,64 74,66 80,68"|split %}{% with v=row|split:"," %}
+            <div class="grid grid-cols-[90px_1fr] items-center gap-3"><span>{% cycle k1 k3 k4 k5 %}</span><span class="grid gap-1"><span class="h-2.5 rounded-full bg-primary-500" style="width: {{ v.0 }}%"></span><span class="h-2.5 rounded-full bg-white/30" style="width: {{ v.1 }}%"></span></span></div>
+          {% endwith %}{% endfor %}
+        </div>
+        <div class="mt-[18px] flex gap-[18px] text-caption font-normal text-on-dark-soft"><span class="inline-flex items-center gap-1.5"><span class="size-2.5 rounded-[3px] bg-primary-500"></span>{% translate "Experimental" %}</span><span class="inline-flex items-center gap-1.5"><span class="size-2.5 rounded-[3px] bg-white/30"></span>{% translate "Control" %}</span></div>
+      </div>
+    </div>
+  </section>
+
+  {# ============ FAQ ============ #}
+  <section id="faq" class="mx-auto max-w-[880px] scroll-mt-6 px-4 pt-28 sm:px-6">
+    <h2 class="landing-h2 text-center">{% translate "Frequently asked questions" %}</h2>
+    <div class="mt-10 grid gap-3">
+      {% partialdef faq_item %}
+        <details class="accordion faq rounded-[20px]"{% if open %} open{% endif %}>
+          <summary class="px-6 py-5 text-[17px] leading-[26px]">{{ q }}<span class="faq-icon grid size-8 shrink-0 place-items-center rounded-sm bg-surface-sunken text-ink transition-transform">{% include "components/icons.html#plus" %}</span></summary>
+          <p class="accordion-body px-6 pb-[22px] text-[15px] leading-[25px]">{{ a }}</p>
+        </details>
+      {% endpartialdef %}
+      {% translate "Who is the platform for?" as q %}{% translate "For students of pedagogical universities training to become chemistry teachers." as a %}{% with open=True %}{% partial faq_item %}{% endwith %}
+      {% translate "How does the virtual lab work?" as q %}{% translate "It opens in the browser, nothing to install. You drag the equipment onto the bench and carry out the commands in order; the reaction is animated and you record the result in the journal." as a %}{% partial faq_item %}
+      {% translate "Why does the next stage not open?" as q %}{% translate "Each stage opens when the previous one is finished. After the theory and the video you need to pass a 3–4 question checkpoint quiz." as a %}{% partial faq_item %}
+      {% translate "Who grades the practice works?" as q %}{% translate "Numbers, formulas and equations are checked automatically. Free text is graded by AI against the criteria and confirmed by the teacher." as a %}{% partial faq_item %}
+      {% translate "How do I sign up as a teacher?" as q %}{% translate "Teacher accounts are created by the platform administrator. Contact the administrator." as a %}{% partial faq_item %}
+    </div>
+  </section>
+
+  {# ============ CTA ============ #}
+  <section class="mx-auto max-w-[1240px] px-4 py-28 sm:px-6">
+    <div class="relative flex flex-wrap items-center justify-between gap-7 overflow-hidden rounded-xl bg-primary-600 p-[clamp(32px,5vw,64px)] text-white">
+      <svg aria-hidden="true" viewBox="0 0 300 200" class="absolute top-0 right-0 h-full opacity-25"><circle cx="250" cy="170" r="24" fill="#fff"/><circle cx="210" cy="120" r="14" fill="#fff"/><circle cx="262" cy="80" r="10" fill="#fff"/><circle cx="226" cy="44" r="7" fill="#fff"/><circle cx="270" cy="18" r="5" fill="#fff"/></svg>
+      <div class="relative max-w-[620px]">
+        <h2 class="text-[clamp(28px,3.4vw,40px)] leading-[1.15] font-extrabold tracking-[-0.03em]">{% translate "Try your first experiment today" %}</h2>
+        <p class="mt-3 text-primary-100">{% translate "Signing up takes a minute. Ask your teacher for your group's join code." %}</p>
+      </div>
+      <a href="{% url 'accounts:signup' %}" class="btn btn-inverse relative h-14 rounded-lg px-7 text-base font-extrabold">{% translate "Sign up as a student" %}</a>
+    </div>
+  </section>
+
+  {# ============ FOOTER ============ #}
+  <footer class="border-t border-line bg-canvas">
+    <div class="mx-auto flex max-w-[1240px] flex-wrap justify-between gap-10 px-4 py-12 sm:px-6">
+      <div class="max-w-[320px]">
+        <span class="flex items-center gap-2.5 text-lg font-bold">{% include "partials/logo.html" %}ChemEduTech</span>
+        <p class="mt-3 text-sm text-ink-soft">{% translate "A virtual lab and an online course for future chemistry teachers. A doctoral dissertation project." %}</p>
+      </div>
+      <div class="flex flex-wrap gap-14 text-sm">
+        <div class="grid content-start gap-2.5"><span class="font-bold">{% translate "Platform" %}</span><a href="#features" class="text-ink-soft hover:text-ink">{% translate "Features" %}</a><a href="#lab" class="text-ink-soft hover:text-ink">{% translate "Lab" %}</a><a href="#faq" class="text-ink-soft hover:text-ink">{% translate "Questions" %}</a></div>
+        <div class="grid content-start gap-2.5"><span class="font-bold">{% translate "Account" %}</span><a href="{% url 'accounts:login' %}" class="text-ink-soft hover:text-ink">{% translate "Log in" %}</a><a href="{% url 'accounts:signup' %}" class="text-ink-soft hover:text-ink">{% translate "Sign up" %}</a></div>
+      </div>
+    </div>
+    <div class="mx-auto max-w-[1240px] px-4 pb-8 text-[13px] text-ink-faint sm:px-6">© {% now "Y" %} ChemEduTech</div>
+  </footer>
+</div>
 {% endblock %}

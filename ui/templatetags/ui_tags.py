@@ -75,6 +75,21 @@ def with_attrs(bound_field, css="input"):
     return bound_field.as_widget(attrs=attrs)
 
 
+@register.simple_tag
+def field_widget(bound_field, css="input", **extra):
+    """{% field_widget form.username "input input-lg" hx_get=url x_model="name" %} — like |with_attrs, plus
+    any attributes (underscores become dashes: hx_get → hx-get, x_model → x-model)."""
+    own = bound_field.field.widget.attrs.get("class", "")
+    attrs = {"class": f"{own} {css}".strip()}
+    if bound_field.errors:
+        attrs["aria-invalid"] = "true"
+        attrs["aria-describedby"] = f"{bound_field.auto_id}_error"
+    elif bound_field.help_text:
+        attrs["aria-describedby"] = f"{bound_field.auto_id}_help"
+    attrs.update({key.replace("_", "-"): value for key, value in extra.items()})
+    return bound_field.as_widget(attrs=attrs)
+
+
 @register.filter
 def widget_type(bound_field):
     """input_type of the widget ("text", "checkbox", "select", …) for component branching."""

@@ -1,22 +1,20 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% comment %}Public pages (landing, catalogue, certificate verification): top bar + centred content.{% endcomment %}
+{% comment %}Public pages (certificate verification, catalogue): white top bar + centred content up to 1240px. The landing has its own hero navbar.{% endcomment %}
 {% block body %}
-<header class="border-b border-line bg-surface">
-  <div class="mx-auto flex max-w-[1200px] flex-wrap items-center gap-4 px-4 py-3 sm:px-6">
-    <a href="{% url 'core:home' %}" class="flex items-center gap-2.5 text-h3 font-bold">
-      {% include "partials/logo.html" %}<span>ChemEduTech</span>
-    </a>
+<header class="sticky top-0 z-40 border-b border-line bg-white/90 backdrop-blur-md">
+  <div class="mx-auto flex h-[72px] max-w-[1240px] items-center gap-4 px-4 sm:px-6">
+    <a href="{% url 'core:home' %}" class="flex items-center gap-2.5 text-lg font-extrabold text-ink">{% include "partials/logo.html" with size=32 %}ChemEduTech</a>
     <nav class="ml-auto flex items-center gap-2" aria-label="{% translate 'Account' %}">
-      {% include "partials/lang_switch.html" %}
+      {% include "partials/lang_menu.html" %}
       {% if user.is_authenticated %}
-        <a class="btn btn-primary btn-sm" href="{% url 'core:home' %}">{% translate "My cabinet" %}</a>
+        <a class="btn btn-primary btn-sm h-[42px]" href="{% url 'core:home' %}">{% translate "My cabinet" %}</a>
       {% else %}
-        <a class="btn btn-ghost btn-sm" href="{% url 'accounts:login' %}">{% translate "Log in" %}</a>
-        <a class="btn btn-primary btn-sm" href="{% url 'accounts:signup' %}">{% translate "Sign up" %}</a>
+        <a class="btn btn-ghost btn-sm h-[42px] max-sm:hidden" href="{% url 'accounts:login' %}">{% translate "Log in" %}</a>
+        <a class="btn btn-primary btn-sm h-[42px]" href="{% url 'accounts:signup' %}">{% translate "Sign up" %}</a>
       {% endif %}
     </nav>
   </div>
 </header>
-<main class="mx-auto max-w-[1200px] px-4 sm:px-6">{% block content %}{% endblock %}</main>
+<main class="mx-auto max-w-[1240px] px-4 py-10 sm:px-6">{% block content %}{% endblock %}</main>
 {% endblock %}

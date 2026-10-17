@@ -1247,6 +1247,39 @@
     background: var(--color-stage-test);
   }
 
+  /* ---- Landing (core/home.html) --------------------------------------- */
+  .landing-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    color: var(--color-on-dark-soft);
+    font-size: 14px;
+    font-weight: 500;
+    transition:
+      background-color 0.15s,
+      color 0.15s;
+  }
+  .landing-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-white);
+  }
+  .landing-h2 {
+    margin-top: 10px;
+    font-size: clamp(32px, 4vw, 46px);
+    line-height: 1.12;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+  .exp-tab[aria-selected="true"] > span {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  .faq[open] .faq-icon {
+    transform: rotate(45deg);
+    background: var(--color-primary-600) !important;
+    color: var(--color-white) !important;
+  }
+
   /* ---- Theory reading text (CKEditor output) --------------------------- */
   .prose-theory {
     max-width: 72ch;
@@ -1604,6 +1637,45 @@
 .float {
   animation: float 6s ease-in-out infinite;
 }
+.float-2 {
+  animation-duration: 7s;
+  animation-delay: 1.2s;
+}
+.float-3 {
+  animation-duration: 5.5s;
+  animation-delay: 0.6s;
+}
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.rise {
+  animation: rise-in 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.rise-2 {
+  animation-delay: 0.15s;
+}
+.rise-3 {
+  animation-delay: 0.3s;
+}
+@keyframes glow {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+.glow {
+  animation: glow 5s ease-in-out infinite;
+}
 .wave {
   animation: wave 4s linear infinite;
 }
@@ -1618,6 +1690,8 @@
   .shimmer,
   .shake,
   .float,
+  .rise,
+  .glow,
   .wave,
   .bar-grow,
   .menu,

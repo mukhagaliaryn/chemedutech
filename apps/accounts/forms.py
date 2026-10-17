@@ -82,6 +82,8 @@ class SignUpForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields["username"].widget.attrs.pop("autofocus", None)  # the wizard starts with the first name
+        self.fields["first_name"].widget.attrs["autofocus"] = True
         self.fields["university"].queryset = active_universities()
         self._narrow_cascade()
 

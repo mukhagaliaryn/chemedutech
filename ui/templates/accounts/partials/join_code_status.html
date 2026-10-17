@@ -1,0 +1,10 @@
+{% load i18n %}{# HTMX answer for the group code field (signup step 2). #}<div id="join-code-status" aria-live="polite">
+{% if group %}
+  <div class="alert alert-success max-w-[520px]">
+    <span class="alert-icon">{% include "components/icons.html#check" with size=18 %}</span>
+    <span class="self-center"><b>{{ group.name }}</b> · {{ group.department.name }}{% if group.department.faculty %} · {{ group.department.faculty.university.name }}{% endif %}</span>
+  </div>
+{% elif code %}
+  <p class="error-text">{% translate "No active group has this code. Check it with your teacher." %}</p>
+{% endif %}
+</div>
