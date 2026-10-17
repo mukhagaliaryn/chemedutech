@@ -593,6 +593,8 @@ def lab_run(request, course_slug, topic_number, stage_pk, experiment_key):
         # the next experiment opens once this analysis is sent, which is when the runner shows the link
         "next": reverse("student:lab_run", args=[*args, following["spec"].key]) if following else "",
     }
+    if not place.preview:
+        urls["ping"] = learning.stage_url(stage, "student:ping")  # time on the lab → StudyDay
     return lab_page(
         request, lab=lab, experiment=experiment, attempt=attempt, urls=urls, nav=nav, topic=place.topic,
         back_url=learning.stage_url(stage),

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ChemEduTech\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 12:19+0500\n"
+"POT-Creation-Date: 2026-10-17 12:28+0500\n"
 "PO-Revision-Date: 2026-10-16 21:00+0500\n"
 "Last-Translator: ChemEduTech\n"
 "Language-Team: ChemEduTech\n"
@@ -469,7 +469,9 @@ msgstr "әр жауапты бірден тексеру"
 msgid ""
 "The student checks every question as they go and sees the correct answer and "
 "the explanation; a checked answer cannot be changed. For checkpoint quizzes."
-msgstr "Студент әр сұрақты бірден тексеріп, дұрыс жауап пен түсіндірмені көреді; тексерілген жауап өзгертілмейді. Бекіту тесттеріне арналған."
+msgstr ""
+"Студент әр сұрақты бірден тексеріп, дұрыс жауап пен түсіндірмені көреді; "
+"тексерілген жауап өзгертілмейді. Бекіту тесттеріне арналған."
 
 #: apps/assessments/models/quiz.py:56
 msgid "quizzes"
@@ -1178,7 +1180,7 @@ msgstr "Теория"
 msgid "Video lesson"
 msgstr "Видеосабақ"
 
-#: apps/courses/models/structure.py:69 ui/templates/labs/run.html:22
+#: apps/courses/models/structure.py:69 ui/templates/labs/run.html:29
 #: ui/views.py:12
 msgid "Lab work"
 msgstr "Зертханалық жұмыс"
@@ -2561,7 +2563,7 @@ msgstr "Ғылыми түсіндірме"
 msgid "Measurements"
 msgstr "Өлшемдер"
 
-#: apps/labs/views.py:58 ui/templates/labs/run.html:46
+#: apps/labs/views.py:58 ui/templates/labs/run.html:50
 #: ui/templates/student/stages/test.html:8 ui/templates/teacher/lab_log.html:33
 msgid "Time"
 msgstr "Уақыт"
@@ -2634,7 +2636,7 @@ msgstr "Жұмсалған уақыт"
 msgid "Analysis: correct answers"
 msgstr "Талдау: дұрыс жауаптар"
 
-#: apps/labs/views.py:76 ui/templates/labs/run.html:17
+#: apps/labs/views.py:76 ui/templates/labs/run.html:23
 #: ui/templates/layouts/learn.html:14
 msgid "Back to the topic"
 msgstr "Тақырыпқа оралу"
@@ -2643,7 +2645,7 @@ msgstr "Тақырыпқа оралу"
 msgid "Next experiment"
 msgstr "Келесі тәжірибе"
 
-#: apps/labs/views.py:78 ui/templates/labs/run.html:48
+#: apps/labs/views.py:78 ui/templates/labs/run.html:54
 msgid "Start again"
 msgstr "Қайта бастау"
 
@@ -3456,7 +3458,7 @@ msgstr "оқу күндері"
 
 #: apps/progress/models/progress.py:15 apps/progress/models/progress.py:70
 #: apps/student/cabinet.py:82 apps/student/learning.py:95
-#: ui/templates/components/stage_stepper.html:23
+#: ui/templates/components/stage_stepper.html:23 ui/templates/labs/run.html:202
 #: ui/templates/student/course_map.html:40
 #: ui/templates/student/course_map.html:81
 #: ui/templates/student/course_map.html:91 ui/templates/student/results.html:92
@@ -3784,8 +3786,8 @@ msgid_plural "%(a)s / %(b)s experiments"
 msgstr[0] "%(a)s / %(b)s тәжірибе"
 msgstr[1] "%(a)s / %(b)s тәжірибе"
 
-#: apps/student/cabinet.py:95 ui/templates/student/results.html:92
-#: ui/templates/student/topic.html:43
+#: apps/student/cabinet.py:95 ui/templates/labs/run.html:202
+#: ui/templates/student/results.html:92 ui/templates/student/topic.html:43
 #: ui/templates/teacher/content/courses.html:21
 #: ui/templates/teacher/dashboard.html:61 ui/templates/teacher/grading.html:44
 #: ui/templates/teacher/partials/groups_table.html:25
@@ -3869,15 +3871,15 @@ msgstr ""
 "Тәжірибелер бірінен соң бірі ашылады: алдыңғысын аяқтап, оның талдауын "
 "жіберіңіз."
 
-#: apps/student/views.py:637
+#: apps/student/views.py:639
 msgid "Finish the material first — the test opens after it."
 msgstr "Алдымен материалды аяқтаңыз — тест содан кейін ашылады."
 
-#: apps/student/views.py:758 ui/templates/student/stage.html:50
+#: apps/student/views.py:760 ui/templates/student/stage.html:50
 msgid "Go to the next stage"
 msgstr "Келесі кезеңге өту"
 
-#: apps/student/views.py:760 ui/templates/teacher/content/item.html:58
+#: apps/student/views.py:762 ui/templates/teacher/content/item.html:58
 msgid "Back to the stage"
 msgstr "Кезеңге оралу"
 
@@ -3947,7 +3949,7 @@ msgid "Kind"
 msgstr "Түрі"
 
 #: apps/teacher/content_forms.py:107 ui/templates/core/home.html:222
-#: ui/templates/labs/run.html:29
+#: ui/templates/labs/run.html:34
 msgid "Experiments"
 msgstr "Тәжірибелер"
 
@@ -5306,7 +5308,7 @@ msgstr "Жіберу"
 msgid "No comments yet."
 msgstr "Әзірге пікір жоқ."
 
-#: ui/templates/labs/run.html:22 ui/templates/layouts/learn.html:23
+#: ui/templates/labs/run.html:29 ui/templates/layouts/learn.html:23
 #: ui/templates/research/analytics.html:13
 #: ui/templates/research/analytics.html:19 ui/templates/student/locked.html:9
 #: ui/templates/student/topic.html:10 ui/templates/teacher/student.html:56
@@ -5315,15 +5317,28 @@ msgstr "Әзірге пікір жоқ."
 msgid "Topic %(n)s"
 msgstr "%(n)s-тақырып"
 
-#: ui/templates/labs/run.html:25
+#: ui/templates/labs/run.html:43
+#: ui/templates/student/partials/stage_tile.html:2
+msgid "locked"
+msgstr "жабық"
+
+#: ui/templates/labs/run.html:61
 #, python-format
 msgid "Experiment %(n)s"
 msgstr "%(n)s-тәжірибе"
 
-#: ui/templates/labs/run.html:37
-#: ui/templates/student/partials/stage_tile.html:2
-msgid "locked"
-msgstr "жабық"
+#: ui/templates/labs/run.html:66 ui/templates/teacher/lab_log.html:34
+msgid "Step"
+msgstr "Қадам"
+
+#: ui/templates/labs/run.html:69 ui/templates/research/dashboard.html:86
+#: ui/templates/teacher/student.html:111
+msgid "Errors"
+msgstr "Қателер"
+
+#: ui/templates/labs/run.html:104
+msgid "Drag an item to the bench or press «+»."
+msgstr "Құралды үстелге сүйреп апарыңыз немесе «+» басыңыз."
 
 #: ui/templates/layouts/auth.html:18
 msgid "About ChemEduTech"
@@ -5841,11 +5856,6 @@ msgstr "Соңғы талпыныстар"
 msgid "Status"
 msgstr "Күйі"
 
-#: ui/templates/research/dashboard.html:86
-#: ui/templates/teacher/student.html:111
-msgid "Errors"
-msgstr "Қателер"
-
 #: ui/templates/student/certificates.html:8
 msgid ""
 "A certificate is issued automatically when the course is completed with a "
@@ -6334,7 +6344,8 @@ msgstr "Орны"
 msgid ""
 "This answer is graded by AI against the author's criteria and confirmed by "
 "the teacher."
-msgstr "Бұл жауапты AI автордың критерийлері бойынша бағалайды, мұғалім растайды."
+msgstr ""
+"Бұл жауапты AI автордың критерийлері бойынша бағалайды, мұғалім растайды."
 
 #: ui/templates/student/partials/practice_field.html:112
 msgid "AI feedback:"
@@ -6366,7 +6377,9 @@ msgstr "Нәтиже"
 msgid ""
 "After you send the answers, the points and a comment for every field appear "
 "here."
-msgstr "Жауаптарды жібергеннен кейін әр өріс бойынша ұпай мен түсініктеме осында шығады."
+msgstr ""
+"Жауаптарды жібергеннен кейін әр өріс бойынша ұпай мен түсініктеме осында "
+"шығады."
 
 #: ui/templates/student/partials/practice_result.html:7
 msgid "Being graded…"
@@ -6471,8 +6484,10 @@ msgid ""
 "Look through the material again and retake the test. %(n)s attempt left."
 msgid_plural ""
 "Look through the material again and retake the test. %(n)s attempts left."
-msgstr[0] "Материалды қайта қарап, тестті қайта тапсырыңыз. Қалған талпыныс: %(n)s."
-msgstr[1] "Материалды қайта қарап, тестті қайта тапсырыңыз. Қалған талпыныс: %(n)s."
+msgstr[0] ""
+"Материалды қайта қарап, тестті қайта тапсырыңыз. Қалған талпыныс: %(n)s."
+msgstr[1] ""
+"Материалды қайта қарап, тестті қайта тапсырыңыз. Қалған талпыныс: %(n)s."
 
 #: ui/templates/student/partials/quiz_panel.html:87
 msgid "No attempts are left — your teacher will look at this stage."
@@ -7674,10 +7689,6 @@ msgstr "Қате таңдаулар"
 #: ui/templates/teacher/lab_log.html:34
 msgid "Event"
 msgstr "Оқиға"
-
-#: ui/templates/teacher/lab_log.html:34
-msgid "Step"
-msgstr "Қадам"
 
 #: ui/templates/teacher/lab_log.html:34
 msgid "Details"

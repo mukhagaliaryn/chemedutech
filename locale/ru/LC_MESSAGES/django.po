@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ChemEduTech\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 12:19+0500\n"
+"POT-Creation-Date: 2026-10-17 12:28+0500\n"
 "PO-Revision-Date: 2026-10-16 21:00+0500\n"
 "Last-Translator: ChemEduTech\n"
 "Language-Team: ChemEduTech\n"
@@ -472,7 +472,9 @@ msgstr "проверять каждый ответ сразу"
 msgid ""
 "The student checks every question as they go and sees the correct answer and "
 "the explanation; a checked answer cannot be changed. For checkpoint quizzes."
-msgstr "Студент проверяет каждый вопрос сразу и видит правильный ответ с объяснением; проверенный ответ изменить нельзя. Для закрепляющих тестов."
+msgstr ""
+"Студент проверяет каждый вопрос сразу и видит правильный ответ с "
+"объяснением; проверенный ответ изменить нельзя. Для закрепляющих тестов."
 
 #: apps/assessments/models/quiz.py:56
 msgid "quizzes"
@@ -1181,7 +1183,7 @@ msgstr "Теория"
 msgid "Video lesson"
 msgstr "Видеоурок"
 
-#: apps/courses/models/structure.py:69 ui/templates/labs/run.html:22
+#: apps/courses/models/structure.py:69 ui/templates/labs/run.html:29
 #: ui/views.py:12
 msgid "Lab work"
 msgstr "Лабораторная работа"
@@ -2562,7 +2564,7 @@ msgstr "Научное объяснение"
 msgid "Measurements"
 msgstr "Измерения"
 
-#: apps/labs/views.py:58 ui/templates/labs/run.html:46
+#: apps/labs/views.py:58 ui/templates/labs/run.html:50
 #: ui/templates/student/stages/test.html:8 ui/templates/teacher/lab_log.html:33
 msgid "Time"
 msgstr "Время"
@@ -2635,7 +2637,7 @@ msgstr "Затрачено времени"
 msgid "Analysis: correct answers"
 msgstr "Анализ: верные ответы"
 
-#: apps/labs/views.py:76 ui/templates/labs/run.html:17
+#: apps/labs/views.py:76 ui/templates/labs/run.html:23
 #: ui/templates/layouts/learn.html:14
 msgid "Back to the topic"
 msgstr "Вернуться к теме"
@@ -2644,7 +2646,7 @@ msgstr "Вернуться к теме"
 msgid "Next experiment"
 msgstr "Следующий опыт"
 
-#: apps/labs/views.py:78 ui/templates/labs/run.html:48
+#: apps/labs/views.py:78 ui/templates/labs/run.html:54
 msgid "Start again"
 msgstr "Начать заново"
 
@@ -3460,7 +3462,7 @@ msgstr "учебные дни"
 
 #: apps/progress/models/progress.py:15 apps/progress/models/progress.py:70
 #: apps/student/cabinet.py:82 apps/student/learning.py:95
-#: ui/templates/components/stage_stepper.html:23
+#: ui/templates/components/stage_stepper.html:23 ui/templates/labs/run.html:202
 #: ui/templates/student/course_map.html:40
 #: ui/templates/student/course_map.html:81
 #: ui/templates/student/course_map.html:91 ui/templates/student/results.html:92
@@ -3792,8 +3794,8 @@ msgstr[1] "%(a)s / %(b)s опыта"
 msgstr[2] "%(a)s / %(b)s опытов"
 msgstr[3] "%(a)s / %(b)s опытов"
 
-#: apps/student/cabinet.py:95 ui/templates/student/results.html:92
-#: ui/templates/student/topic.html:43
+#: apps/student/cabinet.py:95 ui/templates/labs/run.html:202
+#: ui/templates/student/results.html:92 ui/templates/student/topic.html:43
 #: ui/templates/teacher/content/courses.html:21
 #: ui/templates/teacher/dashboard.html:61 ui/templates/teacher/grading.html:44
 #: ui/templates/teacher/partials/groups_table.html:25
@@ -3880,15 +3882,15 @@ msgid ""
 msgstr ""
 "Опыты открываются по очереди: завершите предыдущий и отправьте его анализ."
 
-#: apps/student/views.py:637
+#: apps/student/views.py:639
 msgid "Finish the material first — the test opens after it."
 msgstr "Сначала завершите материал — тест откроется после него."
 
-#: apps/student/views.py:758 ui/templates/student/stage.html:50
+#: apps/student/views.py:760 ui/templates/student/stage.html:50
 msgid "Go to the next stage"
 msgstr "Перейти к следующему этапу"
 
-#: apps/student/views.py:760 ui/templates/teacher/content/item.html:58
+#: apps/student/views.py:762 ui/templates/teacher/content/item.html:58
 msgid "Back to the stage"
 msgstr "Вернуться к этапу"
 
@@ -3958,7 +3960,7 @@ msgid "Kind"
 msgstr "Тип"
 
 #: apps/teacher/content_forms.py:107 ui/templates/core/home.html:222
-#: ui/templates/labs/run.html:29
+#: ui/templates/labs/run.html:34
 msgid "Experiments"
 msgstr "Опыты"
 
@@ -5343,7 +5345,7 @@ msgstr "Отправить"
 msgid "No comments yet."
 msgstr "Комментариев пока нет."
 
-#: ui/templates/labs/run.html:22 ui/templates/layouts/learn.html:23
+#: ui/templates/labs/run.html:29 ui/templates/layouts/learn.html:23
 #: ui/templates/research/analytics.html:13
 #: ui/templates/research/analytics.html:19 ui/templates/student/locked.html:9
 #: ui/templates/student/topic.html:10 ui/templates/teacher/student.html:56
@@ -5352,15 +5354,28 @@ msgstr "Комментариев пока нет."
 msgid "Topic %(n)s"
 msgstr "Тема %(n)s"
 
-#: ui/templates/labs/run.html:25
+#: ui/templates/labs/run.html:43
+#: ui/templates/student/partials/stage_tile.html:2
+msgid "locked"
+msgstr "закрыт"
+
+#: ui/templates/labs/run.html:61
 #, python-format
 msgid "Experiment %(n)s"
 msgstr "Опыт %(n)s"
 
-#: ui/templates/labs/run.html:37
-#: ui/templates/student/partials/stage_tile.html:2
-msgid "locked"
-msgstr "закрыт"
+#: ui/templates/labs/run.html:66 ui/templates/teacher/lab_log.html:34
+msgid "Step"
+msgstr "Шаг"
+
+#: ui/templates/labs/run.html:69 ui/templates/research/dashboard.html:86
+#: ui/templates/teacher/student.html:111
+msgid "Errors"
+msgstr "Ошибки"
+
+#: ui/templates/labs/run.html:104
+msgid "Drag an item to the bench or press «+»."
+msgstr "Перетащите предмет на стол или нажмите «+»."
 
 #: ui/templates/layouts/auth.html:18
 msgid "About ChemEduTech"
@@ -5884,11 +5899,6 @@ msgstr "Последние попытки"
 msgid "Status"
 msgstr "Статус"
 
-#: ui/templates/research/dashboard.html:86
-#: ui/templates/teacher/student.html:111
-msgid "Errors"
-msgstr "Ошибки"
-
 #: ui/templates/student/certificates.html:8
 msgid ""
 "A certificate is issued automatically when the course is completed with a "
@@ -6362,7 +6372,8 @@ msgstr "Единица"
 
 #: ui/templates/student/partials/practice_field.html:36
 msgid "A comma or a dot may be used; units are converted automatically."
-msgstr "Можно писать через запятую или точку; единицы переводятся автоматически."
+msgstr ""
+"Можно писать через запятую или точку; единицы переводятся автоматически."
 
 #: ui/templates/student/partials/practice_field.html:43
 msgid "Chemistry keyboard"
@@ -6391,7 +6402,8 @@ msgstr "Место"
 msgid ""
 "This answer is graded by AI against the author's criteria and confirmed by "
 "the teacher."
-msgstr "Этот ответ AI оценивает по критериям автора, преподаватель подтверждает."
+msgstr ""
+"Этот ответ AI оценивает по критериям автора, преподаватель подтверждает."
 
 #: ui/templates/student/partials/practice_field.html:112
 msgid "AI feedback:"
@@ -6422,7 +6434,8 @@ msgstr "Результат"
 msgid ""
 "After you send the answers, the points and a comment for every field appear "
 "here."
-msgstr "После отправки ответов здесь появятся баллы и комментарий по каждому полю."
+msgstr ""
+"После отправки ответов здесь появятся баллы и комментарий по каждому полю."
 
 #: ui/templates/student/partials/practice_result.html:7
 msgid "Being graded…"
@@ -7745,10 +7758,6 @@ msgstr "Неверные выборы"
 #: ui/templates/teacher/lab_log.html:34
 msgid "Event"
 msgstr "Событие"
-
-#: ui/templates/teacher/lab_log.html:34
-msgid "Step"
-msgstr "Шаг"
 
 #: ui/templates/teacher/lab_log.html:34
 msgid "Details"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 12:19+0500\n"
+"POT-Creation-Date: 2026-10-17 12:28+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1168,7 +1168,7 @@ msgstr ""
 msgid "Video lesson"
 msgstr ""
 
-#: apps/courses/models/structure.py:69 ui/templates/labs/run.html:22
+#: apps/courses/models/structure.py:69 ui/templates/labs/run.html:29
 #: ui/views.py:12
 msgid "Lab work"
 msgstr ""
@@ -2494,7 +2494,7 @@ msgstr ""
 msgid "Measurements"
 msgstr ""
 
-#: apps/labs/views.py:58 ui/templates/labs/run.html:46
+#: apps/labs/views.py:58 ui/templates/labs/run.html:50
 #: ui/templates/student/stages/test.html:8 ui/templates/teacher/lab_log.html:33
 msgid "Time"
 msgstr ""
@@ -2567,7 +2567,7 @@ msgstr ""
 msgid "Analysis: correct answers"
 msgstr ""
 
-#: apps/labs/views.py:76 ui/templates/labs/run.html:17
+#: apps/labs/views.py:76 ui/templates/labs/run.html:23
 #: ui/templates/layouts/learn.html:14
 msgid "Back to the topic"
 msgstr ""
@@ -2576,7 +2576,7 @@ msgstr ""
 msgid "Next experiment"
 msgstr ""
 
-#: apps/labs/views.py:78 ui/templates/labs/run.html:48
+#: apps/labs/views.py:78 ui/templates/labs/run.html:54
 msgid "Start again"
 msgstr ""
 
@@ -3384,7 +3384,7 @@ msgstr ""
 
 #: apps/progress/models/progress.py:15 apps/progress/models/progress.py:70
 #: apps/student/cabinet.py:82 apps/student/learning.py:95
-#: ui/templates/components/stage_stepper.html:23
+#: ui/templates/components/stage_stepper.html:23 ui/templates/labs/run.html:202
 #: ui/templates/student/course_map.html:40
 #: ui/templates/student/course_map.html:81
 #: ui/templates/student/course_map.html:91 ui/templates/student/results.html:92
@@ -3712,8 +3712,8 @@ msgid_plural "%(a)s / %(b)s experiments"
 msgstr[0] ""
 msgstr[1] ""
 
-#: apps/student/cabinet.py:95 ui/templates/student/results.html:92
-#: ui/templates/student/topic.html:43
+#: apps/student/cabinet.py:95 ui/templates/labs/run.html:202
+#: ui/templates/student/results.html:92 ui/templates/student/topic.html:43
 #: ui/templates/teacher/content/courses.html:21
 #: ui/templates/teacher/dashboard.html:61 ui/templates/teacher/grading.html:44
 #: ui/templates/teacher/partials/groups_table.html:25
@@ -3795,15 +3795,15 @@ msgid ""
 "analysis."
 msgstr ""
 
-#: apps/student/views.py:637
+#: apps/student/views.py:639
 msgid "Finish the material first — the test opens after it."
 msgstr ""
 
-#: apps/student/views.py:758 ui/templates/student/stage.html:50
+#: apps/student/views.py:760 ui/templates/student/stage.html:50
 msgid "Go to the next stage"
 msgstr ""
 
-#: apps/student/views.py:760 ui/templates/teacher/content/item.html:58
+#: apps/student/views.py:762 ui/templates/teacher/content/item.html:58
 msgid "Back to the stage"
 msgstr ""
 
@@ -3872,7 +3872,7 @@ msgid "Kind"
 msgstr ""
 
 #: apps/teacher/content_forms.py:107 ui/templates/core/home.html:222
-#: ui/templates/labs/run.html:29
+#: ui/templates/labs/run.html:34
 msgid "Experiments"
 msgstr ""
 
@@ -5166,7 +5166,7 @@ msgstr ""
 msgid "No comments yet."
 msgstr ""
 
-#: ui/templates/labs/run.html:22 ui/templates/layouts/learn.html:23
+#: ui/templates/labs/run.html:29 ui/templates/layouts/learn.html:23
 #: ui/templates/research/analytics.html:13
 #: ui/templates/research/analytics.html:19 ui/templates/student/locked.html:9
 #: ui/templates/student/topic.html:10 ui/templates/teacher/student.html:56
@@ -5175,14 +5175,27 @@ msgstr ""
 msgid "Topic %(n)s"
 msgstr ""
 
-#: ui/templates/labs/run.html:25
+#: ui/templates/labs/run.html:43
+#: ui/templates/student/partials/stage_tile.html:2
+msgid "locked"
+msgstr ""
+
+#: ui/templates/labs/run.html:61
 #, python-format
 msgid "Experiment %(n)s"
 msgstr ""
 
-#: ui/templates/labs/run.html:37
-#: ui/templates/student/partials/stage_tile.html:2
-msgid "locked"
+#: ui/templates/labs/run.html:66 ui/templates/teacher/lab_log.html:34
+msgid "Step"
+msgstr ""
+
+#: ui/templates/labs/run.html:69 ui/templates/research/dashboard.html:86
+#: ui/templates/teacher/student.html:111
+msgid "Errors"
+msgstr ""
+
+#: ui/templates/labs/run.html:104
+msgid "Drag an item to the bench or press «+»."
 msgstr ""
 
 #: ui/templates/layouts/auth.html:18
@@ -5683,11 +5696,6 @@ msgstr ""
 #: ui/templates/teacher/grading.html:10 ui/templates/teacher/student.html:67
 #: ui/templates/teacher/student.html:109 ui/templates/teacher/student.html:159
 msgid "Status"
-msgstr ""
-
-#: ui/templates/research/dashboard.html:86
-#: ui/templates/teacher/student.html:111
-msgid "Errors"
 msgstr ""
 
 #: ui/templates/student/certificates.html:8
@@ -7454,10 +7462,6 @@ msgstr ""
 
 #: ui/templates/teacher/lab_log.html:34
 msgid "Event"
-msgstr ""
-
-#: ui/templates/teacher/lab_log.html:34
-msgid "Step"
 msgstr ""
 
 #: ui/templates/teacher/lab_log.html:34

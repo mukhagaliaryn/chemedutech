@@ -104,6 +104,8 @@ class LabStageTests(TestCase):
         )
         self.assertTrue(r.context["config"]["urls"]["analysis"].startswith(self.url("student:lab_run", "hydrogen")))
         self.assertEqual(r.context["config"]["urls"]["topic"], self.url("student:stage"))
+        self.assertEqual(r.context["config"]["urls"]["ping"], self.url("student:ping"))  # time on the lab → StudyDay
+        self.assertContains(r, "stagePing(")
 
     def test_experiments_open_one_after_another(self):
         rows = progress.lab_experiments(self.enrollment, self.lab_stage)
