@@ -1,4 +1,4 @@
-# ChemEduTech — Ubuntu 24.04 серверіне деплой
+# ChemEduTech — Ubuntu 24.04 серверіне деплой (22.04 — §1-дегі ескерту)
 
 Docker-сіз: **PostgreSQL + Gunicorn (systemd) + Nginx + Let's Encrypt**, қосымша **db_worker** (AI бағалау,
 сертификат PDF). Құрылымы DigitalOcean-ның «How To Set Up Django with Postgres, Nginx, and Gunicorn on Ubuntu»
@@ -37,6 +37,24 @@ apt install -y python3-venv python3-dev build-essential git curl \
 - `libpango…`, `libharfbuzz-subset0` — WeasyPrint (сертификат PDF); `fonts-dejavu-core` — PDF-тегі қазақ әріптері.
 - `gettext` — тек аудармаларды серверде қайта жинау керек болса (`.mo` файлдары репода бар).
 
+> **Ubuntu 22.04 болса** (`lsb_release -a`), жоғарыдағы команда екі жерде сәйкес келмейді:
+>
+> - `libharfbuzz-subset0` пакеті жоқ (`E: Unable to locate package libharfbuzz-subset0`) — 22.04-те ол
+>   `libharfbuzz0b` ішінде. Тізімде `libharfbuzz-subset0` орнына `libharfbuzz0b` жазыңыз.
+> - Әдепкі Python — 3.10, ал Django 6 **Python ≥ 3.12** талап етеді. Жүйелік `python3`-ке тимей, 3.12-ні
+>   deadsnakes PPA-дан қатар орнатыңыз:
+>
+>   ```bash
+>   apt install -y software-properties-common
+>   add-apt-repository -y ppa:deadsnakes/ppa
+>   apt update
+>   apt install -y python3.12 python3.12-venv python3.12-dev
+>   ```
+>
+>   3-бөлімде виртуалды ортаны `python3 -m venv env` емес, **`python3.12 -m venv env`** арқылы жасаңыз.
+>   Ішінде `env/bin/python --version` 3.12 көрсетсе, қалған қадамдар өзгеріссіз.
+> - PostgreSQL 14 орнатылады — Django 6 үшін жеткілікті (ең төменгісі 14).
+
 ## 2. PostgreSQL — жеке база мен пайдаланушы
 
 Басқа сайттардың базаларына тимейді:
@@ -61,7 +79,7 @@ ALTER ROLE chemedutech SET timezone TO 'UTC';
 cd /var/www
 git clone https://github.com/mukhagaliaryn/chemedutech.git
 cd /var/www/chemedutech
-python3 -m venv env
+python3 -m venv env                 # Ubuntu 22.04: python3.12 -m venv env (1-бөлімдегі ескерту)
 env/bin/pip install --upgrade pip
 env/bin/pip install -r requirements.txt
 ```
@@ -228,11 +246,14 @@ systemctl status chemedutech-worker
 
 Бар сайттардың конфигтеріне және `default`-қа **тимейміз**, тек жаңа файл қосамыз.
 
+Алдымен тек HTTP (80) блогы — certbot сертификат алу үшін осы блокты табуы керек. HTTPS пен www → негізгі
+домен бағыттауы бар соңғы нұсқасы — §10.
+
 `nano /etc/nginx/sites-available/chemedutech`
 ```nginx
 server {
     listen 80;
-    server_name chem.example.kz;
+    server_name chem.example.kz www.chem.example.kz;
 
     client_max_body_size 200M;          # видео және практика файлдарын жүктеу
 
@@ -275,11 +296,113 @@ nginx -t && systemctl reload nginx          # reload: басқа сайттар 
 
 ```bash
 apt install -y certbot python3-certbot-nginx     # бар болса өткізіп жіберіледі
-certbot --nginx -d chem.example.kz               # тек осы доменнің блогы өзгереді
+nginx -t && systemctl reload nginx               # §9-дағы блок жүктелген болуы керек
+certbot --nginx -d chem.example.kz -d www.chem.example.kz
 certbot renew --dry-run
 ```
 
-Содан кейін `.env`-те `SITE_URL=https://…`, `DJANGO_CSRF_TRUSTED_ORIGINS=https://…`; уақытша
+> **Бірнеше сайт тұрған серверде certbot SSL-ді `default`-қа жазып қоюы мүмкін.** `default` ішінде
+> `listen 443 ssl default_server` блогы бар болса, certbot кейде жаңа 443-блокты (`# managed by Certbot`,
+> `root /var/www/html`) **`sites-available/default`** файлына қосады. Белгісі: `http://` сайт ашылады, ал
+> `https://` — «Welcome to nginx». Certbot-тан кейін міндетті түрде тексеріңіз (`-R` — `sites-enabled/`
+> ішіндегілер symlink, `-r` оларға кірмейді):
+>
+> ```bash
+> grep -Rn "chem.example.kz" /etc/nginx/sites-enabled/
+> ```
+>
+> Домен тек `sites-enabled/chemedutech` ішінде болуы керек. `default` ішінде шықса:
+> 1. `cp /etc/nginx/sites-available/default /root/default.bak-$(date +%F)`;
+> 2. `default`-тан `server_name chem.example.kz …; # managed by Certbot` жолы бар **бір** `server { … }`
+>    блогын өшіріңіз (`server_name _;` блоктарына тимеңіз). Әзірге reload **жасамаңыз** — әйтпесе 443-те
+>    бұл доменге блок қалмайды;
+> 3. `chemedutech` файлын төмендегі соңғы нұсқамен алмастырып, `nginx -t && systemctl reload nginx`.
+>
+> Сертификат қайта алынбайды — `certbot renew` оны атауы бойынша жаңартады.
+
+### Соңғы конфиг: HTTPS + www → негізгі домен
+
+Certbot-тың өз өзгерістерінің орнына (немесе жоғарыдағы жағдайда) `/etc/nginx/sites-available/chemedutech`
+файлын түгел мынамен алмастырыңыз. `http://…`, `http://www…`, `https://www…` — бәрі `301` арқылы
+`https://chem.example.kz`-ке барады, Django тек негізгі доменді көреді:
+
+```nginx
+# http://chem.example.kz, http://www.chem.example.kz → https://chem.example.kz
+server {
+    listen 80;
+    listen [::]:80;
+    server_name chem.example.kz www.chem.example.kz;
+    return 301 https://chem.example.kz$request_uri;
+}
+
+# https://www.chem.example.kz → https://chem.example.kz
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name www.chem.example.kz;
+
+    ssl_certificate     /etc/letsencrypt/live/chem.example.kz/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/chem.example.kz/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    return 301 https://chem.example.kz$request_uri;
+}
+
+# Негізгі сайт: https://chem.example.kz
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name chem.example.kz;
+
+    ssl_certificate     /etc/letsencrypt/live/chem.example.kz/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/chem.example.kz/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    client_max_body_size 200M;          # видео және практика файлдарын жүктеу
+
+    access_log /var/log/nginx/chemedutech.access.log;
+    error_log  /var/log/nginx/chemedutech.error.log;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+
+    location /static/ {
+        alias /var/www/chemedutech/staticfiles/;
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+    }
+
+    # Сертификат PDF-і тек рұқсатпен: /certificates/<uuid>/pdf/ арқылы (Django береді)
+    location /media/certificates/pdf/ { return 404; }
+
+    location /media/ {
+        alias /var/www/chemedutech/media/;
+    }
+
+    location / {
+        include proxy_params;           # Host, X-Forwarded-For, X-Forwarded-Proto
+        proxy_pass http://unix:/run/chemedutech.sock;
+        proxy_read_timeout 90s;
+    }
+}
+```
+
+- `/etc/letsencrypt/options-ssl-nginx.conf` немесе `ssl-dhparams.pem` жоқ болса (`ls -l` арқылы тексеріңіз),
+  сәйкес жолды екі 443-блоктан да өшіріңіз.
+- Көшіріп қойғанда әр нұсқау бір жолда тұрып, `;`-мен бітуі керек: `nano` ұзын жолды бөліп, `;` түсіп
+  қалса — `[emerg] invalid number of arguments in "alias" directive` (`cat -A` жол соңын көрсетеді).
+
+```bash
+nginx -t && systemctl reload nginx
+curl -sI http://www.chem.example.kz/  | grep -i "^HTTP\|^location"   # 301 → https://chem.example.kz/
+curl -sI https://www.chem.example.kz/ | grep -i "^HTTP\|^location"   # 301 → https://chem.example.kz/
+curl -sI http://chem.example.kz/      | grep -i "^HTTP\|^location"   # 301 → https://chem.example.kz/
+curl -sI https://chem.example.kz/     | grep -i "^HTTP\|^location"   # Django: 302 (логин) немесе 200
+```
+
+Содан кейін `.env`-те `SITE_URL=https://chem.example.kz`, `DJANGO_ALLOWED_HOSTS=chem.example.kz`,
+`DJANGO_CSRF_TRUSTED_ORIGINS=https://chem.example.kz` (www Django-ға жетпейді); уақытша
 `DJANGO_SECURE_SSL_REDIRECT=0` / `DJANGO_SECURE_COOKIES=0` болса — алып тастап, қайта іске қосу:
 
 ```bash
@@ -348,6 +471,9 @@ systemctl restart chemedutech
 |---|---|
 | 502 Bad Gateway | Gunicorn қызметі тоқтаған немесе `/run/chemedutech.sock` жоқ → `journalctl -u chemedutech` |
 | Басқа сайт ашылады | `server_name` дұрыс емес немесе DNS әлі осы серверге қаралмаған |
+| `https://` — «Welcome to nginx», `http://` — дұрыс | certbot 443-блокты `default`-қа жазған: `grep -Rn chem.example.kz /etc/nginx/sites-enabled/` (§10) |
+| `nginx -t`: `invalid number of arguments in "alias"` | көшіргенде жол бөлініп, `;` түсіп қалған: `sed -n '40,46p' … \| cat -A` (§10) |
+| `pip`: `No matching distribution found for Django<6.1,>=6.0` | `env` Python 3.10-пен жасалған: `python3.12 -m venv env` (§1, Ubuntu 22.04) |
 | Статика 404 | `collectstatic` орындалмаған немесе `alias` жолы қате |
 | Файл жүктегенде 500 / Permission denied | `chown -R www-data:www-data /var/www/chemedutech/media` |
 | Қызмет іске қоспайды: `.env` оқылмайды | `chown root:www-data .env && chmod 640 .env` |
