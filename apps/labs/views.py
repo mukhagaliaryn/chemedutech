@@ -1,4 +1,5 @@
 import json
+import random
 
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponseBadRequest, JsonResponse
@@ -130,13 +131,25 @@ def _ui_strings():
     }
 
 
+def shuffled_experiment(experiment, attempt) -> dict:
+    """The experiment for the runner with the options of every choice step, choice journal field and closed
+    analysis question in an order of its own for this attempt (stable on reload): the right answer is not
+    always the first one. The research log records option keys, so the order changes nothing there."""
+    data = experiment.as_json()
+    for group in ("steps", "journal", "questions"):
+        for entry in data[group]:
+            if len(entry.get("options") or []) > 1:
+                random.Random(f"{attempt.pk}:{group}:{entry['key']}").shuffle(entry["options"])
+    return data
+
+
 def lab_page(request, *, lab, experiment, attempt, urls: dict, nav: list[dict], topic=None, back_url=""):
     """Render the simulator. ``urls`` override the API/navigation endpoints the runner (engine.js) calls;
     ``nav`` — [{number, title, url (None = locked), current, done}] for the experiment switcher."""
     config = {
         "attempt": attempt.pk,
         "lab": lab.key,
-        "experiment": experiment.as_json(),
+        "experiment": shuffled_experiment(experiment, attempt),
         "ui": _ui_strings(),
         "urls": {
             "events": reverse("labs:api_events", args=[attempt.pk]),

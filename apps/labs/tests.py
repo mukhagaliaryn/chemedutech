@@ -103,6 +103,22 @@ class AttemptFlowTests(TestCase):
         )
         self.assertEqual(r.json()["checks"], {"eq_a": "species", "eq_b": "unreadable"})
 
+    def test_options_are_shuffled_per_attempt(self):
+        """The right answer is written first in the specs; the runner gets a per-attempt order (stable on reload)."""
+        from apps.labs.views import shuffled_experiment
+
+        exp = get_lab("t02").experiment("displacement")
+        firsts = set()
+        for _i in range(8):
+            attempt = start_attempt(self.user, "t02", exp)
+            record_events(attempt, [{"seq": 1, "t": 0, "type": "start"}, {"seq": 2, "t": 9, "type": "command"}])
+            data = shuffled_experiment(exp, attempt)
+            self.assertEqual(data, shuffled_experiment(exp, attempt))  # the same attempt → the same order
+            question = next(q for q in data["questions"] if q["key"] == "why_cl2")
+            self.assertEqual(sorted(o["key"] for o in question["options"]), ["absent", "liquid", "potential"])
+            firsts.add(question["options"][0]["correct"])
+        self.assertEqual(firsts, {True, False})  # sometimes first, sometimes not
+
     def test_api_is_owner_only(self):
         a = start_attempt(self.user, "t01", self.exp)
         other = User.objects.create_user("s2", password="x")

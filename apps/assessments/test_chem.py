@@ -103,7 +103,7 @@ class FormulaParsingTests(SimpleTestCase):
             "Ca()2": "empty_brackets",
             "2H2O": "leading_coefficient",
             "H0": "zero_count",
-            "H2O!": "unexpected_symbol",
+            "H2$O": "unexpected_symbol",  # two pieces of chemistry: nothing is guessed
             "Fe3++": "bad_charge",
         }
         for text, code in cases.items():
@@ -121,6 +121,23 @@ class FormulaParsingTests(SimpleTestCase):
         self.assertFalse(formulas_equal("Zn2+", "Zn"))
         self.assertFalse(formulas_equal("H2O", "h2o"))
         self.assertFalse(formulas_equal("H2O", ""))
+
+    def test_words_around_the_answer_are_ignored(self):
+        cases = {
+            "Zn + 2HCl -> ZnCl2 + H2. дұрыс жауабы осы": "Zn + 2HCl -> ZnCl2 + H2",
+            "Жауабы: Zn + 2HCl = ZnCl2 + H2↑": "Zn + 2HCl -> ZnCl2 + H2",
+            "«Zn + 2HCl → ZnCl₂ + H₂»": "Zn + 2HCl -> ZnCl2 + H2",
+            "2H2O2 →(MnO2) 2H2O + O2 (катализатор)": "2H2O2 -> 2H2O + O2",
+            "Ag⁺ + Cl⁻ → AgCl↓ (ақ тұнба)": "Ag+ + Cl- -> AgCl",
+            "Жауап: NH4+ + OH- -> NH3 + H2O, аммиак бөлінеді": "NH4+ + OH- -> NH3 + H2O",
+        }
+        for text, expected in cases.items():
+            with self.subTest(text):
+                self.assertTrue(compare_equations(expected, text).same_coefficients)
+        self.assertEqual(parse_formula("ZnCl2 — мырыш хлориді").key, parse_formula("ZnCl2").key)
+        self.assertEqual(parse_formula("Жауабы: ZnCl₂.").key, parse_formula("ZnCl2").key)
+        with self.assertRaises(ChemError):
+            parse_equation("мырыш + тұз қышқылы")  # words only: still no equation
 
     def test_pretty(self):
         self.assertEqual(pretty_formula("CuSO4.5H2O"), "CuSO₄·5H₂O")

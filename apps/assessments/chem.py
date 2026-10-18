@@ -8,6 +8,8 @@
 
 Rules for students' input: Unicode subscripts are digits (₂ = 2), spaces are ignored, letter case
 matters (Co ≠ CO), the arrow may be = -> → ⇌, ↑ ↓ and state marks (g) (aq) (s) (l) are ignored.
+Words around the answer are ignored: «Жауабы: Zn + 2HCl = ZnCl2 + H2.» and «ZnCl2 — мырыш хлориді» read as the
+equation / formula alone (the chemistry is the run of Latin symbols, digits and signs that holds the arrow).
 A charge is written after the formula: Zn2+, OH-, Fe+++, SO4^2-. A single digit before the sign is the
 charge of a one-element ion (Zn2+, Fe3+) or after "]" ([Fe(CN)6]4-) and a count in a polyatomic ion
 (NH4+, H3O+, NO3-); with two digits the last one is the charge (SO42- = SO₄²⁻). Use ^ when in doubt:
@@ -178,8 +180,28 @@ def _normalize(text: str) -> str:
     return str(text or "").translate(_SUBSCRIPTS).translate(_DASHES).strip()
 
 
+# Characters chemistry is written with; anything else (Cyrillic words, «:», «!», quotes …) is commentary.
+_CHEM_RUN = re.compile(r"[A-Za-z0-9\s+\-=<>→⇌⇄⟷⟶↑↓()\[\]{}^·•∙⋅*°.,⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻]+")
+_EDGE_PUNCT = " \t\n.,;"
+_WORDS_IN_BRACKETS = re.compile(r"[(\[][^()\[\]]*[^\x00-\x7f₀-₉⁰-⁹⁺⁻→⇌⇄⟷⟶↑↓·•∙⋅°][^()\[\]]*[)\]]")
+_SPACED_DASH = re.compile(r"\s-\s")  # «ZnCl2 — мырыш хлориді»: a dash between spaces separates words
+
+
+def _strip_prose(s: str, need_arrow: bool) -> str:
+    """The chemistry inside an answer with words around it: the one run with the arrow (an equation) or with a
+    capital letter (a formula), without the full stop or comma that ends a sentence. With two such runs
+    («H2$O») nothing is guessed: the input stays as typed and is reported as unreadable."""
+    if not _CHEM_RUN.fullmatch(s):
+        s = _WORDS_IN_BRACKETS.sub(" ", s)  # «(катализатор)», «(ақ тұнба)»
+        runs = [r for m in _CHEM_RUN.finditer(s) for r in _SPACED_DASH.split(m.group())]
+        runs = [r for r in runs if (_ARROW.search(r) if need_arrow else re.search(r"[A-Z]", r))]
+        if len(runs) == 1:
+            s = runs[0]
+    return s.strip(_EDGE_PUNCT)
+
+
 def parse_formula(text: str) -> Formula:
-    s = _normalize(text)
+    s = _strip_prose(_normalize(text), need_arrow=False)
     if not s:
         raise ChemError("empty")
     body, charge = _split_charge(s)
@@ -307,8 +329,9 @@ def _parse_term(text: str) -> Term:
 
 def parse_equation(text: str) -> Equation:
     s = _normalize(text)
+    s = _STATE.sub(" ", s)  # before the words are cut: state marks may be Kazakh — (г), (ер)
+    s = _strip_prose(s, need_arrow=True)
     s = s.replace("↑", " ").replace("↓", " ")
-    s = _STATE.sub(" ", s)
     arrows = list(_ARROW.finditer(s))
     if not arrows:
         raise ChemError("no_arrow", s)
