@@ -49,9 +49,11 @@ so the tubes are a Django loop over params.tubes.
           {# precipitate settles at the bottom #}
           <rect :x="sc.x({{ i }}) - 20" :y="392 - sc.tubes[{{ i }}].ppt * 34" width="40" :height="sc.tubes[{{ i }}].ppt * 34 + 20"
                 :style="`fill:${sc.tubes[{{ i }}].pptColor}`" x-show="sc.tubes[{{ i }}].ppt > 0"/>
+          <path :d="`M${sc.x({{ i }}) - 20},${392 - sc.tubes[{{ i }}].ppt * 34} h40`" stroke="#9aa8b4" stroke-width="1.6"
+                stroke-dasharray="3 2" x-show="sc.tubes[{{ i }}].ppt > 0"/>
           {% for g in 7|times %}
             <circle :cx="sc.x({{ i }}) - 12 + ({{ g }} * 4.3)" :cy="388 - ({{ g }} % 3) * 5 - sc.tubes[{{ i }}].ppt * 18"
-                    r="2.4" :style="`fill:${sc.tubes[{{ i }}].pptColor}; stroke:#00000022`" x-show="sc.tubes[{{ i }}].ppt > 0.15"/>
+                    r="2.4" :style="`fill:${sc.tubes[{{ i }}].pptColor}; stroke:#7f8d99; stroke-width:.8`" x-show="sc.tubes[{{ i }}].ppt > 0.15"/>
           {% endfor %}
           {# gas bubbles #}
           <g x-show="sc.tubes[{{ i }}].bubbles">

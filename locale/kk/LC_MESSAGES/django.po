@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ChemEduTech\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-18 07:41+0500\n"
+"POT-Creation-Date: 2026-10-18 08:10+0500\n"
 "PO-Revision-Date: 2026-10-16 21:00+0500\n"
 "Last-Translator: ChemEduTech\n"
 "Language-Team: ChemEduTech\n"
@@ -1498,6 +1498,7 @@ msgid "NaOH makes the solution conductive; it is water that is decomposed."
 msgstr "NaOH ерітіндінің электр өткізгіштігін арттырады; ыдырайтын — су."
 
 #: apps/labs/experiments/t01/electrolysis.py:64
+#: apps/labs/experiments/t03/sulfate.py:72
 msgid "Distilled water"
 msgstr "Тазартылған су"
 
@@ -1591,6 +1592,7 @@ msgstr "Тәжірибені аяқтау"
 #: apps/labs/experiments/t02/alkali.py:104
 #: apps/labs/experiments/t02/displacement.py:120
 #: apps/labs/experiments/t02/silver.py:122
+#: apps/labs/experiments/t03/sulfate.py:154
 msgid "The results are saved and the analysis task opens."
 msgstr "Нәтижелер сақталып, талдау тапсырмасы ашылады."
 
@@ -1601,6 +1603,7 @@ msgstr "Нәтижелер сақталып, талдау тапсырмасы �
 #: apps/labs/experiments/t02/alkali.py:105
 #: apps/labs/experiments/t02/displacement.py:121
 #: apps/labs/experiments/t02/silver.py:123
+#: apps/labs/experiments/t03/sulfate.py:155
 msgid "Fill in the lab journal first."
 msgstr "Алдымен зертханалық журналды толтыру керек."
 
@@ -2523,6 +2526,7 @@ msgstr "Зертханалық журналды сақтау"
 
 #: apps/labs/experiments/t02/alkali.py:103
 #: apps/labs/experiments/t02/silver.py:121
+#: apps/labs/experiments/t03/sulfate.py:152
 msgid "Observations and equations are recorded."
 msgstr "Бақылаулар мен теңдеулер тіркелді."
 
@@ -2659,6 +2663,7 @@ msgstr "B пробиркасы, иондық"
 
 #: apps/labs/experiments/t02/displacement.py:42
 #: apps/labs/experiments/t02/silver.py:52
+#: apps/labs/experiments/t03/sulfate.py:67
 msgid "Tube C"
 msgstr "C пробиркасы"
 
@@ -3108,6 +3113,387 @@ msgid ""
 "What would you ask school students to compare in this experiment, and why?"
 msgstr ""
 "Бұл тәжірибеде мектеп оқушыларына нені салыстыруды ұсынуға болады және неге?"
+
+#: apps/labs/experiments/t03/__init__.py:12
+msgid "Sulfur: oxidation of SO₂ and the sulfate test"
+msgstr "Күкірт: SO₂-нің тотығуы және сульфатты анықтау"
+
+#: apps/labs/experiments/t03/sulfate.py:52
+msgid "Oxidation of sulfur(IV) and the qualitative test for sulfate"
+msgstr "Күкірттің тотығуы және сульфат-ионын сапалық анықтау"
+
+#: apps/labs/experiments/t03/sulfate.py:54
+msgid ""
+"Obtain SO₂ from sodium sulfite, oxidise it with hydrogen peroxide to sulfate"
+" (S +4 → +6) and prove the sulfate ion with barium chloride in an acidic "
+"medium, comparing with a control sample."
+msgstr ""
+"Натрий сульфитінен SO₂ алып, оны сутегі пероксидімен сульфатқа дейін "
+"тотықтыру (S +4 → +6) және сульфат-ионын қышқыл ортада барий хлоридімен "
+"бақылау үлгісімен салыстыра отырып дәлелдеу."
+
+#: apps/labs/experiments/t03/sulfate.py:60
+msgid ""
+"SO₂ is sulfur(IV) oxide, an acidic oxide. Hydrogen peroxide oxidises sulfur "
+"from +4 to +6. The sulfate ion is proven by the white BaSO₄ precipitate that"
+" does not dissolve in acid; a sulfite gives no stable precipitate in an "
+"acidic medium, so a control sample is needed."
+msgstr ""
+"SO₂ — күкірт(IV) оксиді, қышқылдық оксид. Сутегі пероксиді күкіртті +4-тен "
+"+6-ға дейін тотықтырады. Сульфат-ионын қышқылда ерімейтін ақ BaSO₄ тұнбасы "
+"дәлелдейді; сульфит қышқыл ортада тұрақты тұнба бермейді, сондықтан бақылау "
+"үлгісі қажет."
+
+#: apps/labs/experiments/t03/sulfate.py:65
+msgid "Reactor A"
+msgstr "A реакторы"
+
+#: apps/labs/experiments/t03/sulfate.py:66
+msgid "Absorber B"
+msgstr "B сіңіргіші"
+
+#: apps/labs/experiments/t03/sulfate.py:70
+msgid "Reactor A, absorber B and test tubes C, D"
+msgstr "A реакторы, B сіңіргіші және C, D пробиркалары"
+
+#: apps/labs/experiments/t03/sulfate.py:71
+msgid "Gas delivery tube"
+msgstr "Газөткізгіш түтік"
+
+#: apps/labs/experiments/t03/sulfate.py:73
+msgid "Sodium sulfite solution"
+msgstr "Натрий сульфитінің ерітіндісі"
+
+#: apps/labs/experiments/t03/sulfate.py:74
+msgid "Hydrochloric acid"
+msgstr "Тұз қышқылы"
+
+#: apps/labs/experiments/t03/sulfate.py:75
+msgid "Universal indicator paper"
+msgstr "Әмбебап индикатор қағазы"
+
+#: apps/labs/experiments/t03/sulfate.py:76
+msgid "Hydrogen peroxide solution"
+msgstr "Сутегі пероксидінің ерітіндісі"
+
+#: apps/labs/experiments/t03/sulfate.py:77
+msgid "Barium chloride solution"
+msgstr "Барий хлоридінің ерітіндісі"
+
+#: apps/labs/experiments/t03/sulfate.py:80
+msgid "Sodium hydroxide solution"
+msgstr "Натрий гидроксидінің ерітіндісі"
+
+#: apps/labs/experiments/t03/sulfate.py:85
+msgid ""
+"An alkali would absorb SO₂ as sulfite and spoil the test for the acidic "
+"medium. It is not needed here."
+msgstr ""
+"Сілті SO₂-ні сульфит түрінде сіңіріп, қышқыл ортаны тексеруді бұзар еді. "
+"Мұнда ол қажет емес."
+
+#: apps/labs/experiments/t03/sulfate.py:89
+msgid "Confirm the safety notice"
+msgstr "Қауіпсіздік ескертуін растау"
+
+#: apps/labs/experiments/t03/sulfate.py:90
+msgid ""
+"Virtual mode only: SO₂ and barium compounds are toxic, nothing is mixed for "
+"real."
+msgstr ""
+"Тек виртуалды режим: SO₂ мен барий қосылыстары улы, ештеңе шынайы "
+"араластырылмайды."
+
+#: apps/labs/experiments/t03/sulfate.py:91
+msgid "Select reactor A, absorber B and test tubes C, D"
+msgstr "A реакторын, B сіңіргішін және C, D пробиркаларын таңдау"
+
+#: apps/labs/experiments/t03/sulfate.py:91
+msgid "The vessels are on the bench."
+msgstr "Ыдыстар үстелге қойылды."
+
+#: apps/labs/experiments/t03/sulfate.py:92
+msgid "Confirm the safety notice first."
+msgstr "Алдымен қауіпсіздік ескертуін растау керек."
+
+#: apps/labs/experiments/t03/sulfate.py:93
+msgid "Connect the gas delivery system"
+msgstr "Газөткізгіш жүйені жалғау"
+
+#: apps/labs/experiments/t03/sulfate.py:94
+msgid ""
+"Reactor A is connected to absorber B with a tube: the gas path is closed."
+msgstr "A реакторы B сіңіргішіне түтікпен жалғанды: газ жолы жабық."
+
+#: apps/labs/experiments/t03/sulfate.py:95
+msgid "Put the vessels on the bench first."
+msgstr "Алдымен ыдыстарды үстелге қою керек."
+
+#: apps/labs/experiments/t03/sulfate.py:96
+msgid "B: pour distilled water"
+msgstr "B: дистилденген су құю"
+
+#: apps/labs/experiments/t03/sulfate.py:96
+msgid "Absorber B holds water to dissolve the gas."
+msgstr "B сіңіргішінде газды ерітуге арналған су бар."
+
+#: apps/labs/experiments/t03/sulfate.py:97
+msgid "Connect A and B first."
+msgstr "Алдымен A мен B-ны жалғау керек."
+
+#: apps/labs/experiments/t03/sulfate.py:98
+msgid "A: pour the Na₂SO₃ solution"
+msgstr "A: Na₂SO₃ ерітіндісін құю"
+
+#: apps/labs/experiments/t03/sulfate.py:98
+msgid "Reactor A holds a sodium sulfite solution (S +4)."
+msgstr "A реакторында натрий сульфитінің ерітіндісі (S +4)."
+
+#: apps/labs/experiments/t03/sulfate.py:99
+msgid "Prepare absorber B first: the gas must have somewhere to go."
+msgstr "Алдымен B сіңіргішін дайындау керек: газдың баратын жері болуы тиіс."
+
+#: apps/labs/experiments/t03/sulfate.py:102
+msgid "A: add hydrochloric acid"
+msgstr "A: тұз қышқылын қосу"
+
+#: apps/labs/experiments/t03/sulfate.py:103
+msgid "Bubbles in A: a gas is released and passes into B."
+msgstr "A-да көпіршіктер: газ бөлініп, B-ға өтеді."
+
+#: apps/labs/experiments/t03/sulfate.py:106
+msgid ""
+"SO₂ is toxic: the acid is added only when the closed gas path and absorber B"
+" are ready."
+msgstr ""
+"SO₂ улы: қышқыл жабық газ жолы мен B сіңіргіші дайын болғанда ғана қосылады."
+
+#: apps/labs/experiments/t03/sulfate.py:111
+msgid "Which gas has passed into B?"
+msgstr "B-ға қандай газ өтті?"
+
+#: apps/labs/experiments/t03/sulfate.py:112
+msgid "The gas is SO₂, sulfur(IV) oxide."
+msgstr "Газ — SO₂, күкірт(IV) оксиді."
+
+#: apps/labs/experiments/t03/sulfate.py:115
+msgid "Right: sulfur keeps the oxidation state +4."
+msgstr "Дұрыс: күкірттің тотығу дәрежесі +4 болып қалады."
+
+#: apps/labs/experiments/t03/sulfate.py:116
+msgid ""
+"Check the oxidation state of S in Na₂SO₃ and the formula of the gas formed."
+msgstr ""
+"Na₂SO₃ құрамындағы S тотығу дәрежесін және түзілген газ формуласын қайта "
+"тексеру керек."
+
+#: apps/labs/experiments/t03/sulfate.py:117
+msgid "Sulfur is not reduced here: it stays +4."
+msgstr "Мұнда күкірт тотықсызданбайды: +4 болып қалады."
+
+#: apps/labs/experiments/t03/sulfate.py:119
+msgid "Run the reaction in A first."
+msgstr "Алдымен A-дағы реакцияны жүргізу керек."
+
+#: apps/labs/experiments/t03/sulfate.py:121
+msgid "B: test the medium with indicator paper"
+msgstr "B: ортаны индикатор қағазымен тексеру"
+
+#: apps/labs/experiments/t03/sulfate.py:122
+msgid ""
+"The paper turns red: the SO₂ solution is acidic — SO₂ is an acidic oxide."
+msgstr "Қағаз қызарады: SO₂ ерітіндісі қышқыл — SO₂ қышқылдық оксид."
+
+#: apps/labs/experiments/t03/sulfate.py:123
+msgid "Pass the gas into B first."
+msgstr "Алдымен газды B-ға өткізу керек."
+
+#: apps/labs/experiments/t03/sulfate.py:124
+msgid "B: add H₂O₂"
+msgstr "B: H₂O₂ қосу"
+
+#: apps/labs/experiments/t03/sulfate.py:124
+msgid "Sulfur(IV) is oxidised to sulfur(VI): sulfate forms in B."
+msgstr "Күкірт(IV) күкірт(VI)-ға дейін тотығады: B-да сульфат түзіледі."
+
+#: apps/labs/experiments/t03/sulfate.py:125
+msgid "Check the medium in B first."
+msgstr "Алдымен B-дағы ортаны тексеру керек."
+
+#: apps/labs/experiments/t03/sulfate.py:128
+msgid "What is the role of H₂O₂ in this step?"
+msgstr "Бұл кезеңде H₂O₂ қандай рөл атқарады?"
+
+#: apps/labs/experiments/t03/sulfate.py:129
+msgid "H₂O₂ is the oxidising agent."
+msgstr "H₂O₂ — тотықтырғыш."
+
+#: apps/labs/experiments/t03/sulfate.py:132
+msgid "Oxidising agent"
+msgstr "Тотықтырғыш"
+
+#: apps/labs/experiments/t03/sulfate.py:132
+msgid "Right: it accepts the electrons."
+msgstr "Дұрыс: ол электрондарды қабылдайды."
+
+#: apps/labs/experiments/t03/sulfate.py:133
+msgid "Reducing agent"
+msgstr "Тотықсыздандырғыш"
+
+#: apps/labs/experiments/t03/sulfate.py:134
+msgid ""
+"The oxidation state of S rose from +4 to +6. Which substance accepts the "
+"electrons?"
+msgstr "S тотығу дәрежесі +4-тен +6-ға артты. Электронды қай зат қабылдайды?"
+
+#: apps/labs/experiments/t03/sulfate.py:135
+msgid "Catalyst"
+msgstr "Катализатор"
+
+#: apps/labs/experiments/t03/sulfate.py:135
+msgid "H₂O₂ is used up in the reaction: it is not a catalyst."
+msgstr "H₂O₂ реакцияда жұмсалады: ол катализатор емес."
+
+#: apps/labs/experiments/t03/sulfate.py:137
+msgid "Add H₂O₂ to B first."
+msgstr "Алдымен B-ға H₂O₂ қосу керек."
+
+#: apps/labs/experiments/t03/sulfate.py:139
+msgid "Transfer the sample into tube C"
+msgstr "Үлгіні C пробиркасына ауыстыру"
+
+#: apps/labs/experiments/t03/sulfate.py:139
+msgid "Tube C holds the oxidised sample: «sample for analysis»."
+msgstr "C пробиркасында тотыққан үлгі: «талдау үлгісі»."
+
+#: apps/labs/experiments/t03/sulfate.py:140
+msgid "Oxidise the sample in B first."
+msgstr "Алдымен B-дағы үлгіні тотықтыру керек."
+
+#: apps/labs/experiments/t03/sulfate.py:143
+msgid "C: run the BaCl₂ test in an acidic medium"
+msgstr "C: қышқыл ортада BaCl₂ сынағын жүргізу"
+
+#: apps/labs/experiments/t03/sulfate.py:144
+msgid "A white BaSO₄ precipitate forms in C: the sulfate ion is detected."
+msgstr "C-да ақ BaSO₄ тұнбасы түзілді: сульфат-ион анықталды."
+
+#: apps/labs/experiments/t03/sulfate.py:147
+msgid ""
+"Turn S(+IV) into S(+VI) first and transfer the sample; then compare with the"
+" sulfate test in an acidic medium."
+msgstr ""
+"Алдымен S(+IV)-ті S(+VI)-ке айналдырып, үлгіні ауыстыру керек; сосын қышқыл "
+"ортадағы сульфат сынағымен салыстыру."
+
+#: apps/labs/experiments/t03/sulfate.py:149
+msgid "Compare with the control sample"
+msgstr "Бақылау үлгісімен салыстыру"
+
+#: apps/labs/experiments/t03/sulfate.py:150
+msgid ""
+"D (sulfite, acidified, not oxidised): no stable precipitate — sulfite must "
+"not be confused with sulfate."
+msgstr ""
+"D (сульфит, қышқылдандырылған, тотықпаған): тұрақты тұнба жоқ — сульфитті "
+"сульфатпен шатастыруға болмайды."
+
+#: apps/labs/experiments/t03/sulfate.py:151
+msgid "Run the test in tube C first."
+msgstr "Алдымен C пробиркасындағы сынақты жүргізу керек."
+
+#: apps/labs/experiments/t03/sulfate.py:152
+msgid "Check the equations and save the journal"
+msgstr "Теңдеулерді тексеріп, журналды сақтау"
+
+#: apps/labs/experiments/t03/sulfate.py:154
+msgid "Save the lab journal and finish"
+msgstr "Зертханалық журналды сақтап, аяқтау"
+
+#: apps/labs/experiments/t03/sulfate.py:158
+msgid "Formation of SO₂ in reactor A: the equation"
+msgstr "A реакторында SO₂ түзілуі: теңдеу"
+
+#: apps/labs/experiments/t03/sulfate.py:160
+msgid "Oxidation of SO₂ by hydrogen peroxide: the equation"
+msgstr "SO₂-нің сутегі пероксидімен тотығуы: теңдеу"
+
+#: apps/labs/experiments/t03/sulfate.py:162
+msgid "The sulfate test: the short ionic equation"
+msgstr "Сульфатты анықтау: қысқартылған иондық теңдеу"
+
+#: apps/labs/experiments/t03/sulfate.py:165
+msgid "How does the oxidation state of sulfur change in B?"
+msgstr "B-да күкірттің тотығу дәрежесі қалай өзгереді?"
+
+#: apps/labs/experiments/t03/sulfate.py:171
+msgid "What is the BaSO₄ precipitate like?"
+msgstr "BaSO₄ тұнбасы қандай?"
+
+#: apps/labs/experiments/t03/sulfate.py:174
+msgid "White, insoluble in water and dilute acid"
+msgstr "Ақ, суда және сұйылтылған қышқылда ерімейді"
+
+#: apps/labs/experiments/t03/sulfate.py:175
+#: apps/labs/experiments/t03/sulfate.py:203
+msgid "Yellow"
+msgstr "Сары"
+
+#: apps/labs/experiments/t03/sulfate.py:176
+#: apps/labs/experiments/t03/sulfate.py:203
+msgid "Black"
+msgstr "Қара"
+
+#: apps/labs/experiments/t03/sulfate.py:179
+msgid "Conclusion: how was the sulfate ion proven?"
+msgstr "Қорытынды: сульфат-ион қалай дәлелденді?"
+
+#: apps/labs/experiments/t03/sulfate.py:184
+msgid "Why is the oxidation state of sulfur +4 in SO₂?"
+msgstr "Неліктен SO₂-де күкірттің тотығу дәрежесі +4?"
+
+#: apps/labs/experiments/t03/sulfate.py:186
+msgid ""
+"Two oxygen atoms give 2 × (−2) = −4, the molecule is neutral, so S = +4"
+msgstr ""
+"Екі оттегі атомы 2 × (−2) = −4 береді, молекула бейтарап, демек S = +4"
+
+#: apps/labs/experiments/t03/sulfate.py:187
+msgid "Because sulfur is in group 4"
+msgstr "Себебі күкірт 4-топта"
+
+#: apps/labs/experiments/t03/sulfate.py:188
+msgid "Because sulfur forms four bonds with hydrogen"
+msgstr "Себебі күкірт сутегімен төрт байланыс түзеді"
+
+#: apps/labs/experiments/t03/sulfate.py:193
+msgid "Why is the control sample in an acidic medium important?"
+msgstr "Неліктен қышқыл ортадағы бақылау үлгісі маңызды?"
+
+#: apps/labs/experiments/t03/sulfate.py:195
+msgid "Barium sulfite can also give a precipitate; in acid only BaSO₄ stays"
+msgstr "Барий сульфиті де тұнба беруі мүмкін; қышқылда тек BaSO₄ қалады"
+
+#: apps/labs/experiments/t03/sulfate.py:196
+msgid "It makes the reaction faster"
+msgstr "Реакцияны жылдамдатады"
+
+#: apps/labs/experiments/t03/sulfate.py:197
+msgid "It colours the precipitate"
+msgstr "Тұнбаны бояйды"
+
+#: apps/labs/experiments/t03/sulfate.py:202
+msgid "What colour is the BaSO₄ precipitate?"
+msgstr "BaSO₄ тұнбасы қандай түсті?"
+
+#: apps/labs/experiments/t03/sulfate.py:203
+msgid "White"
+msgstr "Ақ"
+
+#: apps/labs/experiments/t03/sulfate.py:205
+msgid "Why is this work done virtually and not with real reagents?"
+msgstr ""
+"Неліктен бұл жұмыс нақты реактивтермен емес, виртуалды түрде жүргізіледі?"
 
 #: apps/labs/models/attempt.py:10 apps/progress/models/progress.py:17
 #: apps/progress/models/progress.py:72 apps/student/cabinet.py:94
@@ -9266,9 +9652,6 @@ msgstr "Шарты"
 
 #~ msgid "Change and confirm"
 #~ msgstr "Өзгертіп растау"
-
-#~ msgid "Confirm the grade"
-#~ msgstr "Бағаны растау"
 
 #~ msgid "Latin letters, digits and . _ - characters"
 #~ msgstr "Латын әріптері, сандар және . _ - таңбалары"
