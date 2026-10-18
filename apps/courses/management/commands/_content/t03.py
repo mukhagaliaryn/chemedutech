@@ -6,7 +6,7 @@ quizzes are written from the lecture.
 
 from apps.courses.models import Stage
 
-from .common import chem, formula, table
+from .common import cards, chem, formula, table
 
 TITLE = "VIA тобының p-элементтері (халькогендер)"
 SUMMARY = (
@@ -14,11 +14,6 @@ SUMMARY = (
     "күкірттің маңызды қосылыстары."
 )
 MINUTES = 240
-
-
-def cards(items, caption):
-    body = "".join(f"<div><p><strong>{head}</strong></p><p>{text}</p></div>" for head, text in items)
-    return f'<div class="cards">{body}</div><p><em>{caption}</em></p>'
 
 
 THEORY = chem(f"""

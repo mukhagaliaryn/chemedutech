@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ChemEduTech\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-18 08:10+0500\n"
+"POT-Creation-Date: 2026-10-18 08:22+0500\n"
 "PO-Revision-Date: 2026-10-16 21:00+0500\n"
 "Last-Translator: ChemEduTech\n"
 "Language-Team: ChemEduTech\n"
@@ -1411,6 +1411,7 @@ msgid "Hydrogen and oxygen: obtaining and properties"
 msgstr "Водород и кислород: получение и свойства"
 
 #: apps/labs/experiments/t01/common.py:8 apps/labs/experiments/t01/rate.py:30
+#: apps/labs/experiments/t04/ions.py:63
 msgid "Spirit lamp"
 msgstr "Спиртовка"
 
@@ -1607,6 +1608,7 @@ msgstr "Результаты сохраняются, открывается за
 #: apps/labs/experiments/t02/displacement.py:121
 #: apps/labs/experiments/t02/silver.py:123
 #: apps/labs/experiments/t03/sulfate.py:155
+#: apps/labs/experiments/t04/ions.py:119
 msgid "Fill in the lab journal first."
 msgstr "Сначала нужно заполнить лабораторный журнал."
 
@@ -1910,6 +1912,7 @@ msgid "Mouth up: hydrogen is heavier than air"
 msgstr "Горлышком вверх: водород тяжелее воздуха"
 
 #: apps/labs/experiments/t01/hydrogen.py:127
+#: apps/labs/experiments/t04/ions.py:165
 msgid "It does not matter"
 msgstr "Не имеет значения"
 
@@ -2407,11 +2410,11 @@ msgid ""
 "Iodide is not needed here: this experiment studies chlorine and an alkali."
 msgstr "Иодид здесь не нужен: в опыте изучается реакция хлора со щёлочью."
 
-#: apps/labs/experiments/t02/alkali.py:64
+#: apps/labs/experiments/t02/alkali.py:64 apps/labs/experiments/t04/ions.py:82
 msgid "Take the rack and two test tubes"
 msgstr "Взять штатив и две пробирки"
 
-#: apps/labs/experiments/t02/alkali.py:64
+#: apps/labs/experiments/t02/alkali.py:64 apps/labs/experiments/t04/ions.py:82
 msgid "Test tubes A and B are on the bench."
 msgstr "Пробирки A и B стоят на столе."
 
@@ -2425,7 +2428,7 @@ msgstr "В пробирке A — холодный 2% раствор NaOH."
 
 #: apps/labs/experiments/t02/alkali.py:67
 #: apps/labs/experiments/t02/displacement.py:65
-#: apps/labs/experiments/t02/silver.py:80
+#: apps/labs/experiments/t02/silver.py:80 apps/labs/experiments/t04/ions.py:85
 msgid "Put the rack with the test tubes on the bench first."
 msgstr "Сначала нужно поставить штатив с пробирками на стол."
 
@@ -2529,6 +2532,7 @@ msgstr "Сохранить лабораторный журнал"
 #: apps/labs/experiments/t02/alkali.py:103
 #: apps/labs/experiments/t02/silver.py:121
 #: apps/labs/experiments/t03/sulfate.py:152
+#: apps/labs/experiments/t04/ions.py:116
 msgid "Observations and equations are recorded."
 msgstr "Наблюдения и уравнения записаны."
 
@@ -2658,6 +2662,7 @@ msgid "Tube A, ionic"
 msgstr "Пробирка A, ионное"
 
 #: apps/labs/experiments/t02/displacement.py:41
+#: apps/labs/experiments/t04/ions.py:52
 msgid "Tube B, ionic"
 msgstr "Пробирка B, ионное"
 
@@ -2672,7 +2677,7 @@ msgid "Br₂ + KCl → no reaction"
 msgstr "Br₂ + KCl → реакция не идёт"
 
 #: apps/labs/experiments/t02/displacement.py:53
-#: apps/labs/experiments/t02/silver.py:60
+#: apps/labs/experiments/t02/silver.py:60 apps/labs/experiments/t04/ions.py:60
 msgid "Silver nitrate solution"
 msgstr "Раствор нитрата серебра"
 
@@ -2951,15 +2956,15 @@ msgstr ""
 "чтобы другие анионы (карбонат, гидроксид) не осаждались. Фторид осадка не "
 "даёт: AgF растворим."
 
-#: apps/labs/experiments/t02/silver.py:50
+#: apps/labs/experiments/t02/silver.py:50 apps/labs/experiments/t04/ions.py:50
 msgid "Tube A"
 msgstr "Пробирка A"
 
-#: apps/labs/experiments/t02/silver.py:51
+#: apps/labs/experiments/t02/silver.py:51 apps/labs/experiments/t04/ions.py:51
 msgid "Tube B"
 msgstr "Пробирка B"
 
-#: apps/labs/experiments/t02/silver.py:59
+#: apps/labs/experiments/t02/silver.py:59 apps/labs/experiments/t04/ions.py:71
 msgid "Dilute nitric acid"
 msgstr "Разбавленная азотная кислота"
 
@@ -3053,6 +3058,7 @@ msgid "The precipitates settle; their colours are compared with the table."
 msgstr "Осадки оседают; их окраска сравнивается с таблицей."
 
 #: apps/labs/experiments/t02/silver.py:119
+#: apps/labs/experiments/t04/ions.py:115
 msgid "Add silver nitrate first."
 msgstr "Сначала нужно добавить нитрат серебра."
 
@@ -3176,6 +3182,7 @@ msgid "Barium chloride solution"
 msgstr "Раствор хлорида бария"
 
 #: apps/labs/experiments/t03/sulfate.py:80
+#: apps/labs/experiments/t04/ions.py:57
 msgid "Sodium hydroxide solution"
 msgstr "Раствор гидроксида натрия"
 
@@ -3399,6 +3406,7 @@ msgid "Run the test in tube C first."
 msgstr "Сначала нужно провести пробу в пробирке C."
 
 #: apps/labs/experiments/t03/sulfate.py:152
+#: apps/labs/experiments/t04/ions.py:116
 msgid "Check the equations and save the journal"
 msgstr "Проверить уравнения и сохранить журнал"
 
@@ -3490,6 +3498,295 @@ msgstr "Белый"
 msgid "Why is this work done virtually and not with real reagents?"
 msgstr ""
 "Почему эта работа проводится виртуально, а не с настоящими реактивами?"
+
+#: apps/labs/experiments/t04/__init__.py:12
+msgid "Nitrogen and phosphorus: ammonium and phosphate ions"
+msgstr "Азот и фосфор: ионы аммония и фосфата"
+
+#: apps/labs/experiments/t04/ions.py:36
+msgid "Qualitative tests for ammonium and phosphate ions"
+msgstr "Качественные реакции на ионы аммония и фосфата"
+
+#: apps/labs/experiments/t04/ions.py:38
+msgid ""
+"Detect the ammonium ion with an alkali and indicator paper, and the "
+"phosphate ion with silver nitrate; write the molecular and the short ionic "
+"equations and justify the safety decisions."
+msgstr ""
+"Обнаружить ион аммония щёлочью и индикаторной бумагой, а фосфат-ион — "
+"нитратом серебра; записать молекулярные и сокращённые ионные уравнения и "
+"обосновать решения по безопасности."
+
+#: apps/labs/experiments/t04/ions.py:44
+msgid ""
+"An alkali turns ammonium ions into ammonia, a gas with basic properties: wet"
+" indicator paper turns blue. Nitrogen keeps the oxidation state −3 — it is "
+"an acid–base reaction, not a redox one. Phosphate ions give a yellow Ag₃PO₄ "
+"precipitate with silver ions in a model solution; in real samples the pH and"
+" other ions matter."
+msgstr ""
+"Щёлочь превращает ионы аммония в аммиак — газ с основными свойствами: "
+"влажная индикаторная бумага синеет. Азот сохраняет степень окисления −3 — "
+"это кислотно-основная реакция, а не окислительно-восстановительная. Фосфат-"
+"ионы дают с ионами серебра жёлтый осадок Ag₃PO₄ в модельном растворе; в "
+"реальных пробах важны pH и посторонние ионы."
+
+#: apps/labs/experiments/t04/ions.py:55
+msgid "Rack with two test tubes"
+msgstr "Штатив с двумя пробирками"
+
+#: apps/labs/experiments/t04/ions.py:56
+msgid "Ammonium chloride solution"
+msgstr "Раствор хлорида аммония"
+
+#: apps/labs/experiments/t04/ions.py:58
+msgid "Wet universal indicator paper"
+msgstr "Влажная универсальная индикаторная бумага"
+
+#: apps/labs/experiments/t04/ions.py:59
+msgid "Sodium phosphate solution"
+msgstr "Раствор фосфата натрия"
+
+#: apps/labs/experiments/t04/ions.py:67
+msgid ""
+"Heating is not needed: the indicator shows the gas. Ammonia is never "
+"sniffed."
+msgstr ""
+"Нагревание не нужно: газ показывает индикатор. Аммиак никогда не нюхают."
+
+#: apps/labs/experiments/t04/ions.py:76
+msgid ""
+"Acid would turn phosphate into HPO₄²⁻ and H₂PO₄⁻, and the Ag₃PO₄ precipitate"
+" would not form."
+msgstr ""
+"Кислота превратит фосфат в HPO₄²⁻ и H₂PO₄⁻, и осадок Ag₃PO₄ не образуется."
+
+#: apps/labs/experiments/t04/ions.py:80
+msgid "Accept the safety rules"
+msgstr "Принять правила безопасности"
+
+#: apps/labs/experiments/t04/ions.py:81
+msgid ""
+"Virtual mode only: ammonia irritates the airways, silver nitrate is "
+"hazardous."
+msgstr ""
+"Только виртуальный режим: аммиак раздражает дыхательные пути, нитрат серебра"
+" опасен."
+
+#: apps/labs/experiments/t04/ions.py:83
+msgid "Accept the safety rules first."
+msgstr "Сначала нужно принять правила безопасности."
+
+#: apps/labs/experiments/t04/ions.py:84
+msgid "A: pour the NH₄Cl solution"
+msgstr "A: налить раствор NH₄Cl"
+
+#: apps/labs/experiments/t04/ions.py:84
+msgid "Tube A holds a colourless model NH₄Cl solution."
+msgstr "В пробирке A — бесцветный модельный раствор NH₄Cl."
+
+#: apps/labs/experiments/t04/ions.py:86
+msgid "A: add NaOH"
+msgstr "A: добавить NaOH"
+
+#: apps/labs/experiments/t04/ions.py:86
+msgid "The reaction of the ammonium ion with the base starts."
+msgstr "Началась реакция иона аммония с основанием."
+
+#: apps/labs/experiments/t04/ions.py:87
+msgid "Pour the NH₄Cl solution into tube A first."
+msgstr "Сначала нужно налить раствор NH₄Cl в пробирку A."
+
+#: apps/labs/experiments/t04/ions.py:90
+msgid "A: hold the indicator paper over the tube"
+msgstr "A: поднести индикаторную бумагу к пробирке"
+
+#: apps/labs/experiments/t04/ions.py:91
+msgid "The wet paper turns blue: an alkaline gas, ammonia, is released."
+msgstr "Влажная бумага синеет: выделяется щелочной газ — аммиак."
+
+#: apps/labs/experiments/t04/ions.py:94
+msgid ""
+"Ammonia is never sniffed: the gas is tested only with indicator paper once "
+"the reaction has started."
+msgstr ""
+"Аммиак нельзя нюхать: газ проверяют только индикаторной бумагой после начала"
+" реакции."
+
+#: apps/labs/experiments/t04/ions.py:99
+msgid "Which gas turned the paper blue?"
+msgstr "Какой газ окрасил бумагу в синий цвет?"
+
+#: apps/labs/experiments/t04/ions.py:100
+msgid "The result of tube A is recorded: NH₃ is formed."
+msgstr "Результат пробирки A записан: образуется NH₃."
+
+#: apps/labs/experiments/t04/ions.py:103
+msgid "Ammonia NH₃ — a gas with basic properties"
+msgstr "Аммиак NH₃ — газ с основными свойствами"
+
+#: apps/labs/experiments/t04/ions.py:104
+msgid "Right: NH₃ + H₂O ⇌ NH₄⁺ + OH⁻ makes the paper blue."
+msgstr "Верно: NH₃ + H₂O ⇌ NH₄⁺ + OH⁻ окрашивает бумагу в синий."
+
+#: apps/labs/experiments/t04/ions.py:105
+msgid "Nitrogen N₂"
+msgstr "Азот N₂"
+
+#: apps/labs/experiments/t04/ions.py:105
+msgid ""
+"Nitrogen does not change its oxidation state here (−3) and does not colour "
+"the paper."
+msgstr ""
+"Здесь азот не меняет степень окисления (−3), а N₂ бумагу не окрашивает."
+
+#: apps/labs/experiments/t04/ions.py:106
+msgid "Hydrogen chloride HCl"
+msgstr "Хлороводород HCl"
+
+#: apps/labs/experiments/t04/ions.py:106
+msgid "Hydrogen chloride is acidic: the paper would turn red."
+msgstr "Хлороводород кислый: бумага покраснела бы."
+
+#: apps/labs/experiments/t04/ions.py:108
+msgid "Test the gas with indicator paper first."
+msgstr "Сначала нужно проверить газ индикаторной бумагой."
+
+#: apps/labs/experiments/t04/ions.py:110
+msgid "B: pour the Na₃PO₄ solution"
+msgstr "B: налить раствор Na₃PO₄"
+
+#: apps/labs/experiments/t04/ions.py:110
+msgid "Tube B holds a colourless model phosphate solution."
+msgstr "В пробирке B — бесцветный модельный раствор фосфата."
+
+#: apps/labs/experiments/t04/ions.py:111
+msgid "Finish the test in tube A first."
+msgstr "Сначала нужно закончить пробу в пробирке A."
+
+#: apps/labs/experiments/t04/ions.py:112
+msgid "B: add AgNO₃"
+msgstr "B: добавить AgNO₃"
+
+#: apps/labs/experiments/t04/ions.py:112
+msgid "A yellow Ag₃PO₄ precipitate forms."
+msgstr "Образуется жёлтый осадок Ag₃PO₄."
+
+#: apps/labs/experiments/t04/ions.py:113
+msgid "Pour the phosphate solution into tube B first."
+msgstr "Сначала нужно налить раствор фосфата в пробирку B."
+
+#: apps/labs/experiments/t04/ions.py:114
+msgid "Look at the precipitate closely"
+msgstr "Рассмотреть осадок вблизи"
+
+#: apps/labs/experiments/t04/ions.py:114
+msgid "The solid phase settles; the ionic scheme is shown."
+msgstr "Твёрдая фаза оседает; показана ионная схема."
+
+#: apps/labs/experiments/t04/ions.py:118
+msgid "Submit the conclusion"
+msgstr "Отправить вывод"
+
+#: apps/labs/experiments/t04/ions.py:118
+msgid "The journal and the score are saved, the analysis opens."
+msgstr "Журнал и балл сохранены, открывается анализ."
+
+#: apps/labs/experiments/t04/ions.py:122
+msgid "A: NH₄⁺ + OH⁻ — what was observed?"
+msgstr "A: NH₄⁺ + OH⁻ — что наблюдалось?"
+
+#: apps/labs/experiments/t04/ions.py:123
+msgid "A: the molecular equation"
+msgstr "A: молекулярное уравнение"
+
+#: apps/labs/experiments/t04/ions.py:124
+msgid "A: the short ionic equation"
+msgstr "A: сокращённое ионное уравнение"
+
+#: apps/labs/experiments/t04/ions.py:125
+msgid "B: the molecular equation"
+msgstr "B: молекулярное уравнение"
+
+#: apps/labs/experiments/t04/ions.py:127
+msgid "B: the short ionic equation"
+msgstr "B: сокращённое ионное уравнение"
+
+#: apps/labs/experiments/t04/ions.py:130
+msgid "B: PO₄³⁻ + Ag⁺ — what precipitate formed?"
+msgstr "B: PO₄³⁻ + Ag⁺ — какой осадок образовался?"
+
+#: apps/labs/experiments/t04/ions.py:133
+msgid "Yellow Ag₃PO₄"
+msgstr "Жёлтый Ag₃PO₄"
+
+#: apps/labs/experiments/t04/ions.py:134
+msgid "White AgCl"
+msgstr "Белый AgCl"
+
+#: apps/labs/experiments/t04/ions.py:135
+msgid "Black Ag₂O"
+msgstr "Чёрный Ag₂O"
+
+#: apps/labs/experiments/t04/ions.py:138
+msgid "Safety decision: how was the gas tested and why?"
+msgstr "Решение по безопасности: как и почему так проверяли газ?"
+
+#: apps/labs/experiments/t04/ions.py:143
+msgid ""
+"Which gas forms when NH₄Cl reacts with NaOH, and what are its properties?"
+msgstr "Какой газ образуется при реакции NH₄Cl с NaOH и каковы его свойства?"
+
+#: apps/labs/experiments/t04/ions.py:145
+msgid "Ammonia NH₃; its solution is basic"
+msgstr "Аммиак NH₃; его раствор имеет основный характер"
+
+#: apps/labs/experiments/t04/ions.py:146
+msgid "Hydrogen H₂; it is flammable"
+msgstr "Водород H₂; он горюч"
+
+#: apps/labs/experiments/t04/ions.py:147
+msgid "Chlorine Cl₂; it is yellow-green"
+msgstr "Хлор Cl₂; он жёлто-зелёный"
+
+#: apps/labs/experiments/t04/ions.py:152
+msgid "Why does the oxidation state of nitrogen not change in NH₄⁺ + OH⁻?"
+msgstr "Почему в реакции NH₄⁺ + OH⁻ степень окисления азота не меняется?"
+
+#: apps/labs/experiments/t04/ions.py:154
+msgid "It is −3 in both NH₄⁺ and NH₃: this is an acid–base reaction"
+msgstr "И в NH₄⁺, и в NH₃ она −3: это кислотно-основная реакция"
+
+#: apps/labs/experiments/t04/ions.py:155
+msgid "Because the alkali is a catalyst"
+msgstr "Потому что щёлочь — катализатор"
+
+#: apps/labs/experiments/t04/ions.py:156
+msgid "Because nitrogen is inert"
+msgstr "Потому что азот инертен"
+
+#: apps/labs/experiments/t04/ions.py:161
+msgid "Why does the pH matter in the test for phosphate?"
+msgstr "Почему pH важен при обнаружении фосфата?"
+
+#: apps/labs/experiments/t04/ions.py:163
+msgid ""
+"In acid, protonated forms (HPO₄²⁻, H₂PO₄⁻) dominate and the precipitate does"
+" not form"
+msgstr ""
+"В кислой среде преобладают протонированные формы (HPO₄²⁻, H₂PO₄⁻), и осадок "
+"не образуется"
+
+#: apps/labs/experiments/t04/ions.py:164
+msgid "The pH changes the colour of silver"
+msgstr "pH меняет цвет серебра"
+
+#: apps/labs/experiments/t04/ions.py:168
+msgid ""
+"Which three screen views would you choose to explain this experiment to "
+"school students?"
+msgstr ""
+"Какие три экранных вида стоит выбрать, чтобы объяснить этот опыт школьникам?"
 
 #: apps/labs/models/attempt.py:10 apps/progress/models/progress.py:17
 #: apps/progress/models/progress.py:72 apps/student/cabinet.py:94

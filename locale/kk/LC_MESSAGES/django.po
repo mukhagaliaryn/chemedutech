@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ChemEduTech\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-18 08:10+0500\n"
+"POT-Creation-Date: 2026-10-18 08:22+0500\n"
 "PO-Revision-Date: 2026-10-16 21:00+0500\n"
 "Last-Translator: ChemEduTech\n"
 "Language-Team: ChemEduTech\n"
@@ -1408,6 +1408,7 @@ msgid "Hydrogen and oxygen: obtaining and properties"
 msgstr "Сутегі және оттегі: алынуы және қасиеттері"
 
 #: apps/labs/experiments/t01/common.py:8 apps/labs/experiments/t01/rate.py:30
+#: apps/labs/experiments/t04/ions.py:63
 msgid "Spirit lamp"
 msgstr "Спирт шамы"
 
@@ -1604,6 +1605,7 @@ msgstr "Нәтижелер сақталып, талдау тапсырмасы �
 #: apps/labs/experiments/t02/displacement.py:121
 #: apps/labs/experiments/t02/silver.py:123
 #: apps/labs/experiments/t03/sulfate.py:155
+#: apps/labs/experiments/t04/ions.py:119
 msgid "Fill in the lab journal first."
 msgstr "Алдымен зертханалық журналды толтыру керек."
 
@@ -1910,6 +1912,7 @@ msgid "Mouth up: hydrogen is heavier than air"
 msgstr "Аузын жоғары қаратып: сутегі ауадан ауыр"
 
 #: apps/labs/experiments/t01/hydrogen.py:127
+#: apps/labs/experiments/t04/ions.py:165
 msgid "It does not matter"
 msgstr "Маңызы жоқ"
 
@@ -2406,11 +2409,11 @@ msgstr ""
 "Йодид бұл жерде қажет емес: тәжірибеде хлор мен сілтінің әрекеттесуі "
 "зерттеледі."
 
-#: apps/labs/experiments/t02/alkali.py:64
+#: apps/labs/experiments/t02/alkali.py:64 apps/labs/experiments/t04/ions.py:82
 msgid "Take the rack and two test tubes"
 msgstr "Штатив пен екі пробирканы алу"
 
-#: apps/labs/experiments/t02/alkali.py:64
+#: apps/labs/experiments/t02/alkali.py:64 apps/labs/experiments/t04/ions.py:82
 msgid "Test tubes A and B are on the bench."
 msgstr "A және B пробиркалары үстелге қойылды."
 
@@ -2424,7 +2427,7 @@ msgstr "A пробиркасында суық 2% NaOH ерітіндісі."
 
 #: apps/labs/experiments/t02/alkali.py:67
 #: apps/labs/experiments/t02/displacement.py:65
-#: apps/labs/experiments/t02/silver.py:80
+#: apps/labs/experiments/t02/silver.py:80 apps/labs/experiments/t04/ions.py:85
 msgid "Put the rack with the test tubes on the bench first."
 msgstr "Алдымен пробиркалары бар штативті үстелге қою керек."
 
@@ -2527,6 +2530,7 @@ msgstr "Зертханалық журналды сақтау"
 #: apps/labs/experiments/t02/alkali.py:103
 #: apps/labs/experiments/t02/silver.py:121
 #: apps/labs/experiments/t03/sulfate.py:152
+#: apps/labs/experiments/t04/ions.py:116
 msgid "Observations and equations are recorded."
 msgstr "Бақылаулар мен теңдеулер тіркелді."
 
@@ -2658,6 +2662,7 @@ msgid "Tube A, ionic"
 msgstr "A пробиркасы, иондық"
 
 #: apps/labs/experiments/t02/displacement.py:41
+#: apps/labs/experiments/t04/ions.py:52
 msgid "Tube B, ionic"
 msgstr "B пробиркасы, иондық"
 
@@ -2672,7 +2677,7 @@ msgid "Br₂ + KCl → no reaction"
 msgstr "Br₂ + KCl → реакция жүрмейді"
 
 #: apps/labs/experiments/t02/displacement.py:53
-#: apps/labs/experiments/t02/silver.py:60
+#: apps/labs/experiments/t02/silver.py:60 apps/labs/experiments/t04/ions.py:60
 msgid "Silver nitrate solution"
 msgstr "Күміс нитратының ерітіндісі"
 
@@ -2955,15 +2960,15 @@ msgstr ""
 "тұнба бермеуі үшін ерітінді азот қышқылымен қышқылдандырылады. Фторид тұнба "
 "бермейді: AgF ериді."
 
-#: apps/labs/experiments/t02/silver.py:50
+#: apps/labs/experiments/t02/silver.py:50 apps/labs/experiments/t04/ions.py:50
 msgid "Tube A"
 msgstr "A пробиркасы"
 
-#: apps/labs/experiments/t02/silver.py:51
+#: apps/labs/experiments/t02/silver.py:51 apps/labs/experiments/t04/ions.py:51
 msgid "Tube B"
 msgstr "B пробиркасы"
 
-#: apps/labs/experiments/t02/silver.py:59
+#: apps/labs/experiments/t02/silver.py:59 apps/labs/experiments/t04/ions.py:71
 msgid "Dilute nitric acid"
 msgstr "Сұйылтылған азот қышқылы"
 
@@ -3056,6 +3061,7 @@ msgid "The precipitates settle; their colours are compared with the table."
 msgstr "Тұнбалар шөгеді; олардың түсі кестемен салыстырылады."
 
 #: apps/labs/experiments/t02/silver.py:119
+#: apps/labs/experiments/t04/ions.py:115
 msgid "Add silver nitrate first."
 msgstr "Алдымен күміс нитратын қосу керек."
 
@@ -3181,6 +3187,7 @@ msgid "Barium chloride solution"
 msgstr "Барий хлоридінің ерітіндісі"
 
 #: apps/labs/experiments/t03/sulfate.py:80
+#: apps/labs/experiments/t04/ions.py:57
 msgid "Sodium hydroxide solution"
 msgstr "Натрий гидроксидінің ерітіндісі"
 
@@ -3403,6 +3410,7 @@ msgid "Run the test in tube C first."
 msgstr "Алдымен C пробиркасындағы сынақты жүргізу керек."
 
 #: apps/labs/experiments/t03/sulfate.py:152
+#: apps/labs/experiments/t04/ions.py:116
 msgid "Check the equations and save the journal"
 msgstr "Теңдеулерді тексеріп, журналды сақтау"
 
@@ -3494,6 +3502,297 @@ msgstr "Ақ"
 msgid "Why is this work done virtually and not with real reagents?"
 msgstr ""
 "Неліктен бұл жұмыс нақты реактивтермен емес, виртуалды түрде жүргізіледі?"
+
+#: apps/labs/experiments/t04/__init__.py:12
+msgid "Nitrogen and phosphorus: ammonium and phosphate ions"
+msgstr "Азот пен фосфор: аммоний және фосфат иондары"
+
+#: apps/labs/experiments/t04/ions.py:36
+msgid "Qualitative tests for ammonium and phosphate ions"
+msgstr "Аммоний және фосфат иондарын сапалық анықтау"
+
+#: apps/labs/experiments/t04/ions.py:38
+msgid ""
+"Detect the ammonium ion with an alkali and indicator paper, and the "
+"phosphate ion with silver nitrate; write the molecular and the short ionic "
+"equations and justify the safety decisions."
+msgstr ""
+"Аммоний ионын сілті мен индикатор қағазы арқылы, фосфат ионын күміс нитраты "
+"арқылы анықтау; молекулалық және қысқартылған иондық теңдеулерді жазып, "
+"қауіпсіздік шешімдерін негіздеу."
+
+#: apps/labs/experiments/t04/ions.py:44
+msgid ""
+"An alkali turns ammonium ions into ammonia, a gas with basic properties: wet"
+" indicator paper turns blue. Nitrogen keeps the oxidation state −3 — it is "
+"an acid–base reaction, not a redox one. Phosphate ions give a yellow Ag₃PO₄ "
+"precipitate with silver ions in a model solution; in real samples the pH and"
+" other ions matter."
+msgstr ""
+"Сілті аммоний иондарын аммиакқа — негіздік қасиеті бар газға айналдырады: "
+"дымқыл индикатор қағазы көгереді. Азоттың тотығу дәрежесі −3 болып қалады — "
+"бұл тотығу-тотықсыздану емес, қышқыл-негіздік реакция. Модельдік ерітіндіде "
+"фосфат иондары күміс иондарымен сары Ag₃PO₄ тұнбасын береді; нақты үлгілерде"
+" рН мен бөгде иондар әсер етеді."
+
+#: apps/labs/experiments/t04/ions.py:55
+msgid "Rack with two test tubes"
+msgstr "Екі пробиркасы бар штатив"
+
+#: apps/labs/experiments/t04/ions.py:56
+msgid "Ammonium chloride solution"
+msgstr "Аммоний хлоридінің ерітіндісі"
+
+#: apps/labs/experiments/t04/ions.py:58
+msgid "Wet universal indicator paper"
+msgstr "Дымқыл әмбебап индикатор қағазы"
+
+#: apps/labs/experiments/t04/ions.py:59
+msgid "Sodium phosphate solution"
+msgstr "Натрий фосфатының ерітіндісі"
+
+#: apps/labs/experiments/t04/ions.py:67
+msgid ""
+"Heating is not needed: the indicator shows the gas. Ammonia is never "
+"sniffed."
+msgstr ""
+"Қыздыру қажет емес: газды индикатор көрсетеді. Аммиакты иіскеуге болмайды."
+
+#: apps/labs/experiments/t04/ions.py:76
+msgid ""
+"Acid would turn phosphate into HPO₄²⁻ and H₂PO₄⁻, and the Ag₃PO₄ precipitate"
+" would not form."
+msgstr ""
+"Қышқыл фосфатты HPO₄²⁻ және H₂PO₄⁻ түріне айналдырады да, Ag₃PO₄ тұнбасы "
+"түзілмейді."
+
+#: apps/labs/experiments/t04/ions.py:80
+msgid "Accept the safety rules"
+msgstr "Қауіпсіздік ережесін қабылдау"
+
+#: apps/labs/experiments/t04/ions.py:81
+msgid ""
+"Virtual mode only: ammonia irritates the airways, silver nitrate is "
+"hazardous."
+msgstr ""
+"Тек виртуалды режим: аммиак тыныс жолдарын тітіркендіреді, күміс нитраты "
+"қауіпті."
+
+#: apps/labs/experiments/t04/ions.py:83
+msgid "Accept the safety rules first."
+msgstr "Алдымен қауіпсіздік ережесін қабылдау керек."
+
+#: apps/labs/experiments/t04/ions.py:84
+msgid "A: pour the NH₄Cl solution"
+msgstr "A: NH₄Cl ерітіндісін құю"
+
+#: apps/labs/experiments/t04/ions.py:84
+msgid "Tube A holds a colourless model NH₄Cl solution."
+msgstr "A пробиркасында түссіз модельдік NH₄Cl ерітіндісі."
+
+#: apps/labs/experiments/t04/ions.py:86
+msgid "A: add NaOH"
+msgstr "A: NaOH қосу"
+
+#: apps/labs/experiments/t04/ions.py:86
+msgid "The reaction of the ammonium ion with the base starts."
+msgstr "Аммоний ионының негізбен реакциясы басталды."
+
+#: apps/labs/experiments/t04/ions.py:87
+msgid "Pour the NH₄Cl solution into tube A first."
+msgstr "Алдымен A пробиркасына NH₄Cl ерітіндісін құю керек."
+
+#: apps/labs/experiments/t04/ions.py:90
+msgid "A: hold the indicator paper over the tube"
+msgstr "A: индикатор қағазын пробирка аузына ұстау"
+
+#: apps/labs/experiments/t04/ions.py:91
+msgid "The wet paper turns blue: an alkaline gas, ammonia, is released."
+msgstr "Дымқыл қағаз көгереді: сілтілік газ — аммиак бөлінеді."
+
+#: apps/labs/experiments/t04/ions.py:94
+msgid ""
+"Ammonia is never sniffed: the gas is tested only with indicator paper once "
+"the reaction has started."
+msgstr ""
+"Аммиакты иіскеуге болмайды: газ реакция басталғаннан кейін тек индикатор "
+"қағазымен тексеріледі."
+
+#: apps/labs/experiments/t04/ions.py:99
+msgid "Which gas turned the paper blue?"
+msgstr "Қағазды қандай газ көгертті?"
+
+#: apps/labs/experiments/t04/ions.py:100
+msgid "The result of tube A is recorded: NH₃ is formed."
+msgstr "A пробиркасының нәтижесі тіркелді: NH₃ түзілді."
+
+#: apps/labs/experiments/t04/ions.py:103
+msgid "Ammonia NH₃ — a gas with basic properties"
+msgstr "Аммиак NH₃ — негіздік қасиеті бар газ"
+
+#: apps/labs/experiments/t04/ions.py:104
+msgid "Right: NH₃ + H₂O ⇌ NH₄⁺ + OH⁻ makes the paper blue."
+msgstr "Дұрыс: NH₃ + H₂O ⇌ NH₄⁺ + OH⁻ қағазды көгертеді."
+
+#: apps/labs/experiments/t04/ions.py:105
+msgid "Nitrogen N₂"
+msgstr "Азот N₂"
+
+#: apps/labs/experiments/t04/ions.py:105
+msgid ""
+"Nitrogen does not change its oxidation state here (−3) and does not colour "
+"the paper."
+msgstr "Мұнда азот тотығу дәрежесін өзгертпейді (−3), ал N₂ қағазды боямайды."
+
+#: apps/labs/experiments/t04/ions.py:106
+msgid "Hydrogen chloride HCl"
+msgstr "Хлорсутек HCl"
+
+#: apps/labs/experiments/t04/ions.py:106
+msgid "Hydrogen chloride is acidic: the paper would turn red."
+msgstr "Хлорсутек қышқыл: қағаз қызарар еді."
+
+#: apps/labs/experiments/t04/ions.py:108
+msgid "Test the gas with indicator paper first."
+msgstr "Алдымен газды индикатор қағазымен тексеру керек."
+
+#: apps/labs/experiments/t04/ions.py:110
+msgid "B: pour the Na₃PO₄ solution"
+msgstr "B: Na₃PO₄ ерітіндісін құю"
+
+#: apps/labs/experiments/t04/ions.py:110
+msgid "Tube B holds a colourless model phosphate solution."
+msgstr "B пробиркасында түссіз модельдік фосфат ерітіндісі."
+
+#: apps/labs/experiments/t04/ions.py:111
+msgid "Finish the test in tube A first."
+msgstr "Алдымен A пробиркасындағы сынақты аяқтау керек."
+
+#: apps/labs/experiments/t04/ions.py:112
+msgid "B: add AgNO₃"
+msgstr "B: AgNO₃ қосу"
+
+#: apps/labs/experiments/t04/ions.py:112
+msgid "A yellow Ag₃PO₄ precipitate forms."
+msgstr "Сары Ag₃PO₄ тұнбасы түзіледі."
+
+#: apps/labs/experiments/t04/ions.py:113
+msgid "Pour the phosphate solution into tube B first."
+msgstr "Алдымен B пробиркасына фосфат ерітіндісін құю керек."
+
+#: apps/labs/experiments/t04/ions.py:114
+msgid "Look at the precipitate closely"
+msgstr "Тұнбаны үлкейтіп қарау"
+
+#: apps/labs/experiments/t04/ions.py:114
+msgid "The solid phase settles; the ionic scheme is shown."
+msgstr "Қатты фаза шөгеді; иондық схема көрсетілді."
+
+#: apps/labs/experiments/t04/ions.py:118
+msgid "Submit the conclusion"
+msgstr "Қорытындыны жіберу"
+
+#: apps/labs/experiments/t04/ions.py:118
+msgid "The journal and the score are saved, the analysis opens."
+msgstr "Журнал мен ұпай сақталды, талдау ашылады."
+
+#: apps/labs/experiments/t04/ions.py:122
+msgid "A: NH₄⁺ + OH⁻ — what was observed?"
+msgstr "A: NH₄⁺ + OH⁻ — не байқалды?"
+
+#: apps/labs/experiments/t04/ions.py:123
+msgid "A: the molecular equation"
+msgstr "A: молекулалық теңдеу"
+
+#: apps/labs/experiments/t04/ions.py:124
+msgid "A: the short ionic equation"
+msgstr "A: қысқартылған иондық теңдеу"
+
+#: apps/labs/experiments/t04/ions.py:125
+msgid "B: the molecular equation"
+msgstr "B: молекулалық теңдеу"
+
+#: apps/labs/experiments/t04/ions.py:127
+msgid "B: the short ionic equation"
+msgstr "B: қысқартылған иондық теңдеу"
+
+#: apps/labs/experiments/t04/ions.py:130
+msgid "B: PO₄³⁻ + Ag⁺ — what precipitate formed?"
+msgstr "B: PO₄³⁻ + Ag⁺ — қандай тұнба түзілді?"
+
+#: apps/labs/experiments/t04/ions.py:133
+msgid "Yellow Ag₃PO₄"
+msgstr "Сары Ag₃PO₄"
+
+#: apps/labs/experiments/t04/ions.py:134
+msgid "White AgCl"
+msgstr "Ақ AgCl"
+
+#: apps/labs/experiments/t04/ions.py:135
+msgid "Black Ag₂O"
+msgstr "Қара Ag₂O"
+
+#: apps/labs/experiments/t04/ions.py:138
+msgid "Safety decision: how was the gas tested and why?"
+msgstr "Қауіпсіздік шешімі: газ қалай және неге осылай тексерілді?"
+
+#: apps/labs/experiments/t04/ions.py:143
+msgid ""
+"Which gas forms when NH₄Cl reacts with NaOH, and what are its properties?"
+msgstr ""
+"NH₄Cl мен NaOH әрекеттескенде қандай газ түзіледі және оның табиғаты қандай?"
+
+#: apps/labs/experiments/t04/ions.py:145
+msgid "Ammonia NH₃; its solution is basic"
+msgstr "Аммиак NH₃; оның ерітіндісі негіздік"
+
+#: apps/labs/experiments/t04/ions.py:146
+msgid "Hydrogen H₂; it is flammable"
+msgstr "Сутегі H₂; ол жанғыш"
+
+#: apps/labs/experiments/t04/ions.py:147
+msgid "Chlorine Cl₂; it is yellow-green"
+msgstr "Хлор Cl₂; ол сарғыш-жасыл"
+
+#: apps/labs/experiments/t04/ions.py:152
+msgid "Why does the oxidation state of nitrogen not change in NH₄⁺ + OH⁻?"
+msgstr "Неліктен NH₄⁺ + OH⁻ реакциясында азоттың тотығу дәрежесі өзгермейді?"
+
+#: apps/labs/experiments/t04/ions.py:154
+msgid "It is −3 in both NH₄⁺ and NH₃: this is an acid–base reaction"
+msgstr "NH₄⁺-те де, NH₃-те де ол −3: бұл қышқыл-негіздік реакция"
+
+#: apps/labs/experiments/t04/ions.py:155
+msgid "Because the alkali is a catalyst"
+msgstr "Себебі сілті — катализатор"
+
+#: apps/labs/experiments/t04/ions.py:156
+msgid "Because nitrogen is inert"
+msgstr "Себебі азот инертті"
+
+#: apps/labs/experiments/t04/ions.py:161
+msgid "Why does the pH matter in the test for phosphate?"
+msgstr "Неліктен фосфатты анықтауда рН маңызды?"
+
+#: apps/labs/experiments/t04/ions.py:163
+msgid ""
+"In acid, protonated forms (HPO₄²⁻, H₂PO₄⁻) dominate and the precipitate does"
+" not form"
+msgstr ""
+"Қышқыл ортада протондалған түрлер (HPO₄²⁻, H₂PO₄⁻) басым болып, тұнба "
+"түзілмейді"
+
+#: apps/labs/experiments/t04/ions.py:164
+msgid "The pH changes the colour of silver"
+msgstr "рН күмістің түсін өзгертеді"
+
+#: apps/labs/experiments/t04/ions.py:168
+msgid ""
+"Which three screen views would you choose to explain this experiment to "
+"school students?"
+msgstr ""
+"Бұл тәжірибені мектеп оқушыларына түсіндіру үшін қандай үш экрандық "
+"көріністі таңдауға болады?"
 
 #: apps/labs/models/attempt.py:10 apps/progress/models/progress.py:17
 #: apps/progress/models/progress.py:72 apps/student/cabinet.py:94

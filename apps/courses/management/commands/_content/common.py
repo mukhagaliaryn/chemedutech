@@ -33,3 +33,9 @@ def table(head, rows):
     th = "".join(f"<th>{c}</th>" for c in head)
     body = "".join("<tr>" + "".join(f"<td>{c}</td>" for c in row) + "</tr>" for row in rows)
     return f'<figure class="table"><table><thead><tr>{th}</tr></thead><tbody>{body}</tbody></table></figure>'
+
+
+def cards(items, caption):
+    """A figure drawn as a row of cards: [(heading, text)] and a caption under it."""
+    body = "".join(f"<div><p><strong>{head}</strong></p><p>{text}</p></div>" for head, text in items)
+    return f'<div class="cards">{body}</div><p><em>{caption}</em></p>'

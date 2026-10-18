@@ -8,8 +8,9 @@ def _load() -> dict[str, LabSpec]:
     from apps.labs.experiments.t01 import LAB as T01
     from apps.labs.experiments.t02 import LAB as T02
     from apps.labs.experiments.t03 import LAB as T03
+    from apps.labs.experiments.t04 import LAB as T04
 
-    labs = [T01, T02, T03]
+    labs = [T01, T02, T03, T04]
     return {lab.key: lab for lab in labs}
 
 
