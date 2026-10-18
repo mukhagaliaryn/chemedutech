@@ -10,6 +10,7 @@ from django.urls import reverse
 from PIL import Image
 
 from apps.accounts.models import User
+from apps.assessments.models import QuizAttempt
 from apps.core.html import clean_html
 from apps.organizations.testing import make_group, make_student
 
@@ -141,14 +142,35 @@ class CoursePageTests(TestCase):
         cls.course = Course.objects.get(slug="chemistry")
         cls.student = make_student("s1", group=make_group())
 
-    def test_seed_builds_topic_one_with_six_stages(self):
+    def test_seed_builds_topic_one_from_the_content(self):
         topic = Topic.objects.get(module__course=self.course, number=1)
-        kinds = list(topic.stages.values_list("kind", flat=True))
-        self.assertEqual(kinds, ["theory", "video", "lab", "practice", "practice", "test"])
+        kinds = list(topic.stages.order_by("order").values_list("kind", flat=True))
+        self.assertEqual(kinds, ["theory", "video", "lab", "practice", "practice", "practice", "practice", "test"])
         self.assertEqual(topic.stages.get(kind="lab").lab_content.lab_key, "t01")
-        self.assertIn("<h2>Сутегі</h2>", topic.stages.get(kind="theory").theory_content.body)
+        self.assertIn("<h2>1. Сутегіне жалпы сипаттама</h2>", topic.stages.get(kind="theory").theory_content.body)
+        self.assertEqual(topic.stages.get(kind="test").test_content.quiz.questions.count(), 10)
         call_command("seed_course", verbosity=0)  # idempotent
-        self.assertEqual(Stage.objects.filter(topic=topic).count(), 6)
+        self.assertEqual(Stage.objects.filter(topic=topic).count(), 8)
+
+    def test_replace_keeps_attempted_quizzes_and_stage_kinds(self):
+        topic = Topic.objects.get(module__course=self.course, number=1)
+        test_stage = topic.stages.get(kind="test")
+        quiz = test_stage.test_content.quiz
+        first = quiz.questions.order_by("order").first()
+        attempt = QuizAttempt.objects.create(user=self.student, quiz=quiz, attempt_no=1, question_ids=[first.pk])
+        theory = topic.stages.get(kind="theory").theory_content
+        theory.body = "<p>edited</p>"
+        theory.save()
+        call_command("seed_course", verbosity=0)  # a plain run fills blanks only
+        theory.refresh_from_db()
+        self.assertEqual(theory.body, "<p>edited</p>")
+        call_command("seed_course", replace=True, verbosity=0)
+        theory.refresh_from_db()
+        self.assertIn("Сутегіне жалпы сипаттама", theory.body)
+        self.assertTrue(quiz.questions.filter(pk=first.pk).exists())  # attempted: never rewritten
+        self.assertEqual(attempt.quiz_id, quiz.pk)
+        test_stage.refresh_from_db()
+        self.assertEqual((test_stage.kind, test_stage.order), ("test", 8))
 
 
 class SanitizeTests(TestCase):

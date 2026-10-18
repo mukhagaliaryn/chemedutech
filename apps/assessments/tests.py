@@ -231,11 +231,11 @@ class QuizViewTests(TestCase):
 
     def test_seed_links_quizzes_to_stages(self):
         self.assertEqual(self.quiz.questions.count(), 4)
-        self.assertEqual(Stage.objects.get(topic__number=1, kind="video").checkpoint_quiz.questions.count(), 3)
+        self.assertEqual(Stage.objects.get(topic__number=1, kind="video").checkpoint_quiz.questions.count(), 4)
         test = Stage.objects.get(topic__number=1, kind="test").test_content.quiz
         self.assertEqual(
             set(test.questions.values_list("kind", flat=True)),
-            {"single", "multiple", "numeric", "short_text", "formula", "equation"},
+            {"single"},  # the author's topic test: one right answer of five
         )
         call_command("seed_course", verbosity=0)
         self.assertEqual(Quiz.objects.count(), 3)

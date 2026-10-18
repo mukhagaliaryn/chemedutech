@@ -178,6 +178,7 @@ CKEDITOR_5_CONFIGS = {
         "toolbar": {
             "items": [
                 "heading",
+                "style",
                 "|",
                 "bold",
                 "italic",
@@ -210,6 +211,18 @@ CKEDITOR_5_CONFIGS = {
         "image": {"toolbar": ["imageTextAlternative", "|", "imageStyle:alignLeft", "imageStyle:alignCenter"]},
         "table": {"contentToolbar": ["tableColumn", "tableRow", "mergeTableCells"]},
         "mediaEmbed": {"previewsInData": False},
+        # Theory markup (ARCHITECTURE §9.2): formula lines, note boxes, figures and cards keep their classes
+        # when a teacher edits the text; the classes are styled by .prose-theory in styles.css.
+        "htmlSupport": {
+            "allow": [{"name": "/^(p|div|span|figure|figcaption|img|table)$/", "classes": True}],
+        },
+        "style": {
+            "definitions": [
+                {"name": "Formula", "element": "p", "classes": ["formula"]},
+                {"name": "Note", "element": "p", "classes": ["note"]},
+                {"name": "Task", "element": "p", "classes": ["note", "note-task"]},
+            ]
+        },
     },
     "compact": {  # teacher's short texts: question, option, explanation, prompt, hint — formulas need sub/sup
         "toolbar": {"items": ["bold", "italic", "subscript", "superscript", *_CK_SPECIAL, "|", "undo", "redo"]},

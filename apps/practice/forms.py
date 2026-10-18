@@ -68,7 +68,8 @@ def widget_rows(task, submission=None) -> list[dict]:
         elif item.kind == K.MATCHING:
             pairs = spec.get("pairs", {})
             prev = prev if isinstance(prev, dict) else {}
-            rights = shuffled_options(item.pk, list(pairs.values()))
+            # «distractors» — extra right-hand options that match nothing (e.g. wrong oxidation-state changes)
+            rights = shuffled_options(item.pk, list(dict.fromkeys([*pairs.values(), *spec.get("distractors", [])])))
             row["pairs"] = [
                 {"index": i, "left": left, "rights": rights, "chosen": prev.get(left, "")}
                 for i, left in enumerate(pairs)

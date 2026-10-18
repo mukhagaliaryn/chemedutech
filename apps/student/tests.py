@@ -77,15 +77,15 @@ class CoursePagesTests(StudentFlowBase):
 
     def test_course_map_shows_states(self):
         r = self.client.get(reverse("student:course", args=["chemistry"]))
-        self.assertContains(r, "Сутегі және оттегі")
+        self.assertContains(r, "Сутегі, оттегі, су және сутегі пероксиді")
         self.assertContains(r, self.url(self.theory))
         self.assertContains(r, reverse("student:topic", args=["chemistry", 1]))
-        self.assertEqual(r.context["stages_total"], 6)
+        self.assertEqual(r.context["stages_total"], 8)
         self.assertEqual(r.context["stages_passed"], 0)
 
     def test_topic_page_has_stepper_with_every_stage(self):
         r = self.client.get(reverse("student:topic", args=["chemistry", 1]))
-        self.assertEqual(len(r.context["stepper"]), 6)
+        self.assertEqual(len(r.context["stepper"]), 8)
         self.assertEqual([s["status"] for s in r.context["stepper"]][:2], [S.AVAILABLE, S.LOCKED])
         self.assertEqual(r.context["target"], self.theory)
 

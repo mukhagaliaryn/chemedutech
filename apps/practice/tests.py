@@ -22,6 +22,7 @@ from . import checkers, services
 from .models import AIGrade, PracticeItem, PracticeSubmission, TeacherReview
 from .services import ai_grading
 from .services.submissions import AI_RETRY_DELAYS_MIN
+from .testing import use_test_practices
 
 S = StageProgress.Status
 
@@ -178,8 +179,9 @@ class PracticeBase(TestCase):
     @classmethod
     def setUpTestData(cls):
         call_command("seed_course", verbosity=0)
+        use_test_practices()
         cls.course = Course.objects.get(slug="chemistry")
-        p1, p2 = Stage.objects.filter(topic__number=1, kind="practice").order_by("order")
+        p1, p2 = Stage.objects.filter(topic__number=1, kind="practice").order_by("order")[:2]
         cls.p1, cls.p2 = p1, p2
         cls.task1, cls.task2 = p1.practice_task, p2.practice_task
         cls.open_item = cls.task1.items.get(kind="open")

@@ -116,6 +116,8 @@ def validate_spec(kind: str, spec) -> None:
             pairs = spec.get("pairs")
             if not isinstance(pairs, dict) or len(pairs) < 2:
                 raise SpecError(_('Give at least two pairs: {"pairs": {"left": "right"}}'))
+            if not isinstance(spec.get("distractors", []), list):
+                raise SpecError(_('Extra options are a list: {"distractors": ["…"]}'))
         elif kind == "ordering":
             order = spec.get("order")
             if not isinstance(order, list) or len(order) < 2 or len(set(order)) != len(order):

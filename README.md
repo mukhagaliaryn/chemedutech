@@ -33,7 +33,7 @@ cp .env.example .env                                  # PostgreSQL параме�
 python manage.py migrate
 python manage.py tailwind install && python manage.py tailwind build   # Node.js керек (ui/static_src)
 python manage.py compilemessages --ignore=env --ignore=node_modules
-python manage.py seed_course                          # курс қаңқасы: 1-тақырып, тесттер, практикалар
+python manage.py seed_course [--replace]              # курс мазмұны (_content/, _practice/); --replace — бар мазмұнды жаңарту
 python manage.py createsuperuser                      # role=admin
 python manage.py runserver
 ```

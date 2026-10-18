@@ -1,7 +1,9 @@
-"""Create the course skeleton: 2 modules, 15 topics; topic 1 with its stages.
+"""Create or update the course from the content in ``_content/`` (the author's materials, in Kazakh).
 
-Course/module/topic texts are content (stored in the DB, in Kazakh) and are
-placeholders until the author provides the final wording. Practice works: apps.practice seed_practice.
+Without options the command only adds what is missing (idempotent, safe on every deploy). With ``--replace`` it
+also brings existing objects in line with the content: course/topic/stage texts, theory bodies and the questions
+of quizzes nobody has attempted. Quizzes with attempts and stages are never deleted; practice works:
+apps.practice seed_practice (called with the same option).
 """
 
 from django.apps import apps
@@ -9,112 +11,143 @@ from django.core.management import call_command
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
+from apps.assessments.models import Quiz
 from apps.courses.models import Course, Module, Stage, Topic
 from apps.courses.services import ensure_stage_content
 
-from ._seed_quizzes import THEORY_CHECKPOINT, TOPIC_TEST, VIDEO_CHECKPOINT, checkpoint, topic_test
-
-THEORY_T1 = """
-<h2>Сутегі</h2>
-<p>Сутегі — ең жеңіл газ, түссіз, иіссіз, суда нашар ериді. Зертханада сутегіні
-белсенді металдарды (мырыш, темір) тұз қышқылымен немесе сұйылтылған күкірт
-қышқылымен әрекеттестіріп алады.</p>
-<span class="formula">Zn + 2HCl → ZnCl<sub>2</sub> + H<sub>2</sub>↑</span>
-<p>Сутегі суда нашар еритіндіктен, оны суды ығыстыру әдісімен жинайды. Ауаны
-ығыстыру арқылы жинағанда ыдысты төңкеріп ұстайды, себебі сутегі ауадан жеңіл.</p>
-<h3>Қауіпсіздік</h3>
-<ul>
-  <li>Сутегінің ауамен қоспасы жарылғыш («күркіреуік газ»).</li>
-  <li>Сутегіні тұтатпас бұрын міндетті түрде тазалығын тексереді: таза сутегі
-  тыныш «пах» дыбысымен жанады.</li>
-</ul>
-<h2>Оттегі</h2>
-<p>Зертханада оттегіні сутегі пероксидін марганец(IV) оксиді катализаторы
-қатысында ыдыратып алады.</p>
-<span class="formula">2H<sub>2</sub>O<sub>2</sub> → 2H<sub>2</sub>O + O<sub>2</sub>↑ (MnO<sub>2</sub>)</span>
-<p>Катализатор реакция жылдамдығын арттырады, бірақ реакция соңында өзгеріссіз
-қалады және түзілетін өнімнің жалпы мөлшерін өзгертпейді. Оттегіні бықсып
-тұрған шамшырақпен анықтайды: шамшырақ лап етіп жанады.</p>
-<h2>Судың электролизі</h2>
-<p>Тұрақты ток әсерінен су сутегі мен оттегіге ыдырайды. Катодта сутегі,
-анодта оттегі бөлінеді, олардың көлемдерінің қатынасы 2 : 1.</p>
-<span class="formula">2H<sub>2</sub>O → 2H<sub>2</sub>↑ + O<sub>2</sub>↑</span>
-"""
-
-
-# Topic 1: a typical topic — the stage list is data, any length and mix of kinds is allowed.
-T1_STAGES = [
-    (Stage.Kind.THEORY, "Теория. Сутегі мен оттегінің алынуы және қасиеттері", {"body": THEORY_T1.strip()}),
-    (Stage.Kind.VIDEO, "Видеосабақ. Сутегі мен оттегіні зертханада алу", {}),
-    (Stage.Kind.LAB, "Зертханалық жұмыс. Сутегі және оттегі", {"lab_key": "t01"}),
-    (Stage.Kind.PRACTICE, "Практикалық жұмыс 1. Сутегінің көлемін есептеу", {}),
-    (Stage.Kind.PRACTICE, "Практикалық жұмыс 2. Оттегінің массасын есептеу", {}),
-    (Stage.Kind.TEST, "Тақырып тесті", {}),
-]
+from ._content import CONTENT, COURSE, MODULE_1_TOPICS, MODULES, TOPIC_COUNT, TOPICS
+from ._seed_quizzes import sync_quiz
 
 
 class Command(BaseCommand):
-    help = "Create the ChemEduTech course skeleton (idempotent)."
+    help = "Create the ChemEduTech course from the seed content (idempotent; --replace updates existing content)."
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            "--replace",
+            action="store_true",
+            help="Update existing texts and rewrite quizzes and practice works that no student has answered yet.",
+        )
 
     @transaction.atomic
-    def handle(self, *args, **options):
-        course, _ = Course.objects.update_or_create(
-            slug="chemistry",
+    def handle(self, *args, replace=False, **options):
+        self.replace = replace
+        self.notes = []
+        course, created = Course.objects.get_or_create(
+            slug=COURSE["slug"],
             defaults={
-                "title": "Химия: виртуалды зертханалық практикум",
-                "short_description": "Болашақ химия мұғалімдеріне арналған онлайн курс: теория және виртуалды зертханалық жұмыстар.",
+                **{k: v for k, v in COURSE.items() if k != "slug"},
                 "status": Course.Status.PUBLISHED,
                 "enrollment_mode": Course.EnrollmentMode.OPEN,
             },
         )
-        m1, _ = Module.objects.update_or_create(course=course, order=1, defaults={"title": "1-модуль"})
-        m2, _ = Module.objects.update_or_create(course=course, order=2, defaults={"title": "2-модуль"})
+        if replace and not created:
+            Course.objects.filter(pk=course.pk).update(
+                title=COURSE["title"], short_description=COURSE["short_description"]
+            )
+        modules = {}
+        for order, title in MODULES:
+            module, made = Module.objects.get_or_create(course=course, order=order, defaults={"title": title})
+            if replace and not made and module.title != title:
+                module.title = title
+                module.save(update_fields=["title", "updated_at"])
+            modules[order] = module
 
-        for n in range(1, 16):
-            module = m1 if n <= 8 else m2
-            defaults = {
-                "module": module,
-                "order": n if n <= 8 else n - 8,
-                "title": f"{n}-тақырып",
-                "is_published": False,
-            }
-            if n == 1:
-                defaults.update(
-                    title="Сутегі және оттегі: алынуы және қасиеттері",
-                    summary="Сутегі мен оттегіні зертханада алу, жинау, судың электролизі және катализатордың әсері.",
-                    estimated_minutes=180,
-                    is_published=True,
-                )
-            topic, _ = Topic.objects.update_or_create(module__course=course, number=n, defaults=defaults)
-            if n == 1:
-                for order, (kind, title, content) in enumerate(T1_STAGES, start=1):
-                    stage, _ = Stage.objects.update_or_create(
-                        topic=topic, order=order, defaults={"kind": kind, "title": title}
-                    )
-                    ensure_stage_content(stage, **content)
-                self._seed_t1_quizzes(topic)
+        for n in range(1, max(TOPIC_COUNT, max(TOPICS)) + 1):
+            self._topic(course, modules, n)
 
         if apps.is_installed("apps.practice"):  # a higher layer: called by name, not imported
-            call_command("seed_practice", verbosity=0)
-        self.stdout.write(
-            self.style.SUCCESS(
-                "Course skeleton is ready: 2 modules, 15 topics (topic 1 published, 6 stages, 3 quizzes)."
-            )
-        )
+            call_command("seed_practice", replace=replace, verbosity=options["verbosity"])
+        for note in self.notes:
+            self.stdout.write(self.style.WARNING(note))
+        published = Topic.objects.filter(module__course=course, is_published=True).count()
+        self.stdout.write(self.style.SUCCESS(f"Course «{course.slug}» is ready: {published} published topics."))
 
-    def _seed_t1_quizzes(self, topic):
-        stages = {}
-        for s in topic.stages.order_by("order"):
-            stages.setdefault(s.kind, s)  # the first stage of each kind
-        for kind, title, questions in (
-            (Stage.Kind.THEORY, "1-тақырып. Теорияның бекіту тесті", THEORY_CHECKPOINT),
-            (Stage.Kind.VIDEO, "1-тақырып. Видеосабақтың бекіту тесті", VIDEO_CHECKPOINT),
-        ):
-            stage = stages[kind]
-            if stage.checkpoint_quiz_id is None:
-                stage.checkpoint_quiz = checkpoint(title, questions)
+    # --- topics and stages ----------------------------------------------------------------
+
+    def _topic(self, course, modules, n):
+        module_order, title, summary = TOPICS.get(n, (1 if n <= MODULE_1_TOPICS else 2, f"{n}-тақырып", ""))
+        content = CONTENT.get(n)
+        module = modules[module_order]
+        order = n if module_order == 1 else n - MODULE_1_TOPICS
+        topic = Topic.objects.filter(module__course=course, number=n).first()
+        fresh = topic is None
+        if fresh:
+            topic = Topic.objects.create(
+                module=module, number=n, order=order, title=title, summary=summary, is_published=False
+            )
+        elif self.replace:
+            topic.title, topic.summary = title, summary
+            topic.save(update_fields=["title", "summary", "updated_at"])
+        if content is None:
+            return
+        if fresh or self.replace:  # a topic the teacher unpublished stays unpublished on a plain run
+            topic.estimated_minutes = content.MINUTES
+            topic.is_published = True
+            topic.save(update_fields=["estimated_minutes", "is_published", "updated_at"])
+        self._stages(topic, content.STAGES)
+
+    def _stages(self, topic, specs):
+        """Stages are matched by kind and position within the kind (the 2nd practice spec ↔ the 2nd practice stage),
+        so re-ordering never changes the kind of a stage students have worked on. Extra stages are kept."""
+        existing = {}
+        for stage in topic.stages.order_by("order", "pk"):
+            existing.setdefault(stage.kind, []).append(stage)
+        seen = {}
+        ordered = []
+        for spec in specs:
+            kind = spec["kind"]
+            index = seen.get(kind, 0)
+            seen[kind] = index + 1
+            pool = existing.get(kind, [])
+            stage = pool[index] if index < len(pool) else None
+            if stage is None:
+                stage = Stage.objects.create(topic=topic, kind=kind, title=spec["title"], order=1000 + len(ordered))
+                fresh = True
+            else:
+                fresh = False
+            if fresh or self.replace:
+                stage.title = spec["title"]
+                stage.pass_percent = spec.get("pass_percent", 60)
+                stage.save(update_fields=["title", "pass_percent", "updated_at"])
+            self._content(stage, spec, fresh)
+            ordered.append(stage)
+        if self.replace or any(s.order >= 1000 for s in ordered):
+            extras = [s for kind, pool in existing.items() for s in pool[seen.get(kind, 0) :]]
+            for order, stage in enumerate([*ordered, *extras], start=1):
+                if stage.order != order:
+                    Stage.objects.filter(pk=stage.pk).update(order=order)
+            for stage in extras:
+                self.notes.append(
+                    f"Topic {topic.number}: stage «{stage.title}» is not in the content; kept at the end."
+                )
+
+    def _content(self, stage, spec, fresh):
+        fields = dict(spec.get("content") or {})
+        current = getattr(stage, "content", None)
+        if not (fresh or self.replace) and current is not None:
+            fields = {k: v for k, v in fields.items() if not getattr(current, k, None)}  # fill blanks only
+        ensure_stage_content(stage, **fields)
+        if spec.get("checkpoint"):
+            title, questions = spec["checkpoint"]
+            quiz, result = sync_quiz(
+                stage.checkpoint_quiz, Quiz.Kind.CHECKPOINT, title, questions, replace=self.replace
+            )
+            self._note(stage, result)
+            if stage.checkpoint_quiz_id != quiz.pk:
+                stage.checkpoint_quiz = quiz
                 stage.save(update_fields=["checkpoint_quiz", "updated_at"])
-        test = stages[Stage.Kind.TEST].test_content
-        if test.quiz_id is None:
-            test.quiz = topic_test("1-тақырып тесті", TOPIC_TEST)
-            test.save(update_fields=["quiz", "updated_at"])
+        if spec.get("test"):
+            title, questions = spec["test"]
+            test = stage.test_content
+            quiz, result = sync_quiz(
+                test.quiz, Quiz.Kind.TOPIC_TEST, title, questions, spec.get("test_settings"), replace=self.replace
+            )
+            self._note(stage, result)
+            if test.quiz_id != quiz.pk:
+                test.quiz = quiz
+                test.save(update_fields=["quiz", "updated_at"])
+
+    def _note(self, stage, result):
+        if result == "attempted":
+            self.notes.append(f"Stage «{stage.title}»: students have attempted its quiz — the questions are kept.")
