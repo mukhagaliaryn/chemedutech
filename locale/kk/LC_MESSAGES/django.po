@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ChemEduTech\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-18 08:22+0500\n"
+"POT-Creation-Date: 2026-10-18 08:36+0500\n"
 "PO-Revision-Date: 2026-10-16 21:00+0500\n"
 "Last-Translator: ChemEduTech\n"
 "Language-Team: ChemEduTech\n"
@@ -1606,6 +1606,7 @@ msgstr "Нәтижелер сақталып, талдау тапсырмасы �
 #: apps/labs/experiments/t02/silver.py:123
 #: apps/labs/experiments/t03/sulfate.py:155
 #: apps/labs/experiments/t04/ions.py:119
+#: apps/labs/experiments/t05/carbon_silicon.py:142
 msgid "Fill in the lab journal first."
 msgstr "Алдымен зертханалық журналды толтыру керек."
 
@@ -2428,6 +2429,7 @@ msgstr "A пробиркасында суық 2% NaOH ерітіндісі."
 #: apps/labs/experiments/t02/alkali.py:67
 #: apps/labs/experiments/t02/displacement.py:65
 #: apps/labs/experiments/t02/silver.py:80 apps/labs/experiments/t04/ions.py:85
+#: apps/labs/experiments/t05/carbon_silicon.py:96
 msgid "Put the rack with the test tubes on the bench first."
 msgstr "Алдымен пробиркалары бар штативті үстелге қою керек."
 
@@ -2462,6 +2464,7 @@ msgstr "Болжам: A мен B-да қандай тұздар түзіледі
 #: apps/labs/experiments/t02/alkali.py:81
 #: apps/labs/experiments/t02/displacement.py:69
 #: apps/labs/experiments/t02/silver.py:94
+#: apps/labs/experiments/t05/carbon_silicon.py:104
 msgid "The prediction is recorded."
 msgstr "Болжам тіркелді."
 
@@ -2471,6 +2474,7 @@ msgstr "A: NaCl және NaClO; B: NaCl және NaClO₃"
 
 #: apps/labs/experiments/t02/alkali.py:84
 #: apps/labs/experiments/t02/silver.py:98
+#: apps/labs/experiments/t05/carbon_silicon.py:108
 msgid "Let us check it."
 msgstr "Тәжірибеде тексеріледі."
 
@@ -2663,6 +2667,7 @@ msgstr "A пробиркасы, иондық"
 
 #: apps/labs/experiments/t02/displacement.py:41
 #: apps/labs/experiments/t04/ions.py:52
+#: apps/labs/experiments/t05/carbon_silicon.py:70
 msgid "Tube B, ionic"
 msgstr "B пробиркасы, иондық"
 
@@ -2691,6 +2696,7 @@ msgstr ""
 
 #: apps/labs/experiments/t02/displacement.py:62
 #: apps/labs/experiments/t02/silver.py:72
+#: apps/labs/experiments/t05/carbon_silicon.py:93
 msgid "Take the rack and three test tubes"
 msgstr "Штатив пен үш пробирканы алу"
 
@@ -2770,6 +2776,7 @@ msgid "Tube B holds a colourless KBr solution."
 msgstr "B пробиркасында түссіз KBr ерітіндісі."
 
 #: apps/labs/experiments/t02/displacement.py:94
+#: apps/labs/experiments/t05/carbon_silicon.py:119
 msgid "Finish the experiment in tube A first."
 msgstr "Алдымен A пробиркасындағы тәжірибені аяқтау керек."
 
@@ -2794,6 +2801,7 @@ msgid "Tube C holds a colourless KCl solution."
 msgstr "C пробиркасында түссіз KCl ерітіндісі."
 
 #: apps/labs/experiments/t02/displacement.py:98
+#: apps/labs/experiments/t05/carbon_silicon.py:123
 msgid "Finish the experiment in tube B first."
 msgstr "Алдымен B пробиркасындағы тәжірибені аяқтау керек."
 
@@ -2833,6 +2841,7 @@ msgid "Chlorine displaced bromine in tube B: chlorine is stronger."
 msgstr "B пробиркасында хлор бромды ығыстырды: хлор күштірек."
 
 #: apps/labs/experiments/t02/displacement.py:117
+#: apps/labs/experiments/t05/carbon_silicon.py:138
 msgid "Carry out the experiments in all three tubes first."
 msgstr "Алдымен үш пробиркадағы тәжірибені орындау керек."
 
@@ -3188,6 +3197,7 @@ msgstr "Барий хлоридінің ерітіндісі"
 
 #: apps/labs/experiments/t03/sulfate.py:80
 #: apps/labs/experiments/t04/ions.py:57
+#: apps/labs/experiments/t05/carbon_silicon.py:82
 msgid "Sodium hydroxide solution"
 msgstr "Натрий гидроксидінің ерітіндісі"
 
@@ -3220,6 +3230,7 @@ msgid "The vessels are on the bench."
 msgstr "Ыдыстар үстелге қойылды."
 
 #: apps/labs/experiments/t03/sulfate.py:92
+#: apps/labs/experiments/t05/carbon_silicon.py:94
 msgid "Confirm the safety notice first."
 msgstr "Алдымен қауіпсіздік ескертуін растау керек."
 
@@ -3793,6 +3804,350 @@ msgid ""
 msgstr ""
 "Бұл тәжірибені мектеп оқушыларына түсіндіру үшін қандай үш экрандық "
 "көріністі таңдауға болады?"
+
+#: apps/labs/experiments/t05/__init__.py:12
+msgid "Carbon and silicon compounds"
+msgstr "Көміртек пен кремний қосылыстары"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:56
+msgid "Comparing carbon and silicon compounds"
+msgstr "Көміртек пен кремний қосылыстарының қасиеттерін салыстыру"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:58
+msgid ""
+"Compare the acidic properties of carbon(IV) oxide, the reactions of the "
+"carbonate ion and the reaction of a silicate with acid; explain the "
+"observations at the macro, particle and symbolic levels."
+msgstr ""
+"Көміртек(IV) оксидінің қышқылдық қасиетін, карбонат ионының реакцияларын "
+"және силикаттың қышқылмен әрекеттесуін салыстырып, бақылауларды макро-, "
+"бөлшектік және символдық деңгейде түсіндіру."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:64
+msgid ""
+"CO₂ makes limewater turbid (insoluble CaCO₃); in excess the precipitate "
+"dissolves as soluble Ca(HCO₃)₂. A carbonate releases CO₂ with an acid. An "
+"acidified silicate gives a gel of hydrated silicon dioxide (SiO₂·nH₂O); "
+"H₂SiO₃ is only a conventional school formula for it."
+msgstr ""
+"CO₂ әк суын лайландырады (ерімейтін CaCO₃); артық мөлшерде тұнба ерігіш "
+"Ca(HCO₃)₂ түрінде ериді. Карбонат қышқылмен CO₂ бөледі. Қышқылдандырылған "
+"силикат гидратталған кремний диоксидінің гелін (SiO₂·nH₂O) береді; H₂SiO₃ — "
+"оның тек шартты мектептік формуласы."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:69
+msgid "Excess CO₂"
+msgstr "Артық CO₂"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:71
+msgid "Tube C (conventional)"
+msgstr "C пробиркасы (шартты)"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:74
+msgid "Rack with three test tubes"
+msgstr "Үш пробиркасы бар штатив"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:75
+msgid "Clear limewater"
+msgstr "Мөлдір әк суы"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:76
+msgid "Virtual CO₂ source with a delivery tube"
+msgstr "Газөткізгіш түтігі бар виртуалды CO₂ көзі"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:77
+msgid "Sodium carbonate solution"
+msgstr "Натрий карбонатының ерітіндісі"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:78
+msgid "Dilute hydrochloric acid"
+msgstr "Сұйылтылған тұз қышқылы"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:79
+msgid "Sodium silicate solution"
+msgstr "Натрий силикатының ерітіндісі"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:87
+msgid ""
+"NaOH would absorb CO₂ without a visible change: CO₂ is detected with "
+"limewater."
+msgstr "NaOH CO₂-ні көрінетін өзгеріссіз сіңіреді: CO₂ әк суымен анықталады."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:91
+msgid "Start the lab: confirm the safety notice"
+msgstr "Зертхананы бастау: қауіпсіздік ескертуін растау"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:92
+msgid ""
+"Virtual mode only: CO₂ can suffocate in a closed room, acids are irritants."
+msgstr ""
+"Тек виртуалды режим: CO₂ жабық кеңістікте тұншықтыруы мүмкін, қышқылдар "
+"тітіркендіреді."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:93
+msgid "Tubes A, B and C are on the bench."
+msgstr "A, B және C пробиркалары үстелге қойылды."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:95
+msgid "A: pour limewater"
+msgstr "A: әк суын құю"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:95
+msgid "Tube A holds a clear Ca(OH)₂ solution."
+msgstr "A пробиркасында мөлдір Ca(OH)₂ ерітіндісі."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:97
+msgid "Connect the CO₂ source"
+msgstr "CO₂ көзін қосу"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:97
+msgid "The delivery tube leads into tube A."
+msgstr "Газөткізгіш түтік A пробиркасына жалғанды."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:98
+msgid ""
+"Pour limewater into tube A first: there must be something to detect CO₂ "
+"with."
+msgstr ""
+"Алдымен A пробиркасына әк суын құю керек: CO₂-ні анықтайтын зат болуы тиіс."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:99
+msgid "Send CO₂ — stage 1"
+msgstr "CO₂ жіберу — 1-кезең"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:99
+msgid "Solution A turns turbid: a white CaCO₃ precipitate forms."
+msgstr "A ерітіндісі лайланады: ақ CaCO₃ тұнбасы түзіледі."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:100
+msgid "Connect the CO₂ source to tube A first."
+msgstr "Алдымен CO₂ көзін A пробиркасына қосу керек."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:103
+msgid "Predict: what happens if CO₂ is passed further?"
+msgstr "Болжам: CO₂ әрі қарай жіберілсе не болады?"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:107
+msgid "The turbidity disappears: soluble Ca(HCO₃)₂ forms"
+msgstr "Лайлану жойылады: ерігіш Ca(HCO₃)₂ түзіледі"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:109
+msgid "Even more precipitate forms"
+msgstr "Тұнба одан да көбейеді"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:110
+msgid ""
+"All the Ca(OH)₂ has already reacted; excess CO₂ reacts with CaCO₃ itself."
+msgstr ""
+"Ca(OH)₂ толық әрекеттесіп болды; артық CO₂ CaCO₃-тің өзімен әрекеттеседі."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:111
+msgid "The precipitate turns into a gas"
+msgstr "Тұнба газға айналады"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:113
+msgid "Run stage 1 first."
+msgstr "Алдымен 1-кезеңді орындау керек."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:115
+msgid "Send CO₂ — in excess"
+msgstr "CO₂ жіберу — артық мөлшер"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:116
+msgid ""
+"The turbidity gradually disappears: soluble Ca(HCO₃)₂ goes into solution."
+msgstr "Лайлану біртіндеп азаяды: ерігіш Ca(HCO₃)₂ ерітіндіге өтеді."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:117
+msgid "Make a prediction first."
+msgstr "Алдымен болжам жасау керек."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:118
+msgid "B: pour the Na₂CO₃ solution"
+msgstr "B: Na₂CO₃ ерітіндісін құю"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:118
+msgid "Tube B holds a colourless carbonate solution."
+msgstr "B пробиркасында түссіз карбонат ерітіндісі."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:120
+msgid "B: add HCl"
+msgstr "B: HCl қосу"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:120
+msgid "Gas bubbles: CO₂ is released."
+msgstr "Газ көпіршіктері: CO₂ бөлінеді."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:121
+msgid "Pour the carbonate solution into tube B first."
+msgstr "Алдымен B пробиркасына карбонат ерітіндісін құю керек."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:122
+msgid "C: pour the Na₂SiO₃ solution"
+msgstr "C: Na₂SiO₃ ерітіндісін құю"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:122
+msgid "Tube C holds a colourless silicate solution."
+msgstr "C пробиркасында түссіз силикат ерітіндісі."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:124
+msgid "C: add HCl"
+msgstr "C: HCl қосу"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:124
+msgid "A gel-like precipitate of hydrated silicon dioxide forms."
+msgstr "Гидратталған кремний диоксидінің гель тәрізді тұнбасы түзіледі."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:125
+msgid "Pour the silicate solution into tube C first."
+msgstr "Алдымен C пробиркасына силикат ерітіндісін құю керек."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:128
+msgid "Compare the results"
+msgstr "Нәтижелерді салыстыру"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:129
+msgid "The observations of A, B and C are compared; the equations are shown."
+msgstr "A/B/C бақылаулары салыстырылды; теңдеулер көрсетілді."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:132
+msgid "B — CO₂ bubbles; C — a gel of hydrated SiO₂"
+msgstr "B — CO₂ көпіршіктері; C — гидратталған SiO₂ гелі"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:133
+msgid "Right: the carbonate gives a gas, the silicate a gel."
+msgstr "Дұрыс: карбонат газ береді, силикат — гель."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:134
+msgid "Both B and C release CO₂"
+msgstr "B-да да, C-да да CO₂ бөлінеді"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:135
+msgid "There is no carbon in a silicate: no CO₂ can come from it."
+msgstr "Силикатта көміртек жоқ: одан CO₂ бөлінбейді."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:136
+msgid "Nothing happens in B and C"
+msgstr "B мен C-да ештеңе болмайды"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:136
+msgid "Look at the bubbles in B and the gel in C again."
+msgstr "B-дағы көпіршіктер мен C-дағы гельге қайта назар аудару керек."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:140
+msgid "Save the journal"
+msgstr "Журналды сақтау"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:140
+msgid "Observations, equations and explanations are recorded."
+msgstr "Бақылаулар, теңдеулер және түсіндірмелер тіркелді."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:141
+msgid "Submit the work"
+msgstr "Жұмысты тапсыру"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:141
+msgid "The answers are checked and the analysis opens."
+msgstr "Жауаптар тексерілді, талдау ашылады."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:145
+msgid "A — CO₂ + limewater: the equation"
+msgstr "A — CO₂ + әк суы: теңдеу"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:146
+msgid "A — excess CO₂: the equation"
+msgstr "A — артық CO₂: теңдеу"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:147
+msgid "B — carbonate + acid: the short ionic equation"
+msgstr "B — карбонат + қышқыл: қысқартылған иондық теңдеу"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:149
+msgid "C — silicate + acid: the conventional equation"
+msgstr "C — силикат + қышқыл: шартты теңдеу"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:153
+msgid "C — what forms?"
+msgstr "C — не түзіледі?"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:156
+msgid "A gel of hydrated silicon dioxide (SiO₂·nH₂O)"
+msgstr "Гидратталған кремний диоксидінің гелі (SiO₂·nH₂O)"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:157
+msgid "Pure crystals of H₂SiO₃"
+msgstr "Таза H₂SiO₃ кристалдары"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:158
+msgid "CO₂ gas"
+msgstr "CO₂ газы"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:161
+msgid "Conclusion: how do the carbonate and the silicate differ?"
+msgstr "Қорытынды: карбонат пен силикаттың айырмашылығы неде?"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:166
+msgid "Why does CO₂ first make limewater turbid and then clear?"
+msgstr "Неліктен CO₂ әк суын алдымен лайландырады, сосын мөлдірлендіреді?"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:168
+msgid "CaCO₃ forms first; in excess CO₂ it turns into soluble Ca(HCO₃)₂"
+msgstr "Алдымен CaCO₃ түзіледі; артық CO₂-де ол ерігіш Ca(HCO₃)₂-ге айналады"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:169
+msgid "The solution warms up and the precipitate melts"
+msgstr "Ерітінді жылынып, тұнба балқиды"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:170
+msgid "The water evaporates"
+msgstr "Су буланады"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:175
+msgid ""
+"How do the observations differ when acid is added to a carbonate and to a "
+"silicate?"
+msgstr "Карбонат пен силикатқа қышқыл қосқанда бақылаулар қалай ерекшеленеді?"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:177
+msgid "The carbonate releases gas; the silicate gives a gel-like precipitate"
+msgstr "Карбонат газ бөледі; силикат гель тәрізді тұнба береді"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:178
+msgid "They are the same"
+msgstr "Бірдей"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:179
+msgid "The silicate releases gas; the carbonate gives a gel"
+msgstr "Силикат газ бөледі; карбонат гель береді"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:184
+msgid "Why is the product in tube C hard to describe by one simple formula?"
+msgstr ""
+"Неліктен C пробиркасындағы өнімді бір ғана қарапайым формуламен сипаттау "
+"қиын?"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:186
+msgid ""
+"It is a gel of hydrated and polymerised silicic acid species, SiO₂·nH₂O"
+msgstr ""
+"Ол гидратталған және полимерленген кремний қышқылы түрлерінің гелі, "
+"SiO₂·nH₂O"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:187
+msgid "It is a gas"
+msgstr "Ол газ"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:188
+msgid "Its elements are unknown"
+msgstr "Оның құрамындағы элементтер белгісіз"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:191
+msgid ""
+"Which three levels of representation (macro, particle, symbolic) would you "
+"link in a school lesson, and how?"
+msgstr ""
+"Мектеп сабағында репрезентацияның қандай үш деңгейін (макро-, бөлшектік, "
+"символдық) қалай байланыстыруға болады?"
 
 #: apps/labs/models/attempt.py:10 apps/progress/models/progress.py:17
 #: apps/progress/models/progress.py:72 apps/student/cabinet.py:94

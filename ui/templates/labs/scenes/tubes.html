@@ -46,6 +46,13 @@ so the tubes are a Django loop over params.tubes.
                 :style="`fill:${sc.tubes[{{ i }}].cloudColor}; opacity:${sc.tubes[{{ i }}].cloud * 0.8}; transition: opacity 1.4s`"/>
           <rect :x="sc.x({{ i }}) - 20" :y="sc.liquidTop({{ i }})" width="40" :height="sc.liquidH({{ i }})"
                 :style="`fill:${sc.tubes[{{ i }}].gelColor}; opacity:${sc.tubes[{{ i }}].gel * 0.75}; transition: opacity 1.6s`"/>
+          {# suspended particles make turbidity visible #}
+          <g :style="`opacity:${sc.tubes[{{ i }}].cloud}; transition: opacity 1.4s`">
+            {% for d in 12|times %}
+              <circle :cx="sc.x({{ i }}) - 13 + ({{ d }} * 7) % 27" :cy="sc.liquidTop({{ i }}) + 8 + ({{ d }} * 13) % 60"
+                      r="1.6" fill="#9aa8b4"/>
+            {% endfor %}
+          </g>
           {# precipitate settles at the bottom #}
           <rect :x="sc.x({{ i }}) - 20" :y="392 - sc.tubes[{{ i }}].ppt * 34" width="40" :height="sc.tubes[{{ i }}].ppt * 34 + 20"
                 :style="`fill:${sc.tubes[{{ i }}].pptColor}`" x-show="sc.tubes[{{ i }}].ppt > 0"/>

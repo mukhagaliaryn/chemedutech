@@ -4,7 +4,7 @@ and, for the topics whose materials are ready, a module with the stages (theory,
 The number of topics is not fixed: a new topic is a new line in TOPICS (and, when ready, a module in CONTENT).
 """
 
-from . import t01, t02, t03, t04
+from . import t01, t02, t03, t04, t05
 
 COURSE = {
     "slug": "chemistry",
@@ -27,10 +27,9 @@ TOPICS = {
     2: (1, t02.TITLE, t02.SUMMARY),
     3: (1, t03.TITLE, t03.SUMMARY),
     4: (1, t04.TITLE, t04.SUMMARY),
-    5: (1, "IVA тобының элементтері",
-        "IVA тобының p-элементтеріне жалпы сипаттама, табиғатта таралуы, алынуы, физикалық және химиялық қасиеттері."),
+    5: (1, t05.TITLE, t05.SUMMARY),
 }  # fmt: skip
 TOPIC_COUNT = 15  # the skeleton; more topics may be added later
 MODULE_1_TOPICS = 8  # topics 1–8 → module 1, the rest → module 2
 
-CONTENT = {1: t01, 2: t02, 3: t03, 4: t04}
+CONTENT = {1: t01, 2: t02, 3: t03, 4: t04, 5: t05}

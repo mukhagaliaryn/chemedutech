@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ChemEduTech\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-18 08:22+0500\n"
+"POT-Creation-Date: 2026-10-18 08:36+0500\n"
 "PO-Revision-Date: 2026-10-16 21:00+0500\n"
 "Last-Translator: ChemEduTech\n"
 "Language-Team: ChemEduTech\n"
@@ -1609,6 +1609,7 @@ msgstr "Результаты сохраняются, открывается за
 #: apps/labs/experiments/t02/silver.py:123
 #: apps/labs/experiments/t03/sulfate.py:155
 #: apps/labs/experiments/t04/ions.py:119
+#: apps/labs/experiments/t05/carbon_silicon.py:142
 msgid "Fill in the lab journal first."
 msgstr "Сначала нужно заполнить лабораторный журнал."
 
@@ -2429,6 +2430,7 @@ msgstr "В пробирке A — холодный 2% раствор NaOH."
 #: apps/labs/experiments/t02/alkali.py:67
 #: apps/labs/experiments/t02/displacement.py:65
 #: apps/labs/experiments/t02/silver.py:80 apps/labs/experiments/t04/ions.py:85
+#: apps/labs/experiments/t05/carbon_silicon.py:96
 msgid "Put the rack with the test tubes on the bench first."
 msgstr "Сначала нужно поставить штатив с пробирками на стол."
 
@@ -2463,6 +2465,7 @@ msgstr "Прогноз: какие соли образуются в A и B?"
 #: apps/labs/experiments/t02/alkali.py:81
 #: apps/labs/experiments/t02/displacement.py:69
 #: apps/labs/experiments/t02/silver.py:94
+#: apps/labs/experiments/t05/carbon_silicon.py:104
 msgid "The prediction is recorded."
 msgstr "Прогноз записан."
 
@@ -2472,6 +2475,7 @@ msgstr "A: NaCl и NaClO; B: NaCl и NaClO₃"
 
 #: apps/labs/experiments/t02/alkali.py:84
 #: apps/labs/experiments/t02/silver.py:98
+#: apps/labs/experiments/t05/carbon_silicon.py:108
 msgid "Let us check it."
 msgstr "Проверим на опыте."
 
@@ -2663,6 +2667,7 @@ msgstr "Пробирка A, ионное"
 
 #: apps/labs/experiments/t02/displacement.py:41
 #: apps/labs/experiments/t04/ions.py:52
+#: apps/labs/experiments/t05/carbon_silicon.py:70
 msgid "Tube B, ionic"
 msgstr "Пробирка B, ионное"
 
@@ -2691,6 +2696,7 @@ msgstr ""
 
 #: apps/labs/experiments/t02/displacement.py:62
 #: apps/labs/experiments/t02/silver.py:72
+#: apps/labs/experiments/t05/carbon_silicon.py:93
 msgid "Take the rack and three test tubes"
 msgstr "Взять штатив и три пробирки"
 
@@ -2769,6 +2775,7 @@ msgid "Tube B holds a colourless KBr solution."
 msgstr "В пробирке B — бесцветный раствор KBr."
 
 #: apps/labs/experiments/t02/displacement.py:94
+#: apps/labs/experiments/t05/carbon_silicon.py:119
 msgid "Finish the experiment in tube A first."
 msgstr "Сначала нужно закончить опыт в пробирке A."
 
@@ -2793,6 +2800,7 @@ msgid "Tube C holds a colourless KCl solution."
 msgstr "В пробирке C — бесцветный раствор KCl."
 
 #: apps/labs/experiments/t02/displacement.py:98
+#: apps/labs/experiments/t05/carbon_silicon.py:123
 msgid "Finish the experiment in tube B first."
 msgstr "Сначала нужно закончить опыт в пробирке B."
 
@@ -2833,6 +2841,7 @@ msgid "Chlorine displaced bromine in tube B: chlorine is stronger."
 msgstr "В пробирке B хлор вытеснил бром: хлор сильнее."
 
 #: apps/labs/experiments/t02/displacement.py:117
+#: apps/labs/experiments/t05/carbon_silicon.py:138
 msgid "Carry out the experiments in all three tubes first."
 msgstr "Сначала нужно провести опыты во всех трёх пробирках."
 
@@ -3183,6 +3192,7 @@ msgstr "Раствор хлорида бария"
 
 #: apps/labs/experiments/t03/sulfate.py:80
 #: apps/labs/experiments/t04/ions.py:57
+#: apps/labs/experiments/t05/carbon_silicon.py:82
 msgid "Sodium hydroxide solution"
 msgstr "Раствор гидроксида натрия"
 
@@ -3215,6 +3225,7 @@ msgid "The vessels are on the bench."
 msgstr "Сосуды стоят на столе."
 
 #: apps/labs/experiments/t03/sulfate.py:92
+#: apps/labs/experiments/t05/carbon_silicon.py:94
 msgid "Confirm the safety notice first."
 msgstr "Сначала нужно подтвердить предупреждение о безопасности."
 
@@ -3787,6 +3798,355 @@ msgid ""
 "school students?"
 msgstr ""
 "Какие три экранных вида стоит выбрать, чтобы объяснить этот опыт школьникам?"
+
+#: apps/labs/experiments/t05/__init__.py:12
+msgid "Carbon and silicon compounds"
+msgstr "Соединения углерода и кремния"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:56
+msgid "Comparing carbon and silicon compounds"
+msgstr "Сравнение свойств соединений углерода и кремния"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:58
+msgid ""
+"Compare the acidic properties of carbon(IV) oxide, the reactions of the "
+"carbonate ion and the reaction of a silicate with acid; explain the "
+"observations at the macro, particle and symbolic levels."
+msgstr ""
+"Сравнить кислотные свойства оксида углерода(IV), реакции карбонат-иона и "
+"реакцию силиката с кислотой; объяснить наблюдения на макро-, частичном и "
+"символьном уровнях."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:64
+msgid ""
+"CO₂ makes limewater turbid (insoluble CaCO₃); in excess the precipitate "
+"dissolves as soluble Ca(HCO₃)₂. A carbonate releases CO₂ with an acid. An "
+"acidified silicate gives a gel of hydrated silicon dioxide (SiO₂·nH₂O); "
+"H₂SiO₃ is only a conventional school formula for it."
+msgstr ""
+"CO₂ мутит известковую воду (нерастворимый CaCO₃); в избытке осадок "
+"растворяется в виде растворимого Ca(HCO₃)₂. Карбонат с кислотой выделяет "
+"CO₂. Подкисленный силикат даёт гель гидратированного диоксида кремния "
+"(SiO₂·nH₂O); H₂SiO₃ — лишь условная школьная формула."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:69
+msgid "Excess CO₂"
+msgstr "Избыток CO₂"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:71
+msgid "Tube C (conventional)"
+msgstr "Пробирка C (условно)"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:74
+msgid "Rack with three test tubes"
+msgstr "Штатив с тремя пробирками"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:75
+msgid "Clear limewater"
+msgstr "Прозрачная известковая вода"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:76
+msgid "Virtual CO₂ source with a delivery tube"
+msgstr "Виртуальный источник CO₂ с газоотводной трубкой"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:77
+msgid "Sodium carbonate solution"
+msgstr "Раствор карбоната натрия"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:78
+msgid "Dilute hydrochloric acid"
+msgstr "Разбавленная соляная кислота"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:79
+msgid "Sodium silicate solution"
+msgstr "Раствор силиката натрия"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:87
+msgid ""
+"NaOH would absorb CO₂ without a visible change: CO₂ is detected with "
+"limewater."
+msgstr ""
+"NaOH поглотил бы CO₂ без видимых изменений: CO₂ обнаруживают известковой "
+"водой."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:91
+msgid "Start the lab: confirm the safety notice"
+msgstr "Начать работу: подтвердить предупреждение о безопасности"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:92
+msgid ""
+"Virtual mode only: CO₂ can suffocate in a closed room, acids are irritants."
+msgstr ""
+"Только виртуальный режим: CO₂ в закрытом помещении может вызвать удушье, "
+"кислоты раздражают."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:93
+msgid "Tubes A, B and C are on the bench."
+msgstr "Пробирки A, B и C стоят на столе."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:95
+msgid "A: pour limewater"
+msgstr "A: налить известковую воду"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:95
+msgid "Tube A holds a clear Ca(OH)₂ solution."
+msgstr "В пробирке A — прозрачный раствор Ca(OH)₂."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:97
+msgid "Connect the CO₂ source"
+msgstr "Подключить источник CO₂"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:97
+msgid "The delivery tube leads into tube A."
+msgstr "Газоотводная трубка подведена к пробирке A."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:98
+msgid ""
+"Pour limewater into tube A first: there must be something to detect CO₂ "
+"with."
+msgstr ""
+"Сначала нужно налить известковую воду в пробирку A: должно быть, чем "
+"обнаружить CO₂."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:99
+msgid "Send CO₂ — stage 1"
+msgstr "Пропустить CO₂ — этап 1"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:99
+msgid "Solution A turns turbid: a white CaCO₃ precipitate forms."
+msgstr "Раствор A мутнеет: образуется белый осадок CaCO₃."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:100
+msgid "Connect the CO₂ source to tube A first."
+msgstr "Сначала нужно подключить источник CO₂ к пробирке A."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:103
+msgid "Predict: what happens if CO₂ is passed further?"
+msgstr "Прогноз: что будет, если пропускать CO₂ дальше?"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:107
+msgid "The turbidity disappears: soluble Ca(HCO₃)₂ forms"
+msgstr "Муть исчезает: образуется растворимый Ca(HCO₃)₂"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:109
+msgid "Even more precipitate forms"
+msgstr "Осадка станет ещё больше"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:110
+msgid ""
+"All the Ca(OH)₂ has already reacted; excess CO₂ reacts with CaCO₃ itself."
+msgstr "Весь Ca(OH)₂ уже прореагировал; избыток CO₂ реагирует с самим CaCO₃."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:111
+msgid "The precipitate turns into a gas"
+msgstr "Осадок превращается в газ"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:113
+msgid "Run stage 1 first."
+msgstr "Сначала нужно выполнить этап 1."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:115
+msgid "Send CO₂ — in excess"
+msgstr "Пропустить CO₂ — в избытке"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:116
+msgid ""
+"The turbidity gradually disappears: soluble Ca(HCO₃)₂ goes into solution."
+msgstr "Муть постепенно исчезает: растворимый Ca(HCO₃)₂ переходит в раствор."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:117
+msgid "Make a prediction first."
+msgstr "Сначала нужно сделать прогноз."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:118
+msgid "B: pour the Na₂CO₃ solution"
+msgstr "B: налить раствор Na₂CO₃"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:118
+msgid "Tube B holds a colourless carbonate solution."
+msgstr "В пробирке B — бесцветный раствор карбоната."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:120
+msgid "B: add HCl"
+msgstr "B: добавить HCl"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:120
+msgid "Gas bubbles: CO₂ is released."
+msgstr "Пузырьки газа: выделяется CO₂."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:121
+msgid "Pour the carbonate solution into tube B first."
+msgstr "Сначала нужно налить раствор карбоната в пробирку B."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:122
+msgid "C: pour the Na₂SiO₃ solution"
+msgstr "C: налить раствор Na₂SiO₃"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:122
+msgid "Tube C holds a colourless silicate solution."
+msgstr "В пробирке C — бесцветный раствор силиката."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:124
+msgid "C: add HCl"
+msgstr "C: добавить HCl"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:124
+msgid "A gel-like precipitate of hydrated silicon dioxide forms."
+msgstr "Образуется гелеобразный осадок гидратированного диоксида кремния."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:125
+msgid "Pour the silicate solution into tube C first."
+msgstr "Сначала нужно налить раствор силиката в пробирку C."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:128
+msgid "Compare the results"
+msgstr "Сравнить результаты"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:129
+msgid "The observations of A, B and C are compared; the equations are shown."
+msgstr "Наблюдения A, B и C сопоставлены; показаны уравнения."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:132
+msgid "B — CO₂ bubbles; C — a gel of hydrated SiO₂"
+msgstr "B — пузырьки CO₂; C — гель гидратированного SiO₂"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:133
+msgid "Right: the carbonate gives a gas, the silicate a gel."
+msgstr "Верно: карбонат даёт газ, силикат — гель."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:134
+msgid "Both B and C release CO₂"
+msgstr "И в B, и в C выделяется CO₂"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:135
+msgid "There is no carbon in a silicate: no CO₂ can come from it."
+msgstr "В силикате нет углерода: CO₂ из него не выделится."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:136
+msgid "Nothing happens in B and C"
+msgstr "В B и C ничего не происходит"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:136
+msgid "Look at the bubbles in B and the gel in C again."
+msgstr "Нужно ещё раз посмотреть на пузырьки в B и гель в C."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:140
+msgid "Save the journal"
+msgstr "Сохранить журнал"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:140
+msgid "Observations, equations and explanations are recorded."
+msgstr "Наблюдения, уравнения и объяснения записаны."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:141
+msgid "Submit the work"
+msgstr "Сдать работу"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:141
+msgid "The answers are checked and the analysis opens."
+msgstr "Ответы проверены, открывается анализ."
+
+#: apps/labs/experiments/t05/carbon_silicon.py:145
+msgid "A — CO₂ + limewater: the equation"
+msgstr "A — CO₂ + известковая вода: уравнение"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:146
+msgid "A — excess CO₂: the equation"
+msgstr "A — избыток CO₂: уравнение"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:147
+msgid "B — carbonate + acid: the short ionic equation"
+msgstr "B — карбонат + кислота: сокращённое ионное уравнение"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:149
+msgid "C — silicate + acid: the conventional equation"
+msgstr "C — силикат + кислота: условное уравнение"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:153
+msgid "C — what forms?"
+msgstr "C — что образуется?"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:156
+msgid "A gel of hydrated silicon dioxide (SiO₂·nH₂O)"
+msgstr "Гель гидратированного диоксида кремния (SiO₂·nH₂O)"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:157
+msgid "Pure crystals of H₂SiO₃"
+msgstr "Чистые кристаллы H₂SiO₃"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:158
+msgid "CO₂ gas"
+msgstr "Газ CO₂"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:161
+msgid "Conclusion: how do the carbonate and the silicate differ?"
+msgstr "Вывод: чем различаются карбонат и силикат?"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:166
+msgid "Why does CO₂ first make limewater turbid and then clear?"
+msgstr ""
+"Почему CO₂ сначала мутит известковую воду, а затем она становится "
+"прозрачной?"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:168
+msgid "CaCO₃ forms first; in excess CO₂ it turns into soluble Ca(HCO₃)₂"
+msgstr ""
+"Сначала образуется CaCO₃; в избытке CO₂ он превращается в растворимый "
+"Ca(HCO₃)₂"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:169
+msgid "The solution warms up and the precipitate melts"
+msgstr "Раствор нагревается, и осадок плавится"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:170
+msgid "The water evaporates"
+msgstr "Вода испаряется"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:175
+msgid ""
+"How do the observations differ when acid is added to a carbonate and to a "
+"silicate?"
+msgstr ""
+"Чем различаются наблюдения при добавлении кислоты к карбонату и к силикату?"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:177
+msgid "The carbonate releases gas; the silicate gives a gel-like precipitate"
+msgstr "Карбонат выделяет газ; силикат даёт гелеобразный осадок"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:178
+msgid "They are the same"
+msgstr "Одинаковы"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:179
+msgid "The silicate releases gas; the carbonate gives a gel"
+msgstr "Силикат выделяет газ; карбонат даёт гель"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:184
+msgid "Why is the product in tube C hard to describe by one simple formula?"
+msgstr "Почему продукт в пробирке C трудно описать одной простой формулой?"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:186
+msgid ""
+"It is a gel of hydrated and polymerised silicic acid species, SiO₂·nH₂O"
+msgstr ""
+"Это гель гидратированных и полимеризованных форм кремниевой кислоты, "
+"SiO₂·nH₂O"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:187
+msgid "It is a gas"
+msgstr "Это газ"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:188
+msgid "Its elements are unknown"
+msgstr "Его элементы неизвестны"
+
+#: apps/labs/experiments/t05/carbon_silicon.py:191
+msgid ""
+"Which three levels of representation (macro, particle, symbolic) would you "
+"link in a school lesson, and how?"
+msgstr ""
+"Какие три уровня представления (макро-, частичный, символьный) и как стоит "
+"связать на школьном уроке?"
 
 #: apps/labs/models/attempt.py:10 apps/progress/models/progress.py:17
 #: apps/progress/models/progress.py:72 apps/student/cabinet.py:94
