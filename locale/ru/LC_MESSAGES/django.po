@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ChemEduTech\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-18 02:38+0500\n"
+"POT-Creation-Date: 2026-10-18 07:41+0500\n"
 "PO-Revision-Date: 2026-10-16 21:00+0500\n"
 "Last-Translator: ChemEduTech\n"
 "Language-Team: ChemEduTech\n"
@@ -667,7 +667,7 @@ msgstr "Создать PDF заново"
 msgid "PDF made: %(n)d"
 msgstr "PDF создано: %(n)d"
 
-#: apps/certificates/apps.py:8 config/settings/base.py:378
+#: apps/certificates/apps.py:8 config/settings/base.py:391
 #: ui/templates/partials/shell/sidebar_student.html:18
 #: ui/templates/student/certificates.html:3
 #: ui/templates/student/certificates.html:5
@@ -829,7 +829,7 @@ msgid "This student is already enrolled in the course."
 msgstr "Этот студент уже записан на курс."
 
 #: apps/courses/apps.py:8 apps/research/admin_dashboard.py:38
-#: config/settings/base.py:289 config/settings/base.py:293
+#: config/settings/base.py:302 config/settings/base.py:306
 #: ui/templates/student/partials/course_switch.html:3
 #: ui/templates/teacher/group.html:99
 #: ui/templates/teacher/partials/groups_table.html:10
@@ -1580,7 +1580,10 @@ msgstr "Записать электродные реакции."
 #: apps/labs/experiments/t01/electrolysis.py:107
 #: apps/labs/experiments/t01/hydrogen.py:89
 #: apps/labs/experiments/t01/oxygen.py:102
-#: apps/labs/experiments/t01/rate.py:84 apps/labs/views.py:113
+#: apps/labs/experiments/t01/rate.py:84
+#: apps/labs/experiments/t02/alkali.py:104
+#: apps/labs/experiments/t02/displacement.py:120
+#: apps/labs/experiments/t02/silver.py:122 apps/labs/views.py:115
 msgid "Finish the experiment"
 msgstr "Завершить опыт"
 
@@ -1588,6 +1591,9 @@ msgstr "Завершить опыт"
 #: apps/labs/experiments/t01/hydrogen.py:90
 #: apps/labs/experiments/t01/oxygen.py:103
 #: apps/labs/experiments/t01/rate.py:85
+#: apps/labs/experiments/t02/alkali.py:104
+#: apps/labs/experiments/t02/displacement.py:120
+#: apps/labs/experiments/t02/silver.py:122
 msgid "The results are saved and the analysis task opens."
 msgstr "Результаты сохраняются, открывается задание на анализ."
 
@@ -1595,6 +1601,9 @@ msgstr "Результаты сохраняются, открывается за
 #: apps/labs/experiments/t01/hydrogen.py:92
 #: apps/labs/experiments/t01/oxygen.py:105
 #: apps/labs/experiments/t01/rate.py:87
+#: apps/labs/experiments/t02/alkali.py:105
+#: apps/labs/experiments/t02/displacement.py:121
+#: apps/labs/experiments/t02/silver.py:123
 msgid "Fill in the lab journal first."
 msgstr "Сначала нужно заполнить лабораторный журнал."
 
@@ -1813,6 +1822,7 @@ msgid "There is no gas to collect yet: start the reaction first."
 msgstr "Собирать пока нечего: сначала нужно начать реакцию."
 
 #: apps/labs/experiments/t01/hydrogen.py:81
+#: apps/labs/experiments/t02/alkali.py:101
 msgid "Observe the result"
 msgstr "Наблюдать результат"
 
@@ -2246,7 +2256,7 @@ msgstr "Запустить таймер"
 msgid "The comparison of the two reactions begins."
 msgstr "Начинается сравнение двух реакций."
 
-#: apps/labs/experiments/t01/rate.py:67
+#: apps/labs/experiments/t01/rate.py:67 apps/labs/experiments/t02/alkali.py:90
 msgid "Prepare both tubes first."
 msgstr "Сначала подготовьте обе пробирки."
 
@@ -2343,6 +2353,756 @@ msgid ""
 msgstr ""
 "Почему MnO₂ ускоряет разложение? Объяснение — через понятие энергии "
 "активации."
+
+#: apps/labs/experiments/t02/__init__.py:13
+msgid "Halogens: oxidising ability and halide ions"
+msgstr "Галогены: окислительная активность и галогенид-ионы"
+
+#: apps/labs/experiments/t02/alkali.py:32
+msgid "Chlorine with cold and hot alkali"
+msgstr "Хлор с холодной и горячей щёлочью"
+
+#: apps/labs/experiments/t02/alkali.py:34
+msgid ""
+"Compare the products of chlorine with cold dilute and hot concentrated "
+"sodium hydroxide and explain why both reactions are disproportionation."
+msgstr ""
+"Сравнить продукты реакции хлора с холодным разбавленным и горячим "
+"концентрированным гидроксидом натрия и объяснить, почему обе реакции — "
+"диспропорционирование."
+
+#: apps/labs/experiments/t02/alkali.py:40
+msgid ""
+"In both tubes chlorine (0) is at the same time reduced to chloride (−1) and "
+"oxidised: to hypochlorite (+1) in cold dilute alkali and to chlorate (+5) in"
+" hot concentrated alkali. This is disproportionation; the conditions decide "
+"the product."
+msgstr ""
+"В обеих пробирках хлор (0) одновременно восстанавливается до хлорида (−1) и "
+"окисляется: до гипохлорита (+1) в холодной разбавленной щёлочи и до хлората "
+"(+5) в горячей концентрированной. Это диспропорционирование; продукт "
+"определяют условия."
+
+#: apps/labs/experiments/t02/alkali.py:45
+msgid "Tube B, hot"
+msgstr "Пробирка B, горячая"
+
+#: apps/labs/experiments/t02/alkali.py:49
+msgid "Sodium hydroxide solution, 2% (cold)"
+msgstr "Раствор гидроксида натрия, 2% (холодный)"
+
+#: apps/labs/experiments/t02/alkali.py:50
+msgid "Sodium hydroxide solution, 30%"
+msgstr "Раствор гидроксида натрия, 30%"
+
+#: apps/labs/experiments/t02/alkali.py:51
+msgid "Hot water bath"
+msgstr "Горячая водяная баня"
+
+#: apps/labs/experiments/t02/alkali.py:60
+msgid ""
+"Iodide is not needed here: this experiment studies chlorine and an alkali."
+msgstr "Иодид здесь не нужен: в опыте изучается реакция хлора со щёлочью."
+
+#: apps/labs/experiments/t02/alkali.py:64
+msgid "Take the rack and two test tubes"
+msgstr "Взять штатив и две пробирки"
+
+#: apps/labs/experiments/t02/alkali.py:64
+msgid "Test tubes A and B are on the bench."
+msgstr "Пробирки A и B стоят на столе."
+
+#: apps/labs/experiments/t02/alkali.py:66
+msgid "A: pour cold dilute NaOH"
+msgstr "A: налить холодный разбавленный NaOH"
+
+#: apps/labs/experiments/t02/alkali.py:66
+msgid "Tube A holds a cold 2% NaOH solution."
+msgstr "В пробирке A — холодный 2% раствор NaOH."
+
+#: apps/labs/experiments/t02/alkali.py:67
+#: apps/labs/experiments/t02/displacement.py:65
+#: apps/labs/experiments/t02/silver.py:80
+msgid "Put the rack with the test tubes on the bench first."
+msgstr "Сначала нужно поставить штатив с пробирками на стол."
+
+#: apps/labs/experiments/t02/alkali.py:68
+msgid "B: pour concentrated NaOH"
+msgstr "B: налить концентрированный NaOH"
+
+#: apps/labs/experiments/t02/alkali.py:68
+msgid "Tube B holds a 30% NaOH solution."
+msgstr "В пробирке B — 30% раствор NaOH."
+
+#: apps/labs/experiments/t02/alkali.py:69
+msgid "Pour the solution into tube A first."
+msgstr "Сначала нужно налить раствор в пробирку A."
+
+#: apps/labs/experiments/t02/alkali.py:72
+msgid "B: warm the tube in a hot water bath"
+msgstr "B: нагреть пробирку на горячей водяной бане"
+
+#: apps/labs/experiments/t02/alkali.py:73
+msgid "Tube B is hot (about 80 °C)."
+msgstr "Пробирка B горячая (около 80 °C)."
+
+#: apps/labs/experiments/t02/alkali.py:76
+msgid "Pour concentrated NaOH into tube B first."
+msgstr "Сначала нужно налить концентрированный NaOH в пробирку B."
+
+#: apps/labs/experiments/t02/alkali.py:80
+msgid "Predict the salts formed in A and B"
+msgstr "Прогноз: какие соли образуются в A и B?"
+
+#: apps/labs/experiments/t02/alkali.py:81
+#: apps/labs/experiments/t02/displacement.py:69
+#: apps/labs/experiments/t02/silver.py:94
+msgid "The prediction is recorded."
+msgstr "Прогноз записан."
+
+#: apps/labs/experiments/t02/alkali.py:84
+msgid "A: NaCl and NaClO; B: NaCl and NaClO₃"
+msgstr "A: NaCl и NaClO; B: NaCl и NaClO₃"
+
+#: apps/labs/experiments/t02/alkali.py:84
+#: apps/labs/experiments/t02/silver.py:98
+msgid "Let us check it."
+msgstr "Проверим на опыте."
+
+#: apps/labs/experiments/t02/alkali.py:85
+msgid "The same salts in both tubes"
+msgstr "В обеих пробирках одни и те же соли"
+
+#: apps/labs/experiments/t02/alkali.py:86
+msgid ""
+"Temperature and concentration change the product of the oxidation of "
+"chlorine."
+msgstr "Температура и концентрация меняют продукт окисления хлора."
+
+#: apps/labs/experiments/t02/alkali.py:87
+msgid "A: NaCl and NaClO₃; B: NaCl and NaClO"
+msgstr "A: NaCl и NaClO₃; B: NaCl и NaClO"
+
+#: apps/labs/experiments/t02/alkali.py:88
+msgid ""
+"The higher oxidation state (+5) is reached on heating, not in the cold."
+msgstr ""
+"Высшая степень окисления (+5) достигается при нагревании, а не на холоду."
+
+#: apps/labs/experiments/t02/alkali.py:94
+msgid "Add chlorine water to both tubes"
+msgstr "Добавить хлорную воду в обе пробирки"
+
+#: apps/labs/experiments/t02/alkali.py:95
+msgid ""
+"The yellow-green colour of chlorine disappears in both tubes: chlorine has "
+"reacted with the alkali."
+msgstr ""
+"В обеих пробирках жёлто-зелёная окраска хлора исчезает: хлор прореагировал "
+"со щёлочью."
+
+#: apps/labs/experiments/t02/alkali.py:98
+msgid ""
+"Chlorine water is toxic: it is added only when both tubes are ready (here — "
+"virtually)."
+msgstr ""
+"Хлорная вода ядовита: её добавляют, только когда обе пробирки готовы (здесь "
+"— виртуально)."
+
+#: apps/labs/experiments/t02/alkali.py:101
+msgid "The equations for the cold and the hot alkali are shown."
+msgstr "Показаны уравнения для холодной и горячей щёлочи."
+
+#: apps/labs/experiments/t02/alkali.py:102
+msgid "Add chlorine water first."
+msgstr "Сначала нужно добавить хлорную воду."
+
+#: apps/labs/experiments/t02/alkali.py:103
+#: apps/labs/experiments/t02/displacement.py:119
+#: apps/labs/experiments/t02/silver.py:121
+msgid "Save the lab journal"
+msgstr "Сохранить лабораторный журнал"
+
+#: apps/labs/experiments/t02/alkali.py:103
+#: apps/labs/experiments/t02/silver.py:121
+msgid "Observations and equations are recorded."
+msgstr "Наблюдения и уравнения записаны."
+
+#: apps/labs/experiments/t02/alkali.py:108
+msgid "What happened to the colour of chlorine water in A and B?"
+msgstr "Что стало с окраской хлорной воды в A и B?"
+
+#: apps/labs/experiments/t02/alkali.py:109
+msgid "Tube A (cold dilute NaOH): the equation"
+msgstr "Пробирка A (холодный разбавленный NaOH): уравнение"
+
+#: apps/labs/experiments/t02/alkali.py:111
+msgid "Tube B (hot concentrated NaOH): the equation"
+msgstr "Пробирка B (горячий концентрированный NaOH): уравнение"
+
+#: apps/labs/experiments/t02/alkali.py:115
+msgid "What type of redox reaction is it?"
+msgstr "К какому типу окислительно-восстановительных реакций она относится?"
+
+#: apps/labs/experiments/t02/alkali.py:118
+msgid "Disproportionation"
+msgstr "Диспропорционирование"
+
+#: apps/labs/experiments/t02/alkali.py:119
+msgid "Intermolecular redox reaction"
+msgstr "Межмолекулярная окислительно-восстановительная реакция"
+
+#: apps/labs/experiments/t02/alkali.py:120
+msgid "Neutralisation"
+msgstr "Нейтрализация"
+
+#: apps/labs/experiments/t02/alkali.py:127
+msgid "What is the oxidation state of chlorine in NaClO₃?"
+msgstr "Какова степень окисления хлора в NaClO₃?"
+
+#: apps/labs/experiments/t02/alkali.py:132
+msgid ""
+"Why is chlorine both the oxidising and the reducing agent in these "
+"reactions?"
+msgstr "Почему в этих реакциях хлор одновременно окислитель и восстановитель?"
+
+#: apps/labs/experiments/t02/alkali.py:134
+msgid ""
+"Some chlorine atoms gain electrons (→ −1) and others lose them (→ +1 or +5)"
+msgstr ""
+"Одни атомы хлора принимают электроны (→ −1), другие отдают их (→ +1 или +5)"
+
+#: apps/labs/experiments/t02/alkali.py:136
+msgid "Sodium changes its oxidation state"
+msgstr "Натрий меняет степень окисления"
+
+#: apps/labs/experiments/t02/alkali.py:137
+msgid "Water is the reducing agent"
+msgstr "Вода является восстановителем"
+
+#: apps/labs/experiments/t02/alkali.py:142
+msgid "Which product of the cold reaction is used for disinfection?"
+msgstr ""
+"Какой продукт реакции с холодной щёлочью используется для дезинфекции?"
+
+#: apps/labs/experiments/t02/alkali.py:143
+msgid "Sodium hypochlorite NaClO"
+msgstr "Гипохлорит натрия NaClO"
+
+#: apps/labs/experiments/t02/alkali.py:143
+msgid "Sodium chloride NaCl"
+msgstr "Хлорид натрия NaCl"
+
+#: apps/labs/experiments/t02/alkali.py:144
+msgid "Sodium chlorate NaClO₃"
+msgstr "Хлорат натрия NaClO₃"
+
+#: apps/labs/experiments/t02/alkali.py:146
+msgid ""
+"Why should this experiment be shown to school students as a simulation?"
+msgstr "Почему этот опыт школьникам следует показывать в виде симуляции?"
+
+#: apps/labs/experiments/t02/common.py:6
+msgid "Rack with test tubes"
+msgstr "Штатив с пробирками"
+
+#: apps/labs/experiments/t02/common.py:7
+msgid "Potassium chloride solution"
+msgstr "Раствор хлорида калия"
+
+#: apps/labs/experiments/t02/common.py:8
+msgid "Potassium bromide solution"
+msgstr "Раствор бромида калия"
+
+#: apps/labs/experiments/t02/common.py:9
+msgid "Potassium iodide solution"
+msgstr "Раствор иодида калия"
+
+#: apps/labs/experiments/t02/common.py:10
+msgid "Chlorine water"
+msgstr "Хлорная вода"
+
+#: apps/labs/experiments/t02/common.py:11
+msgid "Bromine water"
+msgstr "Бромная вода"
+
+#: apps/labs/experiments/t02/displacement.py:27
+msgid "Displacement reactions of halogens"
+msgstr "Реакции замещения галогенов"
+
+#: apps/labs/experiments/t02/displacement.py:29
+msgid ""
+"Find out which halogen displaces which from a solution of its salt and build"
+" the series of the oxidising ability of chlorine, bromine and iodine."
+msgstr ""
+"Выяснить, какой галоген вытесняет какой из раствора его соли, и построить "
+"ряд окислительной способности хлора, брома и иода."
+
+#: apps/labs/experiments/t02/displacement.py:35
+msgid ""
+"A free halogen oxidises the anions of a halogen below it in the group: "
+"chlorine displaces bromine and iodine, bromine cannot oxidise chloride ions."
+" Oxidising ability: Cl₂ > Br₂ > I₂ (for the whole group F₂ > Cl₂ > Br₂ > "
+"I₂)."
+msgstr ""
+"Свободный галоген окисляет анионы галогена, стоящего ниже в группе: хлор "
+"вытесняет бром и иод, бром не может окислить хлорид-ионы. Окислительная "
+"способность: Cl₂ > Br₂ > I₂ (для всей группы F₂ > Cl₂ > Br₂ > I₂)."
+
+#: apps/labs/experiments/t02/displacement.py:40
+msgid "Tube A, ionic"
+msgstr "Пробирка A, ионное"
+
+#: apps/labs/experiments/t02/displacement.py:41
+msgid "Tube B, ionic"
+msgstr "Пробирка B, ионное"
+
+#: apps/labs/experiments/t02/displacement.py:42
+#: apps/labs/experiments/t02/silver.py:52
+msgid "Tube C"
+msgstr "Пробирка C"
+
+#: apps/labs/experiments/t02/displacement.py:42
+msgid "Br₂ + KCl → no reaction"
+msgstr "Br₂ + KCl → реакция не идёт"
+
+#: apps/labs/experiments/t02/displacement.py:53
+#: apps/labs/experiments/t02/silver.py:60
+msgid "Silver nitrate solution"
+msgstr "Раствор нитрата серебра"
+
+#: apps/labs/experiments/t02/displacement.py:58
+msgid ""
+"Silver nitrate detects halide ions; it is used in the next experiment, not "
+"for displacement."
+msgstr ""
+"Нитрат серебра обнаруживает галогенид-ионы; он нужен в следующем опыте, а не"
+" для замещения."
+
+#: apps/labs/experiments/t02/displacement.py:62
+#: apps/labs/experiments/t02/silver.py:72
+msgid "Take the rack and three test tubes"
+msgstr "Взять штатив и три пробирки"
+
+#: apps/labs/experiments/t02/displacement.py:62
+#: apps/labs/experiments/t02/silver.py:72
+msgid "Test tubes A, B and C are on the bench."
+msgstr "Пробирки A, B и C стоят на столе."
+
+#: apps/labs/experiments/t02/displacement.py:64
+msgid "A: pour the KI solution"
+msgstr "A: налить раствор KI"
+
+#: apps/labs/experiments/t02/displacement.py:64
+msgid "Tube A holds a colourless KI solution."
+msgstr "В пробирке A — бесцветный раствор KI."
+
+#: apps/labs/experiments/t02/displacement.py:68
+msgid "Predict: what happens when chlorine water is added to A?"
+msgstr "Прогноз: что произойдёт, если добавить в A хлорную воду?"
+
+#: apps/labs/experiments/t02/displacement.py:72
+msgid "The solution turns brown: iodine is formed"
+msgstr "Раствор буреет: образуется иод"
+
+#: apps/labs/experiments/t02/displacement.py:73
+msgid "A reasoned prediction. Let us check it."
+msgstr "Обоснованный прогноз. Проверим на опыте."
+
+#: apps/labs/experiments/t02/displacement.py:74
+msgid "Nothing changes"
+msgstr "Ничего не изменится"
+
+#: apps/labs/experiments/t02/displacement.py:75
+msgid ""
+"Compare the positions of chlorine and iodine in the group and their "
+"oxidising ability."
+msgstr ""
+"Нужно сравнить положение хлора и иода в группе и их окислительную "
+"способность."
+
+#: apps/labs/experiments/t02/displacement.py:76
+msgid "A white precipitate forms"
+msgstr "Образуется белый осадок"
+
+#: apps/labs/experiments/t02/displacement.py:77
+msgid ""
+"A precipitate with halide ions needs silver ions, and there are none here."
+msgstr "Для осадка с галогенид-ионами нужны ионы серебра, а их здесь нет."
+
+#: apps/labs/experiments/t02/displacement.py:79
+msgid "Pour the KI solution into tube A first."
+msgstr "Сначала нужно налить раствор KI в пробирку A."
+
+#: apps/labs/experiments/t02/displacement.py:83
+msgid "A: add chlorine water"
+msgstr "A: добавить хлорную воду"
+
+#: apps/labs/experiments/t02/displacement.py:84
+msgid "The solution turns brown: iodine is formed."
+msgstr "Раствор буреет: образуется иод."
+
+#: apps/labs/experiments/t02/displacement.py:88
+msgid ""
+"Chlorine water is toxic: it is added only to a prepared tube and after the "
+"prediction (here everything is virtual)."
+msgstr ""
+"Хлорная вода ядовита: её добавляют только в подготовленную пробирку и после "
+"прогноза (здесь всё виртуально)."
+
+#: apps/labs/experiments/t02/displacement.py:93
+msgid "B: pour the KBr solution"
+msgstr "B: налить раствор KBr"
+
+#: apps/labs/experiments/t02/displacement.py:93
+msgid "Tube B holds a colourless KBr solution."
+msgstr "В пробирке B — бесцветный раствор KBr."
+
+#: apps/labs/experiments/t02/displacement.py:94
+msgid "Finish the experiment in tube A first."
+msgstr "Сначала нужно закончить опыт в пробирке A."
+
+#: apps/labs/experiments/t02/displacement.py:95
+msgid "B: add chlorine water"
+msgstr "B: добавить хлорную воду"
+
+#: apps/labs/experiments/t02/displacement.py:95
+msgid "The solution turns yellow-orange: bromine is formed."
+msgstr "Раствор окрашивается в жёлто-оранжевый цвет: образуется бром."
+
+#: apps/labs/experiments/t02/displacement.py:96
+msgid "Pour the KBr solution into tube B first."
+msgstr "Сначала нужно налить раствор KBr в пробирку B."
+
+#: apps/labs/experiments/t02/displacement.py:97
+msgid "C: pour the KCl solution"
+msgstr "C: налить раствор KCl"
+
+#: apps/labs/experiments/t02/displacement.py:97
+msgid "Tube C holds a colourless KCl solution."
+msgstr "В пробирке C — бесцветный раствор KCl."
+
+#: apps/labs/experiments/t02/displacement.py:98
+msgid "Finish the experiment in tube B first."
+msgstr "Сначала нужно закончить опыт в пробирке B."
+
+#: apps/labs/experiments/t02/displacement.py:101
+msgid "C: add bromine water"
+msgstr "C: добавить бромную воду"
+
+#: apps/labs/experiments/t02/displacement.py:102
+msgid ""
+"Only the colour of bromine water itself remains: no new substance is formed "
+"— no reaction."
+msgstr ""
+"Остаётся только окраска самой бромной воды: нового вещества нет — реакция не"
+" идёт."
+
+#: apps/labs/experiments/t02/displacement.py:105
+msgid "Pour the KCl solution into tube C first."
+msgstr "Сначала нужно налить раствор KCl в пробирку C."
+
+#: apps/labs/experiments/t02/displacement.py:109
+msgid "Compare the three results"
+msgstr "Сравнить три результата"
+
+#: apps/labs/experiments/t02/displacement.py:110
+msgid "The series of oxidising ability is built: Cl₂ > Br₂ > I₂."
+msgstr "Построен ряд окислительной способности: Cl₂ > Br₂ > I₂."
+
+#: apps/labs/experiments/t02/displacement.py:113
+msgid "Right: each halogen displaces the ones below it."
+msgstr "Верно: каждый галоген вытесняет стоящие ниже."
+
+#: apps/labs/experiments/t02/displacement.py:114
+msgid "Look at tube C: bromine did not displace chlorine."
+msgstr "Посмотрите на пробирку C: бром не вытеснил хлор."
+
+#: apps/labs/experiments/t02/displacement.py:115
+msgid "Chlorine displaced bromine in tube B: chlorine is stronger."
+msgstr "В пробирке B хлор вытеснил бром: хлор сильнее."
+
+#: apps/labs/experiments/t02/displacement.py:117
+msgid "Carry out the experiments in all three tubes first."
+msgstr "Сначала нужно провести опыты во всех трёх пробирках."
+
+#: apps/labs/experiments/t02/displacement.py:119
+msgid "Predictions, observations and equations are recorded."
+msgstr "Прогнозы, наблюдения и уравнения записаны."
+
+#: apps/labs/experiments/t02/displacement.py:124
+msgid "What did you observe in tube A?"
+msgstr "Что наблюдалось в пробирке A?"
+
+#: apps/labs/experiments/t02/displacement.py:125
+#: apps/labs/experiments/t02/silver.py:136
+msgid "Tube A: the short ionic equation"
+msgstr "Пробирка A: сокращённое ионное уравнение"
+
+#: apps/labs/experiments/t02/displacement.py:126
+#: apps/labs/experiments/t02/silver.py:137
+msgid "Tube B: the short ionic equation"
+msgstr "Пробирка B: сокращённое ионное уравнение"
+
+#: apps/labs/experiments/t02/displacement.py:129
+msgid "What happened in tube C?"
+msgstr "Что произошло в пробирке C?"
+
+#: apps/labs/experiments/t02/displacement.py:132
+msgid "No reaction: bromine cannot oxidise chloride ions"
+msgstr "Реакции нет: бром не может окислить хлорид-ионы"
+
+#: apps/labs/experiments/t02/displacement.py:133
+msgid "Chlorine was released"
+msgstr "Выделился хлор"
+
+#: apps/labs/experiments/t02/displacement.py:134
+msgid "A precipitate formed"
+msgstr "Образовался осадок"
+
+#: apps/labs/experiments/t02/displacement.py:137
+msgid "Conclusion: how does the oxidising ability of halogens change?"
+msgstr "Вывод: как меняется окислительная способность галогенов?"
+
+#: apps/labs/experiments/t02/displacement.py:142
+msgid ""
+"Why can Cl₂ oxidise iodide ions, while Br₂ cannot oxidise chloride ions?"
+msgstr ""
+"Почему Cl₂ может окислить иодид-ионы, а Br₂ не может окислить хлорид-ионы?"
+
+#: apps/labs/experiments/t02/displacement.py:144
+msgid "The Cl₂/Cl⁻ pair is a stronger oxidising agent than Br₂/Br⁻ and I₂/I⁻"
+msgstr "Пара Cl₂/Cl⁻ — более сильный окислитель, чем Br₂/Br⁻ и I₂/I⁻"
+
+#: apps/labs/experiments/t02/displacement.py:145
+msgid "Because bromine is a liquid"
+msgstr "Потому что бром — жидкость"
+
+#: apps/labs/experiments/t02/displacement.py:146
+msgid "Because there are no chloride ions in the solution"
+msgstr "Потому что в растворе нет хлорид-ионов"
+
+#: apps/labs/experiments/t02/displacement.py:151
+msgid "Why does the oxidising ability of halogens decrease down the group?"
+msgstr ""
+"Почему окислительная способность галогенов уменьшается вниз по группе?"
+
+#: apps/labs/experiments/t02/displacement.py:153
+msgid ""
+"The atomic radius and the screening grow, an electron is attracted more "
+"weakly"
+msgstr "Растут радиус атома и экранирование, электрон притягивается слабее"
+
+#: apps/labs/experiments/t02/displacement.py:154
+msgid "The molecules become heavier"
+msgstr "Молекулы становятся тяжелее"
+
+#: apps/labs/experiments/t02/displacement.py:155
+msgid "The colour of the substances becomes darker"
+msgstr "Окраска веществ становится темнее"
+
+#: apps/labs/experiments/t02/displacement.py:160
+msgid "Which particle is the reducing agent in Cl₂ + 2I⁻ → 2Cl⁻ + I₂?"
+msgstr "Какая частица является восстановителем в Cl₂ + 2I⁻ → 2Cl⁻ + I₂?"
+
+#: apps/labs/experiments/t02/displacement.py:162
+msgid "The iodide ion I⁻"
+msgstr "Иодид-ион I⁻"
+
+#: apps/labs/experiments/t02/displacement.py:163
+msgid "The chlorine molecule Cl₂"
+msgstr "Молекула хлора Cl₂"
+
+#: apps/labs/experiments/t02/displacement.py:164
+msgid "The chloride ion Cl⁻"
+msgstr "Хлорид-ион Cl⁻"
+
+#: apps/labs/experiments/t02/displacement.py:169
+msgid ""
+"How would you show these reactions to school students without real dangerous"
+" reagents?"
+msgstr "Как показать эти реакции школьникам без настоящих опасных реактивов?"
+
+#: apps/labs/experiments/t02/silver.py:40
+msgid "Detecting halide ions with silver nitrate"
+msgstr "Обнаружение галогенид-ионов нитратом серебра"
+
+#: apps/labs/experiments/t02/silver.py:41
+msgid ""
+"Tell chloride, bromide and iodide ions apart by the colour of their silver "
+"precipitates."
+msgstr ""
+"Различить хлорид-, бромид- и иодид-ионы по окраске их осадков с серебром."
+
+#: apps/labs/experiments/t02/silver.py:45
+msgid ""
+"Silver ions give poorly soluble precipitates with halide ions: AgCl is "
+"white, AgBr is pale cream, AgI is yellow. The solution is acidified with "
+"nitric acid so that other anions (carbonate, hydroxide) do not precipitate. "
+"Fluoride gives no precipitate: AgF is soluble."
+msgstr ""
+"Ионы серебра дают с галогенид-ионами малорастворимые осадки: AgCl — белый, "
+"AgBr — светло-кремовый, AgI — жёлтый. Раствор подкисляют азотной кислотой, "
+"чтобы другие анионы (карбонат, гидроксид) не осаждались. Фторид осадка не "
+"даёт: AgF растворим."
+
+#: apps/labs/experiments/t02/silver.py:50
+msgid "Tube A"
+msgstr "Пробирка A"
+
+#: apps/labs/experiments/t02/silver.py:51
+msgid "Tube B"
+msgstr "Пробирка B"
+
+#: apps/labs/experiments/t02/silver.py:59
+msgid "Dilute nitric acid"
+msgstr "Разбавленная азотная кислота"
+
+#: apps/labs/experiments/t02/silver.py:63
+msgid "Sodium fluoride solution"
+msgstr "Раствор фторида натрия"
+
+#: apps/labs/experiments/t02/silver.py:68
+msgid ""
+"Silver fluoride is soluble: a fluoride gives no precipitate with AgNO₃, so "
+"it is not used here."
+msgstr ""
+"Фторид серебра растворим: фторид не даёт осадка с AgNO₃, поэтому здесь не "
+"используется."
+
+#: apps/labs/experiments/t02/silver.py:76
+msgid "Pour KCl into A, KBr into B and KI into C"
+msgstr "Налить KCl в A, KBr в B и KI в C"
+
+#: apps/labs/experiments/t02/silver.py:77
+msgid "Three colourless solutions of halides are in the tubes."
+msgstr "В пробирках три бесцветных раствора галогенидов."
+
+#: apps/labs/experiments/t02/silver.py:81
+msgid "You need three solutions: KCl, KBr and KI."
+msgstr "Нужны три раствора: KCl, KBr и KI."
+
+#: apps/labs/experiments/t02/silver.py:85
+msgid "Acidify the solutions with dilute HNO₃"
+msgstr "Подкислить растворы разбавленной HNO₃"
+
+#: apps/labs/experiments/t02/silver.py:86
+msgid "A few drops of dilute nitric acid are added to each tube."
+msgstr ""
+"В каждую пробирку добавлено несколько капель разбавленной азотной кислоты."
+
+#: apps/labs/experiments/t02/silver.py:89
+msgid "Pour the halide solutions first."
+msgstr "Сначала нужно налить растворы галогенидов."
+
+#: apps/labs/experiments/t02/silver.py:93
+msgid "Predict the colours of the precipitates with AgNO₃"
+msgstr "Прогноз: какого цвета будут осадки с AgNO₃?"
+
+#: apps/labs/experiments/t02/silver.py:97
+msgid "A — white, B — pale cream, C — yellow"
+msgstr "A — белый, B — светло-кремовый, C — жёлтый"
+
+#: apps/labs/experiments/t02/silver.py:99
+msgid "All three are white"
+msgstr "Все три белые"
+
+#: apps/labs/experiments/t02/silver.py:100
+msgid "The precipitates differ: this is what makes the test qualitative."
+msgstr "Осадки различаются: в этом и смысл качественной реакции."
+
+#: apps/labs/experiments/t02/silver.py:101
+msgid "A — yellow, B — pale cream, C — white"
+msgstr "A — жёлтый, B — светло-кремовый, C — белый"
+
+#: apps/labs/experiments/t02/silver.py:102
+msgid "The colour deepens from chloride to iodide, not the other way round."
+msgstr "Окраска усиливается от хлорида к иодиду, а не наоборот."
+
+#: apps/labs/experiments/t02/silver.py:104
+msgid "Acidify the solutions first."
+msgstr "Сначала нужно подкислить растворы."
+
+#: apps/labs/experiments/t02/silver.py:108
+msgid "Add AgNO₃ solution to each tube"
+msgstr "Добавить раствор AgNO₃ в каждую пробирку"
+
+#: apps/labs/experiments/t02/silver.py:109
+msgid "Precipitates form: white in A, pale cream in B, yellow in C."
+msgstr "Образуются осадки: в A — белый, в B — светло-кремовый, в C — жёлтый."
+
+#: apps/labs/experiments/t02/silver.py:112
+msgid ""
+"Acidify the solutions and make a prediction first: other anions could also "
+"precipitate."
+msgstr ""
+"Сначала нужно подкислить растворы и сделать прогноз: другие анионы тоже "
+"могут дать осадок."
+
+#: apps/labs/experiments/t02/silver.py:116
+msgid "Compare the precipitates"
+msgstr "Сравнить осадки"
+
+#: apps/labs/experiments/t02/silver.py:117
+msgid "The precipitates settle; their colours are compared with the table."
+msgstr "Осадки оседают; их окраска сравнивается с таблицей."
+
+#: apps/labs/experiments/t02/silver.py:119
+msgid "Add silver nitrate first."
+msgstr "Сначала нужно добавить нитрат серебра."
+
+#: apps/labs/experiments/t02/silver.py:128
+msgid "Which precipitate is yellow?"
+msgstr "Какой осадок жёлтый?"
+
+#: apps/labs/experiments/t02/silver.py:138
+msgid "Tube C: the short ionic equation"
+msgstr "Пробирка C: сокращённое ионное уравнение"
+
+#: apps/labs/experiments/t02/silver.py:139
+msgid "How can the three ions be told apart?"
+msgstr "Как различить три иона?"
+
+#: apps/labs/experiments/t02/silver.py:144
+msgid "Why are the solutions acidified with nitric acid before adding AgNO₃?"
+msgstr "Зачем перед добавлением AgNO₃ растворы подкисляют азотной кислотой?"
+
+#: apps/labs/experiments/t02/silver.py:146
+msgid "So that other anions (CO₃²⁻, OH⁻) do not give precipitates with silver"
+msgstr "Чтобы другие анионы (CO₃²⁻, OH⁻) не давали осадков с серебром"
+
+#: apps/labs/experiments/t02/silver.py:147
+msgid "To speed up the reaction"
+msgstr "Чтобы ускорить реакцию"
+
+#: apps/labs/experiments/t02/silver.py:148
+msgid "To colour the precipitates"
+msgstr "Чтобы окрасить осадки"
+
+#: apps/labs/experiments/t02/silver.py:153
+msgid "Why does a fluoride give no precipitate with AgNO₃?"
+msgstr "Почему фторид не даёт осадка с AgNO₃?"
+
+#: apps/labs/experiments/t02/silver.py:155
+msgid "Silver fluoride is soluble in water"
+msgstr "Фторид серебра растворим в воде"
+
+#: apps/labs/experiments/t02/silver.py:156
+msgid "Fluoride does not form ions in solution"
+msgstr "Фторид не образует ионов в растворе"
+
+#: apps/labs/experiments/t02/silver.py:157
+msgid "Fluorine is released as a gas"
+msgstr "Фтор выделяется в виде газа"
+
+#: apps/labs/experiments/t02/silver.py:162
+msgid "Which precipitate dissolves in dilute ammonia solution?"
+msgstr "Какой осадок растворяется в разбавленном растворе аммиака?"
+
+#: apps/labs/experiments/t02/silver.py:169
+msgid ""
+"What would you ask school students to compare in this experiment, and why?"
+msgstr "Что в этом опыте стоит предложить сравнить школьникам и почему?"
 
 #: apps/labs/models/attempt.py:10 apps/progress/models/progress.py:17
 #: apps/progress/models/progress.py:72 apps/student/cabinet.py:94
@@ -2814,7 +3574,7 @@ msgstr ""
 "В конце заполняется лабораторный журнал, опыт завершается и даются ответы на"
 " вопросы анализа."
 
-#: apps/labs/views.py:104
+#: apps/labs/views.py:105
 msgid ""
 "The experiment runs on the screen only: it is not an instruction for working"
 " with real reagents."
@@ -2822,64 +3582,64 @@ msgstr ""
 "Опыт проходит только на экране: это не инструкция для работы с настоящими "
 "реактивами."
 
-#: apps/labs/views.py:105
+#: apps/labs/views.py:107
 #, python-format
 msgid "Steps: %(n)s"
 msgstr "Шагов: %(n)s"
 
-#: apps/labs/views.py:106
+#: apps/labs/views.py:108
 msgid "Start the experiment"
 msgstr "Начать опыт"
 
-#: apps/labs/views.py:107
+#: apps/labs/views.py:109
 msgid "Steps"
 msgstr "Шаги"
 
-#: apps/labs/views.py:108
+#: apps/labs/views.py:110
 msgid "Journal"
 msgstr "Журнал"
 
-#: apps/labs/views.py:109
+#: apps/labs/views.py:111
 msgid "Messages"
 msgstr "Сообщения"
 
-#: apps/labs/views.py:110 ui/templates/teacher/group.html:119
+#: apps/labs/views.py:112 ui/templates/teacher/group.html:119
 msgid "Now"
 msgstr "Сейчас"
 
-#: apps/labs/views.py:111
+#: apps/labs/views.py:113
 msgid "Run"
 msgstr "Выполнить"
 
-#: apps/labs/views.py:112
+#: apps/labs/views.py:114
 msgid "Open the journal"
 msgstr "Открыть журнал"
 
-#: apps/labs/views.py:114
+#: apps/labs/views.py:116
 msgid "Drag to the bench or press «+»:"
 msgstr "Перетащить на стол или «+»:"
 
-#: apps/labs/views.py:115
+#: apps/labs/views.py:117
 msgid "Choose:"
 msgstr "Выбор:"
 
-#: apps/labs/views.py:116
+#: apps/labs/views.py:118
 msgid "All steps are done."
 msgstr "Все шаги выполнены."
 
-#: apps/labs/views.py:117
+#: apps/labs/views.py:119
 msgid "Equipment"
 msgstr "Оборудование"
 
-#: apps/labs/views.py:118
+#: apps/labs/views.py:120
 msgid "Hide the panel"
 msgstr "Скрыть панель"
 
-#: apps/labs/views.py:119
+#: apps/labs/views.py:121
 msgid "Show the panel"
 msgstr "Показать панель"
 
-#: apps/labs/views.py:120 ui/templates/components/alert.html:10
+#: apps/labs/views.py:122 ui/templates/components/alert.html:10
 #: ui/templates/components/toast.html:16 ui/templates/core/home.html:114
 #: ui/templates/layouts/learn.html:49
 #: ui/templates/student/partials/quiz_panel.html:93
@@ -2890,15 +3650,31 @@ msgstr "Показать панель"
 msgid "Close"
 msgstr "Закрыть"
 
-#: apps/labs/views.py:121
+#: apps/labs/views.py:123
 msgid "Briefing"
 msgstr "Вводная"
 
-#: apps/labs/views.py:122
+#: apps/labs/views.py:124
 msgid "Explanation"
 msgstr "Пояснение"
 
-#: apps/labs/views.py:123
+#: apps/labs/views.py:125
+msgid "The equation is right."
+msgstr "Уравнение верное."
+
+#: apps/labs/views.py:126
+msgid "Check the substances or ions."
+msgstr "Нужно проверить вещества или ионы."
+
+#: apps/labs/views.py:127
+msgid "Check the coefficients."
+msgstr "Нужно проверить коэффициенты."
+
+#: apps/labs/views.py:128
+msgid "The equation cannot be read: check the formulas and the arrow."
+msgstr "Уравнение не читается: нужно проверить формулы и стрелку."
+
+#: apps/labs/views.py:129
 msgid "Connection problem. Your actions are kept and will be sent again."
 msgstr "Проблема со связью. Действия сохранены и будут отправлены повторно."
 
@@ -3175,92 +3951,96 @@ msgstr "Для выбора нужны варианты: {\"options\": [\"…\"]
 msgid "Give at least two pairs: {\"pairs\": {\"left\": \"right\"}}"
 msgstr "Нужно не менее двух пар: {\"pairs\": {\"left\": \"right\"}}"
 
-#: apps/practice/checkers.py:122
+#: apps/practice/checkers.py:120
+msgid "Extra options are a list: {\"distractors\": [\"…\"]}"
+msgstr "Дополнительные варианты — список: {\"distractors\": [\"…\"]}"
+
+#: apps/practice/checkers.py:124
 msgid "Give at least two different steps: {\"order\": [\"…\", \"…\"]}"
 msgstr "Нужно не менее двух разных шагов: {\"order\": [\"…\", \"…\"]}"
 
-#: apps/practice/checkers.py:124
+#: apps/practice/checkers.py:126
 #, python-format
 msgid "Unknown kind: %(kind)s"
 msgstr "Неизвестный вид: %(kind)s"
 
-#: apps/practice/checkers.py:126
+#: apps/practice/checkers.py:128
 #, python-format
 msgid "Cannot read the chemistry: %(error)s"
 msgstr "Не удалось прочитать химическую запись: %(error)s"
 
-#: apps/practice/checkers.py:132 apps/practice/checkers.py:193
+#: apps/practice/checkers.py:134 apps/practice/checkers.py:195
 #: apps/practice/services/submissions.py:68
 msgid "The answer is empty."
 msgstr "Ответ пустой."
 
-#: apps/practice/checkers.py:133
+#: apps/practice/checkers.py:135
 #, python-format
 msgid "There is no element «%(el)s». Check the letters and their case."
 msgstr "Элемента «%(el)s» нет. Проверьте буквы и регистр."
 
-#: apps/practice/checkers.py:134
+#: apps/practice/checkers.py:136
 msgid "An element symbol starts with a capital letter."
 msgstr "Символ элемента начинается с заглавной буквы."
 
-#: apps/practice/checkers.py:135
+#: apps/practice/checkers.py:137
 msgid "Check the brackets."
 msgstr "Проверьте скобки."
 
-#: apps/practice/checkers.py:136
+#: apps/practice/checkers.py:138
 msgid "Write the arrow between the sides: -> or =."
 msgstr "Поставьте стрелку между частями: -> или =."
 
-#: apps/practice/checkers.py:137
+#: apps/practice/checkers.py:139
 msgid "An equation has one arrow."
 msgstr "В уравнении одна стрелка."
 
-#: apps/practice/checkers.py:143
+#: apps/practice/checkers.py:145
 msgid "The answer could not be read. Check how it is written."
 msgstr "Ответ не удалось прочитать. Проверьте запись."
 
-#: apps/practice/checkers.py:150
+#: apps/practice/checkers.py:152
 msgid "Write a number, e.g. 2,24."
 msgstr "Требуется число, например 2,24."
 
-#: apps/practice/checkers.py:156
+#: apps/practice/checkers.py:158
 msgid "Check the unit."
 msgstr "Проверьте единицу измерения."
 
-#: apps/practice/checkers.py:162
+#: apps/practice/checkers.py:164
 msgid "The number is not right. Check the calculation."
 msgstr "Число неверное. Проверьте расчёт."
 
-#: apps/practice/checkers.py:171
+#: apps/practice/checkers.py:173
 msgid "This is not the right substance."
 msgstr "Это другое вещество."
 
-#: apps/practice/checkers.py:182
+#: apps/practice/checkers.py:184
 msgid "Check the substances on both sides."
 msgstr "Проверьте вещества в обеих частях."
 
-#: apps/practice/checkers.py:186
+#: apps/practice/checkers.py:188
 msgid "Balanced, but the coefficients can be reduced."
 msgstr "Уравнено, но коэффициенты можно сократить."
 
-#: apps/practice/checkers.py:187
+#: apps/practice/checkers.py:189
 msgid "The equation is not balanced."
 msgstr "Уравнение не уравнено."
 
-#: apps/practice/checkers.py:197 apps/practice/checkers.py:212
+#: apps/practice/checkers.py:199 apps/practice/checkers.py:214
 msgid "This is not the expected word."
 msgstr "Это не то слово."
 
-#: apps/practice/checkers.py:204
+#: apps/practice/checkers.py:206
 msgid "Not the right choice."
 msgstr "Выбор неверный."
 
-#: apps/practice/checkers.py:220
+#: apps/practice/checkers.py:222
 #, python-format
 msgid "%(n)s of %(total)s pairs are right."
 msgstr "Верно %(n)s пар из %(total)s."
 
-#: apps/practice/checkers.py:232
+#: apps/practice/checkers.py:234
 #, python-format
 msgid "%(n)s of %(total)s steps are in the right place."
 msgstr "%(n)s из %(total)s шагов на своём месте."
@@ -3432,7 +4212,7 @@ msgstr "ошибка"
 msgid "AI grade"
 msgstr "оценка AI"
 
-#: apps/practice/models/submission.py:111 config/settings/base.py:341
+#: apps/practice/models/submission.py:111 config/settings/base.py:354
 msgid "AI grades"
 msgstr "оценки AI"
 
@@ -3880,7 +4660,7 @@ msgstr "Активные записи"
 msgid "%(n)s completed"
 msgstr "завершено: %(n)s"
 
-#: apps/research/admin_dashboard.py:43 config/settings/base.py:367
+#: apps/research/admin_dashboard.py:43 config/settings/base.py:380
 #: ui/templates/teacher/partials/student_drawer.html:40
 #: ui/templates/teacher/student.html:106
 msgid "Lab attempts"
@@ -4039,7 +4819,7 @@ msgstr "Автопроверка и ИИ, подтверждает препод�
 msgid "Quiz · attempt %(n)s"
 msgstr "Тест · попытка %(n)s"
 
-#: apps/student/cabinet.py:187 config/settings/base.py:363
+#: apps/student/cabinet.py:187 config/settings/base.py:376
 #: ui/templates/core/home.html:31 ui/templates/core/home.html:199
 #: ui/templates/core/home.html:359
 msgid "Lab"
@@ -4322,7 +5102,7 @@ msgstr[1] "%(n)s дня без активности"
 msgstr[2] "%(n)s дней без активности"
 msgstr[3] "%(n)s дней без активности"
 
-#: apps/teacher/overview.py:103 apps/teacher/tests.py:127
+#: apps/teacher/overview.py:103 apps/teacher/tests.py:129
 msgid "Not started yet"
 msgstr "Ещё не начал"
 
@@ -4442,107 +5222,107 @@ msgstr "Русский"
 msgid "English"
 msgstr "Английский"
 
-#: config/settings/base.py:241 config/settings/base.py:244
+#: config/settings/base.py:254 config/settings/base.py:257
 msgid "Users"
 msgstr "Пользователи"
 
-#: config/settings/base.py:246
+#: config/settings/base.py:259
 msgid "Student profiles"
 msgstr "Профили студентов"
 
-#: config/settings/base.py:251
+#: config/settings/base.py:264
 msgid "Teacher profiles"
 msgstr "Профили преподавателей"
 
-#: config/settings/base.py:258
+#: config/settings/base.py:271
 msgid "Organisations"
 msgstr "Организации"
 
-#: config/settings/base.py:262
+#: config/settings/base.py:275
 msgid "Universities"
 msgstr "Университеты"
 
-#: config/settings/base.py:267
+#: config/settings/base.py:280
 msgid "Faculties"
 msgstr "Факультеты"
 
-#: config/settings/base.py:272
+#: config/settings/base.py:285
 msgid "Departments"
 msgstr "Кафедры"
 
-#: config/settings/base.py:277
+#: config/settings/base.py:290
 msgid "Specialties"
 msgstr "Образовательные программы"
 
-#: config/settings/base.py:282
+#: config/settings/base.py:295
 msgid "Academic groups"
 msgstr "Академические группы"
 
-#: config/settings/base.py:298
+#: config/settings/base.py:311
 msgid "Modules"
 msgstr "Модули"
 
-#: config/settings/base.py:302 ui/templates/teacher/search.html:40
+#: config/settings/base.py:315 ui/templates/teacher/search.html:40
 msgid "Topics"
 msgstr "Темы"
 
-#: config/settings/base.py:304
+#: config/settings/base.py:317
 msgid "Stages"
 msgstr "Этапы"
 
-#: config/settings/base.py:309
+#: config/settings/base.py:322
 msgid "Enrolments"
 msgstr "Записи на курсы"
 
-#: config/settings/base.py:314
+#: config/settings/base.py:327
 msgid "Course groups"
 msgstr "Группы курсов"
 
-#: config/settings/base.py:321
+#: config/settings/base.py:334
 msgid "Assessment"
 msgstr "Оценивание"
 
-#: config/settings/base.py:324
+#: config/settings/base.py:337
 msgid "Quizzes"
 msgstr "Тесты"
 
-#: config/settings/base.py:326 ui/templates/teacher/student.html:137
+#: config/settings/base.py:339 ui/templates/teacher/student.html:137
 msgid "Quiz attempts"
 msgstr "Попытки тестов"
 
-#: config/settings/base.py:331
+#: config/settings/base.py:344
 msgid "Practice tasks"
 msgstr "Практические задания"
 
-#: config/settings/base.py:336
+#: config/settings/base.py:349
 msgid "Practice submissions"
 msgstr "Отправки практических работ"
 
-#: config/settings/base.py:346
+#: config/settings/base.py:359
 msgid "Teacher reviews"
 msgstr "Проверки преподавателей"
 
-#: config/settings/base.py:351
+#: config/settings/base.py:364
 msgid "Stage progress"
 msgstr "Прогресс по этапам"
 
-#: config/settings/base.py:356
+#: config/settings/base.py:369
 msgid "Course results"
 msgstr "Результаты курсов"
 
-#: config/settings/base.py:374
+#: config/settings/base.py:387
 msgid "Certificates and feedback"
 msgstr "Сертификаты и обратная связь"
 
-#: config/settings/base.py:383
+#: config/settings/base.py:396
 msgid "Certificate templates"
 msgstr "Шаблоны сертификатов"
 
-#: config/settings/base.py:388 ui/templates/feedback/partials/thread.html:7
+#: config/settings/base.py:401 ui/templates/feedback/partials/thread.html:7
 msgid "Comments"
 msgstr "Комментарии"
 
-#: config/settings/base.py:393 ui/templates/feedback/notifications.html:3
+#: config/settings/base.py:406 ui/templates/feedback/notifications.html:3
 #: ui/templates/feedback/notifications.html:5
 #: ui/templates/feedback/notifications.html:10
 #: ui/templates/feedback/partials/menu.html:4
@@ -5601,6 +6381,11 @@ msgstr "Предмет можно перетащить на стол или на
 #: ui/templates/labs/run.html:224
 msgid "Lab panel"
 msgstr "Панель лаборатории"
+
+#: ui/templates/labs/run.html:304
+#: ui/templates/student/partials/practice_field.html:43
+msgid "Chemistry keyboard"
+msgstr "Химическая клавиатура"
 
 #: ui/templates/layouts/auth.html:18
 msgid "About ChemEduTech"
@@ -6807,10 +7592,6 @@ msgstr "Единица"
 msgid "A comma or a dot may be used; units are converted automatically."
 msgstr ""
 "Можно писать через запятую или точку; единицы переводятся автоматически."
-
-#: ui/templates/student/partials/practice_field.html:43
-msgid "Chemistry keyboard"
-msgstr "Химическая клавиатура"
 
 #: ui/templates/student/partials/practice_field.html:47
 msgid "Clear"

@@ -138,7 +138,7 @@ class EnrollmentServiceTests(TestCase):
 class CoursePageTests(TestCase):
     @classmethod
     def setUpTestData(cls):
-        call_command("seed_course", verbosity=0)
+        call_command("seed_course", topics=[1], verbosity=0)
         cls.course = Course.objects.get(slug="chemistry")
         cls.student = make_student("s1", group=make_group())
 
@@ -149,7 +149,7 @@ class CoursePageTests(TestCase):
         self.assertEqual(topic.stages.get(kind="lab").lab_content.lab_key, "t01")
         self.assertIn("<h2>1. Сутегіне жалпы сипаттама</h2>", topic.stages.get(kind="theory").theory_content.body)
         self.assertEqual(topic.stages.get(kind="test").test_content.quiz.questions.count(), 10)
-        call_command("seed_course", verbosity=0)  # idempotent
+        call_command("seed_course", topics=[1], verbosity=0)  # idempotent
         self.assertEqual(Stage.objects.filter(topic=topic).count(), 8)
 
     def test_replace_keeps_attempted_quizzes_and_stage_kinds(self):
@@ -161,10 +161,10 @@ class CoursePageTests(TestCase):
         theory = topic.stages.get(kind="theory").theory_content
         theory.body = "<p>edited</p>"
         theory.save()
-        call_command("seed_course", verbosity=0)  # a plain run fills blanks only
+        call_command("seed_course", topics=[1], verbosity=0)  # a plain run fills blanks only
         theory.refresh_from_db()
         self.assertEqual(theory.body, "<p>edited</p>")
-        call_command("seed_course", replace=True, verbosity=0)
+        call_command("seed_course", replace=True, topics=[1], verbosity=0)
         theory.refresh_from_db()
         self.assertIn("Сутегіне жалпы сипаттама", theory.body)
         self.assertTrue(quiz.questions.filter(pk=first.pk).exists())  # attempted: never rewritten
@@ -208,7 +208,7 @@ class CKEditorUploadTests(TestCase):
 class AdminTests(TestCase):
     @classmethod
     def setUpTestData(cls):
-        call_command("seed_course", verbosity=0)
+        call_command("seed_course", topics=[1], verbosity=0)
         cls.admin = User.objects.create_superuser("root", "root@example.kz", "x")
 
     def setUp(self):

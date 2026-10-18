@@ -71,6 +71,7 @@
       journal: {},
       journalSaved: false,
       journalError: "",
+      eqChecks: {}, // equation fields of the journal: ok | species | coefficients | unreadable
       analysisOpen: false,
       analysis: {},
       analysisResult: null,
@@ -373,14 +374,16 @@
           return;
         }
         this.journalError = "";
+        let res;
         try {
-          await postJSON(this.cfg.urls.journal, this.journal);
+          res = await postJSON(this.cfg.urls.journal, this.journal);
         } catch (e) {
           this.journalError = this.ui.network_error;
           return;
         }
+        this.eqChecks = res.checks || {};
         this.journalSaved = true;
-        this.log("journal_saved", this.journalStep.key);
+        this.log("journal_saved", this.journalStep.key, { checks: this.eqChecks });
         this.say("info", this.ui.journal_saved);
         if (this.step && this.step.key === this.journalStep.key) this.complete(this.step);
       },

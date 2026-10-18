@@ -4,9 +4,11 @@ from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from apps.accounts.models import User
+from apps.assessments import chem
 from apps.labs.engine import all_labs, get_lab
 from apps.labs.models import LabAttempt
 from apps.labs.services import finish_attempt, record_events, save_journal, start_attempt, submit_analysis
+from apps.labs.services.attempts import check_equation
 from apps.organizations.testing import make_group, make_student
 
 
@@ -28,6 +30,20 @@ class SpecTests(TestCase):
                     if item["required"]:
                         owners = [s for s in data["steps"] if item["key"] in s["items"]]
                         self.assertEqual(len(owners), 1, f"{exp.key}: {item['key']}")
+                # equation answers of the journal are readable, balanced and never sent to the browser
+                for field in exp.journal:
+                    if field.kind == "equation":
+                        self.assertTrue(chem.parse_equation(field.answer).is_balanced, f"{exp.key}.{field.key}")
+                        self.assertEqual(check_equation(field.answer, field.answer), "ok")
+                self.assertNotIn("answer", json.dumps(data["journal"]))
+                # the generic test-tube bench: ops belong to real steps and real tubes
+                if exp.scene == "tubes":
+                    steps = {s["key"] for s in data["steps"]}
+                    tubes = len(exp.params["tubes"])
+                    for key, ops in exp.params["ops"].items():
+                        self.assertIn(key, steps, f"{exp.key}: ops for an unknown step {key}")
+                        for op in ops:
+                            self.assertLess(op.get("tube", 0), tubes, f"{exp.key}.{key}")
 
 
 @override_settings(ALLOWED_HOSTS=["testserver"])
@@ -73,6 +89,19 @@ class AttemptFlowTests(TestCase):
         self.assertNotIn("hack", a.journal)
         submit_analysis(a, self.exp, {"oxidant": "h_ion", "air_collect": "up", "no_h2": "cu", "teach_purity": "..."})
         self.assertEqual((a.analysis_correct, a.analysis_total), (2, 3))
+
+    def test_equation_journal_fields_are_checked(self):
+        exp = get_lab("t02").experiment("displacement")
+        a = start_attempt(self.user, "t02", exp)
+        checks = save_journal(a, exp, {"eq_a": "Cl₂ + 2I⁻ → 2Cl⁻ + I₂", "eq_b": "Cl2 + Br- -> Cl- + Br2", "obs_c": "none"})
+        self.assertEqual(checks, {"eq_a": "ok", "eq_b": "coefficients"})
+        self.assertEqual((a.journal_correct, a.journal_total), (2, 3))  # eq_a and obs_c right, eq_b wrong
+        self.client.force_login(self.user)
+        r = self.client.post(
+            reverse("labs:api_journal", args=[a.pk]), {"eq_a": "Br2 + 2I- -> 2Br- + I2", "eq_b": "x ->"},
+            content_type="application/json",
+        )
+        self.assertEqual(r.json()["checks"], {"eq_a": "species", "eq_b": "unreadable"})
 
     def test_api_is_owner_only(self):
         a = start_attempt(self.user, "t01", self.exp)

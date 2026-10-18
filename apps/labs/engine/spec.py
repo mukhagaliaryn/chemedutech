@@ -99,12 +99,17 @@ class Step:
 
 @dataclass(frozen=True)
 class JournalField:
+    """A journal field. ``equation`` — the student writes a reaction equation; the server checks it against
+    ``answer`` with apps.assessments.chem (species and coefficients, any order/arrow) and scores it like a choice.
+    The answer is never sent to the browser."""
+
     key: str
     label: str
-    kind: Literal["text", "number", "choice"] = "text"
+    kind: Literal["text", "number", "choice", "equation"] = "text"
     unit: str = ""
     options: tuple[Option, ...] = ()
     required: bool = True
+    answer: str = ""  # equation fields: the correct equation, e.g. "Cl2 + 2I- -> 2Cl- + I2"
 
     def as_json(self):
         return {
@@ -165,7 +170,7 @@ class ExperimentSpec:
             "scene": self.scene,
             "equation": self.equation,
             "explanation": force_str(self.explanation),
-            "extra_equations": [[force_str(a), b] for a, b in self.extra_equations],
+            "extra_equations": [[force_str(a), force_str(b)] for a, b in self.extra_equations],
             "items": [i.as_json() for i in self.items],
             "steps": [s.as_json() for s in self.steps],
             "journal": [j.as_json() for j in self.journal],
@@ -179,7 +184,7 @@ class LabScoring:
     """Lab score formula (ARCHITECTURE §5.4); a lab may override any number.
 
     process  = max(0, 100 − order·order_errors − safety·safety_warnings − wrong·(wrong_items + wrong_choices))
-    journal  = journal_correct / journal_total · 100      (choice fields of the journal)
+    journal  = journal_correct / journal_total · 100      (choice and equation fields of the journal)
     analysis = analysis_correct / analysis_total · 100    (closed analysis questions)
     experiment = w_process·process + w_journal·journal + w_analysis·analysis
     A part with nothing to score (no choice fields) drops out and the other weights are rescaled.

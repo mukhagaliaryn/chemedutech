@@ -28,10 +28,14 @@ class Command(BaseCommand):
             action="store_true",
             help="Update existing texts and rewrite quizzes and practice works that no student has answered yet.",
         )
+        parser.add_argument(
+            "--topics", nargs="*", type=int, help="Build the content of these topic numbers only (tests use 1)."
+        )
 
     @transaction.atomic
-    def handle(self, *args, replace=False, **options):
+    def handle(self, *args, replace=False, topics=None, **options):
         self.replace = replace
+        self.content = {n: c for n, c in CONTENT.items() if not topics or n in topics}
         self.notes = []
         course, created = Course.objects.get_or_create(
             slug=COURSE["slug"],
@@ -57,7 +61,7 @@ class Command(BaseCommand):
             self._topic(course, modules, n)
 
         if apps.is_installed("apps.practice"):  # a higher layer: called by name, not imported
-            call_command("seed_practice", replace=replace, verbosity=options["verbosity"])
+            call_command("seed_practice", replace=replace, topics=list(self.content), verbosity=options["verbosity"])
         for note in self.notes:
             self.stdout.write(self.style.WARNING(note))
         published = Topic.objects.filter(module__course=course, is_published=True).count()
@@ -67,7 +71,7 @@ class Command(BaseCommand):
 
     def _topic(self, course, modules, n):
         module_order, title, summary = TOPICS.get(n, (1 if n <= MODULE_1_TOPICS else 2, f"{n}-тақырып", ""))
-        content = CONTENT.get(n)
+        content = self.content.get(n)
         module = modules[module_order]
         order = n if module_order == 1 else n - MODULE_1_TOPICS
         topic = Topic.objects.filter(module__course=course, number=n).first()

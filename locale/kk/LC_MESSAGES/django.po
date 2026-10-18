@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ChemEduTech\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-18 02:38+0500\n"
+"POT-Creation-Date: 2026-10-18 07:41+0500\n"
 "PO-Revision-Date: 2026-10-16 21:00+0500\n"
 "Last-Translator: ChemEduTech\n"
 "Language-Team: ChemEduTech\n"
@@ -667,7 +667,7 @@ msgstr "PDF-ті қайта жасау"
 msgid "PDF made: %(n)d"
 msgstr "PDF жасалды: %(n)d"
 
-#: apps/certificates/apps.py:8 config/settings/base.py:378
+#: apps/certificates/apps.py:8 config/settings/base.py:391
 #: ui/templates/partials/shell/sidebar_student.html:18
 #: ui/templates/student/certificates.html:3
 #: ui/templates/student/certificates.html:5
@@ -827,7 +827,7 @@ msgid "This student is already enrolled in the course."
 msgstr "Бұл студент курсқа жазылып қойған."
 
 #: apps/courses/apps.py:8 apps/research/admin_dashboard.py:38
-#: config/settings/base.py:289 config/settings/base.py:293
+#: config/settings/base.py:302 config/settings/base.py:306
 #: ui/templates/student/partials/course_switch.html:3
 #: ui/templates/teacher/group.html:99
 #: ui/templates/teacher/partials/groups_table.html:10
@@ -1577,7 +1577,10 @@ msgstr "Электродтық реакцияларды жазу керек."
 #: apps/labs/experiments/t01/electrolysis.py:107
 #: apps/labs/experiments/t01/hydrogen.py:89
 #: apps/labs/experiments/t01/oxygen.py:102
-#: apps/labs/experiments/t01/rate.py:84 apps/labs/views.py:113
+#: apps/labs/experiments/t01/rate.py:84
+#: apps/labs/experiments/t02/alkali.py:104
+#: apps/labs/experiments/t02/displacement.py:120
+#: apps/labs/experiments/t02/silver.py:122 apps/labs/views.py:115
 msgid "Finish the experiment"
 msgstr "Тәжірибені аяқтау"
 
@@ -1585,6 +1588,9 @@ msgstr "Тәжірибені аяқтау"
 #: apps/labs/experiments/t01/hydrogen.py:90
 #: apps/labs/experiments/t01/oxygen.py:103
 #: apps/labs/experiments/t01/rate.py:85
+#: apps/labs/experiments/t02/alkali.py:104
+#: apps/labs/experiments/t02/displacement.py:120
+#: apps/labs/experiments/t02/silver.py:122
 msgid "The results are saved and the analysis task opens."
 msgstr "Нәтижелер сақталып, талдау тапсырмасы ашылады."
 
@@ -1592,6 +1598,9 @@ msgstr "Нәтижелер сақталып, талдау тапсырмасы �
 #: apps/labs/experiments/t01/hydrogen.py:92
 #: apps/labs/experiments/t01/oxygen.py:105
 #: apps/labs/experiments/t01/rate.py:87
+#: apps/labs/experiments/t02/alkali.py:105
+#: apps/labs/experiments/t02/displacement.py:121
+#: apps/labs/experiments/t02/silver.py:123
 msgid "Fill in the lab journal first."
 msgstr "Алдымен зертханалық журналды толтыру керек."
 
@@ -1811,6 +1820,7 @@ msgid "There is no gas to collect yet: start the reaction first."
 msgstr "Жинайтын газ әлі жоқ: алдымен реакцияны бастау керек."
 
 #: apps/labs/experiments/t01/hydrogen.py:81
+#: apps/labs/experiments/t02/alkali.py:101
 msgid "Observe the result"
 msgstr "Нәтижені бақылау"
 
@@ -2245,7 +2255,7 @@ msgstr "Таймерді бастау"
 msgid "The comparison of the two reactions begins."
 msgstr "Реакцияларды салыстыру басталады."
 
-#: apps/labs/experiments/t01/rate.py:67
+#: apps/labs/experiments/t01/rate.py:67 apps/labs/experiments/t02/alkali.py:90
 msgid "Prepare both tubes first."
 msgstr "Алдымен екі пробирканы да дайындау керек."
 
@@ -2340,6 +2350,764 @@ msgid ""
 "decomposition."
 msgstr ""
 "Активтендіру энергиясы тұрғысынан MnO₂ ыдырауды неліктен жылдамдатады?"
+
+#: apps/labs/experiments/t02/__init__.py:13
+msgid "Halogens: oxidising ability and halide ions"
+msgstr "Галогендер: тотықтырғыштық белсенділік және галогенид иондары"
+
+#: apps/labs/experiments/t02/alkali.py:32
+msgid "Chlorine with cold and hot alkali"
+msgstr "Хлордың суық және ыстық сілтімен әрекеттесуі"
+
+#: apps/labs/experiments/t02/alkali.py:34
+msgid ""
+"Compare the products of chlorine with cold dilute and hot concentrated "
+"sodium hydroxide and explain why both reactions are disproportionation."
+msgstr ""
+"Хлордың суық сұйылтылған және ыстық концентрлі натрий гидроксидімен "
+"әрекеттесу өнімдерін салыстырып, екі реакцияның да неге диспропорциялану "
+"екенін түсіндіру."
+
+#: apps/labs/experiments/t02/alkali.py:40
+msgid ""
+"In both tubes chlorine (0) is at the same time reduced to chloride (−1) and "
+"oxidised: to hypochlorite (+1) in cold dilute alkali and to chlorate (+5) in"
+" hot concentrated alkali. This is disproportionation; the conditions decide "
+"the product."
+msgstr ""
+"Екі пробиркада да хлор (0) бір мезгілде хлоридке (−1) дейін тотықсызданады "
+"және тотығады: суық сұйылтылған сілтіде гипохлоритке (+1), ыстық концентрлі "
+"сілтіде хлоратқа (+5) дейін. Бұл — диспропорциялану; өнімді реакция жағдайы "
+"анықтайды."
+
+#: apps/labs/experiments/t02/alkali.py:45
+msgid "Tube B, hot"
+msgstr "B пробиркасы, ыстық"
+
+#: apps/labs/experiments/t02/alkali.py:49
+msgid "Sodium hydroxide solution, 2% (cold)"
+msgstr "Натрий гидроксидінің ерітіндісі, 2% (суық)"
+
+#: apps/labs/experiments/t02/alkali.py:50
+msgid "Sodium hydroxide solution, 30%"
+msgstr "Натрий гидроксидінің ерітіндісі, 30%"
+
+#: apps/labs/experiments/t02/alkali.py:51
+msgid "Hot water bath"
+msgstr "Ыстық су моншасы"
+
+#: apps/labs/experiments/t02/alkali.py:60
+msgid ""
+"Iodide is not needed here: this experiment studies chlorine and an alkali."
+msgstr ""
+"Йодид бұл жерде қажет емес: тәжірибеде хлор мен сілтінің әрекеттесуі "
+"зерттеледі."
+
+#: apps/labs/experiments/t02/alkali.py:64
+msgid "Take the rack and two test tubes"
+msgstr "Штатив пен екі пробирканы алу"
+
+#: apps/labs/experiments/t02/alkali.py:64
+msgid "Test tubes A and B are on the bench."
+msgstr "A және B пробиркалары үстелге қойылды."
+
+#: apps/labs/experiments/t02/alkali.py:66
+msgid "A: pour cold dilute NaOH"
+msgstr "A: суық сұйылтылған NaOH құю"
+
+#: apps/labs/experiments/t02/alkali.py:66
+msgid "Tube A holds a cold 2% NaOH solution."
+msgstr "A пробиркасында суық 2% NaOH ерітіндісі."
+
+#: apps/labs/experiments/t02/alkali.py:67
+#: apps/labs/experiments/t02/displacement.py:65
+#: apps/labs/experiments/t02/silver.py:80
+msgid "Put the rack with the test tubes on the bench first."
+msgstr "Алдымен пробиркалары бар штативті үстелге қою керек."
+
+#: apps/labs/experiments/t02/alkali.py:68
+msgid "B: pour concentrated NaOH"
+msgstr "B: концентрлі NaOH құю"
+
+#: apps/labs/experiments/t02/alkali.py:68
+msgid "Tube B holds a 30% NaOH solution."
+msgstr "B пробиркасында 30% NaOH ерітіндісі."
+
+#: apps/labs/experiments/t02/alkali.py:69
+msgid "Pour the solution into tube A first."
+msgstr "Алдымен A пробиркасына ерітінді құю керек."
+
+#: apps/labs/experiments/t02/alkali.py:72
+msgid "B: warm the tube in a hot water bath"
+msgstr "B: пробирканы ыстық су моншасында қыздыру"
+
+#: apps/labs/experiments/t02/alkali.py:73
+msgid "Tube B is hot (about 80 °C)."
+msgstr "B пробиркасы ыстық (шамамен 80 °C)."
+
+#: apps/labs/experiments/t02/alkali.py:76
+msgid "Pour concentrated NaOH into tube B first."
+msgstr "Алдымен B пробиркасына концентрлі NaOH құю керек."
+
+#: apps/labs/experiments/t02/alkali.py:80
+msgid "Predict the salts formed in A and B"
+msgstr "Болжам: A мен B-да қандай тұздар түзіледі?"
+
+#: apps/labs/experiments/t02/alkali.py:81
+#: apps/labs/experiments/t02/displacement.py:69
+#: apps/labs/experiments/t02/silver.py:94
+msgid "The prediction is recorded."
+msgstr "Болжам тіркелді."
+
+#: apps/labs/experiments/t02/alkali.py:84
+msgid "A: NaCl and NaClO; B: NaCl and NaClO₃"
+msgstr "A: NaCl және NaClO; B: NaCl және NaClO₃"
+
+#: apps/labs/experiments/t02/alkali.py:84
+#: apps/labs/experiments/t02/silver.py:98
+msgid "Let us check it."
+msgstr "Тәжірибеде тексеріледі."
+
+#: apps/labs/experiments/t02/alkali.py:85
+msgid "The same salts in both tubes"
+msgstr "Екі пробиркада бірдей тұздар"
+
+#: apps/labs/experiments/t02/alkali.py:86
+msgid ""
+"Temperature and concentration change the product of the oxidation of "
+"chlorine."
+msgstr "Температура мен концентрация хлордың тотығу өнімін өзгертеді."
+
+#: apps/labs/experiments/t02/alkali.py:87
+msgid "A: NaCl and NaClO₃; B: NaCl and NaClO"
+msgstr "A: NaCl және NaClO₃; B: NaCl және NaClO"
+
+#: apps/labs/experiments/t02/alkali.py:88
+msgid ""
+"The higher oxidation state (+5) is reached on heating, not in the cold."
+msgstr "Жоғары тотығу дәрежесіне (+5) суықта емес, қыздырғанда жетеді."
+
+#: apps/labs/experiments/t02/alkali.py:94
+msgid "Add chlorine water to both tubes"
+msgstr "Екі пробиркаға хлор суын қосу"
+
+#: apps/labs/experiments/t02/alkali.py:95
+msgid ""
+"The yellow-green colour of chlorine disappears in both tubes: chlorine has "
+"reacted with the alkali."
+msgstr ""
+"Екі пробиркада да хлордың сарғыш-жасыл түсі жоғалады: хлор сілтімен "
+"әрекеттесті."
+
+#: apps/labs/experiments/t02/alkali.py:98
+msgid ""
+"Chlorine water is toxic: it is added only when both tubes are ready (here — "
+"virtually)."
+msgstr ""
+"Хлор суы улы: ол екі пробирка дайын болғанда ғана қосылады (мұнда — "
+"виртуалды)."
+
+#: apps/labs/experiments/t02/alkali.py:101
+msgid "The equations for the cold and the hot alkali are shown."
+msgstr "Суық және ыстық сілтіге арналған теңдеулер көрсетілді."
+
+#: apps/labs/experiments/t02/alkali.py:102
+msgid "Add chlorine water first."
+msgstr "Алдымен хлор суын қосу керек."
+
+#: apps/labs/experiments/t02/alkali.py:103
+#: apps/labs/experiments/t02/displacement.py:119
+#: apps/labs/experiments/t02/silver.py:121
+msgid "Save the lab journal"
+msgstr "Зертханалық журналды сақтау"
+
+#: apps/labs/experiments/t02/alkali.py:103
+#: apps/labs/experiments/t02/silver.py:121
+msgid "Observations and equations are recorded."
+msgstr "Бақылаулар мен теңдеулер тіркелді."
+
+#: apps/labs/experiments/t02/alkali.py:108
+msgid "What happened to the colour of chlorine water in A and B?"
+msgstr "A мен B-да хлор суының түсі қалай өзгерді?"
+
+#: apps/labs/experiments/t02/alkali.py:109
+msgid "Tube A (cold dilute NaOH): the equation"
+msgstr "A пробиркасы (суық сұйылтылған NaOH): теңдеу"
+
+#: apps/labs/experiments/t02/alkali.py:111
+msgid "Tube B (hot concentrated NaOH): the equation"
+msgstr "B пробиркасы (ыстық концентрлі NaOH): теңдеу"
+
+#: apps/labs/experiments/t02/alkali.py:115
+msgid "What type of redox reaction is it?"
+msgstr "Бұл тотығу-тотықсыздану реакциясының қай түрі?"
+
+#: apps/labs/experiments/t02/alkali.py:118
+msgid "Disproportionation"
+msgstr "Диспропорциялану"
+
+#: apps/labs/experiments/t02/alkali.py:119
+msgid "Intermolecular redox reaction"
+msgstr "Молекулааралық тотығу-тотықсыздану"
+
+#: apps/labs/experiments/t02/alkali.py:120
+msgid "Neutralisation"
+msgstr "Бейтараптану"
+
+#: apps/labs/experiments/t02/alkali.py:127
+msgid "What is the oxidation state of chlorine in NaClO₃?"
+msgstr "NaClO₃ құрамындағы хлордың тотығу дәрежесі қандай?"
+
+#: apps/labs/experiments/t02/alkali.py:132
+msgid ""
+"Why is chlorine both the oxidising and the reducing agent in these "
+"reactions?"
+msgstr ""
+"Неліктен бұл реакцияларда хлор әрі тотықтырғыш, әрі тотықсыздандырғыш?"
+
+#: apps/labs/experiments/t02/alkali.py:134
+msgid ""
+"Some chlorine atoms gain electrons (→ −1) and others lose them (→ +1 or +5)"
+msgstr ""
+"Хлордың бір атомдары электрон қабылдайды (→ −1), ал басқалары электрон "
+"береді (→ +1 немесе +5)"
+
+#: apps/labs/experiments/t02/alkali.py:136
+msgid "Sodium changes its oxidation state"
+msgstr "Натрий тотығу дәрежесін өзгертеді"
+
+#: apps/labs/experiments/t02/alkali.py:137
+msgid "Water is the reducing agent"
+msgstr "Су тотықсыздандырғыш болады"
+
+#: apps/labs/experiments/t02/alkali.py:142
+msgid "Which product of the cold reaction is used for disinfection?"
+msgstr "Суық сілтідегі реакцияның қай өнімі залалсыздандыруда қолданылады?"
+
+#: apps/labs/experiments/t02/alkali.py:143
+msgid "Sodium hypochlorite NaClO"
+msgstr "Натрий гипохлориті NaClO"
+
+#: apps/labs/experiments/t02/alkali.py:143
+msgid "Sodium chloride NaCl"
+msgstr "Натрий хлориді NaCl"
+
+#: apps/labs/experiments/t02/alkali.py:144
+msgid "Sodium chlorate NaClO₃"
+msgstr "Натрий хлораты NaClO₃"
+
+#: apps/labs/experiments/t02/alkali.py:146
+msgid ""
+"Why should this experiment be shown to school students as a simulation?"
+msgstr ""
+"Неліктен бұл тәжірибені мектеп оқушыларына симуляция ретінде көрсету керек?"
+
+#: apps/labs/experiments/t02/common.py:6
+msgid "Rack with test tubes"
+msgstr "Пробиркалары бар штатив"
+
+#: apps/labs/experiments/t02/common.py:7
+msgid "Potassium chloride solution"
+msgstr "Калий хлоридінің ерітіндісі"
+
+#: apps/labs/experiments/t02/common.py:8
+msgid "Potassium bromide solution"
+msgstr "Калий бромидінің ерітіндісі"
+
+#: apps/labs/experiments/t02/common.py:9
+msgid "Potassium iodide solution"
+msgstr "Калий йодидінің ерітіндісі"
+
+#: apps/labs/experiments/t02/common.py:10
+msgid "Chlorine water"
+msgstr "Хлор суы"
+
+#: apps/labs/experiments/t02/common.py:11
+msgid "Bromine water"
+msgstr "Бром суы"
+
+#: apps/labs/experiments/t02/displacement.py:27
+msgid "Displacement reactions of halogens"
+msgstr "Галогендердің орынбасу реакциялары"
+
+#: apps/labs/experiments/t02/displacement.py:29
+msgid ""
+"Find out which halogen displaces which from a solution of its salt and build"
+" the series of the oxidising ability of chlorine, bromine and iodine."
+msgstr ""
+"Қай галоген қайсысын тұзының ерітіндісінен ығыстыратынын анықтап, хлор, бром"
+" және йодтың тотықтырғыштық қатарын құру."
+
+#: apps/labs/experiments/t02/displacement.py:35
+msgid ""
+"A free halogen oxidises the anions of a halogen below it in the group: "
+"chlorine displaces bromine and iodine, bromine cannot oxidise chloride ions."
+" Oxidising ability: Cl₂ > Br₂ > I₂ (for the whole group F₂ > Cl₂ > Br₂ > "
+"I₂)."
+msgstr ""
+"Бос галоген топта өзінен төмен орналасқан галогеннің анионын тотықтырады: "
+"хлор бром мен йодты ығыстырады, бром хлорид иондарын тотықтыра алмайды. "
+"Тотықтырғыштық қабілет: Cl₂ > Br₂ > I₂ (бүкіл топ үшін F₂ > Cl₂ > Br₂ > I₂)."
+
+#: apps/labs/experiments/t02/displacement.py:40
+msgid "Tube A, ionic"
+msgstr "A пробиркасы, иондық"
+
+#: apps/labs/experiments/t02/displacement.py:41
+msgid "Tube B, ionic"
+msgstr "B пробиркасы, иондық"
+
+#: apps/labs/experiments/t02/displacement.py:42
+#: apps/labs/experiments/t02/silver.py:52
+msgid "Tube C"
+msgstr "C пробиркасы"
+
+#: apps/labs/experiments/t02/displacement.py:42
+msgid "Br₂ + KCl → no reaction"
+msgstr "Br₂ + KCl → реакция жүрмейді"
+
+#: apps/labs/experiments/t02/displacement.py:53
+#: apps/labs/experiments/t02/silver.py:60
+msgid "Silver nitrate solution"
+msgstr "Күміс нитратының ерітіндісі"
+
+#: apps/labs/experiments/t02/displacement.py:58
+msgid ""
+"Silver nitrate detects halide ions; it is used in the next experiment, not "
+"for displacement."
+msgstr ""
+"Күміс нитраты галогенид иондарын анықтайды; ол орынбасу үшін емес, келесі "
+"тәжірибеде қолданылады."
+
+#: apps/labs/experiments/t02/displacement.py:62
+#: apps/labs/experiments/t02/silver.py:72
+msgid "Take the rack and three test tubes"
+msgstr "Штатив пен үш пробирканы алу"
+
+#: apps/labs/experiments/t02/displacement.py:62
+#: apps/labs/experiments/t02/silver.py:72
+msgid "Test tubes A, B and C are on the bench."
+msgstr "A, B және C пробиркалары үстелге қойылды."
+
+#: apps/labs/experiments/t02/displacement.py:64
+msgid "A: pour the KI solution"
+msgstr "A: KI ерітіндісін құю"
+
+#: apps/labs/experiments/t02/displacement.py:64
+msgid "Tube A holds a colourless KI solution."
+msgstr "A пробиркасында түссіз KI ерітіндісі."
+
+#: apps/labs/experiments/t02/displacement.py:68
+msgid "Predict: what happens when chlorine water is added to A?"
+msgstr "Болжам: A-ға хлор суын қосса не болады?"
+
+#: apps/labs/experiments/t02/displacement.py:72
+msgid "The solution turns brown: iodine is formed"
+msgstr "Ерітінді қоңырланады: йод түзіледі"
+
+#: apps/labs/experiments/t02/displacement.py:73
+msgid "A reasoned prediction. Let us check it."
+msgstr "Негізделген болжам. Тәжірибеде тексеріледі."
+
+#: apps/labs/experiments/t02/displacement.py:74
+msgid "Nothing changes"
+msgstr "Ешқандай өзгеріс болмайды"
+
+#: apps/labs/experiments/t02/displacement.py:75
+msgid ""
+"Compare the positions of chlorine and iodine in the group and their "
+"oxidising ability."
+msgstr ""
+"Хлор мен йодтың топтағы орнын және тотықтырғыштық қабілетін салыстыру керек."
+
+#: apps/labs/experiments/t02/displacement.py:76
+msgid "A white precipitate forms"
+msgstr "Ақ тұнба түзіледі"
+
+#: apps/labs/experiments/t02/displacement.py:77
+msgid ""
+"A precipitate with halide ions needs silver ions, and there are none here."
+msgstr ""
+"Галогенид иондарымен тұнба түзілу үшін күміс иондары керек, ал мұнда олар "
+"жоқ."
+
+#: apps/labs/experiments/t02/displacement.py:79
+msgid "Pour the KI solution into tube A first."
+msgstr "Алдымен A пробиркасына KI ерітіндісін құю керек."
+
+#: apps/labs/experiments/t02/displacement.py:83
+msgid "A: add chlorine water"
+msgstr "A: хлор суын қосу"
+
+#: apps/labs/experiments/t02/displacement.py:84
+msgid "The solution turns brown: iodine is formed."
+msgstr "Ерітінді қоңырланады: йод түзіледі."
+
+#: apps/labs/experiments/t02/displacement.py:88
+msgid ""
+"Chlorine water is toxic: it is added only to a prepared tube and after the "
+"prediction (here everything is virtual)."
+msgstr ""
+"Хлор суы улы: ол тек дайын пробиркаға және болжамнан кейін қосылады (мұнда "
+"бәрі виртуалды)."
+
+#: apps/labs/experiments/t02/displacement.py:93
+msgid "B: pour the KBr solution"
+msgstr "B: KBr ерітіндісін құю"
+
+#: apps/labs/experiments/t02/displacement.py:93
+msgid "Tube B holds a colourless KBr solution."
+msgstr "B пробиркасында түссіз KBr ерітіндісі."
+
+#: apps/labs/experiments/t02/displacement.py:94
+msgid "Finish the experiment in tube A first."
+msgstr "Алдымен A пробиркасындағы тәжірибені аяқтау керек."
+
+#: apps/labs/experiments/t02/displacement.py:95
+msgid "B: add chlorine water"
+msgstr "B: хлор суын қосу"
+
+#: apps/labs/experiments/t02/displacement.py:95
+msgid "The solution turns yellow-orange: bromine is formed."
+msgstr "Ерітінді сарғыш-қоңыр түске боялады: бром түзіледі."
+
+#: apps/labs/experiments/t02/displacement.py:96
+msgid "Pour the KBr solution into tube B first."
+msgstr "Алдымен B пробиркасына KBr ерітіндісін құю керек."
+
+#: apps/labs/experiments/t02/displacement.py:97
+msgid "C: pour the KCl solution"
+msgstr "C: KCl ерітіндісін құю"
+
+#: apps/labs/experiments/t02/displacement.py:97
+msgid "Tube C holds a colourless KCl solution."
+msgstr "C пробиркасында түссіз KCl ерітіндісі."
+
+#: apps/labs/experiments/t02/displacement.py:98
+msgid "Finish the experiment in tube B first."
+msgstr "Алдымен B пробиркасындағы тәжірибені аяқтау керек."
+
+#: apps/labs/experiments/t02/displacement.py:101
+msgid "C: add bromine water"
+msgstr "C: бром суын қосу"
+
+#: apps/labs/experiments/t02/displacement.py:102
+msgid ""
+"Only the colour of bromine water itself remains: no new substance is formed "
+"— no reaction."
+msgstr ""
+"Тек бром суының өз түсі қалады: жаңа зат түзілмейді — реакция жүрмейді."
+
+#: apps/labs/experiments/t02/displacement.py:105
+msgid "Pour the KCl solution into tube C first."
+msgstr "Алдымен C пробиркасына KCl ерітіндісін құю керек."
+
+#: apps/labs/experiments/t02/displacement.py:109
+msgid "Compare the three results"
+msgstr "Үш нәтижені салыстыру"
+
+#: apps/labs/experiments/t02/displacement.py:110
+msgid "The series of oxidising ability is built: Cl₂ > Br₂ > I₂."
+msgstr "Тотықтырғыштық қатар құрылды: Cl₂ > Br₂ > I₂."
+
+#: apps/labs/experiments/t02/displacement.py:113
+msgid "Right: each halogen displaces the ones below it."
+msgstr "Дұрыс: әр галоген өзінен төмендегілерді ығыстырады."
+
+#: apps/labs/experiments/t02/displacement.py:114
+msgid "Look at tube C: bromine did not displace chlorine."
+msgstr "C пробиркасына назар: бром хлорды ығыстырған жоқ."
+
+#: apps/labs/experiments/t02/displacement.py:115
+msgid "Chlorine displaced bromine in tube B: chlorine is stronger."
+msgstr "B пробиркасында хлор бромды ығыстырды: хлор күштірек."
+
+#: apps/labs/experiments/t02/displacement.py:117
+msgid "Carry out the experiments in all three tubes first."
+msgstr "Алдымен үш пробиркадағы тәжірибені орындау керек."
+
+#: apps/labs/experiments/t02/displacement.py:119
+msgid "Predictions, observations and equations are recorded."
+msgstr "Болжам, бақылау және теңдеулер тіркелді."
+
+#: apps/labs/experiments/t02/displacement.py:124
+msgid "What did you observe in tube A?"
+msgstr "A пробиркасында не байқалды?"
+
+#: apps/labs/experiments/t02/displacement.py:125
+#: apps/labs/experiments/t02/silver.py:136
+msgid "Tube A: the short ionic equation"
+msgstr "A пробиркасы: қысқартылған иондық теңдеу"
+
+#: apps/labs/experiments/t02/displacement.py:126
+#: apps/labs/experiments/t02/silver.py:137
+msgid "Tube B: the short ionic equation"
+msgstr "B пробиркасы: қысқартылған иондық теңдеу"
+
+#: apps/labs/experiments/t02/displacement.py:129
+msgid "What happened in tube C?"
+msgstr "C пробиркасында не болды?"
+
+#: apps/labs/experiments/t02/displacement.py:132
+msgid "No reaction: bromine cannot oxidise chloride ions"
+msgstr "Реакция жүрмеді: бром хлорид иондарын тотықтыра алмайды"
+
+#: apps/labs/experiments/t02/displacement.py:133
+msgid "Chlorine was released"
+msgstr "Хлор бөлінді"
+
+#: apps/labs/experiments/t02/displacement.py:134
+msgid "A precipitate formed"
+msgstr "Тұнба түзілді"
+
+#: apps/labs/experiments/t02/displacement.py:137
+msgid "Conclusion: how does the oxidising ability of halogens change?"
+msgstr "Қорытынды: галогендердің тотықтырғыштық қабілеті қалай өзгереді?"
+
+#: apps/labs/experiments/t02/displacement.py:142
+msgid ""
+"Why can Cl₂ oxidise iodide ions, while Br₂ cannot oxidise chloride ions?"
+msgstr ""
+"Неліктен Cl₂ йодид иондарын тотықтыра алады, ал Br₂ хлорид иондарын "
+"тотықтыра алмайды?"
+
+#: apps/labs/experiments/t02/displacement.py:144
+msgid "The Cl₂/Cl⁻ pair is a stronger oxidising agent than Br₂/Br⁻ and I₂/I⁻"
+msgstr "Cl₂/Cl⁻ жұбы Br₂/Br⁻ және I₂/I⁻ жұптарынан күшті тотықтырғыш"
+
+#: apps/labs/experiments/t02/displacement.py:145
+msgid "Because bromine is a liquid"
+msgstr "Себебі бром — сұйықтық"
+
+#: apps/labs/experiments/t02/displacement.py:146
+msgid "Because there are no chloride ions in the solution"
+msgstr "Себебі ерітіндіде хлорид иондары жоқ"
+
+#: apps/labs/experiments/t02/displacement.py:151
+msgid "Why does the oxidising ability of halogens decrease down the group?"
+msgstr ""
+"Неліктен топ бойынша төмен қарай галогендердің тотықтырғыштық қабілеті "
+"кемиді?"
+
+#: apps/labs/experiments/t02/displacement.py:153
+msgid ""
+"The atomic radius and the screening grow, an electron is attracted more "
+"weakly"
+msgstr "Атом радиусы мен экрандалу артады, электрон әлсіз тартылады"
+
+#: apps/labs/experiments/t02/displacement.py:154
+msgid "The molecules become heavier"
+msgstr "Молекулалар ауырлайды"
+
+#: apps/labs/experiments/t02/displacement.py:155
+msgid "The colour of the substances becomes darker"
+msgstr "Заттардың түсі қоюланады"
+
+#: apps/labs/experiments/t02/displacement.py:160
+msgid "Which particle is the reducing agent in Cl₂ + 2I⁻ → 2Cl⁻ + I₂?"
+msgstr "Cl₂ + 2I⁻ → 2Cl⁻ + I₂ реакциясында қай бөлшек тотықсыздандырғыш?"
+
+#: apps/labs/experiments/t02/displacement.py:162
+msgid "The iodide ion I⁻"
+msgstr "Йодид ионы I⁻"
+
+#: apps/labs/experiments/t02/displacement.py:163
+msgid "The chlorine molecule Cl₂"
+msgstr "Хлор молекуласы Cl₂"
+
+#: apps/labs/experiments/t02/displacement.py:164
+msgid "The chloride ion Cl⁻"
+msgstr "Хлорид ионы Cl⁻"
+
+#: apps/labs/experiments/t02/displacement.py:169
+msgid ""
+"How would you show these reactions to school students without real dangerous"
+" reagents?"
+msgstr ""
+"Бұл реакцияларды мектеп оқушыларына нақты қауіпті реагенттерсіз қалай "
+"көрсетуге болады?"
+
+#: apps/labs/experiments/t02/silver.py:40
+msgid "Detecting halide ions with silver nitrate"
+msgstr "Галогенид иондарын күміс нитратымен анықтау"
+
+#: apps/labs/experiments/t02/silver.py:41
+msgid ""
+"Tell chloride, bromide and iodide ions apart by the colour of their silver "
+"precipitates."
+msgstr ""
+"Хлорид, бромид және йодид иондарын күміс тұнбаларының түсі бойынша ажырату."
+
+#: apps/labs/experiments/t02/silver.py:45
+msgid ""
+"Silver ions give poorly soluble precipitates with halide ions: AgCl is "
+"white, AgBr is pale cream, AgI is yellow. The solution is acidified with "
+"nitric acid so that other anions (carbonate, hydroxide) do not precipitate. "
+"Fluoride gives no precipitate: AgF is soluble."
+msgstr ""
+"Күміс иондары галогенид иондарымен нашар еритін тұнбалар түзеді: AgCl — ақ, "
+"AgBr — ашық крем түсті, AgI — сары. Басқа аниондар (карбонат, гидроксид) "
+"тұнба бермеуі үшін ерітінді азот қышқылымен қышқылдандырылады. Фторид тұнба "
+"бермейді: AgF ериді."
+
+#: apps/labs/experiments/t02/silver.py:50
+msgid "Tube A"
+msgstr "A пробиркасы"
+
+#: apps/labs/experiments/t02/silver.py:51
+msgid "Tube B"
+msgstr "B пробиркасы"
+
+#: apps/labs/experiments/t02/silver.py:59
+msgid "Dilute nitric acid"
+msgstr "Сұйылтылған азот қышқылы"
+
+#: apps/labs/experiments/t02/silver.py:63
+msgid "Sodium fluoride solution"
+msgstr "Натрий фторидінің ерітіндісі"
+
+#: apps/labs/experiments/t02/silver.py:68
+msgid ""
+"Silver fluoride is soluble: a fluoride gives no precipitate with AgNO₃, so "
+"it is not used here."
+msgstr ""
+"Күміс фториді ериді: фторид AgNO₃-пен тұнба бермейді, сондықтан мұнда "
+"қолданылмайды."
+
+#: apps/labs/experiments/t02/silver.py:76
+msgid "Pour KCl into A, KBr into B and KI into C"
+msgstr "A-ға KCl, B-ға KBr, C-ға KI құю"
+
+#: apps/labs/experiments/t02/silver.py:77
+msgid "Three colourless solutions of halides are in the tubes."
+msgstr "Пробиркаларда галогенидтердің үш түссіз ерітіндісі."
+
+#: apps/labs/experiments/t02/silver.py:81
+msgid "You need three solutions: KCl, KBr and KI."
+msgstr "Үш ерітінді керек: KCl, KBr және KI."
+
+#: apps/labs/experiments/t02/silver.py:85
+msgid "Acidify the solutions with dilute HNO₃"
+msgstr "Ерітінділерді сұйылтылған HNO₃-пен қышқылдандыру"
+
+#: apps/labs/experiments/t02/silver.py:86
+msgid "A few drops of dilute nitric acid are added to each tube."
+msgstr "Әр пробиркаға бірнеше тамшы сұйылтылған азот қышқылы қосылды."
+
+#: apps/labs/experiments/t02/silver.py:89
+msgid "Pour the halide solutions first."
+msgstr "Алдымен галогенидтердің ерітінділерін құю керек."
+
+#: apps/labs/experiments/t02/silver.py:93
+msgid "Predict the colours of the precipitates with AgNO₃"
+msgstr "Болжам: AgNO₃-пен тұнбалар қандай түсті болады?"
+
+#: apps/labs/experiments/t02/silver.py:97
+msgid "A — white, B — pale cream, C — yellow"
+msgstr "A — ақ, B — ашық крем түсті, C — сары"
+
+#: apps/labs/experiments/t02/silver.py:99
+msgid "All three are white"
+msgstr "Үшеуі де ақ"
+
+#: apps/labs/experiments/t02/silver.py:100
+msgid "The precipitates differ: this is what makes the test qualitative."
+msgstr "Тұнбалар әртүрлі: сапалық реакцияның мәні де осында."
+
+#: apps/labs/experiments/t02/silver.py:101
+msgid "A — yellow, B — pale cream, C — white"
+msgstr "A — сары, B — ашық крем түсті, C — ақ"
+
+#: apps/labs/experiments/t02/silver.py:102
+msgid "The colour deepens from chloride to iodide, not the other way round."
+msgstr "Түс керісінше емес, хлоридтен йодидке қарай қоюланады."
+
+#: apps/labs/experiments/t02/silver.py:104
+msgid "Acidify the solutions first."
+msgstr "Алдымен ерітінділерді қышқылдандыру керек."
+
+#: apps/labs/experiments/t02/silver.py:108
+msgid "Add AgNO₃ solution to each tube"
+msgstr "Әр пробиркаға AgNO₃ ерітіндісін қосу"
+
+#: apps/labs/experiments/t02/silver.py:109
+msgid "Precipitates form: white in A, pale cream in B, yellow in C."
+msgstr "Тұнбалар түзілді: A-да ақ, B-да ашық крем түсті, C-да сары."
+
+#: apps/labs/experiments/t02/silver.py:112
+msgid ""
+"Acidify the solutions and make a prediction first: other anions could also "
+"precipitate."
+msgstr ""
+"Алдымен ерітінділерді қышқылдандырып, болжам жасау керек: басқа аниондар да "
+"тұнба беруі мүмкін."
+
+#: apps/labs/experiments/t02/silver.py:116
+msgid "Compare the precipitates"
+msgstr "Тұнбаларды салыстыру"
+
+#: apps/labs/experiments/t02/silver.py:117
+msgid "The precipitates settle; their colours are compared with the table."
+msgstr "Тұнбалар шөгеді; олардың түсі кестемен салыстырылады."
+
+#: apps/labs/experiments/t02/silver.py:119
+msgid "Add silver nitrate first."
+msgstr "Алдымен күміс нитратын қосу керек."
+
+#: apps/labs/experiments/t02/silver.py:128
+msgid "Which precipitate is yellow?"
+msgstr "Қай тұнба сары түсті?"
+
+#: apps/labs/experiments/t02/silver.py:138
+msgid "Tube C: the short ionic equation"
+msgstr "C пробиркасы: қысқартылған иондық теңдеу"
+
+#: apps/labs/experiments/t02/silver.py:139
+msgid "How can the three ions be told apart?"
+msgstr "Үш ионды қалай ажыратуға болады?"
+
+#: apps/labs/experiments/t02/silver.py:144
+msgid "Why are the solutions acidified with nitric acid before adding AgNO₃?"
+msgstr ""
+"Неліктен AgNO₃ қоспас бұрын ерітінділер азот қышқылымен қышқылдандырылады?"
+
+#: apps/labs/experiments/t02/silver.py:146
+msgid "So that other anions (CO₃²⁻, OH⁻) do not give precipitates with silver"
+msgstr "Басқа аниондар (CO₃²⁻, OH⁻) күміспен тұнба бермеуі үшін"
+
+#: apps/labs/experiments/t02/silver.py:147
+msgid "To speed up the reaction"
+msgstr "Реакцияны жылдамдату үшін"
+
+#: apps/labs/experiments/t02/silver.py:148
+msgid "To colour the precipitates"
+msgstr "Тұнбаларды бояу үшін"
+
+#: apps/labs/experiments/t02/silver.py:153
+msgid "Why does a fluoride give no precipitate with AgNO₃?"
+msgstr "Неліктен фторид AgNO₃-пен тұнба бермейді?"
+
+#: apps/labs/experiments/t02/silver.py:155
+msgid "Silver fluoride is soluble in water"
+msgstr "Күміс фториді суда ериді"
+
+#: apps/labs/experiments/t02/silver.py:156
+msgid "Fluoride does not form ions in solution"
+msgstr "Фторид ерітіндіде ион түзбейді"
+
+#: apps/labs/experiments/t02/silver.py:157
+msgid "Fluorine is released as a gas"
+msgstr "Фтор газ түрінде бөлінеді"
+
+#: apps/labs/experiments/t02/silver.py:162
+msgid "Which precipitate dissolves in dilute ammonia solution?"
+msgstr "Қай тұнба аммиактың сұйылтылған ерітіндісінде ериді?"
+
+#: apps/labs/experiments/t02/silver.py:169
+msgid ""
+"What would you ask school students to compare in this experiment, and why?"
+msgstr ""
+"Бұл тәжірибеде мектеп оқушыларына нені салыстыруды ұсынуға болады және неге?"
 
 #: apps/labs/models/attempt.py:10 apps/progress/models/progress.py:17
 #: apps/progress/models/progress.py:72 apps/student/cabinet.py:94
@@ -2815,7 +3583,7 @@ msgstr ""
 "Соңында зертханалық журнал толтырылып, тәжірибе аяқталады және талдау "
 "сұрақтарына жауап беріледі."
 
-#: apps/labs/views.py:104
+#: apps/labs/views.py:105
 msgid ""
 "The experiment runs on the screen only: it is not an instruction for working"
 " with real reagents."
@@ -2823,64 +3591,64 @@ msgstr ""
 "Тәжірибе тек экранда жүреді: бұл нақты реактивтермен жұмыс істеуге арналған "
 "нұсқаулық емес."
 
-#: apps/labs/views.py:105
+#: apps/labs/views.py:107
 #, python-format
 msgid "Steps: %(n)s"
 msgstr "Қадам саны: %(n)s"
 
-#: apps/labs/views.py:106
+#: apps/labs/views.py:108
 msgid "Start the experiment"
 msgstr "Тәжірибені бастау"
 
-#: apps/labs/views.py:107
+#: apps/labs/views.py:109
 msgid "Steps"
 msgstr "Қадамдар"
 
-#: apps/labs/views.py:108
+#: apps/labs/views.py:110
 msgid "Journal"
 msgstr "Журнал"
 
-#: apps/labs/views.py:109
+#: apps/labs/views.py:111
 msgid "Messages"
 msgstr "Хабарламалар"
 
-#: apps/labs/views.py:110 ui/templates/teacher/group.html:119
+#: apps/labs/views.py:112 ui/templates/teacher/group.html:119
 msgid "Now"
 msgstr "Қазір"
 
-#: apps/labs/views.py:111
+#: apps/labs/views.py:113
 msgid "Run"
 msgstr "Орындау"
 
-#: apps/labs/views.py:112
+#: apps/labs/views.py:114
 msgid "Open the journal"
 msgstr "Журналды ашу"
 
-#: apps/labs/views.py:114
+#: apps/labs/views.py:116
 msgid "Drag to the bench or press «+»:"
 msgstr "Үстелге сүйреу немесе «+»:"
 
-#: apps/labs/views.py:115
+#: apps/labs/views.py:117
 msgid "Choose:"
 msgstr "Таңдау:"
 
-#: apps/labs/views.py:116
+#: apps/labs/views.py:118
 msgid "All steps are done."
 msgstr "Барлық қадам орындалды."
 
-#: apps/labs/views.py:117
+#: apps/labs/views.py:119
 msgid "Equipment"
 msgstr "Құралдар"
 
-#: apps/labs/views.py:118
+#: apps/labs/views.py:120
 msgid "Hide the panel"
 msgstr "Панельді жасыру"
 
-#: apps/labs/views.py:119
+#: apps/labs/views.py:121
 msgid "Show the panel"
 msgstr "Панельді көрсету"
 
-#: apps/labs/views.py:120 ui/templates/components/alert.html:10
+#: apps/labs/views.py:122 ui/templates/components/alert.html:10
 #: ui/templates/components/toast.html:16 ui/templates/core/home.html:114
 #: ui/templates/layouts/learn.html:49
 #: ui/templates/student/partials/quiz_panel.html:93
@@ -2891,15 +3659,31 @@ msgstr "Панельді көрсету"
 msgid "Close"
 msgstr "Жабу"
 
-#: apps/labs/views.py:121
+#: apps/labs/views.py:123
 msgid "Briefing"
 msgstr "Кіріспе"
 
-#: apps/labs/views.py:122
+#: apps/labs/views.py:124
 msgid "Explanation"
 msgstr "Түсіндірме"
 
-#: apps/labs/views.py:123
+#: apps/labs/views.py:125
+msgid "The equation is right."
+msgstr "Теңдеу дұрыс."
+
+#: apps/labs/views.py:126
+msgid "Check the substances or ions."
+msgstr "Заттарды немесе иондарды тексеру керек."
+
+#: apps/labs/views.py:127
+msgid "Check the coefficients."
+msgstr "Коэффициенттерді тексеру керек."
+
+#: apps/labs/views.py:128
+msgid "The equation cannot be read: check the formulas and the arrow."
+msgstr "Теңдеу оқылмады: формулалар мен бағыттауышты тексеру керек."
+
+#: apps/labs/views.py:129
 msgid "Connection problem. Your actions are kept and will be sent again."
 msgstr "Байланыс ақауы. Әрекеттер сақталған және қайта жіберіледі."
 
@@ -3173,93 +3957,97 @@ msgstr "Таңдау үшін нұсқалар керек: {\"options\": [\"…\
 msgid "Give at least two pairs: {\"pairs\": {\"left\": \"right\"}}"
 msgstr "Кемінде екі жұп қажет: {\"pairs\": {\"left\": \"right\"}}"
 
-#: apps/practice/checkers.py:122
+#: apps/practice/checkers.py:120
+msgid "Extra options are a list: {\"distractors\": [\"…\"]}"
+msgstr "Қосымша нұсқалар — тізім: {\"distractors\": [\"…\"]}"
+
+#: apps/practice/checkers.py:124
 msgid "Give at least two different steps: {\"order\": [\"…\", \"…\"]}"
 msgstr "Кемінде екі түрлі қадам қажет: {\"order\": [\"…\", \"…\"]}"
 
-#: apps/practice/checkers.py:124
+#: apps/practice/checkers.py:126
 #, python-format
 msgid "Unknown kind: %(kind)s"
 msgstr "Белгісіз түр: %(kind)s"
 
-#: apps/practice/checkers.py:126
+#: apps/practice/checkers.py:128
 #, python-format
 msgid "Cannot read the chemistry: %(error)s"
 msgstr "Химиялық жазу оқылмады: %(error)s"
 
-#: apps/practice/checkers.py:132 apps/practice/checkers.py:193
+#: apps/practice/checkers.py:134 apps/practice/checkers.py:195
 #: apps/practice/services/submissions.py:68
 msgid "The answer is empty."
 msgstr "Жауап бос."
 
-#: apps/practice/checkers.py:133
+#: apps/practice/checkers.py:135
 #, python-format
 msgid "There is no element «%(el)s». Check the letters and their case."
 msgstr ""
 "«%(el)s» деген элемент жоқ. Әріптер мен олардың регистрін тексеру керек."
 
-#: apps/practice/checkers.py:134
+#: apps/practice/checkers.py:136
 msgid "An element symbol starts with a capital letter."
 msgstr "Элемент таңбасы бас әріппен басталады."
 
-#: apps/practice/checkers.py:135
+#: apps/practice/checkers.py:137
 msgid "Check the brackets."
 msgstr "Жақшаларда қате бар."
 
-#: apps/practice/checkers.py:136
+#: apps/practice/checkers.py:138
 msgid "Write the arrow between the sides: -> or =."
 msgstr "Тараптардың арасында бағыт болуы керек: -> немесе =."
 
-#: apps/practice/checkers.py:137
+#: apps/practice/checkers.py:139
 msgid "An equation has one arrow."
 msgstr "Теңдеуде бір ғана бағыт болады."
 
-#: apps/practice/checkers.py:143
+#: apps/practice/checkers.py:145
 msgid "The answer could not be read. Check how it is written."
 msgstr "Жауап оқылмады. Жазылуын тексеру керек."
 
-#: apps/practice/checkers.py:150
+#: apps/practice/checkers.py:152
 msgid "Write a number, e.g. 2,24."
 msgstr "Сан қажет, мысалы 2,24."
 
-#: apps/practice/checkers.py:156
+#: apps/practice/checkers.py:158
 msgid "Check the unit."
 msgstr "Бірлік дұрыс емес."
 
-#: apps/practice/checkers.py:162
+#: apps/practice/checkers.py:164
 msgid "The number is not right. Check the calculation."
 msgstr "Сан дұрыс емес. Есептеуді тексеру керек."
 
-#: apps/practice/checkers.py:171
+#: apps/practice/checkers.py:173
 msgid "This is not the right substance."
 msgstr "Бұл басқа зат."
 
-#: apps/practice/checkers.py:182
+#: apps/practice/checkers.py:184
 msgid "Check the substances on both sides."
 msgstr "Екі тараптағы заттарда қате бар."
 
-#: apps/practice/checkers.py:186
+#: apps/practice/checkers.py:188
 msgid "Balanced, but the coefficients can be reduced."
 msgstr "Теңестірілген, бірақ коэффициенттерді қысқартуға болады."
 
-#: apps/practice/checkers.py:187
+#: apps/practice/checkers.py:189
 msgid "The equation is not balanced."
 msgstr "Теңдеу теңестірілмеген."
 
-#: apps/practice/checkers.py:197 apps/practice/checkers.py:212
+#: apps/practice/checkers.py:199 apps/practice/checkers.py:214
 msgid "This is not the expected word."
 msgstr "Бұл күтілген сөз емес."
 
-#: apps/practice/checkers.py:204
+#: apps/practice/checkers.py:206
 msgid "Not the right choice."
 msgstr "Таңдау дұрыс емес."
 
-#: apps/practice/checkers.py:220
+#: apps/practice/checkers.py:222
 #, python-format
 msgid "%(n)s of %(total)s pairs are right."
 msgstr "%(total)s жұптың %(n)s-ы дұрыс."
 
-#: apps/practice/checkers.py:232
+#: apps/practice/checkers.py:234
 #, python-format
 msgid "%(n)s of %(total)s steps are in the right place."
 msgstr "%(total)s қадамның %(n)s-ы өз орнында."
@@ -3431,7 +4219,7 @@ msgstr "қате"
 msgid "AI grade"
 msgstr "AI бағасы"
 
-#: apps/practice/models/submission.py:111 config/settings/base.py:341
+#: apps/practice/models/submission.py:111 config/settings/base.py:354
 msgid "AI grades"
 msgstr "AI бағалары"
 
@@ -3879,7 +4667,7 @@ msgstr "Белсенді жазылулар"
 msgid "%(n)s completed"
 msgstr "%(n)s аяқталды"
 
-#: apps/research/admin_dashboard.py:43 config/settings/base.py:367
+#: apps/research/admin_dashboard.py:43 config/settings/base.py:380
 #: ui/templates/teacher/partials/student_drawer.html:40
 #: ui/templates/teacher/student.html:106
 msgid "Lab attempts"
@@ -4032,7 +4820,7 @@ msgstr "Автоматты тексеру және AI, мұғалім раста
 msgid "Quiz · attempt %(n)s"
 msgstr "Тест · %(n)s-талпыныс"
 
-#: apps/student/cabinet.py:187 config/settings/base.py:363
+#: apps/student/cabinet.py:187 config/settings/base.py:376
 #: ui/templates/core/home.html:31 ui/templates/core/home.html:199
 #: ui/templates/core/home.html:359
 msgid "Lab"
@@ -4307,7 +5095,7 @@ msgid_plural "%(n)s days inactive"
 msgstr[0] "%(n)s күн белсенсіз"
 msgstr[1] "%(n)s күн белсенсіз"
 
-#: apps/teacher/overview.py:103 apps/teacher/tests.py:127
+#: apps/teacher/overview.py:103 apps/teacher/tests.py:129
 msgid "Not started yet"
 msgstr "Әлі бастамаған"
 
@@ -4416,107 +5204,107 @@ msgstr "Орысша"
 msgid "English"
 msgstr "Ағылшынша"
 
-#: config/settings/base.py:241 config/settings/base.py:244
+#: config/settings/base.py:254 config/settings/base.py:257
 msgid "Users"
 msgstr "Пайдаланушылар"
 
-#: config/settings/base.py:246
+#: config/settings/base.py:259
 msgid "Student profiles"
 msgstr "Студент профильдері"
 
-#: config/settings/base.py:251
+#: config/settings/base.py:264
 msgid "Teacher profiles"
 msgstr "Мұғалім профильдері"
 
-#: config/settings/base.py:258
+#: config/settings/base.py:271
 msgid "Organisations"
 msgstr "Ұйымдар"
 
-#: config/settings/base.py:262
+#: config/settings/base.py:275
 msgid "Universities"
 msgstr "Университеттер"
 
-#: config/settings/base.py:267
+#: config/settings/base.py:280
 msgid "Faculties"
 msgstr "Факультеттер"
 
-#: config/settings/base.py:272
+#: config/settings/base.py:285
 msgid "Departments"
 msgstr "Кафедралар"
 
-#: config/settings/base.py:277
+#: config/settings/base.py:290
 msgid "Specialties"
 msgstr "Білім беру бағдарламалары"
 
-#: config/settings/base.py:282
+#: config/settings/base.py:295
 msgid "Academic groups"
 msgstr "Академиялық топтар"
 
-#: config/settings/base.py:298
+#: config/settings/base.py:311
 msgid "Modules"
 msgstr "Модульдер"
 
-#: config/settings/base.py:302 ui/templates/teacher/search.html:40
+#: config/settings/base.py:315 ui/templates/teacher/search.html:40
 msgid "Topics"
 msgstr "Тақырыптар"
 
-#: config/settings/base.py:304
+#: config/settings/base.py:317
 msgid "Stages"
 msgstr "Кезеңдер"
 
-#: config/settings/base.py:309
+#: config/settings/base.py:322
 msgid "Enrolments"
 msgstr "Жазылулар"
 
-#: config/settings/base.py:314
+#: config/settings/base.py:327
 msgid "Course groups"
 msgstr "Курс топтары"
 
-#: config/settings/base.py:321
+#: config/settings/base.py:334
 msgid "Assessment"
 msgstr "Бағалау"
 
-#: config/settings/base.py:324
+#: config/settings/base.py:337
 msgid "Quizzes"
 msgstr "Тесттер"
 
-#: config/settings/base.py:326 ui/templates/teacher/student.html:137
+#: config/settings/base.py:339 ui/templates/teacher/student.html:137
 msgid "Quiz attempts"
 msgstr "Тест талпыныстары"
 
-#: config/settings/base.py:331
+#: config/settings/base.py:344
 msgid "Practice tasks"
 msgstr "Практикалық тапсырмалар"
 
-#: config/settings/base.py:336
+#: config/settings/base.py:349
 msgid "Practice submissions"
 msgstr "Практикалық жұмыс жіберулері"
 
-#: config/settings/base.py:346
+#: config/settings/base.py:359
 msgid "Teacher reviews"
 msgstr "Мұғалім тексерістері"
 
-#: config/settings/base.py:351
+#: config/settings/base.py:364
 msgid "Stage progress"
 msgstr "Кезең прогресі"
 
-#: config/settings/base.py:356
+#: config/settings/base.py:369
 msgid "Course results"
 msgstr "Курс нәтижелері"
 
-#: config/settings/base.py:374
+#: config/settings/base.py:387
 msgid "Certificates and feedback"
 msgstr "Сертификаттар және кері байланыс"
 
-#: config/settings/base.py:383
+#: config/settings/base.py:396
 msgid "Certificate templates"
 msgstr "Сертификат үлгілері"
 
-#: config/settings/base.py:388 ui/templates/feedback/partials/thread.html:7
+#: config/settings/base.py:401 ui/templates/feedback/partials/thread.html:7
 msgid "Comments"
 msgstr "Пікірлер"
 
-#: config/settings/base.py:393 ui/templates/feedback/notifications.html:3
+#: config/settings/base.py:406 ui/templates/feedback/notifications.html:3
 #: ui/templates/feedback/notifications.html:5
 #: ui/templates/feedback/notifications.html:10
 #: ui/templates/feedback/partials/menu.html:4
@@ -5563,6 +6351,11 @@ msgstr "Құралды үстелге сүйреп апаруға немесе �
 #: ui/templates/labs/run.html:224
 msgid "Lab panel"
 msgstr "Зертхана панелі"
+
+#: ui/templates/labs/run.html:304
+#: ui/templates/student/partials/practice_field.html:43
+msgid "Chemistry keyboard"
+msgstr "Химиялық пернетақта"
 
 #: ui/templates/layouts/auth.html:18
 msgid "About ChemEduTech"
@@ -6748,10 +7541,6 @@ msgstr "Бірлік"
 msgid "A comma or a dot may be used; units are converted automatically."
 msgstr ""
 "Үтір мен нүкте бірдей қабылданады; бірліктер автоматты түрлендіріледі."
-
-#: ui/templates/student/partials/practice_field.html:43
-msgid "Chemistry keyboard"
-msgstr "Химиялық пернетақта"
 
 #: ui/templates/student/partials/practice_field.html:47
 msgid "Clear"

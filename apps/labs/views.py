@@ -122,6 +122,10 @@ def _ui_strings():
         "close": _("Close"),
         "briefing": _("Briefing"),
         "show_explanation": _("Explanation"),
+        "eq_ok": _("The equation is right."),
+        "eq_species": _("Check the substances or ions."),
+        "eq_coefficients": _("Check the coefficients."),
+        "eq_unreadable": _("The equation cannot be read: check the formulas and the arrow."),
         "network_error": _("Connection problem. Your actions are kept and will be sent again."),
     }
 
@@ -228,8 +232,8 @@ def api_journal(request, pk):
     data = _json_body(request)
     if not isinstance(data, dict):
         return HttpResponseBadRequest("object expected")
-    services.save_journal(attempt, experiment, data)
-    return JsonResponse({"ok": True})
+    checks = services.save_journal(attempt, experiment, data)
+    return JsonResponse({"ok": True, "checks": checks})
 
 
 @login_required

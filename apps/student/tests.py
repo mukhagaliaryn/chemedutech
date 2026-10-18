@@ -34,7 +34,7 @@ def answers(attempt, correct=True):
 class StudentFlowBase(TestCase):
     @classmethod
     def setUpTestData(cls):
-        call_command("seed_course", verbosity=0)
+        call_command("seed_course", topics=[1], verbosity=0)
         cls.course = Course.objects.get(slug="chemistry")
         stages = {}
         for s in Stage.objects.filter(topic__number=1).order_by("order"):

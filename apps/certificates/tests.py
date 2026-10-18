@@ -27,7 +27,7 @@ MEDIA = tempfile.mkdtemp(prefix="chem-test-media-")
 class CertificateTests(TestCase):
     @classmethod
     def setUpTestData(cls):
-        call_command("seed_course", verbosity=0)
+        call_command("seed_course", topics=[1], verbosity=0)
         cls.course = Course.objects.get(slug="chemistry")
 
     @classmethod

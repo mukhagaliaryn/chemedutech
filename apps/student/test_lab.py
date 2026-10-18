@@ -59,7 +59,7 @@ class LabScoringTests(SimpleTestCase):
 class LabStageTests(TestCase):
     @classmethod
     def setUpTestData(cls):
-        call_command("seed_course", verbosity=0)
+        call_command("seed_course", topics=[1], verbosity=0)
         cls.course = Course.objects.get(slug="chemistry")
         cls.lab_stage = Stage.objects.get(topic__number=1, kind="lab")
         cls.practice = Stage.objects.filter(topic__number=1, kind="practice").order_by("order").first()

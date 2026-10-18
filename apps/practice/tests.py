@@ -178,7 +178,7 @@ def correct_raw(item, open_text):
 class PracticeBase(TestCase):
     @classmethod
     def setUpTestData(cls):
-        call_command("seed_course", verbosity=0)
+        call_command("seed_course", topics=[1], verbosity=0)
         use_test_practices()
         cls.course = Course.objects.get(slug="chemistry")
         p1, p2 = Stage.objects.filter(topic__number=1, kind="practice").order_by("order")[:2]

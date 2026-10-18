@@ -33,7 +33,7 @@ class TeacherBase(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        call_command("seed_course", verbosity=0)
+        call_command("seed_course", topics=[1], verbosity=0)
         use_test_practices()
         cls.course = Course.objects.get(slug="chemistry")
         cls.stages = list(Stage.objects.filter(topic__number=1).order_by("order", "pk"))

@@ -297,6 +297,20 @@ All behaviour is labRunner (static/js/lab/engine.js) — only the layout lives h
                       <span class="text-[13px] text-ink-soft" x-text="f.unit"></span>
                     </div>
                   </template>
+                  <template x-if="f.kind === 'equation'">
+                    <div class="flex flex-col gap-1.5" x-data="chemInput()" x-init="value = journal[f.key] || ''; $watch('value', (v) => journal[f.key] = v)">
+                      <input x-ref="input" x-model="value" class="input h-10 rounded-[12px] text-[15px] font-medium" :id="'j-' + f.key"
+                             autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="A + 2B -> AB2">
+                      <div class="flex flex-wrap gap-1" role="group" aria-label="{% translate 'Chemistry keyboard' %}">
+                        <template x-for="ch in ['₂', '₃', '₄', '⁺', '⁻', '→', '⇌', '↓', '↑']" :key="ch">
+                          <button type="button" class="h-8 min-w-8 rounded-[8px] border border-line bg-surface px-1.5 text-lg leading-none font-semibold hover:bg-primary-50" @click="insert(ch)" x-text="ch"></button>
+                        </template>
+                      </div>
+                      <p class="min-h-5 text-[15px] font-bold" x-text="preview"></p>
+                      <p x-show="eqChecks[f.key]" x-cloak class="text-[13px] font-semibold"
+                         :class="eqChecks[f.key] === 'ok' ? 'text-success-700' : 'text-danger-700'" x-text="ui['eq_' + eqChecks[f.key]]"></p>
+                    </div>
+                  </template>
                   <template x-if="f.kind === 'choice'">
                     <select class="input h-10 rounded-[12px] text-sm" :id="'j-' + f.key" x-model="journal[f.key]">
                       <option value="">—</option>
@@ -456,7 +470,7 @@ All behaviour is labRunner (static/js/lab/engine.js) — only the layout lives h
 {% endblock %}
 
 {% block scripts %}
-{% if config.urls.ping %}<script defer src="{% static 'js/stage.js' %}"></script>{% endif %}
+<script defer src="{% static 'js/stage.js' %}"></script>{# chemInput (journal equations), stagePing #}
 {% rich_text_assets %}
 <script defer src="{% static 'js/lab/engine.js' %}"></script>
 <script defer src="{% static experiment.scene_script %}"></script>

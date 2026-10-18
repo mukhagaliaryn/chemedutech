@@ -1,0 +1,84 @@
+{% load lab_tags %}{% comment %}
+Generic test-tube bench (scene «tubes», topics 2–5): a rack of labelled tubes. Everything that happens in a tube —
+pouring, colour, precipitate, turbidity, gel, gas, bubbles, heating, indicator paper, delivery tubes — is data in
+the experiment's params.ops, played by static/js/lab/experiments/tubes.js. Alpine x-for does not work inside SVG,
+so the tubes are a Django loop over params.tubes.
+{% endcomment %}
+<svg viewBox="0 0 900 470" class="relative z-[1] block h-auto w-full" role="img" :aria-label="exp.title">
+  <g x-show="sc.shown()" class="appear" style="display:none">
+    {# rack: a wooden base, a stand and a holder bar #}
+    <rect :x="sc.rackX()" y="430" :width="sc.rackW()" height="12" rx="4" fill="#8a6a4f"/>
+    <rect :x="sc.rackX() + 10" y="232" width="8" height="200" rx="3" fill="#7b8a96"/>
+    <rect :x="sc.rackX() + sc.rackW() - 18" y="232" width="8" height="200" rx="3" fill="#7b8a96"/>
+    <rect :x="sc.rackX()" y="226" :width="sc.rackW()" height="12" rx="4" fill="#9c7a5c"/>
+
+    {# delivery tubes between tubes (params.ops … {"pipe": [from, to]}) #}
+    {% for k in 3|times %}
+      <g x-show="sc.pipes.length > {{ k }}">
+        <path :d="sc.pipePath({{ k }})" fill="none" stroke="#6b8ba0" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"/>
+        <path :d="sc.pipePath({{ k }})" fill="none" stroke="#eef6fa" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"/>
+      </g>
+    {% endfor %}
+
+    {% for i in experiment.params.tubes|length|times %}
+      <g>
+        {# heating: a hot water bath around the lower part of the tube, with steam #}
+        <g x-show="sc.tubes[{{ i }}].heat" x-cloak>
+          <rect :x="sc.x({{ i }}) - 38" y="300" width="76" height="126" rx="10" fill="#cfe6f2" fill-opacity=".6" stroke="#6b8ba0" stroke-width="2.5"/>
+          <path :d="`M${sc.x({{ i }}) - 38},318 h76`" stroke="#9ccbe0" stroke-width="2"/>
+          {% for w in "-20 0 20"|split %}
+            <path :d="`M${sc.x({{ i }}) + {{ w }}},292 c-6,-8 6,-14 0,-22 c-6,-8 6,-14 0,-22`" fill="none" stroke="#e07a3a" stroke-width="2.4"
+                  stroke-linecap="round" class="flame" opacity=".75"/>
+          {% endfor %}
+        </g>
+        <clipPath id="tb-in-{{ i }}"><path :d="sc.inner({{ i }})"/></clipPath>
+        {# gas above the liquid (e.g. yellow-green chlorine, brown NO₂) #}
+        <rect :x="sc.x({{ i }}) - 20" y="110" width="40" :height="sc.liquidTop({{ i }}) - 110" clip-path="url(#tb-in-{{ i }})"
+              :style="`fill:${sc.tubes[{{ i }}].gasColor}; opacity:${sc.tubes[{{ i }}].gas}; transition: opacity 1.2s`"/>
+        <g clip-path="url(#tb-in-{{ i }})">
+          {# liquid: its colour changes smoothly (CSS transition) #}
+          <rect :x="sc.x({{ i }}) - 20" :y="sc.liquidTop({{ i }})" width="40" :height="sc.liquidH({{ i }})"
+                :style="`fill:${sc.tubes[{{ i }}].color}; transition: fill ${sc.tubes[{{ i }}].fade}s`"/>
+          <path :d="`M${sc.x({{ i }}) - 20},${sc.liquidTop({{ i }})} h40`" stroke="#ffffff" stroke-opacity=".7" stroke-width="2"
+                x-show="sc.tubes[{{ i }}].level > 0"/>
+          {# turbidity (a white suspension) and gel #}
+          <rect :x="sc.x({{ i }}) - 20" :y="sc.liquidTop({{ i }})" width="40" :height="sc.liquidH({{ i }})"
+                :style="`fill:${sc.tubes[{{ i }}].cloudColor}; opacity:${sc.tubes[{{ i }}].cloud * 0.8}; transition: opacity 1.4s`"/>
+          <rect :x="sc.x({{ i }}) - 20" :y="sc.liquidTop({{ i }})" width="40" :height="sc.liquidH({{ i }})"
+                :style="`fill:${sc.tubes[{{ i }}].gelColor}; opacity:${sc.tubes[{{ i }}].gel * 0.75}; transition: opacity 1.6s`"/>
+          {# precipitate settles at the bottom #}
+          <rect :x="sc.x({{ i }}) - 20" :y="392 - sc.tubes[{{ i }}].ppt * 34" width="40" :height="sc.tubes[{{ i }}].ppt * 34 + 20"
+                :style="`fill:${sc.tubes[{{ i }}].pptColor}`" x-show="sc.tubes[{{ i }}].ppt > 0"/>
+          {% for g in 7|times %}
+            <circle :cx="sc.x({{ i }}) - 12 + ({{ g }} * 4.3)" :cy="388 - ({{ g }} % 3) * 5 - sc.tubes[{{ i }}].ppt * 18"
+                    r="2.4" :style="`fill:${sc.tubes[{{ i }}].pptColor}; stroke:#00000022`" x-show="sc.tubes[{{ i }}].ppt > 0.15"/>
+          {% endfor %}
+          {# gas bubbles #}
+          <g x-show="sc.tubes[{{ i }}].bubbles">
+            {% for b in 6|times %}
+              <circle :cx="sc.x({{ i }}) - 10 + ({{ b }} * 7) % 22" cy="384" :r="2 + {{ b }} % 3" fill="#ffffff" stroke="#9ccbe0" class="bubble"
+                      :style="`--rise:${-(sc.liquidH({{ i }}) - 30)}px; --dur:${1 + ({{ b }} % 4) * 0.25}s; --delay:${ {{ b }} * 0.22}s`"/>
+            {% endfor %}
+          </g>
+        </g>
+        {# the glass #}
+        <path :d="sc.outline({{ i }})" fill="#ffffff" fill-opacity=".12" stroke="#6b8ba0" stroke-width="3"/>
+        <path :d="`M${sc.x({{ i }}) - 23},140 h46`" stroke="#6b8ba0" stroke-width="4" stroke-linecap="round"/>
+
+        {# indicator paper held over the mouth #}
+        <g x-show="sc.tubes[{{ i }}].paper" x-cloak>
+          <rect :x="sc.x({{ i }}) - 6" y="72" width="12" height="62" rx="2" fill="#f3e6a8" stroke="#8a7a3a" stroke-width="1.2"/>
+          <rect :x="sc.x({{ i }}) - 6" y="104" width="12" height="30" rx="2" :style="`fill:${sc.tubes[{{ i }}].paper}; transition: fill 1.5s`"/>
+        </g>
+        {# a bottle tilts over the tube while pouring #}
+        <g x-show="sc.tubes[{{ i }}].pouring" x-cloak>
+          <svg :x="sc.x({{ i }}) + 6" y="58" width="46" height="46" class="pour text-lab-glass"><use href="#i-dropper"></use></svg>
+        </g>
+        {# labels: the tube letter and what is in it #}
+        <text :x="sc.x({{ i }})" y="462" text-anchor="middle" font-size="18" font-weight="800" fill="#14213d" x-text="sc.tubes[{{ i }}].name"></text>
+        <text :x="sc.x({{ i }})" y="128" text-anchor="middle" font-size="14" font-weight="600" fill="#4a5b74" x-text="sc.tubes[{{ i }}].text"
+              x-show="!sc.tubes[{{ i }}].paper"></text>
+      </g>
+    {% endfor %}
+  </g>
+</svg>

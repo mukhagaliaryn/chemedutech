@@ -37,11 +37,14 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument("--replace", action="store_true")
+        parser.add_argument("--topics", nargs="*", type=int, help="Only these topic numbers.")
 
     @transaction.atomic
-    def handle(self, *args, replace=False, **options):
+    def handle(self, *args, replace=False, topics=None, **options):
         count = 0
         for number, specs in PRACTICES.items():
+            if topics is not None and number not in topics:
+                continue
             stages = Stage.objects.filter(
                 topic__number=number, kind=Stage.Kind.PRACTICE, topic__module__course__slug="chemistry"
             ).order_by("order", "pk")

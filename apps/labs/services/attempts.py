@@ -8,6 +8,7 @@ from django.db import IntegrityError, transaction
 from django.db.models import Count
 from django.utils import timezone
 
+from apps.assessments import chem
 from apps.labs.engine import get_lab
 from apps.labs.engine.spec import ExperimentSpec, LabScoring
 from apps.labs.models import LabAttempt, LabEvent
@@ -79,9 +80,25 @@ def record_events(attempt: LabAttempt, events: list[dict]) -> int:
     return saved
 
 
+def check_equation(answer: str, given: str) -> str:
+    """ok | species (other substances) | coefficients (not balanced the same way) | unreadable."""
+    try:
+        result = chem.compare_equations(answer, given)
+    except chem.ChemError:
+        return "unreadable"
+    if not result.same_species:
+        return "species"
+    return "ok" if result.same_coefficients else "coefficients"
+
+
 def _score_choices(fields, answers: dict) -> tuple[int, int]:
+    """Choice fields with a correct option and equation fields count; text and number fields do not."""
     correct = total = 0
     for f in fields:
+        if getattr(f, "kind", "") == "equation" and f.answer:
+            total += 1
+            correct += check_equation(f.answer, str(answers.get(f.key, ""))) == "ok"
+            continue
         right = {o.key for o in f.options if o.correct}
         if not right:
             continue
@@ -91,13 +108,19 @@ def _score_choices(fields, answers: dict) -> tuple[int, int]:
     return correct, total
 
 
-def save_journal(attempt: LabAttempt, experiment: ExperimentSpec, data: dict) -> LabAttempt:
+def save_journal(attempt: LabAttempt, experiment: ExperimentSpec, data: dict) -> dict:
+    """Store the journal and score it; returns {field key: ok | species | coefficients | unreadable} for the
+    equation fields, so the runner can say what to check without revealing the answer."""
     allowed = {f.key for f in experiment.journal}
     clean = {k: str(v)[:2000] for k, v in data.items() if k in allowed}
     attempt.journal = clean
     attempt.journal_correct, attempt.journal_total = _score_choices(experiment.journal, clean)
     attempt.save(update_fields=["journal", "journal_correct", "journal_total"])
-    return attempt
+    return {
+        f.key: check_equation(f.answer, clean.get(f.key, ""))
+        for f in experiment.journal
+        if f.kind == "equation" and f.answer
+    }
 
 
 def _recompute_metrics(attempt: LabAttempt):

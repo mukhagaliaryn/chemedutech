@@ -32,11 +32,13 @@ AttemptAnswer) without an explicit migration plan agreed with the user.
 ## Lab engine (code-based, keep as is unless asked)
 - `apps/labs/engine/spec.py`: `LabSpec` → `ExperimentSpec` → `Item`, `Step`, `JournalField`, `Question`; registry in `engine/registry.py`.
 - One experiment = `experiments/<lab>/<name>.py` + `ui/templates/labs/scenes/<scene>.html` + `ui/static/js/lab/experiments/<scene>.js`.
+  Test-tube experiments use the shared scene `tubes` (no new JS): everything that happens is data in `params.ops` (see `tubes.js`).
+- Journal fields: `text`, `number`, `choice`, `equation` (`answer=` checked on the server by `assessments.chem`, never sent to the browser).
 - All templates live in `ui/templates/` (layouts/, components/, partials/, <app>/); components are documented in their
   header comments and shown at `/ui/styleguide/` (staff only). Icons: `{% include "components/icons.html#lock" %}`.
 - `engine.js` (`Alpine.data("labRunner")`): step order, warnings, pointer drag & drop, journal, finish, analysis, batched event log.
 - **Alpine `x-for`/`x-if` do not work inside `<svg>`** — use Django loops (`{% for i in 6|times %}`, `"0 10 20"|split`).
-- Step kinds: `place`, `action`, `process` (scene calls `runner.processDone()`), `choice`, `journal`, `finish`;
+- Step kinds: `place`, `action`, `process` (scene calls `runner.processDone()`; may have items), `choice`, `journal`, `finish`;
   `Step.safety=True` logs a premature attempt as `safety_warning`.
 - Score formula: `LabSpec.scoring = LabScoring(...)` → `apps/labs/scoring.py`; students run labs inside a course stage
   (`student:lab_run`, experiments open in order), `/labs/<lab>/<exp>/` is a teacher preview.

@@ -206,7 +206,7 @@ class AttemptTests(TestCase):
 class QuizViewTests(TestCase):
     @classmethod
     def setUpTestData(cls):
-        call_command("seed_course", verbosity=0)
+        call_command("seed_course", topics=[1], verbosity=0)
         cls.course = Course.objects.get(slug="chemistry")
         cls.stage = Stage.objects.get(topic__number=1, kind="theory")
         cls.quiz = cls.stage.checkpoint_quiz
@@ -237,7 +237,7 @@ class QuizViewTests(TestCase):
             set(test.questions.values_list("kind", flat=True)),
             {"single"},  # the author's topic test: one right answer of five
         )
-        call_command("seed_course", verbosity=0)
+        call_command("seed_course", topics=[1], verbosity=0)
         self.assertEqual(Quiz.objects.count(), 3)
         self.assertEqual(test.questions.count(), 10)
 
