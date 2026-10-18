@@ -1,9 +1,11 @@
 """Create or update the course from the content in ``_content/`` (the author's materials, in Kazakh).
 
-Without options the command only adds what is missing (idempotent, safe on every deploy). With ``--replace`` it
-also brings existing objects in line with the content: course/topic/stage texts, theory bodies and the questions
-of quizzes nobody has attempted. Quizzes with attempts and stages are never deleted; practice works:
-apps.practice seed_practice (called with the same option).
+Without options the command only adds what is missing (idempotent, safe on every deploy): a topic that has no
+stages yet (a placeholder) gets its title and content and is published; topics already built are not touched.
+With ``--replace`` it also brings existing objects in line with the content: course/topic/stage texts, theory
+bodies and the questions of quizzes nobody has attempted. ``--topics`` limits everything to those topics
+(``--replace --topics 6 7`` never touches the course, the modules or the other topics). Quizzes with attempts and
+stages are never deleted; practice works: apps.practice seed_practice (called with the same options).
 """
 
 from django.apps import apps
@@ -35,7 +37,8 @@ class Command(BaseCommand):
     @transaction.atomic
     def handle(self, *args, replace=False, topics=None, **options):
         self.replace = replace
-        self.content = {n: c for n, c in CONTENT.items() if not topics or n in topics}
+        self.only = set(topics or [])
+        self.content = {n: c for n, c in CONTENT.items() if not self.only or n in self.only}
         self.notes = []
         course, created = Course.objects.get_or_create(
             slug=COURSE["slug"],
@@ -45,14 +48,14 @@ class Command(BaseCommand):
                 "enrollment_mode": Course.EnrollmentMode.OPEN,
             },
         )
-        if replace and not created:
+        if replace and not created and not self.only:
             Course.objects.filter(pk=course.pk).update(
                 title=COURSE["title"], short_description=COURSE["short_description"]
             )
         modules = {}
         for order, title in MODULES:
             module, made = Module.objects.get_or_create(course=course, order=order, defaults={"title": title})
-            if replace and not made and module.title != title:
+            if replace and not made and not self.only and module.title != title:
                 module.title = title
                 module.save(update_fields=["title", "updated_at"])
             modules[order] = module
@@ -75,20 +78,23 @@ class Command(BaseCommand):
         module = modules[module_order]
         order = n if module_order == 1 else n - MODULE_1_TOPICS
         topic = Topic.objects.filter(module__course=course, number=n).first()
-        fresh = topic is None
-        if fresh:
+        if topic is None:
             topic = Topic.objects.create(
                 module=module, number=n, order=order, title=title, summary=summary, is_published=False
             )
-        elif self.replace:
+        # a placeholder (no stages yet) takes the content; a built topic changes only with --replace (of its number)
+        blank = not topic.stages.exists()
+        touch = self.replace and (not self.only or n in self.only)
+        if (blank or touch) and (topic.title, topic.summary) != (title, summary):
             topic.title, topic.summary = title, summary
             topic.save(update_fields=["title", "summary", "updated_at"])
         if content is None:
             return
-        if fresh or self.replace:  # a topic the teacher unpublished stays unpublished on a plain run
+        if blank or touch:  # a built topic the teacher unpublished stays unpublished on a plain run
             topic.estimated_minutes = content.MINUTES
             topic.is_published = True
             topic.save(update_fields=["estimated_minutes", "is_published", "updated_at"])
+        self.touch = touch
         self._stages(topic, content.STAGES)
 
     def _stages(self, topic, specs):
@@ -110,13 +116,13 @@ class Command(BaseCommand):
                 fresh = True
             else:
                 fresh = False
-            if fresh or self.replace:
+            if fresh or self.touch:
                 stage.title = spec["title"]
                 stage.pass_percent = spec.get("pass_percent", 60)
                 stage.save(update_fields=["title", "pass_percent", "updated_at"])
             self._content(stage, spec, fresh)
             ordered.append(stage)
-        if self.replace or any(s.order >= 1000 for s in ordered):
+        if self.touch or any(s.order >= 1000 for s in ordered):
             extras = [s for kind, pool in existing.items() for s in pool[seen.get(kind, 0) :]]
             for order, stage in enumerate([*ordered, *extras], start=1):
                 if stage.order != order:
@@ -129,14 +135,12 @@ class Command(BaseCommand):
     def _content(self, stage, spec, fresh):
         fields = dict(spec.get("content") or {})
         current = getattr(stage, "content", None)
-        if not (fresh or self.replace) and current is not None:
+        if not (fresh or self.touch) and current is not None:
             fields = {k: v for k, v in fields.items() if not getattr(current, k, None)}  # fill blanks only
         ensure_stage_content(stage, **fields)
         if spec.get("checkpoint"):
             title, questions = spec["checkpoint"]
-            quiz, result = sync_quiz(
-                stage.checkpoint_quiz, Quiz.Kind.CHECKPOINT, title, questions, replace=self.replace
-            )
+            quiz, result = sync_quiz(stage.checkpoint_quiz, Quiz.Kind.CHECKPOINT, title, questions, replace=self.touch)
             self._note(stage, result)
             if stage.checkpoint_quiz_id != quiz.pk:
                 stage.checkpoint_quiz = quiz
@@ -145,7 +149,7 @@ class Command(BaseCommand):
             title, questions = spec["test"]
             test = stage.test_content
             quiz, result = sync_quiz(
-                test.quiz, Quiz.Kind.TOPIC_TEST, title, questions, spec.get("test_settings"), replace=self.replace
+                test.quiz, Quiz.Kind.TOPIC_TEST, title, questions, spec.get("test_settings"), replace=self.touch
             )
             self._note(stage, result)
             if test.quiz_id != quiz.pk:

@@ -78,7 +78,9 @@ class Stage(TimeStampedModel):
     weight = models.DecimalField(
         _("weight"),
         default=1,
-        help_text=_("Relative weight among the stages of the same kind: the course share of the kind is split in this proportion"),
+        help_text=_(
+            "Relative weight among the stages of the same kind: the course share of the kind is split in this proportion"
+        ),
         **WEIGHT,
     )
     pass_percent = models.PositiveSmallIntegerField(

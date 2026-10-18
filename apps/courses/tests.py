@@ -152,6 +152,39 @@ class CoursePageTests(TestCase):
         call_command("seed_course", topics=[1], verbosity=0)  # idempotent
         self.assertEqual(Stage.objects.filter(topic=topic).count(), 8)
 
+    def test_new_topics_come_in_and_built_topics_stay_as_they_are(self):
+        """A course update: content for more topics is added later; the topics already built (and edited by a
+        teacher) are not touched by a plain run, nor by --replace limited to other topics."""
+        topic1 = Topic.objects.get(module__course=self.course, number=1)
+        topic1.title = "Мұғалім өзгерткен атау"
+        topic1.save()
+        theory = topic1.stages.get(kind="theory").theory_content
+        theory.body = "<p>edited</p>"
+        theory.save()
+        Course.objects.filter(pk=self.course.pk).update(title="Мұғалімнің курсы")
+        topic2 = Topic.objects.get(module__course=self.course, number=2)
+        self.assertFalse(topic2.is_published)  # a placeholder: no content was built for it
+        self.assertFalse(topic2.stages.exists())
+
+        call_command("seed_course", verbosity=0)  # the content of every ready topic, no --replace
+        topic1.refresh_from_db()
+        theory.refresh_from_db()
+        topic2.refresh_from_db()
+        self.assertEqual((topic1.title, theory.body), ("Мұғалім өзгерткен атау", "<p>edited</p>"))
+        self.assertTrue(topic2.is_published)
+        self.assertEqual(topic2.title, "VIIA тобының p-элементтері (галогендер)")
+        self.assertEqual(topic2.stages.count(), 8)
+
+        topic2.title = "Тағы өзгертілді"
+        topic2.save()
+        call_command("seed_course", replace=True, topics=[3], verbosity=0)  # rewrite topic 3 only
+        topic1.refresh_from_db()
+        topic2.refresh_from_db()
+        self.course.refresh_from_db()
+        self.assertEqual(topic1.title, "Мұғалім өзгерткен атау")
+        self.assertEqual(topic2.title, "Тағы өзгертілді")
+        self.assertEqual(self.course.title, "Мұғалімнің курсы")
+
     def test_replace_keeps_attempted_quizzes_and_stage_kinds(self):
         topic = Topic.objects.get(module__course=self.course, number=1)
         test_stage = topic.stages.get(kind="test")
