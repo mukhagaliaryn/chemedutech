@@ -1,5 +1,5 @@
 {% extends "layouts/student.html" %}
-{% load i18n %}
+{% load i18n static %}
 {% comment %}
 An ICPAI section (docs/icpai/SPEC.md §4.0): its purpose (the guide's «what it does»), its state and percent,
 the «Let the AI explain» place (the AI assistant comes in STEP-32; until then the purpose text stands alone) and
@@ -90,8 +90,46 @@ the section's own content — section 1 leads to the course; kinds not built yet
       {% endfor %}
     </ol>
   </section>
+{% elif section.kind == "video" %}
+  {# ---- section 3: the one video (guide @S3 «ЖИ ВИДЕО ОРНАЛАСАДЫ»; D72) ---- #}
+  <section aria-labelledby="video-title" class="card flex flex-col gap-4">
+    <h2 id="video-title" class="text-[19px] font-extrabold">{% translate "Video" %}</h2>
+    {% if video %}
+      <div x-data="videoTracker({ provider: 'youtube', id: '{{ video.youtube_id }}', url: '{% url 'student:section_watch' section.number %}', min: {{ section.pass_percent }}, done: {% if row.status == 'passed' %}true{% else %}false{% endif %}, start: {{ watched }} })"
+           class="flex flex-col gap-4">
+        <div class="relative aspect-video overflow-hidden rounded-lg bg-ink"><div x-ref="youtube" class="size-full"></div></div>
+        <div x-show="failed !== null" x-cloak class="alert alert-warning" role="alert">
+          <span class="alert-icon">{% include "components/icons.html#warn" with size=18 %}</span>
+          <div class="flex flex-1 flex-wrap items-center justify-between gap-3">
+            <span>{% translate "The video cannot be played here." %}</span>
+            <a class="btn btn-secondary btn-sm" href="https://www.youtube.com/watch?v={{ video.youtube_id }}" target="_blank" rel="noopener">{% include "components/icons.html#play" %}{% translate "Watch on YouTube" %}</a>
+          </div>
+        </div>
+        {% translate "Watched" as l_watched %}
+        <div class="flex flex-col gap-2">
+          <div class="flex items-baseline justify-between text-sm">
+            <span class="font-semibold">{{ l_watched }}</span>
+            <span class="num text-ink-soft"><span x-text="percent">{{ watched }}</span>% · {% blocktranslate with p=section.pass_percent %}needed {{ p }}%{% endblocktranslate %}</span>
+          </div>
+          <div class="progress" :class="done && 'progress-success'" role="progressbar" aria-label="{{ l_watched }}" :aria-valuenow="percent" aria-valuemin="0" aria-valuemax="100">
+            <span :style="`width: ${percent}%`"></span>
+          </div>
+          <p class="text-body-sm text-ink-soft">{% translate "Skipped parts are not counted." %}</p>
+        </div>
+      </div>
+    {% else %}
+      <div class="relative grid aspect-video place-items-center overflow-hidden rounded-lg bg-[radial-gradient(circle_at_30%_30%,#183f87,#0d2149_70%)] text-center text-white">
+        <div class="flex flex-col items-center gap-3 px-6">
+          <span class="pulse grid size-16 place-items-center rounded-full bg-white/15">{% include "components/icons.html#play" with size=26 %}</span>
+          <p class="text-lg font-bold">{% translate "The video is being prepared" %}</p>
+          <p class="max-w-md text-sm text-on-dark-soft">{% translate "It appears here when it is ready. Meanwhile the section counts as done and the next one is open." %}</p>
+        </div>
+      </div>
+    {% endif %}
+  </section>
 {% elif not row.ready %}
   {% translate "The section is in development" as l_title %}{% translate "Its tasks will appear here in the next versions of the platform." as l_text %}
   {% include "components/empty_state.html" with title=l_title text=l_text icon="clock" %}
 {% endif %}
 {% endblock %}
+{% block scripts %}{% if section.kind == "video" and video %}<script defer src="{% static 'js/stage.js' %}"></script>{% endif %}{% endblock %}

@@ -13,7 +13,7 @@ from apps.core.permissions import STUDENT, has_role
 from apps.courses.models import Enrollment
 from apps.feedback import services as feedback
 
-from ..models import Programme, ProgrammeEnrollment, Section, SectionEvent, SectionProgress
+from ..models import Programme, ProgrammeEnrollment, Section, SectionEvent, SectionProgress, VideoWatch
 from ..providers import provider_for
 
 S = SectionProgress.Status
@@ -171,6 +171,18 @@ def blocking_section(enrollment, section) -> Section | None:
         SectionProgress.objects.filter(enrollment=enrollment, status=S.PASSED).values_list("section_id", flat=True)
     )
     return next((s for s in _sections(enrollment.programme) if s.number < section.number and s.pk not in passed), None)
+
+
+@transaction.atomic
+def record_watch(enrollment, section, percent: int) -> int:
+    """The video player's report: keep the largest share watched, then recalculate. Returns the stored percent."""
+    percent = max(0, min(int(percent), 100))
+    watch, _created = VideoWatch.objects.select_for_update().get_or_create(enrollment=enrollment, section=section)
+    if percent > watch.percent:
+        watch.percent = percent
+        watch.save(update_fields=["percent", "updated_at"])
+        recalculate(enrollment)
+    return watch.percent
 
 
 @transaction.atomic

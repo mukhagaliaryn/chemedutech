@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 19:21+0500\n"
+"POT-Creation-Date: 2026-10-24 19:53+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -286,10 +286,10 @@ msgstr ""
 #: apps/courses/models/enrollment.py:52 apps/feedback/models/comment.py:19
 #: apps/labs/models/attempt.py:23 apps/practice/models/submission.py:21
 #: apps/programme/models/diagnostics.py:61 apps/programme/models/progress.py:56
-#: apps/programme/models/progress.py:100 apps/progress/models/activity.py:14
-#: apps/progress/models/progress.py:22 apps/progress/models/progress.py:76
-#: apps/progress/models/progress.py:98 apps/progress/models/progress.py:118
-#: apps/progress/models/progress.py:153
+#: apps/programme/models/progress.py:100 apps/programme/models/video.py:41
+#: apps/progress/models/activity.py:14 apps/progress/models/progress.py:22
+#: apps/progress/models/progress.py:76 apps/progress/models/progress.py:98
+#: apps/progress/models/progress.py:118 apps/progress/models/progress.py:153
 msgid "enrolment"
 msgstr ""
 
@@ -815,7 +815,7 @@ msgstr ""
 msgid "created at"
 msgstr ""
 
-#: apps/core/models.py:9
+#: apps/core/models.py:9 apps/programme/models/video.py:47
 msgid "updated at"
 msgstr ""
 
@@ -5273,19 +5273,19 @@ msgstr "The previous answer is still being graded."
 msgid "You have used all attempts for this work."
 msgstr "No attempts left for this work."
 
-#: apps/programme/admin.py:90 apps/progress/admin.py:64
+#: apps/programme/admin.py:98 apps/progress/admin.py:64
 msgid "Recalculate"
 msgstr ""
 
-#: apps/programme/admin.py:94 apps/progress/admin.py:68
+#: apps/programme/admin.py:102 apps/progress/admin.py:68
 msgid "Recalculated."
 msgstr ""
 
-#: apps/programme/admin.py:105
+#: apps/programme/admin.py:113
 msgid "Open the selected sections for the student"
 msgstr ""
 
-#: apps/programme/admin.py:109 apps/progress/admin.py:39
+#: apps/programme/admin.py:117 apps/progress/admin.py:39
 #, python-format
 msgid "Opened: %(n)d"
 msgstr ""
@@ -5313,7 +5313,8 @@ msgstr ""
 
 #: apps/programme/models/diagnostics.py:29
 #: apps/programme/models/programme.py:66 apps/programme/models/progress.py:59
-#: apps/programme/models/progress.py:103
+#: apps/programme/models/progress.py:103 apps/programme/models/video.py:14
+#: apps/programme/models/video.py:44
 msgid "section"
 msgstr ""
 
@@ -5402,7 +5403,7 @@ msgstr ""
 msgid "Diagnostics"
 msgstr ""
 
-#: apps/programme/models/programme.py:39
+#: apps/programme/models/programme.py:39 ui/templates/student/section.html:96
 msgid "Video"
 msgstr ""
 
@@ -5559,17 +5560,45 @@ msgstr ""
 msgid "section events"
 msgstr ""
 
+#: apps/programme/models/video.py:16
+msgid "YouTube link"
+msgstr ""
+
+#: apps/programme/models/video.py:16
+msgid "Empty — the video is being prepared"
+msgstr ""
+
+#: apps/programme/models/video.py:19
+msgid "section video"
+msgstr ""
+
+#: apps/programme/models/video.py:20
+msgid "section videos"
+msgstr ""
+
+#: apps/programme/models/video.py:46
+msgid "watched, %"
+msgstr ""
+
+#: apps/programme/models/video.py:50 apps/programme/models/video.py:51
+msgid "video watching"
+msgstr ""
+
 #: apps/programme/services/diagnostics.py:70
 msgid "This diagnostic test is not open."
 msgstr ""
 
-#: apps/programme/tests.py:234 ui/templates/student/dashboard.html:68
+#: apps/programme/tests.py:237 ui/templates/student/dashboard.html:68
 #: ui/templates/teacher/dashboard.html:27 ui/templates/teacher/student.html:35
 msgid "Key figures"
 msgstr ""
 
-#: apps/programme/tests.py:268 ui/templates/student/section.html:94
+#: apps/programme/tests.py:271 ui/templates/student/section.html:131
 msgid "The section is in development"
+msgstr ""
+
+#: apps/programme/tests.py:577 ui/templates/student/section.html:124
+msgid "The video is being prepared"
 msgstr ""
 
 #: apps/progress/admin.py:30
@@ -9116,7 +9145,39 @@ msgstr ""
 msgid "Opens after the previous stage"
 msgstr ""
 
-#: ui/templates/student/section.html:94
+#: ui/templates/student/section.html:104
+#: ui/templates/student/stages/video.html:20
+msgid "The video cannot be played here."
+msgstr ""
+
+#: ui/templates/student/section.html:105
+#: ui/templates/student/stages/video.html:21
+msgid "Watch on YouTube"
+msgstr ""
+
+#: ui/templates/student/section.html:108
+#: ui/templates/student/stages/video.html:25
+msgid "Watched"
+msgstr ""
+
+#: ui/templates/student/section.html:112
+#: ui/templates/student/stages/video.html:29
+#, python-format
+msgid "needed %(p)s%%"
+msgstr ""
+
+#: ui/templates/student/section.html:117
+#: ui/templates/student/stages/video.html:34
+msgid "Skipped parts are not counted."
+msgstr ""
+
+#: ui/templates/student/section.html:125
+msgid ""
+"It appears here when it is ready. Meanwhile the section counts as done and "
+"the next one is open."
+msgstr ""
+
+#: ui/templates/student/section.html:131
 msgid "Its tasks will appear here in the next versions of the platform."
 msgstr ""
 
@@ -9272,27 +9333,6 @@ msgstr "Marking it opens the checkpoint quiz"
 
 #: ui/templates/student/stages/video.html:19
 msgid "The video's owner does not allow playing it on other sites."
-msgstr ""
-
-#: ui/templates/student/stages/video.html:20
-msgid "The video cannot be played here."
-msgstr ""
-
-#: ui/templates/student/stages/video.html:21
-msgid "Watch on YouTube"
-msgstr ""
-
-#: ui/templates/student/stages/video.html:25
-msgid "Watched"
-msgstr ""
-
-#: ui/templates/student/stages/video.html:29
-#, python-format
-msgid "needed %(p)s%%"
-msgstr ""
-
-#: ui/templates/student/stages/video.html:34
-msgid "Skipped parts are not counted."
 msgstr ""
 
 #: ui/templates/student/stages/video.html:38

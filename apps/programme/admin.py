@@ -11,6 +11,7 @@ from .models import (
     Section,
     SectionEvent,
     SectionProgress,
+    SectionVideo,
 )
 
 
@@ -38,13 +39,20 @@ class DiagnosticTestInline(TabularInline):
     show_change_link = True
 
 
+class SectionVideoInline(TabularInline):
+    model = SectionVideo
+    extra = 1
+    max_num = 1
+    fields = ("url",)
+
+
 @admin.register(Section)
 class SectionAdmin(ModelAdmin):
     list_display = ("number", "title", "kind", "pass_percent", "guide_anchor", "programme")
     list_display_links = ("number", "title")
     list_filter = ("programme", "kind")
     ordering = ("programme", "number")
-    inlines = [DiagnosticTestInline]
+    inlines = [SectionVideoInline, DiagnosticTestInline]
 
 
 @admin.register(DiagnosticTest)

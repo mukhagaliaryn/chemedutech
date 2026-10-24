@@ -29,6 +29,8 @@ from .models import (
     Section,
     SectionEvent,
     SectionProgress,
+    SectionVideo,
+    VideoWatch,
 )
 from .providers import PROVIDERS, Provider
 from .services import diagnostics
@@ -185,6 +187,7 @@ class EngineTests(Base):
         self.assertTrue(all(self.status(n) == S.PASSED for n in range(1, 9)))
 
     def test_sections_added_or_reordered_later(self):
+        SectionVideo.objects.create(section=self.section(3), url="https://youtu.be/dQw4w9WgXcQ")  # not done at once
         self.pass_stages(4)
         self.enrollment()
         Section.objects.create(programme=self.programme, number=9, kind="independent", title="S9")
@@ -260,7 +263,7 @@ class StudentPageTests(Base):
         self.assertContains(r, reverse("student:section", args=[1]))
 
     def test_an_open_section_not_built_yet(self):
-        Section.objects.filter(pk=self.section(2).pk).update(kind="video")  # an unbuilt kind
+        Section.objects.filter(pk=self.section(2).pk).update(kind="designer")  # a kind not built yet
         self.pass_stages(4)
         r = self.client.get(reverse("student:section", args=[2]))
         self.assertTemplateUsed(r, "student/section.html")
@@ -299,9 +302,9 @@ class TeacherPageTests(Base):
 
     def test_teacher_opens_a_section_from_the_group_page(self):
         back = reverse("teacher:group", args=[self.group.pk])
-        r = self.client.post(reverse("teacher:unlock_section", args=[self.student.pk, 3]), {"next": back})
+        r = self.client.post(reverse("teacher:unlock_section", args=[self.student.pk, 4]), {"next": back})
         self.assertRedirects(r, back, fetch_redirect_response=False)
-        self.assertEqual(self.status(3), S.AVAILABLE)
+        self.assertEqual(self.status(4), S.AVAILABLE)
 
     def test_another_teacher_cannot_open_it(self):
         self.client.force_login(self.other)
@@ -401,7 +404,8 @@ class DiagnosticsTests(DiagnosticsBase):
         self.take("II")
         self.assertEqual((self.status(2), self.status(3)), (S.IN_PROGRESS, S.LOCKED))  # 66.67 % < 80 %
         self.take("III")
-        self.assertEqual((self.status(2), self.status(3)), (S.PASSED, S.AVAILABLE))
+        # section 3 has no video yet: it counts as done at once (D72), section 4 opens
+        self.assertEqual((self.status(2), self.status(3), self.status(4)), (S.PASSED, S.PASSED, S.AVAILABLE))
 
     def test_closed_while_section_2_is_locked(self):
         other = make_student("s2", group=self.group)
@@ -542,3 +546,68 @@ class DiagnosticsSeedTests(TestCase):
         self.assertEqual(tests[1].levels, {})
         call_command("seed_icpai", verbosity=0)
         self.assertEqual(DiagnosticTest.objects.count(), 3)
+        video = SectionVideo.objects.get(section__number=3)
+        self.assertEqual((video.url, video.youtube_id), ("", ""))
+
+
+# --- section 3 — the video (D72) --------------------------------------------------------------------
+
+UP_TO_2 = {Section.Kind.COURSE: Fixed(100), Section.Kind.DIAGNOSTIC: Fixed(100)}
+
+
+class VideoSectionTests(Base):
+    def setUp(self):
+        super().setUp()
+        self.video_section = self.section(3)
+        self.client.force_login(self.student)
+
+    def refresh(self):
+        with patch.dict(PROVIDERS, UP_TO_2):
+            return self.enrollment()
+
+    def test_without_a_video_the_section_counts_as_done(self):
+        self.refresh()
+        self.assertEqual((self.status(3), self.status(4)), (S.PASSED, S.AVAILABLE))
+        SectionVideo.objects.create(section=self.video_section, url="")  # a row without a link is still «no video»
+        self.refresh()
+        self.assertEqual(self.status(3), S.PASSED)
+        with patch.dict(PROVIDERS, UP_TO_2):
+            r = self.client.get(reverse("student:section", args=[3]))
+        with override("kk"):
+            self.assertContains(r, gettext("The video is being prepared"))
+
+    def test_with_a_video_the_share_watched_counts(self):
+        SectionVideo.objects.create(section=self.video_section, url="https://youtu.be/dQw4w9WgXcQ")
+        enrollment = self.refresh()
+        self.assertEqual((self.status(3), self.status(4)), (S.AVAILABLE, S.LOCKED))
+        url = reverse("student:section_watch", args=[3])
+        with patch.dict(PROVIDERS, UP_TO_2):
+            r = self.client.post(url, '{"percent": 50}', content_type="application/json")
+            self.assertEqual(r.json(), {"percent": 50, "done": False})
+            r = self.client.post(url, '{"percent": 30}', content_type="application/json")
+            self.assertEqual(r.json()["percent"], 50)  # the largest share is kept
+            r = self.client.post(url, '{"percent": 85}', content_type="application/json")
+            self.assertEqual(r.json(), {"percent": 85, "done": True})
+        self.assertEqual((self.status(3), self.status(4)), (S.PASSED, S.AVAILABLE))
+        self.assertEqual(VideoWatch.objects.get(enrollment=enrollment).percent, 85)
+
+    def test_the_page_shows_the_player(self):
+        SectionVideo.objects.create(section=self.video_section, url="https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+        with patch.dict(PROVIDERS, UP_TO_2):
+            r = self.client.get(reverse("student:section", args=[3]))
+        self.assertContains(r, "dQw4w9WgXcQ")
+        self.assertContains(r, reverse("student:section_watch", args=[3]))
+        self.assertContains(r, "js/stage.js")
+
+    def test_locked_or_wrong_section(self):
+        SectionVideo.objects.create(section=self.video_section, url="https://youtu.be/dQw4w9WgXcQ")
+        self.enrollment()  # section 1 not done: 3 is locked
+        r = self.client.post(
+            reverse("student:section_watch", args=[3]), '{"percent": 90}', content_type="application/json"
+        )
+        self.assertEqual(r.status_code, 403)
+        self.assertFalse(VideoWatch.objects.exists())
+        r = self.client.post(
+            reverse("student:section_watch", args=[1]), '{"percent": 90}', content_type="application/json"
+        )
+        self.assertEqual(r.status_code, 404)

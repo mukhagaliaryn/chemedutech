@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ChemEduTech\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 19:21+0500\n"
+"POT-Creation-Date: 2026-10-24 19:53+0500\n"
 "PO-Revision-Date: 2026-10-16 21:00+0500\n"
 "Last-Translator: ChemEduTech\n"
 "Language-Team: ChemEduTech\n"
@@ -283,10 +283,10 @@ msgstr "III диагностика"
 #: apps/courses/models/enrollment.py:52 apps/feedback/models/comment.py:19
 #: apps/labs/models/attempt.py:23 apps/practice/models/submission.py:21
 #: apps/programme/models/diagnostics.py:61 apps/programme/models/progress.py:56
-#: apps/programme/models/progress.py:100 apps/progress/models/activity.py:14
-#: apps/progress/models/progress.py:22 apps/progress/models/progress.py:76
-#: apps/progress/models/progress.py:98 apps/progress/models/progress.py:118
-#: apps/progress/models/progress.py:153
+#: apps/programme/models/progress.py:100 apps/programme/models/video.py:41
+#: apps/progress/models/activity.py:14 apps/progress/models/progress.py:22
+#: apps/progress/models/progress.py:76 apps/progress/models/progress.py:98
+#: apps/progress/models/progress.py:118 apps/progress/models/progress.py:153
 msgid "enrolment"
 msgstr "жазылу тәсілі"
 
@@ -352,7 +352,9 @@ msgstr "кезең"
 msgid ""
 "Pre/post knowledge test: before or after the course; ICPAI diagnostics: "
 "stage I, II or III"
-msgstr "Кіріс/шығыс білім тесті: курсқа дейін немесе кейін; ICPAI диагностикасы: I, II немесе III кезең"
+msgstr ""
+"Кіріс/шығыс білім тесті: курсқа дейін немесе кейін; ICPAI диагностикасы: I, "
+"II немесе III кезең"
 
 #: apps/assessments/models/attempt.py:55
 msgid "quiz attempt"
@@ -821,7 +823,7 @@ msgstr "Негізгі"
 msgid "created at"
 msgstr "жасалған уақыты"
 
-#: apps/core/models.py:9
+#: apps/core/models.py:9 apps/programme/models/video.py:47
 msgid "updated at"
 msgstr "өзгертілген уақыты"
 
@@ -5445,19 +5447,19 @@ msgstr "Алдыңғы жауап әлі бағалануда."
 msgid "You have used all attempts for this work."
 msgstr "Бұл жұмыстың барлық талпынысы пайдаланылды."
 
-#: apps/programme/admin.py:90 apps/progress/admin.py:64
+#: apps/programme/admin.py:98 apps/progress/admin.py:64
 msgid "Recalculate"
 msgstr "Қайта есептеу"
 
-#: apps/programme/admin.py:94 apps/progress/admin.py:68
+#: apps/programme/admin.py:102 apps/progress/admin.py:68
 msgid "Recalculated."
 msgstr "Қайта есептелді."
 
-#: apps/programme/admin.py:105
+#: apps/programme/admin.py:113
 msgid "Open the selected sections for the student"
 msgstr "Таңдалған бөлімдерді студентке ашу"
 
-#: apps/programme/admin.py:109 apps/progress/admin.py:39
+#: apps/programme/admin.py:117 apps/progress/admin.py:39
 #, python-format
 msgid "Opened: %(n)d"
 msgstr "Ашылды: %(n)d"
@@ -5485,7 +5487,8 @@ msgstr "Орта"
 
 #: apps/programme/models/diagnostics.py:29
 #: apps/programme/models/programme.py:66 apps/programme/models/progress.py:59
-#: apps/programme/models/progress.py:103
+#: apps/programme/models/progress.py:103 apps/programme/models/video.py:14
+#: apps/programme/models/video.py:44
 msgid "section"
 msgstr "бөлім"
 
@@ -5574,7 +5577,7 @@ msgstr "Курс"
 msgid "Diagnostics"
 msgstr "Диагностика"
 
-#: apps/programme/models/programme.py:39
+#: apps/programme/models/programme.py:39 ui/templates/student/section.html:96
 msgid "Video"
 msgstr "Бейне"
 
@@ -5731,18 +5734,46 @@ msgstr "бөлім оқиғасы"
 msgid "section events"
 msgstr "бөлім оқиғалары"
 
+#: apps/programme/models/video.py:16
+msgid "YouTube link"
+msgstr "YouTube сілтемесі"
+
+#: apps/programme/models/video.py:16
+msgid "Empty — the video is being prepared"
+msgstr "Бос — бейне дайындалуда"
+
+#: apps/programme/models/video.py:19
+msgid "section video"
+msgstr "бөлім бейнесі"
+
+#: apps/programme/models/video.py:20
+msgid "section videos"
+msgstr "бөлім бейнелері"
+
+#: apps/programme/models/video.py:46
+msgid "watched, %"
+msgstr "қаралды, %"
+
+#: apps/programme/models/video.py:50 apps/programme/models/video.py:51
+msgid "video watching"
+msgstr "бейнені қарау"
+
 #: apps/programme/services/diagnostics.py:70
 msgid "This diagnostic test is not open."
 msgstr "Бұл диагностикалық тест ашылмаған."
 
-#: apps/programme/tests.py:234 ui/templates/student/dashboard.html:68
+#: apps/programme/tests.py:237 ui/templates/student/dashboard.html:68
 #: ui/templates/teacher/dashboard.html:27 ui/templates/teacher/student.html:35
 msgid "Key figures"
 msgstr "Көрсеткіштер"
 
-#: apps/programme/tests.py:268 ui/templates/student/section.html:94
+#: apps/programme/tests.py:271 ui/templates/student/section.html:131
 msgid "The section is in development"
 msgstr "Бөлім әзірленуде"
+
+#: apps/programme/tests.py:577 ui/templates/student/section.html:124
+msgid "The video is being prepared"
+msgstr "Бейне дайындалуда"
 
 #: apps/progress/admin.py:30
 msgid "Open the selected stages for the student"
@@ -8097,13 +8128,17 @@ msgstr "ICPAI диагностикасы"
 msgid ""
 "component %% at stages I, II, III over all who took them; gains over "
 "students with both stages"
-msgstr "компонент %% — I, II, III кезеңдерді тапсырғандардың бәрі бойынша; өсім — екі кезеңді де тапсырғандар бойынша"
+msgstr ""
+"компонент %% — I, II, III кезеңдерді тапсырғандардың бәрі бойынша; өсім — "
+"екі кезеңді де тапсырғандар бойынша"
 
 #: ui/templates/research/analytics.html:207
 msgid ""
 "Section 2: the four components of the ICPAI model by stages and research "
 "groups."
-msgstr "2-бөлім: ICPAI моделінің төрт компоненті кезеңдер мен зерттеу топтары бойынша."
+msgstr ""
+"2-бөлім: ICPAI моделінің төрт компоненті кезеңдер мен зерттеу топтары "
+"бойынша."
 
 #: ui/templates/research/analytics.html:218
 #: ui/templates/student/icpai_results.html:55
@@ -8631,7 +8666,9 @@ msgstr "Деңгей: %(l)s"
 msgid ""
 "Component result (%%) = points earned / maximum points × 100. The correct "
 "answers are not shown."
-msgstr "Компонент нәтижесі (%%) = (Жинақталған балл / Ең жоғары мүмкін балл) × 100. Дұрыс жауаптар көрсетілмейді."
+msgstr ""
+"Компонент нәтижесі (%%) = (Жинақталған балл / Ең жоғары мүмкін балл) × 100. "
+"Дұрыс жауаптар көрсетілмейді."
 
 #: ui/templates/student/diagnostic.html:46 ui/templates/student/section.html:66
 msgid "All results"
@@ -8714,7 +8751,9 @@ msgstr "ICPAI – кәсіби даярлық нәтижелері"
 msgid ""
 "The diagnostic results of the four components that make up the structure and "
 "content of the ICPAI authorial model."
-msgstr "Бұл бөлімде авторлық ICPAI моделінің құрылымдық-мазмұндық негізін құрайтын төрт компоненттің диагностикалық нәтижелері көрсетіледі."
+msgstr ""
+"Бұл бөлімде авторлық ICPAI моделінің құрылымдық-мазмұндық негізін құрайтын "
+"төрт компоненттің диагностикалық нәтижелері көрсетіледі."
 
 #: ui/templates/student/icpai_results.html:17
 msgid "Course grades"
@@ -8740,32 +8779,43 @@ msgstr "Компоненттер"
 msgid ""
 "The readiness of a future chemistry teacher to master digital technologies, "
 "to use innovative teaching methods and to develop professionally."
-msgstr "Болашақ химия мұғалімінің цифрлық технологияларды меңгеруге, инновациялық педагогикалық әдістерді қолдануға және кәсіби өзін-өзі дамытуға қатысты даярлық деңгейі."
+msgstr ""
+"Болашақ химия мұғалімінің цифрлық технологияларды меңгеруге, инновациялық "
+"педагогикалық әдістерді қолдануға және кәсіби өзін-өзі дамытуға қатысты "
+"даярлық деңгейі."
 
 #: ui/templates/student/icpai_results.html:31
 msgid ""
 "Mastery of chemistry subject knowledge, of the possibilities of information "
 "and communication technologies and of the principles of pedagogical design."
-msgstr "Химиялық пәндік білімді, ақпараттық-коммуникациялық технологиялардың мүмкіндіктерін және педагогикалық жобалау қағидаларын меңгеру деңгейі."
+msgstr ""
+"Химиялық пәндік білімді, ақпараттық-коммуникациялық технологиялардың "
+"мүмкіндіктерін және педагогикалық жобалау қағидаларын меңгеру деңгейі."
 
 #: ui/templates/student/icpai_results.html:32
 msgid ""
 "The skills of using chemistry knowledge in a digital environment, carrying "
 "out virtual experiments, designing authorial tasks and lessons."
-msgstr "Химиялық білімді цифрлық ортада қолдану, виртуалды тәжірибе жүргізу, авторлық тапсырмалар мен сабақтарды жобалау дағдыларының қалыптасу деңгейі."
+msgstr ""
+"Химиялық білімді цифрлық ортада қолдану, виртуалды тәжірибе жүргізу, "
+"авторлық тапсырмалар мен сабақтарды жобалау дағдыларының қалыптасу деңгейі."
 
 #: ui/templates/student/icpai_results.html:33
 msgid ""
 "The readiness to analyse one's own teaching, to find the mistakes made, to "
 "evaluate the results and to improve one's professional work."
-msgstr "Өзінің педагогикалық әрекеттерін талдау, жіберілген қателерді анықтау, нәтижелерді бағалау және кәсіби қызметін жетілдіруге қатысты даярлық деңгейі."
+msgstr ""
+"Өзінің педагогикалық әрекеттерін талдау, жіберілген қателерді анықтау, "
+"нәтижелерді бағалау және кәсіби қызметін жетілдіруге қатысты даярлық деңгейі."
 
 #: ui/templates/student/icpai_results.html:47
 #, python-format
 msgid ""
 "The latest stage taken is shown. Component result (%%) = points earned / "
 "maximum points × 100."
-msgstr "Соңғы тапсырылған кезең көрсетілген. Компонент нәтижесі (%%) = (Жинақталған балл / Ең жоғары мүмкін балл) × 100"
+msgstr ""
+"Соңғы тапсырылған кезең көрсетілген. Компонент нәтижесі (%%) = (Жинақталған "
+"балл / Ең жоғары мүмкін балл) × 100"
 
 #: ui/templates/student/icpai_results.html:53
 #: ui/templates/student/icpai_results.html:79
@@ -8781,7 +8831,9 @@ msgstr "5 және 6-бөлім бағалары"
 msgid ""
 "The grades of the digital research practice of section 5 and of the "
 "microlesson of section 6 are not combined with them and are kept separately."
-msgstr "5-бөлімдегі цифрлық-зерттеушілік практиканың және 6-бөлімдегі микросабақтың бағалары олармен біріктірілмей, жеке сақталады."
+msgstr ""
+"5-бөлімдегі цифрлық-зерттеушілік практиканың және 6-бөлімдегі микросабақтың "
+"бағалары олармен біріктірілмей, жеке сақталады."
 
 #: ui/templates/student/icpai_results.html:105
 msgid "No grades yet."
@@ -9392,7 +9444,39 @@ msgstr "Диагностикалық тесттер"
 msgid "Opens after the previous stage"
 msgstr "Алдыңғы кезеңнен кейін ашылады"
 
-#: ui/templates/student/section.html:94
+#: ui/templates/student/section.html:104
+#: ui/templates/student/stages/video.html:20
+msgid "The video cannot be played here."
+msgstr "Видеоны мұнда ойнату мүмкін емес."
+
+#: ui/templates/student/section.html:105
+#: ui/templates/student/stages/video.html:21
+msgid "Watch on YouTube"
+msgstr "YouTube-та көру"
+
+#: ui/templates/student/section.html:108
+#: ui/templates/student/stages/video.html:25
+msgid "Watched"
+msgstr "Көрілді"
+
+#: ui/templates/student/section.html:112
+#: ui/templates/student/stages/video.html:29
+#, python-format
+msgid "needed %(p)s%%"
+msgstr "керегі %(p)s%%"
+
+#: ui/templates/student/section.html:117
+#: ui/templates/student/stages/video.html:34
+msgid "Skipped parts are not counted."
+msgstr "Айналдырып өткізілген бөліктер есептелмейді."
+
+#: ui/templates/student/section.html:125
+msgid ""
+"It appears here when it is ready. Meanwhile the section counts as done and "
+"the next one is open."
+msgstr "Дайын болғанда осында шығады. Әзірге бөлім орындалды деп саналады, келесі бөлім ашық."
+
+#: ui/templates/student/section.html:131
 msgid "Its tasks will appear here in the next versions of the platform."
 msgstr ""
 "Бөлімнің тапсырмалары платформаның келесі нұсқаларында осында пайда болады."
@@ -9554,27 +9638,6 @@ msgstr "Белгілеген соң бекіту тесті ашылады"
 #: ui/templates/student/stages/video.html:19
 msgid "The video's owner does not allow playing it on other sites."
 msgstr "Видео иесі оны басқа сайттарда ойнатуға рұқсат бермеген."
-
-#: ui/templates/student/stages/video.html:20
-msgid "The video cannot be played here."
-msgstr "Видеоны мұнда ойнату мүмкін емес."
-
-#: ui/templates/student/stages/video.html:21
-msgid "Watch on YouTube"
-msgstr "YouTube-та көру"
-
-#: ui/templates/student/stages/video.html:25
-msgid "Watched"
-msgstr "Көрілді"
-
-#: ui/templates/student/stages/video.html:29
-#, python-format
-msgid "needed %(p)s%%"
-msgstr "керегі %(p)s%%"
-
-#: ui/templates/student/stages/video.html:34
-msgid "Skipped parts are not counted."
-msgstr "Айналдырып өткізілген бөліктер есептелмейді."
 
 #: ui/templates/student/stages/video.html:38
 msgid "Video watched — the checkpoint quiz is open."

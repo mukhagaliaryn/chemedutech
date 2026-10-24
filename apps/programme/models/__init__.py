@@ -1,6 +1,7 @@
 from .diagnostics import DiagnosticResult, DiagnosticTest, Level, Phase
 from .programme import Programme, Section
 from .progress import ProgrammeEnrollment, SectionEvent, SectionProgress
+from .video import SectionVideo, VideoWatch
 
 __all__ = [
     "DiagnosticResult",
@@ -12,4 +13,6 @@ __all__ = [
     "Section",
     "SectionEvent",
     "SectionProgress",
+    "SectionVideo",
+    "VideoWatch",
 ]

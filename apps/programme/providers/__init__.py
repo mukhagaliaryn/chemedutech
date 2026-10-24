@@ -8,10 +8,12 @@ from ..models import Section
 from .base import Provider, Upcoming
 from .course import CourseProvider
 from .diagnostic import DiagnosticProvider
+from .video import VideoProvider
 
 PROVIDERS: dict[str, Provider] = {
     Section.Kind.COURSE: CourseProvider(),
     Section.Kind.DIAGNOSTIC: DiagnosticProvider(),
+    Section.Kind.VIDEO: VideoProvider(),
 }
 
 

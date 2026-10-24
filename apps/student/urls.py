@@ -9,6 +9,7 @@ STAGE = "learn/<slug:course_slug>/<int:topic_number>/<int:stage_pk>/"
 urlpatterns = [
     path("me/", views.dashboard, name="dashboard"),
     path("me/sections/<int:number>/", sections.section, name="section"),
+    path("me/sections/<int:number>/watch/", sections.section_watch, name="section_watch"),
     path("me/sections/<int:number>/diagnostic/<str:phase>/", sections.diagnostic, name="diagnostic"),
     path("me/sections/<int:number>/diagnostic/<str:phase>/start/", sections.diagnostic_start, name="diagnostic_start"),
     path(

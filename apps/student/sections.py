@@ -1,8 +1,10 @@
 """The ICPAI programme in the student cabinet (docs/icpai/SPEC.md §4.0, STEP-29): the home page with the guide
 and the sections' state, and a page per section. Section 1 leads to the existing course pages."""
 
+import json
+
 from django.contrib import messages
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_POST
@@ -14,7 +16,7 @@ from apps.assessments.views import take_context
 from apps.core.permissions import STUDENT, role_required
 from apps.programme import selectors as programme_selectors
 from apps.programme import services as programme
-from apps.programme.models import DiagnosticTest, Level, Section, SectionProgress
+from apps.programme.models import DiagnosticTest, Level, Section, SectionProgress, SectionVideo, VideoWatch
 from apps.programme.services import diagnostics
 from apps.progress import selectors as progress_selectors
 from apps.progress.services import benchmark
@@ -75,6 +77,11 @@ def section(request, number):
         context["course_block"] = _course_block(enrollment)
     elif section.kind == Section.Kind.DIAGNOSTIC:
         context["diagnostics"] = programme_selectors.diagnostic_rows(enrollment, section)
+    elif section.kind == Section.Kind.VIDEO:
+        video = SectionVideo.objects.filter(section=section).first()
+        watch = VideoWatch.objects.filter(enrollment=enrollment, section=section).first()
+        context["video"] = video if video and video.youtube_id else None
+        context["watched"] = watch.percent if watch else 0
     return render(request, "student/section.html", context)
 
 
@@ -179,3 +186,25 @@ def results(request):
             "stages": programme_selectors.diagnostic_rows(enrollment, section) if section else [],
         },
     )
+
+
+# --- section 3: the video (guide @S3; D72) ----------------------------------------------------------------
+
+
+@require_POST
+@role_required(STUDENT)
+def section_watch(request, number):
+    """The video player reports the share watched ({percent}); answers {percent, done}."""
+    enrollment = programme.refresh(request.user)
+    if enrollment is None:
+        raise Http404
+    section = get_object_or_404(Section, programme=enrollment.programme, number=number, kind=Section.Kind.VIDEO)
+    if not programme.can_access(enrollment, section):
+        return JsonResponse({"error": "not_available"}, status=403)
+    try:
+        percent = int(json.loads(request.body or b"{}").get("percent", 0))
+    except (ValueError, TypeError, AttributeError):
+        return JsonResponse({"error": "bad_request"}, status=400)
+    stored = programme.record_watch(enrollment, section, percent)
+    row = SectionProgress.objects.get(enrollment=enrollment, section=section)
+    return JsonResponse({"percent": stored, "done": row.status == SectionProgress.Status.PASSED})

@@ -4,7 +4,7 @@ section 2 (docs/icpai/SPEC.md §0, §2.2).
 Run after seed_course. Safe on every deploy: missing sections are added; existing ones keep the texts and
 pass marks an administrator may have edited, unless --replace (then titles, kinds, texts and anchors come
 from _icpai/ again). A diagnostic test somebody has taken keeps its questions (research data); only its texts
-are rewritten by --replace. Student enrolments are made lazily when students open their cabinet.
+are rewritten by --replace. The video section gets an empty video (its YouTube link is set in the admin). Student enrolments are made lazily when students open their cabinet.
 """
 
 from django.core.management.base import BaseCommand, CommandError
@@ -12,7 +12,7 @@ from django.db import transaction
 
 from apps.assessments.models import Choice, Question, Quiz
 from apps.courses.models import Course
-from apps.programme.models import DiagnosticTest, Programme, Section
+from apps.programme.models import DiagnosticTest, Programme, Section, SectionVideo
 
 from ._icpai import COURSE_SLUG, PROGRAMME, SECTIONS
 from ._icpai.diagnostics import DIAGNOSTICS
@@ -41,6 +41,10 @@ class Command(BaseCommand):
                 for field, value in values.items():
                     setattr(section, field, value)
                 section.save()
+        for video_section in programme.sections.filter(kind=Section.Kind.VIDEO):
+            SectionVideo.objects.get_or_create(
+                section=video_section
+            )  # the place of the video; the link is set in the admin
         section = programme.sections.filter(kind=Section.Kind.DIAGNOSTIC).order_by("number").first()
         notes = self.seed_diagnostics(section, replace) if section else []
         for note in notes:
