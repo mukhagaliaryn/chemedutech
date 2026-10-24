@@ -24,7 +24,7 @@ from apps.programme.services import diagnostics
 from apps.progress import selectors as progress_selectors
 from apps.progress.services import benchmark
 
-from . import cabinet, designer, micro, portfolio, practice
+from . import cabinet, designer, independent, micro, portfolio, practice
 
 LOCKED = SectionProgress.Status.LOCKED
 
@@ -94,6 +94,8 @@ def section(request, number):
         context.update(micro.micro_context(request.user))
     elif section.kind == Section.Kind.PORTFOLIO:
         context.update(portfolio.portfolio_context(enrollment, request.user))
+    elif section.kind == Section.Kind.INDEPENDENT and row["ready"]:
+        context.update(independent.independent_context(enrollment, section, request.user))
     return render(request, "student/section.html", context)
 
 

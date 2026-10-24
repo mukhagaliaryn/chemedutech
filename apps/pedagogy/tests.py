@@ -514,3 +514,158 @@ class MicroTests(TestCase):
         self.assertEqual(version.snapshot["trials"][0]["messages"][0]["reply"], REPLY["reply"])
         with self.assertRaises(services.LessonError):
             services.check_micro(self.lesson)
+
+
+def expert_answer(keys, status="needs_more", change=""):
+    return {
+        "items": {k: {"status": "ok", "text": f"{k}: дәл."} for k in keys}, "status": status, "focus": "Ғылыми дәлдік",
+        "summary": "Жоба құрылымы логикалы.", "strengths": ["Мақсат нақты"], "suggestions": ["Дескрипторды нақтыла"],
+        "change": change,
+    }  # fmt: skip
+
+
+DRAFT = expert_answer(("accuracy", "fit", "sequence", "cognition", "assessment", "authorship"))
+AFTER = expert_answer(("content", "aim", "time", "tasks", "feedback", "method", "reflection"), status="ok")
+
+
+def fill_independent(lesson, stages=((10, "Қызығушылық"), (20, "Зерттеу"), (15, "Рефлексия"))):
+    ind = services.independent
+    ind.save_details(lesson, {"topic": "Электролиз", "grade": "11", "aim": "Электролиз заңдылықтарын түсіндіру",
+                              "idea": "Зерттеушілік оқыту", "outcomes": "<p>Теңдеу құрады</p>"})  # fmt: skip
+    for minutes, title in stages:
+        stage = ind.add_stage(lesson, title=title, minutes=minutes)
+        services.save(
+            stage, title=title, minutes=minutes, fields={"teacher": f"<p>{title}</p>", "task": "<p>Тапсырма</p>"}
+        )
+    lesson.refresh_from_db()
+    return lesson
+
+
+@override_settings(AI_TUTOR_ENABLED=True)
+class IndependentTests(TestCase):
+    """Section 8: the student's own stages (45 minutes at most), «Айгерім», submit, the stepwise or real trial, the
+    analysis after the trial and the teacher's confirmation."""
+
+    def setUp(self):
+        from apps.ai.services import client as ai_client
+        from apps.ai.tests import FakeClient, answer
+
+        self.answer = answer
+        self.fake = FakeClient(answer(json.dumps(DRAFT)))
+        patcher = mock.patch.object(ai_client, "get_client", return_value=self.fake)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        self.ind = services.independent
+        self.student = make_student("s1")
+        self.teacher = make_student("t1")
+        self.lesson = self.ind.start_independent(self.student)
+
+    def submitted(self):
+        fill_independent(self.lesson)
+        self.ind.submit(self.lesson)
+        self.lesson.refresh_from_db()
+        return self.lesson
+
+    def tried(self):
+        self.submitted()
+        self.fake.replies = [self.answer(json.dumps(SIM))]
+        trial = self.ind.start_trial(self.lesson, grade="11", level="medium")
+        for order in (1, 2, 3):
+            turn = services.give_task(trial, order, explanation="<p>Т</p>", task="<p>Тапсырма</p>", minutes=5)
+            services.analyse(turn, analysis="Талдадым")
+        return self.ind.finish_trial(trial)
+
+    def test_one_open_lesson_and_the_next_cycle(self):
+        self.assertEqual((self.lesson.kind, self.lesson.frame, self.lesson.cycle), ("independent", "free", 1))
+        self.assertEqual(self.ind.start_independent(self.student), self.lesson)
+        Lesson.objects.filter(pk=self.lesson.pk).update(status=Lesson.Status.FINAL)
+        self.assertEqual(self.ind.start_independent(self.student).cycle, 2)
+
+    def test_stages_of_the_students_choosing_take_45_minutes_at_most(self):
+        fill_independent(self.lesson)
+        self.assertEqual(self.ind.total_minutes(self.lesson), 45)
+        with self.assertRaises(services.LessonError):
+            self.ind.add_stage(self.lesson, title="Тағы", minutes=1)
+        for bad in (("", 5), ("Атау", "x"), ("Атау", 0)):
+            with self.assertRaises(services.LessonError):
+                self.ind.add_stage(self.lesson, title=bad[0], minutes=bad[1])
+        stage = self.lesson.stages.get(order=1)
+        with self.assertRaises(services.LessonError):
+            services.save(stage, title="Қызығушылық", minutes=11, fields={})
+        stage = services.save(stage, title="Ой шақыру", minutes=5, fields={"teacher": "<p>Сұрақ</p>"})
+        self.assertEqual((stage.title, stage.minutes), ("Ой шақыру", 5))
+        self.ind.delete_stage(self.lesson.stages.get(order=2))
+        self.assertEqual([(s.order, s.title) for s in self.lesson.stages.all()], [(1, "Ой шақыру"), (2, "Рефлексия")])
+
+    def test_submit_checks_the_structure(self):
+        self.assertEqual({p["code"] for p in self.ind.problems(self.lesson)}, {"details", "no_stages"})
+        with self.assertRaises(services.LessonError):
+            self.ind.submit(self.lesson)
+        fill_independent(self.lesson)
+        version = self.ind.submit(self.lesson)
+        self.lesson.refresh_from_db()
+        self.assertEqual((self.lesson.status, version.snapshot["stages"][1]["title"]), ("submitted", "Зерттеу"))
+
+    def test_aigerim_reviews_the_project_and_compares_with_the_previous_opinion(self):
+        fill_independent(self.lesson)
+        first = self.ind.expert_review(self.lesson)
+        self.assertEqual((first.kind, first.status, first.items["accuracy"]["status"]), ("draft", "needs_more", "ok"))
+        call = self.fake.calls[-1]
+        self.assertEqual(call["output_config"]["format"]["type"], "json_schema")
+        self.assertIn("«Айгерім»", call["system"])
+        self.assertIn("Stage 2 «Зерттеу» (10–30 min)", call["system"])
+        self.assertNotIn("previous opinion (on", call["system"])
+        self.fake.replies = [self.answer(json.dumps({**DRAFT, "change": "Дескриптор нақтыланды"}))]
+        second = self.ind.expert_review(self.lesson)
+        self.assertEqual((second.previous, second.change), (first, "Дескриптор нақтыланды"))
+        self.assertIn("The previous opinion (on the earlier version)", self.fake.calls[-1]["system"])
+        self.assertEqual(self.lesson.review, None)  # the section 4–6 review is a different thing
+
+    def test_the_stepwise_trial_with_the_free_frame(self):
+        with self.assertRaises(services.LessonError):
+            self.ind.start_trial(self.lesson, grade="11", level="medium")  # not submitted
+        self.submitted()
+        self.fake.replies = [self.answer(json.dumps(SIM))]
+        trial = self.ind.start_trial(self.lesson, grade="11", level="medium")
+        self.assertEqual((trial.mode, len(trial.version.snapshot["stages"])), ("stepwise", 3))
+        with self.assertRaises(services.LessonError):
+            self.ind.start_trial(self.lesson, grade="11", level="high")  # one at a time
+        self.assertEqual(services.prefill(trial.version.snapshot["stages"][0])["explanation"], "<p>Қызығушылық</p>")
+        with self.assertRaises(services.LessonError):
+            self.ind.finish_trial(trial)
+        for order in (1, 2, 3):
+            turn = services.give_task(trial, order, explanation="<p>Т</p>", task="<p>Тапсырма</p>", minutes=5)
+            services.analyse(turn, analysis="Талдадым")
+        self.ind.finish_trial(trial)
+        self.lesson.refresh_from_db()
+        self.assertEqual(self.lesson.status, "tested")
+
+    def test_the_analysis_after_a_trial_and_the_teachers_confirmation(self):
+        trial = self.tried()
+        self.fake.replies = [self.answer(json.dumps(AFTER))]
+        review = self.ind.trial_review(trial)
+        self.assertEqual((review.kind, review.trial, set(review.items)), ("trial", trial, set(AFTER["items"])))
+        self.assertIn("A trial with the AI student (medium level, grade 11)", self.fake.calls[-1]["system"])
+        with self.assertRaises(services.LessonError):
+            self.ind.confirm(review, self.teacher, status="ok", score=11)
+        with self.assertRaises(services.LessonError):
+            self.ind.confirm(review, self.teacher, status="great", score=8)
+        self.ind.confirm(review, self.teacher, status="needs_more", comment="Уақытты қайта бөл", score="6")
+        self.lesson.refresh_from_db()
+        self.assertEqual((self.lesson.status, Review.objects.get(trial=trial).total), ("tested", 6))
+        self.ind.confirm(review, self.teacher, status="ok", score=9)
+        self.lesson.refresh_from_db()
+        self.assertEqual((self.lesson.status, Review.objects.get(trial=trial).total), ("final", 9))
+        with self.assertRaises(services.LessonError):
+            self.ind.expert_review(self.lesson)  # the final version is not changed
+
+    def test_a_real_audience_trial_entered_by_the_teacher(self):
+        fill_independent(self.lesson)
+        with self.assertRaises(services.LessonError):
+            self.ind.record_real_trial(self.lesson, self.teacher, grade="10", notes="  ")
+        trial = self.ind.record_real_trial(self.lesson, self.teacher, grade="10", notes="Оқушылар белсенді болды.")
+        self.assertEqual((trial.mode, trial.recorded_by, trial.level), ("real", self.teacher, ""))
+        self.assertIsNotNone(trial.finished_at)
+        self.fake.replies = [self.answer(json.dumps({**AFTER, "change": "Алдыңғымен салыстырғанда"}))]
+        self.ind.trial_review(trial)
+        self.assertIn("The teacher's protocol:\nОқушылар белсенді болды.", self.fake.calls[-1]["system"])

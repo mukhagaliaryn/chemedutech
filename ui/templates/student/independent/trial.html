@@ -1,0 +1,88 @@
+{% extends "layouts/student.html" %}
+{% load i18n %}
+{% comment %}
+A trial of the independent lesson (guide @S8 V, VI): the protocol — the AI student's answers and the student's
+analysis by stage, or the real audience's protocol entered by the teacher —, «Айгерім»'s expert analysis by seven
+directions (asked for after the trial; compared with the previous trial), the teacher's confirmation and final grade
+(the important decisions are the teacher's); «Improve» / «Try it out again».
+{% endcomment %}
+{% block title %}{% translate "Trial results" %} · {{ lesson.topic }} · ChemEduTech{% endblock %}
+{% block crumb %}{{ programme.title }} · {% blocktranslate with n=section.number %}Section {{ n }}{% endblocktranslate %}{% endblock %}
+{% block page_title %}{% translate "Analysing the professional results" %}{% endblock %}
+{% block main_class %}max-w-[1400px]{% endblock %}
+{% block content %}
+<a class="link inline-flex items-center gap-1.5 text-sm font-semibold" href="{% url 'student:independent' lesson.pk %}#trial">{% include "components/icons.html#arrow-left" %}{{ lesson.topic|default:_("Independent authorial lesson") }}</a>
+<section class="card flex flex-wrap items-center gap-4">
+  {% if trial.mode == "real" %}<span class="grid size-14 place-items-center rounded-full bg-primary-50 text-primary-700">{% include "components/icons.html#users" with size=26 %}</span>{% else %}{% include "student/designer/partials/ai_student.html" with level=trial.level size=56 %}{% endif %}
+  <div class="min-w-0 flex-1">
+    <h1 class="text-[20px] leading-7 font-extrabold">{% if trial.mode == "real" %}{% translate "A trial in a real audience" %}{% else %}{% translate "A trial with the AI student" %}: {{ trial.get_level_display|lower }}{% endif %}</h1>
+    <p class="text-[13px] text-ink-soft">{{ trial.started_at|date:"d.m.Y" }}{% if trial.grade %} · {% blocktranslate with g=trial.grade %}Grade {{ g }}{% endblocktranslate %}{% endif %} · v{{ trial.version.number }}{% if trial.recorded_by %} · {% translate "recorded by" %} {{ trial.recorded_by.get_full_name|default:trial.recorded_by.username }}{% endif %}</p>
+  </div>
+  {% if grade %}<span class="num text-[28px] font-extrabold text-success-700">{{ grade.total }}<span class="text-[16px] text-ink-faint"> / 10</span></span>{% endif %}
+</section>
+
+<div class="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_420px]">
+  <section class="card flex min-w-0 flex-col gap-3" aria-labelledby="pr-title">
+    <h2 id="pr-title" class="text-[16px] font-extrabold">{% translate "Trial protocol" %}</h2>
+    {% if trial.mode == "real" %}
+      <p class="text-[14px] leading-[22px] whitespace-pre-line">{{ trial.notes }}</p>
+    {% else %}
+      {% for t in turns %}
+        <div class="tone-{% if t.stage_order > 8 %}8{% else %}{{ t.stage_order }}{% endif %} flex flex-col gap-1.5 rounded-lg border border-(--tone)/25 p-3 text-[13px] leading-[19px]">
+          <p class="flex flex-wrap items-center gap-2 font-extrabold text-(--tone)">{{ t.stage_order }}. {{ t.stage_title }}<span class="badge {% if t.answer_type == 'correct' %}badge-success{% elif t.answer_type == 'partial' %}badge-warning{% else %}badge-danger{% endif %} text-[10.5px] font-bold">{{ t.get_answer_type_display }}</span></p>
+          <p><span class="font-bold">{% translate "Task" %}:</span> <span class="prose-lesson">{{ t.task|rich }}</span></p>
+          <p class="rounded-lg bg-primary-50/70 px-2.5 py-1.5"><span class="font-bold text-primary-700">{% translate "The AI student's answer" %}:</span> {{ t.answer }}</p>
+          <p><span class="font-bold">{% translate "The student's explanation" %}:</span> <span class="prose-lesson">{{ t.student_analysis|rich|default:"—" }}</span></p>
+          {% if t.correction %}<p><span class="font-bold">{% translate "Pedagogical correction made" %}:</span> <span class="prose-lesson">{{ t.correction|rich }}</span></p>{% endif %}
+        </div>
+      {% empty %}<p class="text-[13px] text-ink-faint">—</p>{% endfor %}
+      {% if open_stage %}<a class="btn btn-primary self-start" href="{% url 'student:independent_step' lesson.pk trial.pk open_stage %}">{% translate "Go on with the trial" %}</a>{% endif %}
+    {% endif %}
+  </section>
+
+  <aside class="flex flex-col gap-4 xl:sticky xl:top-20">
+    <section class="overflow-hidden rounded-xl border border-line bg-surface shadow-lift" aria-labelledby="an-title">
+      <header class="flex items-center gap-3 bg-[linear-gradient(120deg,var(--color-stage-lab),var(--color-primary-600))] px-4 py-3 text-white">
+        <span class="rounded-full ring-2 ring-white/40">{% include "student/independent/partials/aigerim.html" with size=48 %}</span>
+        <h2 id="an-title" class="text-[15px] font-extrabold">{% translate "Айгерім's expert analysis" %}</h2>
+      </header>
+      <div class="flex flex-col gap-3 p-4">
+        {% if review %}
+          <p class="flex flex-wrap items-center gap-2 text-[13px]"><span class="badge {% if review.status == 'ok' %}badge-success{% elif review.status == 'revise' %}badge-danger{% else %}badge-warning{% endif %} font-bold">{{ review.get_status_display }}</span>{% if review.focus %}<span class="text-ink-soft">{% translate "Direction checked" %}: {{ review.focus }}</span>{% endif %}</p>
+          <p class="text-[13px] leading-[19px]">{{ review.summary }}</p>
+          <ul class="flex flex-col gap-2 text-[12.5px] leading-[18px]">
+            {% for key, label in directions %}{% with item=review.items|get:key %}
+              <li class="rounded-[10px] bg-canvas px-2.5 py-2"><p class="flex items-center gap-1.5 font-bold"><span class="size-2 shrink-0 rounded-full {% if item.status == 'ok' %}bg-success-600{% elif item.status == 'revise' %}bg-danger-600{% else %}bg-warning-500{% endif %}"></span>{{ label }}</p><p class="mt-0.5 text-ink-soft">{{ item.text }}</p></li>
+            {% endwith %}{% endfor %}
+          </ul>
+          {% if review.change %}<p class="rounded-[8px] bg-primary-50 px-2.5 py-1.5 text-[12.5px]"><span class="font-bold">{% translate "Compared with the previous trial" %}:</span> {{ review.change }}</p>{% endif %}
+          <div class="rounded-lg border px-3 py-2 text-[12.5px] {% if review.teacher_status %}border-success-600/30 bg-success-50{% else %}border-line bg-canvas{% endif %}">
+            {% if review.teacher_status %}
+              <p class="font-bold text-success-700">{% blocktranslate with s=review.get_teacher_status_display %}Confirmed by the teacher: {{ s }}{% endblocktranslate %}{% if grade %} · {{ grade.total }}/10{% endif %}</p>
+              {% if review.teacher_comment %}<p class="mt-0.5">«{{ review.teacher_comment }}»</p>{% endif %}
+            {% else %}<p class="text-ink-soft">{% translate "Айгерім's opinion is an automated expert assessment; the final grade is confirmed by the teacher." %}</p>{% endif %}
+          </div>
+        {% elif trial.finished_at %}
+          <p class="text-[13px] text-ink-soft">{% translate "After the trial Айгерім gives a concrete expert opinion on how you conducted the lesson." %}</p>
+          <form method="post" action="{% url 'student:independent_trial_review' lesson.pk trial.pk %}" x-data="{ busy: false }" @submit="busy = true">{% csrf_token %}
+            <button type="submit" class="btn btn-primary w-full" :disabled="busy" {% if not ai_enabled %}disabled{% endif %}><span x-show="!busy">{% translate "Get Айгерім's analysis" %}</span><span x-show="busy" x-cloak>{% translate "Айгерім is reviewing…" %}</span></button>
+          </form>
+        {% else %}
+          <p class="text-[13px] text-ink-faint">{% translate "Finish the trial first." %}</p>
+        {% endif %}
+      </div>
+    </section>
+    {% if lesson.status != "final" and trial.finished_at %}
+      <section class="card flex flex-col gap-2">
+        <p class="text-[13px] text-ink-soft">{% translate "Analyse your actions and make the corrections needed, then try the lesson out again." %}</p>
+        <div class="flex flex-wrap gap-2"><a class="btn btn-secondary btn-sm" href="{% url 'student:independent' lesson.pk %}">{% include "components/icons.html#edit" %}{% translate "Improve" %}</a><a class="btn btn-primary btn-sm" href="{% url 'student:independent' lesson.pk %}#trial">{% include "components/icons.html#refresh" %}{% translate "Try it out again" %}</a></div>
+      </section>
+    {% elif lesson.status == "final" %}
+      <section class="card flex flex-col gap-2 border-2 border-success-600/30 bg-success-50/50">
+        <p class="text-[14px] font-extrabold text-success-700">{% translate "The cycle is complete." %}</p>
+        <form method="post" action="{% url 'student:independent_start' %}">{% csrf_token %}<button type="submit" class="btn btn-primary btn-sm">{% include "components/icons.html#plus" %}{% translate "Develop the next lesson" %}</button></form>
+      </section>
+    {% endif %}
+  </aside>
+</div>
+{% endblock %}

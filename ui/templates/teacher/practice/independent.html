@@ -1,0 +1,87 @@
+{% extends "layouts/teacher.html" %}
+{% load i18n %}
+{% comment %}An independent lesson of section 8 for the teacher (guide @S8; STEP-38): the lesson's details and stages,
+«Айгерім»'s latest opinions on the project, the trials (the AI student's protocol or the real audience's) with
+Айгерім's analysis and the teacher's confirmation — status, comment, the final grade 0–10 (the important decisions are
+the teacher's) —, and the form for a real-audience trial protocol.{% endcomment %}
+{% block title %}{{ lesson.topic|default:"—" }} · {% translate "Section 8 lessons" %} · ChemEduTech{% endblock %}
+{% block crumb %}{% translate "Section 8 lessons" %}{% endblock %}
+{% block page_title %}{{ lesson.owner.get_full_name|default:lesson.owner.username }}{% endblock %}
+{% block main_class %}max-w-[1400px]{% endblock %}
+{% block content %}
+<a class="link inline-flex items-center gap-1.5 text-sm font-semibold" href="{% url 'teacher:practice_queue' %}?what=independent">{% include "components/icons.html#arrow-left" %}{% translate "Section 8 lessons" %}</a>
+<div class="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_440px]">
+  <div class="flex min-w-0 flex-col gap-4">
+    <section class="card flex flex-col gap-2">
+      <p class="flex flex-wrap gap-2 text-sm"><span class="badge badge-info font-bold">{% blocktranslate with n=lesson.cycle %}Cycle {{ n }}{% endblocktranslate %}</span><span class="badge {% if lesson.status == 'final' %}badge-success{% else %}badge-neutral{% endif %} font-bold">{{ lesson.get_status_display }}</span>{% if lesson.grade %}<span>{% blocktranslate with g=lesson.grade %}Grade {{ g }}{% endblocktranslate %}</span>{% endif %}</p>
+      <h1 class="text-[22px] leading-7 font-extrabold">{{ lesson.topic|default:"—" }}</h1>
+      <p class="text-[13.5px]"><span class="font-bold">{% translate "Learning aim" %}:</span> {{ lesson.aim|default:"—" }}</p>
+      {% if lesson.details.idea %}<p class="text-[13.5px]"><span class="font-bold">{% translate "Authorial pedagogical idea" %}:</span> {{ lesson.details.idea }}</p>{% endif %}
+    </section>
+    <section class="card flex flex-col gap-2">
+      <h2 class="text-[16px] font-extrabold">{% translate "Lesson stages" %}</h2>
+      {% for r in stages %}
+        <details class="tone-{% if forloop.counter > 8 %}8{% else %}{{ forloop.counter }}{% endif %} rounded-lg border border-line">
+          <summary class="flex cursor-pointer items-center gap-2.5 px-3 py-2 text-[13.5px] font-bold"><span class="num grid size-7 place-items-center rounded-full bg-(--tone) text-[12px] text-white">{{ r.stage.order }}</span>{{ r.stage.title }} <span class="num text-[12px] text-(--tone)">{{ r.start }}–{{ r.end }}′</span></summary>
+          <div class="flex flex-col gap-1 px-3 pb-3 text-[13px]">{% for f in fields %}{% with v=r.stage.fields|get:f.key %}{% if v and v != f.key %}<p><span class="font-bold text-(--tone)">{{ f.label }}:</span> <span class="prose-lesson">{{ v|rich }}</span></p>{% endif %}{% endwith %}{% endfor %}</div>
+        </details>
+      {% empty %}<p class="text-[13px] text-ink-faint">—</p>{% endfor %}
+    </section>
+    {% for t in trials %}
+      <section class="card flex flex-col gap-3">
+        <h2 class="flex flex-wrap items-center gap-2 text-[16px] font-extrabold">{% blocktranslate with n=forloop.counter %}Trial {{ n }}{% endblocktranslate %} · {% if t.trial.mode == "real" %}{% translate "A real audience" %}{% else %}{% translate "The AI student" %}: {{ t.trial.get_level_display|lower }}{% endif %}
+          <span class="badge {% if t.trial.finished_at %}badge-success{% else %}badge-info{% endif %} text-[11px]">{% if t.trial.finished_at %}{% translate "Finished" %}{% else %}{% translate "in progress" %}{% endif %}</span>{% if t.grade %}<span class="num text-success-700">{{ t.grade.total }}/10</span>{% endif %}</h2>
+        {% if t.trial.mode == "real" %}<p class="text-[13.5px] whitespace-pre-line">{{ t.trial.notes }}</p>{% else %}
+          <ul class="flex flex-col gap-1.5 text-[12.5px] leading-[18px]">{% for turn in t.turns %}<li class="rounded-lg bg-canvas px-3 py-2"><span class="font-bold">{{ turn.stage_order }}. {{ turn.stage_title }}</span> · {{ turn.get_answer_type_display }}<br><span class="text-ink-soft">{% translate "The AI student's answer" %}:</span> {{ turn.answer|truncatechars:220 }}<br><span class="text-ink-soft">{% translate "The student's explanation" %}:</span> {{ turn.student_analysis|striptags|truncatechars:220 }}</li>{% endfor %}</ul>
+        {% endif %}
+        {% for rv in t.reviews %}
+          <div class="flex flex-col gap-2 rounded-lg border border-line p-3">
+            <p class="flex flex-wrap items-center gap-2 text-[13px] font-bold">{% translate "Айгерім's expert analysis" %}<span class="badge {% if rv.status == 'ok' %}badge-success{% elif rv.status == 'revise' %}badge-danger{% else %}badge-warning{% endif %} text-[11px]">{{ rv.get_status_display }}</span></p>
+            <p class="text-[13px]">{{ rv.summary }}</p>
+            <ul class="grid gap-1 text-[12px] sm:grid-cols-2">{% for key, label in directions %}{% with item=rv.items|get:key %}<li><span class="font-bold">{{ label }}:</span> {{ item.text|truncatechars:160 }}</li>{% endwith %}{% endfor %}</ul>
+            {% if rv.confirmed_at %}
+              <p class="text-[12.5px] text-success-700">{% blocktranslate with s=rv.get_teacher_status_display %}Confirmed by the teacher: {{ s }}{% endblocktranslate %}{% if rv.teacher_comment %} — «{{ rv.teacher_comment }}»{% endif %}</p>
+            {% endif %}
+            {% if editable %}
+              <form method="post" class="grid gap-2 border-t border-line pt-2 sm:grid-cols-[1fr_1fr_110px_auto] sm:items-end">{% csrf_token %}
+                <input type="hidden" name="action" value="confirm"><input type="hidden" name="review" value="{{ rv.pk }}">
+                <label class="flex flex-col gap-1"><span class="text-[12px] font-bold">{% translate "Status" %}</span><select name="status" class="input" required>{% for v, l in statuses %}<option value="{{ v }}" {% if v == rv.teacher_status|default:rv.status %}selected{% endif %}>{{ l }}</option>{% endfor %}</select></label>
+                <label class="flex flex-col gap-1"><span class="text-[12px] font-bold">{% translate "Comment" %}</span><input class="input" name="comment" value="{{ rv.teacher_comment }}"></label>
+                <label class="flex flex-col gap-1"><span class="text-[12px] font-bold">{% translate "Grade" %} /10</span><input class="input num" type="number" name="score" min="0" max="10" required value="{{ t.grade.total|default:'' }}"></label>
+                <button type="submit" class="btn btn-primary">{% include "components/icons.html#check" %}{% translate "Confirm" %}</button>
+              </form>
+            {% endif %}
+          </div>
+        {% empty %}<p class="text-[12.5px] text-ink-faint">{% translate "Айгерім's analysis appears when the student asks for it after the trial." %}</p>{% endfor %}
+      </section>
+    {% endfor %}
+  </div>
+  <aside class="flex flex-col gap-4 xl:sticky xl:top-20">
+    <section class="card flex flex-col gap-2">
+      <h2 class="flex items-center gap-2 text-[15px] font-extrabold">{% include "student/independent/partials/aigerim.html" with size=36 %}{% translate "Айгерім's opinions on the project" %}</h2>
+      {% for rv in drafts %}
+        <div class="flex flex-col gap-1.5 rounded-lg bg-canvas p-3 text-[12.5px]">
+          <p class="flex items-center gap-2 font-bold">{{ rv.created_at|date:"d.m H:i" }}<span class="badge {% if rv.status == 'ok' %}badge-success{% elif rv.status == 'revise' %}badge-danger{% else %}badge-warning{% endif %} text-[10.5px]">{{ rv.get_status_display }}</span>{% if rv.confirmed_at %}<span class="text-success-700">✓ {{ rv.get_teacher_status_display }}</span>{% endif %}</p>
+          <p>{{ rv.summary }}</p>
+          {% if editable and not rv.confirmed_at %}
+            <form method="post" class="flex flex-wrap items-end gap-2">{% csrf_token %}<input type="hidden" name="action" value="confirm"><input type="hidden" name="review" value="{{ rv.pk }}">
+              <select name="status" class="input h-9 w-auto text-[12.5px]">{% for v, l in statuses %}<option value="{{ v }}" {% if v == rv.status %}selected{% endif %}>{{ l }}</option>{% endfor %}</select>
+              <input class="input h-9 min-w-0 flex-1 text-[12.5px]" name="comment" placeholder="{% translate 'Comment' %}">
+              <button type="submit" class="btn btn-secondary btn-sm">{% translate "Confirm" %}</button></form>
+          {% endif %}
+        </div>
+      {% empty %}<p class="text-[12.5px] text-ink-faint">—</p>{% endfor %}
+    </section>
+    {% if editable %}
+      <form method="post" class="card flex flex-col gap-2">{% csrf_token %}
+        <input type="hidden" name="action" value="real">
+        <h2 class="text-[15px] font-extrabold">{% translate "A trial in a real audience" %}</h2>
+        <p class="text-[12.5px] text-ink-soft">{% translate "If you organised the trial with real students, enter its protocol: how the lesson went, the students' answers, the student's pedagogical actions." %}</p>
+        <label class="flex flex-col gap-1"><span class="text-[12px] font-bold">{% translate "Class" %}</span><select name="grade" class="input">{% for g in grade_choices %}<option value="{{ g }}" {% if g == lesson.grade %}selected{% endif %}>{{ g }}</option>{% endfor %}</select></label>
+        <label class="flex flex-col gap-1"><span class="text-[12px] font-bold">{% translate "Trial protocol" %}</span><textarea name="notes" rows="6" class="input" required></textarea></label>
+        <button type="submit" class="btn btn-primary">{% include "components/icons.html#save" %}{% translate "Save the protocol" %}</button>
+      </form>
+    {% endif %}
+  </aside>
+</div>
+{% endblock %}

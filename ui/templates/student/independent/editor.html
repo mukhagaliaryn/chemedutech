@@ -1,0 +1,219 @@
+{% extends "layouts/student.html" %}
+{% load i18n static %}
+{% comment %}
+«The independent authorial lesson development sheet» (guide @S8 II, III, V; picture image25): the cycle steps; the
+lesson's details (II); the stages editor — «Add a new stage», «Change the stage», «Delete the stage», 45 minutes at
+most in all; «ЖИ-сарапшы: Айгерім» — her latest opinion by six dimensions with the status and the direction checked,
+«See Айгерім's opinion» / «Check again», the teacher's confirmation; the chosen stage's content (saved by itself);
+«Submit for the trial», the trial with the AI student and the trials so far.
+{% endcomment %}
+{% block title %}{{ lesson.topic|default:_("Independent authorial lesson") }} · ChemEduTech{% endblock %}
+{% block crumb %}{{ programme.title }} · {% blocktranslate with n=section.number %}Section {{ n }}{% endblocktranslate %}{% endblock %}
+{% block page_title %}{% translate "Developing an independent authorial lesson" %}{% endblock %}
+{% block main_class %}max-w-[1600px]{% endblock %}
+{% block content %}
+<div class="flex flex-wrap items-center justify-between gap-3">
+  <a class="link inline-flex items-center gap-1.5 text-sm font-semibold" href="{% url 'student:section' section.number %}">{% include "components/icons.html#arrow-left" %}{{ section.number }}. {{ section.title }}</a>
+  <span class="flex items-center gap-2 text-sm"><span class="badge badge-info font-bold">{% blocktranslate with n=lesson.cycle %}Cycle {{ n }}{% endblocktranslate %}</span><span class="badge {% if lesson.status == 'final' %}badge-success{% else %}badge-neutral{% endif %} font-bold">{{ lesson.get_status_display }}</span></span>
+</div>
+<ol class="grid grid-cols-2 gap-1.5 sm:grid-cols-3 xl:grid-cols-6" aria-label="{% translate 'The cycle of professional development' %}">
+  {% for st in steps %}
+    <li class="tone-{{ forloop.counter }} flex items-center gap-2 rounded-full border py-1.5 pr-3 pl-1.5 text-[12.5px] font-bold {% if forloop.counter == 1 and lesson.status == 'draft' or forloop.counter == 2 and review and lesson.status == 'draft' or forloop.counter == 3 and lesson.status == 'submitted' or forloop.counter == 4 and lesson.status == 'tested' %}border-(--tone) bg-(--tone) text-white{% else %}border-(--tone)/25 bg-(--tone-50) text-(--tone){% endif %}"><span class="num grid size-6 shrink-0 place-items-center rounded-full bg-white/90 text-[11.5px] text-(--tone)">{{ forloop.counter }}</span>{{ st }}</li>
+  {% endfor %}
+</ol>
+
+<div class="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] 2xl:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)_minmax(0,1fr)]">
+  {# ---- II the details ---- #}
+  <form method="post" class="card flex flex-col gap-3" aria-labelledby="det-title">{% csrf_token %}
+    <h2 id="det-title" class="text-[16px] font-extrabold">{% translate "The lesson's main details" %}</h2>
+    <div class="grid gap-3 sm:grid-cols-2">
+      <label class="flex flex-col gap-1"><span class="text-[12.5px] font-bold">{% translate "Education programme" %}</span><input class="input" name="programme" value="{{ lesson.details.programme|default:'' }}" {% if locked %}disabled{% endif %}></label>
+      <label class="flex flex-col gap-1"><span class="text-[12.5px] font-bold">{% translate "Study year and group" %}</span><input class="input" name="course_group" value="{{ lesson.details.course_group|default:'' }}" {% if locked %}disabled{% endif %}></label>
+    </div>
+    <label class="flex flex-col gap-1"><span class="text-[12.5px] font-bold">{% translate "Lesson topic" %}</span><input class="input" name="topic" maxlength="255" value="{{ lesson.topic }}" {% if locked %}disabled{% endif %}></label>
+    <div class="flex flex-wrap items-center gap-2"><span class="text-[12.5px] font-bold">{% translate "Class" %}</span>
+      {% for g in grades %}<label class="cursor-pointer"><input type="radio" name="grade" value="{{ g }}" class="peer sr-only" {% if lesson.grade == g %}checked{% endif %} {% if locked %}disabled{% endif %}><span class="num grid h-8 w-10 place-items-center rounded-[10px] border border-line-strong text-[13px] font-bold peer-checked:border-primary-600 peer-checked:bg-primary-600 peer-checked:text-white">{{ g }}</span></label>{% endfor %}
+      <span class="ml-auto text-[12.5px] text-ink-soft">{% translate "Lesson duration" %}: {% blocktranslate with n=lesson.duration_min %}{{ n }} min{% endblocktranslate %}</span>
+    </div>
+    <label class="flex flex-col gap-1"><span class="text-[12.5px] font-bold">{% translate "Learning aim" %}</span><textarea class="input" name="aim" rows="2" {% if locked %}disabled{% endif %}>{{ lesson.aim }}</textarea></label>
+    <div class="flex flex-col gap-1" x-data><span class="text-[12.5px] font-bold">{% translate "Expected results" %}</span><textarea name="outcomes" rows="2" class="input" x-rich.answer{% if locked %}="true"{% endif %} data-rt="line" aria-label="{% translate 'Expected results' %}">{{ lesson.outcomes }}</textarea></div>
+    <label class="flex flex-col gap-1"><span class="text-[12.5px] font-bold">{% translate "Authorial pedagogical idea" %}</span><textarea class="input" name="idea" rows="2" {% if locked %}disabled{% endif %}>{{ lesson.details.idea|default:'' }}</textarea></label>
+    <div class="grid gap-3 sm:grid-cols-2">
+      <label class="flex flex-col gap-1"><span class="text-[12.5px] font-bold">{% translate "Teaching methods used" %}</span><textarea class="input" name="method" rows="2" {% if locked %}disabled{% endif %}>{{ lesson.method }}</textarea></label>
+      <label class="flex flex-col gap-1"><span class="text-[12.5px] font-bold">{% translate "Digital tools" %}</span><textarea class="input" name="digital_tools" rows="2" {% if locked %}disabled{% endif %}>{{ lesson.digital_tools }}</textarea></label>
+    </div>
+    <label class="flex flex-col gap-1"><span class="text-[12.5px] font-bold">{% translate "Lab or research task" %}</span><textarea class="input" name="lab_task" rows="2" {% if locked %}disabled{% endif %}>{{ lesson.details.lab_task|default:'' }}</textarea></label>
+    <div class="grid gap-3 sm:grid-cols-2">
+      <label class="flex flex-col gap-1"><span class="text-[12.5px] font-bold">{% translate "Assessment criteria" %}</span><textarea class="input" name="assessment" rows="2" {% if locked %}disabled{% endif %}>{{ lesson.details.assessment|default:'' }}</textarea></label>
+      <label class="flex flex-col gap-1"><span class="text-[12.5px] font-bold">{% translate "Way of feedback" %}</span><textarea class="input" name="feedback_way" rows="2" {% if locked %}disabled{% endif %}>{{ lesson.details.feedback_way|default:'' }}</textarea></label>
+    </div>
+    {% if not locked %}<div class="flex justify-end"><button type="submit" class="btn btn-primary">{% include "components/icons.html#save" %}{% translate "Save the project" %}</button></div>{% endif %}
+  </form>
+
+  {# ---- the stages editor ---- #}
+  <section class="card flex flex-col gap-3" aria-labelledby="st-title">
+    <div class="flex items-center justify-between gap-2">
+      <h2 id="st-title" class="text-[16px] font-extrabold">{% translate "Lesson stages (editor)" %}</h2>
+      <span class="num rounded-full px-2.5 py-1 text-[12.5px] font-extrabold {% if total > lesson.duration_min %}bg-danger-50 text-danger-700{% elif total == lesson.duration_min %}bg-success-50 text-success-700{% else %}bg-canvas text-ink-soft{% endif %}">{{ total }} / {{ lesson.duration_min }} {% translate "min" %}</span>
+    </div>
+    <div class="flex h-2 gap-[2px] overflow-hidden rounded-full bg-surface-sunken" aria-hidden="true">{% for r in stages %}<span class="tone-{% if forloop.counter > 8 %}8{% else %}{{ forloop.counter }}{% endif %} block h-full bg-(--tone)" style="width: {% widthratio r.stage.minutes lesson.duration_min 100 %}%"></span>{% endfor %}</div>
+    <ol class="flex flex-col gap-1.5">
+      {% for r in stages %}{% with s=r.stage %}
+        <li class="tone-{% if forloop.counter > 8 %}8{% else %}{{ forloop.counter }}{% endif %} flex items-center gap-2 rounded-lg border px-2.5 py-2 {% if stage and s.pk == stage.pk %}border-(--tone) bg-(--tone-50){% else %}border-line{% endif %}">
+          <span class="num grid size-7 shrink-0 place-items-center rounded-full bg-(--tone) text-[12px] font-extrabold text-white">{{ s.order }}</span>
+          <a class="min-w-0 flex-1" href="{% url 'student:independent_stage' lesson.pk s.order %}"><span class="block truncate text-[13.5px] font-bold">{{ s.title }}</span><span class="num text-[11.5px] font-semibold text-(--tone)">{{ r.start }}–{{ r.end }}′</span></a>
+          <span class="num shrink-0 text-[12.5px] font-bold">{{ s.minutes }} {% translate "min" %}</span>
+          {% if not locked %}
+            <a class="btn btn-ghost btn-sm px-1.5" href="{% url 'student:independent_stage' lesson.pk s.order %}#content" aria-label="{% translate 'Change the stage' %}: {{ s.title }}" title="{% translate 'Change the stage' %}">{% include "components/icons.html#edit" with size=14 %}</a>
+            <form method="post" action="{% url 'student:independent_stage_delete' lesson.pk s.order %}">{% csrf_token %}
+              {% translate "Delete the stage?" as d_title %}{% translate "Its content is removed from the lesson." as d_text %}{% translate "Delete" as d_label %}
+              <button type="submit" class="btn btn-ghost btn-sm px-1.5 text-danger-600" aria-label="{% translate 'Delete the stage' %}: {{ s.title }}" title="{% translate 'Delete the stage' %}" data-confirm="{{ d_title }}" data-confirm-text="{{ d_text }}" data-confirm-label="{{ d_label }}" data-confirm-variant="danger" data-confirm-icon="trash">{% include "components/icons.html#trash" with size=14 %}</button>
+            </form>
+          {% endif %}
+        </li>
+      {% endwith %}{% empty %}
+        <li class="rounded-lg bg-canvas px-3 py-4 text-center text-[13px] text-ink-soft">{% translate "You form the lesson structure yourself: the names, number, content and time of the stages. In all 45 minutes at most." %}</li>
+      {% endfor %}
+    </ol>
+    {% if not locked %}
+      <form method="post" action="{% url 'student:independent_stage_add' lesson.pk %}" class="flex flex-wrap items-end gap-2 border-t border-line pt-3">{% csrf_token %}
+        <label class="flex min-w-[160px] flex-1 flex-col gap-1"><span class="text-[12px] font-bold">{% translate "Stage title" %}</span><input class="input" name="title" maxlength="255" required></label>
+        <label class="flex w-24 flex-col gap-1"><span class="text-[12px] font-bold">{% translate "Minutes" %}</span><input class="input num" type="number" name="minutes" min="1" max="45" required value="5"></label>
+        <button type="submit" class="btn btn-primary">{% include "components/icons.html#plus" %}{% translate "Add a new stage" %}</button>
+      </form>
+    {% endif %}
+  </section>
+
+  {# ---- III «Айгерім» ---- #}
+  <section id="expert" class="flex scroll-mt-24 flex-col overflow-hidden rounded-xl border border-line bg-surface shadow-lift xl:col-span-2 2xl:col-span-1" aria-labelledby="ag-title">
+    <header class="relative flex items-start gap-4 bg-[linear-gradient(120deg,var(--color-stage-lab),var(--color-primary-600)_70%,var(--color-stage-video))] px-5 py-4 text-white">
+      <span class="rounded-full ring-4 ring-white/40">{% include "student/independent/partials/aigerim.html" with size=72 %}</span>
+      <div class="min-w-0">
+        <h2 id="ag-title" class="text-[17px] font-extrabold">{% translate "AI expert: Айгерім" %}</h2>
+        <p class="mt-1 text-[12.5px] leading-[18px] text-white/90">{% translate "Hello! I am Айгерім. I review your independent authorial lesson and give my professional opinion. You develop the material yourself; I give your pedagogical decisions a concrete assessment." %}</p>
+      </div>
+    </header>
+    <div class="flex flex-col gap-3 p-4">
+      <p class="text-[12px] font-extrabold tracking-wide text-ink-faint uppercase">{% translate "The directions of the expert review" %}</p>
+      <ul class="grid grid-cols-2 gap-1.5 text-[12px] font-semibold sm:grid-cols-3">
+        {% for key, label in dimensions %}{% with item=review.items|get:key %}
+          <li class="flex items-center gap-1.5 rounded-[10px] bg-canvas px-2 py-1.5">
+            {% if review %}<span class="size-2.5 shrink-0 rounded-full {% if item.status == 'ok' %}bg-success-600{% elif item.status == 'revise' %}bg-danger-600{% else %}bg-warning-500{% endif %}"></span>{% else %}<span class="size-2.5 shrink-0 rounded-full bg-line-strong"></span>{% endif %}{{ label }}
+          </li>
+        {% endwith %}{% endfor %}
+      </ul>
+      {% if review %}
+        <div class="flex flex-col gap-2 rounded-lg border p-3 {% if review.status == 'ok' %}border-success-600/30 bg-success-50/50{% elif review.status == 'revise' %}border-danger-600/30 bg-danger-50/50{% else %}border-warning-500/40 bg-warning-50/60{% endif %}">
+          <p class="flex flex-wrap items-center gap-2 text-[13px]"><span class="font-extrabold">{% translate "Status" %}: {{ review.get_status_display }}</span>{% if review.focus %}<span class="text-ink-soft">· {% translate "Direction checked" %}: {{ review.focus }}</span>{% endif %}</p>
+          <p class="text-[13px] leading-[19px]">{{ review.summary }}</p>
+          {% if review.change %}<p class="rounded-[8px] bg-white/70 px-2.5 py-1.5 text-[12.5px]"><span class="font-bold">{% translate "Compared with the previous version" %}:</span> {{ review.change }}</p>{% endif %}
+          <p class="text-[11.5px] {% if review.teacher_status %}text-success-700{% else %}text-ink-faint{% endif %}">{% if review.teacher_status %}{% blocktranslate with s=review.get_teacher_status_display %}Confirmed by the teacher: {{ s }}{% endblocktranslate %}{% if review.teacher_comment %} — «{{ review.teacher_comment }}»{% endif %}{% else %}{% translate "Not final until the teacher confirms it." %}{% endif %}</p>
+        </div>
+        <details class="rounded-lg border border-line">
+          <summary class="cursor-pointer px-3 py-2 text-[13px] font-bold">{% translate "The opinion by dimension" %}</summary>
+          <ul class="flex flex-col gap-2 px-3 pb-3 text-[12.5px] leading-[18px]">
+            {% for key, label in dimensions %}{% with item=review.items|get:key %}
+              <li><p class="flex items-center gap-1.5 font-bold"><span class="size-2 rounded-full {% if item.status == 'ok' %}bg-success-600{% elif item.status == 'revise' %}bg-danger-600{% else %}bg-warning-500{% endif %}"></span>{{ label }}</p><p class="text-ink-soft">{{ item.text }}</p></li>
+            {% endwith %}{% endfor %}
+          </ul>
+        </details>
+        {% if review.strengths %}<div><p class="flex items-center gap-1.5 text-[12.5px] font-extrabold text-success-700">{% include "components/icons.html#check" with size=13 %}{% translate "Strengths" %}</p><ul class="mt-1 list-disc pl-5 text-[12.5px] leading-[18px]">{% for x in review.strengths %}<li>{{ x }}</li>{% endfor %}</ul></div>{% endif %}
+        {% if review.suggestions %}<div><p class="flex items-center gap-1.5 text-[12.5px] font-extrabold text-warning-700">{% include "components/icons.html#sparkle" with size=13 %}{% translate "Suggestions" %}</p><ul class="mt-1 list-disc pl-5 text-[12.5px] leading-[18px]">{% for x in review.suggestions %}<li>{{ x }}</li>{% endfor %}</ul></div>{% endif %}
+      {% endif %}
+      {% if not locked %}
+        <form method="post" action="{% url 'student:independent_expert' lesson.pk %}" x-data="{ busy: false }" @submit="busy = true">{% csrf_token %}
+          <button type="submit" class="btn btn-primary w-full" :disabled="busy" {% if not ai_enabled or not stages %}disabled{% endif %}>
+            <span x-show="!busy" class="inline-flex items-center gap-2">{% include "components/icons.html#eye" %}{% if review %}{% translate "Check again" %}{% else %}{% translate "See Айгерім's opinion" %}{% endif %}</span>
+            <span x-show="busy" x-cloak>{% translate "Айгерім is reviewing…" %}</span>
+          </button>
+        </form>
+        <p class="text-[11.5px] text-ink-faint">{% translate "Айгерім does not write the lesson for you, does not do the tasks and offers no ready authorial solution." %} · {% blocktranslate with n=remaining %}{{ n }} requests left today{% endblocktranslate %}</p>
+      {% endif %}
+    </div>
+  </section>
+</div>
+
+{# ---- the chosen stage's content ---- #}
+{% if stage %}
+  {{ editor_opts|json_script:"editor-opts" }}
+  <section id="content" class="tone-{% if stage.order > 8 %}8{% else %}{{ stage.order }}{% endif %} card flex scroll-mt-24 flex-col gap-0 overflow-hidden p-0" aria-labelledby="ct-title"
+           x-data="stageEditor(JSON.parse(document.getElementById('editor-opts').textContent))">
+    <div class="flex flex-wrap gap-1.5 border-b border-line bg-canvas px-4 py-2.5" role="tablist" aria-label="{% translate 'Lesson stages' %}">
+      {% for r in stages %}<a role="tab" href="{% url 'student:independent_stage' lesson.pk r.stage.order %}#content" class="tone-{% if forloop.counter > 8 %}8{% else %}{{ forloop.counter }}{% endif %} inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-[12.5px] font-bold {% if r.stage.pk == stage.pk %}bg-(--tone) text-white{% else %}bg-surface text-(--tone) ring-1 ring-(--tone)/30{% endif %}" {% if r.stage.pk == stage.pk %}aria-selected="true"{% endif %}><span class="num">{{ r.stage.order }}</span>{{ r.stage.title|truncatechars:22 }}</a>{% endfor %}
+    </div>
+    <div class="flex flex-col gap-3 p-5">
+      <div class="grid gap-3 sm:grid-cols-[1fr_130px]">
+        <label class="flex flex-col gap-1"><span class="text-[13px] font-bold">{% translate "Stage title" %}</span><input id="ct-title" class="input" x-model="title" maxlength="255" {% if locked %}disabled{% endif %}></label>
+        <label class="flex flex-col gap-1"><span class="text-[13px] font-bold">{% translate "Minutes" %}</span><input class="input num" type="number" min="1" max="45" x-model.number="minutes" {% if locked %}disabled{% endif %}></label>
+      </div>
+      <div class="grid gap-3 lg:grid-cols-2">
+        {% for f in fields %}
+          <div class="flex flex-col gap-1.5 rounded-lg border border-line p-3 focus-within:border-(--tone)" data-field="{{ f.key }}" @focusin="active = '{{ f.key }}'">
+            <span class="flex items-center gap-1.5 text-[12.5px] font-extrabold text-(--tone)">{% include "components/icons.html#"|add:f.icon with size=13 %}{{ f.label }}</span>
+            <textarea rows="2" class="input" x-model="fields.{{ f.key }}" x-rich.answer{% if locked %}="true"{% endif %} data-rt="short" aria-label="{{ f.label }}"></textarea>
+          </div>
+        {% endfor %}
+      </div>
+      <p class="inline-flex items-center gap-2 text-[12.5px] font-semibold" :class="state === 'failed' ? 'text-danger-600' : 'text-ink-soft'" aria-live="polite">
+        <span class="size-2 rounded-full" :class="{ 'bg-success-600': state === 'saved', 'bg-warning-500 animate-pulse': state === 'dirty' || state === 'saving', 'bg-danger-600': state === 'failed' }"></span><span x-text="stateText"></span>
+        <span class="num ml-2 text-ink-faint">{% translate "Lesson" %}: <span x-text="total">{{ total }}</span> / {{ lesson.duration_min }} {% translate "min" %}</span>
+      </p>
+    </div>
+  </section>
+{% endif %}
+
+{# ---- V the trial ---- #}
+<section id="trial" class="card flex scroll-mt-24 flex-col gap-4" aria-labelledby="trl-title">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <h2 id="trl-title" class="text-[17px] font-extrabold">{% translate "Trying the independent lesson out" %}</h2>
+    {% if schedule.trial_on %}<span class="inline-flex items-center gap-1.5 rounded-full bg-primary-50 px-3 py-1 text-[12.5px] font-bold text-primary-700">{% include "components/icons.html#timer" with size=13 %}{% translate "Trial date" %}: {{ schedule.trial_on|date:"d.m.Y" }}</span>{% endif %}
+  </div>
+  {% if lesson.status == "draft" %}
+    {% if problems %}
+      <ul class="flex flex-col gap-1 text-[13px] text-warning-700">
+        {% for p in problems %}<li class="flex items-center gap-1.5">{% include "components/icons.html#warn" with size=13 %}{% if p.code == "details" %}{% translate "Fill in the topic, the class and the learning aim." %}{% elif p.code == "no_stages" %}{% translate "Add the lesson stages." %}{% elif p.code == "empty_stage" %}<a class="link" href="{% url 'student:independent_stage' lesson.pk p.order %}#content">{% blocktranslate with n=p.order t=p.title %}Stage {{ n }} «{{ t }}» is empty{% endblocktranslate %}</a>{% else %}{% blocktranslate with a=p.total b=p.duration %}The stages take {{ a }} minutes — more than {{ b }}.{% endblocktranslate %}{% endif %}</li>{% endfor %}
+      </ul>
+    {% endif %}
+    <form method="post" action="{% url 'student:independent_submit' lesson.pk %}" class="flex flex-wrap items-center justify-between gap-3">{% csrf_token %}
+      <p class="max-w-[640px] text-[13px] text-ink-soft">{% translate "When the lesson is fully developed, the system checks that its structure is complete; the lesson opens for the trial on the date set." %}</p>
+      <button type="submit" class="btn btn-primary" {% if problems %}disabled{% endif %}>{% include "components/icons.html#send" %}{% translate "Submit for the trial" %}</button>
+    </form>
+  {% elif not locked %}
+    {% if open_trial %}
+      <a class="btn btn-primary self-start" href="{% url 'student:independent_step' lesson.pk open_trial.pk 1 %}">{% include "components/icons.html#play" %}{% translate "Go on with the trial" %}</a>
+    {% else %}
+      <form method="post" action="{% url 'student:independent_trial_start' lesson.pk %}" class="flex flex-col gap-3">{% csrf_token %}
+        <div class="flex flex-wrap items-center gap-2"><span class="text-[13px] font-bold">{% translate "Class" %}</span>
+          {% for g in grades %}<label class="cursor-pointer"><input type="radio" name="grade" value="{{ g }}" class="peer sr-only" {% if lesson.grade == g %}checked{% endif %} required><span class="num grid h-9 w-11 place-items-center rounded-[10px] border border-line-strong text-[14px] font-bold peer-checked:border-primary-600 peer-checked:bg-primary-600 peer-checked:text-white">{{ g }}</span></label>{% endfor %}
+        </div>
+        <div class="grid gap-2 md:grid-cols-3">
+          {% for value, text in levels %}
+            <label class="group flex cursor-pointer items-center gap-3 rounded-lg border-2 border-line p-3 has-checked:border-stage-video has-checked:bg-ai-50/50">
+              <input type="radio" name="level" value="{{ value }}" class="sr-only" {% if value == "medium" %}checked{% endif %}>
+              {% include "student/designer/partials/ai_student.html" with level=value size=40 %}
+              <span class="text-[13.5px] font-extrabold">{% if value == "high" %}{% translate "High level" %}{% elif value == "medium" %}{% translate "Medium level" %}{% else %}{% translate "Low level" %}{% endif %}</span>
+            </label>
+          {% endfor %}
+        </div>
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <p class="text-[12.5px] text-ink-soft">{% translate "The trial goes stage by stage with the AI student, or the teacher organises it in a real audience and enters its protocol." %}</p>
+          <button type="submit" class="btn bg-success-600 text-white hover:bg-success-700">{% include "components/icons.html#play" %}{% if trials %}{% translate "Try it out again" %}{% else %}{% translate "Start the trial" %}{% endif %}</button>
+        </div>
+      </form>
+    {% endif %}
+  {% endif %}
+  {% if trials %}
+    <ol class="flex flex-col gap-2">
+      {% for t in trials %}
+        <li class="flex flex-wrap items-center gap-3 rounded-lg border border-line px-3 py-2.5 text-[13px]">
+          <span class="font-bold">{% if t.mode == "real" %}{% translate "A real audience" %}{% else %}{% translate "The AI student" %}: {{ t.get_level_display|lower }}{% endif %}</span>
+          <span class="text-ink-soft">{{ t.started_at|date:"d.m.Y" }}{% if t.grade %} · {% blocktranslate with g=t.grade %}Grade {{ g }}{% endblocktranslate %}{% endif %}</span>
+          <span class="badge {% if t.finished_at %}badge-success{% else %}badge-info{% endif %} text-[11px] font-bold">{% if t.finished_at %}{% translate "Finished" %}{% else %}{% translate "in progress" %}{% endif %}</span>
+          <a class="btn btn-secondary btn-sm ml-auto" href="{% if t.finished_at or t.mode == 'real' %}{% url 'student:independent_trial' lesson.pk t.pk %}{% else %}{% url 'student:independent_step' lesson.pk t.pk 1 %}{% endif %}">{% translate "Open" %}</a>
+        </li>
+      {% endfor %}
+    </ol>
+  {% endif %}
+</section>
+{% endblock %}
+{% block scripts %}<script defer src="{% static 'js/designer.js' %}"></script>{% rich_text_assets %}{% endblock %}

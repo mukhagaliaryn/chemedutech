@@ -13,6 +13,7 @@ from .portfolio import (
 )
 from .programme import Programme, Section
 from .progress import ProgrammeEnrollment, SectionEvent, SectionProgress
+from .schedule import SectionSchedule
 from .video import SectionVideo, VideoWatch
 
 __all__ = [
@@ -35,6 +36,7 @@ __all__ = [
     "Section",
     "SectionEvent",
     "SectionProgress",
+    "SectionSchedule",
     "SectionVideo",
     "VideoWatch",
 ]

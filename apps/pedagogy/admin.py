@@ -1,7 +1,17 @@
 from django.contrib import admin
 from unfold.admin import ModelAdmin, TabularInline
 
-from .models import Lesson, LessonEvent, LessonStage, LessonTemplate, LessonVersion, TemplateStage, Trial, TrialTurn
+from .models import (
+    ExpertReview,
+    Lesson,
+    LessonEvent,
+    LessonStage,
+    LessonTemplate,
+    LessonVersion,
+    TemplateStage,
+    Trial,
+    TrialTurn,
+)
 
 
 class ReadOnly:
@@ -82,3 +92,11 @@ class TrialAdmin(ReadOnly, ModelAdmin):
     list_filter = ("level",)
     search_fields = ("lesson__owner__username",)
     inlines = [TrialTurnInline]
+
+
+@admin.register(ExpertReview)
+class ExpertReviewAdmin(ReadOnly, ModelAdmin):
+    list_display = ("created_at", "lesson", "kind", "status", "teacher_status", "confirmed_by")
+    list_filter = ("kind", "status", "teacher_status")
+    search_fields = ("lesson__owner__username", "lesson__topic")
+    list_select_related = ("lesson__owner", "confirmed_by")

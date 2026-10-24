@@ -17,6 +17,12 @@ class Notification(models.Model):
         UNLOCKED = "unlocked", _("The teacher opened a stage for you")
         CERTIFICATE = "certificate", _("Certificate issued")
         SECTION = "section", _("A programme section is open")
+        # section 8 (guide @S8 IV)
+        ICPAI_TASK = "icpai_task", _("A new task")
+        ICPAI_DEADLINE = "icpai_deadline", _("The deadline for handing in the work")
+        ICPAI_TRIAL = "icpai_trial", _("The trial date")
+        ICPAI_EXPERT = "icpai_expert", _("An expert opinion")
+        ICPAI_RETRIAL = "icpai_retrial", _("Trying it out again")
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="notifications", verbose_name=_("user")

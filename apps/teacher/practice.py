@@ -5,15 +5,20 @@ the finished trials of the microlessons (@S6 VI; STEP-36, each trial graded apar
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils.dateparse import parse_date
 from django.utils.translation import gettext as _
 
 from apps.courses import selectors as course_selectors
+from apps.feedback.models import Notification
 from apps.pedagogy import frames
+from apps.pedagogy import selectors as pedagogy_selectors
 from apps.pedagogy import services as pedagogy
-from apps.pedagogy.models import Lesson, Review, Trial
+from apps.pedagogy.models import ExpertReview, Lesson, Review, Trial
+from apps.pedagogy.services import independent as ind
 from apps.programme import services as programme_services
-from apps.programme.models import FEEDBACK_DIRECTIONS, PARTS, Portfolio, PortfolioFeedback
+from apps.programme.models import FEEDBACK_DIRECTIONS, PARTS, Portfolio, PortfolioFeedback, Section, SectionSchedule
 from apps.programme.services import portfolio as portfolio_services
+from apps.programme.services import schedule as schedule_services
 
 from .views import teacher_only
 
@@ -49,7 +54,9 @@ def _micro_trials(request):
 def queue(request):
     """Section 5 practices or section 6 microlesson trials: «To grade» first, then «Graded»."""
     show = request.GET.get("show", "new")
-    what = request.GET.get("what") if request.GET.get("what") in ("micro", "portfolio") else "practice"
+    what = request.GET.get("what") if request.GET.get("what") in ("micro", "portfolio", "independent") else "practice"
+    if what == "independent":
+        return _independent_queue(request, show)
     practices, trials, portfolios = _practices(request), _micro_trials(request), _portfolios(request)
     waiting = portfolios.filter(status=Portfolio.Status.SUBMITTED)
     counts = {
@@ -172,4 +179,97 @@ def portfolio(request, pk):
         "portfolio": item, "version": version, "data": version.snapshot if version else {}, "parts": PARTS,
         "feedback_directions": FEEDBACK_DIRECTIONS, "feedbacks": list(item.feedbacks.select_related("teacher")),
         "statuses": PortfolioFeedback.Status.choices, "waiting": item.status == Portfolio.Status.SUBMITTED,
+    })  # fmt: skip
+
+
+# --- section 8: the independent lessons, «Айгерім», the deadlines (guide @S8; STEP-38) -----------------------------
+
+
+def _independent(request):
+    return Lesson.objects.filter(
+        kind=Lesson.Kind.INDEPENDENT, owner__in=course_selectors.teacher_students(request.user)
+    ).select_related("owner__student_profile__group")
+
+
+def _independent_section(request):
+    """The section 8 of the programmes on the teacher's courses."""
+    return (
+        Section.objects.filter(
+            kind=Section.Kind.INDEPENDENT, programme__course__in=course_selectors.teacher_courses(request.user)
+        )
+        .select_related("programme")
+        .first()
+    )
+
+
+def _independent_queue(request, show):
+    """Section 8: the groups' dates (hand-in and trial) and the independent lessons — those with an analysis after a
+    trial waiting for the teacher's confirmation first."""
+    section = _independent_section(request)
+    groups = list(course_selectors.teacher_groups(request.user))
+    if request.method == "POST" and section:
+        group = next((g for g in groups if str(g.pk) == request.POST.get("group")), None)
+        if group:
+            schedule_services.set_schedule(
+                section, group, request.user,
+                hand_in_on=parse_date(request.POST.get("hand_in_on") or "") or None,
+                trial_on=parse_date(request.POST.get("trial_on") or "") or None,
+            )  # fmt: skip
+            messages.success(request, _("The dates are saved; the students are notified."))
+        return redirect(f"{reverse('teacher:practice_queue')}?what=independent")
+    lessons = _independent(request)
+    waiting = lessons.filter(
+        expert_reviews__kind=ExpertReview.Kind.TRIAL, expert_reviews__confirmed_at__isnull=True
+    ).distinct()
+    rows = (waiting if show != "graded" else lessons.exclude(pk__in=waiting)).order_by("-updated_at")[:300]
+    schedules = {s.group_id: s for s in SectionSchedule.objects.filter(section=section)} if section else {}
+    return render(request, "teacher/practice/queue.html", {
+        "rows": rows, "show": show, "what": "independent", "new": waiting.count(),
+        "graded": lessons.exclude(pk__in=waiting).count(),
+        "counts": {"practice": _practices(request).filter(reviews__isnull=True).count(),
+                   "micro": _micro_trials(request).filter(reviews__isnull=True).count(),
+                   "portfolio": _portfolios(request).filter(status=Portfolio.Status.SUBMITTED).count(),
+                   "independent": waiting.count()},
+        "section8": section, "group_rows": [{"group": g, "schedule": schedules.get(g.pk)} for g in groups],
+    })  # fmt: skip
+
+
+@teacher_only
+def independent(request, pk):
+    """An independent lesson: the details and stages, the trials (protocols), «Айгерім»'s opinions with the
+    teacher's confirmation (status, comment; for an analysis after a trial the final grade 0–10), a real-audience
+    trial protocol."""
+    lesson = get_object_or_404(_independent(request), pk=pk)
+    if request.method == "POST":
+        action = request.POST.get("action")
+        try:
+            if action == "confirm":
+                review = get_object_or_404(lesson.expert_reviews, pk=request.POST.get("review"))
+                ind.confirm(review, request.user, status=request.POST.get("status", ""),
+                            comment=request.POST.get("comment", ""), score=request.POST.get("score"))  # fmt: skip
+                if review.kind == ExpertReview.Kind.TRIAL and review.teacher_status != ExpertReview.Status.OK:
+                    schedule_services.notify(lesson.owner, Notification.Kind.ICPAI_RETRIAL)
+                programme_services.refresh(lesson.owner)
+                messages.success(request, _("Confirmed."))
+            elif action == "real":
+                ind.record_real_trial(lesson, request.user, grade=request.POST.get("grade", ""),
+                                      notes=request.POST.get("notes", ""))  # fmt: skip
+                messages.success(request, _("The real-audience trial protocol is saved."))
+        except pedagogy.LessonError as exc:
+            messages.error(request, {
+                "score": _("Give a grade from 0 to 10."), "status": _("Choose the status."),
+                "empty": _("Write the protocol."),
+            }.get(str(exc), _("The final version cannot be changed.")))  # fmt: skip
+        return redirect("teacher:independent", lesson.pk)
+    grades = {r.trial_id: r for r in Review.objects.filter(lesson=lesson, trial__isnull=False)}
+    trials = [{"trial": t, "turns": list(t.turns.order_by("stage_order")), "grade": grades.get(t.pk),
+               "reviews": list(t.expert_reviews.all())}
+              for t in lesson.trials.select_related("recorded_by").order_by("started_at")]  # fmt: skip
+    return render(request, "teacher/practice/independent.html", {
+        "lesson": lesson, "stages": pedagogy_selectors.timeline(list(lesson.stages.all())),
+        "fields": frames.FREE, "trials": trials,
+        "drafts": list(lesson.expert_reviews.filter(kind=ExpertReview.Kind.DRAFT)[:3]),
+        "dimensions": ExpertReview.DIMENSIONS, "directions": ExpertReview.TRIAL_DIRECTIONS,
+        "statuses": ExpertReview.Status.choices, "grade_choices": pedagogy.practice.GRADES,
+        "editable": lesson.status != Lesson.Status.FINAL,
     })  # fmt: skip

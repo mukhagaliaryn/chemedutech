@@ -109,8 +109,9 @@ def current_order(trial: Trial) -> int | None:
 def prefill(stage: dict) -> dict:
     """The stage's explanation, task and time from the sheet (the student may change them in the trial)."""
     spec = frames.stage_spec(FRAME, stage.get("key", ""))
-    if spec is None:
-        return {"explanation": "", "task": "", "minutes": ""}
+    if spec is None:  # section 8: the free stages — the teacher's explanation and the task fields
+        fields = stage.get("fields", {})
+        return {"explanation": fields.get("teacher", ""), "task": fields.get("task", ""), "minutes": stage["minutes"]}
     labels = {f.key: str(f.label) for f in spec.fields}
 
     def join(keys):
@@ -125,12 +126,13 @@ def prefill(stage: dict) -> dict:
 def _context(trial: Trial, stage: dict, explanation: str, task: str, minutes: int) -> str:
     data = trial.version.snapshot
     spec = frames.stage_spec(FRAME, stage.get("key", ""))
+    aim = spec.aim if spec else html_to_text(stage.get("fields", {}).get("aim", ""))
     told = f"The teacher's explanation:\n{html_to_text(explanation)}\n\nThe task:\n{html_to_text(task)}"
     return (
         f"A chemistry lesson in grade {trial.grade}, {data['duration_min']} minutes. Topic: {data['topic']}.\n"
         f"Lesson aim: {data['aim']}\n"
         f"The teacher conducts the lesson stage by stage. Now: stage {stage['order']} «{stage['title']}» "
-        f"({stage['start']}–{stage['end']} min); its aim: {spec.aim if spec else ''}\n"
+        f"({stage['start']}–{stage['end']} min); its aim: {aim}\n"
         f"Time to do the task: {minutes} min.\n{ai.quote(told)}"
     )
 

@@ -11,6 +11,7 @@ from .models import (
     Section,
     SectionEvent,
     SectionProgress,
+    SectionSchedule,
     SectionVideo,
 )
 
@@ -131,3 +132,16 @@ class DiagnosticResultAdmin(ReadOnlyAdmin):
     list_filter = ("enrollment__programme", "phase", "component", "level", "enrollment__research_cohort")
     search_fields = ("enrollment__student__username", "enrollment__student__last_name")
     list_select_related = ("enrollment__student", "enrollment__programme")
+
+
+@admin.register(SectionSchedule)
+class SectionScheduleAdmin(ModelAdmin):
+    list_display = ("section", "group", "hand_in_on", "trial_on", "set_by")
+    list_filter = ("section__programme",)
+    list_select_related = ("section", "group", "set_by")
+    autocomplete_fields = ("group",)
+    readonly_fields = ("set_by",)
+
+    def save_model(self, request, obj, form, change):
+        obj.set_by = request.user
+        super().save_model(request, obj, form, change)

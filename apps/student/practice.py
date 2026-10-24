@@ -334,6 +334,7 @@ def practice_step(request, number, pk, trial_pk, order):
         "trial": trial,
         "stage": stage,
         "spec": frames.stage_spec(FRAME, stage.get("key", "")),
+        "stage_fields": frames.stage_spec(FRAME, stage.get("key", "")).fields,
         "trial_stages": [{**s, "done": s["order"] in done, "open": current is None or s["order"] <= current}
                          for s in stages],
         "turn": turn,

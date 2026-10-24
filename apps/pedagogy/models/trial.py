@@ -22,10 +22,20 @@ class Trial(models.Model):
         ASSEMBLED = "assembled", _("The assembled lesson, stage by stage on demand")
         STEPWISE = "stepwise", _("Conducting the lesson stage by stage")
         DIALOG = "dialog", _("A microlesson in dialogue")
+        REAL = "real", _("A real audience")
 
     mode = models.CharField(_("mode"), max_length=12, choices=Mode.choices, default=Mode.ASSEMBLED)
     grade = models.CharField(_("grade"), max_length=8, blank=True, help_text=_("Section 5: the class, 7–11"))
-    level = models.CharField(_("AI student's level"), max_length=8, choices=Level.choices)
+    level = models.CharField(_("AI student's level"), max_length=8, choices=Level.choices, blank=True)
+    notes = models.TextField(_("protocol"), blank=True, help_text=_("A real audience: the protocol the teacher enters"))
+    recorded_by = models.ForeignKey(
+        "accounts.User",
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="+",
+        verbose_name=_("recorded by"),
+    )
     started_at = models.DateTimeField(_("started at"), auto_now_add=True)
     finished_at = models.DateTimeField(_("finished at"), null=True, blank=True)
 

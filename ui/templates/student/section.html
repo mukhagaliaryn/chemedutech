@@ -3,7 +3,7 @@
 {% comment %}
 An ICPAI section (docs/icpai/SPEC.md §4.0): its purpose (the guide's «what it does»), its state and percent,
 «Let the AI explain» — the AI assistant panel (ai/partials/panel.html; D73) — and
-the section's own content — section 1 leads to the course, section 4 shows the lesson templates, section 5 the practices, section 6 the microlesson, section 7 the portfolio; kinds not built yet
+the section's own content — section 1 leads to the course, section 4 shows the lesson templates, section 5 the practices, section 6 the microlesson, section 7 the portfolio, section 8 the independent lessons; kinds not built yet
 say so.
 {% endcomment %}
 {% block title %}{{ section.title }} · ChemEduTech{% endblock %}
@@ -132,6 +132,9 @@ say so.
 {% elif section.kind == "portfolio" %}
   {# ---- section 7: feedback and the professional portfolio (guide @S7; STEP-37) ---- #}
   {% include "student/portfolio/partials/dashboard.html" %}
+{% elif section.kind == "independent" and row.ready %}
+  {# ---- section 8: the independent authorial lesson (guide @S8; STEP-38) ---- #}
+  {% include "student/independent/partials/home.html" %}
 {% elif not row.ready %}
   {% translate "The section is in development" as l_title %}{% translate "Its tasks will appear here in the next versions of the platform." as l_text %}
   {% include "components/empty_state.html" with title=l_title text=l_text icon="clock" %}

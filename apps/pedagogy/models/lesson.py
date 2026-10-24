@@ -15,11 +15,13 @@ class Lesson(TimeStampedModel):
         TEMPLATE_COPY = "template_copy", _("Template copy")
         RESEARCH_PRACTICE = "research_practice", _("Digital research practice")
         MICROLESSON = "microlesson", _("Microlesson")
+        INDEPENDENT = "independent", _("Independent authorial lesson")
 
     class Status(models.TextChoices):
         DRAFT = "draft", _("Draft")
         ASSEMBLED = "assembled", _("Assembled")
         TESTED = "tested", _("Tried out")
+        SUBMITTED = "submitted", _("Submitted for the trial")
         FINAL = "final", _("Final version")
 
     owner = models.ForeignKey(
@@ -59,6 +61,7 @@ class Lesson(TimeStampedModel):
         help_text=_("Section 6: education programme, study year, source part"),
     )
     status = models.CharField(_("status"), max_length=16, choices=Status.choices, default=Status.DRAFT)
+    cycle = models.PositiveSmallIntegerField(_("cycle"), null=True, blank=True, help_text=_("Section 8: 1, 2, 3 …"))
 
     class Meta:
         ordering = ("-updated_at",)

@@ -497,7 +497,7 @@ AI_GRADING_EFFORT = os.environ.get("AI_GRADING_EFFORT", "medium")  # low | mediu
 # Server-side refusal fallback (beta) on models that support it; turn off if the API rejects it.
 AI_GRADING_FALLBACKS = env_bool("AI_GRADING_FALLBACKS", True)
 
-# ICPAI AI assistant / AI student / checker / «Айрегім» (apps/ai; D73). Off by default — tests never call the API.
+# ICPAI AI assistant / AI student / checker / «Айгерім» (apps/ai; D73). Off by default — tests never call the API.
 AI_TUTOR_ENABLED = env_bool("AI_TUTOR_ENABLED", False)
 AI_TUTOR_MODEL = os.environ.get("AI_TUTOR_MODEL", "claude-opus-5-5")
 AI_TUTOR_EFFORT = os.environ.get("AI_TUTOR_EFFORT", "low")  # low | medium | high — chat replies stay quick

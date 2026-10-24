@@ -1,5 +1,6 @@
 from .chat import AIUnavailable, LimitReached, ask, conversation_for, enabled, quote, remaining_today, thread
 from .checker import check, check_portfolio
+from .expert import review
 from .student_sim import reply, simulate
 
 __all__ = [
@@ -13,6 +14,7 @@ __all__ = [
     "quote",
     "remaining_today",
     "reply",
+    "review",
     "simulate",
     "thread",
 ]

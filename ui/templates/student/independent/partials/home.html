@@ -1,0 +1,94 @@
+{% load i18n %}{% comment %}
+Section 8 on its section page (guide @S8 I, IV, V, VII; picture image25): «Welcome to the next stage», the cycle of
+professional development, the personal directions of development by the four ICPAI components (the weakest marked),
+«Pay attention to the deadline!», the lessons of the cycles, the notifications, the trial results and the dynamics.
+Context: student.independent.independent_context; section.
+{% endcomment %}
+<section class="relative overflow-hidden rounded-xl bg-[linear-gradient(120deg,var(--color-primary-900),var(--color-primary-600)_55%,var(--color-stage-video))] p-[clamp(20px,3vw,32px)] text-white" aria-labelledby="ind-hero">
+  <svg aria-hidden="true" class="float pointer-events-none absolute top-4 right-6 h-28 opacity-90" viewBox="0 0 80 100"><path d="M40 8c14 12 18 30 14 50H26C22 38 26 20 40 8z" fill="#fff"/><circle cx="40" cy="36" r="7" fill="#5fd3b8"/><path d="M26 58l-10 14 14-4zM54 58l10 14-14-4z" fill="#ff8a7a"/><path d="M33 62h14l-3 20h-8z" fill="#ffd66b" class="glow"/></svg>
+  <div class="relative max-w-[820px]">
+    <p class="text-[12px] font-extrabold tracking-wide text-white/75 uppercase">ICPAI INDEPENDENT TEACHING</p>
+    <h2 id="ind-hero" class="mt-1 text-[clamp(20px,2.4vw,27px)] leading-tight font-extrabold">{% translate "Welcome to the next stage!" %}</h2>
+    <p class="mt-2 text-[14.5px] leading-[22px] text-white/85">{% translate "In this stage the earlier ready authorial lesson templates are no longer offered as the main working tool. Relying on your pedagogical experience, you develop the content of a new lesson fully on your own." %}</p>
+    <div class="mt-4 flex flex-wrap gap-2">
+      <form method="post" action="{% url 'student:independent_start' %}">{% csrf_token %}
+        <button type="submit" class="btn bg-white font-bold text-primary-900 hover:bg-white/90">{% include "components/icons.html#play" %}{% if current_lesson %}{% translate "Go on with the lesson" %}{% elif independent_lessons %}{% translate "Develop the next lesson" %}{% else %}{% translate "Start developing an independent lesson" %}{% endif %}</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<ol class="grid grid-cols-2 gap-1.5 sm:grid-cols-3 xl:grid-cols-6" aria-label="{% translate 'The cycle of professional development' %}">
+  {% for st in steps %}
+    <li class="tone-{{ forloop.counter }} flex items-center gap-2 rounded-full border border-(--tone)/25 bg-(--tone-50) py-1.5 pr-3 pl-1.5 text-[12.5px] font-bold text-(--tone)"><span class="num grid size-6 shrink-0 place-items-center rounded-full bg-(--tone) text-[11.5px] text-white">{{ forloop.counter }}</span>{{ st }}</li>
+  {% endfor %}
+</ol>
+
+<div class="grid items-start gap-4 xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+  <section class="card flex flex-col gap-3" aria-labelledby="dir-title">
+    <h2 id="dir-title" class="text-[16px] font-extrabold">{% translate "Personal directions of professional development" %}</h2>
+    <ul class="grid gap-2.5 sm:grid-cols-2">
+      {% for d in directions %}
+        <li class="flex items-start gap-3 rounded-lg border p-3 {% if d.focus %}border-warning-500/50 bg-warning-50/60{% else %}border-line{% endif %}">
+          {% with v=d.latest|default:0 %}{% if d.latest is not None %}{% with t=d.latest|floatformat:0|add:"%" %}
+            {% if d.component == "motivational" %}{% include "components/ring.html" with value=v size=52 stroke=6 text=t color="stroke-warning-500" track="stroke-warning-50" %}
+            {% elif d.component == "cognitive" %}{% include "components/ring.html" with value=v size=52 stroke=6 text=t color="stroke-primary-600" track="stroke-primary-100" %}
+            {% elif d.component == "activity" %}{% include "components/ring.html" with value=v size=52 stroke=6 text=t color="stroke-stage-lab" track="stroke-stage-lab-50" %}
+            {% else %}{% include "components/ring.html" with value=v size=52 stroke=6 text=t color="stroke-stage-video" track="stroke-stage-video-50" %}{% endif %}
+          {% endwith %}{% else %}{% include "components/ring.html" with value=0 size=52 stroke=6 text="—" %}{% endif %}{% endwith %}
+          <span class="min-w-0"><span class="block text-[13.5px] font-extrabold">{{ forloop.counter }}. {{ d.label }}</span><span class="block text-[12.5px] leading-[18px] text-ink-soft">{{ d.text|capfirst }}</span>
+            {% if d.focus %}<span class="mt-1 inline-flex h-5 items-center rounded-full bg-warning-500 px-2 text-[10.5px] font-bold text-ink">{% translate "To improve first" %}</span>{% endif %}</span>
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <div class="flex flex-col gap-4">
+    <section class="card flex flex-col gap-2 border-2 {% if countdown and countdown.days <= 2 %}border-danger-600/30 bg-danger-50/40{% else %}border-line{% endif %}" aria-labelledby="dl-title">
+      <h2 id="dl-title" class="flex items-center gap-2 text-[15px] font-extrabold {% if countdown and countdown.days <= 2 %}text-danger-700{% endif %}">{% include "components/icons.html#timer" with size=17 %}{% translate "Pay attention to the deadline!" %}</h2>
+      {% if countdown %}
+        <p class="text-[13px] text-ink-soft">{% if countdown.kind == "trial" %}{% translate "Trial date" %}{% else %}{% translate "Hand in the project by" %}{% endif %}: <span class="num font-bold text-ink">{{ countdown.date|date:"d.m.Y" }}</span></p>
+        <p class="num text-[26px] leading-none font-extrabold {% if countdown.days <= 2 %}text-danger-600{% else %}text-primary-900{% endif %}">{% blocktranslate count n=countdown.days %}{{ n }} day left{% plural %}{{ n }} days left{% endblocktranslate %}</p>
+      {% else %}<p class="text-[13px] text-ink-faint">{% translate "The teacher has not set the dates yet." %}</p>{% endif %}
+      {% if schedule %}<p class="text-[12px] text-ink-faint">{% translate "Hand in the project by" %}: {{ schedule.hand_in_on|date:"d.m.Y"|default:"—" }} · {% translate "Trial date" %}: {{ schedule.trial_on|date:"d.m.Y"|default:"—" }}</p>{% endif %}
+    </section>
+    <section class="card flex flex-col gap-2" aria-labelledby="nt-title">
+      <h2 id="nt-title" class="flex items-center gap-2 text-[15px] font-extrabold">{% include "components/icons.html#bell" with size=17 %}{% translate "Notifications" %}</h2>
+      <ul class="flex flex-col gap-2">
+        {% for n in icpai_notes %}
+          <li class="flex gap-2.5 rounded-lg bg-canvas px-3 py-2 text-[12.5px] leading-[18px]"><span class="mt-0.5 text-primary-600">{% include "components/icons.html#bell" with size=13 %}</span><span><span class="block font-bold">{{ n.get_kind_display }}</span>{{ n.title }}<span class="num block text-[11px] text-ink-faint">{{ n.created_at|date:"d.m.Y H:i" }}</span></span></li>
+        {% empty %}<li class="text-[13px] text-ink-faint">—</li>{% endfor %}
+      </ul>
+    </section>
+  </div>
+</div>
+
+<div class="grid items-start gap-4 lg:grid-cols-2">
+  <section class="card flex flex-col gap-3" aria-labelledby="ls-title">
+    <h2 id="ls-title" class="text-[16px] font-extrabold">{% translate "My independent lessons" %}</h2>
+    <ul class="flex flex-col gap-2">
+      {% for x in independent_lessons %}
+        <li class="flex flex-wrap items-center gap-3 rounded-lg border border-line px-3 py-2.5">
+          <span class="num grid size-9 shrink-0 place-items-center rounded-[12px] bg-primary-50 text-[13px] font-extrabold text-primary-700">{{ x.cycle }}</span>
+          <span class="min-w-0 flex-1"><span class="block text-[14px] font-bold">{{ x.topic|default:_("A new lesson") }}</span><span class="text-[12px] text-ink-soft">{% blocktranslate with n=x.cycle %}Cycle {{ n }}{% endblocktranslate %} · {{ x.updated_at|date:"d.m.Y" }}</span></span>
+          <span class="badge {% if x.status == 'final' %}badge-success{% else %}badge-info{% endif %} text-[11px] font-bold">{{ x.get_status_display }}</span>
+          <a class="btn btn-secondary btn-sm" href="{% url 'student:independent' x.pk %}">{% translate "Open" %}</a>
+        </li>
+      {% empty %}<li class="text-[13px] text-ink-faint">{% translate "No lessons yet." %}</li>{% endfor %}
+    </ul>
+  </section>
+  <section class="card flex flex-col gap-3" aria-labelledby="tr-title">
+    <h2 id="tr-title" class="text-[16px] font-extrabold">{% translate "Trial results" %}</h2>
+    {% if trial_rows %}
+      <ul class="flex flex-col gap-1.5 text-[13px]">
+        {% for t in trial_rows %}<li class="flex items-center justify-between gap-2 rounded-lg bg-canvas px-3 py-2"><span><span class="font-bold">{% blocktranslate with n=t.number %}Trial {{ n }}{% endblocktranslate %}</span> · {{ t.trial.finished_at|date:"d.m.Y" }} · {{ t.trial.lesson.topic|truncatechars:30 }}</span><span class="num font-extrabold {% if t.review %}text-success-700{% else %}text-ink-faint{% endif %}">{% if t.review %}{{ t.review.total }} / 10{% else %}—{% endif %}</span></li>{% endfor %}
+      </ul>
+      <p class="text-[13px] font-bold">{% translate "Professional development dynamics" %}</p>
+      <div class="flex h-[140px] items-end gap-3 border-b border-line px-2" aria-hidden="true">
+        {% for t in trial_rows %}<div class="flex h-full flex-1 flex-col items-center justify-end gap-1"><span class="num text-[11px] font-bold text-ink-soft">{% if t.review %}{{ t.review.total }}{% endif %}</span><span class="bar-grow block w-full max-w-[44px] rounded-t-[8px] bg-[linear-gradient(180deg,var(--color-primary-600),var(--color-stage-lab))]" style="height: {% if t.review %}{{ t.review.total }}0{% else %}0{% endif %}%"></span></div>{% endfor %}
+      </div>
+      <div class="flex gap-3 px-2 text-center text-[11px] font-semibold text-ink-faint" aria-hidden="true">{% for t in trial_rows %}<span class="flex-1">{{ t.number }}</span>{% endfor %}</div>
+    {% else %}<p class="text-[13px] text-ink-faint">{% translate "No trials yet." %}</p>{% endif %}
+    <p class="text-[12px] text-ink-soft">{% translate "The grades of the trials in this stage are kept apart; the ICPAI component percents change only when the diagnostic tools are used again." %}</p>
+  </section>
+</div>

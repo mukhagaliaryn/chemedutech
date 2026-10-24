@@ -109,16 +109,20 @@ def save(stage: LessonStage, *, title: str, minutes, fields: dict, inserted: int
     (section 5 — its title and minutes come from the frame). ``inserted`` — the AI message added to the editor before
     this save («Add to the editor», logged as the student's decision)."""
     _editable(stage.lesson)
-    template = stage.lesson.frame == "template"
-    if template and not stage.cleared:
+    frame = stage.lesson.frame
+    if frame == "template" and not stage.cleared:
         raise LessonError("not_cleared")
     before = (stage.title, stage.minutes, stage.fields)
-    if template:
+    if frame in ("template", "free"):  # the student's own stage names and minutes
         stage.title = (title or "").strip()[:255] or stage.title
         try:
             stage.minutes = max(1, min(MAX_MINUTES, int(minutes)))
         except (TypeError, ValueError):
             pass
+    if frame == "free":  # section 8: the stages take 45 minutes at most (guide @S8 II)
+        others = sum(s.minutes for s in stage.lesson.stages.exclude(pk=stage.pk))
+        if others + stage.minutes > stage.lesson.duration_min:
+            raise LessonError("too_long")
     stage.fields = {f.key: _value(f, fields.get(f.key, "")) for f in frames.fields_of(stage.lesson.frame, stage.key)}
     stage.edited = any(stage.fields.values())
     if inserted:

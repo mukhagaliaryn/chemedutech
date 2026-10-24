@@ -10,7 +10,7 @@ class Mode(models.TextChoices):
     ASSISTANT = "assistant", _("AI assistant")
     STUDENT_SIM = "student_sim", _("AI student")
     CHECKER = "checker", _("AI checker")
-    EXPERT = "expert", _("«Айрегім» expert")
+    EXPERT = "expert", _("«Айгерім» expert")
 
 
 class AIConversation(models.Model):

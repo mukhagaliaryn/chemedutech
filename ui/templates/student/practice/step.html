@@ -5,7 +5,7 @@ One stage of the stepwise trial (guide @S5 IV–VI; picture image20): the eight 
 the stage in six steps — 1 the teacher's explanation, 2 giving the task, 3 setting the time (prefilled from the sheet,
 editable) → «Give the task to the student» → 4 the AI student's answer (its type, the possible error, the difficulty;
 the AI assistant's explanation folded) with the time running → 5 analysing the answer (the student's explanation,
-a follow-up question, the pedagogical correction, the improved task — the analysis sheet VI) → 6 the next stage.
+a follow-up question, the pedagogical correction, the improved task — the analysis sheet VI) → 6 the next stage. Also section 8's trial (step_url, results_url; stage_fields — the free stages' fields).
 {% endcomment %}
 {% block title %}{{ stage.order }}. {{ stage.title }} · {% translate "Try the lesson out" %} · ChemEduTech{% endblock %}
 {% block crumb %}{{ programme.title }} · {% blocktranslate with n=section.number %}Section {{ n }}{% endblocktranslate %}{% endblock %}
@@ -18,12 +18,12 @@ a follow-up question, the pedagogical correction, the improved task — the anal
     {% include "student/designer/partials/ai_student.html" with level=trial.level size=44 %}
     <p class="text-sm"><span class="font-extrabold">{% translate "The AI student" %}: {{ trial.get_level_display|lower }}</span><span class="block text-ink-soft">{% blocktranslate with g=trial.grade %}Grade {{ g }}{% endblocktranslate %} · {{ lesson.title }}</span></p>
   </div>
-  <a class="btn btn-ghost btn-sm" href="{% url 'student:practice_results' section.number lesson.pk %}">{% include "components/icons.html#chart" %}{% translate "Analysis sheet" %}</a>
+  <a class="btn btn-ghost btn-sm" href="{% if results_url %}{{ results_url }}{% else %}{% url 'student:practice_results' section.number lesson.pk %}{% endif %}">{% include "components/icons.html#chart" %}{% translate "Analysis sheet" %}</a>
 </div>
 <ol class="grid grid-cols-4 gap-1.5 lg:grid-cols-8" aria-label="{% translate 'Lesson stages' %}">
   {% for s in trial_stages %}
     <li class="tone-{{ s.order }}">
-      {% if s.open %}<a href="{% url 'student:practice_step' section.number lesson.pk trial.pk s.order %}"{% else %}<span{% endif %}
+      {% if s.open %}<a href="{% if step_url %}{% url step_url lesson.pk trial.pk s.order %}{% else %}{% url 'student:practice_step' section.number lesson.pk trial.pk s.order %}{% endif %}"{% else %}<span{% endif %}
         class="flex h-full flex-col items-center gap-1 rounded-lg border px-1.5 py-2 text-center transition-colors {% if s.order == stage.order %}border-(--tone) bg-(--tone-50) shadow-[0_0_0_3px_color-mix(in_srgb,var(--tone)_14%,transparent)]{% elif s.open %}border-line bg-surface hover:border-(--tone){% else %}border-line bg-surface-sunken/50 text-ink-faint{% endif %}"
         {% if s.order == stage.order %}aria-current="step"{% endif %}>
         <span class="num grid size-7 place-items-center rounded-full text-[12.5px] font-extrabold {% if s.done %}bg-success-600 text-white{% elif s.open %}bg-(--tone) text-white{% else %}bg-surface text-ink-faint{% endif %}">{% if s.done %}✓{% elif not s.open %}{% include "components/icons.html#lock" with size=12 %}{% else %}{{ s.order }}{% endif %}</span>
@@ -135,8 +135,8 @@ a follow-up question, the pedagogical correction, the improved task — the anal
             </dl>
           </section>
           <div class="flex justify-end">
-            {% for s in trial_stages %}{% if s.order == stage.order|add:1 and s.open %}<a class="btn btn-primary" href="{% url 'student:practice_step' section.number lesson.pk trial.pk s.order %}">{% translate "Go on to the next stage" %}{% include "components/icons.html#arrow-right" %}</a>{% endif %}{% endfor %}
-            {% if is_last %}<a class="btn btn-primary" href="{% url 'student:practice_results' section.number lesson.pk %}">{% include "components/icons.html#chart" %}{% translate "Analysis sheet" %}</a>{% endif %}
+            {% for s in trial_stages %}{% if s.order == stage.order|add:1 and s.open %}<a class="btn btn-primary" href="{% if step_url %}{% url step_url lesson.pk trial.pk s.order %}{% else %}{% url 'student:practice_step' section.number lesson.pk trial.pk s.order %}{% endif %}">{% translate "Go on to the next stage" %}{% include "components/icons.html#arrow-right" %}</a>{% endif %}{% endfor %}
+            {% if is_last %}<a class="btn btn-primary" href="{% if results_url %}{{ results_url }}{% else %}{% url 'student:practice_results' section.number lesson.pk %}{% endif %}">{% include "components/icons.html#chart" %}{% translate "Analysis sheet" %}</a>{% endif %}
           </div>
         {% else %}
           <form method="post" class="flex flex-col gap-3 rounded-lg border-2 border-(--tone)/30 p-4" aria-labelledby="an-title">{% csrf_token %}
@@ -168,7 +168,7 @@ a follow-up question, the pedagogical correction, the improved task — the anal
     <h2 id="plan-title" class="text-[14px] font-extrabold">{% translate "The stage in your sheet" %}</h2>
     {% if spec %}<p class="rounded-lg bg-warning-50/70 px-3 py-2.5 text-[13px] leading-[19px]"><span class="font-extrabold">{% translate "Aim" %}:</span> {{ spec.aim }}</p>{% endif %}
     <div class="flex max-h-[520px] flex-col gap-2.5 overflow-y-auto pr-1">
-      {% for f in spec.fields %}{% with v=stage.fields|get:f.key %}{% if v and v != f.key %}
+      {% for f in stage_fields %}{% with v=stage.fields|get:f.key %}{% if v and v != f.key %}
         <div><p class="flex items-center gap-1.5 text-[12px] font-extrabold text-(--tone)">{% include "components/icons.html#"|add:f.icon with size=13 %}{{ f.label }}</p><div class="prose-lesson mt-0.5 text-[13px] leading-[19px] text-ink-soft">{% if f.number %}{{ v }} {% translate "min" %}{% else %}{{ v|rich }}{% endif %}</div></div>
       {% endif %}{% endwith %}{% endfor %}
     </div>

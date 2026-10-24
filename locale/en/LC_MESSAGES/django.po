@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 22:28+0500\n"
+"POT-Creation-Date: 2026-10-24 23:32+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -37,7 +37,7 @@ msgstr ""
 #: apps/accounts/admin.py:98 apps/courses/models/course.py:126
 #: apps/courses/models/enrollment.py:36
 #: apps/organizations/models/profiles.py:19
-#: apps/programme/models/progress.py:30
+#: apps/programme/models/progress.py:30 apps/programme/models/schedule.py:19
 msgid "group"
 msgstr ""
 
@@ -165,9 +165,10 @@ msgstr ""
 #: ui/templates/research/dashboard.html:85
 #: ui/templates/teacher/gradebook.html:35 ui/templates/teacher/group.html:118
 #: ui/templates/teacher/group.html:187
-#: ui/templates/teacher/practice/queue.html:33
-#: ui/templates/teacher/practice/queue.html:45
-#: ui/templates/teacher/practice/queue.html:59
+#: ui/templates/teacher/practice/queue.html:53
+#: ui/templates/teacher/practice/queue.html:66
+#: ui/templates/teacher/practice/queue.html:78
+#: ui/templates/teacher/practice/queue.html:92
 #: ui/templates/teacher/students.html:29 ui/templates/ui/styleguide.html:140
 #: ui/views.py:21
 msgid "Student"
@@ -216,7 +217,7 @@ msgstr ""
 
 #: apps/accounts/models/user.py:55 apps/ai/models/conversation.py:20
 #: apps/ai/models/conversation.py:72 apps/assessments/models/attempt.py:29
-#: apps/feedback/models/notification.py:22
+#: apps/feedback/models/notification.py:28
 #: apps/organizations/models/profiles.py:11
 #: apps/organizations/models/profiles.py:42
 msgid "user"
@@ -245,10 +246,10 @@ msgid "AI checker"
 msgstr ""
 
 #: apps/ai/models/conversation.py:13
-msgid "«Айрегім» expert"
+msgid "«Айгерім» expert"
 msgstr ""
 
-#: apps/ai/models/conversation.py:22 apps/pedagogy/models/trial.py:26
+#: apps/ai/models/conversation.py:22 apps/pedagogy/models/trial.py:27
 msgid "mode"
 msgstr ""
 
@@ -273,10 +274,10 @@ msgid "model"
 msgstr ""
 
 #: apps/ai/models/conversation.py:27 apps/core/models.py:8
-#: apps/feedback/models/comment.py:32 apps/feedback/models/notification.py:28
-#: apps/pedagogy/models/lesson.py:131 apps/pedagogy/models/review.py:46
-#: apps/pedagogy/models/trial.py:70 apps/pedagogy/models/trial.py:109
-#: apps/practice/models/submission.py:107
+#: apps/feedback/models/comment.py:32 apps/feedback/models/notification.py:34
+#: apps/pedagogy/models/expert.py:72 apps/pedagogy/models/lesson.py:134
+#: apps/pedagogy/models/review.py:46 apps/pedagogy/models/trial.py:80
+#: apps/pedagogy/models/trial.py:119 apps/practice/models/submission.py:107
 #: apps/practice/models/submission.py:143
 msgid "created at"
 msgstr ""
@@ -335,7 +336,7 @@ msgstr ""
 msgid "error"
 msgstr ""
 
-#: apps/ai/models/conversation.py:57 apps/pedagogy/models/lesson.py:162
+#: apps/ai/models/conversation.py:57 apps/pedagogy/models/lesson.py:165
 #: apps/programme/models/diagnostics.py:73
 #: apps/programme/models/portfolio.py:222 apps/programme/models/progress.py:116
 #: apps/progress/models/progress.py:172
@@ -343,7 +344,8 @@ msgid "at"
 msgstr ""
 
 #: apps/ai/models/conversation.py:61 apps/pedagogy/models/check.py:26
-#: apps/pedagogy/models/trial.py:60 apps/pedagogy/models/trial.py:108
+#: apps/pedagogy/models/expert.py:62 apps/pedagogy/models/trial.py:70
+#: apps/pedagogy/models/trial.py:118
 msgid "AI message"
 msgstr ""
 
@@ -533,12 +535,12 @@ msgid "attempt number"
 msgstr ""
 
 #: apps/assessments/models/attempt.py:35 apps/labs/models/attempt.py:40
-#: apps/pedagogy/models/trial.py:29 apps/progress/models/progress.py:36
+#: apps/pedagogy/models/trial.py:39 apps/progress/models/progress.py:36
 msgid "started at"
 msgstr ""
 
 #: apps/assessments/models/attempt.py:36 apps/labs/models/attempt.py:41
-#: apps/pedagogy/models/trial.py:30
+#: apps/pedagogy/models/trial.py:40
 msgid "finished at"
 msgstr ""
 
@@ -673,16 +675,17 @@ msgstr ""
 #: apps/certificates/models/certificate.py:18 apps/courses/models/content.py:34
 #: apps/courses/models/course.py:31 apps/courses/models/structure.py:17
 #: apps/courses/models/structure.py:36 apps/courses/models/structure.py:76
-#: apps/pedagogy/models/lesson.py:47 apps/pedagogy/models/lesson.py:97
+#: apps/pedagogy/models/lesson.py:49 apps/pedagogy/models/lesson.py:100
 #: apps/pedagogy/models/template.py:43 apps/practice/models/task.py:24
 #: apps/programme/models/programme.py:12 apps/programme/models/programme.py:51
 msgid "title"
 msgstr ""
 
 #: apps/assessments/models/quiz.py:25 apps/assessments/models/quiz.py:84
-#: apps/courses/models/structure.py:75 apps/feedback/models/notification.py:24
-#: apps/pedagogy/models/lesson.py:28 apps/pedagogy/models/trial.py:100
-#: apps/practice/models/task.py:58 apps/programme/models/programme.py:50
+#: apps/courses/models/structure.py:75 apps/feedback/models/notification.py:30
+#: apps/pedagogy/models/expert.py:48 apps/pedagogy/models/lesson.py:30
+#: apps/pedagogy/models/trial.py:110 apps/practice/models/task.py:58
+#: apps/programme/models/programme.py:50
 msgid "kind"
 msgstr ""
 
@@ -984,9 +987,9 @@ msgid "certificate templates"
 msgstr ""
 
 #: apps/certificates/models/certificate.py:45
-#: apps/courses/models/structure.py:35 apps/pedagogy/models/lesson.py:95
-#: apps/pedagogy/models/lesson.py:128 apps/pedagogy/models/template.py:12
-#: apps/pedagogy/models/template.py:42 apps/pedagogy/models/trial.py:98
+#: apps/courses/models/structure.py:35 apps/pedagogy/models/lesson.py:98
+#: apps/pedagogy/models/lesson.py:131 apps/pedagogy/models/template.py:12
+#: apps/pedagogy/models/template.py:42 apps/pedagogy/models/trial.py:108
 #: apps/programme/models/portfolio.py:96 apps/programme/models/programme.py:49
 msgid "number"
 msgstr ""
@@ -1034,7 +1037,7 @@ msgstr ""
 msgid "Core"
 msgstr ""
 
-#: apps/core/models.py:9 apps/pedagogy/models/lesson.py:103
+#: apps/core/models.py:9 apps/pedagogy/models/lesson.py:106
 #: apps/pedagogy/models/review.py:47 apps/programme/models/portfolio.py:185
 #: apps/programme/models/video.py:47
 msgid "updated at"
@@ -1100,8 +1103,8 @@ msgstr ""
 #: apps/courses/models/content.py:17 apps/courses/models/content.py:53
 #: apps/courses/models/content.py:107 apps/courses/models/content.py:151
 #: apps/courses/models/structure.py:113 apps/feedback/models/comment.py:22
-#: apps/labs/models/attempt.py:32 apps/pedagogy/models/lesson.py:158
-#: apps/pedagogy/models/trial.py:52 apps/pedagogy/models/trial.py:99
+#: apps/labs/models/attempt.py:32 apps/pedagogy/models/lesson.py:161
+#: apps/pedagogy/models/trial.py:62 apps/pedagogy/models/trial.py:109
 #: apps/practice/models/submission.py:24 apps/practice/models/task.py:22
 #: apps/programme/models/diagnostics.py:31
 #: apps/programme/models/diagnostics.py:64 apps/progress/models/progress.py:25
@@ -1134,7 +1137,7 @@ msgstr ""
 msgid "source"
 msgstr ""
 
-#: apps/courses/models/content.py:56 apps/feedback/models/notification.py:26
+#: apps/courses/models/content.py:56 apps/feedback/models/notification.py:32
 msgid "link"
 msgstr ""
 
@@ -1212,7 +1215,7 @@ msgstr ""
 msgid "topic tests"
 msgstr ""
 
-#: apps/courses/models/course.py:22 apps/pedagogy/models/lesson.py:20
+#: apps/courses/models/course.py:22 apps/pedagogy/models/lesson.py:21
 #: ui/templates/teacher/content/course.html:61
 msgid "Draft"
 msgstr ""
@@ -1254,10 +1257,10 @@ msgid "cover"
 msgstr ""
 
 #: apps/courses/models/course.py:36 apps/courses/models/enrollment.py:46
-#: apps/labs/models/attempt.py:39 apps/pedagogy/models/lesson.py:61
-#: apps/practice/models/submission.py:28 apps/programme/models/portfolio.py:74
-#: apps/programme/models/progress.py:61 apps/progress/models/progress.py:27
-#: apps/progress/models/progress.py:81
+#: apps/labs/models/attempt.py:39 apps/pedagogy/models/expert.py:53
+#: apps/pedagogy/models/lesson.py:63 apps/practice/models/submission.py:28
+#: apps/programme/models/portfolio.py:74 apps/programme/models/progress.py:61
+#: apps/progress/models/progress.py:27 apps/progress/models/progress.py:81
 msgid "status"
 msgstr ""
 
@@ -1394,7 +1397,7 @@ msgid "Dropped"
 msgstr ""
 
 #: apps/courses/models/enrollment.py:24 apps/labs/models/attempt.py:15
-#: apps/pedagogy/models/lesson.py:26 apps/programme/models/progress.py:19
+#: apps/pedagogy/models/lesson.py:28 apps/programme/models/progress.py:19
 #: ui/templates/partials/shell/sidebar_student.html:61
 msgid "student"
 msgstr ""
@@ -1586,7 +1589,7 @@ msgstr ""
 msgid "reply to"
 msgstr ""
 
-#: apps/feedback/models/comment.py:31 apps/feedback/models/notification.py:27
+#: apps/feedback/models/comment.py:31 apps/feedback/models/notification.py:33
 msgid "read"
 msgstr ""
 
@@ -1627,15 +1630,37 @@ msgstr ""
 msgid "A programme section is open"
 msgstr ""
 
-#: apps/feedback/models/notification.py:25 apps/pedagogy/models/template.py:15
+#: apps/feedback/models/notification.py:21
+msgid "A new task"
+msgstr ""
+
+#: apps/feedback/models/notification.py:22
+msgid "The deadline for handing in the work"
+msgstr ""
+
+#: apps/feedback/models/notification.py:23
+msgid "The trial date"
+msgstr ""
+
+#: apps/feedback/models/notification.py:24
+#, fuzzy
+#| msgid "The teacher opened a stage for you"
+msgid "An expert opinion"
+msgstr "The teacher opened a stage"
+
+#: apps/feedback/models/notification.py:25
+msgid "Trying it out again"
+msgstr ""
+
+#: apps/feedback/models/notification.py:31 apps/pedagogy/models/template.py:15
 msgid "subject"
 msgstr ""
 
-#: apps/feedback/models/notification.py:32
+#: apps/feedback/models/notification.py:38
 msgid "notification"
 msgstr ""
 
-#: apps/feedback/models/notification.py:33
+#: apps/feedback/models/notification.py:39
 msgid "notifications"
 msgstr ""
 
@@ -4269,7 +4294,9 @@ msgid "In progress"
 msgstr ""
 
 #: apps/labs/models/attempt.py:11 ui/templates/assessments/result.html:86
-#: ui/templates/teacher/practice/queue.html:45
+#: ui/templates/student/independent/editor.html:211
+#: ui/templates/teacher/practice/independent.html:34
+#: ui/templates/teacher/practice/queue.html:78
 #: ui/templates/teacher/student.html:140
 msgid "Finished"
 msgstr ""
@@ -4565,6 +4592,9 @@ msgstr ""
 #: ui/templates/student/designer/plan_pdf.html:49
 #: ui/templates/student/designer/results.html:42
 #: ui/templates/student/designer/trial.html:82
+#: ui/templates/student/independent/editor.html:57
+#: ui/templates/student/independent/editor.html:65
+#: ui/templates/student/independent/editor.html:159
 #: ui/templates/student/micro/editor.html:65
 #: ui/templates/student/partials/kind_pill.html:4
 #: ui/templates/student/practice/partials/nav.html:25
@@ -4825,7 +4855,7 @@ msgstr ""
 msgid "Briefing"
 msgstr ""
 
-#: apps/labs/views.py:125 apps/pedagogy/models/trial.py:87
+#: apps/labs/views.py:125 apps/pedagogy/models/trial.py:97
 msgid "Explanation"
 msgstr ""
 
@@ -5049,55 +5079,56 @@ msgstr ""
 msgid "Pedagogical design"
 msgstr ""
 
-#: apps/pedagogy/frames.py:48
+#: apps/pedagogy/frames.py:49
 #: ui/templates/student/designer/partials/plan_sheet.html:32
 #: ui/templates/student/designer/plan_pdf.html:42
 msgid "Teacher's actions"
 msgstr ""
 
-#: apps/pedagogy/frames.py:49
+#: apps/pedagogy/frames.py:50
 #, fuzzy
 #| msgid "Thank you, the test is done"
 msgid "Tasks the students do"
 msgstr "Test complete. Thanks!"
 
-#: apps/pedagogy/frames.py:50
+#: apps/pedagogy/frames.py:51
 msgid "Virtual lab experiments and research work"
 msgstr ""
 
-#: apps/pedagogy/frames.py:51
+#: apps/pedagogy/frames.py:52
 msgid "Digital tools and authorial methods"
 msgstr ""
 
-#: apps/pedagogy/frames.py:52
+#: apps/pedagogy/frames.py:53
 msgid "Assessment criteria and feedback"
 msgstr ""
 
-#: apps/pedagogy/frames.py:53
+#: apps/pedagogy/frames.py:54
 msgid "Stage result"
 msgstr ""
 
-#: apps/pedagogy/frames.py:58
+#: apps/pedagogy/frames.py:59
 msgid "Time to do it, minutes"
 msgstr ""
 
-#: apps/pedagogy/frames.py:61
+#: apps/pedagogy/frames.py:62 apps/pedagogy/frames.py:174
 #, fuzzy
 #| msgid "Thank you, the test is done"
 msgid "The task given to the student"
 msgstr "Test complete. Thanks!"
 
-#: apps/pedagogy/frames.py:65 apps/pedagogy/frames.py:136
+#: apps/pedagogy/frames.py:66 apps/pedagogy/frames.py:137
 msgid "Arousing interest"
 msgstr ""
 
-#: apps/pedagogy/frames.py:66
+#: apps/pedagogy/frames.py:67
 msgid ""
 "To find out the student's prior knowledge and to arouse interest in the "
 "research problem."
 msgstr ""
 
-#: apps/pedagogy/frames.py:67 ui/templates/student/practice/step.html:58
+#: apps/pedagogy/frames.py:68 apps/pedagogy/frames.py:173
+#: ui/templates/student/practice/step.html:58
 #: ui/templates/student/practice/step.html:60
 #: ui/templates/student/practice/step.html:88
 #: ui/templates/student/practice/trial_start.html:56
@@ -5106,13 +5137,14 @@ msgstr ""
 msgid "The teacher's explanation"
 msgstr "The teacher opened a stage"
 
-#: apps/pedagogy/frames.py:68 apps/pedagogy/frames.py:139
+#: apps/pedagogy/frames.py:69 apps/pedagogy/frames.py:140
 msgid "Problem question"
 msgstr ""
 
-#: apps/pedagogy/frames.py:69 ui/templates/student/micro/editor.html:53
+#: apps/pedagogy/frames.py:70 apps/pedagogy/frames.py:176
+#: ui/templates/student/micro/editor.html:53
 #: ui/templates/student/micro/report_pdf.html:25
-#: ui/templates/student/portfolio/partials/dashboard.html:135
+#: ui/templates/student/portfolio/partials/dashboard.html:136
 #: ui/templates/student/portfolio/partials/sheet.html:67
 #: ui/templates/student/portfolio/pdf.html:80
 #: ui/templates/student/portfolio/plan.html:22
@@ -5120,275 +5152,286 @@ msgstr ""
 msgid "Expected result"
 msgstr ""
 
-#: apps/pedagogy/frames.py:73
+#: apps/pedagogy/frames.py:74
 msgid "Finding misconceptions"
 msgstr ""
 
-#: apps/pedagogy/frames.py:74
+#: apps/pedagogy/frames.py:75
 msgid ""
 "To find out the student's initial understanding of chemical phenomena and to "
 "direct them to correct wrong scientific reasoning."
 msgstr ""
 
-#: apps/pedagogy/frames.py:76
+#: apps/pedagogy/frames.py:77
 msgid "Statement offered for analysis"
 msgstr ""
 
-#: apps/pedagogy/frames.py:77
+#: apps/pedagogy/frames.py:78 apps/pedagogy/frames.py:177
 msgid "Assessment criterion"
 msgstr ""
 
-#: apps/pedagogy/frames.py:81
+#: apps/pedagogy/frames.py:82
 msgid "Gathering evidence"
 msgstr ""
 
-#: apps/pedagogy/frames.py:82
+#: apps/pedagogy/frames.py:83
 msgid ""
 "To gather scientific data through a virtual experiment or digital modelling."
 msgstr ""
 
-#: apps/pedagogy/frames.py:83
+#: apps/pedagogy/frames.py:84
 msgid "Research question"
 msgstr ""
 
-#: apps/pedagogy/frames.py:84
+#: apps/pedagogy/frames.py:85
 msgid "Initial hypothesis"
 msgstr ""
 
-#: apps/pedagogy/frames.py:85
+#: apps/pedagogy/frames.py:86
 msgid "Content of the experiment"
 msgstr ""
 
-#: apps/pedagogy/frames.py:86
+#: apps/pedagogy/frames.py:87
 msgid "Parameters to change"
 msgstr ""
 
-#: apps/pedagogy/frames.py:87
+#: apps/pedagogy/frames.py:88
 msgid "Indicators to observe"
 msgstr ""
 
-#: apps/pedagogy/frames.py:88
+#: apps/pedagogy/frames.py:89
 msgid "How the results are recorded"
 msgstr ""
 
-#: apps/pedagogy/frames.py:92
+#: apps/pedagogy/frames.py:93
 msgid "Explaining at three levels"
 msgstr ""
 
-#: apps/pedagogy/frames.py:93
+#: apps/pedagogy/frames.py:94
 msgid ""
 "To explain a chemical phenomenon by connecting the macroscopic, "
 "submicroscopic and symbolic levels."
 msgstr ""
 
-#: apps/pedagogy/frames.py:94
+#: apps/pedagogy/frames.py:95
 msgid "Macroscopic explanation"
 msgstr ""
 
-#: apps/pedagogy/frames.py:95
+#: apps/pedagogy/frames.py:96
 msgid "Submicroscopic model"
 msgstr ""
 
-#: apps/pedagogy/frames.py:96
+#: apps/pedagogy/frames.py:97
 msgid "Chemical equation or formula"
 msgstr ""
 
-#: apps/pedagogy/frames.py:100
+#: apps/pedagogy/frames.py:101
 #, fuzzy
 #| msgid "Thank you, the test is done"
 msgid "Teaching the AI student"
 msgstr "Test complete. Thanks!"
 
-#: apps/pedagogy/frames.py:101
+#: apps/pedagogy/frames.py:102
 msgid ""
 "To improve the future teacher's skills of explaining chemistry knowledge and "
 "answering the student's questions."
 msgstr ""
 
-#: apps/pedagogy/frames.py:103
+#: apps/pedagogy/frames.py:104
 msgid "The chemical concept to explain"
 msgstr ""
 
-#: apps/pedagogy/frames.py:104
+#: apps/pedagogy/frames.py:105
 #, fuzzy
 #| msgid "The teacher opened a stage for you"
 msgid "The teacher's authorial explanation"
 msgstr "The teacher opened a stage"
 
-#: apps/pedagogy/frames.py:105 apps/pedagogy/frames.py:140
+#: apps/pedagogy/frames.py:106 apps/pedagogy/frames.py:141
+#: apps/pedagogy/frames.py:175
 msgid "Visual aids used"
 msgstr ""
 
-#: apps/pedagogy/frames.py:105
+#: apps/pedagogy/frames.py:106
 msgid "Length of the explanation, minutes"
 msgstr ""
 
-#: apps/pedagogy/frames.py:109
+#: apps/pedagogy/frames.py:110
 msgid "Checking in a new situation"
 msgstr ""
 
-#: apps/pedagogy/frames.py:110
+#: apps/pedagogy/frames.py:111
 msgid ""
 "To find out whether the student applies the knowledge gained in a new "
 "chemical situation."
 msgstr ""
 
-#: apps/pedagogy/frames.py:111
+#: apps/pedagogy/frames.py:112
 msgid "New problem situation"
 msgstr ""
 
-#: apps/pedagogy/frames.py:112
+#: apps/pedagogy/frames.py:113
 #: ui/templates/student/designer/partials/turn.html:16
+#: ui/templates/student/independent/trial.html:33
 #: ui/templates/student/practice/step.html:89
 #: ui/templates/teacher/practice/detail.html:46
 msgid "Task"
 msgstr ""
 
-#: apps/pedagogy/frames.py:113
+#: apps/pedagogy/frames.py:114
 msgid "Expected scientific result"
 msgstr ""
 
-#: apps/pedagogy/frames.py:117
+#: apps/pedagogy/frames.py:118
 msgid "Peer assessment"
 msgstr ""
 
-#: apps/pedagogy/frames.py:118
+#: apps/pedagogy/frames.py:119
 msgid ""
 "To assess the results of the task by criteria and to give reasoned feedback."
 msgstr ""
 
-#: apps/pedagogy/frames.py:119
+#: apps/pedagogy/frames.py:120 ui/templates/student/independent/editor.html:47
 msgid "Assessment criteria"
 msgstr ""
 
-#: apps/pedagogy/frames.py:120
+#: apps/pedagogy/frames.py:121
 msgid "Descriptors"
 msgstr ""
 
-#: apps/pedagogy/frames.py:121
+#: apps/pedagogy/frames.py:122 ui/templates/student/independent/editor.html:48
 msgid "Way of feedback"
 msgstr ""
 
-#: apps/pedagogy/frames.py:121
+#: apps/pedagogy/frames.py:122
 msgid "Assessment time, minutes"
 msgstr ""
 
-#: apps/pedagogy/frames.py:125
+#: apps/pedagogy/frames.py:126
 msgid "Reflection"
 msgstr ""
 
-#: apps/pedagogy/frames.py:126
+#: apps/pedagogy/frames.py:127
 msgid ""
 "To find out what the student has learnt, the difficulties met and the "
 "directions of further development."
 msgstr ""
 
-#: apps/pedagogy/frames.py:127
+#: apps/pedagogy/frames.py:128
 msgid "Reflection questions"
 msgstr ""
 
-#: apps/pedagogy/frames.py:128
+#: apps/pedagogy/frames.py:129
 msgid "Way of self-assessment"
 msgstr ""
 
-#: apps/pedagogy/frames.py:129
+#: apps/pedagogy/frames.py:130
 msgid "Summary of the lesson"
 msgstr ""
 
-#: apps/pedagogy/frames.py:137
+#: apps/pedagogy/frames.py:138
 msgid ""
 "To draw the student's attention to the lesson topic and to find out their "
 "prior knowledge."
 msgstr ""
 
-#: apps/pedagogy/frames.py:138
+#: apps/pedagogy/frames.py:139
 #, fuzzy
 #| msgid "The teacher opened a stage for you"
 msgid "The teacher's opening words"
 msgstr "The teacher opened a stage"
 
-#: apps/pedagogy/frames.py:141
+#: apps/pedagogy/frames.py:142
 #, fuzzy
 #| msgid "Thank you, the test is done"
 msgid "The action expected from the student"
 msgstr "Test complete. Thanks!"
 
-#: apps/pedagogy/frames.py:144
+#: apps/pedagogy/frames.py:145
 msgid "Explaining new knowledge"
 msgstr ""
 
-#: apps/pedagogy/frames.py:145
+#: apps/pedagogy/frames.py:146
 msgid ""
 "To convey the chosen chemical concept scientifically correctly and clearly "
 "for the student."
 msgstr ""
 
-#: apps/pedagogy/frames.py:146
+#: apps/pedagogy/frames.py:147
 msgid "Explanation of the chemical concept"
 msgstr ""
 
-#: apps/pedagogy/frames.py:147
+#: apps/pedagogy/frames.py:148
 msgid "Chemical formula or equation"
 msgstr ""
 
-#: apps/pedagogy/frames.py:148
+#: apps/pedagogy/frames.py:149
 msgid "Model or diagram used"
 msgstr ""
 
-#: apps/pedagogy/frames.py:149
+#: apps/pedagogy/frames.py:150
 #, fuzzy
 #| msgid "Thank you, the test is done"
 msgid "The main statements of the explanation"
 msgstr "Test complete. Thanks!"
 
-#: apps/pedagogy/frames.py:152
+#: apps/pedagogy/frames.py:153
 msgid "Applying knowledge"
 msgstr ""
 
-#: apps/pedagogy/frames.py:153
+#: apps/pedagogy/frames.py:154
 msgid ""
 "To check how the student applies the explained knowledge while doing a task."
 msgstr ""
 
-#: apps/pedagogy/frames.py:154
+#: apps/pedagogy/frames.py:155
 msgid "Authorial task"
 msgstr ""
 
-#: apps/pedagogy/frames.py:155
+#: apps/pedagogy/frames.py:156
 msgid "Instructions for doing the task"
 msgstr ""
 
-#: apps/pedagogy/frames.py:156
+#: apps/pedagogy/frames.py:157
 #, fuzzy
 #| msgid "your answer"
 msgid "Expected correct answer"
 msgstr "answer given"
 
-#: apps/pedagogy/frames.py:157
+#: apps/pedagogy/frames.py:158
 msgid "Checking criterion"
 msgstr ""
 
-#: apps/pedagogy/frames.py:160
+#: apps/pedagogy/frames.py:161
 msgid "Checking knowledge and summary"
 msgstr ""
 
-#: apps/pedagogy/frames.py:161
+#: apps/pedagogy/frames.py:162
 msgid "To find out what the student has learnt and to give short feedback."
 msgstr ""
 
-#: apps/pedagogy/frames.py:162
+#: apps/pedagogy/frames.py:163
 msgid "Consolidation question"
 msgstr ""
 
-#: apps/pedagogy/frames.py:163
+#: apps/pedagogy/frames.py:164
 msgid "Way of assessment"
 msgstr ""
 
-#: apps/pedagogy/frames.py:164
+#: apps/pedagogy/frames.py:165
 #, fuzzy
 #| msgid "Thank you, the test is done"
 msgid "Concluding explanation"
 msgstr "Test complete. Thanks!"
+
+#: apps/pedagogy/frames.py:172 ui/templates/core/about.html:178
+#: ui/templates/student/diagnostic.html:63
+#: ui/templates/student/micro/editor.html:92
+#: ui/templates/student/practice/report_pdf.html:38
+#: ui/templates/student/practice/stage.html:32
+#: ui/templates/student/practice/step.html:169
+msgid "Aim"
+msgstr ""
 
 #: apps/pedagogy/models/check.py:11
 msgid "The lesson aim is placed correctly"
@@ -5420,10 +5463,10 @@ msgstr ""
 msgid "The lesson structure is complete"
 msgstr ""
 
-#: apps/pedagogy/models/check.py:21 apps/pedagogy/models/lesson.py:65
-#: apps/pedagogy/models/lesson.py:94 apps/pedagogy/models/lesson.py:127
-#: apps/pedagogy/models/lesson.py:156 apps/pedagogy/models/review.py:29
-#: apps/pedagogy/models/trial.py:15
+#: apps/pedagogy/models/check.py:21 apps/pedagogy/models/expert.py:42
+#: apps/pedagogy/models/lesson.py:68 apps/pedagogy/models/lesson.py:97
+#: apps/pedagogy/models/lesson.py:130 apps/pedagogy/models/lesson.py:159
+#: apps/pedagogy/models/review.py:29 apps/pedagogy/models/trial.py:15
 msgid "lesson"
 msgstr ""
 
@@ -5455,6 +5498,161 @@ msgstr ""
 msgid "AI checks"
 msgstr ""
 
+#: apps/pedagogy/models/expert.py:13
+msgid "The lesson project"
+msgstr ""
+
+#: apps/pedagogy/models/expert.py:14
+#, fuzzy
+#| msgid "Thank you, the test is done"
+msgid "After the trial"
+msgstr "Test complete. Thanks!"
+
+#: apps/pedagogy/models/expert.py:17
+msgid "Fits"
+msgstr ""
+
+#: apps/pedagogy/models/expert.py:18 apps/programme/models/portfolio.py:66
+#: apps/programme/models/portfolio.py:116
+msgid "Needs more work"
+msgstr ""
+
+#: apps/pedagogy/models/expert.py:19 apps/programme/models/portfolio.py:67
+#: apps/programme/models/portfolio.py:117
+msgid "Needs revising"
+msgstr ""
+
+#: apps/pedagogy/models/expert.py:23
+msgid "Scientific accuracy"
+msgstr ""
+
+#: apps/pedagogy/models/expert.py:24
+msgid "Pedagogical fit"
+msgstr ""
+
+#: apps/pedagogy/models/expert.py:25
+#, fuzzy
+#| msgid "Thank you, the test is done"
+msgid "Methodical consistency"
+msgstr "Test complete. Thanks!"
+
+#: apps/pedagogy/models/expert.py:26
+#, fuzzy
+#| msgid "Your answer"
+msgid "The student's cognitive activity"
+msgstr "Answer"
+
+#: apps/pedagogy/models/expert.py:27
+msgid "Quality of assessment"
+msgstr ""
+
+#: apps/pedagogy/models/expert.py:28
+#: ui/templates/student/designer/template.html:57
+#: ui/templates/student/designer/template.html:66
+msgid "Authorial feature"
+msgstr ""
+
+#: apps/pedagogy/models/expert.py:32
+msgid "Correctness of the scientific content"
+msgstr ""
+
+#: apps/pedagogy/models/expert.py:33
+#, fuzzy
+#| msgid "Thank you, the test is done"
+msgid "Reaching the lesson aim"
+msgstr "Test complete. Thanks!"
+
+#: apps/pedagogy/models/expert.py:34
+msgid "Organising the time effectively"
+msgstr ""
+
+#: apps/pedagogy/models/expert.py:35
+msgid "Pedagogical grounding of the tasks"
+msgstr ""
+
+#: apps/pedagogy/models/expert.py:36
+#, fuzzy
+#| msgid "Thank you, the test is done"
+msgid "The feedback given to the students' answers"
+msgstr "Test complete. Thanks!"
+
+#: apps/pedagogy/models/expert.py:37
+msgid "Carrying out the authorial method"
+msgstr ""
+
+#: apps/pedagogy/models/expert.py:38 apps/programme/models/portfolio.py:51
+#, fuzzy
+#| msgid "Thank you, the test is done"
+msgid "The student's professional reflection"
+msgstr "Test complete. Thanks!"
+
+#: apps/pedagogy/models/expert.py:46 apps/pedagogy/models/review.py:37
+#: apps/pedagogy/models/trial.py:61 apps/pedagogy/models/trial.py:107
+msgid "trial"
+msgstr ""
+
+#: apps/pedagogy/models/expert.py:49
+msgid "the lesson as reviewed"
+msgstr ""
+
+#: apps/pedagogy/models/expert.py:51
+msgid "opinion by dimension"
+msgstr ""
+
+#: apps/pedagogy/models/expert.py:51
+msgid "{\"accuracy\": {\"status\", \"text\"}, …}"
+msgstr ""
+
+#: apps/pedagogy/models/expert.py:54
+msgid "direction checked"
+msgstr ""
+
+#: apps/pedagogy/models/expert.py:55
+msgid "expert conclusion"
+msgstr ""
+
+#: apps/pedagogy/models/expert.py:56
+msgid "strengths"
+msgstr ""
+
+#: apps/pedagogy/models/expert.py:57
+#, fuzzy
+#| msgid "AI suggestion → your decision"
+msgid "suggestions"
+msgstr "AI suggestion → teacher's decision"
+
+#: apps/pedagogy/models/expert.py:58
+msgid "what has changed since the previous opinion"
+msgstr ""
+
+#: apps/pedagogy/models/expert.py:60
+msgid "compared with"
+msgstr ""
+
+#: apps/pedagogy/models/expert.py:64
+msgid "status confirmed by the teacher"
+msgstr ""
+
+#: apps/pedagogy/models/expert.py:66 apps/practice/models/submission.py:43
+msgid "teacher's comment"
+msgstr ""
+
+#: apps/pedagogy/models/expert.py:69
+msgid "confirmed by"
+msgstr ""
+
+#: apps/pedagogy/models/expert.py:71
+msgid "confirmed at"
+msgstr ""
+
+#: apps/pedagogy/models/expert.py:76
+msgid "«Айгерім» opinion"
+msgstr ""
+
+#: apps/pedagogy/models/expert.py:77
+msgid "«Айгерім» opinions"
+msgstr ""
+
 #: apps/pedagogy/models/lesson.py:15
 msgid "Template copy"
 msgstr ""
@@ -5476,21 +5674,33 @@ msgstr ""
 #: ui/templates/student/micro/protocol.html:14
 #: ui/templates/student/micro/trial_start.html:7
 #: ui/templates/student/micro/trial_start.html:12
-#: ui/templates/teacher/practice/queue.html:45
+#: ui/templates/teacher/practice/queue.html:78
 msgid "Microlesson"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:21 apps/pedagogy/models/lesson.py:123
+#: apps/pedagogy/models/lesson.py:18
+#: ui/templates/student/independent/editor.html:10
+#: ui/templates/student/independent/trial.html:14
+#, fuzzy
+#| msgid "Your answers"
+msgid "Independent authorial lesson"
+msgstr "Answers"
+
+#: apps/pedagogy/models/lesson.py:22 apps/pedagogy/models/lesson.py:126
 #: apps/programme/portfolio_selectors.py:149
 #: ui/templates/student/micro/partials/entry.html:28
 msgid "Assembled"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:22 apps/pedagogy/models/lesson.py:124
+#: apps/pedagogy/models/lesson.py:23 apps/pedagogy/models/lesson.py:127
 msgid "Tried out"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:23 apps/pedagogy/models/lesson.py:125
+#: apps/pedagogy/models/lesson.py:24
+msgid "Submitted for the trial"
+msgstr ""
+
+#: apps/pedagogy/models/lesson.py:25 apps/pedagogy/models/lesson.py:128
 #: ui/templates/student/designer/assemble.html:71
 #: ui/templates/student/designer/editor.html:155
 #: ui/templates/student/designer/partials/flow.html:11
@@ -5498,174 +5708,182 @@ msgstr ""
 msgid "Final version"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:29
+#: apps/pedagogy/models/lesson.py:31
 msgid "frame"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:29 apps/pedagogy/models/lesson.py:96
+#: apps/pedagogy/models/lesson.py:31 apps/pedagogy/models/lesson.py:99
 msgid "pedagogy/frames.py"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:36 apps/pedagogy/models/template.py:40
+#: apps/pedagogy/models/lesson.py:38 apps/pedagogy/models/template.py:40
 msgid "template"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:44
+#: apps/pedagogy/models/lesson.py:46
 msgid "source lesson"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:45
+#: apps/pedagogy/models/lesson.py:47
 msgid ""
 "Section 5: the student's section 4 lesson, shown beside the sheet (not "
 "copied)"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:48 apps/pedagogy/models/template.py:14
+#: apps/pedagogy/models/lesson.py:50 apps/pedagogy/models/template.py:14
 msgid "lesson topic"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:49 apps/pedagogy/models/template.py:16
-#: apps/pedagogy/models/trial.py:27
+#: apps/pedagogy/models/lesson.py:51 apps/pedagogy/models/template.py:16
+#: apps/pedagogy/models/trial.py:28
 msgid "grade"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:50 apps/pedagogy/models/template.py:17
+#: apps/pedagogy/models/lesson.py:52 apps/pedagogy/models/template.py:17
 msgid "duration, min"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:51 apps/pedagogy/models/template.py:19
+#: apps/pedagogy/models/lesson.py:53 apps/pedagogy/models/template.py:19
 msgid "lesson aim"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:52 apps/pedagogy/models/template.py:21
+#: apps/pedagogy/models/lesson.py:54 apps/pedagogy/models/template.py:21
 msgid "expected results"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:52 apps/pedagogy/models/template.py:20
+#: apps/pedagogy/models/lesson.py:54 apps/pedagogy/models/template.py:20
 #: apps/pedagogy/models/template.py:21
 msgid "HTML"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:53
+#: apps/pedagogy/models/lesson.py:55
 msgid "authorial method used"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:54
+#: apps/pedagogy/models/lesson.py:56
 msgid "digital tools used"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:56
+#: apps/pedagogy/models/lesson.py:58
 msgid "other details"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:59
+#: apps/pedagogy/models/lesson.py:61
 msgid "Section 6: education programme, study year, source part"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:66
+#: apps/pedagogy/models/lesson.py:64
+msgid "cycle"
+msgstr ""
+
+#: apps/pedagogy/models/lesson.py:64
+msgid "Section 8: 1, 2, 3 …"
+msgstr ""
+
+#: apps/pedagogy/models/lesson.py:69
 msgid "lessons"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:96
+#: apps/pedagogy/models/lesson.py:99
 msgid "frame stage"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:98 apps/pedagogy/models/template.py:44
+#: apps/pedagogy/models/lesson.py:101 apps/pedagogy/models/template.py:44
 msgid "minutes"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:99
+#: apps/pedagogy/models/lesson.py:102
 msgid "content"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:100
+#: apps/pedagogy/models/lesson.py:103
 msgid "original content"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:101
+#: apps/pedagogy/models/lesson.py:104
 msgid "cleared at"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:102
+#: apps/pedagogy/models/lesson.py:105
 msgid "redesigned"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:102
+#: apps/pedagogy/models/lesson.py:105
 msgid "The student wrote this stage anew"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:107
+#: apps/pedagogy/models/lesson.py:110
 msgid "lesson stage"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:108
+#: apps/pedagogy/models/lesson.py:111
 msgid "lesson stages"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:129 apps/practice/models/submission.py:142
+#: apps/pedagogy/models/lesson.py:132 apps/practice/models/submission.py:142
 msgid "reason"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:130 apps/programme/models/portfolio.py:97
+#: apps/pedagogy/models/lesson.py:133 apps/programme/models/portfolio.py:97
 msgid "snapshot"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:135
+#: apps/pedagogy/models/lesson.py:138
 msgid "lesson version"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:136
+#: apps/pedagogy/models/lesson.py:139
 msgid "lesson versions"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:147
+#: apps/pedagogy/models/lesson.py:150
 msgid "Lesson created"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:148
+#: apps/pedagogy/models/lesson.py:151
 msgid "Stage content cleared"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:149
+#: apps/pedagogy/models/lesson.py:152
 msgid "Original content restored"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:150
+#: apps/pedagogy/models/lesson.py:153
 msgid "Stage saved"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:151
+#: apps/pedagogy/models/lesson.py:154
 #, fuzzy
 #| msgid "AI suggestion → your decision"
 msgid "AI suggestion added to the editor"
 msgstr "AI suggestion → teacher's decision"
 
-#: apps/pedagogy/models/lesson.py:152
+#: apps/pedagogy/models/lesson.py:155
 msgid "Lesson details saved"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:153
+#: apps/pedagogy/models/lesson.py:156
 msgid "Lesson assembled"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:154
+#: apps/pedagogy/models/lesson.py:157
 msgid "Final version assembled"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:160 apps/programme/models/portfolio.py:212
+#: apps/pedagogy/models/lesson.py:163 apps/programme/models/portfolio.py:212
 #: apps/programme/models/progress.py:105 apps/progress/models/progress.py:161
 msgid "action"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:161 apps/programme/models/portfolio.py:213
+#: apps/pedagogy/models/lesson.py:164 apps/programme/models/portfolio.py:213
 msgid "data"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:166
+#: apps/pedagogy/models/lesson.py:169
 msgid "lesson event"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:167
+#: apps/pedagogy/models/lesson.py:170
 msgid "lesson events"
 msgstr ""
 
@@ -5709,11 +5927,6 @@ msgstr ""
 
 #: apps/pedagogy/models/review.py:24
 msgid "Keeping to the time and summing up the microlesson"
-msgstr ""
-
-#: apps/pedagogy/models/review.py:37 apps/pedagogy/models/trial.py:51
-#: apps/pedagogy/models/trial.py:97
-msgid "trial"
 msgstr ""
 
 #: apps/pedagogy/models/review.py:38
@@ -5791,18 +6004,21 @@ msgid "template stages"
 msgstr ""
 
 #: apps/pedagogy/models/trial.py:10 ui/templates/student/designer/trial.html:46
+#: ui/templates/student/independent/editor.html:194
 #: ui/templates/student/micro/trial_start.html:38
 #: ui/templates/student/practice/trial_start.html:41
 msgid "High level"
 msgstr ""
 
 #: apps/pedagogy/models/trial.py:11 ui/templates/student/designer/trial.html:46
+#: ui/templates/student/independent/editor.html:194
 #: ui/templates/student/micro/trial_start.html:38
 #: ui/templates/student/practice/trial_start.html:41
 msgid "Medium level"
 msgstr ""
 
 #: apps/pedagogy/models/trial.py:12 ui/templates/student/designer/trial.html:46
+#: ui/templates/student/independent/editor.html:194
 #: ui/templates/student/micro/trial_start.html:38
 #: ui/templates/student/practice/trial_start.html:41
 msgid "Low level"
@@ -5824,169 +6040,188 @@ msgstr ""
 msgid "A microlesson in dialogue"
 msgstr ""
 
-#: apps/pedagogy/models/trial.py:27
-msgid "Section 5: the class, 7–11"
+#: apps/pedagogy/models/trial.py:25
+#: ui/templates/student/independent/editor.html:209
+#: ui/templates/teacher/practice/independent.html:33
+msgid "A real audience"
 msgstr ""
 
 #: apps/pedagogy/models/trial.py:28
+msgid "Section 5: the class, 7–11"
+msgstr ""
+
+#: apps/pedagogy/models/trial.py:29
 msgid "AI student's level"
 msgstr ""
 
-#: apps/pedagogy/models/trial.py:34
+#: apps/pedagogy/models/trial.py:30
+msgid "protocol"
+msgstr ""
+
+#: apps/pedagogy/models/trial.py:30
+msgid "A real audience: the protocol the teacher enters"
+msgstr ""
+
+#: apps/pedagogy/models/trial.py:37
+#: ui/templates/student/independent/trial.html:19
+msgid "recorded by"
+msgstr ""
+
+#: apps/pedagogy/models/trial.py:44
 msgid "trial with the AI student"
 msgstr ""
 
-#: apps/pedagogy/models/trial.py:35
+#: apps/pedagogy/models/trial.py:45
 msgid "trials with the AI student"
 msgstr ""
 
-#: apps/pedagogy/models/trial.py:47 apps/pedagogy/models/trial.py:92
+#: apps/pedagogy/models/trial.py:57 apps/pedagogy/models/trial.py:102
 #: ui/templates/assessments/result.html:50
 #: ui/templates/student/practice/results.html:58
 #: ui/templates/teacher/practice/detail.html:36
 msgid "Correct"
 msgstr ""
 
-#: apps/pedagogy/models/trial.py:48 apps/pedagogy/models/trial.py:93
+#: apps/pedagogy/models/trial.py:58 apps/pedagogy/models/trial.py:103
 #: ui/templates/student/practice/results.html:59
 #: ui/templates/teacher/practice/detail.html:36
 msgid "Partly correct"
 msgstr ""
 
-#: apps/pedagogy/models/trial.py:49 apps/pedagogy/models/trial.py:94
+#: apps/pedagogy/models/trial.py:59 apps/pedagogy/models/trial.py:104
 #: ui/templates/assessments/result.html:50
 #: ui/templates/student/practice/results.html:60
 #: ui/templates/teacher/practice/detail.html:36
 msgid "Wrong"
 msgstr ""
 
-#: apps/pedagogy/models/trial.py:53
+#: apps/pedagogy/models/trial.py:63
 msgid "stage title"
 msgstr ""
 
-#: apps/pedagogy/models/trial.py:54 apps/practice/models/task.py:54
+#: apps/pedagogy/models/trial.py:64 apps/practice/models/task.py:54
 msgid "task"
 msgstr ""
 
-#: apps/pedagogy/models/trial.py:54
+#: apps/pedagogy/models/trial.py:64
 msgid "HTML, the stage as assembled"
 msgstr ""
 
-#: apps/pedagogy/models/trial.py:55 apps/pedagogy/models/trial.py:74
+#: apps/pedagogy/models/trial.py:65 apps/pedagogy/models/trial.py:84
 #, fuzzy
 #| msgid "Your answer"
 msgid "AI student's answer"
 msgstr "Answer"
 
-#: apps/pedagogy/models/trial.py:56 apps/pedagogy/models/trial.py:103
+#: apps/pedagogy/models/trial.py:66 apps/pedagogy/models/trial.py:113
 msgid "answer type"
 msgstr ""
 
-#: apps/pedagogy/models/trial.py:57
+#: apps/pedagogy/models/trial.py:67
 msgid "possible error"
 msgstr ""
 
-#: apps/pedagogy/models/trial.py:58
+#: apps/pedagogy/models/trial.py:68
 msgid "difficulty"
 msgstr ""
 
-#: apps/pedagogy/models/trial.py:59
+#: apps/pedagogy/models/trial.py:69
 #, fuzzy
 #| msgid "Thank you, the test is done"
 msgid "methodical suggestion"
 msgstr "Test complete. Thanks!"
 
-#: apps/pedagogy/models/trial.py:62
+#: apps/pedagogy/models/trial.py:72
 msgid "teacher's explanation"
 msgstr ""
 
-#: apps/pedagogy/models/trial.py:63
+#: apps/pedagogy/models/trial.py:73
 msgid "time set, minutes"
 msgstr ""
 
-#: apps/pedagogy/models/trial.py:64
+#: apps/pedagogy/models/trial.py:74
 #, fuzzy
 #| msgid "Thank you, the test is done"
 msgid "the student's explanation"
 msgstr "Test complete. Thanks!"
 
-#: apps/pedagogy/models/trial.py:65
+#: apps/pedagogy/models/trial.py:75
 msgid "follow-up question"
 msgstr ""
 
-#: apps/pedagogy/models/trial.py:66
+#: apps/pedagogy/models/trial.py:76
 msgid "pedagogical correction made"
 msgstr ""
 
-#: apps/pedagogy/models/trial.py:67
+#: apps/pedagogy/models/trial.py:77
 msgid "improved task"
 msgstr ""
 
-#: apps/pedagogy/models/trial.py:68 apps/progress/models/progress.py:38
+#: apps/pedagogy/models/trial.py:78 apps/progress/models/progress.py:38
 msgid "time spent, s"
 msgstr ""
 
-#: apps/pedagogy/models/trial.py:69
+#: apps/pedagogy/models/trial.py:79
 msgid "analysed at"
 msgstr ""
 
-#: apps/pedagogy/models/trial.py:75
+#: apps/pedagogy/models/trial.py:85
 msgid "AI student's answers"
 msgstr ""
 
-#: apps/pedagogy/models/trial.py:88
+#: apps/pedagogy/models/trial.py:98
 #: ui/templates/teacher/content/question.html:3
 #: ui/templates/teacher/content/quiz.html:20
 msgid "Question"
 msgstr ""
 
-#: apps/pedagogy/models/trial.py:89
+#: apps/pedagogy/models/trial.py:99
 msgid "Pedagogical action"
 msgstr ""
 
-#: apps/pedagogy/models/trial.py:95
+#: apps/pedagogy/models/trial.py:105
 #, fuzzy
 #| msgid "Your answer"
 msgid "Not an answer"
 msgstr "Answer"
 
-#: apps/pedagogy/models/trial.py:99
+#: apps/pedagogy/models/trial.py:109
 msgid "By the timer: 1 (0–2 min) … 4 (8–10 min)"
 msgstr ""
 
-#: apps/pedagogy/models/trial.py:101
+#: apps/pedagogy/models/trial.py:111
 #, fuzzy
 #| msgid "The teacher opened a stage for you"
 msgid "the teacher's message"
 msgstr "The teacher opened a stage"
 
-#: apps/pedagogy/models/trial.py:102
+#: apps/pedagogy/models/trial.py:112
 #, fuzzy
 #| msgid "Thank you, the test is done"
 msgid "the AI student's reply"
 msgstr "Test complete. Thanks!"
 
-#: apps/pedagogy/models/trial.py:105
+#: apps/pedagogy/models/trial.py:115
 msgid "time from the start, s"
 msgstr ""
 
-#: apps/pedagogy/models/trial.py:105
+#: apps/pedagogy/models/trial.py:115
 #, fuzzy
 #| msgid "Your answer"
 msgid "The AI student's thinking not counted"
 msgstr "Answer"
 
-#: apps/pedagogy/models/trial.py:107
+#: apps/pedagogy/models/trial.py:117
 #, fuzzy
 #| msgid "Your answer"
 msgid "the AI's answer time, ms"
 msgstr "Answer"
 
-#: apps/pedagogy/models/trial.py:113
+#: apps/pedagogy/models/trial.py:123
 msgid "microlesson turn"
 msgstr ""
 
-#: apps/pedagogy/models/trial.py:114
+#: apps/pedagogy/models/trial.py:124
 msgid "microlesson turns"
 msgstr ""
 
@@ -6161,7 +6396,7 @@ msgid "%(n)s of %(total)s steps are in the right place."
 msgstr ""
 
 #: apps/practice/models/submission.py:14
-#: ui/templates/teacher/practice/queue.html:33
+#: ui/templates/teacher/practice/queue.html:66
 msgid "Submitted"
 msgstr ""
 
@@ -6170,7 +6405,7 @@ msgid "Being graded"
 msgstr ""
 
 #: apps/practice/models/submission.py:16
-#: ui/templates/teacher/practice/queue.html:26
+#: ui/templates/teacher/practice/queue.html:27
 msgid "Graded"
 msgstr ""
 
@@ -6200,10 +6435,6 @@ msgstr ""
 
 #: apps/practice/models/submission.py:41
 msgid "checked by"
-msgstr ""
-
-#: apps/practice/models/submission.py:43
-msgid "teacher's comment"
 msgstr ""
 
 #: apps/practice/models/submission.py:45
@@ -6452,19 +6683,19 @@ msgstr "The previous answer is still being graded."
 msgid "You have used all attempts for this work."
 msgstr "No attempts left for this work."
 
-#: apps/programme/admin.py:98 apps/progress/admin.py:64
+#: apps/programme/admin.py:99 apps/progress/admin.py:64
 msgid "Recalculate"
 msgstr ""
 
-#: apps/programme/admin.py:102 apps/progress/admin.py:68
+#: apps/programme/admin.py:103 apps/progress/admin.py:68
 msgid "Recalculated."
 msgstr ""
 
-#: apps/programme/admin.py:113
+#: apps/programme/admin.py:114
 msgid "Open the selected sections for the student"
 msgstr ""
 
-#: apps/programme/admin.py:117 apps/progress/admin.py:39
+#: apps/programme/admin.py:118 apps/progress/admin.py:39
 #, python-format
 msgid "Opened: %(n)d"
 msgstr ""
@@ -6492,8 +6723,8 @@ msgstr ""
 
 #: apps/programme/models/diagnostics.py:29
 #: apps/programme/models/programme.py:66 apps/programme/models/progress.py:59
-#: apps/programme/models/progress.py:103 apps/programme/models/video.py:14
-#: apps/programme/models/video.py:44
+#: apps/programme/models/progress.py:103 apps/programme/models/schedule.py:13
+#: apps/programme/models/video.py:14 apps/programme/models/video.py:44
 msgid "section"
 msgstr ""
 
@@ -6664,12 +6895,6 @@ msgstr ""
 msgid "The teacher's expert feedback"
 msgstr "The teacher opened a stage"
 
-#: apps/programme/models/portfolio.py:51
-#, fuzzy
-#| msgid "Thank you, the test is done"
-msgid "The student's professional reflection"
-msgstr "Test complete. Thanks!"
-
 #: apps/programme/models/portfolio.py:52
 msgid "The personal professional development map"
 msgstr ""
@@ -6688,14 +6913,6 @@ msgstr ""
 
 #: apps/programme/models/portfolio.py:65 apps/programme/models/portfolio.py:115
 msgid "Accepted"
-msgstr ""
-
-#: apps/programme/models/portfolio.py:66 apps/programme/models/portfolio.py:116
-msgid "Needs more work"
-msgstr ""
-
-#: apps/programme/models/portfolio.py:67 apps/programme/models/portfolio.py:117
-msgid "Needs revising"
 msgstr ""
 
 #: apps/programme/models/portfolio.py:72
@@ -7022,6 +7239,26 @@ msgstr ""
 msgid "section events"
 msgstr ""
 
+#: apps/programme/models/schedule.py:21
+msgid "hand in the project by"
+msgstr ""
+
+#: apps/programme/models/schedule.py:22
+msgid "trial date"
+msgstr ""
+
+#: apps/programme/models/schedule.py:24
+msgid "set by"
+msgstr ""
+
+#: apps/programme/models/schedule.py:28
+msgid "section schedule"
+msgstr ""
+
+#: apps/programme/models/schedule.py:29
+msgid "section schedules"
+msgstr ""
+
 #: apps/programme/models/video.py:16
 msgid "YouTube link"
 msgstr ""
@@ -7155,16 +7392,46 @@ msgstr ""
 msgid "Portfolio: %(status)s"
 msgstr ""
 
+#: apps/programme/services/schedule.py:22
+msgid ""
+"Dear student! The stage of developing an independent authorial lesson is "
+"open for you. Choose the lesson topic and start the pedagogical design."
+msgstr ""
+
+#: apps/programme/services/schedule.py:24
+msgid ""
+"The deadline for handing in the authorial lesson project is near. Check how "
+"far the work is done and complete the parts needed."
+msgstr ""
+
+#: apps/programme/services/schedule.py:26
+msgid ""
+"The professional trial date of your authorial lesson is set. Check the "
+"lesson stages and get ready for the trial."
+msgstr ""
+
+#: apps/programme/services/schedule.py:28
+msgid ""
+"Айгерім has left a new expert opinion on your lesson project. Read the "
+"remarks found."
+msgstr ""
+
+#: apps/programme/services/schedule.py:29
+msgid ""
+"The stage of trying the corrected version of the authorial lesson out again "
+"is open."
+msgstr ""
+
 #: apps/programme/tests.py:239 ui/templates/student/dashboard.html:68
 #: ui/templates/teacher/dashboard.html:27 ui/templates/teacher/student.html:35
 msgid "Key figures"
 msgstr ""
 
-#: apps/programme/tests.py:273 ui/templates/student/section.html:136
+#: apps/programme/tests.py:274 ui/templates/student/section.html:139
 msgid "The section is in development"
 msgstr ""
 
-#: apps/programme/tests.py:579 ui/templates/student/section.html:117
+#: apps/programme/tests.py:580 ui/templates/student/section.html:117
 msgid "The video is being prepared"
 msgstr ""
 
@@ -7502,6 +7769,8 @@ msgstr[1] ""
 #: apps/student/cabinet.py:95 ui/templates/labs/run.html:282
 #: ui/templates/student/designer/partials/templates.html:73
 #: ui/templates/student/home.html:63
+#: ui/templates/student/independent/editor.html:212
+#: ui/templates/student/independent/partials/home.html:75
 #: ui/templates/student/practice/partials/cards.html:60
 #: ui/templates/student/results.html:92 ui/templates/student/topic.html:43
 #: ui/templates/teacher/content/course.html:32
@@ -7509,9 +7778,10 @@ msgstr[1] ""
 #: ui/templates/teacher/dashboard.html:80 ui/templates/teacher/group.html:79
 #: ui/templates/teacher/group.html:124 ui/templates/teacher/group.html:208
 #: ui/templates/teacher/partials/groups_table.html:15
-#: ui/templates/teacher/practice/queue.html:40
-#: ui/templates/teacher/practice/queue.html:54
-#: ui/templates/teacher/practice/queue.html:68
+#: ui/templates/teacher/practice/queue.html:61
+#: ui/templates/teacher/practice/queue.html:73
+#: ui/templates/teacher/practice/queue.html:87
+#: ui/templates/teacher/practice/queue.html:101
 #: ui/templates/teacher/student.html:82 ui/templates/teacher/students.html:32
 msgid "Open"
 msgstr ""
@@ -7632,15 +7902,15 @@ msgstr ""
 msgid "Ask about this stage…"
 msgstr "Test complete. Thanks!"
 
-#: apps/student/designer.py:162 apps/student/micro.py:108
-#: apps/student/practice.py:183
+#: apps/student/designer.py:162 apps/student/independent.py:135
+#: apps/student/micro.py:108 apps/student/practice.py:183
 msgid "Saving…"
 msgstr ""
 
 #: apps/student/designer.py:163 apps/student/designer.py:308
-#: apps/student/micro.py:108 apps/student/micro.py:124
-#: apps/student/practice.py:129 apps/student/practice.py:184
-#: ui/templates/student/designer/editor.html:120
+#: apps/student/independent.py:135 apps/student/micro.py:108
+#: apps/student/micro.py:124 apps/student/practice.py:129
+#: apps/student/practice.py:184 ui/templates/student/designer/editor.html:120
 #: ui/templates/student/practice/stage.html:51
 msgid "Saved"
 msgstr ""
@@ -7659,8 +7929,10 @@ msgid "The suggestion is in the editor — rework it in your own words."
 msgstr ""
 
 #: apps/student/designer.py:182 apps/student/designer.py:193
-#: apps/student/designer.py:292 apps/student/micro.py:122
-#: apps/student/micro.py:181 apps/student/practice.py:127
+#: apps/student/designer.py:292 apps/student/independent.py:152
+#: apps/student/independent.py:186 apps/student/independent.py:221
+#: apps/student/micro.py:122 apps/student/micro.py:181
+#: apps/student/practice.py:127 apps/teacher/practice.py:262
 msgid "The final version cannot be changed."
 msgstr ""
 
@@ -7685,10 +7957,68 @@ msgstr ""
 msgid "The final version is assembled and saved to your portfolio."
 msgstr ""
 
-#: apps/student/micro.py:91
-msgid "Choose a part of your lesson."
+#: apps/student/independent.py:35
+msgid "developing independent creative and professional initiatives"
 msgstr ""
 
+#: apps/student/independent.py:36
+msgid "deepening chemistry subject and pedagogical knowledge"
+msgstr ""
+
+#: apps/student/independent.py:37
+msgid "designing authorial lessons on one's own and using them in practice"
+msgstr ""
+
+#: apps/student/independent.py:38
+msgid "analysing, assessing and improving pedagogical decisions"
+msgstr ""
+
+#: apps/student/independent.py:41
+#, fuzzy
+#| msgid "Thank you, the test is done"
+msgid "Developing the lesson"
+msgstr "Test complete. Thanks!"
+
+#: apps/student/independent.py:42
+msgid "Айгерім's expert opinion"
+msgstr ""
+
+#: apps/student/independent.py:43
+msgid "Trying it out"
+msgstr ""
+
+#: apps/student/independent.py:44
+#, fuzzy
+#| msgid "your answer"
+msgid "Analysing the results"
+msgstr "answer given"
+
+#: apps/student/independent.py:45
+msgid "Improving"
+msgstr ""
+
+#: apps/student/independent.py:46
+msgid "The next lesson"
+msgstr ""
+
+#: apps/student/independent.py:136
+msgid ""
+"Not saved — the stages take more than 45 minutes, or check the connection"
+msgstr ""
+
+#: apps/student/independent.py:154
+msgid "The project is saved."
+msgstr ""
+
+#: apps/student/independent.py:173
+msgid "The stages take 45 minutes at most in all."
+msgstr ""
+
+#: apps/student/independent.py:174
+msgid "Give the stage a name and its minutes."
+msgstr ""
+
+#: apps/student/independent.py:217 apps/student/independent.py:337
 #: apps/student/micro.py:177 apps/student/portfolio.py:160
 #: ui/templates/ai/partials/thread.html:44
 #: ui/templates/student/designer/partials/turn.html:49
@@ -7697,16 +8027,56 @@ msgstr ""
 msgid "Today's AI requests are used up. They renew tomorrow."
 msgstr ""
 
-#: apps/student/micro.py:179 apps/student/portfolio.py:162
-#: ui/templates/ai/partials/thread.html:44
-msgid "The AI assistant did not answer this time. Try again in a minute."
+#: apps/student/independent.py:219 apps/student/independent.py:339
+msgid "Айгерім did not answer this time. Try again in a minute."
 msgstr ""
 
-#: apps/student/micro.py:200 apps/student/practice.py:266
+#: apps/student/independent.py:235 apps/student/independent.py:256
+msgid ""
+"Fill in the details and every stage first; the stages take 45 minutes at "
+"most."
+msgstr ""
+
+#: apps/student/independent.py:237
+msgid "The lesson is submitted for the trial."
+msgstr ""
+
+#: apps/student/independent.py:247
+#, fuzzy
+#| msgid "The group is changed by your teacher."
+msgid "The trial opens on its date set by the teacher."
+msgstr "The group is changed by the teacher."
+
+#: apps/student/independent.py:253 apps/student/micro.py:200
+#: apps/student/practice.py:266
 #, fuzzy
 #| msgid "Thank you, the test is done"
 msgid "Choose the class and the AI student's level."
 msgstr "Test complete. Thanks!"
+
+#: apps/student/independent.py:254
+msgid "Submit the lesson for the trial first."
+msgstr ""
+
+#: apps/student/independent.py:255
+msgid "Finish the trial that is going on first."
+msgstr ""
+
+#: apps/student/independent.py:341
+#: ui/templates/student/independent/trial.html:71
+#, fuzzy
+#| msgid "Thank you, the test is done"
+msgid "Finish the trial first."
+msgstr "Test complete. Thanks!"
+
+#: apps/student/micro.py:91
+msgid "Choose a part of your lesson."
+msgstr ""
+
+#: apps/student/micro.py:179 apps/student/portfolio.py:162
+#: ui/templates/ai/partials/thread.html:44
+msgid "The AI assistant did not answer this time. Try again in a minute."
+msgstr ""
 
 #: apps/student/micro.py:202 ui/templates/student/micro/trial_start.html:15
 msgid "First every stage must be marked correct by the AI assistant's check."
@@ -7806,19 +8176,19 @@ msgid ""
 "The trial is finished; the results are gathered into your research portfolio."
 msgstr ""
 
-#: apps/student/sections.py:238
+#: apps/student/sections.py:240
 msgid "Explain the section"
 msgstr ""
 
-#: apps/student/sections.py:239
+#: apps/student/sections.py:241
 msgid "Let the AI explain"
 msgstr ""
 
-#: apps/student/sections.py:240
+#: apps/student/sections.py:242
 msgid "The AI assistant of the ICPAI programme"
 msgstr ""
 
-#: apps/student/sections.py:241
+#: apps/student/sections.py:243
 #, fuzzy
 #| msgid "Thank you, the test is done"
 msgid "Ask about this section…"
@@ -8031,8 +8401,8 @@ msgstr ""
 msgid "The work is returned to the student; the attempt is given back."
 msgstr ""
 
-#: apps/teacher/grading.py:133 apps/teacher/practice.py:97
-#: apps/teacher/practice.py:131
+#: apps/teacher/grading.py:133 apps/teacher/practice.py:104
+#: apps/teacher/practice.py:138
 msgid "The grade is saved."
 msgstr ""
 
@@ -8071,25 +8441,53 @@ msgstr ""
 msgid "experiment %(n)s"
 msgstr ""
 
-#: apps/teacher/practice.py:95 apps/teacher/practice.py:129
+#: apps/teacher/practice.py:102 apps/teacher/practice.py:136
 msgid "Give every criterion 0, 1 or 2 points."
 msgstr ""
 
-#: apps/teacher/practice.py:162
+#: apps/teacher/practice.py:169
 #, fuzzy
 #| msgid "Thank you, the test is done"
 msgid "Choose the status of the work."
 msgstr "Test complete. Thanks!"
 
-#: apps/teacher/practice.py:164
+#: apps/teacher/practice.py:171
 msgid "The portfolio is not waiting for feedback."
 msgstr ""
 
-#: apps/teacher/practice.py:168
+#: apps/teacher/practice.py:175
 #, fuzzy
 #| msgid "Thank you, the test is done"
 msgid "The feedback is saved and shown to the student."
 msgstr "Test complete. Thanks!"
+
+#: apps/teacher/practice.py:218
+#, fuzzy
+#| msgid "Thank you, the test is done"
+msgid "The dates are saved; the students are notified."
+msgstr "Test complete. Thanks!"
+
+#: apps/teacher/practice.py:253
+msgid "Confirmed."
+msgstr ""
+
+#: apps/teacher/practice.py:257
+msgid "The real-audience trial protocol is saved."
+msgstr ""
+
+#: apps/teacher/practice.py:260
+msgid "Give a grade from 0 to 10."
+msgstr ""
+
+#: apps/teacher/practice.py:260
+#, fuzzy
+#| msgid "Thank you, the test is done"
+msgid "Choose the status."
+msgstr "Test complete. Thanks!"
+
+#: apps/teacher/practice.py:261
+msgid "Write the protocol."
+msgstr ""
 
 #: apps/teacher/views.py:112
 msgid "The group is saved."
@@ -8337,6 +8735,7 @@ msgstr ""
 #: ui/templates/feedback/partials/menu.html:4
 #: ui/templates/partials/shell/notifications_menu.html:8
 #: ui/templates/partials/shell/sidebar_student.html:43
+#: ui/templates/student/independent/partials/home.html:56
 msgid "Notifications"
 msgstr ""
 
@@ -8673,6 +9072,7 @@ msgstr ""
 
 #: ui/templates/ai/partials/thread.html:50
 #: ui/templates/student/designer/trial.html:95
+#: ui/templates/student/independent/editor.html:130
 #: ui/templates/student/micro/editor.html:145
 #: ui/templates/student/practice/step.html:71
 #, python-format
@@ -8897,6 +9297,9 @@ msgstr ""
 
 #: ui/templates/components/confirm.html:20
 #: ui/templates/components/modal.html:20
+#: ui/templates/teacher/practice/independent.html:52
+#: ui/templates/teacher/practice/independent.html:71
+#: ui/templates/teacher/practice/queue.html:61
 msgid "Confirm"
 msgstr ""
 
@@ -8909,6 +9312,7 @@ msgstr ""
 #: ui/templates/core/about.html:34 ui/templates/layouts/site.html:21
 #: ui/templates/student/designer/partials/plan_sheet.html:22
 #: ui/templates/student/designer/plan_pdf.html:37
+#: ui/templates/student/independent/editor.html:39
 #: ui/templates/student/practice/report_pdf.html:31
 #: ui/templates/student/practice/sheet.html:50
 #: ui/templates/student/practice/sheet.html:51
@@ -9005,14 +9409,6 @@ msgstr ""
 msgid ""
 "To develop the skills of assessing students' digital research activity and "
 "learning achievements and of self-reflection."
-msgstr ""
-
-#: ui/templates/core/about.html:178 ui/templates/student/diagnostic.html:63
-#: ui/templates/student/micro/editor.html:92
-#: ui/templates/student/practice/report_pdf.html:38
-#: ui/templates/student/practice/stage.html:32
-#: ui/templates/student/practice/step.html:169
-msgid "Aim"
 msgstr ""
 
 #: ui/templates/core/about.html:179
@@ -9414,7 +9810,7 @@ msgstr ""
 #: ui/templates/partials/shell/sidebar_student.html:35
 #: ui/templates/student/icpai_results.html:8
 #: ui/templates/student/icpai_results.html:10
-#: ui/templates/student/portfolio/partials/dashboard.html:48
+#: ui/templates/student/portfolio/partials/dashboard.html:49
 #: ui/templates/student/practice/partials/nav.html:33
 #: ui/templates/student/practice/results.html:46
 #: ui/templates/student/search.html:11
@@ -9912,10 +10308,13 @@ msgstr ""
 msgid "Latest attempts"
 msgstr ""
 
-#: ui/templates/research/dashboard.html:87 ui/templates/student/results.html:75
-#: ui/templates/teacher/groups.html:23
+#: ui/templates/research/dashboard.html:87
+#: ui/templates/student/independent/editor.html:107
+#: ui/templates/student/results.html:75 ui/templates/teacher/groups.html:23
 #: ui/templates/teacher/partials/grading_queue.html:7
-#: ui/templates/teacher/practice/queue.html:33
+#: ui/templates/teacher/practice/independent.html:49
+#: ui/templates/teacher/practice/queue.html:53
+#: ui/templates/teacher/practice/queue.html:66
 #: ui/templates/teacher/student.html:69 ui/templates/teacher/student.html:111
 #: ui/templates/teacher/student.html:161
 msgid "Status"
@@ -10331,6 +10730,8 @@ msgstr ""
 #: ui/templates/student/designer/template.html:10
 #: ui/templates/student/designer/trial.html:10
 #: ui/templates/student/diagnostic.html:10
+#: ui/templates/student/independent/editor.html:11
+#: ui/templates/student/independent/trial.html:10
 #: ui/templates/student/micro/dialog.html:10
 #: ui/templates/student/micro/editor.html:11
 #: ui/templates/student/micro/protocol.html:10
@@ -10369,6 +10770,7 @@ msgstr ""
 #: ui/templates/student/designer/partials/plan_sheet.html:17
 #: ui/templates/student/designer/plan_pdf.html:32
 #: ui/templates/student/designer/template.html:25
+#: ui/templates/student/independent/editor.html:33
 msgid "Lesson topic"
 msgstr ""
 
@@ -10390,7 +10792,7 @@ msgstr ""
 
 #: ui/templates/student/designer/assemble.html:34
 #: ui/templates/student/micro/editor.html:57
-#: ui/templates/student/portfolio/partials/dashboard.html:164
+#: ui/templates/student/portfolio/partials/dashboard.html:165
 #: ui/templates/student/practice/sheet.html:58
 #: ui/templates/student/profile.html:38
 #: ui/templates/teacher/content/course_form.html:39
@@ -10399,6 +10801,7 @@ msgstr ""
 #: ui/templates/teacher/content/simple_form.html:16
 #: ui/templates/teacher/content/stage.html:51
 #: ui/templates/teacher/group_form.html:25
+#: ui/templates/teacher/practice/queue.html:42
 msgid "Save"
 msgstr ""
 
@@ -10552,10 +10955,14 @@ msgid "The template's content"
 msgstr ""
 
 #: ui/templates/student/designer/editor.html:102
+#: ui/templates/student/independent/editor.html:80
+#: ui/templates/student/independent/editor.html:146
 msgid "Stage title"
 msgstr ""
 
 #: ui/templates/student/designer/editor.html:104
+#: ui/templates/student/independent/editor.html:81
+#: ui/templates/student/independent/editor.html:147
 #: ui/templates/student/practice/step.html:68
 msgid "Minutes"
 msgstr ""
@@ -10592,7 +10999,9 @@ msgid "Restore the original"
 msgstr ""
 
 #: ui/templates/student/designer/editor.html:149
-#: ui/templates/teacher/practice/queue.html:59
+#: ui/templates/student/independent/editor.html:159
+#: ui/templates/teacher/practice/queue.html:53
+#: ui/templates/teacher/practice/queue.html:92
 msgid "Lesson"
 msgstr ""
 
@@ -10612,6 +11021,7 @@ msgstr ""
 #: ui/templates/student/designer/partials/flow.html:11
 #: ui/templates/student/designer/results.html:21
 #: ui/templates/student/designer/trial.html:66
+#: ui/templates/student/independent/editor.html:209
 #: ui/templates/student/micro/dialog.html:21
 #: ui/templates/student/micro/partials/messages.html:17
 #: ui/templates/student/micro/protocol.html:19
@@ -10622,6 +11032,7 @@ msgstr ""
 #: ui/templates/student/practice/step.html:19
 #: ui/templates/student/practice/step.html:107
 #: ui/templates/teacher/practice/detail.html:18
+#: ui/templates/teacher/practice/independent.html:33
 #: ui/templates/teacher/practice/micro.html:16
 #: ui/templates/teacher/practice/micro.html:32
 #, fuzzy
@@ -10633,6 +11044,8 @@ msgstr "Test complete. Thanks!"
 #: ui/templates/student/designer/results.html:8
 #: ui/templates/student/designer/results.html:10
 #: ui/templates/student/designer/trial.html:97
+#: ui/templates/student/independent/partials/home.html:81
+#: ui/templates/student/independent/trial.html:9
 #: ui/templates/student/micro/editor.html:154
 #: ui/templates/student/micro/protocol.html:71
 #: ui/templates/student/micro/report_pdf.html:31
@@ -10672,6 +11085,7 @@ msgstr ""
 #: ui/templates/student/designer/plan_pdf.html:33
 #: ui/templates/student/designer/template.html:28
 #: ui/templates/student/designer/template.html:99
+#: ui/templates/student/independent/editor.html:36
 #: ui/templates/student/micro/editor.html:36
 #: ui/templates/student/micro/editor.html:49
 #: ui/templates/student/micro/editor.html:88
@@ -10789,9 +11203,11 @@ msgid ""
 msgstr ""
 
 #: ui/templates/student/designer/partials/turn.html:26
+#: ui/templates/student/independent/trial.html:34
 #: ui/templates/student/practice/step.html:96
 #: ui/templates/student/practice/trial_start.html:56
 #: ui/templates/teacher/practice/detail.html:47
+#: ui/templates/teacher/practice/independent.html:36
 msgid "The AI student's answer"
 msgstr ""
 
@@ -10965,6 +11381,7 @@ msgid "School grade"
 msgstr ""
 
 #: ui/templates/student/designer/template.html:28
+#: ui/templates/student/independent/editor.html:36
 #: ui/templates/student/practice/report_pdf.html:29
 #: ui/templates/student/practice/sheet.html:46
 #: ui/templates/student/practice/trial_start.html:47
@@ -10987,11 +11404,6 @@ msgstr ""
 #: ui/templates/student/designer/template.html:50
 #: ui/templates/student/designer/template.html:146
 msgid "Create my version"
-msgstr ""
-
-#: ui/templates/student/designer/template.html:57
-#: ui/templates/student/designer/template.html:66
-msgid "Authorial feature"
 msgstr ""
 
 #: ui/templates/student/designer/template.html:60
@@ -11051,6 +11463,7 @@ msgid ""
 msgstr ""
 
 #: ui/templates/student/designer/trial.html:55
+#: ui/templates/student/independent/editor.html:200
 #: ui/templates/student/micro/trial_start.html:49
 #: ui/templates/student/practice/trial_start.html:48
 msgid "Start the trial"
@@ -11171,7 +11584,7 @@ msgid "Details"
 msgstr ""
 
 #: ui/templates/student/icpai_results.html:14
-#: ui/templates/student/portfolio/partials/dashboard.html:47
+#: ui/templates/student/portfolio/partials/dashboard.html:48
 msgid "ICPAI — professional readiness results"
 msgstr ""
 
@@ -11236,7 +11649,7 @@ msgstr ""
 
 #: ui/templates/student/icpai_results.html:53
 #: ui/templates/student/icpai_results.html:79
-#: ui/templates/student/portfolio/partials/dashboard.html:64
+#: ui/templates/student/portfolio/partials/dashboard.html:65
 #, python-format
 msgid "Dynamics by stages, %%"
 msgstr ""
@@ -11257,7 +11670,7 @@ msgstr ""
 #: ui/templates/student/practice/partials/nav.html:10
 #: ui/templates/student/practice/sheet.html:24
 #: ui/templates/teacher/practice/detail.html:17
-#: ui/templates/teacher/practice/queue.html:59
+#: ui/templates/teacher/practice/queue.html:92
 msgid "Practice"
 msgstr ""
 
@@ -11270,6 +11683,7 @@ msgid "Not graded by the teacher yet"
 msgstr ""
 
 #: ui/templates/student/icpai_results.html:121
+#: ui/templates/student/independent/partials/home.html:84
 #: ui/templates/student/micro/dialog.html:9
 #: ui/templates/student/micro/dialog.html:20
 #: ui/templates/student/micro/editor.html:161
@@ -11278,19 +11692,478 @@ msgstr ""
 #: ui/templates/student/micro/protocol.html:74
 #: ui/templates/student/micro/report_pdf.html:33
 #: ui/templates/student/micro/trial_start.html:21
-#: ui/templates/student/portfolio/partials/dashboard.html:152
+#: ui/templates/student/portfolio/partials/dashboard.html:153
 #: ui/templates/student/portfolio/partials/sheet.html:46
 #: ui/templates/student/portfolio/pdf.html:59
+#: ui/templates/teacher/practice/independent.html:33
 #: ui/templates/teacher/practice/micro.html:7
 #: ui/templates/teacher/practice/micro.html:16
-#: ui/templates/teacher/practice/queue.html:50
+#: ui/templates/teacher/practice/queue.html:83
 #, python-format
 msgid "Trial %(n)s"
 msgstr ""
 
 #: ui/templates/student/icpai_results.html:128
-#: ui/templates/student/portfolio/partials/dashboard.html:153
+#: ui/templates/student/portfolio/partials/dashboard.html:154
 msgid "No grades yet."
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:12
+msgid "Developing an independent authorial lesson"
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:17
+#: ui/templates/student/independent/partials/home.html:73
+#: ui/templates/teacher/practice/independent.html:17
+#, python-format
+msgid "Cycle %(n)s"
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:19
+#: ui/templates/student/independent/partials/home.html:21
+#, fuzzy
+#| msgid "Thank you, the test is done"
+msgid "The cycle of professional development"
+msgstr "Test complete. Thanks!"
+
+#: ui/templates/student/independent/editor.html:28
+msgid "The lesson's main details"
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:30
+#: ui/templates/student/micro/editor.html:43
+#: ui/templates/student/portfolio/partials/dashboard.html:163
+#: ui/templates/student/portfolio/partials/sheet.html:17
+#: ui/templates/student/portfolio/pdf.html:30
+msgid "Education programme"
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:31
+msgid "Study year and group"
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:34
+#: ui/templates/student/independent/editor.html:186
+#: ui/templates/student/micro/editor.html:47
+#: ui/templates/student/micro/report_pdf.html:23
+#: ui/templates/student/micro/trial_start.html:24
+#: ui/templates/student/practice/trial_start.html:27
+#: ui/templates/teacher/practice/independent.html:81
+msgid "Class"
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:38
+#: ui/templates/teacher/practice/independent.html:19
+msgid "Learning aim"
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:40
+#: ui/templates/teacher/practice/independent.html:20
+msgid "Authorial pedagogical idea"
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:42
+#, fuzzy
+#| msgid "Thank you, the test is done"
+msgid "Teaching methods used"
+msgstr "Test complete. Thanks!"
+
+#: ui/templates/student/independent/editor.html:43
+msgid "Digital tools"
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:45
+msgid "Lab or research task"
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:50
+#, fuzzy
+#| msgid "Thank you, the test is done"
+msgid "Save the project"
+msgstr "Test complete. Thanks!"
+
+#: ui/templates/student/independent/editor.html:56
+msgid "Lesson stages (editor)"
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:67
+#, fuzzy
+#| msgid "Thank you, the test is done"
+msgid "Change the stage"
+msgstr "Test complete. Thanks!"
+
+#: ui/templates/student/independent/editor.html:69
+#, fuzzy
+#| msgid "Thank you, the test is done"
+msgid "Delete the stage?"
+msgstr "Test complete. Thanks!"
+
+#: ui/templates/student/independent/editor.html:69
+msgid "Its content is removed from the lesson."
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:69
+#: ui/templates/teacher/content/partials/delete.html:4
+#: ui/templates/teacher/content/partials/delete.html:5
+#: ui/templates/teacher/group.html:44
+msgid "Delete"
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:70
+#: ui/templates/teacher/content/stage.html:100
+msgid "Delete the stage"
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:75
+msgid ""
+"You form the lesson structure yourself: the names, number, content and time "
+"of the stages. In all 45 minutes at most."
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:82
+msgid "Add a new stage"
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:92
+msgid "AI expert: Айгерім"
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:93
+msgid ""
+"Hello! I am Айгерім. I review your independent authorial lesson and give my "
+"professional opinion. You develop the material yourself; I give your "
+"pedagogical decisions a concrete assessment."
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:97
+msgid "The directions of the expert review"
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:107
+#: ui/templates/student/independent/trial.html:51
+msgid "Direction checked"
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:109
+msgid "Compared with the previous version"
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:110
+#: ui/templates/student/independent/trial.html:61
+#: ui/templates/teacher/practice/independent.html:44
+#, python-format
+msgid "Confirmed by the teacher: %(s)s"
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:110
+msgid "Not final until the teacher confirms it."
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:113
+msgid "The opinion by dimension"
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:120
+msgid "Strengths"
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:121
+#, fuzzy
+#| msgid "AI suggestion → your decision"
+msgid "Suggestions"
+msgstr "AI suggestion → teacher's decision"
+
+#: ui/templates/student/independent/editor.html:126
+#: ui/templates/student/micro/editor.html:138
+#: ui/templates/student/portfolio/partials/dashboard.html:179
+msgid "Check again"
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:126
+msgid "See Айгерім's opinion"
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:127
+#: ui/templates/student/independent/trial.html:68
+msgid "Айгерім is reviewing…"
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:130
+msgid ""
+"Айгерім does not write the lesson for you, does not do the tasks and offers "
+"no ready authorial solution."
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:141
+#: ui/templates/student/practice/step.html:23
+#: ui/templates/teacher/practice/independent.html:23
+msgid "Lesson stages"
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:168
+msgid "Trying the independent lesson out"
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:169
+#: ui/templates/student/independent/partials/home.html:50
+#: ui/templates/student/independent/partials/home.html:53
+#: ui/templates/teacher/practice/queue.html:41
+msgid "Trial date"
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:174
+#, fuzzy
+#| msgid "Thank you, the test is done"
+msgid "Fill in the topic, the class and the learning aim."
+msgstr "Test complete. Thanks!"
+
+#: ui/templates/student/independent/editor.html:174
+msgid "Add the lesson stages."
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:174
+#: ui/templates/student/practice/sheet.html:108
+#: ui/templates/student/practice/trial_start.html:21
+#, python-format
+msgid "Stage %(n)s «%(t)s» is empty"
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:174
+#, python-format
+msgid "The stages take %(a)s minutes — more than %(b)s."
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:178
+msgid ""
+"When the lesson is fully developed, the system checks that its structure is "
+"complete; the lesson opens for the trial on the date set."
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:179
+#, fuzzy
+#| msgid "Thank you, the test is done"
+msgid "Submit for the trial"
+msgstr "Test complete. Thanks!"
+
+#: ui/templates/student/independent/editor.html:183
+#: ui/templates/student/independent/trial.html:39
+#: ui/templates/student/micro/editor.html:142
+#, fuzzy
+#| msgid "Thank you, the test is done"
+msgid "Go on with the trial"
+msgstr "Test complete. Thanks!"
+
+#: ui/templates/student/independent/editor.html:199
+msgid ""
+"The trial goes stage by stage with the AI student, or the teacher organises "
+"it in a real audience and enters its protocol."
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:200
+#: ui/templates/student/independent/trial.html:78
+#: ui/templates/student/micro/partials/entry.html:12
+#: ui/templates/student/micro/protocol.html:28
+msgid "Try it out again"
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:210
+#: ui/templates/student/independent/trial.html:19
+#: ui/templates/student/micro/dialog.html:21
+#: ui/templates/student/micro/editor.html:36
+#: ui/templates/student/micro/editor.html:169
+#: ui/templates/student/micro/protocol.html:19
+#: ui/templates/student/micro/report_pdf.html:33
+#: ui/templates/student/portfolio/partials/sheet.html:46
+#: ui/templates/student/portfolio/pdf.html:59
+#: ui/templates/student/practice/report_pdf.html:23
+#: ui/templates/student/practice/results.html:55
+#: ui/templates/student/practice/step.html:19
+#: ui/templates/teacher/practice/detail.html:18
+#: ui/templates/teacher/practice/independent.html:17
+#: ui/templates/teacher/practice/micro.html:16
+#, python-format
+msgid "Grade %(g)s"
+msgstr ""
+
+#: ui/templates/student/independent/editor.html:211
+#: ui/templates/student/micro/editor.html:166
+#: ui/templates/teacher/practice/independent.html:34
+msgid "in progress"
+msgstr ""
+
+#: ui/templates/student/independent/partials/home.html:11
+#, fuzzy
+#| msgid "Thank you, the test is done"
+msgid "Welcome to the next stage!"
+msgstr "Test complete. Thanks!"
+
+#: ui/templates/student/independent/partials/home.html:12
+msgid ""
+"In this stage the earlier ready authorial lesson templates are no longer "
+"offered as the main working tool. Relying on your pedagogical experience, "
+"you develop the content of a new lesson fully on your own."
+msgstr ""
+
+#: ui/templates/student/independent/partials/home.html:15
+#, fuzzy
+#| msgid "Thank you, the test is done"
+msgid "Go on with the lesson"
+msgstr "Test complete. Thanks!"
+
+#: ui/templates/student/independent/partials/home.html:15
+#: ui/templates/student/independent/trial.html:83
+msgid "Develop the next lesson"
+msgstr ""
+
+#: ui/templates/student/independent/partials/home.html:15
+msgid "Start developing an independent lesson"
+msgstr ""
+
+#: ui/templates/student/independent/partials/home.html:29
+msgid "Personal directions of professional development"
+msgstr ""
+
+#: ui/templates/student/independent/partials/home.html:40
+msgid "To improve first"
+msgstr ""
+
+#: ui/templates/student/independent/partials/home.html:48
+msgid "Pay attention to the deadline!"
+msgstr ""
+
+#: ui/templates/student/independent/partials/home.html:50
+#: ui/templates/student/independent/partials/home.html:53
+#: ui/templates/teacher/practice/queue.html:40
+msgid "Hand in the project by"
+msgstr ""
+
+#: ui/templates/student/independent/partials/home.html:51
+#, python-format
+msgid "%(n)s day left"
+msgid_plural "%(n)s days left"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ui/templates/student/independent/partials/home.html:52
+#, fuzzy
+#| msgid "The student is not enrolled in your course yet."
+msgid "The teacher has not set the dates yet."
+msgstr "The student is not enrolled in this course yet."
+
+#: ui/templates/student/independent/partials/home.html:68
+msgid "My independent lessons"
+msgstr ""
+
+#: ui/templates/student/independent/partials/home.html:73
+#, fuzzy
+#| msgid "Your answers"
+msgid "A new lesson"
+msgstr "Answers"
+
+#: ui/templates/student/independent/partials/home.html:77
+#, fuzzy
+#| msgid "Your answers"
+msgid "No lessons yet."
+msgstr "Answers"
+
+#: ui/templates/student/independent/partials/home.html:86
+msgid "Professional development dynamics"
+msgstr ""
+
+#: ui/templates/student/independent/partials/home.html:91
+#: ui/templates/student/micro/editor.html:184
+msgid "No trials yet."
+msgstr ""
+
+#: ui/templates/student/independent/partials/home.html:92
+msgid ""
+"The grades of the trials in this stage are kept apart; the ICPAI component "
+"percents change only when the diagnostic tools are used again."
+msgstr ""
+
+#: ui/templates/student/independent/trial.html:11
+msgid "Analysing the professional results"
+msgstr ""
+
+#: ui/templates/student/independent/trial.html:18
+#: ui/templates/teacher/practice/independent.html:79
+msgid "A trial in a real audience"
+msgstr ""
+
+#: ui/templates/student/independent/trial.html:18
+#, fuzzy
+#| msgid "Your answer"
+msgid "A trial with the AI student"
+msgstr "Answer"
+
+#: ui/templates/student/independent/trial.html:26
+#: ui/templates/student/micro/protocol.html:11
+#: ui/templates/teacher/practice/independent.html:82
+msgid "Trial protocol"
+msgstr ""
+
+#: ui/templates/student/independent/trial.html:35
+#: ui/templates/student/practice/report_pdf.html:44
+#: ui/templates/student/practice/results.html:69
+#: ui/templates/student/practice/step.html:131
+#: ui/templates/student/practice/step.html:147
+#: ui/templates/student/practice/step.html:148
+#: ui/templates/teacher/practice/detail.html:49
+#: ui/templates/teacher/practice/independent.html:36
+#, fuzzy
+#| msgid "Thank you, the test is done"
+msgid "The student's explanation"
+msgstr "Test complete. Thanks!"
+
+#: ui/templates/student/independent/trial.html:36
+#: ui/templates/student/practice/report_pdf.html:44
+#: ui/templates/student/practice/results.html:70
+#: ui/templates/student/practice/step.html:133
+#: ui/templates/student/practice/step.html:151
+#: ui/templates/teacher/practice/detail.html:50
+msgid "Pedagogical correction made"
+msgstr ""
+
+#: ui/templates/student/independent/trial.html:47
+#: ui/templates/teacher/practice/independent.html:40
+msgid "Айгерім's expert analysis"
+msgstr ""
+
+#: ui/templates/student/independent/trial.html:58
+#, fuzzy
+#| msgid "Thank you, the test is done"
+msgid "Compared with the previous trial"
+msgstr "Test complete. Thanks!"
+
+#: ui/templates/student/independent/trial.html:63
+msgid ""
+"Айгерім's opinion is an automated expert assessment; the final grade is "
+"confirmed by the teacher."
+msgstr ""
+
+#: ui/templates/student/independent/trial.html:66
+msgid ""
+"After the trial Айгерім gives a concrete expert opinion on how you conducted "
+"the lesson."
+msgstr ""
+
+#: ui/templates/student/independent/trial.html:68
+msgid "Get Айгерім's analysis"
+msgstr ""
+
+#: ui/templates/student/independent/trial.html:77
+msgid ""
+"Analyse your actions and make the corrections needed, then try the lesson "
+"out again."
+msgstr ""
+
+#: ui/templates/student/independent/trial.html:78
+#: ui/templates/student/practice/partials/cards.html:10
+msgid "Improve"
+msgstr ""
+
+#: ui/templates/student/independent/trial.html:82
+msgid "The cycle is complete."
 msgstr ""
 
 #: ui/templates/student/locked.html:5
@@ -11332,22 +12205,6 @@ msgstr ""
 
 #: ui/templates/student/micro/dialog.html:16
 msgid "Timer"
-msgstr ""
-
-#: ui/templates/student/micro/dialog.html:21
-#: ui/templates/student/micro/editor.html:36
-#: ui/templates/student/micro/editor.html:169
-#: ui/templates/student/micro/protocol.html:19
-#: ui/templates/student/micro/report_pdf.html:33
-#: ui/templates/student/portfolio/partials/sheet.html:46
-#: ui/templates/student/portfolio/pdf.html:59
-#: ui/templates/student/practice/report_pdf.html:23
-#: ui/templates/student/practice/results.html:55
-#: ui/templates/student/practice/step.html:19
-#: ui/templates/teacher/practice/detail.html:18
-#: ui/templates/teacher/practice/micro.html:16
-#, python-format
-msgid "Grade %(g)s"
 msgstr ""
 
 #: ui/templates/student/micro/dialog.html:26
@@ -11428,15 +12285,8 @@ msgstr ""
 msgid "Student's full name"
 msgstr ""
 
-#: ui/templates/student/micro/editor.html:43
-#: ui/templates/student/portfolio/partials/dashboard.html:162
-#: ui/templates/student/portfolio/partials/sheet.html:17
-#: ui/templates/student/portfolio/pdf.html:30
-msgid "Education programme"
-msgstr ""
-
 #: ui/templates/student/micro/editor.html:44
-#: ui/templates/student/portfolio/partials/dashboard.html:163
+#: ui/templates/student/portfolio/partials/dashboard.html:164
 #: ui/templates/student/portfolio/partials/sheet.html:19
 #: ui/templates/student/portfolio/pdf.html:32
 msgid "Study year"
@@ -11445,13 +12295,6 @@ msgstr ""
 #: ui/templates/student/micro/editor.html:46
 #: ui/templates/student/micro/report_pdf.html:22
 msgid "Topic of the microlesson"
-msgstr ""
-
-#: ui/templates/student/micro/editor.html:47
-#: ui/templates/student/micro/report_pdf.html:23
-#: ui/templates/student/micro/trial_start.html:24
-#: ui/templates/student/practice/trial_start.html:27
-msgid "Class"
 msgstr ""
 
 #: ui/templates/student/micro/editor.html:49
@@ -11545,24 +12388,13 @@ msgid "the content has changed since"
 msgstr ""
 
 #: ui/templates/student/micro/editor.html:138
-#: ui/templates/student/portfolio/partials/dashboard.html:178
-msgid "Check again"
-msgstr ""
-
-#: ui/templates/student/micro/editor.html:138
 msgid "Send for checking"
 msgstr ""
 
 #: ui/templates/student/micro/editor.html:139
-#: ui/templates/student/portfolio/partials/dashboard.html:178
+#: ui/templates/student/portfolio/partials/dashboard.html:179
 msgid "Checking…"
 msgstr ""
-
-#: ui/templates/student/micro/editor.html:142
-#, fuzzy
-#| msgid "Thank you, the test is done"
-msgid "Go on with the trial"
-msgstr "Test complete. Thanks!"
 
 #: ui/templates/student/micro/editor.html:143
 msgid "The trial opens when every stage is marked ✓ CORRECT."
@@ -11579,10 +12411,6 @@ msgstr ""
 
 #: ui/templates/student/micro/editor.html:161
 msgid "the changed version"
-msgstr ""
-
-#: ui/templates/student/micro/editor.html:166
-msgid "in progress"
 msgstr ""
 
 #: ui/templates/student/micro/editor.html:170
@@ -11614,10 +12442,6 @@ msgstr ""
 msgid "Assemble the microlesson"
 msgstr ""
 
-#: ui/templates/student/micro/editor.html:184
-msgid "No trials yet."
-msgstr ""
-
 #: ui/templates/student/micro/partials/entry.html:10
 msgid ""
 "In section 5 the lesson was developed with the help of AI, and in section 6 "
@@ -11632,11 +12456,6 @@ msgstr "answer given"
 
 #: ui/templates/student/micro/partials/entry.html:12
 msgid "Change"
-msgstr ""
-
-#: ui/templates/student/micro/partials/entry.html:12
-#: ui/templates/student/micro/protocol.html:28
-msgid "Try it out again"
 msgstr ""
 
 #: ui/templates/student/micro/partials/entry.html:28
@@ -11735,10 +12554,6 @@ msgstr ""
 
 #: ui/templates/student/micro/partials/messages.html:32
 msgid "Write the message."
-msgstr ""
-
-#: ui/templates/student/micro/protocol.html:11
-msgid "Trial protocol"
 msgstr ""
 
 #: ui/templates/student/micro/protocol.html:23
@@ -12170,7 +12985,7 @@ msgid ""
 "reflection and the works done are gathered in one system."
 msgstr ""
 
-#: ui/templates/student/portfolio/partials/dashboard.html:24
+#: ui/templates/student/portfolio/partials/dashboard.html:23
 msgid "My professional works"
 msgstr ""
 
@@ -12178,12 +12993,12 @@ msgstr ""
 msgid "View the work"
 msgstr ""
 
-#: ui/templates/student/portfolio/partials/dashboard.html:79
+#: ui/templates/student/portfolio/partials/dashboard.html:80
 #, python-format
 msgid "Component result (%%) = points earned / maximum points × 100."
 msgstr ""
 
-#: ui/templates/student/portfolio/partials/dashboard.html:85
+#: ui/templates/student/portfolio/partials/dashboard.html:86
 #: ui/templates/student/portfolio/reflection.html:33
 #: ui/templates/teacher/practice/portfolio.html:19
 #, fuzzy
@@ -12191,7 +13006,7 @@ msgstr ""
 msgid "The teacher's professional feedback"
 msgstr "The teacher opened a stage"
 
-#: ui/templates/student/portfolio/partials/dashboard.html:97
+#: ui/templates/student/portfolio/partials/dashboard.html:98
 #: ui/templates/student/portfolio/partials/sheet.html:55
 #: ui/templates/student/portfolio/pdf.html:68
 #: ui/templates/student/portfolio/reflection.html:36
@@ -12200,7 +13015,7 @@ msgstr "The teacher opened a stage"
 msgid "Strengths of the work"
 msgstr ""
 
-#: ui/templates/student/portfolio/partials/dashboard.html:98
+#: ui/templates/student/portfolio/partials/dashboard.html:99
 #: ui/templates/student/portfolio/partials/sheet.html:56
 #: ui/templates/student/portfolio/pdf.html:69
 #: ui/templates/student/portfolio/reflection.html:37
@@ -12209,7 +13024,7 @@ msgstr ""
 msgid "Parts that need improving"
 msgstr ""
 
-#: ui/templates/student/portfolio/partials/dashboard.html:99
+#: ui/templates/student/portfolio/partials/dashboard.html:100
 #: ui/templates/student/portfolio/partials/sheet.html:57
 #: ui/templates/student/portfolio/pdf.html:70
 #: ui/templates/student/portfolio/reflection.html:38
@@ -12217,52 +13032,52 @@ msgstr ""
 msgid "Professional recommendations"
 msgstr ""
 
-#: ui/templates/student/portfolio/partials/dashboard.html:103
+#: ui/templates/student/portfolio/partials/dashboard.html:104
 msgid "The portfolio is with the teacher. The feedback appears here."
 msgstr ""
 
-#: ui/templates/student/portfolio/partials/dashboard.html:103
+#: ui/templates/student/portfolio/partials/dashboard.html:104
 #: ui/templates/student/portfolio/partials/sheet.html:59
 #: ui/templates/student/portfolio/pdf.html:72
 #: ui/templates/student/portfolio/reflection.html:39
 msgid "The teacher gives feedback after the portfolio is submitted."
 msgstr ""
 
-#: ui/templates/student/portfolio/partials/dashboard.html:113
+#: ui/templates/student/portfolio/partials/dashboard.html:114
 #: ui/templates/student/portfolio/reflection.html:7
 #: ui/templates/student/portfolio/reflection.html:9
 #: ui/templates/student/portfolio/reflection.html:16
 msgid "My professional reflection"
 msgstr ""
 
-#: ui/templates/student/portfolio/partials/dashboard.html:114
+#: ui/templates/student/portfolio/partials/dashboard.html:115
 msgid "Fill in"
 msgstr ""
 
-#: ui/templates/student/portfolio/partials/dashboard.html:124
+#: ui/templates/student/portfolio/partials/dashboard.html:125
 msgid ""
 "The AI assistant does not write the reflection. You draw the conclusion from "
 "your learning experience, your works and the teacher's feedback."
 msgstr ""
 
-#: ui/templates/student/portfolio/partials/dashboard.html:130
+#: ui/templates/student/portfolio/partials/dashboard.html:131
 #: ui/templates/student/portfolio/plan.html:7
 #: ui/templates/student/portfolio/plan.html:9
 msgid "My professional development trajectory"
 msgstr ""
 
-#: ui/templates/student/portfolio/partials/dashboard.html:131
+#: ui/templates/student/portfolio/partials/dashboard.html:132
 msgid "Open the map"
 msgstr ""
 
-#: ui/templates/student/portfolio/partials/dashboard.html:135
+#: ui/templates/student/portfolio/partials/dashboard.html:136
 #: ui/templates/student/portfolio/partials/sheet.html:67
 #: ui/templates/student/portfolio/pdf.html:80
 #: ui/templates/student/portfolio/plan.html:22
 msgid "Direction to develop"
 msgstr ""
 
-#: ui/templates/student/portfolio/partials/dashboard.html:135
+#: ui/templates/student/portfolio/partials/dashboard.html:136
 #: ui/templates/student/portfolio/partials/sheet.html:67
 #: ui/templates/student/portfolio/pdf.html:80
 #: ui/templates/student/portfolio/plan.html:22
@@ -12270,82 +13085,82 @@ msgstr ""
 msgid "Planned action"
 msgstr ""
 
-#: ui/templates/student/portfolio/partials/dashboard.html:149
+#: ui/templates/student/portfolio/partials/dashboard.html:150
 msgid "Integration of the results of sections 5 and 6"
 msgstr ""
 
-#: ui/templates/student/portfolio/partials/dashboard.html:155
+#: ui/templates/student/portfolio/partials/dashboard.html:156
 msgid ""
 "The grades of sections 5 and 6 are kept apart; they are not combined with "
 "the diagnostic percents, which appear in the results automatically."
 msgstr ""
 
-#: ui/templates/student/portfolio/partials/dashboard.html:160
+#: ui/templates/student/portfolio/partials/dashboard.html:161
 msgid "Assemble my professional portfolio"
 msgstr ""
 
-#: ui/templates/student/portfolio/partials/dashboard.html:167
+#: ui/templates/student/portfolio/partials/dashboard.html:168
 msgid "The reflection: seven answers"
 msgstr ""
 
-#: ui/templates/student/portfolio/partials/dashboard.html:167
+#: ui/templates/student/portfolio/partials/dashboard.html:168
 msgid "The development map: five directions"
 msgstr ""
 
-#: ui/templates/student/portfolio/partials/dashboard.html:167
+#: ui/templates/student/portfolio/partials/dashboard.html:168
 msgid "The final (III) diagnostics"
 msgstr ""
 
-#: ui/templates/student/portfolio/partials/dashboard.html:175
+#: ui/templates/student/portfolio/partials/dashboard.html:176
 msgid ""
 "The AI assistant does not write the conclusion for you; it only checks that "
 "the reflection and the map are complete and consistent."
 msgstr ""
 
-#: ui/templates/student/portfolio/partials/dashboard.html:178
+#: ui/templates/student/portfolio/partials/dashboard.html:179
 msgid "Check the completeness"
 msgstr ""
 
-#: ui/templates/student/portfolio/partials/dashboard.html:183
+#: ui/templates/student/portfolio/partials/dashboard.html:184
 msgid "The structure of the final portfolio"
 msgstr ""
 
-#: ui/templates/student/portfolio/partials/dashboard.html:186
+#: ui/templates/student/portfolio/partials/dashboard.html:187
 #, python-format
 msgid "Assembled: version %(n)s, %(t)s"
 msgstr ""
 
-#: ui/templates/student/portfolio/partials/dashboard.html:186
+#: ui/templates/student/portfolio/partials/dashboard.html:187
 msgid "changed since — assemble again"
 msgstr ""
 
-#: ui/templates/student/portfolio/partials/dashboard.html:189
+#: ui/templates/student/portfolio/partials/dashboard.html:190
 msgid "Assemble the portfolio"
 msgstr ""
 
-#: ui/templates/student/portfolio/partials/dashboard.html:192
+#: ui/templates/student/portfolio/partials/dashboard.html:193
 #: ui/templates/student/portfolio/view.html:14
 msgid "Save as PDF"
 msgstr ""
 
-#: ui/templates/student/portfolio/partials/dashboard.html:193
+#: ui/templates/student/portfolio/partials/dashboard.html:194
 #: ui/templates/student/portfolio/view.html:5
 msgid "View the portfolio"
 msgstr ""
 
-#: ui/templates/student/portfolio/partials/dashboard.html:196
+#: ui/templates/student/portfolio/partials/dashboard.html:197
 msgid "Submit the portfolio to the teacher?"
 msgstr ""
 
-#: ui/templates/student/portfolio/partials/dashboard.html:196
+#: ui/templates/student/portfolio/partials/dashboard.html:197
 msgid "Until the teacher's feedback the portfolio cannot be changed."
 msgstr ""
 
-#: ui/templates/student/portfolio/partials/dashboard.html:196
+#: ui/templates/student/portfolio/partials/dashboard.html:197
 msgid "Submit"
 msgstr ""
 
-#: ui/templates/student/portfolio/partials/dashboard.html:197
+#: ui/templates/student/portfolio/partials/dashboard.html:198
 msgid "Submit to the teacher"
 msgstr ""
 
@@ -12460,10 +13275,6 @@ msgstr ""
 
 #: ui/templates/student/practice/partials/cards.html:10
 msgid "Prepare"
-msgstr ""
-
-#: ui/templates/student/practice/partials/cards.html:10
-msgid "Improve"
 msgstr ""
 
 #: ui/templates/student/practice/partials/cards.html:22
@@ -12599,25 +13410,6 @@ msgid "Possible difficulty found"
 msgstr ""
 
 #: ui/templates/student/practice/report_pdf.html:44
-#: ui/templates/student/practice/results.html:69
-#: ui/templates/student/practice/step.html:131
-#: ui/templates/student/practice/step.html:147
-#: ui/templates/student/practice/step.html:148
-#: ui/templates/teacher/practice/detail.html:49
-#, fuzzy
-#| msgid "Thank you, the test is done"
-msgid "The student's explanation"
-msgstr "Test complete. Thanks!"
-
-#: ui/templates/student/practice/report_pdf.html:44
-#: ui/templates/student/practice/results.html:70
-#: ui/templates/student/practice/step.html:133
-#: ui/templates/student/practice/step.html:151
-#: ui/templates/teacher/practice/detail.html:50
-msgid "Pedagogical correction made"
-msgstr ""
-
-#: ui/templates/student/practice/report_pdf.html:44
 #: ui/templates/student/practice/results.html:71
 #: ui/templates/student/practice/step.html:134
 #: ui/templates/student/practice/step.html:153
@@ -12702,12 +13494,6 @@ msgstr ""
 msgid "Fill in the name, topic, class and aim."
 msgstr ""
 
-#: ui/templates/student/practice/sheet.html:108
-#: ui/templates/student/practice/trial_start.html:21
-#, python-format
-msgid "Stage %(n)s «%(t)s» is empty"
-msgstr ""
-
 #: ui/templates/student/practice/sheet.html:111
 msgid ""
 "Once all the stages are ready, the lesson is tried out with the AI student "
@@ -12718,10 +13504,6 @@ msgstr ""
 msgid ""
 "The AI assistant does not do the task for you: it analyses what you entered "
 "and helps to organise it correctly. You make the changes yourself."
-msgstr ""
-
-#: ui/templates/student/practice/step.html:23
-msgid "Lesson stages"
 msgstr ""
 
 #: ui/templates/student/practice/step.html:39
@@ -13069,7 +13851,7 @@ msgid ""
 "the next one is open."
 msgstr ""
 
-#: ui/templates/student/section.html:136
+#: ui/templates/student/section.html:139
 msgid "Its tasks will appear here in the next versions of the platform."
 msgstr ""
 
@@ -13434,12 +14216,6 @@ msgstr ""
 msgid "No student has answered it yet."
 msgstr ""
 
-#: ui/templates/teacher/content/partials/delete.html:4
-#: ui/templates/teacher/content/partials/delete.html:5
-#: ui/templates/teacher/group.html:44
-msgid "Delete"
-msgstr ""
-
 #: ui/templates/teacher/content/partials/delete.html:5
 msgid "Delete it?"
 msgstr ""
@@ -13581,10 +14357,6 @@ msgid ""
 "the student fills in."
 msgstr ""
 
-#: ui/templates/teacher/content/stage.html:100
-msgid "Delete the stage"
-msgstr ""
-
 #: ui/templates/teacher/content/stage.html:101
 msgid ""
 "Students have already worked on this stage, so it cannot be deleted. Make it "
@@ -13683,10 +14455,11 @@ msgid "AI: %(p)s%%"
 msgstr ""
 
 #: ui/templates/teacher/dashboard.html:64
-#: ui/templates/teacher/practice/queue.html:45
-#: ui/templates/teacher/practice/queue.html:54
-#: ui/templates/teacher/practice/queue.html:59
-#: ui/templates/teacher/practice/queue.html:68
+#: ui/templates/teacher/practice/independent.html:51
+#: ui/templates/teacher/practice/queue.html:78
+#: ui/templates/teacher/practice/queue.html:87
+#: ui/templates/teacher/practice/queue.html:92
+#: ui/templates/teacher/practice/queue.html:101
 msgid "Grade"
 msgstr ""
 
@@ -14273,6 +15046,8 @@ msgid "Time spent: %(m)s (set: %(n)s min)"
 msgstr ""
 
 #: ui/templates/teacher/practice/detail.html:80
+#: ui/templates/teacher/practice/independent.html:50
+#: ui/templates/teacher/practice/independent.html:70
 #: ui/templates/teacher/practice/micro.html:55
 msgid "Comment"
 msgstr ""
@@ -14281,6 +15056,34 @@ msgstr ""
 msgid ""
 "Kept apart from the ICPAI component percents; it does not open sections."
 msgstr ""
+
+#: ui/templates/teacher/practice/independent.html:8
+#: ui/templates/teacher/practice/independent.html:9
+#: ui/templates/teacher/practice/independent.html:13
+#: ui/templates/teacher/practice/queue.html:23
+msgid "Section 8 lessons"
+msgstr ""
+
+#: ui/templates/teacher/practice/independent.html:56
+msgid ""
+"Айгерім's analysis appears when the student asks for it after the trial."
+msgstr ""
+
+#: ui/templates/teacher/practice/independent.html:62
+msgid "Айгерім's opinions on the project"
+msgstr ""
+
+#: ui/templates/teacher/practice/independent.html:80
+msgid ""
+"If you organised the trial with real students, enter its protocol: how the "
+"lesson went, the students' answers, the student's pedagogical actions."
+msgstr ""
+
+#: ui/templates/teacher/practice/independent.html:83
+#, fuzzy
+#| msgid "Thank you, the test is done"
+msgid "Save the protocol"
+msgstr "Test complete. Thanks!"
 
 #: ui/templates/teacher/practice/micro.html:8
 #: ui/templates/teacher/practice/micro.html:12
@@ -14330,6 +15133,12 @@ msgid "Professional portfolios"
 msgstr ""
 
 #: ui/templates/teacher/practice/queue.html:14
+#, fuzzy
+#| msgid "Your answers"
+msgid "Independent authorial lessons"
+msgstr "Answers"
+
+#: ui/templates/teacher/practice/queue.html:14
 msgid "Digital research practices"
 msgstr ""
 
@@ -14337,6 +15146,12 @@ msgstr ""
 msgid ""
 "The teacher's professional feedback on the submitted portfolios; «Accepted» "
 "completes section 7."
+msgstr ""
+
+#: ui/templates/teacher/practice/queue.html:15
+msgid ""
+"Айгерім's opinion is an automated expert assessment; the important "
+"scientific and final decisions are confirmed by the teacher."
 msgstr ""
 
 #: ui/templates/teacher/practice/queue.html:15
@@ -14349,29 +15164,43 @@ msgstr ""
 msgid "Section"
 msgstr ""
 
-#: ui/templates/teacher/practice/queue.html:25
+#: ui/templates/teacher/practice/queue.html:26
 #, fuzzy
 #| msgid "Your work is graded"
 msgid "To grade"
 msgstr "Work graded"
 
-#: ui/templates/teacher/practice/queue.html:40
+#: ui/templates/teacher/practice/queue.html:32
+msgid "Deadlines of section 8"
+msgstr ""
+
+#: ui/templates/teacher/practice/queue.html:33
+msgid ""
+"The hand-in and trial dates of the independent lesson for each group; the "
+"students get the notifications by them."
+msgstr ""
+
+#: ui/templates/teacher/practice/queue.html:53
+msgid "Cycle"
+msgstr ""
+
+#: ui/templates/teacher/practice/queue.html:73
 msgid "Give feedback"
 msgstr ""
 
-#: ui/templates/teacher/practice/queue.html:45
+#: ui/templates/teacher/practice/queue.html:78
 msgid "Trial"
 msgstr ""
 
-#: ui/templates/teacher/practice/queue.html:59
+#: ui/templates/teacher/practice/queue.html:92
 msgid "Gathered"
 msgstr ""
 
-#: ui/templates/teacher/practice/queue.html:76
+#: ui/templates/teacher/practice/queue.html:109
 msgid "Nothing here yet"
 msgstr ""
 
-#: ui/templates/teacher/practice/queue.html:76
+#: ui/templates/teacher/practice/queue.html:109
 #, fuzzy
 #| msgid "Grades appear when you open the first topic."
 msgid "Works appear when students finish their trials."

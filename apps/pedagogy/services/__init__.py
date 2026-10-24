@@ -1,3 +1,4 @@
+from . import independent
 from .assembly import (
     assemble,
     assembled_version,
@@ -42,6 +43,7 @@ from .practice import (
 
 __all__ = [
     "DURATION_S",
+    "independent",
     "LessonError",
     "assemble_micro",
     "check_micro",

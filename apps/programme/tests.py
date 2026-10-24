@@ -265,9 +265,10 @@ class StudentPageTests(Base):
         self.assertContains(r, reverse("student:section", args=[1]))
 
     def test_an_open_section_not_built_yet(self):
-        Section.objects.filter(pk=self.section(2).pk).update(kind="independent")  # a kind not built yet
+        Section.objects.filter(pk=self.section(2).pk).update(kind="independent")
         self.pass_stages(4)
-        r = self.client.get(reverse("student:section", args=[2]))
+        with mock.patch.dict(PROVIDERS, {k: v for k, v in PROVIDERS.items() if k != "independent"}, clear=True):
+            r = self.client.get(reverse("student:section", args=[2]))  # a kind without its provider yet
         self.assertTemplateUsed(r, "student/section.html")
         with override("kk"):
             self.assertContains(r, gettext("The section is in development"))
@@ -1341,3 +1342,151 @@ class PortfolioTests(DiagnosticsBase):
         self.assertTemplateUsed(r, "student/portfolio/partials/sheet.html")
         self.assertContains(r, "Менің жауабым 7")
         self.assertTrue(self.client.get(reverse("student:portfolio_pdf")).content.startswith(b"%PDF"))
+
+
+@override_settings(AI_TUTOR_ENABLED=True)
+class IndependentLessonTests(Base):
+    """Section 8: the notifications, the project with «Айгерім», submit, the stepwise trial, the analysis, the
+    teacher's dates and confirmation; a completed cycle is 100 % of the section."""
+
+    def setUp(self):
+        super().setUp()
+        import json
+
+        from apps.ai.services import client as ai_client
+        from apps.ai.tests import FakeClient, answer
+        from apps.pedagogy.tests import AFTER, DRAFT, SIM
+
+        self.json, self.answer, self.after, self.sim = json, answer, AFTER, SIM
+        self.fake = FakeClient(answer(json.dumps(DRAFT)))
+        patcher = mock.patch.object(ai_client, "get_client", return_value=self.fake)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        self.teacher = User.objects.create_user("ta", "ta@example.kz", "x", role=User.Role.TEACHER)
+        CourseTeacher.objects.create(course=self.course, teacher=self.teacher)
+        self.group.curator = self.teacher
+        self.group.save()
+        services.unlock_section(self.enrollment(), self.section(8), self.teacher)
+        self.client.force_login(self.student)
+
+    def url(self, name, *args):
+        return reverse(f"student:{name}", args=args)
+
+    def create(self):
+        from apps.pedagogy.models import Lesson
+        from apps.pedagogy.tests import fill_independent
+
+        self.client.post(self.url("independent_start"))
+        self.lesson = Lesson.objects.get(owner=self.student, kind="independent")
+        fill_independent(self.lesson)
+        return self.lesson
+
+    def tried(self):
+        self.create()
+        self.client.post(self.url("independent_submit", self.lesson.pk))
+        self.fake.replies = [self.answer(self.json.dumps(self.sim))]
+        self.client.post(self.url("independent_trial_start", self.lesson.pk), {"grade": "11", "level": "medium"})
+        trial = self.lesson.trials.get()
+        for order in (1, 2, 3):
+            step = self.url("independent_step", self.lesson.pk, trial.pk, order)
+            self.client.post(
+                step, {"action": "give", "explanation": "<p>Т</p>", "task": "<p>Тапсырма</p>", "minutes": "5"}
+            )
+            self.assertContains(self.client.get(step), "<p>Тапсырма</p>")
+            r = self.client.post(step, {"action": "analyse", "analysis": "Талдадым"})
+        self.assertRedirects(r, self.url("independent_trial", self.lesson.pk, trial.pk))
+        trial.refresh_from_db()
+        return trial
+
+    def test_the_section_page_and_the_first_notification(self):
+        r = self.client.get(reverse("student:section", args=[8]))
+        self.assertTemplateUsed(r, "student/independent/partials/home.html")
+        self.assertContains(r, self.url("independent_start"))
+        self.assertEqual(Notification.objects.filter(user=self.student, kind="icpai_task").count(), 1)
+        self.client.get(reverse("student:section", args=[8]))
+        self.assertEqual(Notification.objects.filter(user=self.student, kind="icpai_task").count(), 1)  # once
+
+    def test_the_editor_stages_and_aigerim(self):
+        lesson = self.create()
+        r = self.client.get(self.url("independent", lesson.pk))
+        self.assertTemplateUsed(r, "student/independent/editor.html")
+        self.assertEqual(r.context["total"], 45)
+        r = self.client.post(self.url("independent_stage_add", lesson.pk), {"title": "Тағы", "minutes": "5"})
+        self.assertRedirects(r, self.url("independent", lesson.pk))
+        self.assertEqual(lesson.stages.count(), 3)
+        r = self.client.post(
+            self.url("independent_stage_save", lesson.pk, 2),
+            {"title": "Зерттеу", "minutes": 25, "fields": {"task": "<p>Жаңа</p>"}}, content_type="application/json",
+        )  # fmt: skip
+        self.assertEqual((r.status_code, r.json()["error"]), (409, "too_long"))
+        self.client.post(self.url("independent_expert", lesson.pk))
+        self.assertEqual(lesson.expert_reviews.count(), 1)
+        self.assertEqual(Notification.objects.filter(user=self.student, kind="icpai_expert").count(), 1)
+        self.assertContains(self.client.get(self.url("independent", lesson.pk)), "Жоба құрылымы логикалы.")
+        self.client.post(self.url("independent_stage_delete", lesson.pk, 3))
+        self.assertEqual(lesson.stages.count(), 2)
+
+    def test_the_trial_waits_for_its_date(self):
+        from datetime import date
+
+        lesson = self.create()
+        self.client.post(self.url("independent_submit", lesson.pk))
+        self.client.force_login(self.teacher)
+        queue = reverse("teacher:practice_queue") + "?what=independent"
+        self.assertContains(self.client.get(queue), 'name="trial_on"')
+        later = date.today() + timedelta(days=5)
+        with self.captureOnCommitCallbacks(execute=True):
+            self.client.post(queue, {"group": self.group.pk, "hand_in_on": "", "trial_on": later.isoformat()})
+        self.assertEqual(Notification.objects.filter(user=self.student, kind="icpai_trial").count(), 1)
+        self.client.force_login(self.student)
+        self.client.post(self.url("independent_trial_start", lesson.pk), {"grade": "11", "level": "medium"})
+        self.assertFalse(lesson.trials.exists())
+        self.assertContains(self.client.get(reverse("student:section", args=[8])), later.strftime("%d.%m.%Y"))
+
+    def test_the_hand_in_reminder(self):
+        from django.utils import timezone
+
+        from apps.programme.models import SectionSchedule
+        from apps.programme.services import schedule
+
+        self.enrollment()
+        today = timezone.localdate()
+        SectionSchedule.objects.create(
+            section=self.section(8), group=self.group, hand_in_on=today + timedelta(days=2), set_by=self.teacher
+        )
+        self.assertEqual(schedule.remind(today), 1)
+        self.assertEqual(schedule.remind(today), 0)  # once a day
+        self.assertEqual(schedule.remind(today + timedelta(days=1)), 0)  # only two days before
+        self.assertEqual(schedule.countdown(SectionSchedule.objects.get(), today)["days"], 2)
+        call_command("icpai_reminders")
+
+    def test_trial_analysis_and_the_teachers_confirmation_complete_the_section(self):
+        trial = self.tried()
+        self.fake.replies = [self.answer(self.json.dumps(self.after))]
+        self.client.post(self.url("independent_trial_review", self.lesson.pk, trial.pk))
+        review = trial.expert_reviews.get()
+        r = self.client.get(self.url("independent_trial", self.lesson.pk, trial.pk))
+        self.assertTemplateUsed(r, "student/independent/trial.html")
+        self.assertContains(r, "Талдадым")
+        self.client.force_login(self.teacher)
+        r = self.client.get(reverse("teacher:practice_queue") + "?what=independent")
+        self.assertContains(r, reverse("teacher:independent", args=[self.lesson.pk]))
+        page = reverse("teacher:independent", args=[self.lesson.pk])
+        self.assertContains(self.client.get(page), 'name="score"')
+        self.client.post(page, {"action": "confirm", "review": review.pk, "status": "needs_more", "score": "6"})
+        self.assertEqual(Notification.objects.filter(user=self.student, kind="icpai_retrial").count(), 1)
+        self.assertEqual(SectionProgress.objects.get(section__number=8).percent, Decimal("0.00"))
+        self.client.post(page, {"action": "real", "grade": "10", "notes": "Нақты сыныпта өтті."})
+        self.assertEqual(self.lesson.trials.filter(mode="real").count(), 1)
+        self.client.post(page, {"action": "confirm", "review": review.pk, "status": "ok", "score": "9"})
+        self.lesson.refresh_from_db()
+        self.assertEqual(self.lesson.status, "final")
+        self.assertEqual(SectionProgress.objects.get(section__number=8).percent, Decimal("100.00"))
+        other = User.objects.create_user("tb", "tb@example.kz", "x", role=User.Role.TEACHER)
+        self.client.force_login(other)
+        self.assertEqual(self.client.get(page).status_code, 404)
+        self.client.force_login(self.student)
+        r = self.client.get(reverse("student:section", args=[8]))
+        self.assertEqual(r.context["max_score"], 9)
+        self.client.post(self.url("independent_start"))
+        self.assertEqual(self.student.lessons.filter(kind="independent").count(), 2)

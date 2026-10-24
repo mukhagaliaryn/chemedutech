@@ -10,8 +10,9 @@ which fields prefill «The teacher's explanation» and «Giving the task» of th
 the minutes field.
 
 MICRO_4 — «The sheet of developing the microlesson and trying it out professionally» (section 6, guide @S6 II): four
-fixed stages of a 10-minute microlesson (2 + 3 + 3 + 2) and the fields the student fills in. FREE comes with
-section 8.
+fixed stages of a 10-minute microlesson (2 + 3 + 3 + 2) and the fields the student fills in.
+
+FREE — the independent lesson of section 8 (guide @S8 II): stages of the student's own choosing, the same fields each.
 """
 
 from dataclasses import dataclass
@@ -165,7 +166,18 @@ MICRO_4 = (
     ),
 )  # fmt: skip
 
-FRAMES = {"template": TEMPLATE, "research_8": RESEARCH_8, "micro_4": MICRO_4}
+# FREE — the independent lesson of section 8 (guide @S8 II): the student chooses the stages' names, number, content and
+# time (45 minutes at most in all); each stage has the same fields (names as in the earlier sheets of the guide).
+FREE = (
+    Field("aim", _("Aim"), "award"),
+    Field("teacher", _("The teacher's explanation"), "user"),
+    Field("task", _("The task given to the student"), "list"),
+    Field("visual", _("Visual aids used"), "eye"),
+    Field("expected", _("Expected result"), "check"),
+    Field("criterion", _("Assessment criterion"), "check-square"),
+)
+
+FRAMES = {"template": TEMPLATE, "research_8": RESEARCH_8, "micro_4": MICRO_4, "free": FREE}
 
 
 def stages_of(frame: str) -> tuple[Stage, ...]:
@@ -181,6 +193,8 @@ def fields_of(frame: str, key: str = "") -> tuple[Field, ...]:
     """The fields of a stage: the same for every stage of TEMPLATE, per stage in RESEARCH_8."""
     if frame == "template":
         return TEMPLATE
+    if frame == "free":
+        return FREE
     spec = stage_spec(frame, key)
     return spec.fields if spec else ()
 

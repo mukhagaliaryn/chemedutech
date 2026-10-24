@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import designer, micro, portfolio, practice, sections, views
+from . import designer, independent, micro, portfolio, practice, sections, views
 
 app_name = "student"
 
@@ -67,6 +67,25 @@ urlpatterns = [
     path("me/portfolio/submit/", portfolio.submit, name="portfolio_submit"),
     path("me/portfolio/view/", portfolio.view, name="portfolio_view"),
     path("me/portfolio/pdf/", portfolio.pdf, name="portfolio_pdf"),
+    path("me/independent/", independent.home, name="independent_home"),
+    path("me/independent/start/", independent.start, name="independent_start"),
+    path("me/independent/<int:pk>/", independent.lesson, name="independent"),
+    path("me/independent/<int:pk>/stages/add/", independent.stage_add, name="independent_stage_add"),
+    path("me/independent/<int:pk>/stages/<int:order>/", independent.lesson, name="independent_stage"),
+    path("me/independent/<int:pk>/stages/<int:order>/save/", independent.stage_save, name="independent_stage_save"),
+    path(
+        "me/independent/<int:pk>/stages/<int:order>/delete/", independent.stage_delete, name="independent_stage_delete"
+    ),
+    path("me/independent/<int:pk>/expert/", independent.expert, name="independent_expert"),
+    path("me/independent/<int:pk>/submit/", independent.submit, name="independent_submit"),
+    path("me/independent/<int:pk>/trial/", independent.trial_start, name="independent_trial_start"),
+    path("me/independent/<int:pk>/trial/<int:trial_pk>/", independent.trial, name="independent_trial"),
+    path(
+        "me/independent/<int:pk>/trial/<int:trial_pk>/review/",
+        independent.trial_review,
+        name="independent_trial_review",
+    ),
+    path("me/independent/<int:pk>/trial/<int:trial_pk>/<int:order>/", independent.step, name="independent_step"),
     path("me/icpai/", sections.results, name="icpai"),
     path("me/search/", views.search, name="search"),
     path("me/results/", views.results, name="results"),
