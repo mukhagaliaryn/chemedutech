@@ -6,7 +6,7 @@ from django.urls import reverse
 from apps.accounts.models import User
 from apps.courses import services
 from apps.courses.models import Topic
-from apps.labs.engine import get_lab
+from apps.labs.engine import all_labs, get_lab
 from apps.organizations.testing import make_group, make_student
 from ui.templatetags.ui_tags import initials, percent_of, status_variant
 
@@ -245,8 +245,9 @@ class PublicPagesTests(TestCase):
         r = self.client.get(reverse("core:home"))
         facts = r.context["facts"]
         self.assertEqual((facts["modules"], facts["topics"]), (2, 15))
-        self.assertEqual(facts["experiments"], len(get_lab("t01").experiments))
-        self.assertEqual(len(facts["lab"]["experiments"]), facts["experiments"])
+        labs = list(all_labs().values())
+        self.assertEqual(facts["experiments"], sum(len(lab.experiments) for lab in labs))
+        self.assertEqual(len(facts["lab"]["experiments"]), len(get_lab("t01").experiments))  # the showcase lab
         self.assertContains(r, 'id="lab"')
         self.assertContains(r, reverse("accounts:signup"))
         self.assertContains(r, "Zn + 2HCl → ZnCl<sub>2</sub>")  # equation HTML from the lab spec
@@ -258,13 +259,6 @@ class PublicPagesTests(TestCase):
         self.assertContains(r, 'role="alert"')
         self.assertContains(r, "shake")
 
-    def test_username_check(self):
-        url = reverse("accounts:username_check")
-        self.assertContains(self.client.get(url, {"username": "Taken.Name"}), 'data-status="error"')
-        self.assertContains(self.client.get(url, {"username": "free.name"}), 'data-status="ok"')
-        self.assertContains(self.client.get(url, {"username": "bad@name"}), 'data-status="error"')
-        self.assertContains(self.client.get(url, {"username": ""}), 'data-status=""')
-
     def test_join_code_check(self):
         url = reverse("accounts:join_code_check")
         self.assertContains(self.client.get(url, {"join_code": self.group.join_code}), "Хим-23-1")
@@ -274,12 +268,12 @@ class PublicPagesTests(TestCase):
         url = reverse("accounts:signup")
         self.assertEqual(self.client.get(url).context["step"], 1)
         base = {
-            "first_name": "Айгерім", "last_name": "Сапарова", "email": "a@example.kz", "username": "aigerim",
+            "first_name": "Айгерім", "last_name": "Сапарова", "email": "a@example.kz",
             "password1": "Chem-2026-x", "password2": "Chem-2026-x", "group_mode": "code",
         }  # fmt: skip
         r = self.client.post(url, {**base, "join_code": "XXXX-0000"})
         self.assertEqual(r.context["step"], 2)
-        r = self.client.post(url, {**base, "username": "taken.name", "join_code": "XXXX-0000"})
+        r = self.client.post(url, {**base, "email": "Taken.Name@example.kz", "join_code": "XXXX-0000"})
         self.assertEqual(r.context["step"], 1)
         r = self.client.post(url, {**base, "join_code": self.group.join_code})
         self.assertRedirects(r, reverse("student:dashboard"), fetch_redirect_response=False)
