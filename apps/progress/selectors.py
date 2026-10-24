@@ -3,6 +3,8 @@ from datetime import timedelta
 from django.db.models import Count, Sum
 from django.utils import timezone
 
+from apps.courses.models import Stage
+
 from .models import CourseResult, ModuleResult, ProgressEvent, StageProgress, StudyDay, TopicResult
 
 
@@ -125,3 +127,17 @@ def module_results_by_enrollment(enrollment_ids) -> dict[int, dict[int, ModuleRe
     for r in ModuleResult.objects.filter(enrollment_id__in=enrollment_ids):
         result[r.enrollment_id][r.module_id] = r
     return result
+
+
+def required_stages_done(enrollment) -> tuple[int, int]:
+    """(done, total) over the required stages of the published topics; done = passed or awaiting check
+    (the ICPAI section 1 percent, D68)."""
+    stages = Stage.objects.filter(
+        topic__module__course_id=enrollment.course_id, topic__is_published=True, is_required=True
+    )
+    done = StageProgress.objects.filter(
+        enrollment=enrollment,
+        stage__in=stages,
+        status__in=(StageProgress.Status.PASSED, StageProgress.Status.AWAITING_CHECK),
+    ).count()
+    return done, stages.count()

@@ -39,12 +39,13 @@ from apps.labs.views import analysis_payload, lab_page
 from apps.practice import forms as practice_forms
 from apps.practice import services as practice
 from apps.practice.models import PracticeSubmission
+from apps.programme import services as programme
 from apps.progress import selectors as progress_selectors
 from apps.progress import services as progress
 from apps.progress.grading import grade_for
 from apps.progress.services import benchmark
 
-from . import cabinet, learning
+from . import cabinet, learning, sections
 from .learning import S
 
 LEARN = "layouts/learn.html"
@@ -67,6 +68,9 @@ def dashboard(request):
     if not has_role(request.user, STUDENT):
         return redirect(home_url_for(request.user))
     enrollments, enrollment = _student_enrollments(request)
+    programme_enrollment = programme.refresh(request.user)
+    if programme_enrollment:  # the ICPAI home: the guide and the sections instead of the key figures (@S0-RULES)
+        return render(request, "student/home.html", sections.home_context(request.user, programme_enrollment))
     context = {"enrollments": enrollments}
     if enrollment:
         context.update(cabinet.dashboard(request.user, enrollment))

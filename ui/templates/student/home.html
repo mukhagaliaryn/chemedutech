@@ -1,0 +1,79 @@
+{% extends "layouts/student.html" %}
+{% load i18n %}
+{% comment %}
+Student home in the ICPAI programme (docs/icpai/SPEC.md §4.0, guide @S0-RULES, picture image10): the personal
+key figures are left out; instead — «Continue» with the current section and the guide to the platform: every
+section with its «what it does» text (verbatim from the guide), its state and percent. The course's pre-test
+card stays (research, STEP-22).
+{% endcomment %}
+{% block title %}{% translate "Home" %} · ChemEduTech{% endblock %}
+{% block crumb %}{{ programme.title }}{% endblock %}
+{% block page_title %}{% translate "Home" %}{% endblock %}
+{% block content %}
+<div>
+  <h1 class="text-[30px] leading-[38px] font-extrabold tracking-[-0.02em]">{% blocktranslate with name=user.first_name|default:user.get_username %}Welcome, {{ name }}!{% endblocktranslate %}</h1>
+  <p class="mt-1 text-ink-soft">{% translate "The guide below shows how to use the ChemEduTech platform." %}</p>
+</div>
+
+{% if benchmark.pre == "open" or benchmark.post == "open" %}{% include "student/partials/benchmark_card.html" with course=course_block.course %}{% endif %}
+
+{# ---- continue: the current section ---- #}
+{% if current %}
+<section aria-labelledby="continue-title" class="brand-ground rounded-xl p-[clamp(24px,3vw,36px)]">
+  <div class="relative flex flex-wrap items-end justify-between gap-5">
+    <div class="max-w-[640px]">
+      <p class="text-sm text-primary-200">{% blocktranslate with a=passed_count b=rows|length %}Sections passed: {{ a }} of {{ b }}{% endblocktranslate %}</p>
+      <h2 id="continue-title" class="mt-1.5 text-[clamp(22px,2.4vw,30px)] leading-[1.2] font-extrabold tracking-[-0.02em]">{{ current.section.number }}. {{ current.section.title }}</h2>
+      {% if current.section.kind == "course" and course_block.card %}
+        <p class="mt-2 text-on-dark-soft">{% blocktranslate with n=course_block.card.topic.number t=course_block.card.topic.title s=course_block.card.stage.title %}Topic {{ n }} · {{ t }} — next: {{ s }}{% endblocktranslate %}</p>
+      {% elif current.status == "passed" %}
+        <p class="mt-2 text-on-dark-soft">{% translate "Every open section is passed." %}</p>
+      {% endif %}
+      <div class="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+        <div class="progress progress-sm w-[min(320px,60vw)] bg-white/15" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ current.percent|floatformat:0 }}"
+             aria-label="{% translate 'Section done' %}"><span style="width: {{ current.percent|floatformat:0 }}%"></span></div>
+        <span class="num text-sm font-bold">{{ current.percent|floatformat:0 }}%</span>
+        <span class="text-caption text-primary-200">{% blocktranslate with p=current.section.pass_percent %}the next section opens at {{ p }}%{% endblocktranslate %}</span>
+      </div>
+    </div>
+    <a href="{{ continue_url }}" class="btn btn-inverse btn-lg rounded-lg">{% translate "Continue" %}{% include "components/icons.html#arrow-right" with size=18 %}</a>
+  </div>
+</section>
+{% endif %}
+
+{# ---- the guide: sections with «what it does» ---- #}
+<section aria-labelledby="guide-title" class="card flex flex-col gap-5">
+  <div>
+    <h2 id="guide-title" class="text-[20px] font-extrabold">{% translate "Guide to using the platform" %}</h2>
+    <p class="mt-1 text-sm text-ink-soft">{% blocktranslate with p=current.section.pass_percent|default:80 %}Sections open one after another: the next one opens when the previous one is {{ p }}% done.{% endblocktranslate %}</p>
+  </div>
+  <ol class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(min(280px,100%),1fr))]">
+    {% for r in rows %}
+      <li class="flex flex-col gap-3 rounded-lg border p-5 {% if r.status == 'locked' %}border-line bg-surface-sunken/60{% elif r.section.pk == current.section.pk %}border-primary-600 bg-surface shadow-[0_10px_30px_rgba(31,95,209,.12)]{% else %}border-line bg-surface{% endif %}">
+        <div class="flex items-center gap-3">
+          <span class="num grid size-9 shrink-0 place-items-center rounded-[12px] text-[15px] font-extrabold {% if r.status == 'passed' %}bg-success-600 text-white{% elif r.status == 'locked' %}bg-surface text-ink-faint{% else %}bg-primary-600 text-white{% endif %}">{{ r.section.number }}</span>
+          <h3 class="min-w-0 flex-1 text-[15px] leading-5 font-bold">{{ r.section.title }}</h3>
+        </div>
+        <p class="flex-1 text-[13px] leading-5 whitespace-pre-line text-ink-soft">{{ r.section.purpose }}</p>
+        <div class="flex items-center justify-between gap-3">
+          {% include "student/partials/section_state.html" with row=r %}
+          <a class="link text-sm font-bold" href="{{ r.url }}">{% if r.status == "locked" %}{% translate "Details" %}{% else %}{% translate "Open" %}{% endif %} →</a>
+        </div>
+      </li>
+    {% endfor %}
+  </ol>
+</section>
+
+{# ---- teacher's comment ---- #}
+{% with c=comments.0 %}{% if c %}
+<section aria-labelledby="fb-title" class="card flex flex-wrap items-start gap-5">
+  {% if c.author %}{% include "components/avatar.html" with person=c.author shape="square" tone="dark" size="lg" %}{% endif %}
+  <div class="min-w-0 flex-[1_1_420px]">
+    <h2 id="fb-title" class="text-[17px] font-bold">{% translate "Teacher's comment" %}
+      <span class="text-sm font-medium text-ink-faint">{% if c.stage %}· {% blocktranslate with s=c.stage.title %}about «{{ s }}»{% endblocktranslate %}{% endif %} · {{ c.at|ago }}</span></h2>
+    <p class="mt-2 text-[15px] leading-[25px] whitespace-pre-line">{{ c.body|truncatechars:600 }}</p>
+    {% if c.stage %}<a class="btn btn-secondary btn-sm mt-3" href="{% url 'student:stage' c.stage.topic.module.course.slug c.stage.topic.number c.stage.pk %}#comments">{% include "components/icons.html#message" %}{% translate "Reply" %}</a>{% endif %}
+  </div>
+</section>
+{% endif %}{% endwith %}
+{% endblock %}

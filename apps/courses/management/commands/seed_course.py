@@ -17,7 +17,7 @@ from apps.assessments.models import Quiz
 from apps.courses.models import Course, Module, Stage, Topic
 from apps.courses.services import ensure_stage_content
 
-from ._content import CONTENT, COURSE, MODULE_1_TOPICS, MODULES, TOPIC_COUNT, TOPICS
+from ._content import CONTENT, COURSE, LEGACY_TITLES, MODULE_1_TOPICS, MODULES, TOPIC_COUNT, TOPICS
 from ._seed_quizzes import sync_quiz
 
 
@@ -48,7 +48,7 @@ class Command(BaseCommand):
                 "enrollment_mode": Course.EnrollmentMode.OPEN,
             },
         )
-        if replace and not created and not self.only:
+        if not created and ((replace and not self.only) or course.title in LEGACY_TITLES):
             Course.objects.filter(pk=course.pk).update(
                 title=COURSE["title"], short_description=COURSE["short_description"]
             )

@@ -1,0 +1,93 @@
+from django.contrib import admin, messages
+from django.utils.translation import gettext_lazy as _
+from unfold.admin import ModelAdmin, TabularInline
+
+from . import services
+from .models import Programme, ProgrammeEnrollment, Section, SectionEvent, SectionProgress
+
+
+class SectionInline(TabularInline):
+    model = Section
+    extra = 0
+    fields = ("number", "kind", "title", "pass_percent", "guide_anchor")
+    ordering = ("number",)
+    show_change_link = True
+
+
+@admin.register(Programme)
+class ProgrammeAdmin(ModelAdmin):
+    list_display = ("title", "slug", "course", "is_active")
+    list_filter = ("is_active",)
+    prepopulated_fields = {"slug": ("title",)}
+    inlines = [SectionInline]
+
+
+@admin.register(Section)
+class SectionAdmin(ModelAdmin):
+    list_display = ("number", "title", "kind", "pass_percent", "guide_anchor", "programme")
+    list_display_links = ("number", "title")
+    list_filter = ("programme", "kind")
+    ordering = ("programme", "number")
+
+
+class ReadOnlyAdmin(ModelAdmin):
+    """Section progress is derived by programme.services — never edited by hand."""
+
+    def get_readonly_fields(self, request, obj=None):
+        return [f.name for f in self.model._meta.fields]
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+
+class SectionProgressInline(TabularInline):
+    model = SectionProgress
+    extra = 0
+    fields = ("section", "status", "percent", "opened_at", "passed_at", "unlocked_by")
+    readonly_fields = fields
+    can_delete = False
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+
+@admin.register(ProgrammeEnrollment)
+class ProgrammeEnrollmentAdmin(ReadOnlyAdmin):
+    list_display = ("student", "programme", "group", "research_cohort", "created_at", "completed_at")
+    list_filter = ("programme", "research_cohort")
+    search_fields = ("student__username", "student__last_name", "student__email")
+    list_select_related = ("student", "programme", "group")
+    inlines = [SectionProgressInline]
+    actions = ["recalculate"]
+
+    @admin.action(description=_("Recalculate"))
+    def recalculate(self, request, queryset):
+        for enrollment in queryset:
+            services.recalculate(enrollment)
+        self.message_user(request, _("Recalculated."), messages.SUCCESS)
+
+
+@admin.register(SectionProgress)
+class SectionProgressAdmin(ReadOnlyAdmin):
+    list_display = ("enrollment", "section", "status", "percent", "opened_at", "passed_at", "unlocked_by")
+    list_filter = ("section__programme", "status", "section__number")
+    search_fields = ("enrollment__student__username", "enrollment__student__last_name")
+    list_select_related = ("enrollment__student", "enrollment__programme", "section")
+    actions = ["open_for_student"]
+
+    @admin.action(description=_("Open the selected sections for the student"))
+    def open_for_student(self, request, queryset):
+        for row in queryset.select_related("enrollment", "section"):
+            services.unlock_section(row.enrollment, row.section, request.user)
+        self.message_user(request, _("Opened: %(n)d") % {"n": queryset.count()}, messages.SUCCESS)
+
+
+@admin.register(SectionEvent)
+class SectionEventAdmin(ReadOnlyAdmin):
+    list_display = ("created_at", "enrollment", "section", "action", "percent", "actor")
+    list_filter = ("action", "section__programme", "section__number")
+    search_fields = ("enrollment__student__username", "enrollment__student__last_name")
+    list_select_related = ("enrollment__student", "section", "actor")

@@ -174,6 +174,49 @@ the student drawer). Every destructive or irreversible action asks in the shared
   </template>
 </section>
 
+{% if sections %}
+{# ---- ICPAI: students × sections (docs/icpai/SPEC.md §4.9) ---- #}
+<section aria-labelledby="sections-title" class="rounded-card border border-line bg-surface">
+  <div class="flex flex-wrap items-baseline justify-between gap-3 px-6 pt-5 pb-3">
+    <h2 id="sections-title" class="text-[17px] font-extrabold">{% blocktranslate with t=programme.title %}{{ t }} sections{% endblocktranslate %}</h2>
+    <p class="text-caption text-ink-soft">{% translate "Percent done per section; a locked section can be opened for one student by hand." %}</p>
+  </div>
+  <div class="overflow-x-auto border-t border-line">
+    <table class="table min-w-[760px]">
+      <thead><tr>
+        <th scope="col">{% translate "Student" %}</th>
+        {% for s in sections %}<th scope="col" class="text-center"><span class="tip inline-flex" tabindex="0">{{ s.number }}<span class="tipbox">{{ s.number }}. {{ s.title }}</span></span></th>{% endfor %}
+      </tr></thead>
+      <tbody>
+        {% for m in matrix %}
+          <tr>
+            <td class="font-bold">{{ m.student.full_name|default:m.student.username }}</td>
+            {% for c in m.cells %}{% with p=c.progress %}
+              <td class="text-center">
+                {% if p and p.status == "passed" %}
+                  <span class="badge badge-success font-bold" title="{% translate 'Passed' %}">{% include "components/icons.html#check" with size=12 %}{{ p.percent|floatformat:0 }}</span>
+                {% elif p and p.status != "locked" %}
+                  <span class="num font-bold">{{ p.percent|floatformat:0 }}%</span>{% if p.unlocked_by_id %}<span class="sr-only"> · {% translate "opened by the teacher" %}</span><span aria-hidden="true" class="text-primary-600" title="{% translate 'opened by the teacher' %}"> ·</span>{% endif %}
+                {% elif m.enrollment %}
+                  <form method="post" action="{% url 'teacher:unlock_section' m.student.pk c.section.number %}">
+                    {% csrf_token %}<input type="hidden" name="course" value="{{ course.slug }}"><input type="hidden" name="next" value="{{ request.get_full_path }}">
+                    <button type="submit" class="btn btn-ghost btn-icon btn-sm text-ink-faint"
+                            aria-label="{% blocktranslate with n=c.section.number s=m.student.full_name|default:m.student.username %}Open section {{ n }} for {{ s }}{% endblocktranslate %}"
+                            data-confirm="{% blocktranslate with n=c.section.number s=m.student.full_name|default:m.student.username %}Open section {{ n }} for {{ s }}?{% endblocktranslate %}"
+                            data-confirm-text="{% translate 'The section stays open whatever the order says; the action is logged.' %}"
+                            data-confirm-label="{% translate 'Open' %}" data-confirm-icon="unlock">{% include "components/icons.html#lock" with size=14 %}</button>
+                  </form>
+                {% else %}<span class="text-ink-faint">—</span>{% endif %}
+              </td>
+            {% endwith %}{% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endif %}
+
 <dialog id="add-student" class="dialog max-w-[520px]" aria-labelledby="add-student-title">
   <form method="post" action="{% url 'teacher:group_add_student' group.pk %}" class="flex flex-col gap-4">
     {% csrf_token %}

@@ -3,6 +3,7 @@
 from django import template
 
 from apps.core.permissions import STUDENT, has_role
+from apps.programme import selectors as programme_selectors
 
 from .. import cabinet, learning
 from ..learning import S
@@ -43,3 +44,24 @@ def _current_topic(user):
         "percent": round(100 * passed / len(required)) if required else 0,
         "url": learning.stage_url(stage),
     }
+
+
+@register.simple_tag(takes_context=True)
+def sidebar_sections(context):
+    """{% sidebar_sections as nav %} — the ICPAI sections of the sidebar, or None when the student is in no programme.
+
+    {rows: programme.selectors.section_rows, current: number of the section page open now}. Reads the stored
+    state (the programme pages recalculate it); computed once per request.
+    """
+    request = context.get("request")
+    user = getattr(request, "user", None)
+    if user is None or not has_role(user, STUDENT):
+        return None
+    if not hasattr(request, "_sidebar_sections"):
+        enrollment = programme_selectors.current_enrollment(user)
+        request._sidebar_sections = {"rows": programme_selectors.section_rows(enrollment)} if enrollment else None
+    nav = request._sidebar_sections
+    if nav:
+        match = getattr(request, "resolver_match", None)
+        nav["current"] = match.kwargs.get("number") if match and match.view_name == "student:section" else None
+    return nav

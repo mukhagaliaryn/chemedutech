@@ -12,6 +12,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext as _
 from django.utils.translation import ngettext
 from django.views.decorators.http import require_POST
@@ -24,6 +25,9 @@ from apps.feedback import selectors as feedback_selectors
 from apps.feedback import services as feedback
 from apps.labs import selectors as lab_selectors
 from apps.labs.models import LabAttempt
+from apps.programme import selectors as programme_selectors
+from apps.programme import services as programme
+from apps.programme.models import Section
 from apps.progress import services as progress
 
 from . import overview
@@ -152,10 +156,14 @@ def group(request, pk):
     }
     if request.GET.get("format") == "csv":
         return _group_csv(group, course, rows)
+    sections, matrix = _sections_matrix(course, shown)
     return render(
         request,
         "teacher/group.html",
         {
+            "programme": programme_selectors.programme_of_course(course),
+            "sections": sections,
+            "matrix": matrix,
             "group": group,
             "links": links,
             "courses": courses,
@@ -172,6 +180,17 @@ def group(request, pk):
             "attach_form": AttachCourseForm(request.user, group),
         },
     )
+
+
+def _sections_matrix(course, rows):
+    """ICPAI students × sections for the shown rows (recalculated so the teacher sees fresh percents)."""
+    found = programme_selectors.programme_of_course(course)
+    if found is None or not rows:
+        return [], []
+    for r in rows:
+        for enrollment in programme.join(r["enrollment"]):
+            programme.recalculate(enrollment)
+    return programme_selectors.matrix(found, [r["student"] for r in rows])
 
 
 def _group_csv(group, course, rows):
@@ -432,6 +451,26 @@ def unlock_stage(request, pk, stage_pk):
     else:
         messages.success(request, _("«%(stage)s» is open for the student.") % {"stage": stage.title})
     return redirect(f"{reverse('teacher:student', args=[student.pk])}?course={enrollment.course.slug}#stages")
+
+
+@require_POST
+@teacher_only
+def unlock_section(request, pk, number):
+    """Open an ICPAI section for one student by hand (logged), from the group page."""
+    student = _student(request, pk)
+    _enrollments, enrollment = _enrollment(request, student)
+    found = programme_selectors.programme_of_course(enrollment.course) if enrollment else None
+    back = request.POST.get("next", "")
+    if not url_has_allowed_host_and_scheme(back, allowed_hosts={request.get_host()}):
+        back = reverse("teacher:student", args=[student.pk])
+    if found is None:
+        messages.error(request, _("The student's course is not part of a programme."))
+        return redirect(back)
+    section = get_object_or_404(Section, programme=found, number=number)
+    enrollment = next(e for e in programme.join(enrollment) if e.programme_id == found.pk)
+    programme.unlock_section(enrollment, section, request.user)
+    messages.success(request, _("Section %(n)s is open for the student.") % {"n": section.number})
+    return redirect(back)
 
 
 @teacher_only

@@ -1,7 +1,9 @@
 {% load i18n student_tags %}{% comment %}
 Student sidebar (mockup «StudentSidebar»): white rail, menu, «current topic» card, user card.
 Collapses to an 84px icon rail (layouts/cabinet.html keeps the state in localStorage).
-{% endcomment %}{% unread_notifications as unread %}{% sidebar_topic as card %}
+A student of the ICPAI programme sees its 8 sections (number, state, percent ring) and «Results»; the cabinet
+pages move to a lower group, the «current topic» card is left out (section 1 leads to it).
+{% endcomment %}{% unread_notifications as unread %}{% sidebar_sections as nav %}{% if not nav %}{% sidebar_topic as card %}{% endif %}
 <div class="flex h-full flex-col gap-3 border-r border-line bg-surface px-3.5 py-5">
   <div class="flex h-11 items-center justify-between gap-2 in-data-[collapsed=true]:h-auto in-data-[collapsed=true]:flex-col">
     <a href="{% url 'student:dashboard' %}" class="flex min-w-0 items-center gap-2.5 overflow-hidden text-[17px] font-extrabold whitespace-nowrap text-ink">
@@ -13,6 +15,28 @@ Collapses to an 84px icon rail (layouts/cabinet.html keeps the state in localSto
   <p class="nav-section nav-hide">{% translate "Learning" %}</p>
   <nav class="flex flex-col gap-1" aria-label="{% translate 'Student menu' %}">
     {% translate "Home" as l %}{% include "components/nav_item.html" with url_name="student:dashboard" icon="home" label=l %}
+  {% if nav %}
+  </nav>
+  <p class="nav-section nav-hide">{% translate "ICPAI programme" %}</p>
+  <nav class="flex flex-col gap-0.5" aria-label="{% translate 'Programme sections' %}">
+    {% for r in nav.rows %}
+      <a href="{{ r.url }}" class="nav-item h-10{% if r.status == 'locked' and nav.current != r.section.number %} text-ink-faint{% endif %}"{% if nav.current == r.section.number %} aria-current="page"{% endif %} title="{{ r.section.number }}. {{ r.section.title }}">
+        <span class="num grid size-6 shrink-0 place-items-center rounded-[8px] text-[12px] font-extrabold {% if r.status == 'passed' %}bg-success-600 text-white{% elif r.status == 'locked' %}bg-surface-sunken text-ink-faint{% else %}bg-primary-50 text-primary-700{% endif %}">{{ r.section.number }}</span>
+        <span class="nav-label min-w-0 flex-1 truncate">{{ r.section.title }}</span>
+        <span class="nav-hide shrink-0">
+          {% if r.status == "passed" %}{% translate "passed" as state %}{% include "components/icons.html#check" with size=16 icon_class="text-success-600" %}
+          {% elif r.status == "locked" %}{% translate "locked" as state %}{% include "components/icons.html#lock" with size=14 %}
+          {% else %}{% blocktranslate with p=r.percent|floatformat:0 asvar state %}{{ p }}% done{% endblocktranslate %}{% include "components/ring.html" with value=r.percent size=22 stroke=3 text=" " label=state %}{% endif %}
+          <span class="sr-only">{{ state }}</span>
+        </span>
+        <span class="nav-tip" role="tooltip">{{ r.section.number }}. {{ r.section.title }}</span>
+      </a>
+    {% endfor %}
+    {% translate "Results" as l %}{% include "components/nav_item.html" with url_name="student:icpai" icon="activity" label=l %}
+  </nav>
+  <p class="nav-section nav-hide">{% translate "Cabinet" %}</p>
+  <nav class="flex flex-col gap-1" aria-label="{% translate 'Cabinet' %}">
+  {% endif %}
     {% translate "My courses" as l %}{% include "components/nav_item.html" with url_name="student:courses" match="student:courses student:course student:topic student:stage" icon="book" label=l %}
     {% translate "Grades" as l %}{% include "components/nav_item.html" with url_name="student:results" icon="chart" label=l %}
     {% translate "Certificates" as l %}{% include "components/nav_item.html" with url_name="student:certificates" icon="award" label=l %}

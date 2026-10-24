@@ -50,5 +50,5 @@ the AI never writes a lesson stage, a reflection or a portfolio for the student 
   (`student:lab_run`, experiments open in order), `/labs/<lab>/<exp>/` is a teacher preview.
 
 ## Commands
-`python manage.py test apps` · `python manage.py tailwind start|build` · `python manage.py seed_course` ·
+`python manage.py test apps` · `python manage.py tailwind start|build` · `python manage.py seed_course` · `python manage.py seed_icpai` ·
 `python manage.py makemessages -l kk -l ru --ignore=env --ignore="ui/static_src/*"` · `ruff check .`

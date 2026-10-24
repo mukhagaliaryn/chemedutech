@@ -1,0 +1,65 @@
+{% extends "layouts/student.html" %}
+{% load i18n %}
+{% comment %}
+An ICPAI section (docs/icpai/SPEC.md §4.0): its purpose (the guide's «what it does»), its state and percent,
+the «Let the AI explain» place (the AI assistant comes in STEP-32; until then the purpose text stands alone) and
+the section's own content — section 1 leads to the course; kinds not built yet say so.
+{% endcomment %}
+{% block title %}{{ section.title }} · ChemEduTech{% endblock %}
+{% block crumb %}{{ programme.title }} · {% blocktranslate with n=section.number %}Section {{ n }}{% endblocktranslate %}{% endblock %}
+{% block page_title %}{{ section.title }}{% endblock %}
+{% block content %}
+<section aria-labelledby="section-title" class="card flex flex-wrap items-center gap-5">
+  <span class="num grid size-[60px] shrink-0 place-items-center rounded-[20px] text-[24px] font-extrabold {% if row.status == 'passed' %}bg-success-600 text-white{% else %}bg-primary-900 text-white{% endif %}">{{ section.number }}</span>
+  <div class="min-w-0 flex-[1_1_320px]">
+    <p class="text-[13px] font-semibold text-ink-faint">{% blocktranslate with n=section.number %}Section {{ n }}{% endblocktranslate %}</p>
+    <h1 id="section-title" class="text-[clamp(22px,2.4vw,28px)] leading-[1.25] font-extrabold tracking-[-0.02em]">{{ section.title }}</h1>
+    <div class="mt-2 flex flex-wrap items-center gap-2">
+      {% include "student/partials/section_state.html" %}
+      {% if row.status != "passed" %}<span class="text-caption text-ink-soft">{% blocktranslate with p=section.pass_percent %}The next section opens at {{ p }}%.{% endblocktranslate %}</span>{% endif %}
+    </div>
+  </div>
+  {% blocktranslate with p=row.percent|floatformat:0 asvar done %}{{ p }}% done{% endblocktranslate %}
+  {% include "components/ring.html" with value=row.percent size=72 stroke=8 label=done %}
+</section>
+
+<div class="grid items-start gap-4 grid-cols-[repeat(auto-fit,minmax(min(360px,100%),1fr))]">
+  <section aria-labelledby="purpose-title" class="card flex flex-col gap-3">
+    <h2 id="purpose-title" class="text-[17px] font-bold">{% translate "What the section does" %}</h2>
+    <p class="text-[15px] leading-[25px] whitespace-pre-line">{{ section.purpose }}</p>
+  </section>
+
+  <section aria-labelledby="ai-title" class="card flex flex-col gap-3">
+    <div class="flex items-center gap-3">
+      <span class="tile bg-primary-50 text-primary-600">{% include "components/icons.html#sparkle" %}</span>
+      <h2 id="ai-title" class="text-[17px] font-bold">{% translate "Let the AI explain" %}</h2>
+    </div>
+    <p class="text-sm text-ink-soft">{% translate "The AI assistant will explain the section here: its aim and how to start." %}</p>
+    <button type="button" class="btn btn-secondary self-start" disabled aria-describedby="ai-soon">{% include "components/icons.html#sparkle" %}{% translate "Explain the section" %}</button>
+    <p id="ai-soon" class="text-caption text-ink-faint">{% translate "Available when the AI assistant is connected." %}</p>
+  </section>
+</div>
+
+{% if section.kind == "course" %}
+  {% if course_block %}
+    <section aria-labelledby="course-title" class="card flex flex-wrap items-center gap-5">
+      <span class="tile tile-lg stage-theory">{% include "components/icons.html#book" with size=22 %}</span>
+      <div class="min-w-0 flex-[1_1_320px]">
+        <h2 id="course-title" class="text-[17px] font-bold">{{ course_block.course.title }}</h2>
+        <p class="mt-1 text-sm text-ink-soft">{% blocktranslate with a=course_block.done b=course_block.total %}Required stages done: {{ a }} of {{ b }}{% endblocktranslate %}</p>
+        {% if course_block.card %}<p class="mt-1 text-sm text-ink-soft">{% blocktranslate with n=course_block.card.topic.number s=course_block.card.stage.title %}Next: topic {{ n }} · {{ s }}{% endblocktranslate %}</p>{% endif %}
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <a class="btn btn-secondary" href="{{ course_block.course_url }}">{% include "components/icons.html#list" %}{% translate "Course map" %}</a>
+        {% if course_block.card %}<a class="btn btn-primary" href="{{ course_block.card.url }}">{% translate "Continue learning" %}{% include "components/icons.html#arrow-right" %}</a>{% endif %}
+      </div>
+    </section>
+  {% else %}
+    {% translate "Not enrolled in the course" as l_title %}{% translate "Section 1 is the course; the teacher adds the group to it." as l_text %}
+    {% include "components/empty_state.html" with title=l_title text=l_text icon="book" %}
+  {% endif %}
+{% elif not row.ready %}
+  {% translate "The section is in development" as l_title %}{% translate "Its tasks will appear here in the next versions of the platform." as l_text %}
+  {% include "components/empty_state.html" with title=l_title text=l_text icon="clock" %}
+{% endif %}
+{% endblock %}

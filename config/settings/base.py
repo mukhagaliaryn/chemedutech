@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     "apps.practice",
     "apps.feedback",
     "apps.certificates",
+    "apps.programme",  # ICPAI: sections and the 80 % engine (docs/icpai/SPEC.md)
     # product layer: views and URLs only
     "apps.student",
     "apps.teacher",
@@ -380,6 +381,32 @@ UNFOLD = {
                         "title": _("Lab attempts"),
                         "icon": "science",
                         "link": reverse_lazy("admin:labs_labattempt_changelist"),
+                    },
+                ],
+            },
+            {
+                "title": _("ICPAI programme"),
+                "separator": True,
+                "items": [
+                    {
+                        "title": _("Programmes and sections"),
+                        "icon": "account_tree",
+                        "link": reverse_lazy("admin:programme_programme_changelist"),
+                    },
+                    {
+                        "title": _("Programme enrolments"),
+                        "icon": "how_to_reg",
+                        "link": reverse_lazy("admin:programme_programmeenrollment_changelist"),
+                    },
+                    {
+                        "title": _("Section progress"),
+                        "icon": "linear_scale",
+                        "link": reverse_lazy("admin:programme_sectionprogress_changelist"),
+                    },
+                    {
+                        "title": _("Section events"),
+                        "icon": "history",
+                        "link": reverse_lazy("admin:programme_sectionevent_changelist"),
                     },
                 ],
             },

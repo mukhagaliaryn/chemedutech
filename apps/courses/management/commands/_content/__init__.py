@@ -8,12 +8,15 @@ from . import t01, t02, t03, t04, t05
 
 COURSE = {
     "slug": "chemistry",
-    "title": "Бейорганикалық химия",
+    "title": "Жалпы химия",
     "short_description": (
-        "Болашақ химия мұғалімдеріне арналған бейорганикалық химия курсы: электрондық дәрістер, бейнедәрістер, "
+        "Болашақ химия мұғалімдеріне арналған жалпы химия курсы: электрондық дәрістер, бейнедәрістер, "
         "виртуалды зертхана, практикалық жұмыстар және тесттер."
     ),
 }
+# ICPAI @S1: the course was renamed «Бейорганикалық химия» → «Жалпы химия»; a course still under an old title gets
+# the new one on the next seed (a title a teacher has changed is left alone)
+LEGACY_TITLES = ("Бейорганикалық химия",)
 
 # (order, title)
 MODULES = [

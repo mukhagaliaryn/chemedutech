@@ -16,6 +16,7 @@ class Notification(models.Model):
         COMMENT = "comment", _("New comment")
         UNLOCKED = "unlocked", _("The teacher opened a stage for you")
         CERTIFICATE = "certificate", _("Certificate issued")
+        SECTION = "section", _("A programme section is open")
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="notifications", verbose_name=_("user")

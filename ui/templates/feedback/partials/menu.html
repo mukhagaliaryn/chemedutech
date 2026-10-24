@@ -9,7 +9,7 @@
 {% for n in items %}
   <a href="{% url 'feedback:open' n.pk %}" class="flex gap-3 border-b border-canvas px-4 py-3 text-ink transition-colors hover:bg-canvas">
     <span class="grid size-[34px] shrink-0 place-items-center rounded-sm {% if n.kind == 'returned' %}bg-warning-50 text-warning-700{% elif n.kind == 'graded' or n.kind == 'certificate' %}bg-success-50 text-success-600{% elif n.kind == 'comment' %}bg-primary-50 text-primary-600{% else %}bg-surface-sunken text-ink-soft{% endif %}">
-      {% if n.kind == "certificate" %}{% include "components/icons.html#award" with size=16 %}{% elif n.kind == "unlocked" %}{% include "components/icons.html#unlock" %}{% elif n.kind == "graded" %}{% include "components/icons.html#check" %}{% elif n.kind == "comment" %}{% include "components/icons.html#message" with size=16 %}{% elif n.kind == "returned" %}{% include "components/icons.html#warn" %}{% else %}{% include "components/icons.html#bell" with size=16 %}{% endif %}
+      {% if n.kind == "certificate" %}{% include "components/icons.html#award" with size=16 %}{% elif n.kind == "unlocked" or n.kind == "section" %}{% include "components/icons.html#unlock" %}{% elif n.kind == "graded" %}{% include "components/icons.html#check" %}{% elif n.kind == "comment" %}{% include "components/icons.html#message" with size=16 %}{% elif n.kind == "returned" %}{% include "components/icons.html#warn" %}{% else %}{% include "components/icons.html#bell" with size=16 %}{% endif %}
     </span>
     <span class="flex min-w-0 flex-1 flex-col leading-[19px]">
       <span class="text-sm font-semibold">{{ n.get_kind_display }}</span>

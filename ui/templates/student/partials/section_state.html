@@ -1,0 +1,7 @@
+{% load i18n %}{% comment %}
+The state of an ICPAI section as a badge: row (programme.selectors.section_rows item).
+Passed → success; locked → neutral with a lock; open → the percent done; a kind not built yet says so.
+{% endcomment %}{% if row.status == "passed" %}<span class="badge badge-success font-bold">{% include "components/icons.html#check" with size=12 %}{% translate "Passed" %} · {{ row.percent|floatformat:0 }}%</span>
+{% elif row.status == "locked" %}<span class="badge font-bold">{% include "components/icons.html#lock" with size=12 %}{% translate "Locked" %}</span>
+{% elif not row.ready %}<span class="badge badge-warning font-bold">{% translate "In development" %}</span>
+{% else %}<span class="badge badge-info font-bold">{% blocktranslate with p=row.percent|floatformat:0 %}{{ p }}% done{% endblocktranslate %}</span>{% endif %}

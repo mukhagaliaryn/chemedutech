@@ -20,7 +20,7 @@ or narrows the content column (default max-w-[1280px]).
          class="fixed inset-y-0 left-0 z-[61] w-[264px] -translate-x-full transition-[transform,width] duration-250 ease-out
                 data-[open=true]:translate-x-0 data-[open=true]:shadow-modal
                 lg:sticky lg:top-0 lg:z-auto lg:h-screen lg:shrink-0 lg:translate-x-0 lg:data-[collapsed=true]:w-[84px]">
-    <div class="h-full max-lg:overflow-y-auto">{% block sidebar %}{% endblock %}</div>
+    <div class="h-full max-lg:overflow-y-auto lg:in-data-[collapsed=false]:overflow-y-auto">{% block sidebar %}{% endblock %}</div>
     <button type="button" class="close-btn absolute top-5 -right-12 lg:hidden" x-show="nav" x-cloak @click="nav = false" aria-label="{% translate 'Close menu' %}">
       {% include "components/icons.html#x" %}
     </button>

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ChemEduTech\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-18 08:36+0500\n"
+"POT-Creation-Date: 2026-10-24 17:24+0500\n"
 "PO-Revision-Date: 2026-10-16 21:00+0500\n"
 "Last-Translator: ChemEduTech\n"
 "Language-Team: ChemEduTech\n"
@@ -33,6 +33,7 @@ msgstr "аты-жөні"
 #: apps/accounts/admin.py:98 apps/courses/models/course.py:126
 #: apps/courses/models/enrollment.py:36
 #: apps/organizations/models/profiles.py:19
+#: apps/programme/models/progress.py:30
 msgid "group"
 msgstr "топ"
 
@@ -159,8 +160,8 @@ msgstr "Оқытушы"
 #: apps/accounts/models/user.py:33 apps/teacher/gradebook.py:19
 #: ui/templates/layouts/student.html:8 ui/templates/research/dashboard.html:84
 #: ui/templates/teacher/gradebook.html:35 ui/templates/teacher/group.html:118
-#: ui/templates/teacher/students.html:29 ui/templates/ui/styleguide.html:140
-#: ui/views.py:21
+#: ui/templates/teacher/group.html:187 ui/templates/teacher/students.html:29
+#: ui/templates/ui/styleguide.html:140 ui/views.py:21
 msgid "Student"
 msgstr "Студент"
 
@@ -205,7 +206,7 @@ msgid "interface language"
 msgstr "интерфейс тілі"
 
 #: apps/accounts/models/user.py:55 apps/assessments/models/attempt.py:26
-#: apps/feedback/models/notification.py:21
+#: apps/feedback/models/notification.py:22
 #: apps/organizations/models/profiles.py:11
 #: apps/organizations/models/profiles.py:42
 msgid "user"
@@ -227,10 +228,8 @@ msgid "question"
 msgstr "сұрақ"
 
 #: apps/assessments/admin.py:38 ui/templates/assessments/result.html:83
-#: ui/templates/research/dashboard.html:51
-#: ui/templates/student/results.html:73
-#: ui/templates/student/stages/test.html:9
-#: ui/templates/teacher/student.html:67
+#: ui/templates/research/dashboard.html:51 ui/templates/student/results.html:73
+#: ui/templates/student/stages/test.html:9 ui/templates/teacher/student.html:67
 msgid "Attempts"
 msgstr "Талпыныстар"
 
@@ -270,6 +269,7 @@ msgstr "Қорытынды тест"
 #: apps/certificates/models/certificate.py:43 apps/courses/models/course.py:38
 #: apps/courses/models/enrollment.py:52 apps/feedback/models/comment.py:19
 #: apps/labs/models/attempt.py:23 apps/practice/models/submission.py:21
+#: apps/programme/models/progress.py:56 apps/programme/models/progress.py:100
 #: apps/progress/models/activity.py:14 apps/progress/models/progress.py:22
 #: apps/progress/models/progress.py:76 apps/progress/models/progress.py:98
 #: apps/progress/models/progress.py:118 apps/progress/models/progress.py:153
@@ -324,6 +324,7 @@ msgid "percent"
 msgstr "пайыз"
 
 #: apps/assessments/models/attempt.py:39 apps/progress/models/progress.py:124
+#: ui/templates/partials/shell/sidebar_student.html:27
 #: ui/templates/student/partials/stage_tile.html:2
 msgid "passed"
 msgstr "өтті"
@@ -417,20 +418,22 @@ msgid "First attempt"
 msgstr "Бірінші талпыныс"
 
 #: apps/assessments/models/quiz.py:23
-#: apps/certificates/models/certificate.py:18
-#: apps/courses/models/content.py:34 apps/courses/models/course.py:31
-#: apps/courses/models/structure.py:17 apps/courses/models/structure.py:36
-#: apps/courses/models/structure.py:76 apps/practice/models/task.py:24
+#: apps/certificates/models/certificate.py:18 apps/courses/models/content.py:34
+#: apps/courses/models/course.py:31 apps/courses/models/structure.py:17
+#: apps/courses/models/structure.py:36 apps/courses/models/structure.py:76
+#: apps/practice/models/task.py:24 apps/programme/models/programme.py:12
+#: apps/programme/models/programme.py:51
 msgid "title"
 msgstr "атауы"
 
 #: apps/assessments/models/quiz.py:24 apps/assessments/models/quiz.py:74
-#: apps/courses/models/structure.py:75 apps/feedback/models/notification.py:23
-#: apps/practice/models/task.py:58
+#: apps/courses/models/structure.py:75 apps/feedback/models/notification.py:24
+#: apps/practice/models/task.py:58 apps/programme/models/programme.py:50
 msgid "kind"
 msgstr "түрі"
 
-#: apps/assessments/models/quiz.py:26 apps/courses/models/structure.py:85
+#: apps/assessments/models/quiz.py:26 apps/courses/models/structure.py:87
+#: apps/programme/models/programme.py:54
 msgid "pass mark, %"
 msgstr "өту шегі, %"
 
@@ -484,9 +487,8 @@ msgstr "әр жауапты бірден тексеру"
 
 #: apps/assessments/models/quiz.py:50
 msgid ""
-"The student checks every question as they go and sees the correct answer and"
-" the explanation; a checked answer cannot be changed. For checkpoint "
-"quizzes."
+"The student checks every question as they go and sees the correct answer and "
+"the explanation; a checked answer cannot be changed. For checkpoint quizzes."
 msgstr ""
 "Студент әр сұрақты бірден тексеріп, дұрыс жауап пен түсіндірмені көреді; "
 "тексерілген жауап өзгертілмейді. Бекіту тесттеріне арналған."
@@ -516,7 +518,7 @@ msgstr "Қысқа мәтін"
 msgid "Chemical formula"
 msgstr "Химиялық формула"
 
-#: apps/assessments/models/quiz.py:70 apps/labs/views.py:55
+#: apps/assessments/models/quiz.py:70 apps/labs/views.py:56
 #: apps/practice/models/task.py:46 ui/templates/assessments/take.html:67
 #: ui/templates/student/partials/quiz_question.html:28
 msgid "Reaction equation"
@@ -568,8 +570,7 @@ msgstr "қолданыста"
 #: apps/assessments/models/quiz.py:98
 msgid "Retired questions stay in old attempts but are not asked again"
 msgstr ""
-"Қолданыстан шыққан сұрақтар ескі талпыныстарда қалады, бірақ қайта "
-"қойылмайды"
+"Қолданыстан шыққан сұрақтар ескі талпыныстарда қалады, бірақ қайта қойылмайды"
 
 #: apps/assessments/models/quiz.py:113
 msgid "Enter the correct number."
@@ -590,8 +591,8 @@ msgid "Cannot read %(answer)s: %(error)s"
 msgstr "%(answer)s оқылмады: %(error)s"
 
 #: apps/assessments/models/quiz.py:136
-#: apps/certificates/models/certificate.py:20
-#: apps/courses/models/content.py:19 apps/feedback/models/comment.py:30
+#: apps/certificates/models/certificate.py:20 apps/courses/models/content.py:19
+#: apps/feedback/models/comment.py:30
 msgid "text"
 msgstr "мәтін"
 
@@ -653,8 +654,7 @@ msgstr ""
 "шығаруға болады."
 
 #: apps/assessments/services/authoring.py:81
-#: apps/courses/services/authoring.py:26
-#: apps/practice/services/authoring.py:77
+#: apps/courses/services/authoring.py:26 apps/practice/services/authoring.py:77
 msgid "The list has changed. Reload the page and try again."
 msgstr "Тізім өзгерген. Бетті жаңартып, қайталау керек."
 
@@ -667,8 +667,8 @@ msgstr "PDF-ті қайта жасау"
 msgid "PDF made: %(n)d"
 msgstr "PDF жасалды: %(n)d"
 
-#: apps/certificates/apps.py:8 config/settings/base.py:391
-#: ui/templates/partials/shell/sidebar_student.html:18
+#: apps/certificates/apps.py:8 config/settings/base.py:418
+#: ui/templates/partials/shell/sidebar_student.html:42
 #: ui/templates/student/certificates.html:3
 #: ui/templates/student/certificates.html:5
 #: ui/templates/student/dashboard.html:58 ui/templates/student/results.html:48
@@ -679,6 +679,7 @@ msgstr "Сертификаттар"
 #: apps/certificates/models/certificate.py:48 apps/courses/models/course.py:78
 #: apps/courses/models/course.py:101 apps/courses/models/course.py:124
 #: apps/courses/models/enrollment.py:27 apps/courses/models/structure.py:14
+#: apps/programme/models/programme.py:19
 msgid "course"
 msgstr "курс"
 
@@ -693,8 +694,8 @@ msgstr "A4 альбомдық, 297 × 210 мм"
 #: apps/certificates/models/certificate.py:23
 #, python-brace-format
 msgid ""
-"Shown under the holder's name. Placeholders: {full_name}, {course}, {score},"
-" {letter}, {date}, {number}"
+"Shown under the holder's name. Placeholders: {full_name}, {course}, {score}, "
+"{letter}, {date}, {number}"
 msgstr ""
 "Иесінің аты-жөнінің астында көрсетіледі. Орын толтырғыштар: {full_name}, "
 "{course}, {score}, {letter}, {date}, {number}"
@@ -720,7 +721,7 @@ msgid "certificate templates"
 msgstr "сертификат үлгілері"
 
 #: apps/certificates/models/certificate.py:45
-#: apps/courses/models/structure.py:35
+#: apps/courses/models/structure.py:35 apps/programme/models/programme.py:49
 msgid "number"
 msgstr "нөмірі"
 
@@ -768,7 +769,7 @@ msgid "Core"
 msgstr "Негізгі"
 
 #: apps/core/models.py:8 apps/feedback/models/comment.py:32
-#: apps/feedback/models/notification.py:27
+#: apps/feedback/models/notification.py:28
 #: apps/practice/models/submission.py:107
 #: apps/practice/models/submission.py:143
 msgid "created at"
@@ -810,7 +811,7 @@ msgstr[1] "%(n)d студент жазылды."
 msgid "A published topic needs at least one required stage."
 msgstr "Жарияланған тақырыпта кемінде бір міндетті кезең болуы керек."
 
-#: apps/courses/admin.py:138 apps/courses/models/structure.py:112
+#: apps/courses/admin.py:138 apps/courses/models/structure.py:114
 msgid "stages"
 msgstr "кезеңдер"
 
@@ -827,7 +828,7 @@ msgid "This student is already enrolled in the course."
 msgstr "Бұл студент курсқа жазылып қойған."
 
 #: apps/courses/apps.py:8 apps/research/admin_dashboard.py:38
-#: config/settings/base.py:302 config/settings/base.py:306
+#: config/settings/base.py:303 config/settings/base.py:307
 #: ui/templates/student/partials/course_switch.html:3
 #: ui/templates/teacher/group.html:99
 #: ui/templates/teacher/partials/groups_table.html:10
@@ -837,7 +838,7 @@ msgstr "Курстар"
 
 #: apps/courses/models/content.py:17 apps/courses/models/content.py:53
 #: apps/courses/models/content.py:107 apps/courses/models/content.py:151
-#: apps/courses/models/structure.py:111 apps/feedback/models/comment.py:22
+#: apps/courses/models/structure.py:113 apps/feedback/models/comment.py:22
 #: apps/labs/models/attempt.py:32 apps/practice/models/submission.py:24
 #: apps/practice/models/task.py:22 apps/progress/models/progress.py:25
 #: apps/progress/models/progress.py:156
@@ -869,7 +870,7 @@ msgstr "Жүктелген файл"
 msgid "source"
 msgstr "көзі"
 
-#: apps/courses/models/content.py:56 apps/feedback/models/notification.py:25
+#: apps/courses/models/content.py:56 apps/feedback/models/notification.py:26
 msgid "link"
 msgstr "сілтеме"
 
@@ -948,13 +949,11 @@ msgstr "тақырып тесті"
 msgid "topic tests"
 msgstr "тақырып тесттері"
 
-#: apps/courses/models/course.py:22
-#: ui/templates/teacher/content/course.html:61
+#: apps/courses/models/course.py:22 ui/templates/teacher/content/course.html:61
 msgid "Draft"
 msgstr "Жоба"
 
-#: apps/courses/models/course.py:23
-#: ui/templates/teacher/content/course.html:61
+#: apps/courses/models/course.py:23 ui/templates/teacher/content/course.html:61
 msgid "Published"
 msgstr "Жарияланған"
 
@@ -974,7 +973,7 @@ msgstr "Тек бекітілген топтар"
 msgid "By course code"
 msgstr "Курс коды арқылы"
 
-#: apps/courses/models/course.py:32
+#: apps/courses/models/course.py:32 apps/programme/models/programme.py:13
 msgid "slug"
 msgstr "slug"
 
@@ -992,7 +991,8 @@ msgstr "мұқаба"
 
 #: apps/courses/models/course.py:36 apps/courses/models/enrollment.py:46
 #: apps/labs/models/attempt.py:39 apps/practice/models/submission.py:28
-#: apps/progress/models/progress.py:27 apps/progress/models/progress.py:81
+#: apps/programme/models/progress.py:61 apps/progress/models/progress.py:27
+#: apps/progress/models/progress.py:81
 msgid "status"
 msgstr "күйі"
 
@@ -1053,8 +1053,8 @@ msgid ""
 "Taken once before the first stage (pre) and once after the course (post); "
 "not graded"
 msgstr ""
-"Алғашқы кезеңге дейін бір рет (кіріс) және курстан кейін бір рет (қорытынды)"
-" тапсырылады; бағаланбайды"
+"Алғашқы кезеңге дейін бір рет (кіріс) және курстан кейін бір рет (қорытынды) "
+"тапсырылады; бағаланбайды"
 
 #: apps/courses/models/course.py:79
 msgid "courses"
@@ -1135,7 +1135,8 @@ msgid "Dropped"
 msgstr "Шығарылды"
 
 #: apps/courses/models/enrollment.py:24 apps/labs/models/attempt.py:15
-#: ui/templates/partials/shell/sidebar_student.html:37
+#: apps/programme/models/progress.py:19
+#: ui/templates/partials/shell/sidebar_student.html:61
 msgid "student"
 msgstr "студент"
 
@@ -1144,7 +1145,7 @@ msgid "The student's group at enrolment"
 msgstr "Жазылған кездегі студенттің тобы"
 
 #: apps/courses/models/enrollment.py:40 apps/labs/models/attempt.py:37
-#: apps/organizations/models/group.py:65
+#: apps/organizations/models/group.py:65 apps/programme/models/progress.py:32
 msgid "research group"
 msgstr "зерттеу тобы"
 
@@ -1156,9 +1157,9 @@ msgstr "Жазылғанда топтан көшіріледі және өзге
 msgid "enrolled at"
 msgstr "жазылған уақыты"
 
-#: apps/courses/models/enrollment.py:48 apps/progress/models/progress.py:37
-#: apps/progress/models/progress.py:85 apps/progress/models/progress.py:105
-#: apps/progress/models/progress.py:125
+#: apps/courses/models/enrollment.py:48 apps/programme/models/progress.py:33
+#: apps/progress/models/progress.py:37 apps/progress/models/progress.py:85
+#: apps/progress/models/progress.py:105 apps/progress/models/progress.py:125
 msgid "completed at"
 msgstr "аяқталған уақыты"
 
@@ -1243,7 +1244,7 @@ msgstr "Практикалық жұмыс"
 msgid "required"
 msgstr "міндетті"
 
-#: apps/courses/models/structure.py:81
+#: apps/courses/models/structure.py:82
 msgid ""
 "Relative weight among the stages of the same kind: the course share of the "
 "kind is split in this proportion"
@@ -1251,18 +1252,18 @@ msgstr ""
 "Осы түрдегі кезеңдер арасындағы салыстырмалы салмақ: курстағы түр үлесі осы "
 "пропорциямен бөлінеді"
 
-#: apps/courses/models/structure.py:88
+#: apps/courses/models/structure.py:90
 msgid ""
 "Lab and practice stages; stages graded by a quiz use the quiz's pass mark"
 msgstr ""
-"Зертхана мен практика кезеңдері үшін; тестпен бағаланатын кезеңдерде тесттің"
-" өту шегі қолданылады"
+"Зертхана мен практика кезеңдері үшін; тестпен бағаланатын кезеңдерде тесттің "
+"өту шегі қолданылады"
 
-#: apps/courses/models/structure.py:97
+#: apps/courses/models/structure.py:99
 msgid "checkpoint quiz"
 msgstr "бекіту тесті"
 
-#: apps/courses/models/structure.py:98
+#: apps/courses/models/structure.py:100
 msgid "3–4 questions after a theory or video stage"
 msgstr "Теория немесе видео кезеңінен кейінгі 3–4 сұрақ"
 
@@ -1280,8 +1281,8 @@ msgid ""
 "Students have already worked on this stage. Make it optional or unpublish "
 "the topic instead."
 msgstr ""
-"Студенттер бұл кезеңде жұмыс істеп қойған. Оның орнына кезеңді міндетті емес"
-" етуге немесе тақырыпты жариялаудан алуға болады."
+"Студенттер бұл кезеңде жұмыс істеп қойған. Оның орнына кезеңді міндетті емес "
+"етуге немесе тақырыпты жариялаудан алуға болады."
 
 #: apps/courses/services/enrollment.py:36
 msgid "This course is not open for enrolment."
@@ -1316,8 +1317,7 @@ msgstr "Студент бұл топта жоқ."
 msgid "Only an empty group can be deleted. Make it inactive instead."
 msgstr "Тек бос топ жойылады. Оның орнына топты белсенді емес етуге болады."
 
-#: apps/feedback/apps.py:8
-#: ui/templates/admin/practice/practiceitem/try.html:21
+#: apps/feedback/apps.py:8 ui/templates/admin/practice/practiceitem/try.html:21
 #: ui/templates/admin/practice/practiceitem/try.html:30
 msgid "Feedback"
 msgstr "Кері байланыс"
@@ -1338,7 +1338,7 @@ msgstr "жұмыс id"
 msgid "reply to"
 msgstr "жауап берілген пікір"
 
-#: apps/feedback/models/comment.py:31 apps/feedback/models/notification.py:26
+#: apps/feedback/models/comment.py:31 apps/feedback/models/notification.py:27
 msgid "read"
 msgstr "оқылды"
 
@@ -1375,15 +1375,19 @@ msgstr "Мұғалім кезеңді ашты"
 msgid "Certificate issued"
 msgstr "Сертификат берілді"
 
-#: apps/feedback/models/notification.py:24
+#: apps/feedback/models/notification.py:19
+msgid "A programme section is open"
+msgstr "Бағдарламаның бөлімі ашылды"
+
+#: apps/feedback/models/notification.py:25
 msgid "subject"
 msgstr "тақырыбы"
 
-#: apps/feedback/models/notification.py:31
+#: apps/feedback/models/notification.py:32
 msgid "notification"
 msgstr "хабарлама"
 
-#: apps/feedback/models/notification.py:32
+#: apps/feedback/models/notification.py:33
 msgid "notifications"
 msgstr "хабарламалар"
 
@@ -1430,8 +1434,8 @@ msgstr "Судың электролизі"
 
 #: apps/labs/experiments/t01/electrolysis.py:19
 msgid ""
-"Decompose water by direct current and determine the volume ratio of hydrogen"
-" and oxygen."
+"Decompose water by direct current and determine the volume ratio of hydrogen "
+"and oxygen."
 msgstr ""
 "Суды тұрақты токпен ыдыратып, сутегі мен оттегі көлемдерінің қатынасын "
 "анықтау."
@@ -1468,8 +1472,8 @@ msgstr "Айнымалы ток көзі"
 
 #: apps/labs/experiments/t01/electrolysis.py:39
 msgid ""
-"Alternating current keeps swapping the electrodes, so the gases would mix in"
-" both tubes. Electrolysis needs direct current."
+"Alternating current keeps swapping the electrodes, so the gases would mix in "
+"both tubes. Electrolysis needs direct current."
 msgstr ""
 "Айнымалы ток электродтардың полярлығын үнемі ауыстырады, сондықтан газдар "
 "екі түтікте де араласып кетеді. Электролизге тұрақты ток қажет."
@@ -1578,18 +1582,16 @@ msgstr "Электродтық реакцияларды жазу керек."
 
 #: apps/labs/experiments/t01/electrolysis.py:107
 #: apps/labs/experiments/t01/hydrogen.py:89
-#: apps/labs/experiments/t01/oxygen.py:102
-#: apps/labs/experiments/t01/rate.py:84
+#: apps/labs/experiments/t01/oxygen.py:102 apps/labs/experiments/t01/rate.py:84
 #: apps/labs/experiments/t02/alkali.py:104
 #: apps/labs/experiments/t02/displacement.py:120
-#: apps/labs/experiments/t02/silver.py:122 apps/labs/views.py:115
+#: apps/labs/experiments/t02/silver.py:122 apps/labs/views.py:116
 msgid "Finish the experiment"
 msgstr "Тәжірибені аяқтау"
 
 #: apps/labs/experiments/t01/electrolysis.py:108
 #: apps/labs/experiments/t01/hydrogen.py:90
-#: apps/labs/experiments/t01/oxygen.py:103
-#: apps/labs/experiments/t01/rate.py:85
+#: apps/labs/experiments/t01/oxygen.py:103 apps/labs/experiments/t01/rate.py:85
 #: apps/labs/experiments/t02/alkali.py:104
 #: apps/labs/experiments/t02/displacement.py:120
 #: apps/labs/experiments/t02/silver.py:122
@@ -1599,8 +1601,7 @@ msgstr "Нәтижелер сақталып, талдау тапсырмасы �
 
 #: apps/labs/experiments/t01/electrolysis.py:110
 #: apps/labs/experiments/t01/hydrogen.py:92
-#: apps/labs/experiments/t01/oxygen.py:105
-#: apps/labs/experiments/t01/rate.py:87
+#: apps/labs/experiments/t01/oxygen.py:105 apps/labs/experiments/t01/rate.py:87
 #: apps/labs/experiments/t02/alkali.py:105
 #: apps/labs/experiments/t02/displacement.py:121
 #: apps/labs/experiments/t02/silver.py:123
@@ -1618,7 +1619,7 @@ msgstr "Катодтағы газ көлемі"
 #: apps/labs/experiments/t01/electrolysis.py:115
 #: apps/labs/experiments/t01/hydrogen.py:97
 #: apps/labs/experiments/t01/rate.py:91 apps/labs/experiments/t01/rate.py:92
-#: apps/labs/views.py:62
+#: apps/labs/views.py:63
 msgid "mL"
 msgstr "мл"
 
@@ -1698,8 +1699,8 @@ msgstr "NaOH-тан көбірек сутегі алу үшін"
 
 #: apps/labs/experiments/t01/electrolysis.py:153
 msgid ""
-"How would you show the class which tube contains hydrogen and which contains"
-" oxygen?"
+"How would you show the class which tube contains hydrogen and which contains "
+"oxygen?"
 msgstr ""
 "Қай түтікте сутегі, қайсысында оттегі бар екенін сыныпқа қалай көрсетуге "
 "болады?"
@@ -1876,8 +1877,7 @@ msgstr "Ол сумен әрекеттеседі"
 
 #: apps/labs/experiments/t01/hydrogen.py:113
 msgid ""
-"Which particle is the oxidising agent in the reaction Zn + 2HCl → ZnCl₂ + "
-"H₂?"
+"Which particle is the oxidising agent in the reaction Zn + 2HCl → ZnCl₂ + H₂?"
 msgstr ""
 "Zn + 2HCl → ZnCl₂ + H₂ реакциясында қай бөлшек тотықтырғыш болып табылады?"
 
@@ -1951,8 +1951,8 @@ msgstr "Оттегіні алу"
 
 #: apps/labs/experiments/t01/oxygen.py:29
 msgid ""
-"Obtain oxygen by decomposing hydrogen peroxide and compare the rate with and"
-" without a catalyst."
+"Obtain oxygen by decomposing hydrogen peroxide and compare the rate with and "
+"without a catalyst."
 msgstr ""
 "Сутегі пероксидін ыдыратып оттегі алу және катализатормен және "
 "катализаторсыз жылдамдықты салыстыру."
@@ -2067,8 +2067,7 @@ msgstr "Бақылау"
 
 #: apps/labs/experiments/t01/oxygen.py:95
 msgid ""
-"A glowing splint flares up in oxygen. The rates of the two runs are "
-"compared."
+"A glowing splint flares up in oxygen. The rates of the two runs are compared."
 msgstr ""
 "Оттегіде бықсып тұрған шамшырақ лап етіп жанады. Екі тәжірибенің "
 "жылдамдықтары салыстырылады."
@@ -2090,7 +2089,7 @@ msgid "Average rate without a catalyst"
 msgstr "Катализаторсыз орташа жылдамдық"
 
 #: apps/labs/experiments/t01/oxygen.py:109
-#: apps/labs/experiments/t01/oxygen.py:110 apps/labs/views.py:64
+#: apps/labs/experiments/t01/oxygen.py:110 apps/labs/views.py:65
 msgid "mL/min"
 msgstr "мл/мин"
 
@@ -2215,8 +2214,8 @@ msgid ""
 "Heating would also speed up the reaction and mix two factors. Change only "
 "one variable: the catalyst."
 msgstr ""
-"Қыздыру да реакцияны жылдамдатады, сонда екі фактор араласып кетеді. Тек бір"
-" айнымалы өзгертіледі: катализатор."
+"Қыздыру да реакцияны жылдамдатады, сонда екі фактор араласып кетеді. Тек бір "
+"айнымалы өзгертіледі: катализатор."
 
 #: apps/labs/experiments/t01/rate.py:40
 msgid "Select two test tubes"
@@ -2355,8 +2354,7 @@ msgstr "H₂O₂ концентрациясы"
 msgid ""
 "Using the idea of activation energy, explain why MnO₂ speeds up the "
 "decomposition."
-msgstr ""
-"Активтендіру энергиясы тұрғысынан MnO₂ ыдырауды неліктен жылдамдатады?"
+msgstr "Активтендіру энергиясы тұрғысынан MnO₂ ыдырауды неліктен жылдамдатады?"
 
 #: apps/labs/experiments/t02/__init__.py:13
 msgid "Halogens: oxidising ability and halide ions"
@@ -2378,8 +2376,8 @@ msgstr ""
 #: apps/labs/experiments/t02/alkali.py:40
 msgid ""
 "In both tubes chlorine (0) is at the same time reduced to chloride (−1) and "
-"oxidised: to hypochlorite (+1) in cold dilute alkali and to chlorate (+5) in"
-" hot concentrated alkali. This is disproportionation; the conditions decide "
+"oxidised: to hypochlorite (+1) in cold dilute alkali and to chlorate (+5) in "
+"hot concentrated alkali. This is disproportionation; the conditions decide "
 "the product."
 msgstr ""
 "Екі пробиркада да хлор (0) бір мезгілде хлоридке (−1) дейін тотықсызданады "
@@ -2493,8 +2491,7 @@ msgid "A: NaCl and NaClO₃; B: NaCl and NaClO"
 msgstr "A: NaCl және NaClO₃; B: NaCl және NaClO"
 
 #: apps/labs/experiments/t02/alkali.py:88
-msgid ""
-"The higher oxidation state (+5) is reached on heating, not in the cold."
+msgid "The higher oxidation state (+5) is reached on heating, not in the cold."
 msgstr "Жоғары тотығу дәрежесіне (+5) суықта емес, қыздырғанда жетеді."
 
 #: apps/labs/experiments/t02/alkali.py:94
@@ -2572,10 +2569,8 @@ msgstr "NaClO₃ құрамындағы хлордың тотығу дәреже
 
 #: apps/labs/experiments/t02/alkali.py:132
 msgid ""
-"Why is chlorine both the oxidising and the reducing agent in these "
-"reactions?"
-msgstr ""
-"Неліктен бұл реакцияларда хлор әрі тотықтырғыш, әрі тотықсыздандырғыш?"
+"Why is chlorine both the oxidising and the reducing agent in these reactions?"
+msgstr "Неліктен бұл реакцияларда хлор әрі тотықтырғыш, әрі тотықсыздандырғыш?"
 
 #: apps/labs/experiments/t02/alkali.py:134
 msgid ""
@@ -2609,8 +2604,7 @@ msgid "Sodium chlorate NaClO₃"
 msgstr "Натрий хлораты NaClO₃"
 
 #: apps/labs/experiments/t02/alkali.py:146
-msgid ""
-"Why should this experiment be shown to school students as a simulation?"
+msgid "Why should this experiment be shown to school students as a simulation?"
 msgstr ""
 "Неліктен бұл тәжірибені мектеп оқушыларына симуляция ретінде көрсету керек?"
 
@@ -2644,18 +2638,17 @@ msgstr "Галогендердің орынбасу реакциялары"
 
 #: apps/labs/experiments/t02/displacement.py:29
 msgid ""
-"Find out which halogen displaces which from a solution of its salt and build"
-" the series of the oxidising ability of chlorine, bromine and iodine."
+"Find out which halogen displaces which from a solution of its salt and build "
+"the series of the oxidising ability of chlorine, bromine and iodine."
 msgstr ""
-"Қай галоген қайсысын тұзының ерітіндісінен ығыстыратынын анықтап, хлор, бром"
-" және йодтың тотықтырғыштық қатарын құру."
+"Қай галоген қайсысын тұзының ерітіндісінен ығыстыратынын анықтап, хлор, бром "
+"және йодтың тотықтырғыштық қатарын құру."
 
 #: apps/labs/experiments/t02/displacement.py:35
 msgid ""
 "A free halogen oxidises the anions of a halogen below it in the group: "
-"chlorine displaces bromine and iodine, bromine cannot oxidise chloride ions."
-" Oxidising ability: Cl₂ > Br₂ > I₂ (for the whole group F₂ > Cl₂ > Br₂ > "
-"I₂)."
+"chlorine displaces bromine and iodine, bromine cannot oxidise chloride ions. "
+"Oxidising ability: Cl₂ > Br₂ > I₂ (for the whole group F₂ > Cl₂ > Br₂ > I₂)."
 msgstr ""
 "Бос галоген топта өзінен төмен орналасқан галогеннің анионын тотықтырады: "
 "хлор бром мен йодты ығыстырады, бром хлорид иондарын тотықтыра алмайды. "
@@ -2940,8 +2933,8 @@ msgstr "Хлорид ионы Cl⁻"
 
 #: apps/labs/experiments/t02/displacement.py:169
 msgid ""
-"How would you show these reactions to school students without real dangerous"
-" reagents?"
+"How would you show these reactions to school students without real dangerous "
+"reagents?"
 msgstr ""
 "Бұл реакцияларды мектеп оқушыларына нақты қауіпті реагенттерсіз қалай "
 "көрсетуге болады?"
@@ -3139,8 +3132,8 @@ msgstr "Күкірттің тотығуы және сульфат-ионын с�
 
 #: apps/labs/experiments/t03/sulfate.py:54
 msgid ""
-"Obtain SO₂ from sodium sulfite, oxidise it with hydrogen peroxide to sulfate"
-" (S +4 → +6) and prove the sulfate ion with barium chloride in an acidic "
+"Obtain SO₂ from sodium sulfite, oxidise it with hydrogen peroxide to sulfate "
+"(S +4 → +6) and prove the sulfate ion with barium chloride in an acidic "
 "medium, comparing with a control sample."
 msgstr ""
 "Натрий сульфитінен SO₂ алып, оны сутегі пероксидімен сульфатқа дейін "
@@ -3150,8 +3143,8 @@ msgstr ""
 #: apps/labs/experiments/t03/sulfate.py:60
 msgid ""
 "SO₂ is sulfur(IV) oxide, an acidic oxide. Hydrogen peroxide oxidises sulfur "
-"from +4 to +6. The sulfate ion is proven by the white BaSO₄ precipitate that"
-" does not dissolve in acid; a sulfite gives no stable precipitate in an "
+"from +4 to +6. The sulfate ion is proven by the white BaSO₄ precipitate that "
+"does not dissolve in acid; a sulfite gives no stable precipitate in an "
 "acidic medium, so a control sample is needed."
 msgstr ""
 "SO₂ — күкірт(IV) оксиді, қышқылдық оксид. Сутегі пероксиді күкіртті +4-тен "
@@ -3195,8 +3188,7 @@ msgstr "Сутегі пероксидінің ерітіндісі"
 msgid "Barium chloride solution"
 msgstr "Барий хлоридінің ерітіндісі"
 
-#: apps/labs/experiments/t03/sulfate.py:80
-#: apps/labs/experiments/t04/ions.py:57
+#: apps/labs/experiments/t03/sulfate.py:80 apps/labs/experiments/t04/ions.py:57
 #: apps/labs/experiments/t05/carbon_silicon.py:82
 msgid "Sodium hydroxide solution"
 msgstr "Натрий гидроксидінің ерітіндісі"
@@ -3281,8 +3273,8 @@ msgstr "A-да көпіршіктер: газ бөлініп, B-ға өтеді.
 
 #: apps/labs/experiments/t03/sulfate.py:106
 msgid ""
-"SO₂ is toxic: the acid is added only when the closed gas path and absorber B"
-" are ready."
+"SO₂ is toxic: the acid is added only when the closed gas path and absorber B "
+"are ready."
 msgstr ""
 "SO₂ улы: қышқыл жабық газ жолы мен B сіңіргіші дайын болғанда ғана қосылады."
 
@@ -3398,8 +3390,8 @@ msgstr "C-да ақ BaSO₄ тұнбасы түзілді: сульфат-ион
 
 #: apps/labs/experiments/t03/sulfate.py:147
 msgid ""
-"Turn S(+IV) into S(+VI) first and transfer the sample; then compare with the"
-" sulfate test in an acidic medium."
+"Turn S(+IV) into S(+VI) first and transfer the sample; then compare with the "
+"sulfate test in an acidic medium."
 msgstr ""
 "Алдымен S(+IV)-ті S(+VI)-ке айналдырып, үлгіні ауыстыру керек; сосын қышқыл "
 "ортадағы сульфат сынағымен салыстыру."
@@ -3472,10 +3464,8 @@ msgid "Why is the oxidation state of sulfur +4 in SO₂?"
 msgstr "Неліктен SO₂-де күкірттің тотығу дәрежесі +4?"
 
 #: apps/labs/experiments/t03/sulfate.py:186
-msgid ""
-"Two oxygen atoms give 2 × (−2) = −4, the molecule is neutral, so S = +4"
-msgstr ""
-"Екі оттегі атомы 2 × (−2) = −4 береді, молекула бейтарап, демек S = +4"
+msgid "Two oxygen atoms give 2 × (−2) = −4, the molecule is neutral, so S = +4"
+msgstr "Екі оттегі атомы 2 × (−2) = −4 береді, молекула бейтарап, демек S = +4"
 
 #: apps/labs/experiments/t03/sulfate.py:187
 msgid "Because sulfur is in group 4"
@@ -3534,17 +3524,17 @@ msgstr ""
 
 #: apps/labs/experiments/t04/ions.py:44
 msgid ""
-"An alkali turns ammonium ions into ammonia, a gas with basic properties: wet"
-" indicator paper turns blue. Nitrogen keeps the oxidation state −3 — it is "
-"an acid–base reaction, not a redox one. Phosphate ions give a yellow Ag₃PO₄ "
-"precipitate with silver ions in a model solution; in real samples the pH and"
-" other ions matter."
+"An alkali turns ammonium ions into ammonia, a gas with basic properties: wet "
+"indicator paper turns blue. Nitrogen keeps the oxidation state −3 — it is an "
+"acid–base reaction, not a redox one. Phosphate ions give a yellow Ag₃PO₄ "
+"precipitate with silver ions in a model solution; in real samples the pH and "
+"other ions matter."
 msgstr ""
 "Сілті аммоний иондарын аммиакқа — негіздік қасиеті бар газға айналдырады: "
 "дымқыл индикатор қағазы көгереді. Азоттың тотығу дәрежесі −3 болып қалады — "
 "бұл тотығу-тотықсыздану емес, қышқыл-негіздік реакция. Модельдік ерітіндіде "
-"фосфат иондары күміс иондарымен сары Ag₃PO₄ тұнбасын береді; нақты үлгілерде"
-" рН мен бөгде иондар әсер етеді."
+"фосфат иондары күміс иондарымен сары Ag₃PO₄ тұнбасын береді; нақты үлгілерде "
+"рН мен бөгде иондар әсер етеді."
 
 #: apps/labs/experiments/t04/ions.py:55
 msgid "Rack with two test tubes"
@@ -3564,15 +3554,14 @@ msgstr "Натрий фосфатының ерітіндісі"
 
 #: apps/labs/experiments/t04/ions.py:67
 msgid ""
-"Heating is not needed: the indicator shows the gas. Ammonia is never "
-"sniffed."
+"Heating is not needed: the indicator shows the gas. Ammonia is never sniffed."
 msgstr ""
 "Қыздыру қажет емес: газды индикатор көрсетеді. Аммиакты иіскеуге болмайды."
 
 #: apps/labs/experiments/t04/ions.py:76
 msgid ""
-"Acid would turn phosphate into HPO₄²⁻ and H₂PO₄⁻, and the Ag₃PO₄ precipitate"
-" would not form."
+"Acid would turn phosphate into HPO₄²⁻ and H₂PO₄⁻, and the Ag₃PO₄ precipitate "
+"would not form."
 msgstr ""
 "Қышқыл фосфатты HPO₄²⁻ және H₂PO₄⁻ түріне айналдырады да, Ag₃PO₄ тұнбасы "
 "түзілмейді."
@@ -3787,8 +3776,8 @@ msgstr "Неліктен фосфатты анықтауда рН маңызды
 
 #: apps/labs/experiments/t04/ions.py:163
 msgid ""
-"In acid, protonated forms (HPO₄²⁻, H₂PO₄⁻) dominate and the precipitate does"
-" not form"
+"In acid, protonated forms (HPO₄²⁻, H₂PO₄⁻) dominate and the precipitate does "
+"not form"
 msgstr ""
 "Қышқыл ортада протондалған түрлер (HPO₄²⁻, H₂PO₄⁻) басым болып, тұнба "
 "түзілмейді"
@@ -3906,8 +3895,7 @@ msgstr "Газөткізгіш түтік A пробиркасына жалға�
 
 #: apps/labs/experiments/t05/carbon_silicon.py:98
 msgid ""
-"Pour limewater into tube A first: there must be something to detect CO₂ "
-"with."
+"Pour limewater into tube A first: there must be something to detect CO₂ with."
 msgstr ""
 "Алдымен A пробиркасына әк суын құю керек: CO₂-ні анықтайтын зат болуы тиіс."
 
@@ -4127,11 +4115,9 @@ msgstr ""
 "қиын?"
 
 #: apps/labs/experiments/t05/carbon_silicon.py:186
-msgid ""
-"It is a gel of hydrated and polymerised silicic acid species, SiO₂·nH₂O"
+msgid "It is a gel of hydrated and polymerised silicic acid species, SiO₂·nH₂O"
 msgstr ""
-"Ол гидратталған және полимерленген кремний қышқылы түрлерінің гелі, "
-"SiO₂·nH₂O"
+"Ол гидратталған және полимерленген кремний қышқылы түрлерінің гелі, SiO₂·nH₂O"
 
 #: apps/labs/experiments/t05/carbon_silicon.py:187
 msgid "It is a gas"
@@ -4149,12 +4135,13 @@ msgstr ""
 "Мектеп сабағында репрезентацияның қандай үш деңгейін (макро-, бөлшектік, "
 "символдық) қалай байланыстыруға болады?"
 
-#: apps/labs/models/attempt.py:10 apps/progress/models/progress.py:17
-#: apps/progress/models/progress.py:72 apps/student/cabinet.py:94
-#: apps/student/learning.py:97 ui/templates/components/stage_stepper.html:24
-#: ui/templates/student/course_map.html:42
-#: ui/templates/student/results.html:92 ui/templates/student/topic.html:37
-#: ui/templates/teacher/gradebook.html:52 ui/templates/teacher/student.html:82
+#: apps/labs/models/attempt.py:10 apps/programme/models/progress.py:52
+#: apps/progress/models/progress.py:17 apps/progress/models/progress.py:72
+#: apps/student/cabinet.py:94 apps/student/learning.py:97
+#: ui/templates/components/stage_stepper.html:24
+#: ui/templates/student/course_map.html:42 ui/templates/student/results.html:92
+#: ui/templates/student/topic.html:37 ui/templates/teacher/gradebook.html:52
+#: ui/templates/teacher/student.html:82
 msgid "In progress"
 msgstr "Орындалуда"
 
@@ -4172,8 +4159,7 @@ msgid ""
 "Empty for a teacher's preview and for attempts made before the course "
 "structure"
 msgstr ""
-"Мұғалімнің алдын ала қарауында және курс құрылымына дейінгі талпыныстарда "
-"бос"
+"Мұғалімнің алдын ала қарауында және курс құрылымына дейінгі талпыныстарда бос"
 
 #: apps/labs/models/attempt.py:35
 msgid "experiment"
@@ -4279,7 +4265,7 @@ msgstr "Қауіпсіздік ескертуі"
 msgid "Wrong choice"
 msgstr "Қате таңдау"
 
-#: apps/labs/models/attempt.py:89 apps/labs/views.py:46
+#: apps/labs/models/attempt.py:89 apps/labs/views.py:47
 #: ui/templates/student/partials/practice_field.html:121 ui/views.py:24
 msgid "Hint"
 msgstr "Кеңес"
@@ -4324,126 +4310,125 @@ msgstr "зертхана оқиғасы"
 msgid "lab events"
 msgstr "зертхана оқиғалары"
 
-#: apps/labs/views.py:30
+#: apps/labs/views.py:31
 msgid "Equipment and reagents"
 msgstr "Құралдар мен реагенттер"
 
-#: apps/labs/views.py:31
+#: apps/labs/views.py:32
 msgid "Glassware"
 msgstr "Шыны ыдыстар"
 
-#: apps/labs/views.py:32
+#: apps/labs/views.py:33
 msgid "Devices"
 msgstr "Аспаптар"
 
-#: apps/labs/views.py:33
+#: apps/labs/views.py:34
 msgid "Reagents"
 msgstr "Реагенттер"
 
-#: apps/labs/views.py:34
+#: apps/labs/views.py:35
 msgid "Virtual bench"
 msgstr "Виртуалды жұмыс үстелі"
 
-#: apps/labs/views.py:35
+#: apps/labs/views.py:36
 msgid "Drag equipment here or use the commands below."
 msgstr ""
 "Құралдарды осында сүйреп әкелуге немесе төмендегі командаларды қолдануға "
 "болады."
 
-#: apps/labs/views.py:36
+#: apps/labs/views.py:37
 msgid "Release to place on the bench"
 msgstr "Босатқанда үстелге қойылады"
 
-#: apps/labs/views.py:37
+#: apps/labs/views.py:38
 msgid "Add to bench"
 msgstr "Құралды таңдау"
 
-#: apps/labs/views.py:38
+#: apps/labs/views.py:39
 msgid "Commands"
 msgstr "Тәжірибе командалары"
 
-#: apps/labs/views.py:39
+#: apps/labs/views.py:40
 msgid "Warnings and observations"
 msgstr "Ескертулер мен бақылаулар"
 
-#: apps/labs/views.py:40
+#: apps/labs/views.py:41
 msgid "Messages about your actions will appear here."
 msgstr "Әрекеттер туралы хабарлар осында шығады."
 
-#: apps/labs/views.py:41
+#: apps/labs/views.py:42
 msgid "Lab journal"
 msgstr "Зертханалық журнал"
 
-#: apps/labs/views.py:42
+#: apps/labs/views.py:43
 msgid "Save journal"
 msgstr "Журналды сақтау"
 
-#: apps/labs/views.py:43
+#: apps/labs/views.py:44
 msgid "Journal saved."
 msgstr "Журнал сақталды."
 
-#: apps/labs/views.py:44
+#: apps/labs/views.py:45
 msgid "Fill in all fields of the journal."
 msgstr "Журналдың барлық өрісін толтыру керек."
 
-#: apps/labs/views.py:45
+#: apps/labs/views.py:46
 #, python-format
 msgid "The journal opens at the «%(step)s» step."
 msgstr "Журнал «%(step)s» қадамында ашылады."
 
-#: apps/labs/views.py:47
+#: apps/labs/views.py:48
 msgid "Done"
 msgstr "Орындалды"
 
-#: apps/labs/views.py:48
+#: apps/labs/views.py:49
 msgid "In progress…"
 msgstr "Жүріп жатыр…"
 
-#: apps/labs/views.py:49 ui/templates/accounts/signup.html:130
+#: apps/labs/views.py:50 ui/templates/accounts/signup.html:130
 msgid "Next"
 msgstr "Келесі"
 
-#: apps/labs/views.py:50
+#: apps/labs/views.py:51
 #, python-format
 msgid "Not yet. Next step: «%(step)s»."
 msgstr "Әлі ерте. Келесі қадам: «%(step)s»."
 
-#: apps/labs/views.py:51
+#: apps/labs/views.py:52
 msgid "This step is already done."
 msgstr "Бұл қадам орындалып қойған."
 
-#: apps/labs/views.py:52
+#: apps/labs/views.py:53
 msgid "This item is not needed in this experiment."
 msgstr "Бұл зат осы тәжірибеге қажет емес."
 
-#: apps/labs/views.py:53
+#: apps/labs/views.py:54
 msgid "This item is already on the bench."
 msgstr "Бұл зат үстелде тұр."
 
-#: apps/labs/views.py:54
+#: apps/labs/views.py:55
 msgid "Choose"
 msgstr "Таңдау"
 
-#: apps/labs/views.py:56
+#: apps/labs/views.py:57
 msgid "Scientific explanation"
 msgstr "Ғылыми түсіндірме"
 
-#: apps/labs/views.py:57
+#: apps/labs/views.py:58
 msgid "Measurements"
 msgstr "Өлшемдер"
 
-#: apps/labs/views.py:58 ui/templates/labs/run.html:53
-#: ui/templates/student/stages/test.html:8
-#: ui/templates/teacher/lab_log.html:35
+#: apps/labs/views.py:59 ui/templates/labs/run.html:53
+#: ui/templates/student/stages/test.html:8 ui/templates/teacher/lab_log.html:35
 #: ui/templates/teacher/partials/student_drawer.html:16
 msgid "Time"
 msgstr "Уақыт"
 
-#: apps/labs/views.py:59
+#: apps/labs/views.py:60
 msgid "Volume"
 msgstr "Көлем"
 
-#: apps/labs/views.py:60 ui/templates/student/course_map.html:76
+#: apps/labs/views.py:61 ui/templates/student/course_map.html:76
 #: ui/templates/student/dashboard.html:110
 #: ui/templates/student/dashboard.html:112
 #: ui/templates/student/partials/kind_pill.html:4
@@ -4451,77 +4436,75 @@ msgstr "Көлем"
 msgid "min"
 msgstr "мин"
 
-#: apps/labs/views.py:61 ui/templates/research/analytics.html:121
+#: apps/labs/views.py:62 ui/templates/research/analytics.html:121
 msgid "s"
 msgstr "с"
 
-#: apps/labs/views.py:63
+#: apps/labs/views.py:64
 msgid "Rate"
 msgstr "Жылдамдық"
 
-#: apps/labs/views.py:65
+#: apps/labs/views.py:66
 msgid "Volume of gas against time"
 msgstr "Газ көлемінің уақытқа тәуелділігі"
 
-#: apps/labs/views.py:66
+#: apps/labs/views.py:67
 msgid "Theoretical maximum"
 msgstr "Теориялық шегі"
 
-#: apps/labs/views.py:67
+#: apps/labs/views.py:68
 msgid "Analysis task"
 msgstr "Талдау тапсырмасы"
 
-#: apps/labs/views.py:68
+#: apps/labs/views.py:69
 msgid "Submit answers"
 msgstr "Жауаптарды жіберу"
 
-#: apps/labs/views.py:69 ui/templates/assessments/take.html:77
+#: apps/labs/views.py:70 ui/templates/assessments/take.html:77
 #: ui/templates/student/partials/quiz_question.html:32
 msgid "Your answer"
 msgstr "Жауап"
 
-#: apps/labs/views.py:70
+#: apps/labs/views.py:71
 msgid "Experiment complete"
 msgstr "Тәжірибе аяқталды"
 
-#: apps/labs/views.py:71 ui/templates/research/dashboard.html:53
-#: ui/templates/research/dashboard.html:88
-#: ui/templates/teacher/lab_log.html:25
+#: apps/labs/views.py:72 ui/templates/research/dashboard.html:53
+#: ui/templates/research/dashboard.html:88 ui/templates/teacher/lab_log.html:25
 msgid "Order errors"
 msgstr "Рет қателері"
 
-#: apps/labs/views.py:72 ui/templates/research/dashboard.html:54
-#: ui/templates/research/dashboard.html:88
-#: ui/templates/teacher/lab_log.html:26
+#: apps/labs/views.py:73 ui/templates/research/dashboard.html:54
+#: ui/templates/research/dashboard.html:88 ui/templates/teacher/lab_log.html:26
 msgid "Safety warnings"
 msgstr "Қауіпсіздік ескертулері"
 
-#: apps/labs/views.py:73
+#: apps/labs/views.py:74
 msgid "Wrong equipment or choices"
 msgstr "Қате құрал не таңдау"
 
-#: apps/labs/views.py:74
+#: apps/labs/views.py:75
 msgid "Time spent"
 msgstr "Жұмсалған уақыт"
 
-#: apps/labs/views.py:75
+#: apps/labs/views.py:76
 msgid "Analysis: correct answers"
 msgstr "Талдау: дұрыс жауаптар"
 
-#: apps/labs/views.py:76 ui/templates/labs/run.html:26
+#: apps/labs/views.py:77 ui/templates/labs/run.html:26
 #: ui/templates/layouts/learn.html:14
 msgid "Back to the topic"
 msgstr "Тақырыпқа оралу"
 
-#: apps/labs/views.py:77
+#: apps/labs/views.py:78
 msgid "Next experiment"
 msgstr "Келесі тәжірибе"
 
-#: apps/labs/views.py:78 ui/templates/labs/run.html:58
+#: apps/labs/views.py:79 ui/templates/labs/run.html:58
 msgid "Start again"
 msgstr "Қайта бастау"
 
-#: apps/labs/views.py:80
+#: apps/labs/views.py:81
 msgid ""
 "Start the experiment again? The current progress will be saved as an "
 "unfinished attempt."
@@ -4529,93 +4512,92 @@ msgstr ""
 "Тәжірибені қайта бастайсыз ба? Ағымдағы барыс аяқталмаған талпыныс ретінде "
 "сақталады."
 
-#: apps/labs/views.py:82 ui/templates/core/home.html:90
+#: apps/labs/views.py:83 ui/templates/core/home.html:90
 #: ui/templates/research/analytics.html:100
 msgid "Safety"
 msgstr "Қауіпсіздік"
 
-#: apps/labs/views.py:83
+#: apps/labs/views.py:84
 msgid "Observation"
 msgstr "Бақылау"
 
-#: apps/labs/views.py:84
+#: apps/labs/views.py:85
 msgid "Mistake"
 msgstr "Қате"
 
-#: apps/labs/views.py:85
+#: apps/labs/views.py:86
 msgid "Note"
 msgstr "Ескерту"
 
-#: apps/labs/views.py:86
+#: apps/labs/views.py:87
 msgid "Speed"
 msgstr "Жылдамдық"
 
-#: apps/labs/views.py:87
+#: apps/labs/views.py:88
 msgid "without catalyst"
 msgstr "катализаторсыз"
 
-#: apps/labs/views.py:88
+#: apps/labs/views.py:89
 msgid "with MnO₂"
 msgstr "MnO₂ қатысында"
 
-#: apps/labs/views.py:89
+#: apps/labs/views.py:90
 msgid "A: without catalyst"
 msgstr "А: катализаторсыз"
 
-#: apps/labs/views.py:90
+#: apps/labs/views.py:91
 msgid "B: with MnO₂"
 msgstr "В: MnO₂ қатысында"
 
-#: apps/labs/views.py:91
+#: apps/labs/views.py:92
 msgid "Cathode (−)"
 msgstr "Катод (−)"
 
-#: apps/labs/views.py:92
+#: apps/labs/views.py:93
 msgid "Anode (+)"
 msgstr "Анод (+)"
 
-#: apps/labs/views.py:93
+#: apps/labs/views.py:94
 msgid "Ratio"
 msgstr "Қатынас"
 
-#: apps/labs/views.py:94
+#: apps/labs/views.py:95
 msgid "Purity test: a quiet pop — the hydrogen is pure."
 msgstr "Тазалығын тексеру: тыныш «пах» дыбысы — сутегі таза."
 
-#: apps/labs/views.py:95
+#: apps/labs/views.py:96
 msgid "The glowing splint flares up: the gas is oxygen."
 msgstr "Бықсып тұрған шамшырақ лап етіп жанды: бұл газ — оттегі."
 
-#: apps/labs/views.py:96
+#: apps/labs/views.py:97
 msgid "Tube A is the control: it must stay without a catalyst."
 msgstr "А пробиркасы — бақылау үлгісі: ол катализаторсыз қалуы керек."
 
-#: apps/labs/views.py:98 ui/templates/labs/run.html:33
+#: apps/labs/views.py:99 ui/templates/labs/run.html:33
 #, python-format
 msgid "Experiment %(n)s"
 msgstr "%(n)s-тәжірибе"
 
-#: apps/labs/views.py:99
+#: apps/labs/views.py:100
 msgid "Goal"
 msgstr "Мақсаты"
 
-#: apps/labs/views.py:100
+#: apps/labs/views.py:101
 msgid "How it works"
 msgstr "Қалай орындалады"
 
-#: apps/labs/views.py:101
+#: apps/labs/views.py:102
 msgid "Drag the equipment onto the bench or press «+»."
 msgstr "Құралдар үстелге сүйреп апарылады немесе «+» басылады."
 
-#: apps/labs/views.py:102
+#: apps/labs/views.py:103
 msgid ""
 "Carry out the commands in order: a command out of order is counted as a "
 "mistake."
 msgstr ""
-"Командалар ретімен орындалады: ретсіз орындалған команда қате болып "
-"саналады."
+"Командалар ретімен орындалады: ретсіз орындалған команда қате болып саналады."
 
-#: apps/labs/views.py:103
+#: apps/labs/views.py:104
 msgid ""
 "Fill in the lab journal, finish the experiment and answer the analysis "
 "questions."
@@ -4623,107 +4605,107 @@ msgstr ""
 "Соңында зертханалық журнал толтырылып, тәжірибе аяқталады және талдау "
 "сұрақтарына жауап беріледі."
 
-#: apps/labs/views.py:105
+#: apps/labs/views.py:106
 msgid ""
-"The experiment runs on the screen only: it is not an instruction for working"
-" with real reagents."
+"The experiment runs on the screen only: it is not an instruction for working "
+"with real reagents."
 msgstr ""
 "Тәжірибе тек экранда жүреді: бұл нақты реактивтермен жұмыс істеуге арналған "
 "нұсқаулық емес."
 
-#: apps/labs/views.py:107
+#: apps/labs/views.py:108
 #, python-format
 msgid "Steps: %(n)s"
 msgstr "Қадам саны: %(n)s"
 
-#: apps/labs/views.py:108
+#: apps/labs/views.py:109
 msgid "Start the experiment"
 msgstr "Тәжірибені бастау"
 
-#: apps/labs/views.py:109
+#: apps/labs/views.py:110
 msgid "Steps"
 msgstr "Қадамдар"
 
-#: apps/labs/views.py:110
+#: apps/labs/views.py:111
 msgid "Journal"
 msgstr "Журнал"
 
-#: apps/labs/views.py:111
+#: apps/labs/views.py:112
 msgid "Messages"
 msgstr "Хабарламалар"
 
-#: apps/labs/views.py:112 ui/templates/teacher/group.html:119
+#: apps/labs/views.py:113 ui/templates/teacher/group.html:119
 msgid "Now"
 msgstr "Қазір"
 
-#: apps/labs/views.py:113
+#: apps/labs/views.py:114
 msgid "Run"
 msgstr "Орындау"
 
-#: apps/labs/views.py:114
+#: apps/labs/views.py:115
 msgid "Open the journal"
 msgstr "Журналды ашу"
 
-#: apps/labs/views.py:116
+#: apps/labs/views.py:117
 msgid "Drag to the bench or press «+»:"
 msgstr "Үстелге сүйреу немесе «+»:"
 
-#: apps/labs/views.py:117
+#: apps/labs/views.py:118
 msgid "Choose:"
 msgstr "Таңдау:"
 
-#: apps/labs/views.py:118
+#: apps/labs/views.py:119
 msgid "All steps are done."
 msgstr "Барлық қадам орындалды."
 
-#: apps/labs/views.py:119
+#: apps/labs/views.py:120
 msgid "Equipment"
 msgstr "Құралдар"
 
-#: apps/labs/views.py:120
+#: apps/labs/views.py:121
 msgid "Hide the panel"
 msgstr "Панельді жасыру"
 
-#: apps/labs/views.py:121
+#: apps/labs/views.py:122
 msgid "Show the panel"
 msgstr "Панельді көрсету"
 
-#: apps/labs/views.py:122 ui/templates/components/alert.html:10
+#: apps/labs/views.py:123 ui/templates/components/alert.html:10
 #: ui/templates/components/toast.html:16 ui/templates/core/home.html:114
 #: ui/templates/layouts/learn.html:49
 #: ui/templates/student/partials/quiz_panel.html:93
 #: ui/templates/teacher/dashboard.html:101 ui/templates/teacher/group.html:77
-#: ui/templates/teacher/group.html:182 ui/templates/teacher/group.html:199
+#: ui/templates/teacher/group.html:225 ui/templates/teacher/group.html:242
 #: ui/templates/teacher/partials/student_drawer.html:10
 #: ui/templates/ui/styleguide.html:116
 msgid "Close"
 msgstr "Жабу"
 
-#: apps/labs/views.py:123
+#: apps/labs/views.py:124
 msgid "Briefing"
 msgstr "Кіріспе"
 
-#: apps/labs/views.py:124
+#: apps/labs/views.py:125
 msgid "Explanation"
 msgstr "Түсіндірме"
 
-#: apps/labs/views.py:125
+#: apps/labs/views.py:126
 msgid "The equation is right."
 msgstr "Теңдеу дұрыс."
 
-#: apps/labs/views.py:126
+#: apps/labs/views.py:127
 msgid "Check the substances or ions."
 msgstr "Заттарды немесе иондарды тексеру керек."
 
-#: apps/labs/views.py:127
+#: apps/labs/views.py:128
 msgid "Check the coefficients."
 msgstr "Коэффициенттерді тексеру керек."
 
-#: apps/labs/views.py:128
+#: apps/labs/views.py:129
 msgid "The equation cannot be read: check the formulas and the arrow."
 msgstr "Теңдеу оқылмады: формулалар мен бағыттауышты тексеру керек."
 
-#: apps/labs/views.py:129
+#: apps/labs/views.py:130
 msgid "Connection problem. Your actions are kept and will be sent again."
 msgstr "Байланыс ақауы. Әрекеттер сақталған және қайта жіберіледі."
 
@@ -4809,6 +4791,7 @@ msgstr "Студенттер тіркелгенде енгізе алады"
 
 #: apps/organizations/models/group.py:67
 #: apps/organizations/models/structure.py:12
+#: apps/programme/models/programme.py:14
 msgid "active"
 msgstr "белсенді"
 
@@ -5209,8 +5192,8 @@ msgstr "модель"
 msgid "prompt version"
 msgstr "промпт нұсқасы"
 
-#: apps/practice/models/submission.py:98
-#: apps/practice/models/submission.py:141 apps/practice/models/task.py:125
+#: apps/practice/models/submission.py:98 apps/practice/models/submission.py:141
+#: apps/practice/models/task.py:125
 msgid "criteria"
 msgstr "критерийлер"
 
@@ -5259,7 +5242,7 @@ msgstr "қате"
 msgid "AI grade"
 msgstr "AI бағасы"
 
-#: apps/practice/models/submission.py:111 config/settings/base.py:354
+#: apps/practice/models/submission.py:111 config/settings/base.py:355
 msgid "AI grades"
 msgstr "AI бағалары"
 
@@ -5394,8 +5377,8 @@ msgid ""
 "Answers were graded by these criteria: a criterion cannot be deleted, only "
 "reworded."
 msgstr ""
-"Жауаптар осы критерийлермен бағаланған: критерийді жоюға болмайды, тек сөзін"
-" түзетуге болады."
+"Жауаптар осы критерийлермен бағаланған: критерийді жоюға болмайды, тек сөзін "
+"түзетуге болады."
 
 #: apps/practice/services/authoring.py:65
 msgid "Students have answered this field: it cannot be deleted."
@@ -5414,22 +5397,220 @@ msgstr "Алдыңғы жауап әлі бағалануда."
 msgid "You have used all attempts for this work."
 msgstr "Бұл жұмыстың барлық талпынысы пайдаланылды."
 
-#: apps/progress/admin.py:30
-msgid "Open the selected stages for the student"
-msgstr "Таңдалған кезеңдерді студентке ашу"
+#: apps/programme/admin.py:66 apps/progress/admin.py:64
+msgid "Recalculate"
+msgstr "Қайта есептеу"
 
-#: apps/progress/admin.py:39
+#: apps/programme/admin.py:70 apps/progress/admin.py:68
+msgid "Recalculated."
+msgstr "Қайта есептелді."
+
+#: apps/programme/admin.py:81
+msgid "Open the selected sections for the student"
+msgstr "Таңдалған бөлімдерді студентке ашу"
+
+#: apps/programme/admin.py:85 apps/progress/admin.py:39
 #, python-format
 msgid "Opened: %(n)d"
 msgstr "Ашылды: %(n)d"
 
-#: apps/progress/admin.py:64
-msgid "Recalculate"
-msgstr "Қайта есептеу"
+#: apps/programme/apps.py:8 config/settings/base.py:388
+#: ui/templates/partials/shell/sidebar_student.html:20
+msgid "ICPAI programme"
+msgstr "ICPAI бағдарламасы"
 
-#: apps/progress/admin.py:68
-msgid "Recalculated."
-msgstr "Қайта есептелді."
+#: apps/programme/models/programme.py:20
+msgid "The course of section 1; its students take part in the programme"
+msgstr "1-бөлімнің курсы; оның студенттері бағдарламаға қатысады"
+
+#: apps/programme/models/programme.py:25 apps/programme/models/programme.py:47
+#: apps/programme/models/progress.py:22
+msgid "programme"
+msgstr "бағдарлама"
+
+#: apps/programme/models/programme.py:26
+msgid "programmes"
+msgstr "бағдарламалар"
+
+#: apps/programme/models/programme.py:37 apps/teacher/forms.py:41
+#: ui/templates/teacher/gradebook.html:38
+#: ui/templates/teacher/partials/grading_queue.html:15
+msgid "Course"
+msgstr "Курс"
+
+#: apps/programme/models/programme.py:38
+msgid "Diagnostics"
+msgstr "Диагностика"
+
+#: apps/programme/models/programme.py:39
+msgid "Video"
+msgstr "Бейне"
+
+#: apps/programme/models/programme.py:40
+msgid "Lesson design constructor"
+msgstr "Педагогикалық жобалау конструкторы"
+
+#: apps/programme/models/programme.py:41
+msgid "Digital research practice"
+msgstr "Цифрлық-зерттеушілік практика"
+
+#: apps/programme/models/programme.py:42
+msgid "Microlesson"
+msgstr "Микросабақ"
+
+#: apps/programme/models/programme.py:43
+msgid "Portfolio"
+msgstr "Портфолио"
+
+#: apps/programme/models/programme.py:44
+msgid "Independent lesson"
+msgstr "Дербес авторлық сабақ"
+
+#: apps/programme/models/programme.py:49
+msgid "The order of the sections"
+msgstr "Бөлімдердің реті"
+
+#: apps/programme/models/programme.py:52
+msgid "purpose"
+msgstr "атқаратын қызметі"
+
+#: apps/programme/models/programme.py:52
+msgid "«What it does» — the text of the author's guide"
+msgstr "«Атқаратын қызметі» — автордың нұсқаулығындағы мәтін"
+
+#: apps/programme/models/programme.py:57
+msgid "The next section opens when this one reaches it"
+msgstr "Бөлім осы шекке жеткенде келесісі ашылады"
+
+#: apps/programme/models/programme.py:59
+msgid "settings"
+msgstr "баптаулар"
+
+#: apps/programme/models/programme.py:59
+msgid "Settings of the section kind"
+msgstr "Бөлім түрінің баптаулары"
+
+#: apps/programme/models/programme.py:61
+msgid "guide anchor"
+msgstr "нұсқаулықтағы белгі"
+
+#: apps/programme/models/programme.py:61
+msgid "Tag in docs/icpai/source/guide.md, e.g. @S4"
+msgstr "docs/icpai/source/guide.md ішіндегі белгі, мыс. @S4"
+
+#: apps/programme/models/programme.py:66 apps/programme/models/progress.py:59
+#: apps/programme/models/progress.py:103
+msgid "section"
+msgstr "бөлім"
+
+#: apps/programme/models/programme.py:67
+msgid "sections"
+msgstr "бөлімдер"
+
+#: apps/programme/models/progress.py:37
+msgid "programme enrolment"
+msgstr "бағдарламаға жазылу"
+
+#: apps/programme/models/progress.py:38
+msgid "programme enrolments"
+msgstr "бағдарламаға жазылулар"
+
+#: apps/programme/models/progress.py:50 apps/progress/models/progress.py:15
+#: apps/progress/models/progress.py:70 apps/student/cabinet.py:82
+#: apps/student/learning.py:95 ui/templates/components/stage_stepper.html:23
+#: ui/templates/labs/run.html:282 ui/templates/student/course_map.html:42
+#: ui/templates/student/course_map.html:83
+#: ui/templates/student/course_map.html:93
+#: ui/templates/student/partials/section_state.html:5
+#: ui/templates/student/results.html:92 ui/templates/student/stages/lab.html:23
+#: ui/templates/student/topic.html:37 ui/templates/teacher/student.html:60
+#: ui/templates/teacher/student.html:82
+msgid "Locked"
+msgstr "Жабық"
+
+#: apps/programme/models/progress.py:51 apps/progress/models/progress.py:16
+#: apps/progress/models/progress.py:71
+#: ui/templates/components/stage_stepper.html:25
+#: ui/templates/student/topic.html:37
+msgid "Available"
+msgstr "Ашық"
+
+#: apps/programme/models/progress.py:53 apps/programme/models/progress.py:95
+#: apps/progress/models/progress.py:19 apps/progress/models/progress.py:143
+#: apps/student/cabinet.py:80 ui/templates/components/stage_stepper.html:22
+#: ui/templates/student/partials/section_state.html:4
+#: ui/templates/student/results.html:92 ui/templates/student/topic.html:37
+#: ui/templates/teacher/group.html:197 ui/templates/teacher/student.html:82
+msgid "Passed"
+msgstr "Өтті"
+
+#: apps/programme/models/progress.py:62 apps/programme/models/progress.py:106
+msgid "done, %"
+msgstr "орындалды, %"
+
+#: apps/programme/models/progress.py:63 apps/progress/models/progress.py:48
+msgid "opened at"
+msgstr "ашылған уақыты"
+
+#: apps/programme/models/progress.py:64
+msgid "passed at"
+msgstr "өткен уақыты"
+
+#: apps/programme/models/progress.py:71 apps/progress/models/progress.py:45
+msgid "opened by"
+msgstr "ашқан"
+
+#: apps/programme/models/progress.py:72
+msgid "A teacher who opened the section by hand"
+msgstr "Бөлімді қолмен ашқан мұғалім"
+
+#: apps/programme/models/progress.py:74
+msgid "opened by hand at"
+msgstr "қолмен ашылған уақыты"
+
+#: apps/programme/models/progress.py:78 apps/programme/models/progress.py:79
+msgid "section progress"
+msgstr "бөлім прогресі"
+
+#: apps/programme/models/progress.py:94
+msgid "Opened"
+msgstr "Ашылды"
+
+#: apps/programme/models/progress.py:96 apps/progress/models/progress.py:148
+msgid "Opened by the teacher"
+msgstr "Мұғалім ашты"
+
+#: apps/programme/models/progress.py:97
+msgid "Percent changed"
+msgstr "Пайыз өзгерді"
+
+#: apps/programme/models/progress.py:105 apps/progress/models/progress.py:161
+msgid "action"
+msgstr "әрекет"
+
+#: apps/programme/models/progress.py:113 apps/progress/models/progress.py:168
+msgid "by"
+msgstr "кім"
+
+#: apps/programme/models/progress.py:114
+msgid "Empty when it follows from the student's work"
+msgstr "Студенттің жұмысынан туындаса — бос"
+
+#: apps/programme/models/progress.py:116 apps/progress/models/progress.py:172
+msgid "at"
+msgstr "уақыты"
+
+#: apps/programme/models/progress.py:120
+msgid "section event"
+msgstr "бөлім оқиғасы"
+
+#: apps/programme/models/progress.py:121
+msgid "section events"
+msgstr "бөлім оқиғалары"
+
+#: apps/progress/admin.py:30
+msgid "Open the selected stages for the student"
+msgstr "Таңдалған кезеңдерді студентке ашу"
 
 #: apps/progress/apps.py:8 ui/templates/teacher/group.html:120
 #: ui/templates/teacher/partials/groups_table.html:13
@@ -5469,24 +5650,6 @@ msgstr "оқу күні"
 msgid "study days"
 msgstr "оқу күндері"
 
-#: apps/progress/models/progress.py:15 apps/progress/models/progress.py:70
-#: apps/student/cabinet.py:82 apps/student/learning.py:95
-#: ui/templates/components/stage_stepper.html:23
-#: ui/templates/labs/run.html:282 ui/templates/student/course_map.html:42
-#: ui/templates/student/course_map.html:83
-#: ui/templates/student/course_map.html:93
-#: ui/templates/student/results.html:92
-#: ui/templates/student/stages/lab.html:23 ui/templates/student/topic.html:37
-#: ui/templates/teacher/student.html:60 ui/templates/teacher/student.html:82
-msgid "Locked"
-msgstr "Жабық"
-
-#: apps/progress/models/progress.py:16 apps/progress/models/progress.py:71
-#: ui/templates/components/stage_stepper.html:25
-#: ui/templates/student/topic.html:37
-msgid "Available"
-msgstr "Ашық"
-
 #: apps/progress/models/progress.py:18 apps/student/cabinet.py:84
 #: apps/student/cabinet.py:212 ui/templates/components/stage_stepper.html:20
 #: ui/templates/layouts/learn.html:56 ui/templates/student/course_map.html:98
@@ -5494,13 +5657,6 @@ msgstr "Ашық"
 #: ui/templates/teacher/dashboard.html:49 ui/templates/teacher/student.html:82
 msgid "Awaiting check"
 msgstr "Тексеруді күтуде"
-
-#: apps/progress/models/progress.py:19 apps/progress/models/progress.py:143
-#: apps/student/cabinet.py:80 ui/templates/components/stage_stepper.html:22
-#: ui/templates/student/results.html:92 ui/templates/student/topic.html:37
-#: ui/templates/teacher/student.html:82
-msgid "Passed"
-msgstr "Өтті"
 
 #: apps/progress/models/progress.py:30
 msgid "needs the teacher's attention"
@@ -5526,17 +5682,9 @@ msgstr "материал аяқталған уақыт"
 msgid "time spent, s"
 msgstr "жұмсалған уақыт, с"
 
-#: apps/progress/models/progress.py:45
-msgid "opened by"
-msgstr "ашқан"
-
 #: apps/progress/models/progress.py:46
 msgid "A teacher who opened the stage by hand"
 msgstr "Кезеңді қолмен ашқан мұғалім"
-
-#: apps/progress/models/progress.py:48
-msgid "opened at"
-msgstr "ашылған уақыты"
 
 #: apps/progress/models/progress.py:51 apps/progress/models/progress.py:52
 msgid "stage progress"
@@ -5594,8 +5742,7 @@ msgstr "курс нәтижесі"
 msgid "course results"
 msgstr "курс нәтижелері"
 
-#: apps/progress/models/progress.py:141
-#: ui/templates/research/dashboard.html:90
+#: apps/progress/models/progress.py:141 ui/templates/research/dashboard.html:90
 #: ui/templates/teacher/student.html:110
 msgid "Started"
 msgstr "Басталды"
@@ -5621,10 +5768,6 @@ msgstr "Мұғалім растады"
 msgid "Returned by the teacher"
 msgstr "Мұғалім қайтарды"
 
-#: apps/progress/models/progress.py:148
-msgid "Opened by the teacher"
-msgstr "Мұғалім ашты"
-
 #: apps/progress/models/progress.py:149
 msgid "Topic completed"
 msgstr "Тақырып аяқталды"
@@ -5634,21 +5777,9 @@ msgstr "Тақырып аяқталды"
 msgid "Course completed"
 msgstr "Курс аяқталды"
 
-#: apps/progress/models/progress.py:161
-msgid "action"
-msgstr "әрекет"
-
-#: apps/progress/models/progress.py:168
-msgid "by"
-msgstr "кім"
-
 #: apps/progress/models/progress.py:169
 msgid "Empty when the student did it"
 msgstr "Студенттің өзі жасаса — бос"
-
-#: apps/progress/models/progress.py:172
-msgid "at"
-msgstr "уақыты"
 
 #: apps/progress/models/progress.py:176
 msgid "progress event"
@@ -5707,7 +5838,7 @@ msgstr "Белсенді жазылулар"
 msgid "%(n)s completed"
 msgstr "%(n)s аяқталды"
 
-#: apps/research/admin_dashboard.py:43 config/settings/base.py:380
+#: apps/research/admin_dashboard.py:43 config/settings/base.py:381
 #: ui/templates/teacher/partials/student_drawer.html:40
 #: ui/templates/teacher/student.html:106
 msgid "Lab attempts"
@@ -5817,11 +5948,12 @@ msgstr[0] "%(a)s / %(b)s тәжірибе"
 msgstr[1] "%(a)s / %(b)s тәжірибе"
 
 #: apps/student/cabinet.py:95 ui/templates/labs/run.html:282
-#: ui/templates/student/results.html:92 ui/templates/student/topic.html:43
+#: ui/templates/student/home.html:60 ui/templates/student/results.html:92
+#: ui/templates/student/topic.html:43
 #: ui/templates/teacher/content/course.html:32
 #: ui/templates/teacher/content/courses.html:22
 #: ui/templates/teacher/dashboard.html:80 ui/templates/teacher/group.html:79
-#: ui/templates/teacher/group.html:124
+#: ui/templates/teacher/group.html:124 ui/templates/teacher/group.html:207
 #: ui/templates/teacher/partials/groups_table.html:15
 #: ui/templates/teacher/student.html:82 ui/templates/teacher/students.html:32
 msgid "Open"
@@ -5860,7 +5992,7 @@ msgstr "Автоматты тексеру және AI, мұғалім раста
 msgid "Quiz · attempt %(n)s"
 msgstr "Тест · %(n)s-талпыныс"
 
-#: apps/student/cabinet.py:187 config/settings/base.py:376
+#: apps/student/cabinet.py:187 config/settings/base.py:377
 #: ui/templates/core/home.html:31 ui/templates/core/home.html:199
 #: ui/templates/core/home.html:359
 msgid "Lab"
@@ -5883,23 +6015,23 @@ msgstr "Практика · %(n)s-талпыныс"
 msgid "Week %(n)s"
 msgstr "%(n)s-апта"
 
-#: apps/student/views.py:115
+#: apps/student/views.py:119
 msgid "Profile saved."
 msgstr "Профиль сақталды."
 
-#: apps/student/views.py:120
+#: apps/student/views.py:124
 msgid "Password changed."
 msgstr "Құпиясөз өзгертілді."
 
-#: apps/student/views.py:339
+#: apps/student/views.py:343
 msgid "Before the first stage, take the short entry knowledge test."
 msgstr "Алғашқы кезеңге дейін қысқа кіріс білім тестін тапсыру керек."
 
-#: apps/student/views.py:524 ui/templates/student/stages/practice.html:41
+#: apps/student/views.py:528 ui/templates/student/stages/practice.html:41
 msgid "Preview: answers are not saved."
 msgstr "Алдын ала қарау: жауаптар сақталмайды."
 
-#: apps/student/views.py:637
+#: apps/student/views.py:641
 msgid ""
 "Experiments open one after another: finish the previous one and send its "
 "analysis."
@@ -5907,15 +6039,15 @@ msgstr ""
 "Тәжірибелер бірінен соң бірі ашылады: алдыңғысын аяқтап, оның талдауын "
 "жіберу керек."
 
-#: apps/student/views.py:714
+#: apps/student/views.py:718
 msgid "Finish the material first — the test opens after it."
 msgstr "Алдымен материалды аяқтау керек — тест содан кейін ашылады."
 
-#: apps/student/views.py:835 ui/templates/student/stage.html:50
+#: apps/student/views.py:839 ui/templates/student/stage.html:50
 msgid "Go to the next stage"
 msgstr "Келесі кезеңге өту"
 
-#: apps/student/views.py:837 ui/templates/teacher/content/item.html:61
+#: apps/student/views.py:841 ui/templates/teacher/content/item.html:61
 msgid "Back to the stage"
 msgstr "Кезеңге оралу"
 
@@ -6050,11 +6182,6 @@ msgstr "Зерттеу тобы"
 msgid "The student signs up first; then add the account here."
 msgstr "Алдымен студент тіркеледі, содан кейін оның аккаунты осында қосылады."
 
-#: apps/teacher/forms.py:41 ui/templates/teacher/gradebook.html:38
-#: ui/templates/teacher/partials/grading_queue.html:15
-msgid "Course"
-msgstr "Курс"
-
 #: apps/teacher/forms.py:42
 msgid "Starts on"
 msgstr "Басталуы"
@@ -6144,26 +6271,26 @@ msgstr "Әлі бастамаған"
 msgid "experiment %(n)s"
 msgstr "%(n)s-тәжірибе"
 
-#: apps/teacher/views.py:108
+#: apps/teacher/views.py:112
 msgid "The group is saved."
 msgstr "Топ сақталды."
 
-#: apps/teacher/views.py:122
+#: apps/teacher/views.py:126
 msgid "The group is deleted."
 msgstr "Топ жойылды."
 
-#: apps/teacher/views.py:210
+#: apps/teacher/views.py:229
 msgid "The research group is saved."
 msgstr "Зерттеу тобы сақталды."
 
-#: apps/teacher/views.py:214
+#: apps/teacher/views.py:233
 #, python-format
 msgid "%(n)s enrolment got it now."
 msgid_plural "%(n)s enrolments got it now."
 msgstr[0] "%(n)s жазылуға ол қазір қойылды."
 msgstr[1] "%(n)s жазылуға ол қазір қойылды."
 
-#: apps/teacher/views.py:220
+#: apps/teacher/views.py:239
 #, python-format
 msgid ""
 "%(n)s enrolment keeps its earlier research group (the research snapshot)."
@@ -6174,182 +6301,207 @@ msgstr[0] ""
 msgstr[1] ""
 "%(n)s жазылу бұрынғы зерттеу тобын сақтайды (зерттеу үшін бекітілген мән)."
 
-#: apps/teacher/views.py:237
+#: apps/teacher/views.py:256
 msgid "No student account with this username or email."
 msgstr "Бұл логин немесе email бойынша студент аккаунты табылмады."
 
-#: apps/teacher/views.py:244
+#: apps/teacher/views.py:263
 #, python-format
 msgid "%(name)s is added to the group."
 msgstr "%(name)s топқа қосылды."
 
-#: apps/teacher/views.py:249
+#: apps/teacher/views.py:268
 #, python-format
 msgid "Enrolled in %(n)s course of the group."
 msgid_plural "Enrolled in %(n)s courses of the group."
 msgstr[0] "Топтың %(n)s курсына жазылды."
 msgstr[1] "Топтың %(n)s курсына жазылды."
 
-#: apps/teacher/views.py:267
+#: apps/teacher/views.py:286
 #, python-format
 msgid "%(name)s is removed from the group. Courses and progress stay."
 msgstr "%(name)s топтан шығарылды. Курстар мен прогресс сақталады."
 
-#: apps/teacher/views.py:277
+#: apps/teacher/views.py:296
 msgid "A new join code is made; the old one no longer works."
 msgstr "Жаңа қосылу коды жасалды; ескісі енді жұмыс істемейді."
 
-#: apps/teacher/views.py:289
+#: apps/teacher/views.py:308
 msgid "The group is attached to the course; its students are enrolled."
 msgstr "Топ курсқа бекітілді; оның студенттері курсқа жазылды."
 
-#: apps/teacher/views.py:303
+#: apps/teacher/views.py:322
 msgid "The group is detached. Enrolled students keep the course and progress."
 msgstr ""
 "Топ курстан ажыратылды. Жазылған студенттерде курс пен прогресс сақталады."
 
-#: apps/teacher/views.py:318
+#: apps/teacher/views.py:337
 msgid "The final knowledge test is open for the group."
 msgstr "Қорытынды білім тесті топқа ашылды."
 
-#: apps/teacher/views.py:320
+#: apps/teacher/views.py:339
 msgid ""
 "The final knowledge test is closed; it opens for each student after the "
 "course."
 msgstr ""
 "Қорытынды білім тесті жабылды; ол әр студентке курсты аяқтағанда ашылады."
 
-#: apps/teacher/views.py:425
+#: apps/teacher/views.py:444
 msgid "The student is not enrolled in your course."
 msgstr "Студент бұл курсқа жазылмаған."
 
-#: apps/teacher/views.py:431
+#: apps/teacher/views.py:450
 msgid "This stage cannot be opened: its topic is not published."
 msgstr "Бұл кезеңді ашу мүмкін емес: оның тақырыбы жарияланбаған."
 
-#: apps/teacher/views.py:433
+#: apps/teacher/views.py:452
 #, python-format
 msgid "«%(stage)s» is open for the student."
 msgstr "«%(stage)s» студентке ашылды."
 
-#: config/settings/base.py:151
+#: apps/teacher/views.py:467
+msgid "The student's course is not part of a programme."
+msgstr "Студенттің курсы бағдарламаға кірмейді."
+
+#: apps/teacher/views.py:472
+#, python-format
+msgid "Section %(n)s is open for the student."
+msgstr "%(n)s-бөлім студентке ашылды."
+
+#: config/settings/base.py:152
 msgid "Kazakh"
 msgstr "Қазақша"
 
-#: config/settings/base.py:152
+#: config/settings/base.py:153
 msgid "Russian"
 msgstr "Орысша"
 
-#: config/settings/base.py:153
+#: config/settings/base.py:154
 msgid "English"
 msgstr "Ағылшынша"
 
-#: config/settings/base.py:254 config/settings/base.py:257
+#: config/settings/base.py:255 config/settings/base.py:258
 msgid "Users"
 msgstr "Пайдаланушылар"
 
-#: config/settings/base.py:259
+#: config/settings/base.py:260
 msgid "Student profiles"
 msgstr "Студент профильдері"
 
-#: config/settings/base.py:264
+#: config/settings/base.py:265
 msgid "Teacher profiles"
 msgstr "Мұғалім профильдері"
 
-#: config/settings/base.py:271
+#: config/settings/base.py:272
 msgid "Organisations"
 msgstr "Ұйымдар"
 
-#: config/settings/base.py:275
+#: config/settings/base.py:276
 msgid "Universities"
 msgstr "Университеттер"
 
-#: config/settings/base.py:280
+#: config/settings/base.py:281
 msgid "Faculties"
 msgstr "Факультеттер"
 
-#: config/settings/base.py:285
+#: config/settings/base.py:286
 msgid "Departments"
 msgstr "Кафедралар"
 
-#: config/settings/base.py:290
+#: config/settings/base.py:291
 msgid "Specialties"
 msgstr "Білім беру бағдарламалары"
 
-#: config/settings/base.py:295
+#: config/settings/base.py:296
 msgid "Academic groups"
 msgstr "Академиялық топтар"
 
-#: config/settings/base.py:311
+#: config/settings/base.py:312
 msgid "Modules"
 msgstr "Модульдер"
 
-#: config/settings/base.py:315 ui/templates/teacher/search.html:40
+#: config/settings/base.py:316 ui/templates/teacher/search.html:40
 msgid "Topics"
 msgstr "Тақырыптар"
 
-#: config/settings/base.py:317
+#: config/settings/base.py:318
 msgid "Stages"
 msgstr "Кезеңдер"
 
-#: config/settings/base.py:322
+#: config/settings/base.py:323
 msgid "Enrolments"
 msgstr "Жазылулар"
 
-#: config/settings/base.py:327
+#: config/settings/base.py:328
 msgid "Course groups"
 msgstr "Курс топтары"
 
-#: config/settings/base.py:334
+#: config/settings/base.py:335
 msgid "Assessment"
 msgstr "Бағалау"
 
-#: config/settings/base.py:337
+#: config/settings/base.py:338
 msgid "Quizzes"
 msgstr "Тесттер"
 
-#: config/settings/base.py:339 ui/templates/teacher/student.html:137
+#: config/settings/base.py:340 ui/templates/teacher/student.html:137
 msgid "Quiz attempts"
 msgstr "Тест талпыныстары"
 
-#: config/settings/base.py:344
+#: config/settings/base.py:345
 msgid "Practice tasks"
 msgstr "Практикалық тапсырмалар"
 
-#: config/settings/base.py:349
+#: config/settings/base.py:350
 msgid "Practice submissions"
 msgstr "Практикалық жұмыс жіберулері"
 
-#: config/settings/base.py:359
+#: config/settings/base.py:360
 msgid "Teacher reviews"
 msgstr "Мұғалім тексерістері"
 
-#: config/settings/base.py:364
+#: config/settings/base.py:365
 msgid "Stage progress"
 msgstr "Кезең прогресі"
 
-#: config/settings/base.py:369
+#: config/settings/base.py:370
 msgid "Course results"
 msgstr "Курс нәтижелері"
 
-#: config/settings/base.py:387
+#: config/settings/base.py:392
+msgid "Programmes and sections"
+msgstr "Бағдарламалар мен бөлімдер"
+
+#: config/settings/base.py:397
+msgid "Programme enrolments"
+msgstr "Бағдарламаға жазылулар"
+
+#: config/settings/base.py:402
+msgid "Section progress"
+msgstr "Бөлімдер прогресі"
+
+#: config/settings/base.py:407
+msgid "Section events"
+msgstr "Бөлім оқиғалары"
+
+#: config/settings/base.py:414
 msgid "Certificates and feedback"
 msgstr "Сертификаттар және кері байланыс"
 
-#: config/settings/base.py:396
+#: config/settings/base.py:423
 msgid "Certificate templates"
 msgstr "Сертификат үлгілері"
 
-#: config/settings/base.py:401 ui/templates/feedback/partials/thread.html:7
+#: config/settings/base.py:428 ui/templates/feedback/partials/thread.html:7
 msgid "Comments"
 msgstr "Пікірлер"
 
-#: config/settings/base.py:406 ui/templates/feedback/notifications.html:3
+#: config/settings/base.py:433 ui/templates/feedback/notifications.html:3
 #: ui/templates/feedback/notifications.html:5
 #: ui/templates/feedback/notifications.html:10
 #: ui/templates/feedback/partials/menu.html:4
 #: ui/templates/partials/shell/notifications_menu.html:8
-#: ui/templates/partials/shell/sidebar_student.html:19
+#: ui/templates/partials/shell/sidebar_student.html:43
 msgid "Notifications"
 msgstr "Хабарламалар"
 
@@ -6362,7 +6514,8 @@ msgstr "Пайдаланушы интерфейсі"
 msgid ""
 "Hello, %(user)s!\n"
 "\n"
-"Someone (hopefully you) asked to reset the password of your ChemEduTech account.\n"
+"Someone (hopefully you) asked to reset the password of your ChemEduTech "
+"account.\n"
 "Open the link to set a new password:"
 msgstr ""
 "Құрметті %(user)s!\n"
@@ -6602,8 +6755,8 @@ msgstr "Жауап"
 
 #: ui/templates/admin/practice/practiceitem/try.html:14
 msgid ""
-"Numeric: {\"value\": \"2,24\", \"unit\": \"L\"}; choice and ordering: a JSON"
-" list; matching: a JSON object. Other kinds: plain text."
+"Numeric: {\"value\": \"2,24\", \"unit\": \"L\"}; choice and ordering: a JSON "
+"list; matching: a JSON object. Other kinds: plain text."
 msgstr ""
 "Сан: {\"value\": \"2,24\", \"unit\": \"L\"}; таңдау мен рет: JSON тізім; "
 "сәйкестендіру: JSON объект. Басқалары: кәдімгі мәтін."
@@ -6708,8 +6861,7 @@ msgstr "дұрысы:"
 msgid "Counts for the grade"
 msgstr "Бағаға есептеледі"
 
-#: ui/templates/assessments/take.html:20
-#: ui/templates/student/benchmark.html:40
+#: ui/templates/assessments/take.html:20 ui/templates/student/benchmark.html:40
 msgid "one attempt, not graded"
 msgstr "бір әрекет, бағаға әсер етпейді"
 
@@ -6844,8 +6996,8 @@ msgstr ""
 #: ui/templates/teacher/content/question.html:60
 #: ui/templates/teacher/content/simple_form.html:17
 #: ui/templates/teacher/content/stage_new.html:16
-#: ui/templates/teacher/dashboard.html:113 ui/templates/teacher/group.html:187
-#: ui/templates/teacher/group.html:208 ui/templates/teacher/group_form.html:26
+#: ui/templates/teacher/dashboard.html:113 ui/templates/teacher/group.html:230
+#: ui/templates/teacher/group.html:251 ui/templates/teacher/group_form.html:26
 msgid "Cancel"
 msgstr "Болдырмау"
 
@@ -6992,11 +7144,11 @@ msgstr "Автоматты және AI бағалау"
 
 #: ui/templates/core/home.html:166
 msgid ""
-"Formulas and equations are checked by meaning; open answers are graded by AI"
-" against criteria and confirmed by the teacher."
+"Formulas and equations are checked by meaning; open answers are graded by AI "
+"against criteria and confirmed by the teacher."
 msgstr ""
-"Формула мен теңдеуді мағынасы бойынша тексереді, ашық жауапты AI критерийлер"
-" арқылы бағалап, мұғалім растайды."
+"Формула мен теңдеуді мағынасы бойынша тексереді, ашық жауапты AI критерийлер "
+"арқылы бағалап, мұғалім растайды."
 
 #: ui/templates/core/home.html:170
 msgid "Analytics for the teacher"
@@ -7131,8 +7283,7 @@ msgid "A fair grade"
 msgstr "Әділ баға"
 
 #: ui/templates/core/home.html:288
-msgid ""
-"Every stage score and how it was calculated is shown in the grade book."
+msgid "Every stage score and how it was calculated is shown in the grade book."
 msgstr ""
 "Әр кезеңнің ұпайы мен оның қалай есептелгені бағалар кітапшасында көрінеді."
 
@@ -7142,8 +7293,8 @@ msgstr "Топтарды басқару"
 
 #: ui/templates/core/home.html:291
 msgid ""
-"Create a group, share the join code and assign the research group (control /"
-" experimental)."
+"Create a group, share the join code and assign the research group (control / "
+"experimental)."
 msgstr ""
 "Топ құру, қосылу кодын беру, зерттеу тобын (бақылау/эксперименттік) "
 "тағайындау."
@@ -7204,8 +7355,7 @@ msgstr "Кезеңдер бойынша орташа ұпай (мысал)"
 #: ui/templates/core/home.html:316 ui/templates/research/analytics.html:41
 #: ui/templates/research/analytics.html:61
 #: ui/templates/research/analytics.html:180
-#: ui/templates/research/analytics.html:211
-#: ui/templates/teacher/groups.html:35
+#: ui/templates/research/analytics.html:211 ui/templates/teacher/groups.html:35
 #: ui/templates/teacher/partials/cohort.html:2
 msgid "Experimental"
 msgstr "Эксперименттік"
@@ -7213,8 +7363,7 @@ msgstr "Эксперименттік"
 #: ui/templates/core/home.html:316 ui/templates/research/analytics.html:41
 #: ui/templates/research/analytics.html:62
 #: ui/templates/research/analytics.html:180
-#: ui/templates/research/analytics.html:212
-#: ui/templates/teacher/groups.html:36
+#: ui/templates/research/analytics.html:212 ui/templates/teacher/groups.html:36
 #: ui/templates/teacher/partials/cohort.html:3
 msgid "Control"
 msgstr "Бақылау"
@@ -7240,9 +7389,9 @@ msgstr "Виртуалды зертхана қалай жұмыс істейді
 
 #: ui/templates/core/home.html:332
 msgid ""
-"It opens in the browser, nothing to install. You drag the equipment onto the"
-" bench and carry out the commands in order; the reaction is animated and you"
-" record the result in the journal."
+"It opens in the browser, nothing to install. You drag the equipment onto the "
+"bench and carry out the commands in order; the reaction is animated and you "
+"record the result in the journal."
 msgstr ""
 "Браузерде ашылады, ештеңе орнатудың қажеті жоқ. Құралдарды үстелге сүйреп "
 "қойып, командаларды ретпен орындайсыз; реакция анимациямен көрсетіледі, "
@@ -7254,8 +7403,8 @@ msgstr "Неге келесі кезең ашылмайды?"
 
 #: ui/templates/core/home.html:333
 msgid ""
-"Each stage opens when the previous one is finished. After the theory and the"
-" video you need to pass a 3–4 question checkpoint quiz."
+"Each stage opens when the previous one is finished. After the theory and the "
+"video you need to pass a 3–4 question checkpoint quiz."
 msgstr ""
 "Әр кезең алдыңғысы аяқталғанда ашылады. Теория мен видеодан кейін 3–4 "
 "сұрақтық бекіту тестінен өту керек."
@@ -7287,14 +7436,13 @@ msgid "Try your first experiment today"
 msgstr "Алғашқы тәжірибені бүгін-ақ бастау"
 
 #: ui/templates/core/home.html:345
-msgid ""
-"Signing up takes a minute. Ask your teacher for your group's join code."
+msgid "Signing up takes a minute. Ask your teacher for your group's join code."
 msgstr "Тіркелу бір минутты алады. Топтың қосылу коды мұғалімде болады."
 
 #: ui/templates/core/home.html:356
 msgid ""
-"A virtual lab and an online course for future chemistry teachers. A doctoral"
-" dissertation project."
+"A virtual lab and an online course for future chemistry teachers. A doctoral "
+"dissertation project."
 msgstr ""
 "Болашақ химия мұғалімдеріне арналған виртуалды зертхана және онлайн курс. "
 "Докторлық диссертациялық жоба."
@@ -7308,6 +7456,8 @@ msgid "Account"
 msgstr "Аккаунт"
 
 #: ui/templates/feedback/notifications.html:4
+#: ui/templates/partials/shell/sidebar_student.html:37
+#: ui/templates/partials/shell/sidebar_student.html:38
 msgid "Cabinet"
 msgstr "Кабинет"
 
@@ -7356,7 +7506,7 @@ msgstr "Барлық хабарламалар"
 
 #: ui/templates/feedback/partials/thread.html:12
 #: ui/templates/feedback/partials/thread.html:16
-#: ui/templates/student/dashboard.html:156
+#: ui/templates/student/dashboard.html:156 ui/templates/student/home.html:75
 msgid "Reply"
 msgstr "Жауап беру"
 
@@ -7380,6 +7530,7 @@ msgid "Topic %(n)s"
 msgstr "%(n)s-тақырып"
 
 #: ui/templates/labs/run.html:46
+#: ui/templates/partials/shell/sidebar_student.html:28
 #: ui/templates/student/partials/stage_tile.html:2
 msgid "locked"
 msgstr "жабық"
@@ -7474,8 +7625,8 @@ msgid "Account menu"
 msgstr "Аккаунт мәзірі"
 
 #: ui/templates/layouts/cabinet.html:63
-#: ui/templates/partials/shell/sidebar_student.html:20
-#: ui/templates/partials/shell/sidebar_student.html:33
+#: ui/templates/partials/shell/sidebar_student.html:44
+#: ui/templates/partials/shell/sidebar_student.html:57
 #: ui/templates/partials/shell/sidebar_teacher.html:26
 #: ui/templates/student/profile.html:5 ui/templates/student/profile.html:7
 #: ui/templates/teacher/partials/student_drawer.html:39
@@ -7522,6 +7673,7 @@ msgstr "%(n)s-тақырып кезеңдері"
 
 #: ui/templates/layouts/learn.html:59 ui/templates/student/course_map.html:9
 #: ui/templates/student/courses.html:28 ui/templates/student/locked.html:19
+#: ui/templates/student/section.html:53
 msgid "Course map"
 msgstr "Курс картасы"
 
@@ -7551,46 +7703,63 @@ msgstr "Мәзірді жию"
 msgid "Loading…"
 msgstr "Жүктелуде…"
 
-#: ui/templates/partials/shell/sidebar_student.html:13
+#: ui/templates/partials/shell/sidebar_student.html:15
 msgid "Learning"
 msgstr "Оқу"
 
-#: ui/templates/partials/shell/sidebar_student.html:14
+#: ui/templates/partials/shell/sidebar_student.html:16
 msgid "Student menu"
 msgstr "Студент мәзірі"
 
-#: ui/templates/partials/shell/sidebar_student.html:15
+#: ui/templates/partials/shell/sidebar_student.html:17
 #: ui/templates/partials/shell/sidebar_teacher.html:16
 #: ui/templates/student/dashboard.html:7 ui/templates/student/dashboard.html:9
-#: ui/templates/teacher/dashboard.html:8
-#: ui/templates/teacher/dashboard.html:10
+#: ui/templates/student/home.html:9 ui/templates/student/home.html:11
+#: ui/templates/student/section_locked.html:18
+#: ui/templates/teacher/dashboard.html:8 ui/templates/teacher/dashboard.html:10
 msgid "Home"
 msgstr "Басты бет"
 
-#: ui/templates/partials/shell/sidebar_student.html:16
+#: ui/templates/partials/shell/sidebar_student.html:21
+msgid "Programme sections"
+msgstr "Бағдарлама бөлімдері"
+
+#: ui/templates/partials/shell/sidebar_student.html:29
+#: ui/templates/student/partials/section_state.html:7
+#: ui/templates/student/section.html:22
+#, python-format
+msgid "%(p)s%% done"
+msgstr "%(p)s%% орындалды"
+
+#: ui/templates/partials/shell/sidebar_student.html:35
+#: ui/templates/student/search.html:11
+msgid "Results"
+msgstr "Нәтижелер"
+
+#: ui/templates/partials/shell/sidebar_student.html:40
 #: ui/templates/student/course_map.html:8 ui/templates/student/courses.html:3
 #: ui/templates/student/courses.html:5 ui/templates/student/dashboard.html:15
 #: ui/templates/student/results.html:16
 msgid "My courses"
 msgstr "Менің курстарым"
 
-#: ui/templates/partials/shell/sidebar_student.html:17
+#: ui/templates/partials/shell/sidebar_student.html:41
 #: ui/templates/student/results.html:47
 msgid "Grades"
 msgstr "Бағалар"
 
-#: ui/templates/partials/shell/sidebar_student.html:25
+#: ui/templates/partials/shell/sidebar_student.html:49
 msgid "Current topic"
 msgstr "Ағымдағы тақырып"
 
-#: ui/templates/partials/shell/sidebar_student.html:28
+#: ui/templates/partials/shell/sidebar_student.html:52
 #, python-format
 msgid "%(a)s of %(b)s stages"
 msgstr "%(b)s кезеңнің %(a)s-і"
 
-#: ui/templates/partials/shell/sidebar_student.html:29
-#: ui/templates/student/courses.html:27 ui/templates/student/topic.html:20
-#: ui/templates/student/topic.html:43
+#: ui/templates/partials/shell/sidebar_student.html:53
+#: ui/templates/student/courses.html:27 ui/templates/student/home.html:39
+#: ui/templates/student/topic.html:20 ui/templates/student/topic.html:43
 msgid "Continue"
 msgstr "Жалғастыру"
 
@@ -7639,15 +7808,14 @@ msgid "Practice works"
 msgstr "Практикалық жұмыстар"
 
 #: ui/templates/partials/shell/sidebar_teacher.html:20
-#: ui/templates/research/dashboard.html:4
-#: ui/templates/teacher/gradebook.html:4 ui/templates/teacher/lab_log.html:29
+#: ui/templates/research/dashboard.html:4 ui/templates/teacher/gradebook.html:4
+#: ui/templates/teacher/lab_log.html:29
 msgid "Analysis"
 msgstr "Талдау"
 
 #: ui/templates/partials/shell/sidebar_teacher.html:21
 #: ui/templates/teacher/gradebook.html:3 ui/templates/teacher/gradebook.html:5
-#: ui/templates/teacher/gradebook.html:9
-#: ui/templates/teacher/gradebook.html:32
+#: ui/templates/teacher/gradebook.html:9 ui/templates/teacher/gradebook.html:32
 msgid "Grade register"
 msgstr "Бағалар журналы"
 
@@ -7695,8 +7863,8 @@ msgstr "Кезеңдер бойынша орташа ұпай"
 
 #: ui/templates/research/analytics.html:50
 msgid ""
-"Descriptive statistics only. Test significance (t-test, Mann–Whitney) on the"
-" downloaded data. The research group of an enrolment is the value at "
+"Descriptive statistics only. Test significance (t-test, Mann–Whitney) on the "
+"downloaded data. The research group of an enrolment is the value at "
 "enrolment."
 msgstr ""
 "Тек сипаттамалы статистика. Статистикалық маңыздылық (t-тест, Манн–Уитни) "
@@ -7794,8 +7962,8 @@ msgid ""
 "κ ≥ 0.80 — almost perfect agreement (Landis & Koch). Points as %% of the "
 "field's points; the latest check of an answer is used."
 msgstr ""
-"κ ≥ 0.80 — «өте жоғары келісім» (Landis & Koch). Ұпай өріс ұпайының %%-ымен;"
-" жауаптың соңғы тексерісі қолданылады."
+"κ ≥ 0.80 — «өте жоғары келісім» (Landis & Koch). Ұпай өріс ұпайының %%-ымен; "
+"жауаптың соңғы тексерісі қолданылады."
 
 #: ui/templates/research/analytics.html:131
 #, python-format
@@ -7987,8 +8155,8 @@ msgstr "Аяқталған талпыныстар әлі жоқ."
 msgid "Latest attempts"
 msgstr "Соңғы талпыныстар"
 
-#: ui/templates/research/dashboard.html:86
-#: ui/templates/student/results.html:75 ui/templates/teacher/groups.html:23
+#: ui/templates/research/dashboard.html:86 ui/templates/student/results.html:75
+#: ui/templates/teacher/groups.html:23
 #: ui/templates/teacher/partials/grading_queue.html:7
 #: ui/templates/teacher/student.html:69 ui/templates/teacher/student.html:111
 #: ui/templates/teacher/student.html:161
@@ -8082,8 +8250,7 @@ msgstr "Тестті бастау"
 msgid ""
 "The final knowledge test opens when you finish the course or when your "
 "teacher opens it."
-msgstr ""
-"Қорытынды білім тесті курс аяқталғанда немесе мұғалім ашқанда ашылады."
+msgstr "Қорытынды білім тесті курс аяқталғанда немесе мұғалім ашқанда ашылады."
 
 #: ui/templates/student/certificates.html:8
 msgid ""
@@ -8121,8 +8288,7 @@ msgstr "Мұғалім:"
 msgid "Stages open in order"
 msgstr "Кезеңдер ретпен ашылады"
 
-#: ui/templates/student/course_map.html:30
-#: ui/templates/student/results.html:59
+#: ui/templates/student/course_map.html:30 ui/templates/student/results.html:59
 msgid "current score"
 msgstr "ағымдағы ұпай"
 
@@ -8131,7 +8297,7 @@ msgid "stages passed"
 msgstr "кезең өтілді"
 
 #: ui/templates/student/course_map.html:32
-#: ui/templates/student/dashboard.html:36
+#: ui/templates/student/dashboard.html:36 ui/templates/student/section.html:54
 msgid "Continue learning"
 msgstr "Оқуды жалғастыру"
 
@@ -8146,8 +8312,7 @@ msgstr "Сүзгі"
 msgid "All"
 msgstr "Барлығы"
 
-#: ui/templates/student/course_map.html:57
-#: ui/templates/student/results.html:33
+#: ui/templates/student/course_map.html:57 ui/templates/student/results.html:33
 #: ui/templates/teacher/content/course.html:47
 #, python-format
 msgid "Module %(n)s"
@@ -8170,8 +8335,7 @@ msgid_plural "%(n)s stages"
 msgstr[0] "%(n)s кезең"
 msgstr[1] "%(n)s кезең"
 
-#: ui/templates/student/course_map.html:81
-#: ui/templates/teacher/student.html:59
+#: ui/templates/student/course_map.html:81 ui/templates/teacher/student.html:59
 #, python-format
 msgid "Completed · %(s)s"
 msgstr "Аяқталды · %(s)s"
@@ -8204,8 +8368,8 @@ msgid ""
 "Complete every topic with a course score of at least %(p)s and the "
 "certificate is issued automatically."
 msgstr ""
-"Барлық тақырып аяқталып, курс бойынша кемінде %(p)s ұпай жиналса, сертификат"
-" автоматты түрде беріледі."
+"Барлық тақырып аяқталып, курс бойынша кемінде %(p)s ұпай жиналса, сертификат "
+"автоматты түрде беріледі."
 
 #: ui/templates/student/courses.html:15
 msgid "preview"
@@ -8248,8 +8412,7 @@ msgid "You are not enrolled in a course yet"
 msgstr "Курсқа жазылу әлі жоқ"
 
 #: ui/templates/student/dashboard.html:15
-msgid ""
-"Choose a course in the catalogue or ask your teacher to add your group."
+msgid "Choose a course in the catalogue or ask your teacher to add your group."
 msgstr ""
 "Курсты каталогтан таңдауға немесе мұғалімнен топты қосуды сұрауға болады."
 
@@ -8375,12 +8538,12 @@ msgstr ""
 "шығады."
 
 #: ui/templates/student/dashboard.html:153
-#: ui/templates/student/dashboard.html:162
+#: ui/templates/student/dashboard.html:162 ui/templates/student/home.html:72
 #: ui/templates/student/stages/practice.html:20
 msgid "Teacher's comment"
 msgstr "Мұғалімнің пікірі"
 
-#: ui/templates/student/dashboard.html:154
+#: ui/templates/student/dashboard.html:154 ui/templates/student/home.html:73
 #, python-format
 msgid "about «%(s)s»"
 msgstr "«%(s)s» туралы"
@@ -8392,7 +8555,55 @@ msgid_plural "%(n)s more comments"
 msgstr[0] "тағы %(n)s пікір"
 msgstr[1] "тағы %(n)s пікір"
 
+#: ui/templates/student/home.html:14
+#, python-format
+msgid "Welcome, %(name)s!"
+msgstr "Сәлем, %(name)s!"
+
+#: ui/templates/student/home.html:15
+msgid "The guide below shows how to use the ChemEduTech platform."
+msgstr "ChemEduTech платформасын пайдалану тәртібі — төмендегі нұсқаулықта."
+
+#: ui/templates/student/home.html:25
+#, python-format
+msgid "Sections passed: %(a)s of %(b)s"
+msgstr "Өткен бөлімдер: %(a)s / %(b)s"
+
+#: ui/templates/student/home.html:28
+#, python-format
+msgid "Topic %(n)s · %(t)s — next: %(s)s"
+msgstr "%(n)s-тақырып · %(t)s — келесі: %(s)s"
+
+#: ui/templates/student/home.html:30
+msgid "Every open section is passed."
+msgstr "Ашық бөлімдердің бәрі өтті."
+
+#: ui/templates/student/home.html:34
+msgid "Section done"
+msgstr "Бөлімнің орындалуы"
+
+#: ui/templates/student/home.html:36
+#, python-format
+msgid "the next section opens at %(p)s%%"
+msgstr "келесі бөлім %(p)s%%-да ашылады"
+
+#: ui/templates/student/home.html:47
+msgid "Guide to using the platform"
+msgstr "Платформаны пайдалану жөніндегі нұсқаулық"
+
+#: ui/templates/student/home.html:48
+#, python-format
+msgid ""
+"Sections open one after another: the next one opens when the previous one is "
+"%(p)s%% done."
+msgstr "Бөлімдер ретімен ашылады: алдыңғы бөлім %(p)s%%-ға орындалғанда келесісі ашылады."
+
+#: ui/templates/student/home.html:60 ui/templates/teacher/lab_log.html:36
+msgid "Details"
+msgstr "Мәліметтер"
+
 #: ui/templates/student/locked.html:5
+#: ui/templates/student/section_locked.html:5
 msgid "Not open yet"
 msgstr "Әлі ашылмаған"
 
@@ -8490,8 +8701,7 @@ msgstr "Сертификат туралы"
 
 #: ui/templates/student/partials/certificate_card.html:31
 msgid ""
-"It is downloaded as a PDF; anyone can check that it is real with its QR "
-"code."
+"It is downloaded as a PDF; anyone can check that it is real with its QR code."
 msgstr ""
 "PDF форматында жүктеледі, QR-код арқылы түпнұсқалығын кез келген адам "
 "тексере алады."
@@ -8579,8 +8789,7 @@ msgstr "Бірлік"
 
 #: ui/templates/student/partials/practice_field.html:36
 msgid "A comma or a dot may be used; units are converted automatically."
-msgstr ""
-"Үтір мен нүкте бірдей қабылданады; бірліктер автоматты түрлендіріледі."
+msgstr "Үтір мен нүкте бірдей қабылданады; бірліктер автоматты түрлендіріледі."
 
 #: ui/templates/student/partials/practice_field.html:47
 msgid "Clear"
@@ -8766,6 +8975,10 @@ msgstr "Қате."
 msgid "See the result"
 msgstr "Нәтижені көру"
 
+#: ui/templates/student/partials/section_state.html:6
+msgid "In development"
+msgstr "Әзірленуде"
+
 #: ui/templates/student/partials/stage_tile.html:2
 msgid "awaiting check"
 msgstr "тексеруді күтуде"
@@ -8919,10 +9132,6 @@ msgstr "Іздеу"
 msgid "Type a topic or a stage name in the search box above."
 msgstr "Жоғарыдағы іздеу жолына тақырып немесе кезең атауын жазу керек."
 
-#: ui/templates/student/search.html:11
-msgid "Results"
-msgstr "Нәтижелер"
-
 #: ui/templates/student/search.html:24 ui/templates/teacher/search.html:55
 msgid "Nothing found"
 msgstr "Ештеңе табылмады"
@@ -8930,6 +9139,80 @@ msgstr "Ештеңе табылмады"
 #: ui/templates/student/search.html:24 ui/templates/teacher/search.html:55
 msgid "Check the spelling or try a shorter word."
 msgstr "Жазылуын тексеру немесе қысқарақ сөзбен іздеп көру керек."
+
+#: ui/templates/student/section.html:9 ui/templates/student/section.html:15
+#: ui/templates/student/section_locked.html:6
+#: ui/templates/student/section_locked.html:11
+#, python-format
+msgid "Section %(n)s"
+msgstr "%(n)s-бөлім"
+
+#: ui/templates/student/section.html:19
+#, python-format
+msgid "The next section opens at %(p)s%%."
+msgstr "Келесі бөлім %(p)s%%-да ашылады."
+
+#: ui/templates/student/section.html:28
+msgid "What the section does"
+msgstr "Атқаратын қызметі"
+
+#: ui/templates/student/section.html:35
+msgid "Let the AI explain"
+msgstr "ЖИ түсіндірсін"
+
+#: ui/templates/student/section.html:37
+msgid ""
+"The AI assistant will explain the section here: its aim and how to start."
+msgstr "Мұнда ЖИ-ассистент бөлімнің мақсатын және оны неден бастау керегін түсіндіреді."
+
+#: ui/templates/student/section.html:38
+msgid "Explain the section"
+msgstr "Бөлімді түсіндіру"
+
+#: ui/templates/student/section.html:39
+msgid "Available when the AI assistant is connected."
+msgstr "ЖИ-ассистент қосылғанда қолжетімді болады."
+
+#: ui/templates/student/section.html:49
+#, python-format
+msgid "Required stages done: %(a)s of %(b)s"
+msgstr "Орындалған міндетті кезеңдер: %(a)s / %(b)s"
+
+#: ui/templates/student/section.html:50
+#, python-format
+msgid "Next: topic %(n)s · %(s)s"
+msgstr "Келесі: %(n)s-тақырып · %(s)s"
+
+#: ui/templates/student/section.html:58
+msgid "Not enrolled in the course"
+msgstr "Курсқа жазылмаған"
+
+#: ui/templates/student/section.html:58
+msgid "Section 1 is the course; the teacher adds the group to it."
+msgstr "1-бөлім — курс; топты курсқа мұғалім қосады."
+
+#: ui/templates/student/section.html:62
+msgid "The section is in development"
+msgstr "Бөлім әзірленуде"
+
+#: ui/templates/student/section.html:62
+msgid "Its tasks will appear here in the next versions of the platform."
+msgstr "Бөлімнің тапсырмалары платформаның келесі нұсқаларында осында пайда болады."
+
+#: ui/templates/student/section_locked.html:14
+#, python-format
+msgid ""
+"The section opens when section %(n)s «%(t)s» is %(p)s%% done (now %(d)s%%)."
+msgstr "Бұл бөлім %(n)s-бөлім «%(t)s» %(p)s%%-ға орындалғанда ашылады (қазір %(d)s%%)."
+
+#: ui/templates/student/section_locked.html:15
+#, python-format
+msgid "Go to section %(n)s"
+msgstr "%(n)s-бөлімге өту"
+
+#: ui/templates/student/section_locked.html:17
+msgid "Sections open one after another."
+msgstr "Бөлімдер ретімен ашылады."
 
 #: ui/templates/student/stage.html:12
 msgid "Read"
@@ -9142,8 +9425,8 @@ msgstr "Бұл курста ассистент рөлі берілген: маз
 
 #: ui/templates/teacher/content/course.html:25
 msgid ""
-"One test for the research: students take it before the first stage and again"
-" after the course. It is not graded and its answers are not shown."
+"One test for the research: students take it before the first stage and again "
+"after the course. It is not graded and its answers are not shown."
 msgstr ""
 "Зерттеуге арналған бір тест: студенттер оны алғашқы кезеңге дейін және "
 "курстан кейін қайта тапсырады. Бағаға әсер етпейді, жауаптары көрсетілмейді."
@@ -9190,8 +9473,7 @@ msgstr "Әзірге модуль жоқ"
 
 #: ui/templates/teacher/content/course.html:92
 msgid "Add a module, then topics and their stages."
-msgstr ""
-"Алдымен модуль, содан кейін тақырыптар мен олардың кезеңдері қосылады."
+msgstr "Алдымен модуль, содан кейін тақырыптар мен олардың кезеңдері қосылады."
 
 #: ui/templates/teacher/content/course_form.html:20
 msgid "Enrolment and order"
@@ -9239,8 +9521,8 @@ msgstr "AI бағалау рубрикасы"
 
 #: ui/templates/teacher/content/item.html:36
 msgid ""
-"The AI scores each criterion and explains why; the platform adds the points."
-" The model answer is a reference, not a word-for-word requirement."
+"The AI scores each criterion and explains why; the platform adds the points. "
+"The model answer is a reference, not a word-for-word requirement."
 msgstr ""
 "AI әр критерийді бағалап, себебін түсіндіреді; ұпайларды платформа қосады. "
 "Үлгі жауап — бағдар, сөзбе-сөз талап емес."
@@ -9357,8 +9639,8 @@ msgstr "Жаңа сұрақ"
 
 #: ui/templates/teacher/content/question.html:11
 msgid ""
-"Students have answered this question. Fix typos only; to change its meaning,"
-" retire it and add a new one."
+"Students have answered this question. Fix typos only; to change its meaning, "
+"retire it and add a new one."
 msgstr ""
 "Студенттер бұл сұраққа жауап берген. Тек қатені түзетуге болады; мағынасын "
 "өзгерту үшін оны қолданыстан шығарып, жаңасын қосу керек."
@@ -9397,8 +9679,8 @@ msgid ""
 "Pre/post test: questions stay fixed once students have taken it — otherwise "
 "pre and post are not comparable."
 msgstr ""
-"Кіріс/қорытынды тест: студенттер тапсырғаннан кейін сұрақтар өзгермеуі керек"
-" — әйтпесе нәтижелерді салыстыру мүмкін емес."
+"Кіріс/қорытынды тест: студенттер тапсырғаннан кейін сұрақтар өзгермеуі керек "
+"— әйтпесе нәтижелерді салыстыру мүмкін емес."
 
 #: ui/templates/teacher/content/quiz.html:33
 msgid "retired"
@@ -9435,8 +9717,8 @@ msgid ""
 "Labs are written in code (apps/labs/experiments); here you choose which one "
 "this stage uses."
 msgstr ""
-"Зертханалар кодта жазылған (apps/labs/experiments); мұнда осы кезең қайсысын"
-" қолданатынын таңдайсыз."
+"Зертханалар кодта жазылған (apps/labs/experiments); мұнда осы кезең қайсысын "
+"қолданатынын таңдайсыз."
 
 #: ui/templates/teacher/content/stage.html:40
 msgid "Choose a lab and save to pick its experiments."
@@ -9480,8 +9762,8 @@ msgstr "Кезеңді жою"
 
 #: ui/templates/teacher/content/stage.html:101
 msgid ""
-"Students have already worked on this stage, so it cannot be deleted. Make it"
-" optional or unpublish the topic."
+"Students have already worked on this stage, so it cannot be deleted. Make it "
+"optional or unpublish the topic."
 msgstr ""
 "Студенттер бұл кезеңде жұмыс істеп қойған, сондықтан оны жоюға болмайды. "
 "Кезеңді міндетті емес етуге немесе тақырыпты жариялаудан алуға болады."
@@ -9505,7 +9787,7 @@ msgstr ""
 "сұрақтық бекіту тестін қосу ұсынылады."
 
 #: ui/templates/teacher/content/stage_new.html:15
-#: ui/templates/teacher/group.html:188
+#: ui/templates/teacher/group.html:231
 msgid "Add"
 msgstr "Қосу"
 
@@ -9616,8 +9898,8 @@ msgstr "Жаңа топ"
 #: ui/templates/teacher/gradebook.html:9
 msgid ""
 "T — topic, M — module (current score over completed topics; topics in "
-"progress are greyed). The letter follows the current course score; the final"
-" grade is set when every topic is completed."
+"progress are greyed). The letter follows the current course score; the final "
+"grade is set when every topic is completed."
 msgstr ""
 "Т — тақырып, М — модуль (аяқталған тақырыптар бойынша ағымдағы ұпай; "
 "аяқталмаған тақырыптар сұр). Әріп ағымдағы курс ұпайына сәйкес; қорытынды "
@@ -9806,7 +10088,7 @@ msgstr "Қосылу коды"
 msgid "Copy the join code"
 msgstr "Қосылу кодын көшіру"
 
-#: ui/templates/teacher/group.html:34 ui/templates/teacher/group.html:181
+#: ui/templates/teacher/group.html:34 ui/templates/teacher/group.html:224
 msgid "Add a student"
 msgstr "Студент қосу"
 
@@ -9858,7 +10140,7 @@ msgstr "Топты жою"
 msgid "Courses of the group"
 msgstr "Топтың курстары"
 
-#: ui/templates/teacher/group.html:55 ui/templates/teacher/group.html:198
+#: ui/templates/teacher/group.html:55 ui/templates/teacher/group.html:241
 msgid "Attach a course"
 msgstr "Курс бекіту"
 
@@ -9880,11 +10162,9 @@ msgstr "Қорытынды тест жабылсын ба?"
 
 #: ui/templates/teacher/group.html:77
 msgid ""
-"It opens again for each student after the course. Results already taken "
-"stay."
+"It opens again for each student after the course. Results already taken stay."
 msgstr ""
-"Ол әр студентке курстан кейін қайта ашылады. Тапсырылған нәтижелер "
-"сақталады."
+"Ол әр студентке курстан кейін қайта ашылады. Тапсырылған нәтижелер сақталады."
 
 #: ui/templates/teacher/group.html:77
 msgid "Close the post-test"
@@ -9976,16 +10256,45 @@ msgstr "Әзірге студент жоқ."
 msgid "Student profile"
 msgstr "Студент профилі"
 
-#: ui/templates/teacher/group.html:185
+#: ui/templates/teacher/group.html:181
+#, python-format
+msgid "%(t)s sections"
+msgstr "%(t)s бөлімдері"
+
+#: ui/templates/teacher/group.html:182
+msgid ""
+"Percent done per section; a locked section can be opened for one student by "
+"hand."
+msgstr "Әр бөлімнің орындалу пайызы; жабық бөлімді бір студентке қолмен ашуға болады."
+
+#: ui/templates/teacher/group.html:199
+msgid "opened by the teacher"
+msgstr "мұғалім ашты"
+
+#: ui/templates/teacher/group.html:204
+#, python-format
+msgid "Open section %(n)s for %(s)s"
+msgstr "%(n)s-бөлімді ашу: %(s)s"
+
+#: ui/templates/teacher/group.html:205
+#, python-format
+msgid "Open section %(n)s for %(s)s?"
+msgstr "%(n)s-бөлімді ашу керек пе: %(s)s?"
+
+#: ui/templates/teacher/group.html:206
+msgid "The section stays open whatever the order says; the action is logged."
+msgstr "Бөлім реттен тыс ашық қалады; әрекет журналға жазылады."
+
+#: ui/templates/teacher/group.html:228
 #, python-format
 msgid "Join code: <b class=\"num tracking-[.1em]\">%(code)s</b>"
 msgstr "Қосылу коды: <b class=\"num tracking-[.1em]\">%(code)s</b>"
 
-#: ui/templates/teacher/group.html:206
+#: ui/templates/teacher/group.html:249
 msgid "The group's students are enrolled at once."
 msgstr "Топ студенттері курсқа бірден жазылады."
 
-#: ui/templates/teacher/group.html:209
+#: ui/templates/teacher/group.html:252
 msgid "Attach"
 msgstr "Бекіту"
 
@@ -10047,10 +10356,6 @@ msgstr "Оқиға"
 #: ui/templates/teacher/lab_log.html:36
 msgid "Step"
 msgstr "Қадам"
-
-#: ui/templates/teacher/lab_log.html:36
-msgid "Details"
-msgstr "Мәліметтер"
 
 #: ui/templates/teacher/lab_log.html:48
 msgid "No events were logged."
@@ -10205,8 +10510,8 @@ msgstr "UI компоненттері"
 
 #: ui/templates/ui/styleguide.html:9
 msgid ""
-"Every component of ui/templates/components with sample data. Radii: small 10"
-" · medium 14 · card 20–24 · large 28."
+"Every component of ui/templates/components with sample data. Radii: small 10 "
+"· medium 14 · card 20–24 · large 28."
 msgstr ""
 "ui/templates/components ішіндегі барлық компонент үлгі деректермен. "
 "Радиустар: кіші 10 · орта 14 · карта 20–24 · үлкен 28."
@@ -10296,8 +10601,8 @@ msgstr "Шарты"
 #~ msgstr "Тексеру кезегі"
 
 #~ msgid ""
-#~ "Nothing to check. Works the AI could not grade with confidence will appear "
-#~ "here."
+#~ "Nothing to check. Works the AI could not grade with confidence will "
+#~ "appear here."
 #~ msgstr ""
 #~ "Тексеретін жұмыс жоқ. AI сенімді бағалай алмаған жұмыстар осында шығады."
 
@@ -10329,14 +10634,15 @@ msgstr "Шарты"
 #~ msgid ""
 #~ "No comments yet. The teacher's comments on your works will appear here."
 #~ msgstr ""
-#~ "Әзірге пікір жоқ. Мұғалімнің жұмыстарыңызға жазған пікірлері осында шығады."
+#~ "Әзірге пікір жоқ. Мұғалімнің жұмыстарыңызға жазған пікірлері осында "
+#~ "шығады."
 
 #~ msgid ""
-#~ "Take it before the first stage: it shows what you already know. One attempt,"
-#~ " it does not affect your grade."
+#~ "Take it before the first stage: it shows what you already know. One "
+#~ "attempt, it does not affect your grade."
 #~ msgstr ""
-#~ "Оны алғашқы кезеңге дейін тапсырыңыз: ол сіздің не білетініңізді көрсетеді. "
-#~ "Бір әрекет, бағаға әсер етпейді."
+#~ "Оны алғашқы кезеңге дейін тапсырыңыз: ол сіздің не білетініңізді "
+#~ "көрсетеді. Бір әрекет, бағаға әсер етпейді."
 
 #~ msgid ""
 #~ "The course is behind you — check how much your knowledge has grown. One "
@@ -10346,14 +10652,15 @@ msgstr "Шарты"
 #~ "бағаға әсер етпейді."
 
 #~ msgid ""
-#~ "Drag by ⋮⋮ or use the arrows. Topic numbers follow the order; students see "
-#~ "published topics only."
+#~ "Drag by ⋮⋮ or use the arrows. Topic numbers follow the order; students "
+#~ "see published topics only."
 #~ msgstr ""
-#~ "⋮⋮ арқылы сүйреңіз немесе жебелерді қолданыңыз. Тақырып нөмірлері ретке сай "
-#~ "қойылады; студенттер тек жарияланған тақырыптарды көреді."
+#~ "⋮⋮ арқылы сүйреңіз немесе жебелерді қолданыңыз. Тақырып нөмірлері ретке "
+#~ "сай қойылады; студенттер тек жарияланған тақырыптарды көреді."
 
 #~ msgid ""
-#~ "Modules, topics and stages; theory, video, lab, practice fields and quizzes."
+#~ "Modules, topics and stages; theory, video, lab, practice fields and "
+#~ "quizzes."
 #~ msgstr ""
 #~ "Модульдер, тақырыптар және кезеңдер; теория, видео, зертхана, практика "
 #~ "өрістері және тесттер."
@@ -10362,20 +10669,21 @@ msgstr "Шарты"
 #~ msgstr "Иә, жою"
 
 #~ msgid ""
-#~ "The pre/post test of the course: one attempt before the first stage and one "
-#~ "after the course; only the overall percent is shown. Keep the questions "
-#~ "fixed once students have taken it — a changed test makes pre and post "
-#~ "incomparable."
+#~ "The pre/post test of the course: one attempt before the first stage and "
+#~ "one after the course; only the overall percent is shown. Keep the "
+#~ "questions fixed once students have taken it — a changed test makes pre "
+#~ "and post incomparable."
 #~ msgstr ""
-#~ "Курстың кіріс/қорытынды тесті: алғашқы кезеңге дейін бір әрекет және курстан"
-#~ " кейін бір әрекет; тек жалпы пайыз көрсетіледі. Студенттер тапсыра "
+#~ "Курстың кіріс/қорытынды тесті: алғашқы кезеңге дейін бір әрекет және "
+#~ "курстан кейін бір әрекет; тек жалпы пайыз көрсетіледі. Студенттер тапсыра "
 #~ "бастағаннан кейін сұрақтарды өзгертпеңіз — өзгерген тест кіріс пен "
 #~ "қорытындыны салыстыруға келмейтін етеді."
 
 #~ msgid "Manage groups"
 #~ msgstr "Топтарды басқару"
 
-#~ msgid "topic scores of completed topics; in-progress topics are shown greyed"
+#~ msgid ""
+#~ "topic scores of completed topics; in-progress topics are shown greyed"
 #~ msgstr "аяқталған тақырыптардың ұпайлары; орындалып жатқандары сұр түспен"
 
 #~ msgid ""
@@ -10405,12 +10713,14 @@ msgstr "Шарты"
 
 #~ msgid "No students yet. Give them the join code or add their accounts."
 #~ msgstr ""
-#~ "Әзірге студент жоқ. Оларға қосылу кодын беріңіз немесе аккаунттарын қосыңыз."
+#~ "Әзірге студент жоқ. Оларға қосылу кодын беріңіз немесе аккаунттарын "
+#~ "қосыңыз."
 
 #~ msgid ""
 #~ "Lab errors: order errors · safety warnings · wrong equipment or choice."
 #~ msgstr ""
-#~ "Зертхана қателері: рет қатесі · қауіпсіздік ескертуі · қате құрал не таңдау."
+#~ "Зертхана қателері: рет қатесі · қауіпсіздік ескертуі · қате құрал не "
+#~ "таңдау."
 
 #~ msgid "Click a student's name to see their profile."
 #~ msgstr "Студенттің атын бассаңыз — профилі ашылады."
@@ -10481,11 +10791,12 @@ msgstr "Шарты"
 #, python-format
 #~ msgid ""
 #~ "%(p)s%% of AI-graded works are drawn at random for your check, so the "
-#~ "agreement is measured on an unbiased sample (the share is set in the course "
-#~ "settings)."
+#~ "agreement is measured on an unbiased sample (the share is set in the "
+#~ "course settings)."
 #~ msgstr ""
 #~ "AI бағалаған жұмыстардың %(p)s%%-ы тексеруіңізге кездейсоқ таңдалады, "
-#~ "сондықтан сәйкестік бейтарап іріктемеде өлшенеді (үлесі курс баптауларында)."
+#~ "сондықтан сәйкестік бейтарап іріктемеде өлшенеді (үлесі курс "
+#~ "баптауларында)."
 
 #, python-format
 #~ msgid "Hello, %(name)s"
@@ -10631,11 +10942,12 @@ msgstr "Шарты"
 
 #~ msgid ""
 #~ "Run laboratory experiments on a virtual bench: choose glassware and "
-#~ "reagents, follow the procedure, observe the reaction and keep a lab journal."
+#~ "reagents, follow the procedure, observe the reaction and keep a lab "
+#~ "journal."
 #~ msgstr ""
 #~ "Зертханалық тәжірибелерді виртуалды үстелде жасаңыз: ыдыстар мен "
-#~ "реагенттерді таңдаңыз, жұмыс ретін орындаңыз, реакцияны бақылап, зертханалық"
-#~ " журнал толтырыңыз."
+#~ "реагенттерді таңдаңыз, жұмыс ретін орындаңыз, реакцияны бақылап, "
+#~ "зертханалық журнал толтырыңыз."
 
 #~ msgid "Create an account"
 #~ msgstr "Тіркелу"

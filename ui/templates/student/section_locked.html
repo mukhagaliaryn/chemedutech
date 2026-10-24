@@ -1,0 +1,21 @@
+{% extends "layouts/student.html" %}
+{% load i18n %}
+{% comment %}A locked ICPAI section explains itself: which section to finish first, to what percent, and a link to it.{% endcomment %}
+{% block title %}{% translate "Not open yet" %} · ChemEduTech{% endblock %}
+{% block crumb %}{{ programme.title }} · {% blocktranslate with n=section.number %}Section {{ n }}{% endblocktranslate %}{% endblock %}
+{% block page_title %}{{ section.title }}{% endblock %}
+{% block content %}
+<section class="mx-auto flex w-full max-w-[640px] flex-col items-center gap-4 rounded-xl border border-line bg-surface px-8 py-12 text-center">
+  <span class="grid size-16 place-items-center rounded-[20px] bg-surface-sunken text-ink-soft">{% include "components/icons.html#key" with size=28 %}</span>
+  <p class="text-[13px] font-semibold text-ink-faint">{% blocktranslate with n=section.number %}Section {{ n }}{% endblocktranslate %}</p>
+  <h1 class="-mt-2 text-[26px] leading-8 font-extrabold tracking-[-0.02em]">{{ section.title }}</h1>
+  {% if blocking %}
+    <p class="max-w-md text-ink-soft">{% blocktranslate with n=blocking.section.number t=blocking.section.title p=blocking.section.pass_percent d=blocking.percent|floatformat:0 %}The section opens when section {{ n }} «{{ t }}» is {{ p }}% done (now {{ d }}%).{% endblocktranslate %}</p>
+    <a class="btn btn-primary mt-2 h-auto min-h-11 max-w-full py-3 whitespace-normal" href="{{ blocking.url }}">{% blocktranslate with n=blocking.section.number %}Go to section {{ n }}{% endblocktranslate %}{% include "components/icons.html#arrow-right" %}</a>
+  {% else %}
+    <p class="max-w-md text-ink-soft">{% translate "Sections open one after another." %}</p>
+    <a class="btn btn-primary mt-2" href="{% url 'student:dashboard' %}">{% include "components/icons.html#home" %}{% translate "Home" %}</a>
+  {% endif %}
+  <p class="max-w-md text-sm whitespace-pre-line text-ink-soft">{{ section.purpose }}</p>
+</section>
+{% endblock %}
