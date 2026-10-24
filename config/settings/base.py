@@ -404,6 +404,11 @@ UNFOLD = {
                         "link": reverse_lazy("admin:programme_sectionprogress_changelist"),
                     },
                     {
+                        "title": _("Diagnostic results"),
+                        "icon": "query_stats",
+                        "link": reverse_lazy("admin:programme_diagnosticresult_changelist"),
+                    },
+                    {
                         "title": _("Section events"),
                         "icon": "history",
                         "link": reverse_lazy("admin:programme_sectionevent_changelist"),

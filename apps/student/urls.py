@@ -9,6 +9,14 @@ STAGE = "learn/<slug:course_slug>/<int:topic_number>/<int:stage_pk>/"
 urlpatterns = [
     path("me/", views.dashboard, name="dashboard"),
     path("me/sections/<int:number>/", sections.section, name="section"),
+    path("me/sections/<int:number>/diagnostic/<str:phase>/", sections.diagnostic, name="diagnostic"),
+    path("me/sections/<int:number>/diagnostic/<str:phase>/start/", sections.diagnostic_start, name="diagnostic_start"),
+    path(
+        "me/sections/<int:number>/diagnostic/<str:phase>/<int:attempt_id>/submit/",
+        sections.diagnostic_submit,
+        name="diagnostic_submit",
+    ),
+    path("me/icpai/", sections.results, name="icpai"),
     path("me/search/", views.search, name="search"),
     path("me/results/", views.results, name="results"),
     path("me/certificates/", views.certificates, name="certificates"),

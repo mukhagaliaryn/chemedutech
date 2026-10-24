@@ -22,6 +22,7 @@ from apps.labs.models import LabAttempt, LabEvent
 from apps.organizations.models import ResearchCohort
 from apps.practice.models import TeacherReview
 from apps.practice.services import sampling
+from apps.programme.models import DiagnosticResult
 
 from . import analytics
 
@@ -227,6 +228,43 @@ def export_quiz_answers(request):
         for a in qs.iterator(chunk_size=500)
     )
     return _csv_response("quiz_answers.csv", header, rows)
+
+
+@role_required(TEACHER, ADMIN)
+def export_diagnostics(request):
+    """ICPAI diagnostics (D71): one row per student × stage × component — earned, maximum, percent, the level."""
+    qs = DiagnosticResult.objects.select_related(
+        "enrollment__student__student_profile__group", "enrollment__programme__course", "attempt"
+    ).order_by("enrollment__student__username", "phase", "component")
+    if not has_role(request.user, ADMIN):
+        courses = course_selectors.teacher_courses(request.user)
+        students = course_selectors.teacher_enrollments(request.user).values("student")
+        qs = qs.filter(enrollment__programme__course__in=courses, enrollment__student__in=students)
+    header = [
+        "result_id", "username", "full_name", "study_group", "cohort", "programme", "course", "stage", "component",
+        "earned", "maximum", "percent", "level", "attempt_id", "finished_at",
+    ]  # fmt: skip
+    rows = (
+        [
+            r.pk,
+            r.enrollment.student.username,
+            r.enrollment.student.full_name,
+            _group_name(r.enrollment.student),
+            r.enrollment.research_cohort,
+            r.enrollment.programme.slug,
+            r.enrollment.programme.course.slug,
+            r.phase,
+            r.component,
+            r.earned,
+            r.maximum,
+            r.percent,
+            r.level,
+            r.attempt_id,
+            r.attempt.finished_at.isoformat() if r.attempt.finished_at else "",
+        ]  # fmt: skip
+        for r in qs.iterator(chunk_size=500)
+    )
+    return _csv_response("diagnostics.csv", header, rows)
 
 
 @role_required(TEACHER, ADMIN)

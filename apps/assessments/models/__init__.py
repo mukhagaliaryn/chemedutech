@@ -1,4 +1,4 @@
 from .attempt import AttemptAnswer, AttemptAnswerChoice, QuizAttempt
-from .quiz import Choice, Question, Quiz
+from .quiz import Choice, Component, Question, Quiz
 
-__all__ = ["AttemptAnswer", "AttemptAnswerChoice", "Choice", "Question", "Quiz", "QuizAttempt"]
+__all__ = ["AttemptAnswer", "AttemptAnswerChoice", "Choice", "Component", "Question", "Quiz", "QuizAttempt"]

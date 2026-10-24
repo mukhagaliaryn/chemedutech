@@ -58,6 +58,38 @@ the section's own content — section 1 leads to the course; kinds not built yet
     {% translate "Not enrolled in the course" as l_title %}{% translate "Section 1 is the course; the teacher adds the group to it." as l_text %}
     {% include "components/empty_state.html" with title=l_title text=l_text icon="book" %}
   {% endif %}
+{% elif section.kind == "diagnostic" %}
+  {# ---- section 2: the stages I → II → III, taken in order, once each (guide @S2; D71) ---- #}
+  <section aria-labelledby="diag-title" class="flex flex-col gap-4">
+    <div class="flex flex-wrap items-baseline justify-between gap-3">
+      <h2 id="diag-title" class="text-[19px] font-extrabold">{% translate "Diagnostic tests" %}</h2>
+      <a class="link text-sm font-bold" href="{% url 'student:icpai' %}">{% translate "All results" %} →</a>
+    </div>
+    <ol class="grid gap-4 lg:grid-cols-3">
+      {% for d in diagnostics %}
+        <li class="card flex flex-col gap-4 {% if d.state == 'locked' %}bg-surface-sunken/60{% elif d.state != 'done' %}border-2 border-primary-600 shadow-lift{% endif %}">
+          <div class="flex items-start gap-3">
+            <span class="num grid size-11 shrink-0 place-items-center rounded-[14px] text-[15px] font-extrabold {% if d.state == 'done' %}bg-success-600 text-white{% elif d.state == 'locked' %}bg-surface text-ink-faint{% else %}bg-primary-600 text-white{% endif %}">{{ d.test.phase }}</span>
+            <div class="min-w-0">
+              <h3 class="text-[15px] leading-5 font-bold">{{ d.test.stage_name }}</h3>
+              <p class="mt-1 text-[13px] leading-5 text-ink-soft">{{ d.test.note }}</p>
+            </div>
+          </div>
+          {% if d.state == "done" %}
+            {% include "student/partials/component_rings.html" with results=d.results size=58 compact=True %}
+            <div class="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-line pt-3">
+              <span class="num text-sm font-bold">{% blocktranslate with a=d.summary.earned|floatformat:0 b=d.summary.maximum|floatformat:0 %}{{ a }} of {{ b }} points{% endblocktranslate %}</span>
+              <a class="link text-sm font-bold" href="{{ d.url }}">{% translate "See the result" %} →</a>
+            </div>
+          {% elif d.state == "locked" %}
+            <p class="mt-auto flex items-center gap-2 text-sm text-ink-soft">{% include "components/icons.html#lock" with size=14 %}{% translate "Opens after the previous stage" %}</p>
+          {% else %}
+            <a class="btn btn-primary mt-auto self-start" href="{{ d.url }}">{% if d.state == "started" %}{% translate "Continue the test" %}{% else %}{% translate "Start the test" %}{% endif %}{% include "components/icons.html#arrow-right" %}</a>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ol>
+  </section>
 {% elif not row.ready %}
   {% translate "The section is in development" as l_title %}{% translate "Its tasks will appear here in the next versions of the platform." as l_text %}
   {% include "components/empty_state.html" with title=l_title text=l_text icon="clock" %}

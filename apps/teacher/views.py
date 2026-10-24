@@ -157,11 +157,16 @@ def group(request, pk):
     if request.GET.get("format") == "csv":
         return _group_csv(group, course, rows)
     sections, matrix = _sections_matrix(course, shown)
+    found = programme_selectors.programme_of_course(course)
+    if found and matrix:
+        summaries = programme_selectors.diagnostic_summaries(found, [m["student"] for m in matrix])
+        for m in matrix:
+            m["diagnostics"] = [summaries.get(m["student"].pk, {}).get(p) for p in ("I", "II", "III")]
     return render(
         request,
         "teacher/group.html",
         {
-            "programme": programme_selectors.programme_of_course(course),
+            "programme": found,
             "sections": sections,
             "matrix": matrix,
             "group": group,

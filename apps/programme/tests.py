@@ -10,6 +10,9 @@ from django.urls import reverse
 from django.utils.translation import gettext, override
 
 from apps.accounts.models import User
+from apps.assessments import selectors as quiz_selectors
+from apps.assessments import services as quiz_services
+from apps.assessments.models import Quiz, QuizAttempt
 from apps.courses import services as course_services
 from apps.courses.models import Course, CourseTeacher, Enrollment, Stage, Topic
 from apps.feedback.models import Notification
@@ -18,8 +21,17 @@ from apps.progress import services as progress
 from apps.progress.tests import build_course
 
 from . import selectors, services
-from .models import Programme, ProgrammeEnrollment, Section, SectionEvent, SectionProgress
+from .models import (
+    DiagnosticResult,
+    DiagnosticTest,
+    Programme,
+    ProgrammeEnrollment,
+    Section,
+    SectionEvent,
+    SectionProgress,
+)
 from .providers import PROVIDERS, Provider
+from .services import diagnostics
 
 S = SectionProgress.Status
 KINDS = [k for k, _label in Section.Kind.choices]  # course, diagnostic, … — the 8 kinds in section order
@@ -248,6 +260,7 @@ class StudentPageTests(Base):
         self.assertContains(r, reverse("student:section", args=[1]))
 
     def test_an_open_section_not_built_yet(self):
+        Section.objects.filter(pk=self.section(2).pk).update(kind="video")  # an unbuilt kind
         self.pass_stages(4)
         r = self.client.get(reverse("student:section", args=[2]))
         self.assertTemplateUsed(r, "student/section.html")
@@ -335,3 +348,197 @@ class SeedTests(TestCase):
         self.assertIs(selectors.current_section(rows), rows[1])
         rows = [{"status": S.PASSED}, {"status": S.LOCKED}]
         self.assertIs(selectors.current_section(rows), rows[0])
+
+
+# --- STEP-31: section 2 — the diagnostics I → II → III (D71) ---------------------------------------------------
+
+
+def make_diagnostics(section):
+    """The three tests of the guide (seed data) on a section of kind «diagnostic»."""
+    from .management.commands._icpai.diagnostics import DIAGNOSTICS
+    from .management.commands.seed_icpai import Command
+
+    tests = {}
+    for phase, data in DIAGNOSTICS.items():
+        quiz = Quiz.objects.create(title=data["stage"], kind=Quiz.Kind.DIAGNOSTIC, pass_percent=0, max_attempts=1)
+        Command.fill(quiz, data["questions"])
+        tests[phase] = DiagnosticTest.objects.create(
+            section=section, phase=phase, quiz=quiz, stage_name=data["stage"], note=data["note"], title=data["title"],
+            aim=data["aim"], levels=data["levels"],
+        )  # fmt: skip
+    return tests
+
+
+class DiagnosticsBase(Base):
+    def setUp(self):
+        super().setUp()
+        self.tests = make_diagnostics(self.section(2))
+        self.pass_stages(4)  # section 1 at 80 % → section 2 opens
+        self.penr = self.enrollment()
+
+    def take(self, phase, correct=None):
+        """Take a stage; ``correct`` — the question numbers (1–10) answered right, the rest wrong (all by default)."""
+        test = self.tests[phase]
+        attempt = diagnostics.start(self.penr, test)
+        answers = {}
+        for n, q in enumerate(test.quiz.questions.order_by("order"), start=1):
+            right = correct is None or n in correct
+            answers[q.pk] = q.choices.filter(is_correct=right).first().pk
+        attempt = quiz_services.submit_attempt(attempt, answers)
+        return diagnostics.record(self.penr, test, attempt)
+
+
+class DiagnosticsTests(DiagnosticsBase):
+    def test_stages_open_one_after_another_and_section_2_needs_all_three(self):
+        self.assertEqual(diagnostics.state(self.penr, self.tests["I"]), diagnostics.OPEN)
+        self.assertEqual(diagnostics.state(self.penr, self.tests["II"]), diagnostics.LOCKED)
+        with self.assertRaises(quiz_services.AttemptError):
+            diagnostics.start(self.penr, self.tests["II"])
+        self.take("I")
+        self.assertEqual(diagnostics.state(self.penr, self.tests["II"]), diagnostics.OPEN)
+        self.assertEqual(diagnostics.state(self.penr, self.tests["III"]), diagnostics.LOCKED)
+        self.assertEqual(SectionProgress.objects.get(section__number=2).percent, Decimal("33.33"))
+        self.take("II")
+        self.assertEqual((self.status(2), self.status(3)), (S.IN_PROGRESS, S.LOCKED))  # 66.67 % < 80 %
+        self.take("III")
+        self.assertEqual((self.status(2), self.status(3)), (S.PASSED, S.AVAILABLE))
+
+    def test_closed_while_section_2_is_locked(self):
+        other = make_student("s2", group=self.group)
+        enr = course_services.enroll(other, self.course, "group", group=self.group)
+        progress.ensure_progress(enr)
+        penr = services.refresh(other)
+        self.assertEqual(diagnostics.state(penr, self.tests["I"]), diagnostics.LOCKED)
+
+    def test_component_percent_and_level(self):
+        # the guide's example: 2 of the 3 cognitive questions (3–5) right → 66.7 %
+        rows = {r.component: r for r in self.take("I", correct={1, 2, 3, 4, 6, 7})}
+        self.assertEqual(rows["cognitive"].percent, Decimal("66.67"))
+        self.assertEqual(
+            (rows["motivational"].percent, rows["activity"].percent), (Decimal("100.00"), Decimal("66.67"))
+        )
+        self.assertEqual(rows["reflective"].percent, Decimal("0.00"))
+        self.assertEqual({r.level for r in rows.values()}, {"medium"})  # 6 of 10
+        self.assertEqual(
+            [diagnostics.level_for(n, 10) for n in (0, 4, 5, 7, 8, 10)],
+            ["low", "low", "medium", "medium", "high", "high"],
+        )
+
+    def test_once_only_and_kept_out_of_the_course_statistics(self):
+        self.take("I")
+        with self.assertRaises(quiz_services.AttemptError):
+            diagnostics.start(self.penr, self.tests["I"])
+        attempt = QuizAttempt.objects.get(quiz=self.tests["I"].quiz)
+        self.assertEqual((attempt.phase, attempt.enrollment), ("I", self.course_enrollment))
+        self.assertFalse(quiz_selectors.finished_attempts(self.course_enrollment).exists())
+        self.assertEqual(len(diagnostics.record(self.penr, self.tests["I"], attempt)), 4)  # recorded once
+        self.assertEqual(DiagnosticResult.objects.count(), 4)
+
+
+class DiagnosticsPageTests(DiagnosticsBase):
+    def setUp(self):
+        super().setUp()
+        self.client.force_login(self.student)
+
+    def url(self, phase, name="student:diagnostic"):
+        return reverse(name, args=[2, phase])
+
+    def test_section_2_lists_the_stages(self):
+        r = self.client.get(reverse("student:section", args=[2]))
+        for test in self.tests.values():
+            self.assertContains(r, test.stage_name)
+        self.assertContains(r, self.url("I"))
+
+    def test_intro_start_take_submit_result(self):
+        r = self.client.get(self.url("I"))
+        self.assertContains(r, self.tests["I"].title)
+        self.assertContains(r, self.tests["I"].aim)
+        self.assertRedirects(self.client.post(self.url("I", "student:diagnostic_start")), self.url("I"))
+        r = self.client.get(self.url("I"))
+        self.assertTemplateUsed(r, "assessments/take.html")
+        attempt = QuizAttempt.objects.get(quiz=self.tests["I"].quiz)
+        data = {f"q{q.pk}": q.choices.get(is_correct=True).pk for q in self.tests["I"].quiz.questions.all()}
+        submit = reverse("student:diagnostic_submit", args=[2, "I", attempt.pk])
+        self.assertRedirects(self.client.post(submit, data), self.url("I"))
+        r = self.client.get(self.url("I"))
+        self.assertTemplateUsed(r, "student/diagnostic.html")
+        self.assertContains(r, self.tests["I"].levels["high"])  # 10 of 10 → the guide's «high» interpretation
+        first = self.tests["I"].quiz.questions.order_by("order").first()
+        self.assertNotContains(r, first.choices.get(is_correct=True).text)  # the key is not shown
+        self.assertContains(r, self.url("II"))  # on to stage II
+
+    def test_stage_two_has_no_interpretation_in_the_guide(self):
+        self.take("I")
+        self.take("II")
+        r = self.client.get(self.url("II"))
+        self.assertEqual(r.context["interpretation"], "")
+
+    def test_locked_stage_cannot_be_started(self):
+        r = self.client.get(self.url("III"))
+        self.assertEqual(r.context["row"]["state"], diagnostics.LOCKED)
+        self.client.post(self.url("III", "student:diagnostic_start"))
+        self.assertFalse(QuizAttempt.objects.filter(quiz=self.tests["III"].quiz).exists())
+
+    def test_results_page(self):
+        r = self.client.get(reverse("student:icpai"))
+        self.assertFalse(r.context["taken"])
+        self.take("I", correct={1, 2, 3, 4, 6, 7})
+        self.take("II")
+        r = self.client.get(reverse("student:icpai"))
+        cognitive = next(row for row in r.context["rows"] if row["component"] == "cognitive")
+        self.assertEqual(cognitive["phases"], {"I": Decimal("66.67"), "II": Decimal("100.00"), "III": None})
+        self.assertEqual(cognitive["latest"], Decimal("100.00"))
+        self.assertContains(r, reverse("student:results"))  # course grades
+
+
+class DiagnosticsTeacherTests(DiagnosticsBase):
+    def setUp(self):
+        super().setUp()
+        self.teacher = User.objects.create_user("ta", "ta@example.kz", "x", role=User.Role.TEACHER)
+        self.other = User.objects.create_user("tb", "tb@example.kz", "x", role=User.Role.TEACHER)
+        CourseTeacher.objects.create(course=self.course, teacher=self.teacher)
+        course_services.assign_group(self.course, self.group, teacher=self.teacher)
+        self.take("I", correct={1, 2, 3, 4, 5, 6, 7})
+        self.client.force_login(self.teacher)
+
+    def test_group_page_shows_the_stages(self):
+        r = self.client.get(reverse("teacher:group", args=[self.group.pk]))
+        first = r.context["matrix"][0]["diagnostics"]
+        self.assertEqual((first[0]["earned"], first[0]["level"], first[1]), (Decimal("7.00"), "medium", None))
+
+    def test_analytics_by_component_stage_and_cohort(self):
+        r = self.client.get(reverse("research:analytics_course", args=[self.course.slug]))
+        rows = {(row["component"], row["cohort"]): row for row in r.context["diagnostic_rows"]}
+        self.assertEqual(rows[("cognitive", "experimental")]["I"]["mean"], 100.0)
+        self.assertEqual(rows[("reflective", "experimental")]["I"]["mean"], 0.0)
+        self.assertEqual(rows[("cognitive", "control")]["I"]["n"], 0)
+
+    def test_csv_export_is_scoped(self):
+        r = self.client.get(reverse("research:export_diagnostics"))
+        lines = b"".join(r.streaming_content if r.streaming else [r.content]).decode("utf-8-sig").strip().splitlines()
+        self.assertEqual(len(lines), 1 + 4)
+        self.assertIn("I,cognitive", lines[1] + lines[2] + lines[3] + lines[4])
+        self.client.force_login(self.other)
+        r = self.client.get(reverse("research:export_diagnostics"))
+        lines = b"".join(r.streaming_content if r.streaming else [r.content]).decode("utf-8-sig").strip().splitlines()
+        self.assertEqual(len(lines), 1)
+
+
+class DiagnosticsSeedTests(TestCase):
+    def test_seed_makes_three_tests_from_the_guide(self):
+        call_command("seed_course", topics=[1], verbosity=0)
+        call_command("seed_icpai", verbosity=0)
+        tests = list(DiagnosticTest.objects.order_by("phase"))
+        self.assertEqual([t.phase for t in tests], ["I", "II", "III"])
+        keys = []
+        for t in tests:
+            questions = list(t.quiz.questions.order_by("order"))
+            self.assertEqual(len(questions), 10)
+            keys.append(
+                "".join("ABCD"[[c.is_correct for c in q.choices.order_by("order")].index(True)] for q in questions)
+            )
+        self.assertEqual(keys, ["CBADBCADBC", "DBACDBCADB", "BDACBADCBA"])  # the guide's answer keys
+        self.assertEqual(tests[0].quiz.max_attempts, 1)
+        self.assertEqual(tests[1].levels, {})
+        call_command("seed_icpai", verbosity=0)
+        self.assertEqual(DiagnosticTest.objects.count(), 3)

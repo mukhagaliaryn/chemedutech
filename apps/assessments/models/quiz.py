@@ -14,6 +14,7 @@ class Quiz(TimeStampedModel):
         MODULE_TEST = "module_test", _("Module test")
         FINAL = "final", _("Final test")
         BENCHMARK = "benchmark", _("Pre/post knowledge test")
+        DIAGNOSTIC = "diagnostic", _("ICPAI diagnostic test")
 
     class Grading(models.TextChoices):
         BEST = "best", _("Best attempt")
@@ -60,6 +61,15 @@ class Quiz(TimeStampedModel):
         return self.title
 
 
+class Component(models.TextChoices):
+    """The four components of the ICPAI model a diagnostic question measures (guide @S2)."""
+
+    MOTIVATIONAL = "motivational", _("Motivational")
+    COGNITIVE = "cognitive", _("Cognitive")
+    ACTIVITY = "activity", _("Activity-based")
+    REFLECTIVE = "reflective", _("Reflective")
+
+
 class Question(TimeStampedModel):
     class Kind(models.TextChoices):
         SINGLE = "single", _("One correct option")
@@ -93,6 +103,13 @@ class Question(TimeStampedModel):
             'Short text: accepted spellings; formula or equation: correct answers, e.g. ["ZnCl2"] or '
             '["Zn + 2HCl -> ZnCl2 + H2"]'
         ),
+    )
+    component = models.CharField(
+        _("ICPAI component"),
+        max_length=16,
+        choices=Component.choices,
+        blank=True,
+        help_text=_("For diagnostic tests: what the question measures"),
     )
     is_active = models.BooleanField(
         _("in use"), default=True, help_text=_("Retired questions stay in old attempts but are not asked again")

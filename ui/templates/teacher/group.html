@@ -186,6 +186,7 @@ the student drawer). Every destructive or irreversible action asks in the shared
       <thead><tr>
         <th scope="col">{% translate "Student" %}</th>
         {% for s in sections %}<th scope="col" class="text-center"><span class="tip inline-flex" tabindex="0">{{ s.number }}<span class="tipbox">{{ s.number }}. {{ s.title }}</span></span></th>{% endfor %}
+        {% for p in "I II III"|split %}<th scope="col" class="text-center{% if forloop.first %} border-l border-line{% endif %}"><span class="tip inline-flex" tabindex="0">{% translate "D" %}-{{ p }}<span class="tipbox">{% blocktranslate %}Diagnostics {{ p }}: points and level{% endblocktranslate %}</span></span></th>{% endfor %}
       </tr></thead>
       <tbody>
         {% for m in matrix %}
@@ -209,11 +210,18 @@ the student drawer). Every destructive or irreversible action asks in the shared
                 {% else %}<span class="text-ink-faint">—</span>{% endif %}
               </td>
             {% endwith %}{% endfor %}
+            {% for d in m.diagnostics %}
+              <td class="num text-center{% if forloop.first %} border-l border-line{% endif %}">
+                {% if d %}<span class="badge font-bold {% if d.level == 'high' %}badge-success{% elif d.level == 'medium' %}badge-info{% else %}badge-warning{% endif %}">{{ d.earned|floatformat:0 }}/{{ d.maximum|floatformat:0 }}</span>
+                {% else %}<span class="text-ink-faint">—</span>{% endif %}
+              </td>
+            {% endfor %}
           </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
+  <p class="border-t border-line px-6 py-3 text-caption text-ink-soft"><span class="badge badge-warning">0–4</span> {% translate "low" %} · <span class="badge badge-info">5–7</span> {% translate "medium" %} · <span class="badge badge-success">8–10</span> {% translate "high" %}</p>
 </section>
 {% endif %}
 

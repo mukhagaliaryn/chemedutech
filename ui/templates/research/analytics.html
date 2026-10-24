@@ -198,6 +198,47 @@ agreement and the random spot-check, then the full descriptive table. Descriptiv
   {% endif %}
 </section>
 
+{# ---- ICPAI diagnostics I / II / III (STEP-31, D71) ---- #}
+{% if has_programme %}
+<section aria-labelledby="diag" class="overflow-hidden rounded-card border border-line bg-surface">
+  <div class="flex flex-wrap items-center justify-between gap-3 border-b border-surface-sunken px-6 py-4">
+    <div>
+      <h2 id="diag" class="flex items-center gap-1.5 text-[17px] font-extrabold">{% translate "ICPAI diagnostics" %}{% translate "component % at stages I, II, III over all who took them; gains over students with both stages" as h_diag %}{% include "components/hint.html" with text=h_diag %}</h2>
+      <p class="text-[13px] text-ink-soft">{% translate "Section 2: the four components of the ICPAI model by stages and research groups." %}</p>
+    </div>
+    <a class="btn btn-secondary btn-sm" href="{% url 'research:export_diagnostics' %}">{% include "components/icons.html#download" %}CSV</a>
+  </div>
+  {% partialdef d_cell %}<td class="text-right">{% if d.n %}<span class="font-bold">{{ d.mean|floatformat:1 }}</span><span class="block text-caption text-ink-faint">{% blocktranslate with m=d.median|floatformat:1 %}median {{ m }}{% endblocktranslate %} · n = {{ d.n }}</span>{% else %}<span class="text-ink-faint">—</span>{% endif %}</td>{% endpartialdef %}
+  {% partialdef g_cell %}<td class="text-right">{% if d.n %}<span class="font-bold {% if d.mean >= 0 %}text-success-700{% else %}text-danger-700{% endif %}">{% if d.mean >= 0 %}+{% endif %}{{ d.mean|floatformat:1 }}</span><span class="block text-caption text-ink-faint">n = {{ d.n }}</span>{% else %}<span class="text-ink-faint">—</span>{% endif %}</td>{% endpartialdef %}
+  <div class="overflow-x-auto">
+    <table class="table min-w-[760px]">
+      <thead><tr>
+        <th scope="col">{% translate "Component" %}</th>
+        <th scope="col">{% translate "Group" %}</th>
+        <th scope="col" class="text-right">{% translate "Stage I" %}</th>
+        <th scope="col" class="text-right">{% translate "Stage II" %}</th>
+        <th scope="col" class="text-right">{% translate "Stage III" %}</th>
+        <th scope="col" class="text-right">{% translate "II − I, p.p." %}</th>
+        <th scope="col" class="text-right">{% translate "III − I, p.p." %}</th>
+      </tr></thead>
+      <tbody class="num">
+        {% for row in diagnostic_rows %}
+          <tr{% if row.cohort == "all" %} class="bg-canvas"{% endif %}>
+            {% if row.cohort == "experimental" %}<th scope="rowgroup" rowspan="3" class="align-top font-bold">{{ row.label }}</th>{% endif %}
+            <td class="font-semibold">{% if row.cohort == "experimental" %}{% translate "Experimental" %}{% elif row.cohort == "control" %}{% translate "Control" %}{% else %}{% translate "All students" %}{% endif %}</td>
+            {% with d=row.I %}{% partial d_cell %}{% endwith %}
+            {% with d=row.II %}{% partial d_cell %}{% endwith %}
+            {% with d=row.III %}{% partial d_cell %}{% endwith %}
+            {% with d=row.gain_II %}{% partial g_cell %}{% endwith %}
+            {% with d=row.gain_III %}{% partial g_cell %}{% endwith %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endif %}
+
 {# ---- full descriptive table ---- #}
 <section aria-labelledby="cmp" class="overflow-hidden rounded-card border border-line bg-surface">
   <div class="flex flex-wrap items-center justify-between gap-3 border-b border-surface-sunken px-6 py-4">

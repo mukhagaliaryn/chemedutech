@@ -17,6 +17,7 @@ from apps.labs.engine import get_lab
 from apps.labs.models import LabAttempt, LabEvent
 from apps.practice.models import AIGrade, TeacherReview
 from apps.practice.services import sampling
+from apps.programme import selectors as programme_selectors
 from apps.progress.models import StageProgress, TopicResult
 
 COHORTS = ("experimental", "control")
@@ -340,6 +341,35 @@ def pre_post_table(enrollments, scores) -> list[dict]:
     return rows
 
 
+def diagnostics_table(enrollments, course) -> list[dict]:
+    """ICPAI diagnostics (D71): per component × cohort (+ everybody) — stages I, II, III (all who took them) and the
+    gains II − I, III − I over the students with both stages (p.p.). Cohort = the course enrolment's research group."""
+    cohort_of = {e.student_id: e.research_cohort or "" for e in enrollments}
+    values: dict[tuple[str, int], dict[str, float]] = defaultdict(dict)
+    for r in programme_selectors.diagnostic_results_of_course(course, list(cohort_of)):
+        values[(r.component, r.enrollment.student_id)][r.phase] = float(r.percent)
+    labels = dict(programme_selectors.COMPONENT_LABELS)
+    rows = []
+    for component in programme_selectors.COMPONENTS:
+        for cohort in (*COHORTS, "all"):
+            students = [s for s, c in cohort_of.items() if cohort == "all" or c == cohort]
+            per = [values.get((component, s), {}) for s in students]
+            rows.append(
+                {
+                    "component": component,
+                    "label": labels[component],
+                    "cohort": cohort,
+                    "students": len(students),
+                    "I": stats.describe([v["I"] for v in per if "I" in v]),
+                    "II": stats.describe([v["II"] for v in per if "II" in v]),
+                    "III": stats.describe([v["III"] for v in per if "III" in v]),
+                    "gain_II": stats.describe([v["II"] - v["I"] for v in per if "I" in v and "II" in v]),
+                    "gain_III": stats.describe([v["III"] - v["I"] for v in per if "I" in v and "III" in v]),
+                }
+            )
+    return rows
+
+
 def page(user, course, group=None, topic=None) -> dict:
     enrollments, topics, stages = scope(user, course, group, topic)
     per = measures(enrollments, topics, stages)
@@ -357,6 +387,8 @@ def page(user, course, group=None, topic=None) -> dict:
         "benchmark_quiz": course.benchmark_quiz,
         "pre_post": pre_post,
         "pre_post_rows": pre_post_table(enrollments, pre_post),
+        "diagnostic_rows": diagnostics_table(enrollments, course),
+        "has_programme": programme_selectors.programme_of_course(course) is not None,
     }
 
 

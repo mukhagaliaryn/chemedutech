@@ -1,0 +1,108 @@
+{% extends "layouts/student.html" %}
+{% load i18n %}
+{% comment %}
+«Results» (SPEC §3.3; guide @S7 II «ICPAI – кәсіби даярлық нәтижелері»; picture image24): the four components with the
+latest stage's percent and the guide's description, the dynamics by stages (grouped bars + table I/II/III), the
+grades of sections 5 and 6 kept apart (guide @S5 VII, @S7), a link to the course grades. Always open.
+{% endcomment %}
+{% block title %}{% translate "Results" %} · ChemEduTech{% endblock %}
+{% block crumb %}{{ programme.title }}{% endblock %}
+{% block page_title %}{% translate "Results" %}{% endblock %}
+{% block content %}
+<div class="flex flex-wrap items-end justify-between gap-4">
+  <div>
+    <h1 class="text-[28px] leading-9 font-extrabold tracking-[-0.02em]">{% translate "ICPAI — professional readiness results" %}</h1>
+    <p class="mt-1 max-w-[720px] text-ink-soft">{% translate "The diagnostic results of the four components that make up the structure and content of the ICPAI authorial model." %}</p>
+  </div>
+  <a class="btn btn-secondary" href="{% url 'student:results' %}">{% include "components/icons.html#book" %}{% translate "Course grades" %}</a>
+</div>
+
+{% if not taken %}
+  {% translate "No diagnostic results yet" as l_title %}{% translate "They appear here after the diagnostic tests of section 2." as l_text %}
+  {% if section %}{% url 'student:section' section.number as s_url %}{% translate "Go to section 2" as l_action %}{% endif %}
+  {% include "components/empty_state.html" with title=l_title text=l_text icon="chart" action_url=s_url action_label=l_action action_icon="arrow-right" %}
+{% else %}
+
+{# ---- the four components: the latest stage ---- #}
+<section aria-labelledby="comp-title" class="card flex flex-col gap-5">
+  <h2 id="comp-title" class="text-[19px] font-extrabold">{% translate "Components" %}</h2>
+  <ul class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    {% translate "The readiness of a future chemistry teacher to master digital technologies, to use innovative teaching methods and to develop professionally." as m_text %}
+    {% translate "Mastery of chemistry subject knowledge, of the possibilities of information and communication technologies and of the principles of pedagogical design." as c_text %}
+    {% translate "The skills of using chemistry knowledge in a digital environment, carrying out virtual experiments, designing authorial tasks and lessons." as a_text %}
+    {% translate "The readiness to analyse one's own teaching, to find the mistakes made, to evaluate the results and to improve one's professional work." as r_text %}
+    {% for r in rows %}
+      <li class="flex flex-col items-center gap-3 rounded-lg bg-canvas p-5 text-center">
+        {% with v=r.latest|default:0 %}{% if r.latest is not None %}{% with t=r.latest|floatformat:0|add:"%" %}
+          {% if r.component == "motivational" %}{% include "components/ring.html" with value=v size=112 stroke=11 text=t color="stroke-warning-500" track="stroke-warning-50" %}
+          {% elif r.component == "cognitive" %}{% include "components/ring.html" with value=v size=112 stroke=11 text=t color="stroke-primary-600" track="stroke-primary-100" %}
+          {% elif r.component == "activity" %}{% include "components/ring.html" with value=v size=112 stroke=11 text=t color="stroke-stage-lab" track="stroke-stage-lab-50" %}
+          {% else %}{% include "components/ring.html" with value=v size=112 stroke=11 text=t color="stroke-stage-video" track="stroke-stage-video-50" %}{% endif %}
+        {% endwith %}{% else %}{% include "components/ring.html" with value=0 size=112 stroke=11 text="—" %}{% endif %}{% endwith %}
+        <span class="text-[15px] font-extrabold">{{ r.label }}</span>
+        <span class="text-[13px] leading-5 text-ink-soft">{% if r.component == "motivational" %}{{ m_text }}{% elif r.component == "cognitive" %}{{ c_text }}{% elif r.component == "activity" %}{{ a_text }}{% else %}{{ r_text }}{% endif %}</span>
+      </li>
+    {% endfor %}
+  </ul>
+  <p class="text-caption text-ink-faint">{% translate "The latest stage taken is shown. Component result (%) = points earned / maximum points × 100." %}</p>
+</section>
+
+{# ---- dynamics by stages ---- #}
+<section aria-labelledby="dyn-title" class="card flex flex-col gap-5">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <h2 id="dyn-title" class="text-[19px] font-extrabold">{% translate "Dynamics by stages, %" %}</h2>
+    <p class="flex flex-wrap gap-4 text-caption font-semibold text-ink-soft" aria-hidden="true">
+      <span class="inline-flex items-center gap-1.5"><span class="size-3 rounded-[4px] bg-primary-300"></span>{% translate "Stage I" %}</span>
+      <span class="inline-flex items-center gap-1.5"><span class="size-3 rounded-[4px] bg-stage-lab"></span>{% translate "Stage II" %}</span>
+      <span class="inline-flex items-center gap-1.5"><span class="size-3 rounded-[4px] bg-stage-video"></span>{% translate "Stage III" %}</span>
+    </p>
+  </div>
+  <div class="grid grid-cols-4 gap-4 border-b border-line" aria-hidden="true">
+    {% for r in rows %}
+      <div class="flex flex-col items-center gap-2">
+        <div class="flex h-[200px] w-full items-end justify-center gap-1.5">
+          {% for p in phases %}
+            {% with v=r.phases|get:p %}
+              <div class="flex h-full w-full max-w-[34px] flex-col items-center justify-end gap-1">
+                <span class="num text-[11px] font-bold text-ink-soft">{% if v is not None %}{{ v|floatformat:0 }}{% endif %}</span>
+                <span class="bar-grow block w-full rounded-t-[8px] {% if p == 'I' %}bg-primary-300{% elif p == 'II' %}bg-stage-lab{% else %}bg-stage-video{% endif %}" style="height: {% if v is not None %}{{ v|stringformat:'.1f' }}{% else %}0{% endif %}%; animation-delay: {{ forloop.counter }}50ms"></span>
+              </div>
+            {% endwith %}
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  <div class="-mt-3 grid grid-cols-4 gap-4 text-center text-[13px] font-bold" aria-hidden="true">{% for r in rows %}<span>{{ r.label }}</span>{% endfor %}</div>
+  <div class="table-wrap">
+    <table class="table">
+      <caption class="sr-only">{% translate "Dynamics by stages, %" %}</caption>
+      <thead><tr>
+        <th scope="col">{% translate "Component" %}</th>
+        <th scope="col" class="text-right">{% translate "Stage I" %}</th>
+        <th scope="col" class="text-right">{% translate "Stage II" %}</th>
+        <th scope="col" class="text-right">{% translate "Stage III" %}</th>
+      </tr></thead>
+      <tbody class="num">
+        {% for r in rows %}
+          <tr>
+            <td class="font-semibold">{{ r.label }}</td>
+            {% for p in phases %}{% with v=r.phases|get:p %}<td class="text-right font-bold">{% if v is not None %}{{ v|floatformat:1 }}%{% else %}<span class="font-normal text-ink-faint">—</span>{% endif %}</td>{% endwith %}{% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endif %}
+
+{# ---- grades of sections 5 and 6: kept apart ---- #}
+<section aria-labelledby="grades-title" class="card flex flex-wrap items-start gap-5">
+  <span class="tile tile-lg bg-success-50 text-success-600">{% include "components/icons.html#award" with size=22 %}</span>
+  <div class="min-w-0 flex-[1_1_420px]">
+    <h2 id="grades-title" class="text-[17px] font-extrabold">{% translate "Grades of sections 5 and 6" %}</h2>
+    <p class="mt-1 text-sm text-ink-soft">{% translate "The grades of the digital research practice of section 5 and of the microlesson of section 6 are not combined with them and are kept separately." %}</p>
+    <p class="mt-3 text-sm font-semibold text-ink-faint">{% translate "No grades yet." %}</p>
+  </div>
+</section>
+{% endblock %}

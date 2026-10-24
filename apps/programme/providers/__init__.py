@@ -7,8 +7,12 @@ change in one place. Kinds that are not built yet report 0 % and ``ready = False
 from ..models import Section
 from .base import Provider, Upcoming
 from .course import CourseProvider
+from .diagnostic import DiagnosticProvider
 
-PROVIDERS: dict[str, Provider] = {Section.Kind.COURSE: CourseProvider()}
+PROVIDERS: dict[str, Provider] = {
+    Section.Kind.COURSE: CourseProvider(),
+    Section.Kind.DIAGNOSTIC: DiagnosticProvider(),
+}
 
 
 def provider_for(section) -> Provider:

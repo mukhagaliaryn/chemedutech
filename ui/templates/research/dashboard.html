@@ -14,6 +14,7 @@
       <a class="btn btn-secondary btn-sm" href="{% url 'research:export_events' %}?{{ query }}">{% include "components/icons.html#download" %}{% translate "Download action log (CSV)" %}</a>
       <a class="btn btn-secondary btn-sm" href="{% url 'research:export_quiz_answers' %}">{% include "components/icons.html#download" %}{% translate "Quiz answers (CSV)" %}</a>
       <a class="btn btn-secondary btn-sm" href="{% url 'research:export_ai_reviews' %}">{% include "components/icons.html#download" %}{% translate "AI ↔ teacher grades (CSV)" %}</a>
+      <a class="btn btn-secondary btn-sm" href="{% url 'research:export_diagnostics' %}">{% include "components/icons.html#download" %}{% translate "ICPAI diagnostics (CSV)" %}</a>
     </div>
   </div>
 

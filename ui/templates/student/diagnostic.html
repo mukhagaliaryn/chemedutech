@@ -1,0 +1,80 @@
+{% extends "layouts/student.html" %}
+{% load i18n %}
+{% comment %}
+One stage of the ICPAI diagnostics (guide @S2-I/II/III; D71). Before: the guide's stage name, note, test title and aim,
+the rules (10 questions, one attempt, the answers are not shown) and «Start the test» — or why it is locked.
+After: the four component rings (image24), the score, the level and the guide's interpretation of it (stage II has
+none in the guide — only the level is shown), the way on to the next stage.
+{% endcomment %}
+{% block title %}{{ test.stage_name }} · ChemEduTech{% endblock %}
+{% block crumb %}{{ programme.title }} · {% blocktranslate with n=section.number %}Section {{ n }}{% endblocktranslate %}{% endblock %}
+{% block page_title %}{{ test.stage_name }}{% endblock %}
+{% block main_class %}max-w-[960px]{% endblock %}
+{% block content %}
+<nav class="flex flex-wrap items-center gap-2 text-sm" aria-label="{% translate 'Breadcrumbs' %}">
+  <a class="link inline-flex items-center gap-1.5 font-semibold" href="{% url 'student:section' section.number %}">{% include "components/icons.html#arrow-left" %}{{ section.number }}. {{ section.title }}</a>
+</nav>
+
+{# the three stages #}
+<ol class="flex gap-2" aria-label="{% translate 'Diagnostic stages' %}">
+  {% for d in rows %}
+    <li class="flex min-w-0 flex-1 items-center gap-2 rounded-lg border px-3 py-2.5 text-sm font-semibold {% if d.test.pk == test.pk %}border-primary-600 bg-primary-50 text-primary-900{% elif d.state == 'done' %}border-line bg-surface text-success-700{% else %}border-line bg-surface text-ink-faint{% endif %}"{% if d.test.pk == test.pk %} aria-current="step"{% endif %}>
+      <span class="num grid size-6 shrink-0 place-items-center rounded-full text-[12px] font-extrabold {% if d.state == 'done' %}bg-success-600 text-white{% elif d.test.pk == test.pk %}bg-primary-600 text-white{% else %}bg-surface-sunken{% endif %}">{% if d.state == "done" %}✓{% else %}{{ d.test.phase }}{% endif %}</span>
+      <span class="truncate">{{ d.test.stage_name }}</span>
+    </li>
+  {% endfor %}
+</ol>
+
+{% if row.state == "done" %}
+  <section aria-labelledby="result-title" class="card flex flex-col gap-6 p-[clamp(22px,4vw,36px)]">
+    <div class="flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <p class="text-[13px] font-semibold text-ink-soft">{% translate "Result of the stage" %}</p>
+        <h1 id="result-title" class="mt-0.5 text-[24px] leading-8 font-extrabold">{{ test.stage_name }}</h1>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="num text-[36px] leading-none font-extrabold">{{ row.summary.earned|floatformat:0 }}<span class="text-[20px] text-ink-faint"> / {{ row.summary.maximum|floatformat:0 }}</span></span>
+        <span class="badge font-bold {% if row.summary.level == 'high' %}badge-success{% elif row.summary.level == 'medium' %}badge-info{% else %}badge-warning{% endif %}">{% blocktranslate with l=level_label %}Level: {{ l }}{% endblocktranslate %}</span>
+      </div>
+    </div>
+    {% include "student/partials/component_rings.html" with results=row.results %}
+    {% if interpretation %}
+      <p class="rounded-lg bg-canvas px-5 py-4 text-[15px] leading-6"><span class="font-bold">{{ level_label }}.</span> {{ interpretation }}</p>
+    {% endif %}
+    <p class="text-caption text-ink-faint">{% translate "Component result (%) = points earned / maximum points × 100. The correct answers are not shown." %}</p>
+    <div class="flex flex-wrap justify-between gap-3 border-t border-line pt-5">
+      <a class="btn btn-secondary" href="{% url 'student:icpai' %}">{% include "components/icons.html#chart" %}{% translate "All results" %}</a>
+      {% if next_row and next_row.state != "locked" %}
+        <a class="btn btn-primary" href="{{ next_row.url }}">{{ next_row.test.stage_name }}{% include "components/icons.html#arrow-right" %}</a>
+      {% else %}
+        <a class="btn btn-primary" href="{% url 'student:section' section.number %}">{% translate "Back to the section" %}{% include "components/icons.html#arrow-right" %}</a>
+      {% endif %}
+    </div>
+  </section>
+{% else %}
+  <section aria-labelledby="test-title" class="card flex flex-col gap-5 p-[clamp(22px,4vw,36px)]">
+    <div>
+      <span class="inline-flex h-7 items-center rounded-full bg-primary-50 px-3 text-[13px] font-bold text-primary-700">{{ test.stage_name }}</span>
+      <p class="mt-3 text-[15px] leading-6 text-ink-soft">{{ test.note }}</p>
+    </div>
+    <div class="rounded-lg border border-line p-5">
+      <p class="text-caption font-semibold text-ink-faint">{% translate "Test title" %}</p>
+      <h1 id="test-title" class="mt-1 text-[20px] leading-7 font-extrabold">{{ test.title }}</h1>
+      <p class="mt-4 text-caption font-semibold text-ink-faint">{% translate "Aim" %}</p>
+      <p class="mt-1 text-[15px] leading-6">{{ test.aim }}</p>
+    </div>
+    <ul class="grid gap-2.5 sm:grid-cols-3">
+      <li class="flex items-center gap-2.5 rounded-lg bg-canvas px-4 py-3 text-sm font-semibold">{% include "components/icons.html#list" with size=18 %}{% blocktranslate count n=question_count %}{{ n }} question{% plural %}{{ n }} questions{% endblocktranslate %}</li>
+      <li class="flex items-center gap-2.5 rounded-lg bg-canvas px-4 py-3 text-sm font-semibold">{% include "components/icons.html#key" with size=18 %}{% translate "one attempt, not graded" %}</li>
+      <li class="flex items-center gap-2.5 rounded-lg bg-canvas px-4 py-3 text-sm font-semibold">{% include "components/icons.html#chart" with size=18 %}{% translate "4 ICPAI components" %}</li>
+    </ul>
+    {% if row.state == "locked" %}
+      {% translate "This stage opens after the previous one." as l_locked %}{% include "components/alert.html" with variant="info" text=l_locked %}
+    {% else %}
+      <form method="post" action="{% url 'student:diagnostic_start' section.number test.phase %}" class="flex justify-end">{% csrf_token %}
+        <button type="submit" class="btn btn-primary h-[46px] px-[22px] text-[15px] font-bold">{% translate "Start the test" %}{% include "components/icons.html#arrow-right" %}</button>
+      </form>
+    {% endif %}
+  </section>
+{% endif %}
+{% endblock %}

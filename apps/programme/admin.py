@@ -3,7 +3,15 @@ from django.utils.translation import gettext_lazy as _
 from unfold.admin import ModelAdmin, TabularInline
 
 from . import services
-from .models import Programme, ProgrammeEnrollment, Section, SectionEvent, SectionProgress
+from .models import (
+    DiagnosticResult,
+    DiagnosticTest,
+    Programme,
+    ProgrammeEnrollment,
+    Section,
+    SectionEvent,
+    SectionProgress,
+)
 
 
 class SectionInline(TabularInline):
@@ -22,12 +30,28 @@ class ProgrammeAdmin(ModelAdmin):
     inlines = [SectionInline]
 
 
+class DiagnosticTestInline(TabularInline):
+    model = DiagnosticTest
+    extra = 0
+    fields = ("phase", "stage_name", "quiz")
+    ordering = ("phase",)
+    show_change_link = True
+
+
 @admin.register(Section)
 class SectionAdmin(ModelAdmin):
     list_display = ("number", "title", "kind", "pass_percent", "guide_anchor", "programme")
     list_display_links = ("number", "title")
     list_filter = ("programme", "kind")
     ordering = ("programme", "number")
+    inlines = [DiagnosticTestInline]
+
+
+@admin.register(DiagnosticTest)
+class DiagnosticTestAdmin(ModelAdmin):
+    list_display = ("phase", "stage_name", "quiz", "section")
+    list_filter = ("section__programme",)
+    ordering = ("section", "phase")
 
 
 class ReadOnlyAdmin(ModelAdmin):
@@ -91,3 +115,11 @@ class SectionEventAdmin(ReadOnlyAdmin):
     list_filter = ("action", "section__programme", "section__number")
     search_fields = ("enrollment__student__username", "enrollment__student__last_name")
     list_select_related = ("enrollment__student", "section", "actor")
+
+
+@admin.register(DiagnosticResult)
+class DiagnosticResultAdmin(ReadOnlyAdmin):
+    list_display = ("enrollment", "phase", "component", "earned", "maximum", "percent", "level", "created_at")
+    list_filter = ("enrollment__programme", "phase", "component", "level", "enrollment__research_cohort")
+    search_fields = ("enrollment__student__username", "enrollment__student__last_name")
+    list_select_related = ("enrollment__student", "enrollment__programme")

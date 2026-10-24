@@ -1,0 +1,19 @@
+{% load i18n %}{% comment %}
+The four ICPAI components of one diagnostic stage as rings (picture image24): results — DiagnosticResult rows in the
+guide's order; size — ring size in px (default 96); compact — small rings without the points line.
+Colours: motivational amber, cognitive blue, activity teal, reflective violet.
+{% endcomment %}<ul class="grid grid-cols-2 {% if compact %}gap-x-2 gap-y-3{% else %}gap-4 sm:grid-cols-4{% endif %}">
+  {% for r in results %}
+    <li class="flex flex-col items-center gap-2 text-center">
+      {% blocktranslate with c=r.get_component_display p=r.percent|floatformat:0 asvar label %}{{ c }}: {{ p }}%{% endblocktranslate %}
+      {% with text=r.percent|floatformat:0|add:"%" %}
+        {% if r.component == "motivational" %}{% include "components/ring.html" with value=r.percent size=size|default:96 stroke=9 text=text label=label color="stroke-warning-500" track="stroke-warning-50" %}
+        {% elif r.component == "cognitive" %}{% include "components/ring.html" with value=r.percent size=size|default:96 stroke=9 text=text label=label color="stroke-primary-600" track="stroke-primary-50" %}
+        {% elif r.component == "activity" %}{% include "components/ring.html" with value=r.percent size=size|default:96 stroke=9 text=text label=label color="stroke-stage-lab" track="stroke-stage-lab-50" %}
+        {% else %}{% include "components/ring.html" with value=r.percent size=size|default:96 stroke=9 text=text label=label color="stroke-stage-video" track="stroke-stage-video-50" %}{% endif %}
+      {% endwith %}
+      <span class="{% if compact %}text-caption leading-4{% else %}text-sm leading-5{% endif %} font-bold">{{ r.get_component_display }}</span>
+      {% if not compact %}<span class="num text-caption text-ink-soft">{% blocktranslate with a=r.earned|floatformat:0 b=r.maximum|floatformat:0 %}{{ a }} of {{ b }} points{% endblocktranslate %}</span>{% endif %}
+    </li>
+  {% endfor %}
+</ul>
