@@ -8,7 +8,7 @@
   {% translate "What are you looking for?" as l_t %}{% translate "Search for a student, a group or a topic." as l_x %}
   {% include "components/empty_state.html" with title=l_t text=l_x icon="search" %}
 {% elif students or groups or topics %}
-  <div class="grid items-start gap-4 lg:grid-cols-2">
+  <div class="grid grid-cols-1 items-start gap-4 lg:grid-cols-2">
     {% if students %}
       <section class="card flex flex-col gap-1 p-4">
         <h2 class="px-2 pb-2 text-h3 font-extrabold">{% translate "Students" %}</h2>

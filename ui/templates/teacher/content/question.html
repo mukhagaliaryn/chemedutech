@@ -16,7 +16,7 @@
   {% csrf_token %}
   {% if form.non_field_errors %}<p class="error-text" role="alert">{{ form.non_field_errors|join:" " }}</p>{% endif %}
   <section class="card flex flex-col gap-4">
-    <div class="grid gap-4 sm:grid-cols-[2fr_1fr]">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-[2fr_1fr]">
       <div class="field">
         <label class="label" for="{{ form.kind.id_for_label }}">{{ form.kind.label }}</label>
         <select id="{{ form.kind.id_for_label }}" name="kind" class="input" x-model="kind">
@@ -44,7 +44,7 @@
       <button type="button" class="btn btn-ghost btn-sm self-start" @click="rows.push({id: '', text: '', correct: false, delete: false, in_use: false})">{% include "components/icons.html#plus" %}{% translate "Option" %}</button>
     </fieldset>
 
-    <div x-show="kind === 'numeric'" class="grid gap-4 sm:grid-cols-2">
+    <div x-show="kind === 'numeric'" class="grid grid-cols-1 gap-4 sm:grid-cols-2">
       {% include "components/input.html" with field=form.numeric_answer %}
       {% include "components/input.html" with field=form.numeric_tolerance %}
     </div>

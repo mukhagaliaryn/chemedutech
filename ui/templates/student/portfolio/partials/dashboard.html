@@ -21,7 +21,7 @@ submit to the teacher). Context: student.portfolio.portfolio_context; section.
 {# ---- I.1 My professional works ---- #}
 <section class="card flex flex-col gap-3" aria-labelledby="works-title">
   <h2 id="works-title" class="flex items-center gap-2 text-[16px] font-extrabold">{% include "components/icons.html#book" with size=18 %}{% translate "My professional works" %}</h2>
-  <ul class="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+  <ul class="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
     {% for w in works %}
       <li class="tone-{{ forloop.counter }} group flex flex-col gap-2.5 rounded-lg border border-line p-3.5 transition-all hover:-translate-y-0.5 hover:border-(--tone) hover:shadow-lift" data-reveal>
         <div class="flex items-start gap-3">
@@ -41,7 +41,7 @@ submit to the teacher). Context: student.portfolio.portfolio_context; section.
   </ul>
 </section>
 
-<div class="grid items-start gap-4 xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+<div class="grid grid-cols-1 items-start gap-4 xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
   {# ---- II ICPAI results ---- #}
   <section class="card flex flex-col gap-4" aria-labelledby="icpai-title">
     <div class="flex items-center justify-between gap-2">
@@ -107,14 +107,14 @@ submit to the teacher). Context: student.portfolio.portfolio_context; section.
   </section>
 </div>
 
-<div class="grid items-start gap-4 lg:grid-cols-2">
+<div class="grid grid-cols-1 items-start gap-4 lg:grid-cols-2">
   {# ---- IV my reflection ---- #}
   <section class="card flex flex-col gap-3" aria-labelledby="rf-title">
     <div class="flex items-center justify-between gap-2">
       <h2 id="rf-title" class="flex items-center gap-2 text-[16px] font-extrabold">{% include "components/icons.html#user" with size=18 %}{% translate "My professional reflection" %}</h2>
       {% if portfolio.editable %}<a class="btn btn-secondary btn-sm" href="{% url 'student:portfolio_reflection' %}">{% include "components/icons.html#edit" %}{% translate "Fill in" %}</a>{% endif %}
     </div>
-    <ol class="grid gap-2 sm:grid-cols-2">
+    <ol class="grid grid-cols-1 gap-2 sm:grid-cols-2">
       {% for r in reflection %}
         <li class="tone-{% if forloop.counter > 6 %}7{% else %}{{ forloop.counter }}{% endif %} rounded-lg bg-(--tone-50) px-3 py-2.5">
           <p class="flex items-start gap-2 text-[12.5px] leading-[17px] font-extrabold text-(--tone)"><span class="num">{{ forloop.counter }}.</span>{{ r.question }}</p>
@@ -144,7 +144,7 @@ submit to the teacher). Context: student.portfolio.portfolio_context; section.
   </section>
 </div>
 
-<div class="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
+<div class="grid grid-cols-1 items-start gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
   {# ---- integration of sections 5 and 6 ---- #}
   <section class="card flex flex-col gap-3" aria-labelledby="int-title">
     <h2 id="int-title" class="flex items-center gap-2 text-[16px] font-extrabold">{% include "components/icons.html#grid" with size=18 %}{% translate "Integration of the results of sections 5 and 6" %}</h2>
@@ -159,12 +159,12 @@ submit to the teacher). Context: student.portfolio.portfolio_context; section.
   {# ---- VI assemble the portfolio ---- #}
   <section id="assemble" class="card flex scroll-mt-24 flex-col gap-4" aria-labelledby="as-title">
     <h2 id="as-title" class="flex items-center gap-2 text-[16px] font-extrabold">{% include "components/icons.html#award" with size=18 %}{% translate "Assemble my professional portfolio" %}</h2>
-    <form method="post" action="{% url 'student:portfolio_details' %}" class="grid gap-3 sm:grid-cols-[1fr_1fr_auto] sm:items-end">{% csrf_token %}
+    <form method="post" action="{% url 'student:portfolio_details' %}" class="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_1fr_auto] sm:items-end">{% csrf_token %}
       <label class="flex flex-col gap-1"><span class="text-[12.5px] font-bold">{% translate "Education programme" %}</span><input class="input" name="programme_name" maxlength="255" value="{{ portfolio.programme_name }}" {% if not portfolio.editable %}disabled{% endif %}></label>
       <label class="flex flex-col gap-1"><span class="text-[12.5px] font-bold">{% translate "Study year" %}</span><input class="input" name="study_year" maxlength="64" value="{{ portfolio.study_year }}" {% if not portfolio.editable %}disabled{% endif %}></label>
       {% if portfolio.editable %}<button type="submit" class="btn btn-secondary">{% include "components/icons.html#save" %}{% translate "Save" %}</button>{% endif %}
     </form>
-    <ul class="grid gap-2 text-[13px] sm:grid-cols-3">
+    <ul class="grid grid-cols-1 gap-2 text-[13px] sm:grid-cols-3">
       {% translate "The reflection: seven answers" as c1 %}{% translate "The development map: five directions" as c2 %}{% translate "The final (III) diagnostics" as c3 %}
       <li class="flex items-center gap-2 rounded-lg {% if state.reflection %}bg-success-50 text-success-700{% else %}bg-warning-50 text-warning-700{% endif %} px-3 py-2 font-semibold">{% if state.reflection %}{% include "components/icons.html#check" with size=15 %}{% else %}{% include "components/icons.html#warn" with size=15 %}{% endif %}{{ c1 }}</li>
       <li class="flex items-center gap-2 rounded-lg {% if state.plan %}bg-success-50 text-success-700{% else %}bg-warning-50 text-warning-700{% endif %} px-3 py-2 font-semibold">{% if state.plan %}{% include "components/icons.html#check" with size=15 %}{% else %}{% include "components/icons.html#warn" with size=15 %}{% endif %}{{ c2 }}</li>
@@ -182,7 +182,7 @@ submit to the teacher). Context: student.portfolio.portfolio_context; section.
     {% endif %}
     <details class="rounded-lg border border-line">
       <summary class="cursor-pointer px-4 py-2.5 text-[13px] font-bold">{% translate "The structure of the final portfolio" %}</summary>
-      <ol class="grid gap-1 px-4 pb-3 text-[12.5px] sm:grid-cols-2">{% for p in parts %}<li class="flex gap-2"><span class="num font-extrabold text-primary-600">{{ forloop.counter }}.</span>{{ p }}</li>{% endfor %}</ol>
+      <ol class="grid grid-cols-1 gap-1 px-4 pb-3 text-[12.5px] sm:grid-cols-2">{% for p in parts %}<li class="flex gap-2"><span class="num font-extrabold text-primary-600">{{ forloop.counter }}.</span>{{ p }}</li>{% endfor %}</ol>
     </details>
     {% if version %}<p class="text-[12.5px] text-ink-soft">{% blocktranslate with n=version.number t=version.created_at|date:"d.m.Y H:i" %}Assembled: version {{ n }}, {{ t }}{% endblocktranslate %}{% if not current and portfolio.editable %} · <span class="font-bold text-warning-700">{% translate "changed since — assemble again" %}</span>{% endif %}</p>{% endif %}
     <div class="flex flex-wrap gap-2">

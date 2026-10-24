@@ -17,7 +17,7 @@ content, the versions, the trials (→ protocols), the AI checks and «Айге�
     {% if review %}<span class="num font-extrabold text-success-700">{{ review.total }}/10</span>{% endif %}
   </p>
   <h1 class="text-[22px] leading-7 font-extrabold">{{ lesson.topic|default:lesson.title|default:"—" }}</h1>
-  <dl class="grid gap-x-6 gap-y-1 text-[13.5px] md:grid-cols-2">
+  <dl class="grid grid-cols-1 gap-x-6 gap-y-1 text-[13.5px] md:grid-cols-2">
     {% if lesson.grade %}<div><dt class="inline font-bold">{% translate "Class" %}:</dt> <dd class="inline">{{ lesson.grade }}</dd></div>{% endif %}
     <div><dt class="inline font-bold">{% translate "Duration" %}:</dt> <dd class="inline num">{{ lesson.duration_min }} {% translate "min" %}</dd></div>
     {% if lesson.aim %}<div class="md:col-span-2"><dt class="inline font-bold">{% translate "Learning aim" %}:</dt> <dd class="inline">{{ lesson.aim }}</dd></div>{% endif %}
@@ -28,7 +28,7 @@ content, the versions, the trials (→ protocols), the AI checks and «Айге�
   </dl>
 </section>
 
-<div class="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_400px]">
+<div class="grid grid-cols-1 items-start gap-4 xl:grid-cols-[minmax(0,1fr)_400px]">
   <section class="card flex min-w-0 flex-col gap-2" aria-labelledby="st-title">
     <h2 id="st-title" class="text-h3">{% translate "Lesson stages" %}</h2>
     {% for r in stages %}

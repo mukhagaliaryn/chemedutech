@@ -115,6 +115,11 @@ ANTHROPIC_API_KEY=
 AI_GRADING_ENABLED=0
 AI_GRADING_MODEL=claude-sonnet-5-5
 
+# ICPAI ЖИ-і: ассистент, ЖИ-оқушы, тексеруші, «Айгерім» (сол ANTHROPIC_API_KEY; 0 — ЖИ батырмалары бұғатталады)
+AI_TUTOR_ENABLED=0
+# AI_TUTOR_MODEL=claude-opus-5-5
+# AI_TUTOR_DAILY_REQUESTS=60
+
 # Құпиясөзді қалпына келтіру хаттары (мысал: Gmail, app password)
 DJANGO_EMAIL_HOST=smtp.gmail.com
 DJANGO_EMAIL_PORT=587
@@ -462,6 +467,8 @@ cd /var/www/chemedutech
 git pull
 env/bin/pip install -r requirements.txt
 env/bin/python manage.py migrate
+env/bin/python manage.py seed_course                 # жаңа мазмұн болса (бар деректерді өзгертпейді)
+env/bin/python manage.py seed_icpai                  # ICPAI бөлімдері, диагностика, үлгі сабақтар (сол сияқты)
 env/bin/python manage.py collectstatic --noinput
 systemctl restart chemedutech chemedutech-worker
 ```

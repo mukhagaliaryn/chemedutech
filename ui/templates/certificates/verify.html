@@ -12,7 +12,7 @@
       <p class="num text-caption font-bold tracking-wide text-primary-600 uppercase">{% translate "Certificate" %} · {{ certificate.number }}</p>
       <h2 class="mt-2.5 text-[28px] leading-[34px] font-extrabold">{{ certificate.holder_name }}</h2>
       <p class="mt-1.5 text-ink-soft">{% blocktranslate with c=certificate.course_title %}completed the course «{{ c }}»{% endblocktranslate %}</p>
-      <dl class="mt-6 grid gap-3 sm:grid-cols-3">
+      <dl class="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
         <div class="rounded-md bg-canvas px-4 py-3"><dt class="text-caption font-normal text-ink-soft">{% translate "Score" %}</dt><dd class="num mt-0.5 text-lg font-extrabold">{{ certificate.score_percent|floatformat:1 }} · {{ certificate.letter }}</dd></div>
         <div class="rounded-md bg-canvas px-4 py-3"><dt class="text-caption font-normal text-ink-soft">{% translate "Date of issue" %}</dt><dd class="mt-0.5 text-lg font-extrabold">{{ certificate.issued_at|date:"j E Y" }}</dd></div>
         <div class="rounded-md bg-canvas px-4 py-3"><dt class="text-caption font-normal text-ink-soft">{% translate "Number" %}</dt><dd class="num mt-0.5 text-lg font-extrabold">{{ certificate.number }}</dd></div>

@@ -36,9 +36,9 @@ stages (2 + 3 + 3 + 2 min) with their fields saved by themselves and «The AI as
     <span class="flex flex-wrap gap-1.5 text-[12px] font-semibold"><span class="inline-flex h-7 items-center rounded-full bg-canvas px-3">{% if lesson.grade %}{% blocktranslate with g=lesson.grade %}Grade {{ g }}{% endblocktranslate %}{% else %}—{% endif %}</span><span class="inline-flex h-7 items-center gap-1 rounded-full bg-canvas px-3">{% include "components/icons.html#clock" with size=12 %}{% blocktranslate with n=10 %}{{ n }} min{% endblocktranslate %}</span></span>
     <span class="transition-transform group-open:rotate-180">{% include "components/icons.html#chevron-down" with size=16 %}</span>
   </summary>
-  <form method="post" class="grid gap-4 border-t border-line px-5 py-4 lg:grid-cols-[minmax(0,1fr)_340px]">{% csrf_token %}
+  <form method="post" class="grid grid-cols-1 gap-4 border-t border-line px-5 py-4 lg:grid-cols-[minmax(0,1fr)_340px]">{% csrf_token %}
     <div class="flex flex-col gap-3">
-      <div class="grid gap-3 md:grid-cols-3">
+      <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
         <label class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Student's full name" %}</span><input class="input" value="{{ user.get_full_name|default:user.username }}" disabled></label>
         <label class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Education programme" %}</span><input class="input" name="programme" maxlength="255" value="{{ lesson.details.programme|default:'' }}" {% if locked %}disabled{% endif %}></label>
         <label class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Study year" %}</span><input class="input" name="study_year" maxlength="64" value="{{ lesson.details.study_year|default:'' }}" {% if locked %}disabled{% endif %}></label>
@@ -48,7 +48,7 @@ stages (2 + 3 + 3 + 2 min) with their fields saved by themselves and «The AI as
         {% for g in grades %}<label class="cursor-pointer"><input type="radio" name="grade" value="{{ g }}" class="peer sr-only" {% if lesson.grade == g %}checked{% endif %} {% if locked %}disabled{% endif %}><span class="num grid h-9 w-11 place-items-center rounded-[10px] border border-line-strong text-[14px] font-bold peer-checked:border-primary-600 peer-checked:bg-primary-600 peer-checked:text-white">{{ g }}</span></label>{% endfor %}
         <span class="ml-2 text-sm text-ink-soft">{% translate "Length of the microlesson" %}: {% blocktranslate with n=10 %}{{ n }} min{% endblocktranslate %}</span>
       </fieldset>
-      <div class="grid gap-3 md:grid-cols-2">
+      <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
         <label class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Aim of the microlesson" %}</span><textarea class="input" name="aim" rows="2" {% if locked %}disabled{% endif %}>{{ lesson.aim }}</textarea></label>
         <div class="flex flex-col gap-1.5" x-data><span class="text-[13px] font-bold">{% translate "Expected result" %}</span><textarea name="outcomes" rows="2" class="input" x-rich.answer{% if locked %}="true"{% endif %} data-rt="line" aria-label="{% translate 'Expected result' %}">{{ lesson.outcomes }}</textarea></div>
         <label class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Pedagogical method used" %}</span><input class="input" name="method" value="{{ lesson.method }}" {% if locked %}disabled{% endif %}></label>
@@ -69,14 +69,14 @@ stages (2 + 3 + 3 + 2 min) with their fields saved by themselves and «The AI as
   </form>
 </details>
 
-<div class="grid items-start gap-4 2xl:grid-cols-[minmax(0,1fr)_360px]" x-data="{ stale: false }" @stage-changed.window="stale = true">
+<div class="grid grid-cols-1 items-start gap-4 2xl:grid-cols-[minmax(0,1fr)_360px]" x-data="{ stale: false }" @stage-changed.window="stale = true">
   {# ---- II. the four stages ---- #}
   <section aria-labelledby="ii-title" class="flex min-w-0 flex-col gap-3">
     <div class="flex flex-wrap items-center justify-between gap-2">
       <h2 id="ii-title" class="flex items-center gap-2.5 text-[18px] font-extrabold"><span class="grid size-8 place-items-center rounded-full bg-primary-900 text-[12px] text-white">II</span>{% translate "The structure of the microlesson" %}</h2>
       <span class="inline-flex items-center gap-2 rounded-full bg-warning-50 px-3 py-1.5 text-[12.5px] font-bold text-warning-700">{% include "components/icons.html#award" with size=14 %}{% translate "One microlesson (one topic)" %}</span>
     </div>
-    <div class="grid gap-4 lg:grid-cols-2">
+    <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
       {% for r in rows %}
         {{ r.opts|json_script:r.opts_id }}
       {% endfor %}

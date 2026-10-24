@@ -44,7 +44,7 @@
   <form method="post" class="flex flex-col gap-4" novalidate>
     {% csrf_token %}
     {% include "components/input.html" with field=form.title %}
-    <div class="grid gap-4 sm:grid-cols-2">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
       {% if quiz.kind != "benchmark" %}
         {% include "components/input.html" with field=form.pass_percent %}
         {% include "components/input.html" with field=form.grading %}

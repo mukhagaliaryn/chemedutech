@@ -11,11 +11,11 @@
     {% csrf_token %}
     {% if form.non_field_errors %}<p class="error-text" role="alert">{{ form.non_field_errors|join:" " }}</p>{% endif %}
     {% include "components/input.html" with field=form.name %}
-    <div class="grid gap-4 sm:grid-cols-2">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
       {% include "components/input.html" with field=form.department %}
       {% include "components/input.html" with field=form.specialty %}
     </div>
-    <div class="grid gap-4 sm:grid-cols-2">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
       {% include "components/input.html" with field=form.admission_year %}
       {% include "components/input.html" with field=form.study_year %}
     </div>

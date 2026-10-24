@@ -39,7 +39,7 @@ micro, micro_trials or micro_sources (student.micro.micro_context); section.
       <h2 id="choose-title" class="text-[19px] font-extrabold">{% translate "Choosing the microlesson" %}</h2>
       <p class="mt-1 max-w-[860px] text-[14px] leading-[21px] text-ink-soft">{% translate "Choose the authorial lesson you developed in section 5. Take one content part of it and adapt it to an independent 10-minute microlesson. The microlesson covers one concrete learning aim, not the whole content of the topic." %}</p>
     </div>
-    <div class="grid gap-3 lg:grid-cols-3" role="radiogroup" aria-label="{% translate 'Your lesson' %}">
+    <div class="grid grid-cols-1 gap-3 lg:grid-cols-3" role="radiogroup" aria-label="{% translate 'Your lesson' %}">
       {% for p in micro_sources %}
         <label class="tone-{{ forloop.counter }} cursor-pointer rounded-lg border-2 p-3 transition-all" :class="practice === '{{ p.pk }}' ? 'border-(--tone) bg-(--tone-50) shadow-lift' : 'border-line hover:border-(--tone)/50'">
           <input type="radio" name="practice" value="{{ p.pk }}" class="sr-only" x-model="practice" @change="stage = ''">
@@ -53,7 +53,7 @@ micro, micro_trials or micro_sources (student.micro.micro_context); section.
     {% for p in micro_sources %}
       <fieldset x-show="practice === '{{ p.pk }}'" x-cloak class="flex flex-col gap-2">
         <legend class="mb-2 text-[14px] font-bold">{% translate "Choose the part of the lesson" %}</legend>
-        <div class="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+        <div class="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-4">
           {% for s in p.stages.all %}
             <label class="tone-{{ s.order }} flex cursor-pointer items-start gap-2.5 rounded-lg border p-3 transition-colors" :class="stage === '{{ s.order }}' && practice === '{{ p.pk }}' ? 'border-(--tone) bg-(--tone-50)' : 'border-line hover:border-(--tone)/50'">
               <input type="radio" name="stage" value="{{ s.order }}" class="sr-only" x-model="stage" :disabled="practice !== '{{ p.pk }}'">

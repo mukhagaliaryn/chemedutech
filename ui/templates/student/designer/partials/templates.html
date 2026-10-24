@@ -6,7 +6,7 @@ designer — pedagogy.selectors.template_cards; section.
 {% endcomment %}
 <section aria-labelledby="flow-title" class="card flex flex-col gap-4 overflow-hidden">
   <h2 id="flow-title" class="text-[17px] font-extrabold">{% translate "How the AI assistant helps to change any part" %}</h2>
-  <ol class="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+  <ol class="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-5">
     {% translate "Choose a lesson template" as s1 %}{% translate "Get to know a ready authorial lesson" as d1 %}
     {% translate "Choose a part" as s2 %}{% translate "Choose the stage to change" as d2 %}
     {% translate "Develop it with the AI assistant" as s3 %}{% translate "Advice, task, experiment, assessment" as d3 %}
@@ -40,7 +40,7 @@ designer — pedagogy.selectors.template_cards; section.
     <h2 id="tpl-title" class="text-[19px] font-extrabold">{% translate "Authorial lesson templates" %}</h2>
     <p class="text-sm text-ink-soft">{% translate "Each template is a 45-minute lesson. Get to know it, then create your own version." %}</p>
   </div>
-  <ul class="grid gap-5 lg:grid-cols-3">
+  <ul class="grid grid-cols-1 gap-5 lg:grid-cols-3">
     {% for card in designer %}{% with t=card.template lesson=card.lesson %}
       <li class="group card card-lift flex flex-col overflow-hidden p-0" data-reveal>
         <a href="{% url 'student:lesson_template' section.number t.code %}" class="tpl-{{ t.code }} relative block h-[178px] overflow-hidden text-white" aria-label="{{ t.name }}">

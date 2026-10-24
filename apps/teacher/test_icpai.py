@@ -78,6 +78,19 @@ class IcpaiCabinetTests(Base):
         self.assertContains(r, self.conversation.get_mode_display())
         self.assertEqual(len(r.context["messages_"]), self.conversation.messages.count())
 
+    def test_an_expert_dialogue_with_its_structured_items(self):
+        from apps.ai.tests import answer
+        from apps.pedagogy.services import independent as ind
+        from apps.pedagogy.tests import DRAFT, fill_independent
+
+        self.fake.replies = [answer(json.dumps(DRAFT))]
+        lesson = ind.start_independent(self.student)
+        fill_independent(lesson)
+        ind.expert_review(lesson)
+        conversation = self.student.ai_conversations.get(mode="expert")
+        r = self.client.get(reverse("teacher:student_ai", args=[self.student.pk, conversation.pk]))
+        self.assertContains(r, "Жоба құрылымы логикалы.")  # the summary among the structured fields
+
     def test_another_teacher_or_student_gets_404(self):
         urls = [
             reverse("teacher:student_lesson", args=[self.student.pk, self.lesson.pk]),

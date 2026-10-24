@@ -63,7 +63,7 @@ none in the guide — only the level is shown), the way on to the next stage.
       <p class="mt-4 text-caption font-semibold text-ink-faint">{% translate "Aim" %}</p>
       <p class="mt-1 text-[15px] leading-6">{{ test.aim }}</p>
     </div>
-    <ul class="grid gap-2.5 sm:grid-cols-3">
+    <ul class="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
       <li class="flex items-center gap-2.5 rounded-lg bg-canvas px-4 py-3 text-sm font-semibold">{% include "components/icons.html#list" with size=18 %}{% blocktranslate count n=question_count %}{{ n }} question{% plural %}{{ n }} questions{% endblocktranslate %}</li>
       <li class="flex items-center gap-2.5 rounded-lg bg-canvas px-4 py-3 text-sm font-semibold">{% include "components/icons.html#key" with size=18 %}{% translate "one attempt, not graded" %}</li>
       <li class="flex items-center gap-2.5 rounded-lg bg-canvas px-4 py-3 text-sm font-semibold">{% include "components/icons.html#chart" with size=18 %}{% translate "4 ICPAI components" %}</li>

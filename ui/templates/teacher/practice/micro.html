@@ -9,7 +9,7 @@ and the rubric of @S6 VI (five criteria × 0–2) with a comment; each trial is 
 {% block main_class %}max-w-[1400px]{% endblock %}
 {% block content %}
 <a class="link inline-flex items-center gap-1.5 text-sm font-semibold" href="{% url 'teacher:practice_queue' %}?what=micro">{% include "components/icons.html#arrow-left" %}{% translate "Section 6 microlessons" %}</a>
-<div class="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_400px]">
+<div class="grid grid-cols-1 items-start gap-4 xl:grid-cols-[minmax(0,1fr)_400px]">
   <div class="flex min-w-0 flex-col gap-4">
     <section class="card flex flex-col gap-2">
       <p class="flex flex-wrap items-center gap-2 text-sm text-ink-soft"><span class="inline-flex h-7 items-center rounded-full bg-stage-video px-3 text-[12.5px] font-bold text-white">{% blocktranslate with n=number %}Trial {{ n }}{% endblocktranslate %}</span>{% translate "The AI student" %}: {{ trial.get_level_display|lower }} · {% blocktranslate with g=trial.grade %}Grade {{ g }}{% endblocktranslate %} · {{ seconds|duration_s }} · v{{ trial.version.number }}</p>

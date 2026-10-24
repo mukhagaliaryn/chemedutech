@@ -22,11 +22,11 @@ most in all; «ЖИ-сарапшы: Айгерім» — her latest opinion by s
   {% endfor %}
 </ol>
 
-<div class="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] 2xl:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)_minmax(0,1fr)]">
+<div class="grid grid-cols-1 items-start gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] 2xl:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)_minmax(0,1fr)]">
   {# ---- II the details ---- #}
   <form method="post" class="card flex flex-col gap-3" aria-labelledby="det-title">{% csrf_token %}
     <h2 id="det-title" class="text-[16px] font-extrabold">{% translate "The lesson's main details" %}</h2>
-    <div class="grid gap-3 sm:grid-cols-2">
+    <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
       <label class="flex flex-col gap-1"><span class="text-[12.5px] font-bold">{% translate "Education programme" %}</span><input class="input" name="programme" value="{{ lesson.details.programme|default:'' }}" {% if locked %}disabled{% endif %}></label>
       <label class="flex flex-col gap-1"><span class="text-[12.5px] font-bold">{% translate "Study year and group" %}</span><input class="input" name="course_group" value="{{ lesson.details.course_group|default:'' }}" {% if locked %}disabled{% endif %}></label>
     </div>
@@ -38,12 +38,12 @@ most in all; «ЖИ-сарапшы: Айгерім» — her latest opinion by s
     <label class="flex flex-col gap-1"><span class="text-[12.5px] font-bold">{% translate "Learning aim" %}</span><textarea class="input" name="aim" rows="2" {% if locked %}disabled{% endif %}>{{ lesson.aim }}</textarea></label>
     <div class="flex flex-col gap-1" x-data><span class="text-[12.5px] font-bold">{% translate "Expected results" %}</span><textarea name="outcomes" rows="2" class="input" x-rich.answer{% if locked %}="true"{% endif %} data-rt="line" aria-label="{% translate 'Expected results' %}">{{ lesson.outcomes }}</textarea></div>
     <label class="flex flex-col gap-1"><span class="text-[12.5px] font-bold">{% translate "Authorial pedagogical idea" %}</span><textarea class="input" name="idea" rows="2" {% if locked %}disabled{% endif %}>{{ lesson.details.idea|default:'' }}</textarea></label>
-    <div class="grid gap-3 sm:grid-cols-2">
+    <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
       <label class="flex flex-col gap-1"><span class="text-[12.5px] font-bold">{% translate "Teaching methods used" %}</span><textarea class="input" name="method" rows="2" {% if locked %}disabled{% endif %}>{{ lesson.method }}</textarea></label>
       <label class="flex flex-col gap-1"><span class="text-[12.5px] font-bold">{% translate "Digital tools" %}</span><textarea class="input" name="digital_tools" rows="2" {% if locked %}disabled{% endif %}>{{ lesson.digital_tools }}</textarea></label>
     </div>
     <label class="flex flex-col gap-1"><span class="text-[12.5px] font-bold">{% translate "Lab or research task" %}</span><textarea class="input" name="lab_task" rows="2" {% if locked %}disabled{% endif %}>{{ lesson.details.lab_task|default:'' }}</textarea></label>
-    <div class="grid gap-3 sm:grid-cols-2">
+    <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
       <label class="flex flex-col gap-1"><span class="text-[12.5px] font-bold">{% translate "Assessment criteria" %}</span><textarea class="input" name="assessment" rows="2" {% if locked %}disabled{% endif %}>{{ lesson.details.assessment|default:'' }}</textarea></label>
       <label class="flex flex-col gap-1"><span class="text-[12.5px] font-bold">{% translate "Way of feedback" %}</span><textarea class="input" name="feedback_way" rows="2" {% if locked %}disabled{% endif %}>{{ lesson.details.feedback_way|default:'' }}</textarea></label>
     </div>
@@ -142,11 +142,11 @@ most in all; «ЖИ-сарапшы: Айгерім» — her latest opinion by s
       {% for r in stages %}<a role="tab" href="{% url 'student:independent_stage' lesson.pk r.stage.order %}#content" class="tone-{% if forloop.counter > 8 %}8{% else %}{{ forloop.counter }}{% endif %} inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-[12.5px] font-bold {% if r.stage.pk == stage.pk %}bg-(--tone) text-white{% else %}bg-surface text-(--tone) ring-1 ring-(--tone)/30{% endif %}" {% if r.stage.pk == stage.pk %}aria-selected="true"{% endif %}><span class="num">{{ r.stage.order }}</span>{{ r.stage.title|truncatechars:22 }}</a>{% endfor %}
     </div>
     <div class="flex flex-col gap-3 p-5">
-      <div class="grid gap-3 sm:grid-cols-[1fr_130px]">
+      <div class="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_130px]">
         <label class="flex flex-col gap-1"><span class="text-[13px] font-bold">{% translate "Stage title" %}</span><input id="ct-title" class="input" x-model="title" maxlength="255" {% if locked %}disabled{% endif %}></label>
         <label class="flex flex-col gap-1"><span class="text-[13px] font-bold">{% translate "Minutes" %}</span><input class="input num" type="number" min="1" max="45" x-model.number="minutes" {% if locked %}disabled{% endif %}></label>
       </div>
-      <div class="grid gap-3 lg:grid-cols-2">
+      <div class="grid grid-cols-1 gap-3 lg:grid-cols-2">
         {% for f in fields %}
           <div class="flex flex-col gap-1.5 rounded-lg border border-line p-3 focus-within:border-(--tone)" data-field="{{ f.key }}" @focusin="active = '{{ f.key }}'">
             <span class="flex items-center gap-1.5 text-[12.5px] font-extrabold text-(--tone)">{% include "components/icons.html#"|add:f.icon with size=13 %}{{ f.label }}</span>
@@ -186,7 +186,7 @@ most in all; «ЖИ-сарапшы: Айгерім» — her latest opinion by s
         <div class="flex flex-wrap items-center gap-2"><span class="text-[13px] font-bold">{% translate "Class" %}</span>
           {% for g in grades %}<label class="cursor-pointer"><input type="radio" name="grade" value="{{ g }}" class="peer sr-only" {% if lesson.grade == g %}checked{% endif %} required><span class="num grid h-9 w-11 place-items-center rounded-[10px] border border-line-strong text-[14px] font-bold peer-checked:border-primary-600 peer-checked:bg-primary-600 peer-checked:text-white">{{ g }}</span></label>{% endfor %}
         </div>
-        <div class="grid gap-2 md:grid-cols-3">
+        <div class="grid grid-cols-1 gap-2 md:grid-cols-3">
           {% for value, text in levels %}
             <label class="group flex cursor-pointer items-center gap-3 rounded-lg border-2 border-line p-3 has-checked:border-stage-video has-checked:bg-ai-50/50">
               <input type="radio" name="level" value="{{ value }}" class="sr-only" {% if value == "medium" %}checked{% endif %}>

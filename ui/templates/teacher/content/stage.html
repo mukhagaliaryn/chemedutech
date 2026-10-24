@@ -21,7 +21,7 @@
   <section class="card flex flex-col gap-4">
     <h2 class="text-h3">{% translate "Stage" %}</h2>
     {% include "components/input.html" with field=form.title %}
-    <div class="grid gap-4 sm:grid-cols-3">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
       {% include "components/input.html" with field=form.weight %}
       {% include "components/input.html" with field=form.pass_percent %}
       {% include "components/input.html" with field=form.is_required class="sm:pt-7" %}

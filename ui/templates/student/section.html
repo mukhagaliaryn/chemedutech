@@ -24,7 +24,7 @@ say so.
   {% include "components/ring.html" with value=row.percent size=72 stroke=8 label=done %}
 </section>
 
-<div class="grid items-start gap-4 lg:grid-cols-[1fr_1.15fr]">
+<div class="grid grid-cols-1 items-start gap-4 lg:grid-cols-[1fr_1.15fr]">
   <section aria-labelledby="purpose-title" class="card flex flex-col gap-3">
     <h2 id="purpose-title" class="text-[17px] font-bold">{% translate "What the section does" %}</h2>
     <p class="text-[15px] leading-[25px] whitespace-pre-line">{{ section.purpose }}</p>
@@ -58,7 +58,7 @@ say so.
       <h2 id="diag-title" class="text-[19px] font-extrabold">{% translate "Diagnostic tests" %}</h2>
       <a class="link text-sm font-bold" href="{% url 'student:icpai' %}">{% translate "All results" %} →</a>
     </div>
-    <ol class="grid gap-4 lg:grid-cols-3">
+    <ol class="grid grid-cols-1 gap-4 lg:grid-cols-3">
       {% for d in diagnostics %}
         <li class="card flex flex-col gap-4 {% if d.state == 'locked' %}bg-surface-sunken/60{% elif d.state != 'done' %}border-2 border-primary-600 shadow-lift{% endif %}">
           <div class="flex items-start gap-3">

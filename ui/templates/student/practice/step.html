@@ -84,7 +84,7 @@ a follow-up question, the pedagogical correction, the improved task — the anal
             <span class="flex items-center gap-2">{% for n in "123"|make_list %}<span class="num grid size-6 place-items-center rounded-full bg-success-600 text-[11px] text-white">✓</span>{% endfor %}{% translate "The explanation, the task and the time" %} · <span class="num">{{ turn.time_minutes|default:"—" }} {% translate "min" %}</span></span>
             <span class="transition-transform group-open:rotate-180">{% include "components/icons.html#chevron-down" with size=15 %}</span>
           </summary>
-          <div class="grid gap-3 border-t border-line px-4 py-3 md:grid-cols-2">
+          <div class="grid grid-cols-1 gap-3 border-t border-line px-4 py-3 md:grid-cols-2">
             <div><p class="text-[12px] font-extrabold tracking-wide text-ink-faint uppercase">{% translate "The teacher's explanation" %}</p><div class="prose-lesson mt-1">{{ turn.teacher_explanation|rich|default:"—" }}</div></div>
             <div><p class="text-[12px] font-extrabold tracking-wide text-ink-faint uppercase">{% translate "Task" %}</p><div class="prose-lesson mt-1">{{ turn.task|rich|default:"—" }}</div></div>
           </div>
@@ -110,7 +110,7 @@ a follow-up question, the pedagogical correction, the improved task — the anal
               <p class="mt-1.5 text-[14.5px] leading-[23px] whitespace-pre-line">{{ turn.answer }}</p>
             </div>
           </div>
-          <div class="grid gap-3 md:grid-cols-2">
+          <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
             <div class="flex gap-3 rounded-lg border border-danger-600/25 bg-danger-50 p-3.5"><span class="grid size-7 shrink-0 place-items-center rounded-full bg-danger-600 text-white">{% include "components/icons.html#x" with size=13 %}</span><div><h3 class="text-[12.5px] font-extrabold text-danger-700">{% translate "The student's possible error" %}</h3><p class="mt-0.5 text-[13.5px] leading-[20px]">{{ turn.possible_error|default:"—" }}</p></div></div>
             <div class="flex gap-3 rounded-lg border border-primary-600/20 bg-primary-50 p-3.5"><span class="grid size-7 shrink-0 place-items-center rounded-full bg-primary-600 text-white">{% include "components/icons.html#help" with size=13 %}</span><div><h3 class="text-[12.5px] font-extrabold text-primary-700">{% translate "Where it was difficult" %}</h3><p class="mt-0.5 text-[13.5px] leading-[20px]">{{ turn.difficulty|default:"—" }}</p></div></div>
           </div>
@@ -127,7 +127,7 @@ a follow-up question, the pedagogical correction, the improved task — the anal
         {% if turn.analysed_at %}
           <section class="flex flex-col gap-3 rounded-lg border border-line p-4" aria-labelledby="an-title">
             <h2 id="an-title" class="flex items-center gap-2.5 text-[14px] font-extrabold"><span class="num grid size-7 place-items-center rounded-full bg-success-600 text-[12px] text-white">✓</span>{% translate "Analysing the answer" %}</h2>
-            <dl class="grid gap-3 md:grid-cols-2 text-[13.5px]">
+            <dl class="grid grid-cols-1 gap-3 md:grid-cols-2 text-[13.5px]">
               <div><dt class="text-[12px] font-extrabold text-ink-faint uppercase">{% translate "The student's explanation" %}</dt><dd class="prose-lesson mt-0.5">{{ turn.student_analysis|rich }}</dd></div>
               <div><dt class="text-[12px] font-extrabold text-ink-faint uppercase">{% translate "Follow-up question" %}</dt><dd class="prose-lesson mt-0.5">{{ turn.follow_up_question|rich|default:"—" }}</dd></div>
               <div><dt class="text-[12px] font-extrabold text-ink-faint uppercase">{% translate "Pedagogical correction made" %}</dt><dd class="prose-lesson mt-0.5">{{ turn.correction|rich|default:"—" }}</dd></div>
@@ -146,7 +146,7 @@ a follow-up question, the pedagogical correction, the improved task — the anal
             <p class="text-[12.5px] text-ink-soft">{% translate "Check the AI student's answer, find the errors and give an explanation; ask an extra question to improve the student's understanding." %}</p>
             <div class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "The student's explanation" %} <span class="text-danger-600">*</span></span>
               <textarea name="analysis" rows="3" class="input" x-rich.answer data-rt="short" aria-label="{% translate "The student's explanation" %}"></textarea></div>
-            <div class="grid gap-3 md:grid-cols-2">
+            <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
               <label class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Follow-up question" %}</span><textarea name="follow_up" rows="2" class="input"></textarea></label>
               <label class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Pedagogical correction made" %}</span><textarea name="correction" rows="2" class="input"></textarea></label>
             </div>

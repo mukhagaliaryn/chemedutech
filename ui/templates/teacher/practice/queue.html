@@ -15,7 +15,7 @@ practices and the finished microlesson trials (each trial graded apart) of the t
   </div>
 </div>
 <div class="flex flex-wrap items-center justify-between gap-3">
-  <div class="flex gap-1.5" role="tablist" aria-label="{% translate 'Section' %}">
+  <div class="flex flex-wrap gap-1.5" role="tablist" aria-label="{% translate 'Section' %}">
     <a role="tab" href="?what=practice" class="inline-flex h-10 items-center gap-2 rounded-[12px] px-4 text-sm font-bold {% if what == 'practice' %}bg-primary-900 text-white{% else %}bg-surface text-ink-soft ring-1 ring-line{% endif %}">{% translate "Section 5 practices" %}{% if counts.practice %}<span class="num rounded-full bg-warning-500 px-2 text-[12px] text-ink">{{ counts.practice }}</span>{% endif %}</a>
     <a role="tab" href="?what=micro" class="inline-flex h-10 items-center gap-2 rounded-[12px] px-4 text-sm font-bold {% if what == 'micro' %}bg-primary-900 text-white{% else %}bg-surface text-ink-soft ring-1 ring-line{% endif %}">{% translate "Section 6 microlessons" %}{% if counts.micro %}<span class="num rounded-full bg-warning-500 px-2 text-[12px] text-ink">{{ counts.micro }}</span>{% endif %}</a>
     <a role="tab" href="?what=portfolio" class="inline-flex h-10 items-center gap-2 rounded-[12px] px-4 text-sm font-bold {% if what == 'portfolio' %}bg-primary-900 text-white{% else %}bg-surface text-ink-soft ring-1 ring-line{% endif %}">{% translate "Section 7 portfolios" %}{% if counts.portfolio %}<span class="num rounded-full bg-warning-500 px-2 text-[12px] text-ink">{{ counts.portfolio }}</span>{% endif %}</a>
@@ -33,7 +33,7 @@ practices and the finished microlesson trials (each trial graded apart) of the t
     {% if section8 %}
       <div class="flex flex-col gap-2">
         {% for g in group_rows %}
-          <form method="post" class="grid items-end gap-3 rounded-lg border border-line p-3 sm:grid-cols-[1fr_180px_180px_auto]">{% csrf_token %}
+          <form method="post" class="grid grid-cols-1 items-end gap-3 rounded-lg border border-line p-3 sm:grid-cols-[1fr_180px_180px_auto]">{% csrf_token %}
             <input type="hidden" name="group" value="{{ g.group.pk }}">
             <span class="text-[14px] font-bold">{{ g.group }}</span>
             <label class="flex flex-col gap-1"><span class="text-[12px] font-bold">{% translate "Hand in the project by" %}</span><input class="input" type="date" name="hand_in_on" value="{{ g.schedule.hand_in_on|date:'Y-m-d' }}"></label>

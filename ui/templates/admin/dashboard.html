@@ -7,7 +7,7 @@ Only unfold's own classes are used here (its stylesheet is built separately from
 {% block content %}
   {% if kpis %}
   <div class="flex flex-col gap-6 mb-8">
-    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
       {% for k in kpis %}
         {% component "unfold/components/card.html" with href=k.url %}
           {% component "unfold/components/text.html" %}{{ k.title }}{% endcomponent %}

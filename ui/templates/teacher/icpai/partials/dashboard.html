@@ -11,7 +11,7 @@ teacher/icpai.py dashboard_block.{% endcomment %}
     </div>
     <a class="btn btn-inverse btn-sm" href="{% url 'teacher:practice_queue' %}">{% include "components/icons.html#check-square" with size=16 %}{% translate "ICPAI works" %}</a>
   </div>
-  <div class="grid gap-0 xl:grid-cols-[minmax(0,1fr)_340px]">
+  <div class="grid grid-cols-1 gap-0 xl:grid-cols-[minmax(0,1fr)_340px]">
     <div class="min-w-0 overflow-x-auto p-5">
       <table class="w-full min-w-[560px] border-separate border-spacing-1 text-[13px]">
         <caption class="sr-only">{% translate "Groups by ICPAI section: the share of students who passed" %}</caption>

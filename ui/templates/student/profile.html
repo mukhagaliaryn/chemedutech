@@ -24,12 +24,12 @@
     <form method="post" class="flex flex-col gap-4" novalidate>
       {% csrf_token %}<input type="hidden" name="form" value="profile">
       {% if profile_form.non_field_errors %}{% include "components/alert.html" with variant="danger" text=profile_form.non_field_errors|join:" " role="alert" %}{% endif %}
-      <div class="grid gap-4 sm:grid-cols-2">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {% include "components/input.html" with field=profile_form.last_name %}
         {% include "components/input.html" with field=profile_form.first_name %}
       </div>
       {% include "components/input.html" with field=profile_form.middle_name %}
-      <div class="grid gap-4 sm:grid-cols-2">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {% include "components/input.html" with field=profile_form.email %}
         {% include "components/input.html" with field=profile_form.phone %}
       </div>
@@ -42,7 +42,7 @@
     {% if student_profile %}
     <section class="card flex flex-col gap-3" aria-labelledby="g-title">
       <h2 id="g-title" class="text-[17px] font-extrabold">{% translate "Study" %}</h2>
-      <dl class="grid gap-2 sm:grid-cols-2">
+      <dl class="grid grid-cols-1 gap-2 sm:grid-cols-2">
         {% with g=student_profile.group %}
           {% if g %}
             <div class="rounded-md bg-canvas px-4 py-3"><dt class="text-caption font-normal text-ink-faint">{% translate "Group" %}</dt><dd class="mt-0.5 font-semibold">{{ g }}</dd></div>

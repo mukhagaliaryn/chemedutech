@@ -49,7 +49,7 @@ Texts are gettext strings; their kk translation is the guide's text, verbatim (Â
 
 {% if page == 1 %}
   {# ===== 1 Â· the platform, its aim and tasks (image3â€“4) ===== #}
-  <div class="grid gap-5 lg:grid-cols-[1fr_1.05fr_1fr]">
+  <div class="grid grid-cols-1 gap-5 lg:grid-cols-[1fr_1.05fr_1fr]">
     <div class="flex flex-col gap-5">
       <div data-reveal>
         <article class="tilt card flex flex-col gap-4 shadow-lift" x-data="tilt" @pointermove="move" @pointerleave="leave">
@@ -197,7 +197,7 @@ Texts are gettext strings; their kk translation is the guide's text, verbatim (Â
       </div>
     </li>
   {% endpartialdef %}
-  <div class="relative grid items-center gap-5 lg:grid-cols-[1fr_320px_1fr]">
+  <div class="relative grid grid-cols-1 items-center gap-5 lg:grid-cols-[1fr_320px_1fr]">
     {# connectors from the results to the flask (wide screens) #}
     <svg aria-hidden="true" class="pointer-events-none absolute inset-0 h-full w-full max-lg:hidden" viewBox="0 0 100 100" preserveAspectRatio="none">
       <g fill="none" stroke="#8aaef7" stroke-width="2" vector-effect="non-scaling-stroke">
@@ -281,7 +281,7 @@ Texts are gettext strings; their kk translation is the guide's text, verbatim (Â
           <span class="num text-[28px] font-extrabold {{ ink }}">{{ letter }}</span>
           <span class="ml-auto" aria-hidden="true">{% partial art %}</span>
         </div>
-        <div class="grid gap-3 sm:grid-cols-[1fr_1.25fr]">
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_1.25fr]">
           <div class="rounded-lg bg-canvas p-3.5">
             <p class="text-caption font-semibold text-ink-faint">{% translate "Component" %}</p>
             <h3 class="mt-1 text-[16px] leading-[22px] font-bold">{{ name }}</h3>
@@ -320,7 +320,7 @@ Texts are gettext strings; their kk translation is the guide's text, verbatim (Â
       {% endif %}
     </svg>
   {% endpartialdef %}
-  <div class="relative grid gap-5 lg:grid-cols-2 lg:gap-x-[220px] lg:gap-y-10 lg:py-4">
+  <div class="relative grid grid-cols-1 gap-5 lg:grid-cols-2 lg:gap-x-[220px] lg:gap-y-10 lg:py-4">
     <svg aria-hidden="true" class="pointer-events-none absolute inset-0 h-full w-full max-lg:hidden" preserveAspectRatio="none" viewBox="0 0 100 100">
       <g stroke="#8aaef7" stroke-width="2" fill="none">
         {% for d in "M50,50 L40,26 M50,50 L60,26 M50,50 L40,74 M50,50 L60,74"|split:"M" %}{% if d %}<path class="dash-flow" vector-effect="non-scaling-stroke" d="M{{ d }}"/>{% endif %}{% endfor %}

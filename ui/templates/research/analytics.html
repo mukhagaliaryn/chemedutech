@@ -43,7 +43,7 @@ agreement and the random spot-check, then the full descriptive table. Descriptiv
   {% endfor %}
 </section>
 
-<div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+<div class="grid grid-cols-1 items-start gap-5 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
   {# ---- grouped bars by stage ---- #}
   <section class="card min-w-0" aria-labelledby="by-stage">
     <div class="flex flex-wrap items-center justify-between gap-3">
@@ -90,7 +90,7 @@ agreement and the random spot-check, then the full descriptive table. Descriptiv
   </section>
 </div>
 
-<div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+<div class="grid grid-cols-1 items-start gap-5 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
   {# ---- frequent errors ---- #}
   <section class="card min-w-0" aria-labelledby="errs" x-data="{ kind: 'order' }">
     <div class="mb-3.5 flex flex-wrap items-center justify-between gap-3">
@@ -241,7 +241,7 @@ agreement and the random spot-check, then the full descriptive table. Descriptiv
 
 {# ---- ICPAI sections, grades of sections 5/6/8, the AI (STEP-39) ---- #}
 {% if has_programme %}
-<div class="grid items-start gap-4 xl:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
+<div class="grid grid-cols-1 items-start gap-4 xl:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
   <section aria-labelledby="sfun" class="card flex flex-col gap-3">
     <div>
       <h2 id="sfun" class="text-[17px] font-extrabold">{% translate "ICPAI sections passed" %}</h2>

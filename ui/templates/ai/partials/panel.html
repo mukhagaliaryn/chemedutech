@@ -40,7 +40,7 @@ When AI is off the panel says so and the page works on without it.
             {% translate "Choose the kind of help:" %}
             <span class="transition-transform" :class="open && 'rotate-180'">{% include "components/icons.html#chevron-down" with size=15 %}</span>
           </button>
-          <div x-show="open" x-transition.opacity class="grid gap-1 px-2 pb-2 sm:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2" role="group" aria-label="{% translate 'Quick requests' %}">
+          <div x-show="open" x-transition.opacity class="grid grid-cols-1 gap-1 px-2 pb-2 sm:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2" role="group" aria-label="{% translate 'Quick requests' %}">
             {% for intent, label, icon in quick %}
               <button type="submit" name="intent" value="{{ intent }}" class="flex items-center gap-2.5 rounded-[10px] px-2 py-2 text-left text-[13px] leading-[17px] font-semibold text-ink transition-colors hover:bg-white disabled:opacity-50">
                 <span class="grid size-7 shrink-0 place-items-center rounded-[8px] bg-white text-stage-video shadow-[0_1px_2px_rgb(0_0_0/0.06)]">{% include "components/icons.html#"|add:icon with size=15 %}</span>{{ label }}

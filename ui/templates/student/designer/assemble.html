@@ -12,7 +12,7 @@ what the assembled lesson contains (the guide's eight points) and the button tha
 {% block content %}
 {% include "student/designer/partials/flow.html" with step=2 %}
 
-<div class="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_380px]">
+<div class="grid grid-cols-1 items-start gap-4 lg:grid-cols-[minmax(0,1fr)_380px]">
   {# ---- the lesson's details ---- #}
   <form id="details-form" method="post" class="card flex flex-col gap-4" aria-labelledby="details-title">{% csrf_token %}
     <div class="flex items-center gap-3">
@@ -84,7 +84,7 @@ what the assembled lesson contains (the guide's eight points) and the button tha
 {# ---- the stages at a glance ---- #}
 <section class="card flex flex-col gap-3" aria-labelledby="glance-title">
   <h2 id="glance-title" class="text-[17px] font-extrabold">{% translate "Lesson structure" %}</h2>
-  <ol class="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-3">
+  <ol class="grid grid-cols-1 gap-2.5 sm:grid-cols-2 xl:grid-cols-3">
     {% for row in stages %}{% with s=row.stage %}
       <li class="tone-{{ forloop.counter }}">
         <a href="{% url 'student:lesson_stage' section.number lesson.pk s.order %}" class="flex items-center gap-3 rounded-lg border border-line px-3 py-3 transition-colors hover:border-(--tone) hover:bg-(--tone-50)">
@@ -100,7 +100,7 @@ what the assembled lesson contains (the guide's eight points) and the button tha
 {# ---- what the assembled lesson contains (the guide's eight points) ---- #}
 <section class="card flex flex-col gap-3" aria-labelledby="contains-title">
   <h2 id="contains-title" class="text-[17px] font-extrabold">{% translate "The assembled lesson brings together:" %}</h2>
-  <ol class="grid gap-2 text-sm sm:grid-cols-2">
+  <ol class="grid grid-cols-1 gap-2 text-sm sm:grid-cols-2">
     {% translate "The name, topic, aim and expected results of the authorial lesson." as c1 %}
     {% translate "The stages of the lesson and their duration." as c2 %}
     {% translate "The teacher's actions at each stage." as c3 %}

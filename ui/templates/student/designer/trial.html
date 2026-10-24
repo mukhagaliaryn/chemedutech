@@ -38,7 +38,7 @@ the way to «Trial results». The guide's requirement — the AI student is a si
   {# ---- the level ---- #}
   <form method="post" action="{% url 'student:lesson_trial_start' section.number lesson.pk %}" x-show="choose" x-cloak class="card flex flex-col gap-4" aria-labelledby="level-title">{% csrf_token %}
     <h2 id="level-title" class="text-[17px] font-extrabold">{% translate "Choose the AI student's level" %}</h2>
-    <div class="grid gap-3 md:grid-cols-3" role="radiogroup">
+    <div class="grid grid-cols-1 gap-3 md:grid-cols-3" role="radiogroup">
       {% for value, text in levels %}
         <label class="group relative flex cursor-pointer flex-col items-center gap-3 rounded-lg border-2 border-line p-5 text-center transition-all hover:-translate-y-0.5 hover:shadow-lift has-checked:border-stage-video has-checked:bg-ai-50/50">
           <input type="radio" name="level" value="{{ value }}" class="sr-only" {% if value == "medium" %}checked{% endif %}>

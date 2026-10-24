@@ -18,7 +18,7 @@
   </section>
   <section class="card flex flex-col gap-4">
     <h2 class="text-h3">{% translate "Enrolment and order" %}</h2>
-    <div class="grid gap-4 sm:grid-cols-3">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
       {% include "components/input.html" with field=form.status %}
       {% include "components/input.html" with field=form.enrollment_mode %}
       {% include "components/input.html" with field=form.enroll_code %}
@@ -27,13 +27,13 @@
   </section>
   <section class="card flex flex-col gap-4">
     <h2 class="text-h3">{% translate "Grading" %}</h2>
-    <div class="grid gap-4 sm:grid-cols-2">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
       {% include "components/input.html" with field=form.passing_score %}
       {% include "components/input.html" with field=form.certificate_enabled %}
     </div>
     {% include "components/input.html" with field=form.review_sample_percent class="max-w-xs" %}
     <p class="text-sm text-ink-soft">{% translate "Share of each stage kind in a topic score. Kinds missing from a topic drop out and the rest are rescaled; several stages of one kind split its share." %}</p>
-    <div class="grid gap-4 sm:grid-cols-5">{% for f in form.weight_fields %}{% include "components/input.html" with field=f %}{% endfor %}</div>
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-5">{% for f in form.weight_fields %}{% include "components/input.html" with field=f %}{% endfor %}</div>
   </section>
   <div class="flex gap-2">
     <button type="submit" class="btn btn-primary">{% include "components/icons.html#save" %}{% translate "Save" %}</button>

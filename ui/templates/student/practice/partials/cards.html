@@ -28,7 +28,7 @@ status and the teacher's grade. practices — student.practice.practice_context;
     <h2 id="pr-title" class="text-[19px] font-extrabold">{% translate "Choose the authorial lesson" %}</h2>
     <p class="text-sm text-ink-soft">{% translate "Three practice lessons — one for each of your authorial lessons." %}</p>
   </div>
-  <ul class="grid gap-5 lg:grid-cols-3">
+  <ul class="grid grid-cols-1 gap-5 lg:grid-cols-3">
     {% for card in practices %}{% with t=card.template p=card.practice %}
       <li class="group card card-lift flex flex-col overflow-hidden p-0" data-reveal>
         <div class="tpl-{{ t.code }} relative h-[150px] overflow-hidden text-white">

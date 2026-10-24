@@ -69,7 +69,7 @@ All behaviour is labRunner (static/js/lab/engine.js) — only the layout lives h
   <div class="relative flex min-h-0 flex-1 flex-col lg:flex-row">
 
     {# ---------- equipment rail (wide screens) / bottom sheet (small screens) ---------- #}
-    <div x-show="toolsOpen" x-cloak x-transition.opacity class="fixed inset-0 z-40 bg-[rgba(13,33,73,.45)] lg:hidden" @click="toolsOpen = false"></div>
+    <div x-show="toolsOpen" x-cloak x-transition.opacity class="fixed inset-0 z-40 bg-[rgba(13,33,73,.45)] lg:hidden" @click="toolsOpen = false" @keydown.escape.window="toolsOpen = false"></div>
     <aside class="lab-tools flex select-none flex-col border-line bg-surface max-lg:fixed max-lg:inset-x-0 max-lg:bottom-0 max-lg:z-50 max-lg:max-h-[70dvh] max-lg:rounded-t-[24px] max-lg:shadow-modal max-lg:transition-transform lg:shrink-0 lg:border-r"
            :class="[toolsOpen ? 'max-lg:translate-y-0' : 'max-lg:translate-y-full', toolsCollapsed ? 'lg:w-[72px]' : 'lg:w-[272px]']"
            aria-labelledby="tools-title">
@@ -87,7 +87,7 @@ All behaviour is labRunner (static/js/lab/engine.js) — only the layout lives h
         <template x-for="group in itemGroups" :key="group.label">
           <div class="mb-3 flex flex-col gap-2">
             <h3 class="text-caption font-semibold text-ink-faint" :class="toolsCollapsed && 'lg:sr-only'" x-text="group.label"></h3>
-            <ul class="grid gap-2 sm:grid-cols-2 lg:grid-cols-1">
+            <ul class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-1">
               <template x-for="it in group.items" :key="it.key">
                 <li class="group relative flex touch-none items-center gap-2.5 rounded-md border p-2 transition-[border-color,box-shadow,transform]"
                     :class="[has(it.key) ? 'border-success-50 bg-[#f3faf7]' : 'cursor-grab border-line bg-surface hover:-translate-y-px hover:border-primary-300 hover:shadow-[0_8px_20px_rgba(20,33,61,.08)]', toolsCollapsed && 'lg:justify-center lg:p-1.5']"
@@ -356,7 +356,7 @@ All behaviour is labRunner (static/js/lab/engine.js) — only the layout lives h
           <h1 id="intro-title" class="mt-1 text-[28px] leading-9 font-extrabold tracking-[-0.02em]" x-text="exp.title"></h1>
           <p class="mt-2 max-w-[65ch] text-[17px] leading-relaxed text-ink-soft"><span class="font-bold text-ink" x-text="ui.goal + ': '"></span><span x-text="exp.goal"></span></p>
         </div>
-        <div class="grid gap-3 md:grid-cols-2">
+        <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
           <div class="rounded-card border border-line bg-surface p-5">
             <h2 class="mb-3 text-[15px] font-extrabold" x-text="ui.tools"></h2>
             <ul class="grid gap-2">

@@ -13,30 +13,28 @@ Context: teacher/icpai.py conversation.{% endcomment %}
   <span class="grid size-12 place-items-center rounded-full bg-[linear-gradient(135deg,var(--color-stage-lab),var(--color-primary-600))] text-white">{% include "components/icons.html#sparkle" with size=22 %}</span>
   <div class="min-w-0 flex-1">
     <h1 class="text-[20px] leading-7 font-extrabold">{{ conversation.get_mode_display }}</h1>
-    <p class="num text-[13px] text-ink-soft">{{ conversation.context_type }} #{{ conversation.context_id }} · {{ conversation.prompt_version }} · {{ conversation.model }} · {{ conversation.created_at|date:"d.m.Y H:i" }}</p>
+    <p class="num text-[13px] break-words text-ink-soft">{{ conversation.context_type }} #{{ conversation.context_id }} · {{ conversation.prompt_version }} · {{ conversation.model }} · {{ conversation.created_at|date:"d.m.Y H:i" }} · {% blocktranslate with i=tokens.i|default:0 o=tokens.o|default:0 %}{{ i }} in · {{ o }} out tokens{% endblocktranslate %}</p>
   </div>
-  <p class="num text-caption text-ink-soft">{% blocktranslate with i=tokens.i|default:0 o=tokens.o|default:0 %}{{ i }} in · {{ o }} out tokens{% endblocktranslate %}</p>
 </section>
 <p class="text-caption text-ink-soft">{% translate "Read only. The student's messages and the AI's answers are kept as research data." %}</p>
 <ol class="flex flex-col gap-3">
-  {% for m in messages_ %}
+  {% for row in messages_ %}{% with m=row.m %}
     {% if m.role == "user" %}
       <li class="flex flex-col items-end gap-1">
         <span class="text-caption text-ink-soft">{% translate "Student" %}{% if m.intent %} · {{ m.intent }}{% endif %} · <span class="num">{{ m.created_at|date:"d.m H:i" }}</span></span>
-        <p class="max-w-[85%] rounded-xl rounded-br-sm bg-primary-600 px-4 py-2.5 text-[14px] leading-[21px] whitespace-pre-line text-white">{{ m.content|default:"—" }}</p>
+        <p class="max-w-[85%] rounded-xl rounded-br-sm bg-primary-600 px-4 py-2.5 text-[14px] leading-[21px] whitespace-pre-line [overflow-wrap:anywhere] text-white">{{ m.content|default:"—" }}</p>
       </li>
     {% else %}
       <li class="flex flex-col items-start gap-1">
         <span class="text-caption text-ink-soft">{% translate "AI" %}{% if m.intent %} · {{ m.intent }}{% endif %} · <span class="num">{{ m.created_at|date:"d.m H:i" }} · {{ m.input_tokens }}+{{ m.output_tokens }} tok · {{ m.latency_ms }} ms</span></span>
-        <div class="max-w-[85%] rounded-xl rounded-bl-sm border border-line bg-surface px-4 py-2.5 text-[14px] leading-[21px] shadow-sm">
+        <div class="max-w-[85%] min-w-0 rounded-xl rounded-bl-sm border border-line bg-surface px-4 py-2.5 text-[14px] leading-[21px] [overflow-wrap:anywhere] shadow-sm">
           {% if m.error %}<p class="text-danger-700">{% translate "The call failed" %}: {{ m.error|truncatechars:200 }}</p>{% endif %}
-          {% if m.content %}<p class="whitespace-pre-line">{{ m.content }}</p>{% endif %}
-          {% if m.structured %}
-            <dl class="mt-1 flex flex-col gap-1 text-[12.5px]">{% for k, v in m.structured.items %}<div><dt class="inline font-bold text-ink-soft">{{ k }}:</dt> <dd class="inline break-words">{{ v }}</dd></div>{% endfor %}</dl>
-          {% endif %}
+          {% if row.fields %}{# a structured answer: its fields (the raw JSON text is in the CSV) #}
+            <dl class="flex flex-col gap-1.5 text-[13px]">{% for k, lines in row.fields %}<div><dt class="font-bold text-ink-soft">{{ k }}</dt>{% for line in lines %}<dd>{{ line }}</dd>{% endfor %}</div>{% endfor %}</dl>
+          {% elif m.content %}<p class="whitespace-pre-line">{{ m.content }}</p>{% endif %}
         </div>
       </li>
     {% endif %}
-  {% empty %}<li class="text-sm text-ink-faint">—</li>{% endfor %}
+  {% endwith %}{% empty %}<li class="text-sm text-ink-faint">—</li>{% endfor %}
 </ol>
 {% endblock %}

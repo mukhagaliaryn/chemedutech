@@ -71,7 +71,7 @@ graded answer of this field) + «criteria» (AI scores of an open answer); gradi
     {% endfor %}
 
   {% elif item.kind == "matching" %}
-    <div class="grid gap-2 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] sm:items-center">
+    <div class="grid grid-cols-1 gap-2 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] sm:items-center">
       {% for p in row.pairs %}
         <label class="font-medium" for="{{ name }}_m{{ p.index }}">{{ p.left }}</label>
         <select id="{{ name }}_m{{ p.index }}" class="input" name="{{ name }}_m{{ p.index }}">

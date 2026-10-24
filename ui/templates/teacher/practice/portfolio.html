@@ -10,7 +10,7 @@ feedback below.{% endcomment %}
 {% block main_class %}max-w-[1440px]{% endblock %}
 {% block content %}
 <a class="link inline-flex items-center gap-1.5 text-sm font-semibold" href="{% url 'teacher:practice_queue' %}?what=portfolio">{% include "components/icons.html#arrow-left" %}{% translate "Section 7 portfolios" %}</a>
-<div class="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_420px]">
+<div class="grid grid-cols-1 items-start gap-4 xl:grid-cols-[minmax(0,1fr)_420px]">
   <div class="min-w-0">{% if version %}{% include "student/portfolio/partials/sheet.html" %}{% endif %}</div>
   <div class="flex flex-col gap-4 xl:sticky xl:top-20">
     {% if waiting %}

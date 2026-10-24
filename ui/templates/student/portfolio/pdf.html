@@ -25,7 +25,7 @@ with a plain stylesheet (WeasyPrint does not read the Tailwind build).
   <div class="flex flex-col gap-5 p-[clamp(16px,2.6vw,28px)]">
     {# 1 #}
     <section><h3 class="mb-2 text-[15px] font-extrabold text-primary-700">1. {{ parts.0 }}</h3>
-      <dl class="grid gap-2 text-[13.5px] sm:grid-cols-2 lg:grid-cols-4">
+      <dl class="grid grid-cols-1 gap-2 text-[13.5px] sm:grid-cols-2 lg:grid-cols-4">
         <div class="rounded-lg bg-canvas px-3 py-2"><dt class="text-[11px] font-bold text-ink-faint uppercase">{% translate "Student's full name" %}</dt><dd class="font-bold">{{ data.student.name }}</dd></div>
         <div class="rounded-lg bg-canvas px-3 py-2"><dt class="text-[11px] font-bold text-ink-faint uppercase">{% translate "Education programme" %}</dt><dd class="font-bold">{{ data.student.programme|default:"—" }}</dd></div>
         <div class="rounded-lg bg-canvas px-3 py-2"><dt class="text-[11px] font-bold text-ink-faint uppercase">{% translate "Study group" %}</dt><dd class="font-bold">{{ data.student.group|default:"—" }}</dd></div>
@@ -42,15 +42,15 @@ with a plain stylesheet (WeasyPrint does not read the Tailwind build).
     {# 3 #}
     <section><h3 class="mb-2 text-[15px] font-extrabold text-primary-700">3. {{ parts.2 }}</h3>
       <p class="text-[13px]">{{ data.course.title }}{% if data.course.score is not None %} · <span class="num font-bold">{{ data.course.score|floatformat:0 }}%</span>{% endif %}{% if data.course.passed %} · <span class="font-bold text-success-700">{% translate "Passed" %}</span>{% endif %}</p>
-      <ul class="mt-1 grid gap-1 text-[12.5px] sm:grid-cols-2">{% for t in data.course.topics %}<li class="flex justify-between gap-2 rounded-[8px] bg-canvas px-3 py-1.5"><span>{{ t.title }}</span><span class="num text-ink-soft">{{ t.status }}{% if t.score is not None %} · {{ t.score|floatformat:0 }}%{% endif %}</span></li>{% empty %}<li class="text-ink-faint">—</li>{% endfor %}</ul>
+      <ul class="mt-1 grid grid-cols-1 gap-1 text-[12.5px] sm:grid-cols-2">{% for t in data.course.topics %}<li class="flex justify-between gap-2 rounded-[8px] bg-canvas px-3 py-1.5"><span>{{ t.title }}</span><span class="num text-ink-soft">{{ t.status }}{% if t.score is not None %} · {{ t.score|floatformat:0 }}%{% endif %}</span></li>{% empty %}<li class="text-ink-faint">—</li>{% endfor %}</ul>
     </section>
     {# 4 #}
     <section><h3 class="mb-2 text-[15px] font-extrabold text-primary-700">4. {{ parts.3 }}</h3>
-      <ul class="grid gap-2 sm:grid-cols-3">{% for x in data.lessons %}<li class="rounded-lg border border-line px-3 py-2 text-[12.5px]"><p class="font-bold">{{ x.title }}</p><p class="text-ink-soft">{{ x.status }} · {% blocktranslate with n=x.redesigned %}{{ n }} stages redesigned{% endblocktranslate %}</p></li>{% empty %}<li class="text-ink-faint">—</li>{% endfor %}</ul>
+      <ul class="grid grid-cols-1 gap-2 sm:grid-cols-3">{% for x in data.lessons %}<li class="rounded-lg border border-line px-3 py-2 text-[12.5px]"><p class="font-bold">{{ x.title }}</p><p class="text-ink-soft">{{ x.status }} · {% blocktranslate with n=x.redesigned %}{{ n }} stages redesigned{% endblocktranslate %}</p></li>{% empty %}<li class="text-ink-faint">—</li>{% endfor %}</ul>
     </section>
     {# 5 #}
     <section><h3 class="mb-2 text-[15px] font-extrabold text-primary-700">5. {{ parts.4 }}</h3>
-      <ul class="grid gap-2 sm:grid-cols-3">{% for x in data.practices %}<li class="rounded-lg border border-line px-3 py-2 text-[12.5px]"><p class="font-bold">{{ x.title }}</p><p class="text-ink-soft">{{ x.status }}{% if x.grade is not None %} · <span class="num font-bold text-ink">{{ x.grade }}/10</span>{% endif %}</p>{% if x.comment %}<p class="mt-1 text-ink-soft italic">«{{ x.comment }}»</p>{% endif %}</li>{% empty %}<li class="text-ink-faint">—</li>{% endfor %}</ul>
+      <ul class="grid grid-cols-1 gap-2 sm:grid-cols-3">{% for x in data.practices %}<li class="rounded-lg border border-line px-3 py-2 text-[12.5px]"><p class="font-bold">{{ x.title }}</p><p class="text-ink-soft">{{ x.status }}{% if x.grade is not None %} · <span class="num font-bold text-ink">{{ x.grade }}/10</span>{% endif %}</p>{% if x.comment %}<p class="mt-1 text-ink-soft italic">«{{ x.comment }}»</p>{% endif %}</li>{% empty %}<li class="text-ink-faint">—</li>{% endfor %}</ul>
     </section>
     {# 6 #}
     <section><h3 class="mb-2 text-[15px] font-extrabold text-primary-700">6. {{ parts.5 }}</h3>

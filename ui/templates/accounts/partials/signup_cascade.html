@@ -1,5 +1,5 @@
 {% load i18n %}{# University → Faculty → Department → Group; re-rendered by accounts:signup_cascade on every change #}
-<div id="signup-cascade" class="grid gap-4 sm:grid-cols-2"
+<div id="signup-cascade" class="grid grid-cols-1 gap-4 sm:grid-cols-2"
      hx-get="{% url 'accounts:signup_cascade' %}" hx-trigger="change" hx-include="this" hx-target="this" hx-swap="outerHTML">
   {% for name in form.CASCADE %}{% with field=form|get_field:name %}
     {% include "components/input.html" with field=field %}

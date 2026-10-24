@@ -23,7 +23,7 @@ error), the methodical suggestion and whether the stage has been revised since; 
     </div>
     <a class="btn btn-secondary btn-sm" href="{% url 'student:lesson_trial' section.number lesson.pk %}?trial={{ trial.pk }}">{% include "components/icons.html#eye" %}{% translate "The AI student's answers" %}</a>
   </div>
-  <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+  <ul class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
     <li class="flex items-center gap-3 rounded-lg bg-success-50 p-4"><span class="grid size-11 place-items-center rounded-full bg-success-600 text-white">{% include "components/icons.html#check" with size=20 %}</span><span><span class="num block text-[26px] leading-none font-extrabold">{{ counts.correct }}</span><span class="text-[13px] font-semibold text-success-700">{% translate "Clear tasks" %}</span></span></li>
     <li class="flex items-center gap-3 rounded-lg bg-warning-50 p-4"><span class="grid size-11 place-items-center rounded-full bg-warning-500 text-white">{% include "components/icons.html#alert" with size=20 %}</span><span><span class="num block text-[26px] leading-none font-extrabold">{{ counts.partial }}</span><span class="text-[13px] font-semibold text-warning-700">{% translate "Need improving" %}</span></span></li>
     <li class="flex items-center gap-3 rounded-lg bg-danger-50 p-4"><span class="grid size-11 place-items-center rounded-full bg-danger-600 text-white">{% include "components/icons.html#x" with size=20 %}</span><span><span class="num block text-[26px] leading-none font-extrabold">{{ counts.wrong }}</span><span class="text-[13px] font-semibold text-danger-700">{% translate "Possible error" %}</span></span></li>
@@ -44,7 +44,7 @@ error), the methodical suggestion and whether the stage has been revised since; 
         {% if r.revised %}<span class="badge badge-info text-[11px] font-bold">{% include "components/icons.html#edit" with size=12 %}{% translate "Revised" %}</span>{% endif %}
       </div>
       {% if t %}
-        <div class="grid gap-3 px-5 md:grid-cols-3">
+        <div class="grid grid-cols-1 gap-3 px-5 md:grid-cols-3">
           <div class="rounded-lg bg-primary-50/70 p-3.5"><h3 class="flex items-center gap-1.5 text-[12.5px] font-extrabold text-primary-700">{% include "components/icons.html#help" with size=14 %}{% translate "Possible difficulties" %}</h3><p class="mt-1 text-[13px] leading-[19px]">{{ t.difficulty|default:"—" }}</p></div>
           <div class="rounded-lg bg-danger-50/70 p-3.5"><h3 class="flex items-center gap-1.5 text-[12.5px] font-extrabold text-danger-700">{% include "components/icons.html#x" with size=14 %}{% translate "Scientific remarks" %}</h3><p class="mt-1 text-[13px] leading-[19px]">{{ t.possible_error|default:"—" }}</p></div>
           <div class="rounded-lg bg-success-50/70 p-3.5"><h3 class="flex items-center gap-1.5 text-[12.5px] font-extrabold text-success-700">{% include "components/icons.html#check" with size=14 %}{% translate "Methodical suggestions" %}</h3><p class="mt-1 text-[13px] leading-[19px]">{{ t.suggestion|default:"—" }}</p></div>

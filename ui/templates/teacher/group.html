@@ -250,7 +250,7 @@ the student drawer). Every destructive or irreversible action asks in the shared
       <button type="submit" formmethod="dialog" formnovalidate class="close-btn" aria-label="{% translate 'Close' %}">{% include "components/icons.html#x" %}</button>
     </div>
     {% include "components/input.html" with field=attach_form.course %}
-    <div class="grid gap-4 sm:grid-cols-2">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
       {% include "components/input.html" with field=attach_form.starts_on %}
       {% include "components/input.html" with field=attach_form.ends_on %}
     </div>

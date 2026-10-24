@@ -29,7 +29,7 @@ AI check marked every stage correct.{% endcomment %}
       </div>
     </fieldset>
     <fieldset class="flex flex-col gap-2"><legend class="mb-2 text-[14px] font-bold">{% translate "The AI student's level" %}</legend>
-      <div class="grid gap-3 md:grid-cols-3">
+      <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
         {% for value, text in levels %}
           <label class="group relative flex cursor-pointer items-start gap-3 rounded-lg border-2 border-line p-4 transition-all hover:shadow-lift has-checked:border-stage-video has-checked:bg-ai-50/50">
             <input type="radio" name="level" value="{{ value }}" class="sr-only" {% if value == "medium" %}checked{% endif %}>
@@ -39,7 +39,7 @@ AI check marked every stage correct.{% endcomment %}
         {% endfor %}
       </div>
     </fieldset>
-    <ol class="grid gap-2 text-[13.5px] md:grid-cols-3">
+    <ol class="grid grid-cols-1 gap-2 text-[13.5px] md:grid-cols-3">
       {% translate "Starting the trial: the 10-minute timer starts." as o1 %}{% translate "The teacher's explanation: you explain the topic to the virtual student." as o2 %}{% translate "Asking a question: you ask the AI student your question." as o3 %}{% translate "The AI student's answer: fully correct, partly correct or wrong." as o4 %}{% translate "The teacher's pedagogical action: an extra explanation, a leading question or checking again." as o5 %}{% translate "Finishing: the dialogue is gathered into the trial protocol." as o6 %}
       {% for o in o1|add:"|"|add:o2|add:"|"|add:o3|add:"|"|add:o4|add:"|"|add:o5|add:"|"|add:o6|split:"|" %}
         <li class="tone-{{ forloop.counter }} flex items-start gap-2.5 rounded-lg bg-(--tone-50) px-3 py-2.5"><span class="num grid size-6 shrink-0 place-items-center rounded-full bg-(--tone) text-[12px] font-extrabold text-white">{{ forloop.counter }}</span>{{ o }}</li>

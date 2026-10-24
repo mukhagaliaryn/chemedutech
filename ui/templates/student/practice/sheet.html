@@ -15,7 +15,7 @@ copied — SPEC О-7); the eight stages of part II at a glance; what is missing 
   <a class="link inline-flex items-center gap-1.5 font-semibold" href="{% url 'student:section' section.number %}">{% include "components/icons.html#arrow-left" %}{{ section.number }}. {{ section.title }}</a>
 </nav>
 
-<div class="grid items-start gap-4 xl:grid-cols-[260px_minmax(0,1fr)]">
+<div class="grid grid-cols-1 items-start gap-4 xl:grid-cols-[260px_minmax(0,1fr)]">
   {% include "student/practice/partials/nav.html" with current="details" %}
 
   <div class="flex min-w-0 flex-col gap-4">
@@ -28,7 +28,7 @@ copied — SPEC О-7); the eight stages of part II at a glance; what is missing 
     {# ---- I. About the authorial lesson ---- #}
     <form method="post" class="card flex flex-col gap-4" aria-labelledby="i-title">{% csrf_token %}
       <h2 id="i-title" class="flex items-center gap-2.5 text-[17px] font-extrabold"><span class="grid size-8 place-items-center rounded-full bg-primary-900 text-[13px] text-white">I</span>{% translate "About the authorial lesson" %}</h2>
-      <div class="grid gap-4 md:grid-cols-2">
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
         <label class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Name of the authorial lesson" %}</span>
           <input class="input" name="title" maxlength="255" value="{{ lesson.title }}" {% if lesson.status == 'final' %}disabled{% endif %}></label>
         <label class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Chemistry topic" %}</span>
@@ -49,7 +49,7 @@ copied — SPEC О-7); the eight stages of part II at a glance; what is missing 
         <textarea class="input" name="aim" rows="2" {% if lesson.status == 'final' %}disabled{% endif %}>{{ lesson.aim }}</textarea></label>
       <div class="flex flex-col gap-1.5" x-data><span class="text-[13px] font-bold">{% translate "Expected results" %}</span>
         <textarea name="outcomes" rows="3" class="input" x-rich.answer{% if lesson.status == 'final' %}="true"{% endif %} data-rt="short" aria-label="{% translate 'Expected results' %}">{{ lesson.outcomes }}</textarea></div>
-      <div class="grid gap-4 md:grid-cols-2">
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
         <label class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Authorial method used" %}</span>
           <textarea class="input" name="method" rows="2" {% if lesson.status == 'final' %}disabled{% endif %}>{{ lesson.method }}</textarea></label>
         <label class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Digital tools used" %}</span>
@@ -83,7 +83,7 @@ copied — SPEC О-7); the eight stages of part II at a glance; what is missing 
         <h2 id="ii-title" class="flex items-center gap-2.5 text-[17px] font-extrabold"><span class="grid size-8 place-items-center rounded-full bg-primary-900 text-[12px] text-white">II</span>{% translate "Organising the lesson by stages" %}</h2>
         <span class="num text-sm font-bold text-ink-soft">{{ filled }} / {{ stages|length }}</span>
       </div>
-      <ol class="grid gap-2.5 sm:grid-cols-2 2xl:grid-cols-4">
+      <ol class="grid grid-cols-1 gap-2.5 sm:grid-cols-2 2xl:grid-cols-4">
         {% for s in stages %}{% with spec=specs|get:s.order %}
           <li class="tone-{{ s.order }}">
             <a href="{% url 'student:practice_stage' section.number lesson.pk s.order %}" class="flex h-full flex-col gap-1.5 rounded-lg border border-(--tone)/25 bg-(--tone-50) p-3.5 transition-all hover:-translate-y-0.5 hover:border-(--tone) hover:shadow-lift">

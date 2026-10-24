@@ -21,7 +21,7 @@ directions (asked for after the trial; compared with the previous trial), the te
   {% if grade %}<span class="num text-[28px] font-extrabold text-success-700">{{ grade.total }}<span class="text-[16px] text-ink-faint"> / 10</span></span>{% endif %}
 </section>
 
-<div class="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_420px]">
+<div class="grid grid-cols-1 items-start gap-4 xl:grid-cols-[minmax(0,1fr)_420px]">
   <section class="card flex min-w-0 flex-col gap-3" aria-labelledby="pr-title">
     <h2 id="pr-title" class="text-[16px] font-extrabold">{% translate "Trial protocol" %}</h2>
     {% if trial.mode == "real" %}

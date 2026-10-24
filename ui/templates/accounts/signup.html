@@ -64,7 +64,7 @@ signupWizard in static/js/ui.js); after a server error the wizard opens on the f
         {# --- step 1 --- #}
         <section x-show="step === 1" class="fade flex flex-col gap-[18px]" data-step="1">
           <div><h2 class="text-2xl font-extrabold tracking-[-0.015em]">{% translate "Personal details" %}</h2><p class="mt-1 text-ink-soft">{% translate "This is how your name will appear on the certificate." %}</p></div>
-          <div class="grid gap-4 sm:grid-cols-2">
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {% for name in "first_name last_name email"|split %}{% with field=form|get_field:name %}
               <div class="field{% if name == 'email' %} sm:col-span-2{% endif %}">
                 <label class="label" for="{{ field.id_for_label }}">{{ field.label }}</label>
@@ -73,7 +73,7 @@ signupWizard in static/js/ui.js); after a server error the wizard opens on the f
               </div>
             {% endwith %}{% endfor %}
           </div>
-          <div class="grid gap-4 sm:grid-cols-2">
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div class="field">
               <label class="label" for="{{ form.password1.id_for_label }}">{{ form.password1.label }}</label>
               {% field_widget form.password1 "input input-lg" required="required" x_model="password" %}
@@ -116,7 +116,7 @@ signupWizard in static/js/ui.js); after a server error the wizard opens on the f
         {# --- step 3 --- #}
         <section x-show="step === 3" x-cloak class="fade flex flex-col gap-[18px]" data-step="3">
           <div><h2 class="text-2xl font-extrabold tracking-[-0.015em]">{% translate "Check and confirm" %}</h2><p class="mt-1 text-ink-soft">{% translate "Are your details correct?" %}</p></div>
-          <dl class="grid overflow-hidden rounded-[18px] border border-line sm:grid-cols-2 [&>div]:border-surface-sunken [&>div]:px-[18px] [&>div]:py-3.5 [&>div:nth-child(-n+2)]:border-b">
+          <dl class="grid grid-cols-1 overflow-hidden rounded-[18px] border border-line sm:grid-cols-2 [&>div]:border-surface-sunken [&>div]:px-[18px] [&>div]:py-3.5 [&>div:nth-child(-n+2)]:border-b">
             <div><dt class="text-caption font-normal text-ink-faint">{% translate "Full name" %}</dt><dd class="mt-0.5 font-semibold" x-text="review.name">—</dd></div>
             <div><dt class="text-caption font-normal text-ink-faint">{% translate "Email" %}</dt><dd class="mt-0.5 font-semibold break-all" x-text="review.login">—</dd></div>
             <div><dt class="text-caption font-normal text-ink-faint">{% translate "Department" %}</dt><dd class="mt-0.5 font-semibold" x-text="review.department">—</dd></div>

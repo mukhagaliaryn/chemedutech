@@ -2,7 +2,7 @@
 <div class="flex flex-col gap-4">
   {% if content.instructions %}<p class="whitespace-pre-line text-[17px] leading-7 text-ink-soft">{{ content.instructions }}</p>{% endif %}
   {% if quiz %}
-    <dl class="num grid gap-2 sm:grid-cols-2">
+    <dl class="num grid grid-cols-1 gap-2 sm:grid-cols-2">
       <div class="rounded-md bg-canvas px-4 py-3"><dt class="text-caption font-normal text-ink-faint">{% translate "Questions" %}</dt><dd class="mt-0.5 text-lg font-extrabold">{{ question_count }}</dd></div>
       <div class="rounded-md bg-canvas px-4 py-3"><dt class="text-caption font-normal text-ink-faint">{% translate "Pass mark" %}</dt><dd class="mt-0.5 text-lg font-extrabold">{{ quiz.pass_percent }}%</dd></div>
       {% if quiz.time_limit_min %}<div class="rounded-md bg-canvas px-4 py-3"><dt class="text-caption font-normal text-ink-faint">{% translate "Time" %}</dt><dd class="mt-0.5 text-lg font-extrabold">{% blocktranslate with m=quiz.time_limit_min %}{{ m }} min{% endblocktranslate %}</dd></div>{% endif %}

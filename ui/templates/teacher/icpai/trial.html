@@ -18,7 +18,7 @@ the teacher's grade and «Айгерім»'s analysis. Context: teacher/icpai.py
   {% if review %}<span class="num text-[28px] font-extrabold text-success-700">{{ review.total }}<span class="text-[16px] text-ink-faint"> / 10</span></span>{% endif %}
 </section>
 
-<div class="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_420px]">
+<div class="grid grid-cols-1 items-start gap-4 xl:grid-cols-[minmax(0,1fr)_420px]">
   <section class="card flex min-w-0 flex-col gap-3" aria-labelledby="pr-title">
     <h2 id="pr-title" class="text-h3">{% translate "Trial protocol" %}</h2>
     {% if trial.mode == "real" %}

@@ -13,7 +13,7 @@ feedback, whose answers can be added to the editor.
 {% block content %}
 {{ editor_opts|json_script:"editor-opts" }}
 <div x-data="stageEditor(JSON.parse(document.getElementById('editor-opts').textContent))" @ai-insert="insert($event.detail)"
-     class="grid items-start gap-4 xl:grid-cols-[250px_minmax(0,1fr)] 2xl:grid-cols-[250px_minmax(0,1fr)_400px]">
+     class="grid grid-cols-1 items-start gap-4 xl:grid-cols-[250px_minmax(0,1fr)] 2xl:grid-cols-[250px_minmax(0,1fr)_400px]">
   {% include "student/practice/partials/nav.html" with current=stage.order %}
 
   <section class="tone-{{ stage.order }} flex min-w-0 flex-col gap-4" aria-labelledby="stage-title">
@@ -32,7 +32,7 @@ feedback, whose answers can be added to the editor.
           <p class="text-[14px] leading-[21px]"><span class="font-extrabold">{% translate "Aim" %}:</span> {{ spec.aim }}</p>
         </div>
         {% for f in fields %}
-          <div class="grid gap-2 rounded-lg border border-line p-3 transition-shadow focus-within:border-(--tone) focus-within:shadow-[0_0_0_3px_color-mix(in_srgb,var(--tone)_14%,transparent)] md:grid-cols-[200px_minmax(0,1fr)] md:items-start"
+          <div class="grid grid-cols-1 gap-2 rounded-lg border border-line p-3 transition-shadow focus-within:border-(--tone) focus-within:shadow-[0_0_0_3px_color-mix(in_srgb,var(--tone)_14%,transparent)] md:grid-cols-[200px_minmax(0,1fr)] md:items-start"
                data-field="{{ f.key }}" @focusin="active = '{{ f.key }}'">
             <span class="flex items-center gap-2.5 pt-1">
               <span class="grid size-8 shrink-0 place-items-center rounded-[10px] bg-(--tone-50) text-(--tone)">{% include "components/icons.html#"|add:f.icon with size=16 %}</span>

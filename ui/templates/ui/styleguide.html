@@ -9,7 +9,7 @@
   <p class="mt-1 text-ink-soft">{% translate "Every component of ui/templates/components with sample data. Radii: small 10 · medium 14 · card 20–24 · large 28." %}</p>
 </header>
 
-<div class="grid items-start gap-5 lg:grid-cols-2">
+<div class="grid grid-cols-1 items-start gap-5 lg:grid-cols-2">
   <section class="card flex flex-col gap-4">
     <h2 class="text-lg font-bold">{% translate "Buttons" %}</h2>
     <div class="flex flex-wrap items-center gap-2.5">
@@ -142,7 +142,7 @@
   </table>
 </section>
 
-<div class="grid gap-4 md:grid-cols-2">
+<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
   {% include "components/empty_state.html" with title="Әзірге курс жоқ" text="Мұғалім топты курсқа бекіткенде курс осында пайда болады." action_url="#" action_label="Каталог" %}
   {% include "components/lock_state.html" with title="Бұл кезең әлі жабық" text="Бұл кезең теорияның бекіту тестінен кейін ашылады." action_url="#" action_label="Теорияға оралу" %}
 </div>

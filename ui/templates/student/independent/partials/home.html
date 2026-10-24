@@ -5,7 +5,7 @@ professional development, the personal directions of development by the four ICP
 Context: student.independent.independent_context; section.
 {% endcomment %}
 <section class="relative overflow-hidden rounded-xl bg-[linear-gradient(120deg,var(--color-primary-900),var(--color-primary-600)_55%,var(--color-stage-video))] p-[clamp(20px,3vw,32px)] text-white" aria-labelledby="ind-hero">
-  <svg aria-hidden="true" class="float pointer-events-none absolute top-4 right-6 h-28 opacity-90" viewBox="0 0 80 100"><path d="M40 8c14 12 18 30 14 50H26C22 38 26 20 40 8z" fill="#fff"/><circle cx="40" cy="36" r="7" fill="#5fd3b8"/><path d="M26 58l-10 14 14-4zM54 58l10 14-14-4z" fill="#ff8a7a"/><path d="M33 62h14l-3 20h-8z" fill="#ffd66b" class="glow"/></svg>
+  <svg aria-hidden="true" class="float pointer-events-none absolute top-4 right-6 h-28 opacity-90 max-sm:top-3 max-sm:right-3 max-sm:h-14 max-sm:opacity-40" viewBox="0 0 80 100"><path d="M40 8c14 12 18 30 14 50H26C22 38 26 20 40 8z" fill="#fff"/><circle cx="40" cy="36" r="7" fill="#5fd3b8"/><path d="M26 58l-10 14 14-4zM54 58l10 14-14-4z" fill="#ff8a7a"/><path d="M33 62h14l-3 20h-8z" fill="#ffd66b" class="glow"/></svg>
   <div class="relative max-w-[820px]">
     <p class="text-[12px] font-extrabold tracking-wide text-white/75 uppercase">ICPAI INDEPENDENT TEACHING</p>
     <h2 id="ind-hero" class="mt-1 text-[clamp(20px,2.4vw,27px)] leading-tight font-extrabold">{% translate "Welcome to the next stage!" %}</h2>
@@ -24,10 +24,10 @@ Context: student.independent.independent_context; section.
   {% endfor %}
 </ol>
 
-<div class="grid items-start gap-4 xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+<div class="grid grid-cols-1 items-start gap-4 xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
   <section class="card flex flex-col gap-3" aria-labelledby="dir-title">
     <h2 id="dir-title" class="text-[16px] font-extrabold">{% translate "Personal directions of professional development" %}</h2>
-    <ul class="grid gap-2.5 sm:grid-cols-2">
+    <ul class="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
       {% for d in directions %}
         <li class="flex items-start gap-3 rounded-lg border p-3 {% if d.focus %}border-warning-500/50 bg-warning-50/60{% else %}border-line{% endif %}">
           {% with v=d.latest|default:0 %}{% if d.latest is not None %}{% with t=d.latest|floatformat:0|add:"%" %}
@@ -63,7 +63,7 @@ Context: student.independent.independent_context; section.
   </div>
 </div>
 
-<div class="grid items-start gap-4 lg:grid-cols-2">
+<div class="grid grid-cols-1 items-start gap-4 lg:grid-cols-2">
   <section class="card flex flex-col gap-3" aria-labelledby="ls-title">
     <h2 id="ls-title" class="text-[16px] font-extrabold">{% translate "My independent lessons" %}</h2>
     <ul class="flex flex-col gap-2">

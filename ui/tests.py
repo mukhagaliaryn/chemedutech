@@ -274,3 +274,31 @@ class PublicPagesTests(TestCase):
         self.assertEqual(r.context["step"], 1)
         r = self.client.post(url, {**base, "join_code": self.group.join_code})
         self.assertRedirects(r, reverse("student:dashboard"), fetch_redirect_response=False)
+
+
+class MobileLayoutTests(TestCase):
+    """STEP-40 (D81): a responsive grid needs a base column track — an implicit `auto` column grows to its
+    content's min-content (a `truncate` line, a table) and the page scrolls sideways at 390 px."""
+
+    def test_responsive_grids_have_a_base_column(self):
+        import re
+        from pathlib import Path
+
+        bad = []
+        for path in Path(__file__).parent.joinpath("templates").rglob("*.html"):
+            for cls in re.findall(r'class="([^"{}]*)"', path.read_text()):
+                tokens = cls.split()
+                if (
+                    "grid" in tokens
+                    and any(re.match(r"^(sm|md|lg|xl|2xl):grid-cols-", t) for t in tokens)
+                    and not any(t.startswith(("grid-cols-", "[grid-template-columns")) for t in tokens)
+                ):
+                    bad.append(f"{path.name}: {cls}")
+        self.assertEqual(bad, [], "add grid-cols-1 to these grids")
+
+    def test_hidden_tooltips_take_no_room(self):
+        from pathlib import Path
+
+        css = Path(__file__).parent.joinpath("static_src/src/styles.css").read_text()
+        block = css[css.index("  .tipbox {") :]
+        self.assertIn("display: none", block[: block.index("}")])

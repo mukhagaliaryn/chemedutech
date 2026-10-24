@@ -103,7 +103,7 @@ attention; my groups.
       <button type="submit" formmethod="dialog" formnovalidate class="close-btn" aria-label="{% translate 'Close' %}">{% include "components/icons.html#x" %}</button>
     </div>
     {% include "components/input.html" with field=group_form.name %}
-    <div class="grid gap-3 sm:grid-cols-2">
+    <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
       {% include "components/input.html" with field=group_form.department %}
       {% include "components/input.html" with field=group_form.specialty %}
       {% include "components/input.html" with field=group_form.admission_year %}

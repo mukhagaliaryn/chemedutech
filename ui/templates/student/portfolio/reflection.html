@@ -9,7 +9,7 @@ reflection».{% endcomment %}
 {% block main_class %}max-w-[1280px]{% endblock %}
 {% block content %}
 <a class="link inline-flex items-center gap-1.5 text-sm font-semibold" href="{% url 'student:section' section.number %}">{% include "components/icons.html#arrow-left" %}{{ section.number }}. {{ section.title }}</a>
-<div class="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_340px]">
+<div class="grid grid-cols-1 items-start gap-4 lg:grid-cols-[minmax(0,1fr)_340px]">
   <form method="post" class="card flex flex-col gap-4" aria-labelledby="rf-title">{% csrf_token %}
     <div>
       <h1 id="rf-title" class="text-[22px] leading-7 font-extrabold">{% translate "My professional reflection" %}</h1>

@@ -34,7 +34,7 @@ The course's pre/post knowledge test (STEP-22): intro with the rules → the tes
       {% if phase == "pre" %}{% translate "Before the first stage, answer a few questions on the whole course. Nobody expects you to know everything yet: the test shows your starting point." %}
       {% else %}{% translate "The same questions as at the start of the course. Answer on your own — the result shows how your knowledge has grown." %}{% endif %}
     </p>
-    <ul class="grid gap-2.5 sm:grid-cols-3">
+    <ul class="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
       <li class="flex items-center gap-2.5 rounded-lg bg-canvas px-4 py-3 text-sm font-semibold">{% include "components/icons.html#list" with size=18 %}{% blocktranslate count n=question_count %}{{ n }} question{% plural %}{{ n }} questions{% endblocktranslate %}</li>
       <li class="flex items-center gap-2.5 rounded-lg bg-canvas px-4 py-3 text-sm font-semibold">{% include "components/icons.html#timer" with size=18 %}{% if quiz.time_limit_min %}{% blocktranslate with m=quiz.time_limit_min %}{{ m }} min{% endblocktranslate %}{% else %}{% translate "no time limit" %}{% endif %}</li>
       <li class="flex items-center gap-2.5 rounded-lg bg-canvas px-4 py-3 text-sm font-semibold">{% include "components/icons.html#key" with size=18 %}{% translate "one attempt, not graded" %}</li>

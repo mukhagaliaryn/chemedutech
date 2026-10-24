@@ -196,12 +196,34 @@ def trial(request, pk, trial_pk):
     })  # fmt: skip
 
 
+def _lines(value) -> list[str]:
+    """A structured answer's field as readable lines: {key: {status, text}} → «key · status — text», a list → its
+    items, anything else → its text."""
+    if isinstance(value, dict):
+        out = []
+        for k, v in value.items():
+            if isinstance(v, dict):
+                out.append(f"{k} · " + " — ".join(str(x) for x in v.values() if x not in ("", None)))
+            else:
+                out.append(f"{k}: {v}")
+        return out
+    if isinstance(value, list):
+        return [str(x) for x in value]
+    return [str(value)] if value not in ("", None) else []
+
+
 @teacher_only
 def conversation(request, pk, conversation_pk):
     """An AI dialogue of the student, read only (assistant, AI student, checker, «Айгерім»)."""
     student = _student(request, pk)
     item = get_object_or_404(AIConversation, pk=conversation_pk, user=student)
     return render(request, "teacher/icpai/conversation.html", {
-        "student": student, "conversation": item, "messages_": list(item.messages.all()),
+        "student": student, "conversation": item,
+        # the structured answer's fields as pairs: «Айгерім»'s answer has a key "items", which a template would take
+        # for dict.items
+        "messages_": [
+            {"m": m, "fields": [(k, _lines(v)) for k, v in (m.structured or {}).items() if _lines(v)]}
+            for m in item.messages.all()
+        ],
         "tokens": item.messages.aggregate(i=Sum("input_tokens"), o=Sum("output_tokens")),
     })  # fmt: skip

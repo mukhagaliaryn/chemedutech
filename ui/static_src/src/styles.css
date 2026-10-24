@@ -179,10 +179,15 @@
     position: relative;
   }
   @media (prefers-reduced-motion: reduce) {
+    /* a safety net under the per-class rules below: every animation jumps to its end state, nothing loops */
     *,
     *::before,
     *::after {
       transition-duration: 0s !important;
+      animation-duration: 0.01ms !important;
+      animation-delay: 0s !important;
+      animation-iteration-count: 1 !important;
+      scroll-behavior: auto !important;
     }
   }
 }
@@ -1234,8 +1239,9 @@
     left: 50%;
     bottom: calc(100% + 8px);
     z-index: 40;
+    display: none; /* out of the layout while hidden: no sideways scroll on a phone */
     width: max-content;
-    max-width: 260px;
+    max-width: min(260px, calc(100vw - 32px));
     padding: 8px 12px;
     border-radius: 12px;
     background: var(--color-ink);
@@ -1250,12 +1256,21 @@
     transform: translate(-50%, 4px);
     transition:
       opacity 0.15s,
-      transform 0.15s;
+      transform 0.15s,
+      display 0.15s allow-discrete;
   }
   .tip:hover > .tipbox,
   .tip:focus-within > .tipbox {
+    display: block;
     opacity: 1;
     transform: translate(-50%, 0);
+  }
+  @starting-style {
+    .tip:hover > .tipbox,
+    .tip:focus-within > .tipbox {
+      opacity: 0;
+      transform: translate(-50%, 4px);
+    }
   }
 
   /* ---- Icon tile (stage kinds, KPI icons) ------------------------------ */
