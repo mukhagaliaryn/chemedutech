@@ -17,6 +17,7 @@ the grading queue counter. Collapses like the student sidebar.
     {% translate "Course content" as l %}{% include "components/nav_item.html" with url_name="teacher:courses" match="teacher:courses teacher:course_content teacher:course_settings teacher:module_new teacher:module teacher:topic_new teacher:topic teacher:stage_new teacher:stage teacher:item_new teacher:item teacher:quiz teacher:question_new teacher:question" icon="book" label=l %}
     {% translate "Groups and students" as l %}{% include "components/nav_item.html" with url_name="teacher:groups" match="teacher:groups teacher:group teacher:group_new teacher:group_edit teacher:students teacher:student teacher:lab_log" icon="users" label=l %}
     {% translate "Practice works" as l %}{% include "components/nav_item.html" with url_name="teacher:grading" match="teacher:grading teacher:grading_detail" icon="check-square" label=l badge=pending %}
+    {% translate "Section 5 practices" as l %}{% include "components/nav_item.html" with url_name="teacher:practice_queue" match="teacher:practice_queue teacher:practice" icon="award" label=l %}
     <p class="nav-section nav-hide">{% translate "Analysis" %}</p>
     {% translate "Grade register" as l %}{% include "components/nav_item.html" with url_name="teacher:gradebook" match="teacher:gradebook teacher:gradebook_course" icon="grid" label=l %}
     {% translate "Statistics" as l %}{% include "components/nav_item.html" with url_name="research:analytics" match="research:analytics research:analytics_course" icon="activity" label=l %}

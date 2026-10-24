@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import content, gradebook, grading, views
+from . import content, gradebook, grading, practice, views
 
 app_name = "teacher"
 
@@ -21,6 +21,8 @@ urlpatterns = [
     path("groups/<int:pk>/courses/<int:link_pk>/detach/", views.group_detach, name="group_detach"),
     path("groups/<int:pk>/courses/<int:link_pk>/post-test/", views.group_posttest, name="group_posttest"),
     path("grading/", grading.queue, name="grading"),
+    path("practice/", practice.queue, name="practice_queue"),
+    path("practice/<int:pk>/", practice.detail, name="practice"),
     path("grading/<int:pk>/", grading.detail, name="grading_detail"),
     path("comments/", grading.comment, name="comment"),
     path("courses/", content.courses, name="courses"),

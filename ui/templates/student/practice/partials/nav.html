@@ -1,0 +1,39 @@
+{% load i18n %}{% comment %}
+The development sheet's navigation (guide @S5 I–IV): the template's banner, «I. About the lesson», the eight stages
+of part II with their minutes (filled ones marked), «Try the lesson out» and the results. current — "details" or a
+stage order; lesson, section, stages, specs, trial.
+{% endcomment %}
+<aside aria-label="{% translate 'Development sheet' %}" class="card flex min-w-0 flex-col gap-2 p-3 xl:sticky xl:top-20">
+  {% if template %}
+    <div class="tpl-{{ template.code }} relative flex h-[84px] flex-col justify-end overflow-hidden rounded-lg p-3 text-white">
+      <span class="absolute -top-2 -right-6 h-[90px] w-[130px] opacity-35">{% include "student/designer/partials/art.html#"|add:template.code %}</span>
+      <span class="relative text-[11px] font-bold tracking-wide text-white/80 uppercase">{% translate "Practice" %} №{{ template.number }}</span>
+      <span class="relative text-[13.5px] leading-[17px] font-extrabold">{{ lesson.title|default:template.name|truncatechars:42 }}</span>
+    </div>
+  {% endif %}
+  <a href="{% url 'student:practice' section.number lesson.pk %}" class="flex items-center gap-3 rounded-lg border px-2.5 py-2.5 text-[13.5px] font-bold {% if current == 'details' %}border-primary-600 bg-primary-50 text-primary-900{% else %}border-transparent hover:bg-canvas{% endif %}">
+    <span class="grid size-8 shrink-0 place-items-center rounded-full bg-primary-900 text-[12px] font-extrabold text-white">I</span>{% translate "About the lesson" %}
+  </a>
+  <p class="px-2.5 pt-1 text-[11px] font-extrabold tracking-wide text-ink-faint uppercase">{% translate "II. The lesson by stages" %}</p>
+  <ol class="flex gap-1 overflow-x-auto xl:flex-col xl:overflow-visible">
+    {% for s in stages %}{% with spec=specs|get:s.order %}
+      <li class="tone-{{ s.order }} min-w-[170px] xl:min-w-0">
+        <a href="{% url 'student:practice_stage' section.number lesson.pk s.order %}"
+           class="flex items-center gap-2.5 rounded-lg border px-2.5 py-2 transition-colors {% if current == s.order %}border-(--tone) bg-(--tone-50){% else %}border-transparent hover:bg-canvas{% endif %}"
+           {% if current == s.order %}aria-current="step"{% endif %}>
+          <span class="num grid size-7 shrink-0 place-items-center rounded-full bg-(--tone) text-[12.5px] font-extrabold text-white">{{ s.order }}</span>
+          <span class="min-w-0 flex-1"><span class="block truncate text-[13px] leading-[17px] font-bold">{{ s.title }}</span><span class="num text-[11.5px] font-semibold text-(--tone)">{{ spec.start }}–{{ spec.end }} {% translate "min" %}</span></span>
+          {% if s.edited %}<span class="text-success-600">{% include "components/icons.html#check" with size=14 %}</span>{% endif %}
+        </a>
+      </li>
+    {% endwith %}{% endfor %}
+  </ol>
+  <div class="mt-1 flex flex-col gap-1.5 border-t border-line pt-3">
+    {% if lesson.status == "final" %}
+      <a class="btn btn-secondary btn-sm" href="{% url 'student:practice_results' section.number lesson.pk %}">{% include "components/icons.html#award" %}{% translate "Results" %}</a>
+    {% else %}
+      <a class="btn btn-primary btn-sm" href="{% url 'student:practice_trial' section.number lesson.pk %}">{% include "components/icons.html#play" %}{% translate "Try the lesson out" %}</a>
+      {% if trial %}<a class="btn btn-ghost btn-sm" href="{% url 'student:practice_results' section.number lesson.pk %}">{% include "components/icons.html#chart" %}{% translate "Analysis sheet" %}</a>{% endif %}
+    {% endif %}
+  </div>
+</aside>

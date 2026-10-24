@@ -12,9 +12,33 @@ from .assembly import (
     task_html,
 )
 from .lessons import LessonError, clean, clear, restore, save, start, template_fields
+from .practice import (
+    analyse,
+    current_order,
+    finish,
+    give_task,
+    grade,
+    planned_types,
+    prefill,
+    save_sheet_details,
+    sheet_problems,
+    start_practice,
+    start_stepwise,
+)
 
 __all__ = [
     "LessonError",
+    "analyse",
+    "current_order",
+    "finish",
+    "give_task",
+    "grade",
+    "planned_types",
+    "prefill",
+    "save_sheet_details",
+    "sheet_problems",
+    "start_practice",
+    "start_stepwise",
     "assemble",
     "assembled_version",
     "clean",

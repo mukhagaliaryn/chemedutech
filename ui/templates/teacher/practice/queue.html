@@ -1,0 +1,42 @@
+{% extends "layouts/teacher.html" %}
+{% load i18n %}
+{% comment %}Section 5 practices (guide @S5 VII; STEP-35): the finished practices of the teacher's students — «To
+grade» and «Graded» — each with the template, the trial's AI student level and the 10-point grade.{% endcomment %}
+{% block title %}{% translate "Section 5 practices" %} · ChemEduTech{% endblock %}
+{% block crumb %}ICPAI{% endblock %}
+{% block page_title %}{% translate "Section 5 practices" %}{% endblock %}
+{% block main_class %}max-w-[1200px]{% endblock %}
+{% block content %}
+<div class="flex flex-wrap items-end justify-between gap-3">
+  <div>
+    <h1 class="text-[26px] leading-8 font-extrabold">{% translate "Digital research practices" %}</h1>
+    <p class="mt-1 max-w-[720px] text-ink-soft">{% translate "The 10-point grade of section 5 (five criteria × 2 points). It is kept apart from the ICPAI component percents and does not open sections." %}</p>
+  </div>
+  <div class="flex gap-1.5" role="tablist">
+    <a role="tab" href="?show=new" class="inline-flex h-9 items-center gap-2 rounded-full border px-4 text-sm font-bold {% if show != 'graded' %}border-primary-600 bg-primary-50 text-primary-700{% else %}border-line bg-surface text-ink-soft{% endif %}" {% if show != 'graded' %}aria-selected="true"{% endif %}>{% translate "To grade" %}<span class="num rounded-full bg-white px-2 text-[12px]">{{ counts.new }}</span></a>
+    <a role="tab" href="?show=graded" class="inline-flex h-9 items-center gap-2 rounded-full border px-4 text-sm font-bold {% if show == 'graded' %}border-primary-600 bg-primary-50 text-primary-700{% else %}border-line bg-surface text-ink-soft{% endif %}" {% if show == 'graded' %}aria-selected="true"{% endif %}>{% translate "Graded" %}<span class="num rounded-full bg-white px-2 text-[12px]">{{ counts.graded }}</span></a>
+  </div>
+</div>
+{% if rows %}
+  <div class="table-wrap">
+    <table class="table">
+      <thead><tr><th scope="col">{% translate "Student" %}</th><th scope="col">{% translate "Practice" %}</th><th scope="col">{% translate "Lesson" %}</th><th scope="col">{% translate "Gathered" %}</th><th scope="col" class="text-right">{% translate "Grade" %}</th><th></th></tr></thead>
+      <tbody>
+        {% for p in rows %}
+          <tr>
+            <td><span class="flex items-center gap-2.5">{% include "components/avatar.html" with person=p.owner size="sm" %}<span><span class="block font-semibold">{{ p.owner.get_full_name|default:p.owner.username }}</span><span class="text-caption text-ink-faint">{{ p.owner.student_profile.group|default:"" }}</span></span></span></td>
+            <td><span class="tpl-{{ p.source_template.code }} inline-flex h-6 items-center rounded-full px-2.5 text-[12px] font-bold text-white">№{{ p.source_template.number }}</span></td>
+            <td class="max-w-[320px]"><span class="line-clamp-2">{{ p.title }}</span></td>
+            <td class="num text-ink-soft">{{ p.updated_at|date:"d.m.Y H:i" }}</td>
+            <td class="num text-right font-extrabold">{% if p.review %}{{ p.review.total }}/10{% else %}<span class="font-normal text-ink-faint">—</span>{% endif %}</td>
+            <td class="text-right"><a class="btn {% if p.review %}btn-secondary{% else %}btn-primary{% endif %} btn-sm" href="{% url 'teacher:practice' p.pk %}">{% if p.review %}{% translate "Open" %}{% else %}{% translate "Grade" %}{% endif %}</a></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  {% translate "No practices here yet" as l_title %}{% translate "They appear when students finish the trial and gather the results." as l_text %}
+  {% include "components/empty_state.html" with title=l_title text=l_text icon="award" %}
+{% endif %}
+{% endblock %}

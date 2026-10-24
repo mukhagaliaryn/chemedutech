@@ -72,7 +72,7 @@ def clear(stage: LessonStage) -> LessonStage:
     _editable(stage.lesson)
     if stage.cleared:
         return stage
-    stage.fields = {key: "" for key in frames.keys_of(stage.lesson.frame)}
+    stage.fields = {key: "" for key in frames.keys_of(stage.lesson.frame, stage.key)}
     stage.cleared_at = timezone.now()
     stage.save(update_fields=["fields", "cleared_at", "updated_at"])
     _log(stage.lesson, E.CLEARED, stage)
@@ -95,20 +95,31 @@ def restore(stage: LessonStage) -> LessonStage:
     return stage
 
 
+def _value(spec, value) -> str:
+    """A field's value as stored: minutes as digits (1–45), text cleaned."""
+    if spec.number:
+        digits = "".join(ch for ch in str(value or "") if ch.isdigit())[:2]
+        return str(max(1, min(MAX_MINUTES, int(digits)))) if digits else ""
+    return clean(str(value or ""))
+
+
 @transaction.atomic
 def save(stage: LessonStage, *, title: str, minutes, fields: dict, inserted: int | None = None) -> LessonStage:
-    """The student's version of a cleared stage. ``inserted`` — the AI message added to the editor before this save
-    («Add to the editor», logged as the student's decision)."""
+    """The student's version of a stage: a cleared template stage (section 4) or a stage of a frame's fixed stages
+    (section 5 — its title and minutes come from the frame). ``inserted`` — the AI message added to the editor before
+    this save («Add to the editor», logged as the student's decision)."""
     _editable(stage.lesson)
-    if not stage.cleared:
+    template = stage.lesson.frame == "template"
+    if template and not stage.cleared:
         raise LessonError("not_cleared")
     before = (stage.title, stage.minutes, stage.fields)
-    stage.title = (title or "").strip()[:255] or stage.title
-    try:
-        stage.minutes = max(1, min(MAX_MINUTES, int(minutes)))
-    except (TypeError, ValueError):
-        pass
-    stage.fields = {key: clean(fields.get(key, "")) for key in frames.keys_of(stage.lesson.frame)}
+    if template:
+        stage.title = (title or "").strip()[:255] or stage.title
+        try:
+            stage.minutes = max(1, min(MAX_MINUTES, int(minutes)))
+        except (TypeError, ValueError):
+            pass
+    stage.fields = {f.key: _value(f, fields.get(f.key, "")) for f in frames.fields_of(stage.lesson.frame, stage.key)}
     stage.edited = any(stage.fields.values())
     if inserted:
         _log(stage.lesson, E.AI_INSERTED, stage, message=inserted)

@@ -1,0 +1,84 @@
+{% extends "layouts/teacher.html" %}
+{% load i18n %}
+{% comment %}A section 5 practice for the teacher (guide @S5; STEP-35): the sheet (I, II), the trial protocol — the
+teacher's explanation, the task, the AI student's answer and its type, the student's analysis, correction and improved
+task by stage (VI) — and the 10-point rubric (VII: five criteria × 0–2) with a comment.{% endcomment %}
+{% block title %}{{ lesson.title }} · {% translate "Section 5 practices" %} · ChemEduTech{% endblock %}
+{% block crumb %}{% translate "Section 5 practices" %}{% endblock %}
+{% block page_title %}{{ lesson.owner.get_full_name|default:lesson.owner.username }}{% endblock %}
+{% block main_class %}max-w-[1400px]{% endblock %}
+{% block content %}
+<a class="link inline-flex items-center gap-1.5 text-sm font-semibold" href="{% url 'teacher:practice_queue' %}">{% include "components/icons.html#arrow-left" %}{% translate "Section 5 practices" %}</a>
+<div class="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_400px]">
+  <div class="flex min-w-0 flex-col gap-4">
+    <section class="card flex flex-col gap-3">
+      <div class="flex flex-wrap items-center gap-3">
+        <span class="tpl-{{ lesson.source_template.code }} inline-flex h-7 items-center rounded-full px-3 text-[12.5px] font-bold text-white">{% translate "Practice" %} №{{ lesson.source_template.number }}</span>
+        {% if trial %}<span class="text-sm text-ink-soft">{% translate "The AI student" %}: {{ trial.get_level_display|lower }} · {% blocktranslate with g=trial.grade %}Grade {{ g }}{% endblocktranslate %}</span>{% endif %}
+      </div>
+      <h1 class="text-[22px] leading-7 font-extrabold">{{ plan.title }}</h1>
+      <dl class="grid gap-3 text-[13.5px] md:grid-cols-2">
+        <div><dt class="text-[12px] font-extrabold text-stage-lab uppercase">{% translate "Chemistry topic" %}</dt><dd>{{ plan.topic }}</dd></div>
+        <div><dt class="text-[12px] font-extrabold text-stage-lab uppercase">{% translate "The class the lesson is for" %}</dt><dd>{{ plan.grade }}</dd></div>
+        <div><dt class="text-[12px] font-extrabold text-stage-lab uppercase">{% translate "Lesson aim" %}</dt><dd>{{ plan.aim }}</dd></div>
+        <div><dt class="text-[12px] font-extrabold text-stage-lab uppercase">{% translate "Expected results" %}</dt><dd class="prose-lesson">{{ plan.outcomes|rich }}</dd></div>
+        <div><dt class="text-[12px] font-extrabold text-stage-lab uppercase">{% translate "Authorial method used" %}</dt><dd>{{ plan.method|default:"—" }}</dd></div>
+        <div><dt class="text-[12px] font-extrabold text-stage-lab uppercase">{% translate "Digital tools used" %}</dt><dd>{{ plan.digital_tools|default:"—" }}</dd></div>
+      </dl>
+    </section>
+    <ol class="flex flex-col gap-3">
+      {% for r in rows %}{% with s=r.stage t=r.turn %}
+        <li class="tone-{{ s.order }} card flex flex-col gap-3 overflow-hidden p-0" x-data="{ open: false }">
+          <button type="button" class="flex items-center gap-3 bg-(--tone-50) px-5 py-3 text-left" @click="open = !open" :aria-expanded="open">
+            <span class="num grid size-9 shrink-0 place-items-center rounded-full bg-(--tone) text-[15px] font-extrabold text-white">{{ s.order }}</span>
+            <span class="min-w-0 flex-1 text-[15px] font-extrabold">{{ s.title }} <span class="num text-[12.5px] font-semibold text-(--tone)">{{ s.start }}–{{ s.end }} {% translate "min" %}</span></span>
+            {% if t %}<span class="badge {% if t.answer_type == 'correct' %}badge-success{% elif t.answer_type == 'partial' %}badge-warning{% else %}badge-danger{% endif %} text-[11px] font-bold">{% if t.answer_type == "correct" %}{% translate "Correct" %}{% elif t.answer_type == "partial" %}{% translate "Partly correct" %}{% else %}{% translate "Wrong" %}{% endif %}</span>{% endif %}
+            <span class="transition-transform" :class="open && 'rotate-180'">{% include "components/icons.html#chevron-down" with size=16 %}</span>
+          </button>
+          <div class="grid gap-4 px-5 pb-4 lg:grid-cols-2">
+            <div class="flex flex-col gap-1.5" x-show="open" x-cloak>
+              <p class="text-[12px] font-extrabold tracking-wide text-ink-faint uppercase">{% translate "The sheet" %}</p>
+              {% for f in r.fields %}<div class="text-[13px]"><span class="font-bold text-(--tone)">{{ f.label }}:</span> <span class="prose-lesson">{{ f.html|rich }}</span></div>{% endfor %}
+            </div>
+            {% if t %}
+              <div class="flex flex-col gap-2 text-[13px] leading-[19px]" :class="open || 'lg:col-span-2'">
+                <div x-show="open" x-cloak><span class="font-bold">{% translate "Task" %}:</span> <span class="prose-lesson">{{ t.task|rich }}</span></div>
+                <div class="rounded-lg bg-primary-50/70 px-3 py-2"><span class="font-bold text-primary-700">{% translate "The AI student's answer" %}:</span> {{ t.answer }}</div>
+                <div class="grid gap-2 md:grid-cols-3">
+                  <div class="rounded-lg border border-line px-3 py-2"><p class="text-[11.5px] font-extrabold text-ink-faint uppercase">{% translate "The student's explanation" %}</p><div class="prose-lesson">{{ t.student_analysis|rich|default:"—" }}</div></div>
+                  <div class="rounded-lg border border-line px-3 py-2"><p class="text-[11.5px] font-extrabold text-ink-faint uppercase">{% translate "Pedagogical correction made" %}</p><div class="prose-lesson">{{ t.correction|rich|default:"—" }}</div></div>
+                  <div class="rounded-lg border border-line px-3 py-2"><p class="text-[11.5px] font-extrabold text-ink-faint uppercase">{% translate "Improved task" %}</p><div class="prose-lesson">{{ t.improved_task|rich|default:"—" }}</div></div>
+                </div>
+                {% if t.follow_up_question %}<p><span class="font-bold">{% translate "Follow-up question" %}:</span> {{ t.follow_up_question|rich }}</p>{% endif %}
+                {% if t.duration_s %}<p class="text-caption text-ink-faint">{% blocktranslate with m=t.duration_s|duration_s n=t.time_minutes %}Time spent: {{ m }} (set: {{ n }} min){% endblocktranslate %}</p>{% endif %}
+              </div>
+            {% endif %}
+          </div>
+        </li>
+      {% endwith %}{% endfor %}
+    </ol>
+  </div>
+
+  <form method="post" class="card flex flex-col gap-4 xl:sticky xl:top-20" aria-labelledby="rubric-title">{% csrf_token %}
+    <div class="flex items-center justify-between gap-3">
+      <h2 id="rubric-title" class="text-[17px] font-extrabold">{% translate "Assessment of the digital research practice" %}</h2>
+      {% if review %}<span class="num text-[22px] font-extrabold text-success-700">{{ review.total }}/10</span>{% endif %}
+    </div>
+    {% for c in criteria %}
+      <fieldset class="flex flex-col gap-2 rounded-lg bg-canvas p-3">
+        <legend class="sr-only">{{ c.label }}</legend>
+        <p class="flex gap-2 text-[13px] leading-[18px] font-semibold"><span class="num grid size-6 shrink-0 place-items-center rounded-full bg-primary-600 text-[11.5px] font-extrabold text-white">{{ c.number }}</span>{{ c.label }}</p>
+        <div class="flex gap-1.5 pl-8">
+          {% for v in "012"|make_list %}
+            <label class="cursor-pointer"><input type="radio" name="c{{ c.number }}" value="{{ v }}" class="peer sr-only" {% if c.points|stringformat:"s" == v %}checked{% endif %} required>
+              <span class="num grid h-9 w-11 place-items-center rounded-[10px] border border-line-strong bg-surface text-[14px] font-bold peer-checked:border-primary-600 peer-checked:bg-primary-600 peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-primary-100">{{ v }}</span></label>
+          {% endfor %}
+        </div>
+      </fieldset>
+    {% endfor %}
+    <label class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Comment" %}</span><textarea name="comment" rows="3" class="input">{{ review.comment }}</textarea></label>
+    <button type="submit" class="btn btn-primary">{% include "components/icons.html#save" %}{% translate "Save the grade" %}</button>
+    <p class="text-caption text-ink-faint">{% translate "Kept apart from the ICPAI component percents; it does not open sections." %}</p>
+  </form>
+</div>
+{% endblock %}

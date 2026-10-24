@@ -51,6 +51,18 @@ INTENTS = {
     ),
     "timing": _("Analyse whether the tasks of this stage fit its time and what to change."),
     "methods": _("Suggest alternative teaching methods for this stage."),
+    # section 5, the development sheet (guide @S5 III: the seven services and the feedback)
+    "sheet_aim": _("Analyse whether the research aim fits the lesson topic."),
+    "sheet_order": _("Help me put the tasks of this stage in a good order."),
+    "sheet_experiment": _("Give remarks on the scientific correctness of the chemistry experiment."),
+    "sheet_tools": _("Assess whether the digital tools I use fit the lesson aim."),
+    "sheet_age": _("Give methodical advice suited to the students' age and readiness."),
+    "sheet_time": _("Analyse whether the time given to this stage is enough."),
+    "sheet_criteria": _("Help me make the assessment criteria and descriptors precise."),
+    "sheet_feedback": _(
+        "Give feedback on my stage under four headings: Successfully organised parts; Parts that need improving; "
+        "Methodical suggestions; Remarks on the scientific content."
+    ),
 }
 
 LANGUAGES = {"kk": "Kazakh", "ru": "Russian", "en": "English"}

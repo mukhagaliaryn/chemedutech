@@ -933,3 +933,144 @@ class DesignerFlowTests(Base):
         mine = reverse("student:lesson_trial_turn", args=[4, self.lesson.pk, trial.pk, 1])
         self.assertEqual(self.client.post(mine).status_code, 404)
         self.assertEqual(self.fake.calls, [])
+
+
+@override_settings(AI_TUTOR_ENABLED=True)
+class ResearchPracticeTests(Base):
+    """Section 5: the template cards → the sheet (I, II with the AI assistant) → the stepwise trial → the analysis
+    sheet → «Finish the trial and gather the results»; the teacher's 10-point grade; the section's percent."""
+
+    def setUp(self):
+        super().setUp()
+        import json
+
+        from apps.ai.services import client as ai_client
+        from apps.ai.tests import FakeClient, answer
+        from apps.pedagogy.tests import SIM, make_template
+
+        self.fake = FakeClient(answer(json.dumps(SIM)))
+        patcher = mock.patch.object(ai_client, "get_client", return_value=self.fake)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        self.template = make_template()
+        self.teacher = User.objects.create_user("ta", "ta@example.kz", "x", role=User.Role.TEACHER)
+        CourseTeacher.objects.create(course=self.course, teacher=self.teacher)
+        services.unlock_section(self.enrollment(), self.section(5), self.teacher)
+        self.client.force_login(self.student)
+
+    def start(self):
+        from apps.pedagogy.models import Lesson
+
+        self.client.post(reverse("student:practice_start", args=[5, "chem_design"]))
+        self.lesson = Lesson.objects.get(owner=self.student, kind="research_practice")
+        return self.lesson
+
+    def url(self, name, *args):
+        return reverse(f"student:{name}", args=[5, self.lesson.pk, *args])
+
+    def finished(self):
+        from apps.pedagogy import services as pedagogy
+        from apps.pedagogy.tests import fill_sheet
+
+        self.start()
+        fill_sheet(self.lesson)
+        trial = pedagogy.start_stepwise(self.lesson, grade="9", level="medium")
+        for order in range(1, 9):
+            turn = pedagogy.give_task(trial, order, explanation="<p>x</p>", task="<p>y</p>", minutes=3)
+            pedagogy.analyse(turn, analysis="талдау")
+        pedagogy.finish(trial)
+        return trial
+
+    def test_the_section_shows_one_practice_per_template(self):
+        r = self.client.get(reverse("student:section", args=[5]))
+        self.assertTemplateUsed(r, "student/practice/partials/cards.html")
+        self.assertContains(r, reverse("student:practice_start", args=[5, "chem_design"]))
+        self.assertTrue(r.context["row"]["ready"])
+
+    def test_sheet_details_and_a_stage_with_the_ai_assistant(self):
+        self.start()
+        self.assertRedirects(
+            self.client.post(reverse("student:practice_start", args=[5, "chem_design"])), self.url("practice")
+        )
+        r = self.client.post(
+            self.url("practice"), {"title": "Менің практикам", "topic": "pH", "grade": "8", "aim": "Мақсат"}
+        )
+        self.lesson.refresh_from_db()
+        self.assertEqual((self.lesson.title, self.lesson.grade), ("Менің практикам", "8"))
+        r = self.client.get(self.url("practice_stage", 3))
+        self.assertTemplateUsed(r, "student/practice/stage.html")
+        self.assertContains(r, 'value="sheet_feedback"')
+        body = {"fields": {"hypothesis": "<p>NO<sub>2</sub> көбейеді</p>", "time": 9}}
+        r = self.client.post(self.url("practice_stage_save", 3), body, content_type="application/json")
+        self.assertEqual(r.json()["edited"], True)
+        r = self.client.post(self.url("practice_stage_ai", 3), {"intent": "sheet_feedback"})
+        system = self.fake.calls[0]["system"]
+        self.assertIn("stage 3", system)
+        self.assertIn("NO₂ көбейеді", system)
+        self.assertIn("<student_text>", system)
+
+    def test_the_trial_waits_for_a_filled_sheet(self):
+        self.start()
+        r = self.client.get(self.url("practice_trial"))
+        self.assertTrue(r.context["problems"])
+        self.assertRedirects(
+            self.client.post(self.url("practice_trial"), {"grade": "9", "level": "low"}), self.url("practice_trial")
+        )
+        self.assertFalse(self.lesson.trials.exists())
+
+    def test_the_stepwise_trial(self):
+        from apps.pedagogy.tests import fill_sheet
+
+        self.start()
+        fill_sheet(self.lesson)
+        r = self.client.post(self.url("practice_trial"), {"grade": "9", "level": "low"})
+        trial = self.lesson.trials.get()
+        self.assertRedirects(r, self.url("practice_step", trial.pk, 1))
+        r = self.client.get(self.url("practice_step", trial.pk, 1))
+        self.assertContains(r, "interest teacher_explanation")  # prefilled from the sheet
+        self.assertRedirects(
+            self.client.get(self.url("practice_step", trial.pk, 3)), self.url("practice_step", trial.pk, 1)
+        )
+        self.client.post(
+            self.url("practice_step", trial.pk, 1),
+            {"action": "give", "explanation": "<p>Т</p>", "task": "<p>Т</p>", "minutes": "4"},
+        )
+        r = self.client.get(self.url("practice_step", trial.pk, 1))
+        self.assertContains(r, SIM_TEXT["difficulty"])
+        r = self.client.post(
+            self.url("practice_step", trial.pk, 1),
+            {"action": "analyse", "analysis": "<p>Түсіндірдім</p>", "duration_s": "80"},
+        )
+        self.assertRedirects(r, self.url("practice_step", trial.pk, 2))
+        r = self.client.get(self.url("practice_results"))
+        self.assertEqual(r.context["open_stage"], 2)
+        self.client.post(self.url("practice_finish"))
+        self.lesson.refresh_from_db()
+        self.assertEqual(self.lesson.status, "draft")  # not every stage analysed
+
+    def test_finish_then_report_pdf_and_the_section_percent(self):
+        self.finished()
+        r = self.client.get(self.url("practice_results"))
+        self.assertContains(r, self.url("practice_pdf"))
+        r = self.client.get(self.url("practice_pdf"))
+        self.assertTrue(r.content.startswith(b"%PDF"))
+        self.enrollment()
+        self.assertEqual(SectionProgress.objects.get(section__number=5).percent, Decimal("100.00"))  # one template
+
+    def test_the_teacher_grades_and_the_student_sees_it_apart(self):
+        self.finished()
+        self.client.force_login(self.teacher)
+        r = self.client.get(reverse("teacher:practice_queue"))
+        self.assertContains(r, reverse("teacher:practice", args=[self.lesson.pk]))
+        url = reverse("teacher:practice", args=[self.lesson.pk])
+        self.assertContains(self.client.get(url), "талдау")
+        self.client.post(url, {"c1": "2", "c2": "1", "c3": "2", "c4": "2", "c5": "1", "comment": "Жақсы"})
+        self.assertEqual(self.lesson.review.total, 8)
+        other = User.objects.create_user("tb", "tb@example.kz", "x", role=User.Role.TEACHER)
+        self.client.force_login(other)
+        self.assertEqual(self.client.get(url).status_code, 404)
+        self.client.force_login(self.student)
+        r = self.client.get(reverse("student:icpai"))
+        self.assertEqual(r.context["practice_grades"][0]["review"].total, 8)
+        self.assertContains(self.client.get(self.url("practice_results")), "8<span")
+        self.assertEqual(self.client.get(url).status_code, 403)

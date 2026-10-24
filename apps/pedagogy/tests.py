@@ -5,8 +5,8 @@ from django.test import TestCase, override_settings
 
 from apps.organizations.testing import make_student
 
-from . import selectors, services
-from .models import Lesson, LessonEvent, LessonTemplate, TemplateStage
+from . import frames, selectors, services
+from .models import Lesson, LessonEvent, LessonTemplate, LessonVersion, Review, TemplateStage, Trial
 
 E = LessonEvent.Action
 
@@ -255,3 +255,122 @@ class AssemblyTests(TestCase):
         self.assertTrue(rows[2]["cells"]["students"][0]["label"])  # two fields share the column
         self.assertEqual(rows[2]["cells"]["teacher"], [])
         self.assertEqual(rows[0]["cells"]["teacher"][0]["label"], "")
+
+
+def fill_sheet(lesson):
+    """Every field of the eight stages and part I filled (the minutes as numbers)."""
+    services.save_sheet_details(lesson, {"title": "Практика", "topic": "Тепе-теңдік", "grade": "9", "aim": "Мақсат"})
+    for stage in lesson.stages.all():
+        values = {k: ("5" if k == "time" else f"<p>{stage.key} {k}</p>") for k in stage.fields}
+        services.save(stage, title="", minutes=None, fields=values)
+
+
+@override_settings(AI_TUTOR_ENABLED=True)
+class PracticeTests(TestCase):
+    def setUp(self):
+        from apps.ai.services import client as ai_client
+        from apps.ai.tests import FakeClient, answer
+
+        self.fake = FakeClient(answer(json.dumps(SIM)))
+        patcher = mock.patch.object(ai_client, "get_client", return_value=self.fake)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        self.student = make_student("s1")
+        self.template = make_template()
+        self.source = services.start(self.student, self.template)
+        self.lesson = services.start_practice(self.student, self.template)
+
+    def trial(self, level="medium"):
+        fill_sheet(self.lesson)
+        return services.start_stepwise(self.lesson, grade="9", level=level)
+
+    def run_stage(self, trial, order):
+        turn = services.give_task(trial, order, explanation="<p>Түсіндірме</p>", task="<p>Тапсырма</p>", minutes=4)
+        return services.analyse(turn, analysis="Қате: реакция тоқтамайды", correction="Сұрақ қостым", duration_s=95)
+
+    def test_the_sheet_has_the_eight_stages_of_the_guide(self):
+        stages = list(self.lesson.stages.all())
+        self.assertEqual([s.key for s in stages], [s.key for s in frames.RESEARCH_8])
+        self.assertEqual([s.minutes for s in stages], [4, 6, 9, 8, 7, 5, 4, 2])
+        self.assertEqual(set(stages[2].fields), {"research_question", "hypothesis", "experiment", "parameters",
+                                                 "indicators", "time", "recording"})  # fmt: skip
+        self.assertEqual(self.lesson.source_lesson, self.source)
+        self.assertEqual(self.lesson.stages.get(order=1).fields["teacher_explanation"], "")  # not copied (О-7)
+        self.assertEqual(services.start_practice(self.student, self.template), self.lesson)
+
+    def test_a_sheet_stage_is_saved_without_clearing_and_keeps_its_frame(self):
+        stage = self.lesson.stages.get(order=3)
+        stage = services.save(
+            stage, title="Басқа", minutes=20, fields={"time": "9 мин", "hypothesis": "<p>NO<sub>2</sub></p>"}
+        )
+        self.assertEqual(stage.minutes, 9)  # the frame's minutes; the title stays the frame's too
+        self.assertNotEqual(stage.title, "Басқа")
+        self.assertEqual(stage.fields["time"], "9")
+        self.assertEqual(stage.fields["hypothesis"], "<p>NO<sub>2</sub></p>")
+        self.assertTrue(stage.edited)
+
+    def test_the_trial_needs_a_filled_sheet_a_class_and_a_level(self):
+        with self.assertRaises(services.LessonError):
+            services.start_stepwise(self.lesson, grade="9", level="medium")
+        fill_sheet(self.lesson)
+        for grade_, level in (("6", "medium"), ("9", "genius")):
+            with self.assertRaises(services.LessonError):
+                services.start_stepwise(self.lesson, grade=grade_, level=level)
+        trial = services.start_stepwise(self.lesson, grade="10", level="high")
+        self.assertEqual((trial.mode, trial.grade, trial.version.reason), ("stepwise", "10", "trial"))
+
+    def test_the_answer_types_are_mixed_by_level(self):
+        for level, counts in (("high", (5, 2, 1)), ("medium", (3, 3, 2)), ("low", (2, 3, 3))):
+            trial = Trial(pk=7, level=level, version=LessonVersion(snapshot={"stages": [{}] * 8}))
+            types = services.planned_types(trial)
+            self.assertEqual(tuple(types.count(t) for t in ("correct", "partial", "wrong")), counts)
+            self.assertEqual(types, services.planned_types(trial))  # the same every time
+
+    def test_stages_open_one_by_one_with_the_planned_type(self):
+        trial = self.trial()
+        self.assertEqual(services.current_order(trial), 1)
+        with self.assertRaises(services.LessonError):
+            services.give_task(trial, 2, explanation="x", task="y", minutes=3)
+        turn = services.give_task(trial, 1, explanation="<p>Т</p>", task="<p>Тапсырма H<sub>2</sub></p>", minutes=50)
+        self.assertEqual((turn.time_minutes, turn.task), (45, "<p>Тапсырма H<sub>2</sub></p>"))
+        system = self.fake.calls[0]["system"]
+        self.assertIn(f"Required answer type: {services.planned_types(trial)[0]}.", system)
+        self.assertIn("grade 9", system)
+        self.assertEqual(services.current_order(trial), 1)  # not analysed yet
+        with self.assertRaises(services.LessonError):
+            services.analyse(turn, analysis="  ")
+        services.analyse(turn, analysis="Түсіндірдім", duration_s=70)
+        self.assertEqual(services.current_order(trial), 2)
+
+    def test_finish_gathers_the_results_and_closes_the_practice(self):
+        trial = self.trial("low")
+        for order in range(1, 8):
+            self.run_stage(trial, order)
+        with self.assertRaises(services.LessonError):
+            services.finish(trial)
+        self.run_stage(trial, 8)
+        version = services.finish(trial)
+        self.lesson.refresh_from_db()
+        self.assertEqual((self.lesson.status, version.reason), ("final", "final"))
+        turns = version.snapshot["trial"]["turns"]
+        self.assertEqual(len(turns), 8)
+        self.assertEqual((turns[0]["student_analysis"], turns[0]["duration_s"]), ("Қате: реакция тоқтамайды", 95))
+        with self.assertRaises(services.LessonError):
+            services.save(self.lesson.stages.get(order=1), title="", minutes=None, fields={})
+
+    def test_the_teachers_grade(self):
+        teacher = make_student("t1")
+        with self.assertRaises(services.LessonError):
+            services.grade(self.lesson, teacher, dict.fromkeys("12345", 2))  # not finished
+        trial = self.trial()
+        for order in range(1, 9):
+            self.run_stage(trial, order)
+        services.finish(trial)
+        self.lesson.refresh_from_db()
+        for bad in ({"1": 3, "2": 1, "3": 1, "4": 1, "5": 1}, {"1": 1}):
+            with self.assertRaises(services.LessonError):
+                services.grade(self.lesson, teacher, bad)
+        review = services.grade(self.lesson, teacher, {"1": 2, "2": 1, "3": 2, "4": 0, "5": 2}, "Жақсы")
+        self.assertEqual((review.total, review.comment), (7, "Жақсы"))
+        review = services.grade(self.lesson, teacher, dict.fromkeys("12345", "2"))
+        self.assertEqual((review.total, Review.objects.count()), (10, 1))

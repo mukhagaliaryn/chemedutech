@@ -1,0 +1,72 @@
+{% load i18n %}{% comment %}
+Section 5 on its section page (guide @S5; picture image20): the way of the practice (prepare → try out → analyse →
+improve) and one card per authorial template — the student's section 4 lesson, the practice sheet's progress, its
+status and the teacher's grade. practices — student.practice.practice_context; section.
+{% endcomment %}
+<section aria-labelledby="pr-flow" class="card flex flex-col gap-4 overflow-hidden">
+  <div class="flex flex-wrap items-center justify-between gap-4">
+    <h2 id="pr-flow" class="text-[17px] font-extrabold">{% translate "Developing the authorial lesson and trying it out" %}</h2>
+    <ol class="flex flex-wrap items-center gap-1.5 text-[13px] font-bold">
+      {% translate "Prepare" as f1 %}{% translate "Try it out" as f2 %}{% translate "Analysis" as f3 %}{% translate "Improve" as f4 %}
+      <li class="tone-1 flex items-center gap-2 rounded-full bg-(--tone-50) py-1.5 pr-3.5 pl-1.5 text-(--tone)"><span class="grid size-6 place-items-center rounded-full bg-(--tone) text-white">{% include "components/icons.html#list" with size=13 %}</span>{{ f1 }}</li>
+      <li aria-hidden="true" class="text-ink-faint">{% include "components/icons.html#chevron-right" with size=14 %}</li>
+      <li class="tone-4 flex items-center gap-2 rounded-full bg-(--tone-50) py-1.5 pr-3.5 pl-1.5 text-(--tone)"><span class="grid size-6 place-items-center rounded-full bg-(--tone) text-white">{% include "components/icons.html#play" with size=12 %}</span>{{ f2 }}</li>
+      <li aria-hidden="true" class="text-ink-faint">{% include "components/icons.html#chevron-right" with size=14 %}</li>
+      <li class="tone-2 flex items-center gap-2 rounded-full bg-(--tone-50) py-1.5 pr-3.5 pl-1.5 text-(--tone)"><span class="grid size-6 place-items-center rounded-full bg-(--tone) text-white">{% include "components/icons.html#chart" with size=13 %}</span>{{ f3 }}</li>
+      <li aria-hidden="true" class="text-ink-faint">{% include "components/icons.html#chevron-right" with size=14 %}</li>
+      <li class="tone-3 flex items-center gap-2 rounded-full bg-(--tone-50) py-1.5 pr-3.5 pl-1.5 text-(--tone)"><span class="grid size-6 place-items-center rounded-full bg-(--tone) text-white">{% include "components/icons.html#settings" with size=13 %}</span>{{ f4 }}</li>
+    </ol>
+  </div>
+  <p class="flex items-start gap-3 rounded-lg bg-danger-50/70 px-4 py-3 text-[14px] leading-[21px]">
+    <span class="glow mt-0.5 shrink-0 text-warning-500">{% include "components/icons.html#sparkle" with size=18 %}</span>
+    {% translate "In this section you conduct your authorial lesson stage by stage, analyse the AI student's answers and improve it." %}
+  </p>
+</section>
+
+<section aria-labelledby="pr-title" class="flex flex-col gap-4">
+  <div class="flex flex-wrap items-baseline justify-between gap-3">
+    <h2 id="pr-title" class="text-[19px] font-extrabold">{% translate "Choose the authorial lesson" %}</h2>
+    <p class="text-sm text-ink-soft">{% translate "Three practice lessons — one for each of your authorial lessons." %}</p>
+  </div>
+  <ul class="grid gap-5 lg:grid-cols-3">
+    {% for card in practices %}{% with t=card.template p=card.practice %}
+      <li class="group card card-lift flex flex-col overflow-hidden p-0" data-reveal>
+        <div class="tpl-{{ t.code }} relative h-[150px] overflow-hidden text-white">
+          <span class="num absolute top-4 left-4 z-10 inline-flex h-7 items-center rounded-full bg-white/20 px-3 text-[13px] font-extrabold ring-1 ring-white/35 backdrop-blur-sm">№{{ t.number }}</span>
+          {% if p.status == "final" %}<span class="absolute top-4 right-4 z-10 grid size-8 place-items-center rounded-full bg-white text-success-600 shadow">{% include "components/icons.html#check" with size=17 %}</span>{% endif %}
+          <div class="absolute inset-x-8 top-6 bottom-0 transition-transform duration-500 group-hover:scale-[1.04]">{% include "student/designer/partials/art.html#"|add:t.code %}</div>
+        </div>
+        <div class="flex flex-1 flex-col gap-3 p-5">
+          <h3 class="text-[16px] leading-[22px] font-extrabold">{{ t.name }}</h3>
+          <p class="text-[13px] leading-5 text-ink-soft">
+            {% if card.source %}{% translate "Your lesson" %}: <span class="font-semibold text-ink">{{ card.source.title }}</span>
+              {% if card.source.status == "final" %}<span class="badge badge-success ml-1 text-[10.5px]">{{ card.source.get_status_display }}</span>{% endif %}
+            {% else %}{% translate "No section 4 lesson for this template yet — the sheet starts empty." %}{% endif %}
+          </p>
+          {% if p %}
+            <div class="mt-auto flex flex-col gap-1.5">
+              <div class="flex justify-between text-[12px] font-semibold text-ink-soft"><span>{% translate "Development sheet" %}</span><span class="num">{{ card.filled }} / {{ card.stage_count }}</span></div>
+              <div class="flex h-2 gap-[3px]" aria-hidden="true">
+                {% for s in p.stages.all %}<span class="tone-{{ forloop.counter }} block h-full flex-1 rounded-full {% if s.edited %}bg-(--tone){% else %}bg-surface-sunken{% endif %}"></span>{% endfor %}
+              </div>
+            </div>
+          {% endif %}
+          <div class="flex flex-wrap items-center justify-between gap-2 border-t border-line pt-3">
+            {% if p %}
+              <span class="flex flex-col gap-1">
+                <span class="badge {% if p.status == 'final' %}badge-success{% else %}badge-info{% endif %} w-fit text-[11px] font-bold">{% if p.status == "final" %}{% translate "Tried out, results gathered" %}{% elif p.trials.exists %}{% translate "Trial in progress" %}{% else %}{% translate "Sheet in progress" %}{% endif %}</span>
+                {% if card.review %}<span class="num text-[13px] font-extrabold text-success-700">{% blocktranslate with n=card.review.total %}Teacher's grade: {{ n }}/10{% endblocktranslate %}</span>{% endif %}
+              </span>
+              <a class="btn {% if p.status == 'final' %}btn-secondary{% else %}btn-primary{% endif %} btn-sm" href="{% if p.status == 'final' %}{% url 'student:practice_results' section.number p.pk %}{% else %}{% url 'student:practice' section.number p.pk %}{% endif %}">{% if p.status == "final" %}{% translate "Open" %}{% else %}{% translate "Continue" %}{% endif %}{% include "components/icons.html#arrow-right" %}</a>
+            {% else %}
+              <span class="text-[13px] text-ink-faint">{% translate "Not started" %}</span>
+              <form method="post" action="{% url 'student:practice_start' section.number t.code %}">{% csrf_token %}
+                <button type="submit" class="btn btn-primary btn-sm">{% include "components/icons.html#plus" %}{% translate "Open the sheet" %}</button>
+              </form>
+            {% endif %}
+          </div>
+        </div>
+      </li>
+    {% endwith %}{% endfor %}
+  </ul>
+</section>

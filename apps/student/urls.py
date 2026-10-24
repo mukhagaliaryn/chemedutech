@@ -1,10 +1,11 @@
 from django.urls import path
 
-from . import designer, sections, views
+from . import designer, practice, sections, views
 
 app_name = "student"
 
 LESSON = "me/sections/<int:number>/lessons/<int:pk>/"
+PRACTICE = "me/sections/<int:number>/practices/<int:pk>/"
 STAGE = "learn/<slug:course_slug>/<int:topic_number>/<int:stage_pk>/"
 
 urlpatterns = [
@@ -35,6 +36,16 @@ urlpatterns = [
     path(LESSON + "<int:order>/restore/", designer.lesson_stage_restore, name="lesson_stage_restore"),
     path(LESSON + "<int:order>/save/", designer.lesson_stage_save, name="lesson_stage_save"),
     path(LESSON + "<int:order>/ai/", designer.lesson_stage_ai, name="lesson_stage_ai"),
+    path("me/sections/<int:number>/practices/<slug:code>/start/", practice.practice_start, name="practice_start"),
+    path(PRACTICE, practice.practice, name="practice"),
+    path(PRACTICE + "trial/", practice.practice_trial, name="practice_trial"),
+    path(PRACTICE + "trial/<int:trial_pk>/<int:order>/", practice.practice_step, name="practice_step"),
+    path(PRACTICE + "results/", practice.practice_results, name="practice_results"),
+    path(PRACTICE + "finish/", practice.practice_finish, name="practice_finish"),
+    path(PRACTICE + "pdf/", practice.practice_pdf, name="practice_pdf"),
+    path(PRACTICE + "<int:order>/", practice.practice_stage, name="practice_stage"),
+    path(PRACTICE + "<int:order>/save/", practice.practice_stage_save, name="practice_stage_save"),
+    path(PRACTICE + "<int:order>/ai/", practice.practice_stage_ai, name="practice_stage_ai"),
     path("me/icpai/", sections.results, name="icpai"),
     path("me/search/", views.search, name="search"),
     path("me/results/", views.results, name="results"),

@@ -1,0 +1,120 @@
+{% extends "layouts/student.html" %}
+{% load i18n static %}
+{% comment %}
+«The development sheet of the digital research practice», part I (guide @S5 I; picture image20): the authorial
+lesson's details (name, chemistry topic, class 7–11, 45 minutes, aim, expected results, authorial method, digital
+tools); «Choosing the structure of the authorial lesson» — the student's section 4 lesson as the source (shown, not
+copied — SPEC О-7); the eight stages of part II at a glance; what is missing before the trial.
+{% endcomment %}
+{% block title %}{% translate "Development sheet" %} · {{ lesson.title|default:template.name }} · ChemEduTech{% endblock %}
+{% block crumb %}{{ programme.title }} · {% blocktranslate with n=section.number %}Section {{ n }}{% endblocktranslate %}{% endblock %}
+{% block page_title %}{% translate "Digital research practice" %}{% endblock %}
+{% block main_class %}max-w-[1500px]{% endblock %}
+{% block content %}
+<nav class="flex flex-wrap items-center gap-2 text-sm" aria-label="{% translate 'Breadcrumbs' %}">
+  <a class="link inline-flex items-center gap-1.5 font-semibold" href="{% url 'student:section' section.number %}">{% include "components/icons.html#arrow-left" %}{{ section.number }}. {{ section.title }}</a>
+</nav>
+
+<div class="grid items-start gap-4 xl:grid-cols-[260px_minmax(0,1fr)]">
+  {% include "student/practice/partials/nav.html" with current="details" %}
+
+  <div class="flex min-w-0 flex-col gap-4">
+    <header class="relative overflow-hidden rounded-xl bg-[linear-gradient(120deg,var(--color-primary-900),var(--color-primary-600)_60%,var(--color-stage-lab))] px-[clamp(20px,3vw,32px)] py-6 text-white">
+      <svg aria-hidden="true" class="pointer-events-none absolute -top-8 -right-6 h-48 opacity-15" viewBox="0 0 200 160"><g fill="none" stroke="#fff" stroke-width="2"><path d="M40 40l18-10 18 10v20l-18 10-18-10z"/><path d="M76 50l40 20"/><path d="M116 70l18-10 18 10v20l-18 10-18-10z"/><circle cx="170" cy="130" r="20"/><path class="dash-flow" stroke-dasharray="5 5" d="M134 90l26 26"/></g></svg>
+      <p class="relative text-[12px] font-extrabold tracking-wide text-white/75 uppercase">{% translate "Section 5" %} · {% translate "Practice" %} №{{ template.number }}</p>
+      <h1 class="relative mt-1 max-w-[820px] text-[clamp(20px,2.4vw,27px)] leading-tight font-extrabold uppercase">{% translate "The development sheet of the digital research practice" %}</h1>
+    </header>
+
+    {# ---- I. About the authorial lesson ---- #}
+    <form method="post" class="card flex flex-col gap-4" aria-labelledby="i-title">{% csrf_token %}
+      <h2 id="i-title" class="flex items-center gap-2.5 text-[17px] font-extrabold"><span class="grid size-8 place-items-center rounded-full bg-primary-900 text-[13px] text-white">I</span>{% translate "About the authorial lesson" %}</h2>
+      <div class="grid gap-4 md:grid-cols-2">
+        <label class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Name of the authorial lesson" %}</span>
+          <input class="input" name="title" maxlength="255" value="{{ lesson.title }}" {% if lesson.status == 'final' %}disabled{% endif %}></label>
+        <label class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Chemistry topic" %}</span>
+          <input class="input" name="topic" maxlength="255" value="{{ lesson.topic }}" {% if lesson.status == 'final' %}disabled{% endif %}></label>
+      </div>
+      <div class="flex flex-wrap items-end gap-6">
+        <fieldset class="flex flex-col gap-1.5"><legend class="mb-1.5 text-[13px] font-bold">{% translate "The class the lesson is for" %}</legend>
+          <div class="flex gap-1.5">
+            {% for g in grades %}
+              <label class="cursor-pointer"><input type="radio" name="grade" value="{{ g }}" class="peer sr-only" {% if lesson.grade == g %}checked{% endif %} {% if lesson.status == 'final' %}disabled{% endif %}>
+                <span class="num grid h-10 w-12 place-items-center rounded-[12px] border border-line-strong text-[15px] font-bold transition-colors peer-checked:border-primary-600 peer-checked:bg-primary-600 peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-primary-100 hover:border-primary-600">{{ g }}</span></label>
+            {% endfor %}
+          </div>
+        </fieldset>
+        <p class="flex items-center gap-2 rounded-[12px] bg-canvas px-4 py-2.5 text-sm"><span class="font-bold">{% translate "Lesson duration" %}:</span> {% blocktranslate with n=lesson.duration_min %}{{ n }} min{% endblocktranslate %}</p>
+      </div>
+      <label class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Lesson aim" %}</span>
+        <textarea class="input" name="aim" rows="2" {% if lesson.status == 'final' %}disabled{% endif %}>{{ lesson.aim }}</textarea></label>
+      <div class="flex flex-col gap-1.5" x-data><span class="text-[13px] font-bold">{% translate "Expected results" %}</span>
+        <textarea name="outcomes" rows="3" class="input" x-rich.answer{% if lesson.status == 'final' %}="true"{% endif %} data-rt="short" aria-label="{% translate 'Expected results' %}">{{ lesson.outcomes }}</textarea></div>
+      <div class="grid gap-4 md:grid-cols-2">
+        <label class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Authorial method used" %}</span>
+          <textarea class="input" name="method" rows="2" {% if lesson.status == 'final' %}disabled{% endif %}>{{ lesson.method }}</textarea></label>
+        <label class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Digital tools used" %}</span>
+          <textarea class="input" name="digital_tools" rows="2" {% if lesson.status == 'final' %}disabled{% endif %}>{{ lesson.digital_tools }}</textarea></label>
+      </div>
+      {% if lesson.status != "final" %}<div class="flex justify-end"><button type="submit" class="btn btn-primary">{% include "components/icons.html#save" %}{% translate "Save" %}</button></div>{% endif %}
+    </form>
+
+    {# ---- choosing the structure: the section 4 lesson as the source ---- #}
+    <section class="card flex flex-col gap-3" aria-labelledby="src-title">
+      <h2 id="src-title" class="text-[17px] font-extrabold">{% translate "Choosing the structure of the authorial lesson" %}</h2>
+      <p class="text-[14px] leading-[21px] text-ink-soft">{% translate "Your authorial lesson from section 4 is shown with all its stages. Use it as a source: the eight stages of the sheet are filled in by you." %}</p>
+      {% if lesson.source_lesson %}
+        <div class="tone-1 flex flex-wrap items-center gap-4 rounded-lg border border-line p-4">
+          <span class="tpl-{{ template.code }} relative block h-14 w-20 shrink-0 overflow-hidden rounded-[12px]"><span class="absolute inset-1">{% include "student/designer/partials/art.html#"|add:template.code %}</span></span>
+          <div class="min-w-0 flex-[1_1_300px]">
+            <p class="text-[15px] font-bold">{{ lesson.source_lesson.title }}</p>
+            <div class="mt-2 flex h-2 gap-[3px] overflow-hidden rounded-full" aria-hidden="true">{% for row in source_rows %}<span class="tone-{{ forloop.counter }} block h-full bg-(--tone)" style="width: {{ row.share|stringformat:'.2f' }}%"></span>{% endfor %}</div>
+            <p class="mt-1.5 flex flex-wrap gap-x-3 gap-y-1 text-[12px] text-ink-soft">{% for row in source_rows %}<span>{{ row.stage.order }}. {{ row.stage.title }}</span>{% endfor %}</p>
+          </div>
+          {% if source_version and designer_number %}<a class="btn btn-secondary btn-sm" target="_blank" rel="noopener" href="{% url 'student:lesson_plan' designer_number lesson.source_lesson.pk %}">{% include "components/icons.html#eye" %}{% translate "Open the lesson" %}</a>{% endif %}
+        </div>
+      {% else %}
+        <p class="text-sm text-ink-faint">{% translate "No section 4 lesson for this template yet — the sheet starts empty." %}</p>
+      {% endif %}
+    </section>
+
+    {# ---- II. the eight stages at a glance (image20) ---- #}
+    <section class="card flex flex-col gap-3" aria-labelledby="ii-title">
+      <div class="flex flex-wrap items-baseline justify-between gap-2">
+        <h2 id="ii-title" class="flex items-center gap-2.5 text-[17px] font-extrabold"><span class="grid size-8 place-items-center rounded-full bg-primary-900 text-[12px] text-white">II</span>{% translate "Organising the lesson by stages" %}</h2>
+        <span class="num text-sm font-bold text-ink-soft">{{ filled }} / {{ stages|length }}</span>
+      </div>
+      <ol class="grid gap-2.5 sm:grid-cols-2 2xl:grid-cols-4">
+        {% for s in stages %}{% with spec=specs|get:s.order %}
+          <li class="tone-{{ s.order }}">
+            <a href="{% url 'student:practice_stage' section.number lesson.pk s.order %}" class="flex h-full flex-col gap-1.5 rounded-lg border border-(--tone)/25 bg-(--tone-50) p-3.5 transition-all hover:-translate-y-0.5 hover:border-(--tone) hover:shadow-lift">
+              <span class="flex items-center justify-between"><span class="num grid size-8 place-items-center rounded-full bg-(--tone) text-[14px] font-extrabold text-white">{{ s.order }}</span>{% if s.edited %}<span class="text-success-600">{% include "components/icons.html#check" with size=16 %}</span>{% endif %}</span>
+              <span class="text-[14px] font-extrabold">{{ s.title }}</span>
+              <span class="num text-[12px] font-bold text-(--tone)">{{ spec.start }}–{{ spec.end }} {% translate "min" %}</span>
+              <span class="line-clamp-3 text-[12.5px] leading-[18px] text-ink-soft">{{ spec.aim }}</span>
+            </a>
+          </li>
+        {% endwith %}{% endfor %}
+      </ol>
+    </section>
+
+    {# ---- before the trial ---- #}
+    {% if lesson.status != "final" %}
+      <section class="card flex flex-wrap items-center gap-4" aria-labelledby="go-title">
+        <span class="grid size-12 shrink-0 place-items-center rounded-[16px] bg-[linear-gradient(135deg,var(--color-stage-video),var(--color-primary-600))] text-white">{% include "components/icons.html#play" with size=22 %}</span>
+        <div class="min-w-0 flex-[1_1_360px]">
+          <h2 id="go-title" class="text-[16px] font-extrabold">{% translate "Try the lesson out" %}</h2>
+          {% if problems %}
+            <ul class="mt-1 flex flex-col gap-1 text-[13px] text-warning-700">
+              {% for p in problems %}<li class="flex items-center gap-1.5">{% include "components/icons.html#warn" with size=13 %}{% if p.code == "details" %}{% translate "Fill in the name, topic, class and aim." %}{% elif p.code == "empty_stage" %}<a class="link" href="{% url 'student:practice_stage' section.number lesson.pk p.order %}">{% blocktranslate with n=p.order t=p.title %}Stage {{ n }} «{{ t }}» is empty{% endblocktranslate %}</a>{% endif %}</li>{% endfor %}
+            </ul>
+          {% else %}
+            <p class="mt-1 text-[13px] text-ink-soft">{% translate "Once all the stages are ready, the lesson is tried out with the AI student stage by stage." %}</p>
+          {% endif %}
+        </div>
+        <a class="btn btn-primary {% if problems %}pointer-events-none opacity-50{% endif %}" href="{% url 'student:practice_trial' section.number lesson.pk %}" {% if problems %}aria-disabled="true"{% endif %}>{% include "components/icons.html#play" %}{% translate "Try the lesson out" %}</a>
+      </section>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}{% rich_text_assets %}{% endblock %}

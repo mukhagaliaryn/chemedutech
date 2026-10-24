@@ -17,6 +17,13 @@ class Trial(models.Model):
     version = models.ForeignKey(
         "pedagogy.LessonVersion", on_delete=models.PROTECT, related_name="trials", verbose_name=_("version")
     )
+
+    class Mode(models.TextChoices):
+        ASSEMBLED = "assembled", _("The assembled lesson, stage by stage on demand")
+        STEPWISE = "stepwise", _("Conducting the lesson stage by stage")
+
+    mode = models.CharField(_("mode"), max_length=12, choices=Mode.choices, default=Mode.ASSEMBLED)
+    grade = models.CharField(_("grade"), max_length=8, blank=True, help_text=_("Section 5: the class, 7–11"))
     level = models.CharField(_("AI student's level"), max_length=8, choices=Level.choices)
     started_at = models.DateTimeField(_("started at"), auto_now_add=True)
     finished_at = models.DateTimeField(_("finished at"), null=True, blank=True)
@@ -50,6 +57,15 @@ class TrialTurn(models.Model):
     difficulty = models.TextField(_("difficulty"), blank=True)
     suggestion = models.TextField(_("methodical suggestion"), blank=True)
     message_id = models.PositiveIntegerField(_("AI message"), null=True, blank=True)
+    # section 5, the stepwise trial (@S5 IV) and the analysis sheet after the trial (@S5 VI)
+    teacher_explanation = models.TextField(_("teacher's explanation"), blank=True)
+    time_minutes = models.PositiveSmallIntegerField(_("time set, minutes"), null=True, blank=True)
+    student_analysis = models.TextField(_("the student's explanation"), blank=True)
+    follow_up_question = models.TextField(_("follow-up question"), blank=True)
+    correction = models.TextField(_("pedagogical correction made"), blank=True)
+    improved_task = models.TextField(_("improved task"), blank=True)
+    duration_s = models.PositiveIntegerField(_("time spent, s"), null=True, blank=True)
+    analysed_at = models.DateTimeField(_("analysed at"), null=True, blank=True)
     created_at = models.DateTimeField(_("created at"), auto_now_add=True)
 
     class Meta:

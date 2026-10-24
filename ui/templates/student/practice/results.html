@@ -1,0 +1,108 @@
+{% extends "layouts/student.html" %}
+{% load i18n %}
+{% comment %}
+«The analysis sheet after the trial» (guide @S5 VI) for every stage — the stage, the AI student's answer type, the
+possible difficulty, the student's explanation, the pedagogical correction, the improved task — then «Finish the
+trial and gather the results»; once gathered: the research portfolio (PDF), the teacher's 10-point grade (VII, apart
+from ICPAI) and the note that the ICPAI components go to «Results» automatically.
+{% endcomment %}
+{% block title %}{% translate "Analysis sheet" %} · {{ lesson.title }} · ChemEduTech{% endblock %}
+{% block crumb %}{{ programme.title }} · {% blocktranslate with n=section.number %}Section {{ n }}{% endblocktranslate %}{% endblock %}
+{% block page_title %}{% translate "Digital research practice" %}{% endblock %}
+{% block main_class %}max-w-[1500px]{% endblock %}
+{% block content %}
+<div class="grid items-start gap-4 xl:grid-cols-[260px_minmax(0,1fr)]">
+  {% include "student/practice/partials/nav.html" with current="results" %}
+
+  <div class="flex min-w-0 flex-col gap-4">
+    {% if lesson.status == "final" %}
+      <section class="relative flex flex-wrap items-center gap-4 overflow-hidden rounded-xl bg-[linear-gradient(120deg,var(--color-success-700),var(--color-stage-lab))] px-6 py-5 text-white">
+        <span class="pulse-ring absolute left-6 size-14 rounded-full border-2 border-white/40" aria-hidden="true"></span>
+        <span class="relative grid size-14 shrink-0 place-items-center rounded-full bg-white/20">{% include "components/icons.html#award" with size=28 %}</span>
+        <div class="relative min-w-0 flex-[1_1_320px]">
+          <p class="text-[18px] font-extrabold">{% translate "The research portfolio is gathered" %}</p>
+          <p class="text-sm text-white/85">{% translate "Your authorial lesson, the AI student's modelled answers, your corrections and the final reflection are kept together." %}</p>
+        </div>
+        <a class="btn relative bg-white text-success-700 hover:bg-white/90" href="{% url 'student:practice_pdf' section.number lesson.pk %}">{% include "components/icons.html#download" %}PDF</a>
+      </section>
+
+      {# ---- the teacher's grade (VII) ---- #}
+      <section class="card flex flex-col gap-4" aria-labelledby="grade-title">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <h2 id="grade-title" class="text-[17px] font-extrabold">{% translate "Assessment of the digital research practice" %}</h2>
+          {% if review %}<span class="num text-[26px] font-extrabold text-success-700">{{ review.total }}<span class="text-[16px] text-ink-faint"> / 10</span></span>{% else %}<span class="badge badge-info font-bold">{% translate "Not graded by the teacher yet" %}</span>{% endif %}
+        </div>
+        <ul class="flex flex-col gap-2">
+          {% for c in score_rows %}
+            <li class="flex items-center gap-3 rounded-lg bg-canvas px-4 py-2.5 text-[13.5px]">
+              <span class="num grid size-7 shrink-0 place-items-center rounded-full bg-primary-600 text-[12px] font-extrabold text-white">{{ c.number }}</span>
+              <span class="min-w-0 flex-1">{{ c.label }}</span>
+              <span class="flex gap-1" aria-hidden="true"><span class="size-3 rounded-full {% if c.points >= 1 %}bg-success-600{% else %}bg-surface-sunken{% endif %}"></span><span class="size-3 rounded-full {% if c.points >= 2 %}bg-success-600{% else %}bg-surface-sunken{% endif %}"></span></span>
+              <span class="num w-10 text-right font-bold">{% if c.points is not None %}{{ c.points }}{% else %}—{% endif %}/2</span>
+            </li>
+          {% endfor %}
+        </ul>
+        {% if review.comment %}<p class="rounded-lg border border-line px-4 py-3 text-[14px] leading-[21px]"><span class="font-bold">{% translate "Teacher's comment" %}:</span> {{ review.comment|linebreaksbr }}</p>{% endif %}
+        <p class="text-[12.5px] text-ink-faint">{% translate "This grade is kept apart from the diagnostic percents of the four ICPAI components; those go to «Results» automatically." %} <a class="link font-semibold" href="{% url 'student:icpai' %}">{% translate "Results" %} →</a></p>
+      </section>
+    {% endif %}
+
+    {# ---- the analysis sheet (VI) ---- #}
+    <section class="card flex flex-col gap-4" aria-labelledby="vi-title">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h1 id="vi-title" class="text-[19px] font-extrabold">{% translate "The analysis sheet after the trial" %}</h1>
+          <p class="text-[13px] text-ink-soft">{% translate "The AI student" %}: {{ trial.get_level_display|lower }} · {% blocktranslate with g=trial.grade %}Grade {{ g }}{% endblocktranslate %}</p>
+        </div>
+        <ul class="flex flex-wrap gap-2 text-[12.5px] font-bold">
+          <li class="flex items-center gap-1.5 rounded-full bg-success-50 px-3 py-1.5 text-success-700">{% include "components/icons.html#check" with size=13 %}{% translate "Correct" %}: <span class="num">{{ counts.correct }}</span></li>
+          <li class="flex items-center gap-1.5 rounded-full bg-warning-50 px-3 py-1.5 text-warning-700">{% include "components/icons.html#alert" with size=13 %}{% translate "Partly correct" %}: <span class="num">{{ counts.partial }}</span></li>
+          <li class="flex items-center gap-1.5 rounded-full bg-danger-50 px-3 py-1.5 text-danger-700">{% include "components/icons.html#x" with size=13 %}{% translate "Wrong" %}: <span class="num">{{ counts.wrong }}</span></li>
+        </ul>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-[760px] border-separate border-spacing-1 text-left text-[13px] leading-[19px]">
+          <thead><tr class="text-[11px] tracking-wide text-white uppercase">
+            <th scope="col" class="w-[14%] rounded-[8px] bg-primary-900 px-3 py-2.5">{% translate "Stage tried out" %}</th>
+            <th scope="col" class="w-[10%] rounded-[8px] bg-primary-900 px-3 py-2.5">{% translate "The AI student's answer type" %}</th>
+            <th scope="col" class="w-[18%] rounded-[8px] bg-primary-900 px-3 py-2.5">{% translate "Possible difficulty found" %}</th>
+            <th scope="col" class="w-[20%] rounded-[8px] bg-primary-900 px-3 py-2.5">{% translate "The student's explanation" %}</th>
+            <th scope="col" class="w-[18%] rounded-[8px] bg-primary-900 px-3 py-2.5">{% translate "Pedagogical correction made" %}</th>
+            <th scope="col" class="w-[20%] rounded-[8px] bg-primary-900 px-3 py-2.5">{% translate "Improved task" %}</th>
+          </tr></thead>
+          <tbody>
+            {% for r in rows %}{% with t=r.turn s=r.stage %}
+              <tr class="tone-{{ s.order }} align-top">
+                <th scope="row" class="rounded-[8px] border border-line bg-(--tone-50) px-3 py-2.5"><span class="block font-extrabold text-(--tone)">{{ s.order }}. {{ s.title }}</span><span class="num text-[11.5px] font-bold text-ink-soft">{{ s.start }}–{{ s.end }} {% translate "min" %}</span></th>
+                {% if t %}
+                  <td class="rounded-[8px] border border-line px-3 py-2.5"><span class="badge {% if t.answer_type == 'correct' %}badge-success{% elif t.answer_type == 'partial' %}badge-warning{% else %}badge-danger{% endif %} text-[11px] font-bold">{{ t.get_answer_type_display }}</span></td>
+                  <td class="rounded-[8px] border border-line px-3 py-2.5">{{ t.difficulty|default:"—" }}</td>
+                  <td class="rounded-[8px] border border-line px-3 py-2.5"><div class="prose-lesson text-[13px]">{{ t.student_analysis|rich|default:"—" }}</div></td>
+                  <td class="rounded-[8px] border border-line px-3 py-2.5"><div class="prose-lesson text-[13px]">{{ t.correction|rich|default:"—" }}</div></td>
+                  <td class="rounded-[8px] border border-line px-3 py-2.5"><div class="prose-lesson text-[13px]">{{ t.improved_task|rich|default:"—" }}</div></td>
+                {% else %}
+                  <td colspan="5" class="rounded-[8px] border border-dashed border-line px-3 py-2.5 text-ink-faint">{% translate "Not tried out yet" %}</td>
+                {% endif %}
+              </tr>
+            {% endwith %}{% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% if lesson.status != "final" %}
+        <div class="flex flex-wrap items-center justify-between gap-3 border-t border-line pt-4">
+          {% if open_stage %}
+            <p class="text-[13px] text-warning-700">{% translate "First analyse the AI student's answer at every stage." %}</p>
+            <a class="btn btn-secondary" href="{% url 'student:practice_step' section.number lesson.pk trial.pk open_stage %}">{% blocktranslate with n=open_stage %}Go on with stage {{ n }}{% endblocktranslate %}{% include "components/icons.html#arrow-right" %}</a>
+          {% else %}
+            <p class="max-w-[640px] text-[13px] text-ink-soft">{% translate "The student's main task is not to get a correct answer from the AI student, but to conduct the authorial lesson, respond pedagogically to the student's answer, explain the errors and improve the lesson content." %}</p>
+            <form method="post" action="{% url 'student:practice_finish' section.number lesson.pk %}">{% csrf_token %}
+              {% translate "Finish the trial and gather the results?" as f_title %}{% translate "The sheet, the AI student's answers and your corrections are gathered into your research portfolio and can no longer be changed." as f_text %}{% translate "Finish" as f_label %}
+              <button type="submit" class="btn btn-primary h-[48px] px-6 text-[15px] font-bold" data-confirm="{{ f_title }}" data-confirm-text="{{ f_text }}" data-confirm-label="{{ f_label }}" data-confirm-variant="success" data-confirm-icon="check">{% include "components/icons.html#check-square" %}{% translate "Finish the trial and gather the results" %}</button>
+            </form>
+          {% endif %}
+        </div>
+      {% endif %}
+    </section>
+  </div>
+</div>
+{% endblock %}

@@ -13,6 +13,7 @@ class Lesson(TimeStampedModel):
 
     class Kind(models.TextChoices):
         TEMPLATE_COPY = "template_copy", _("Template copy")
+        RESEARCH_PRACTICE = "research_practice", _("Digital research practice")
 
     class Status(models.TextChoices):
         DRAFT = "draft", _("Draft")
@@ -33,12 +34,23 @@ class Lesson(TimeStampedModel):
         related_name="lessons",
         verbose_name=_("template"),
     )
+    source_lesson = models.ForeignKey(
+        "self",
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="derived",
+        verbose_name=_("source lesson"),
+        help_text=_("Section 5: the student's section 4 lesson, shown beside the sheet (not copied)"),
+    )
     title = models.CharField(_("title"), max_length=255)
     topic = models.CharField(_("lesson topic"), max_length=255, blank=True)
     grade = models.CharField(_("grade"), max_length=32, blank=True)
     duration_min = models.PositiveSmallIntegerField(_("duration, min"), default=45)
     aim = models.TextField(_("lesson aim"), blank=True)
     outcomes = models.TextField(_("expected results"), blank=True, help_text=_("HTML"))
+    method = models.TextField(_("authorial method used"), blank=True)
+    digital_tools = models.TextField(_("digital tools used"), blank=True)
     status = models.CharField(_("status"), max_length=16, choices=Status.choices, default=Status.DRAFT)
 
     class Meta:
@@ -50,7 +62,12 @@ class Lesson(TimeStampedModel):
                 fields=("owner", "source_template"),
                 condition=Q(kind="template_copy"),
                 name="lesson_one_copy_per_template",
-            )
+            ),
+            models.UniqueConstraint(
+                fields=("owner", "source_template"),
+                condition=Q(kind="research_practice"),
+                name="lesson_one_practice_per_template",
+            ),
         ]
 
     def __str__(self):
@@ -63,6 +80,7 @@ class LessonStage(models.Model):
 
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name="stages", verbose_name=_("lesson"))
     order = models.PositiveSmallIntegerField(_("number"))
+    key = models.CharField(_("frame stage"), max_length=32, blank=True, help_text=_("pedagogy/frames.py"))
     title = models.CharField(_("title"), max_length=255)
     minutes = models.PositiveSmallIntegerField(_("minutes"))
     fields = models.JSONField(_("content"), default=dict, blank=True)
@@ -90,6 +108,7 @@ class LessonVersion(models.Model):
 
     class Reason(models.TextChoices):
         ASSEMBLE = "assemble", _("Assembled")
+        TRIAL = "trial", _("Tried out")
         FINAL = "final", _("Final version")
 
     lesson = models.ForeignKey(Lesson, on_delete=models.PROTECT, related_name="versions", verbose_name=_("lesson"))

@@ -1,0 +1,52 @@
+{% load i18n %}<!doctype html>{% comment %}
+The research portfolio of a section 5 practice as a PDF (WeasyPrint, A4): part I of the sheet, the eight stages with
+their fields, the analysis sheet after the trial (VI) and the teacher's grade if given (VII).
+{% endcomment %}
+<html lang="{{ LANGUAGE_CODE|default:'kk' }}"><head><meta charset="utf-8"><title>{{ plan.title }}</title>
+<style>
+  @page { size: A4; margin: 14mm; }
+  body { font-family: "Inter", "DejaVu Sans", sans-serif; font-size: 9.5pt; color: #13213b; line-height: 1.45; }
+  .head { background: #15336b; color: #fff; border-radius: 10px; padding: 12px 16px; }
+  .head h1 { margin: 0; font-size: 14pt; text-transform: uppercase; } .head p { margin: 3px 0 0; color: #c9d6f0; }
+  h2 { font-size: 11.5pt; margin: 14px 0 6px; color: #15336b; }
+  .grid { display: flex; flex-wrap: wrap; gap: 6px; }
+  .box { border: 1px solid #d7deea; border-radius: 8px; padding: 6px 9px; flex: 1 1 45%; }
+  .k { color: #0b7a7a; font-size: 7.5pt; font-weight: 800; text-transform: uppercase; }
+  .stage { border: 1px solid #d7deea; border-radius: 8px; padding: 8px 10px; margin-bottom: 6px; page-break-inside: avoid; }
+  .stage h3 { margin: 0 0 4px; font-size: 10pt; } .stage h3 span { color: #0b7a7a; font-weight: 700; font-size: 8.5pt; }
+  .f { margin: 3px 0; } .f b { color: #1a4dab; }
+  table { width: 100%; border-collapse: collapse; font-size: 8.5pt; } th, td { border: 1px solid #d7deea; padding: 5px 6px; vertical-align: top; text-align: left; }
+  th { background: #15336b; color: #fff; font-size: 7.5pt; text-transform: uppercase; }
+  p { margin: 0 0 3px; } ul, ol { margin: 2px 0 3px; padding-left: 14px; }
+</style></head>
+<body>
+  <div class="head"><h1>{% translate "The development sheet of the digital research practice" %}</h1><p>{{ plan.title }} · {% blocktranslate with g=trial.grade %}Grade {{ g }}{% endblocktranslate %} · {% translate "The AI student" %}: {{ trial.get_level_display|lower }}</p></div>
+  <h2>I. {% translate "About the authorial lesson" %}</h2>
+  <div class="grid">
+    <div class="box"><div class="k">{% translate "Name of the authorial lesson" %}</div>{{ plan.title }}</div>
+    <div class="box"><div class="k">{% translate "Chemistry topic" %}</div>{{ plan.topic }}</div>
+    <div class="box"><div class="k">{% translate "The class the lesson is for" %}</div>{{ plan.grade }}</div>
+    <div class="box"><div class="k">{% translate "Lesson duration" %}</div>{% blocktranslate with n=plan.duration_min %}{{ n }} min{% endblocktranslate %}</div>
+    <div class="box"><div class="k">{% translate "Lesson aim" %}</div>{{ plan.aim }}</div>
+    <div class="box"><div class="k">{% translate "Expected results" %}</div>{{ plan.outcomes|rich }}</div>
+    <div class="box"><div class="k">{% translate "Authorial method used" %}</div>{{ plan.method|default:"—" }}</div>
+    <div class="box"><div class="k">{% translate "Digital tools used" %}</div>{{ plan.digital_tools|default:"—" }}</div>
+  </div>
+  <h2>II. {% translate "Organising the lesson by stages" %}</h2>
+  {% for r in rows %}
+    <div class="stage"><h3>{{ r.stage.order }}. {{ r.stage.title }} <span>({{ r.stage.start }}–{{ r.stage.end }} {% translate "min" %})</span></h3>
+      {% if r.spec %}<div class="f"><b>{% translate "Aim" %}:</b> {{ r.spec.aim }}</div>{% endif %}
+      {% for f in r.fields %}<div class="f"><b>{{ f.label }}:</b> {{ f.html|rich }}</div>{% endfor %}
+    </div>
+  {% endfor %}
+  <h2>{% translate "The analysis sheet after the trial" %}</h2>
+  <table>
+    <tr><th>{% translate "Stage tried out" %}</th><th>{% translate "The AI student's answer type" %}</th><th>{% translate "Possible difficulty found" %}</th><th>{% translate "The student's explanation" %}</th><th>{% translate "Pedagogical correction made" %}</th><th>{% translate "Improved task" %}</th></tr>
+    {% for r in rows %}<tr><td>{{ r.stage.order }}. {{ r.stage.title }}</td>{% if r.turn %}<td>{{ r.turn.get_answer_type_display }}</td><td>{{ r.turn.difficulty }}</td><td>{{ r.turn.student_analysis|rich }}</td><td>{{ r.turn.correction|rich }}</td><td>{{ r.turn.improved_task|rich }}</td>{% else %}<td colspan="5">—</td>{% endif %}</tr>{% endfor %}
+  </table>
+  {% if review %}
+    <h2>{% translate "Assessment of the digital research practice" %}: {{ review.total }} / 10</h2>
+    <table>{% for c in score_rows %}<tr><td>{{ c.number }}. {{ c.label }}</td><td style="width: 12%">{{ c.points }}/2</td></tr>{% endfor %}</table>
+    {% if review.comment %}<p style="margin-top: 6px"><b>{% translate "Teacher's comment" %}:</b> {{ review.comment }}</p>{% endif %}
+  {% endif %}
+</body></html>

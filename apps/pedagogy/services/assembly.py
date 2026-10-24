@@ -58,13 +58,14 @@ def snapshot(lesson: Lesson) -> dict:
     stages, start = [], 0
     for stage in lesson.stages.all():
         stages.append({
-            "order": stage.order, "title": stage.title, "minutes": stage.minutes, "start": start,
+            "order": stage.order, "key": stage.key, "title": stage.title, "minutes": stage.minutes, "start": start,
             "end": start + stage.minutes, "fields": dict(stage.fields), "redesigned": stage.edited,
         })  # fmt: skip
         start += stage.minutes
     return {
         "title": lesson.title, "topic": lesson.topic, "grade": lesson.grade, "duration_min": lesson.duration_min,
-        "aim": lesson.aim, "outcomes": lesson.outcomes, "frame": lesson.frame,
+        "aim": lesson.aim, "outcomes": lesson.outcomes, "frame": lesson.frame, "kind": lesson.kind,
+        "method": lesson.method, "digital_tools": lesson.digital_tools,
         "subject": template.subject if template else "",
         "template": {
             "code": template.code, "number": template.number, "name": template.name,
@@ -123,7 +124,7 @@ def task_html(stage: dict) -> str:
 
 def _context(trial: Trial, stage: dict) -> str:
     data = trial.version.snapshot
-    labels = {f.key: str(f.label) for f in frames.fields_of(data.get("frame", "template"))}
+    labels = {f.key: str(f.label) for f in frames.fields_of(data.get("frame", "template"), stage.get("key", ""))}
     outline = "\n".join(f"{s['order']}. «{s['title']}» – {s['minutes']} min" for s in data["stages"])
     content = "\n\n".join(
         f"{labels.get(key, key)}:\n{html_to_text(html)}" for key, html in stage["fields"].items() if html

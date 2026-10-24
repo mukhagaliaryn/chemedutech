@@ -17,11 +17,22 @@ from .chat import AIUnavailable, LimitReached, conversation_for, enabled, remain
 from .client import CallFailed, call
 
 FIELDS = tuple(student_sim.SCHEMA["required"])
+ANSWER_TYPES = ("correct", "partial", "wrong")
 
 
-def simulate(user, *, context_type: str, context_id: int, context: str, level: str, intent: str = "", client=None):
+def simulate(
+    user,
+    *,
+    context_type: str,
+    context_id: int,
+    context: str,
+    level: str,
+    answer_type: str = "",
+    intent: str = "",
+    client=None,
+):
     """The AI student at ``level`` does one stage described in ``context``; returns the AIMessage whose ``structured``
-    holds the five fields. Raises LimitReached / AIUnavailable like ``ask`` (a failed call is logged)."""
+    holds the five fields; ``answer_type`` (correct / partial / wrong) makes the AI give that kind of answer. Raises LimitReached / AIUnavailable like ``ask`` (a failed call is logged)."""
     if not enabled():
         raise AIUnavailable("disabled")
     if remaining_today(user) <= 0:
@@ -38,7 +49,8 @@ def simulate(user, *, context_type: str, context_id: int, context: str, level: s
     language = assistant.LANGUAGES.get((get_language() or "kk")[:2], "Kazakh")
     system = (
         f"{student_sim.SYSTEM}\n\n<context>\nInterface language: {language}.\nReadiness level: {level}.\n"
-        f"{context}\n</context>"
+        + (f"Required answer type: {answer_type}.\n" if answer_type in ANSWER_TYPES else "")
+        + f"{context}\n</context>"
     )
     usage, _created = AIUsage.objects.get_or_create(user=user, date=timezone.localdate())
     AIUsage.objects.filter(pk=usage.pk).update(requests=F("requests") + 1)

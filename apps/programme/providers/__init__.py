@@ -9,6 +9,7 @@ from .base import Provider, Upcoming
 from .course import CourseProvider
 from .designer import DesignerProvider
 from .diagnostic import DiagnosticProvider
+from .practice import ResearchPracticeProvider
 from .video import VideoProvider
 
 PROVIDERS: dict[str, Provider] = {
@@ -16,6 +17,7 @@ PROVIDERS: dict[str, Provider] = {
     Section.Kind.DIAGNOSTIC: DiagnosticProvider(),
     Section.Kind.VIDEO: VideoProvider(),
     Section.Kind.DESIGNER: DesignerProvider(),
+    Section.Kind.RESEARCH_PRACTICE: ResearchPracticeProvider(),
 }
 
 

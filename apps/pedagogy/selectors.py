@@ -57,8 +57,8 @@ def template_blocks(stage: TemplateStage) -> list[dict]:
 def stage_fields(stage: LessonStage) -> list[dict]:
     """The stage's frame fields with their labels and the student's (or the copied) HTML."""
     return [
-        {"key": f.key, "label": f.label, "icon": f.icon, "html": stage.fields.get(f.key, "")}
-        for f in frames.fields_of(stage.lesson.frame)
+        {"key": f.key, "label": f.label, "icon": f.icon, "number": f.number, "html": stage.fields.get(f.key, "")}
+        for f in frames.fields_of(stage.lesson.frame, stage.key)
     ]
 
 

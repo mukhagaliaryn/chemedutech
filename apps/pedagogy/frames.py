@@ -1,9 +1,13 @@
-"""The fields of a lesson stage, by frame (docs/icpai/SPEC.md §2.3; kept in code, not in the database — D4).
+"""The stages and fields of a lesson, by frame (docs/icpai/SPEC.md §2.3; kept in code, not in the database — D4).
 
 TEMPLATE — a stage of the author's lesson templates (section 4, guide @S4-L1…L3). Its fields are the points of the
 assembled lesson (guide @S4-ASSEMBLE 1, items 3–8): the template's labelled blocks are sorted into them by
-docs/icpai/tools/gen_lessons.py. The other frames (CONSTRUCTOR_8, RESEARCH_SHEET_8, MICRO_4, FREE) come with their
-sections.
+docs/icpai/tools/gen_lessons.py. The stages themselves come from the template.
+
+RESEARCH_8 — «The development sheet of the digital research practice» (section 5, guide @S5 II): eight fixed stages
+with their minutes, aim and fields (names verbatim from the guide in the kk translation). ``explain`` and ``task`` say
+which fields prefill «The teacher's explanation» and «Giving the task» of the stepwise trial (@S5 IV); ``time`` is
+the minutes field. The other frames (MICRO_4, FREE) come with their sections.
 """
 
 from dataclasses import dataclass
@@ -16,6 +20,24 @@ class Field:
     key: str
     label: str
     icon: str
+    number: bool = False  # minutes, not text
+
+
+@dataclass(frozen=True)
+class Stage:
+    key: str
+    title: str
+    start: int
+    end: int
+    aim: str
+    fields: tuple
+    explain: tuple = ()
+    task: tuple = ()
+    time: str = "time"
+
+    @property
+    def minutes(self) -> int:
+        return self.end - self.start
 
 
 TEMPLATE = (
@@ -27,12 +49,103 @@ TEMPLATE = (
     Field("result", _("Stage result"), "award"),
 )
 
-FRAMES = {"template": TEMPLATE}
+
+def _time(label=None):
+    return Field("time", label or _("Time to do it, minutes"), "clock", number=True)
 
 
-def fields_of(frame: str) -> tuple[Field, ...]:
-    return FRAMES[frame]
+TASK = Field("task", _("The task given to the student"), "list")
+
+RESEARCH_8 = (
+    Stage(
+        "interest", _("Arousing interest"), 0, 4,
+        _("To find out the student's prior knowledge and to arouse interest in the research problem."),
+        (Field("teacher_explanation", _("The teacher's explanation"), "user"),
+         Field("problem_question", _("Problem question"), "help"), TASK, _time(),
+         Field("expected", _("Expected result"), "award")),
+        explain=("teacher_explanation", "problem_question"), task=("task",),
+    ),
+    Stage(
+        "misconception", _("Finding misconceptions"), 4, 10,
+        _("To find out the student's initial understanding of chemical phenomena and to direct them to correct "
+          "wrong scientific reasoning."),
+        (Field("statement", _("Statement offered for analysis"), "message"), TASK, _time(),
+         Field("criterion", _("Assessment criterion"), "check")),
+        explain=("statement",), task=("task",),
+    ),
+    Stage(
+        "evidence", _("Gathering evidence"), 10, 19,
+        _("To gather scientific data through a virtual experiment or digital modelling."),
+        (Field("research_question", _("Research question"), "help"),
+         Field("hypothesis", _("Initial hypothesis"), "sparkle"),
+         Field("experiment", _("Content of the experiment"), "lab"),
+         Field("parameters", _("Parameters to change"), "settings"),
+         Field("indicators", _("Indicators to observe"), "chart"), _time(),
+         Field("recording", _("How the results are recorded"), "table")),
+        explain=("research_question", "hypothesis"), task=("experiment", "parameters", "indicators", "recording"),
+    ),
+    Stage(
+        "three_levels", _("Explaining at three levels"), 19, 27,
+        _("To explain a chemical phenomenon by connecting the macroscopic, submicroscopic and symbolic levels."),
+        (Field("macro", _("Macroscopic explanation"), "eye"),
+         Field("submicro", _("Submicroscopic model"), "grid"),
+         Field("equation", _("Chemical equation or formula"), "activity"), TASK, _time()),
+        explain=("macro", "submicro", "equation"), task=("task",),
+    ),
+    Stage(
+        "teach_ai", _("Teaching the AI student"), 27, 34,
+        _("To improve the future teacher's skills of explaining chemistry knowledge and answering the student's "
+          "questions."),
+        (Field("concept", _("The chemical concept to explain"), "book"),
+         Field("explanation", _("The teacher's authorial explanation"), "user"),
+         Field("visual", _("Visual aids used"), "eye"), _time(_("Length of the explanation, minutes"))),
+        explain=("concept", "explanation", "visual"),
+    ),
+    Stage(
+        "new_situation", _("Checking in a new situation"), 34, 39,
+        _("To find out whether the student applies the knowledge gained in a new chemical situation."),
+        (Field("situation", _("New problem situation"), "help"),
+         Field("task", _("Task"), "list"),
+         Field("expected", _("Expected scientific result"), "award"), _time()),
+        explain=("situation",), task=("task",),
+    ),
+    Stage(
+        "peer_assessment", _("Peer assessment"), 39, 43,
+        _("To assess the results of the task by criteria and to give reasoned feedback."),
+        (Field("criteria", _("Assessment criteria"), "check"),
+         Field("descriptors", _("Descriptors"), "list"),
+         Field("feedback", _("Way of feedback"), "message"), _time(_("Assessment time, minutes"))),
+        explain=("criteria", "descriptors"), task=("feedback",),
+    ),
+    Stage(
+        "reflection", _("Reflection"), 43, 45,
+        _("To find out what the student has learnt, the difficulties met and the directions of further development."),
+        (Field("questions", _("Reflection questions"), "help"),
+         Field("self_assessment", _("Way of self-assessment"), "check-square"),
+         Field("summary", _("Summary of the lesson"), "award"), _time()),
+        explain=("summary",), task=("questions", "self_assessment"),
+    ),
+)  # fmt: skip
+
+FRAMES = {"template": TEMPLATE, "research_8": RESEARCH_8}
 
 
-def keys_of(frame: str) -> tuple[str, ...]:
-    return tuple(f.key for f in FRAMES[frame])
+def stages_of(frame: str) -> tuple[Stage, ...]:
+    """The fixed stages of a frame (empty for TEMPLATE: its stages come from the template)."""
+    return RESEARCH_8 if frame == "research_8" else ()
+
+
+def stage_spec(frame: str, key: str) -> Stage | None:
+    return next((s for s in stages_of(frame) if s.key == key), None)
+
+
+def fields_of(frame: str, key: str = "") -> tuple[Field, ...]:
+    """The fields of a stage: the same for every stage of TEMPLATE, per stage in RESEARCH_8."""
+    if frame == "template":
+        return TEMPLATE
+    spec = stage_spec(frame, key)
+    return spec.fields if spec else ()
+
+
+def keys_of(frame: str, key: str = "") -> tuple[str, ...]:
+    return tuple(f.key for f in fields_of(frame, key))

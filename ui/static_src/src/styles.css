@@ -2090,7 +2090,8 @@
 }
 
 /* ---- ICPAI lesson designer (student/designer/*; guide pictures image12–18) ---------------------------------
-   The six stage tones of the template pictures (blue, green, orange, violet, rose, teal) as --tone / --tone-50,
+   The stage tones of the template pictures (blue, green, orange, violet, rose, teal; 7–8 for the eight stages of
+   section 5) as --tone / --tone-50,
    the template gradients, and the template's text blocks. */
 @layer components {
   .tone-1 {
@@ -2116,6 +2117,14 @@
   .tone-6 {
     --tone: var(--color-stage-lab);
     --tone-50: var(--color-stage-lab-50);
+  }
+  .tone-7 {
+    --tone: var(--color-primary-700);
+    --tone-50: var(--color-primary-50);
+  }
+  .tone-8 {
+    --tone: var(--color-ai-700);
+    --tone-50: var(--color-ai-50);
   }
   .tpl-chem_design {
     background: linear-gradient(135deg, var(--color-primary-700), var(--color-primary-600) 45%, var(--color-stage-lab));

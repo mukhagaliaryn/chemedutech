@@ -1,0 +1,178 @@
+{% extends "layouts/student.html" %}
+{% load i18n %}
+{% comment %}
+One stage of the stepwise trial (guide @S5 IV–VI; picture image20): the eight stages on top (they open one by one);
+the stage in six steps — 1 the teacher's explanation, 2 giving the task, 3 setting the time (prefilled from the sheet,
+editable) → «Give the task to the student» → 4 the AI student's answer (its type, the possible error, the difficulty;
+the AI assistant's explanation folded) with the time running → 5 analysing the answer (the student's explanation,
+a follow-up question, the pedagogical correction, the improved task — the analysis sheet VI) → 6 the next stage.
+{% endcomment %}
+{% block title %}{{ stage.order }}. {{ stage.title }} · {% translate "Try the lesson out" %} · ChemEduTech{% endblock %}
+{% block crumb %}{{ programme.title }} · {% blocktranslate with n=section.number %}Section {{ n }}{% endblocktranslate %}{% endblock %}
+{% block page_title %}{% translate "Try the lesson out" %}{% endblock %}
+{% block main_class %}max-w-[1440px]{% endblock %}
+{% block content %}
+{# ---- the eight stages ---- #}
+<div class="flex flex-wrap items-center justify-between gap-3">
+  <div class="flex items-center gap-3">
+    {% include "student/designer/partials/ai_student.html" with level=trial.level size=44 %}
+    <p class="text-sm"><span class="font-extrabold">{% translate "The AI student" %}: {{ trial.get_level_display|lower }}</span><span class="block text-ink-soft">{% blocktranslate with g=trial.grade %}Grade {{ g }}{% endblocktranslate %} · {{ lesson.title }}</span></p>
+  </div>
+  <a class="btn btn-ghost btn-sm" href="{% url 'student:practice_results' section.number lesson.pk %}">{% include "components/icons.html#chart" %}{% translate "Analysis sheet" %}</a>
+</div>
+<ol class="grid grid-cols-4 gap-1.5 lg:grid-cols-8" aria-label="{% translate 'Lesson stages' %}">
+  {% for s in trial_stages %}
+    <li class="tone-{{ s.order }}">
+      {% if s.open %}<a href="{% url 'student:practice_step' section.number lesson.pk trial.pk s.order %}"{% else %}<span{% endif %}
+        class="flex h-full flex-col items-center gap-1 rounded-lg border px-1.5 py-2 text-center transition-colors {% if s.order == stage.order %}border-(--tone) bg-(--tone-50) shadow-[0_0_0_3px_color-mix(in_srgb,var(--tone)_14%,transparent)]{% elif s.open %}border-line bg-surface hover:border-(--tone){% else %}border-line bg-surface-sunken/50 text-ink-faint{% endif %}"
+        {% if s.order == stage.order %}aria-current="step"{% endif %}>
+        <span class="num grid size-7 place-items-center rounded-full text-[12.5px] font-extrabold {% if s.done %}bg-success-600 text-white{% elif s.open %}bg-(--tone) text-white{% else %}bg-surface text-ink-faint{% endif %}">{% if s.done %}✓{% elif not s.open %}{% include "components/icons.html#lock" with size=12 %}{% else %}{{ s.order }}{% endif %}</span>
+        <span class="text-[11.5px] leading-[14px] font-bold">{{ s.title }}</span>
+        <span class="num text-[10.5px] font-semibold {% if s.open %}text-(--tone){% endif %}">{{ s.start }}–{{ s.end }}′</span>
+      {% if s.open %}</a>{% else %}</span>{% endif %}
+    </li>
+  {% endfor %}
+</ol>
+
+{% if error %}
+  <div class="alert alert-warning" role="alert"><span class="alert-icon">{% include "components/icons.html#warn" with size=18 %}</span>
+    <span>{% if error == "limit" %}{% translate "Today's AI requests are used up. They renew tomorrow." %}{% elif error == "off" %}{% translate "Available when the AI assistant is connected." %}{% elif error == "failed" %}{% translate "The AI student did not answer this time. Try again in a minute." %}{% elif error == "empty" %}{% translate "Fill in the required fields." %}{% else %}{% translate "This stage is not open now." %}{% endif %}</span></div>
+{% endif %}
+
+<div class="tone-{{ stage.order }} grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_340px]">
+  <section class="card flex min-w-0 flex-col gap-0 overflow-hidden p-0" aria-labelledby="stage-title">
+    <header class="flex flex-wrap items-center gap-3 border-b border-(--tone)/20 bg-(--tone-50) px-5 py-4">
+      <span class="num grid size-11 shrink-0 place-items-center rounded-full bg-(--tone) text-[18px] font-extrabold text-white shadow-[0_0_0_4px_white]">{{ stage.order }}</span>
+      <div class="min-w-0 flex-1">
+        <p class="text-[12px] font-bold tracking-wide text-(--tone) uppercase">{% blocktranslate with n=stage.order %}Stage {{ n }}{% endblocktranslate %}</p>
+        <h1 id="stage-title" class="text-[19px] leading-6 font-extrabold">{{ stage.title }}</h1>
+      </div>
+      <span class="num inline-flex h-8 items-center gap-1.5 rounded-full bg-white px-3 text-[13px] font-bold ring-1 ring-(--tone)/30">{% include "components/icons.html#clock" with size=14 %}{{ stage.start }}–{{ stage.end }} {% translate "min" %}</span>
+    </header>
+
+    {% if not turn %}
+      {# ---- steps 1–3, then «Give the task to the student» ---- #}
+      <form method="post" class="flex flex-col gap-4 p-5" x-data="{ busy: false }" @submit="busy = true">{% csrf_token %}
+        <input type="hidden" name="action" value="give">
+        <div class="flex flex-col gap-2">
+          <span class="flex items-center gap-2.5 text-[14px] font-extrabold"><span class="num grid size-7 place-items-center rounded-full bg-(--tone) text-[12.5px] text-white">1</span>{% translate "The teacher's explanation" %}</span>
+          <p class="text-[12.5px] text-ink-soft">{% translate "Enter your explanation or use what you prepared in the lesson scenario." %}</p>
+          <textarea name="explanation" rows="3" class="input" x-rich.answer data-rt="short" aria-label="{% translate "The teacher's explanation" %}">{{ prefill.explanation }}</textarea>
+        </div>
+        <div class="flex flex-col gap-2">
+          <span class="flex items-center gap-2.5 text-[14px] font-extrabold"><span class="num grid size-7 place-items-center rounded-full bg-(--tone) text-[12.5px] text-white">2</span>{% translate "Giving the task" %}</span>
+          <textarea name="task" rows="3" class="input" x-rich.answer data-rt="short" aria-label="{% translate 'Giving the task' %}">{{ prefill.task }}</textarea>
+        </div>
+        <div class="flex flex-wrap items-center gap-3">
+          <span class="flex items-center gap-2.5 text-[14px] font-extrabold"><span class="num grid size-7 place-items-center rounded-full bg-(--tone) text-[12.5px] text-white">3</span>{% translate "Setting the time" %}</span>
+          <input type="number" name="minutes" min="1" max="45" class="input num w-24" value="{{ prefill.minutes|default:stage.minutes }}" aria-label="{% translate 'Minutes' %}"><span class="text-sm text-ink-soft">{% translate "min" %}</span>
+        </div>
+        <div class="flex flex-wrap items-center justify-between gap-3 border-t border-line pt-4">
+          <span class="text-[12.5px] text-ink-faint">{% blocktranslate with n=remaining %}{{ n }} requests left today{% endblocktranslate %}</span>
+          <button type="submit" class="btn h-[48px] bg-success-600 px-6 text-[15px] font-bold text-white hover:bg-success-700" :disabled="busy" {% if not ai_enabled %}disabled{% endif %}>
+            <span x-show="!busy" class="inline-flex items-center gap-2">{% include "components/icons.html#play" %}{% translate "Give the task to the student" %}</span>
+            <span x-show="busy" x-cloak class="inline-flex items-center gap-2"><span class="typing flex gap-1"><span class="size-1.5 rounded-full bg-white"></span><span class="size-1.5 rounded-full bg-white"></span><span class="size-1.5 rounded-full bg-white"></span></span>{% translate "The AI student is doing the task…" %}</span>
+          </button>
+        </div>
+      </form>
+    {% else %}
+      <div class="flex flex-col gap-4 p-5" x-data="{ start: Date.now(), now: Date.now(), limit: {{ turn.time_minutes|default:stage.minutes }} * 60, hint: false }"
+           x-init="setInterval(() => now = Date.now(), 1000)">
+        {# ---- steps 1–3 as given ---- #}
+        <details class="group rounded-lg border border-line">
+          <summary class="flex cursor-pointer items-center justify-between gap-2 px-4 py-3 text-[13.5px] font-bold">
+            <span class="flex items-center gap-2">{% for n in "123"|make_list %}<span class="num grid size-6 place-items-center rounded-full bg-success-600 text-[11px] text-white">✓</span>{% endfor %}{% translate "The explanation, the task and the time" %} · <span class="num">{{ turn.time_minutes|default:"—" }} {% translate "min" %}</span></span>
+            <span class="transition-transform group-open:rotate-180">{% include "components/icons.html#chevron-down" with size=15 %}</span>
+          </summary>
+          <div class="grid gap-3 border-t border-line px-4 py-3 md:grid-cols-2">
+            <div><p class="text-[12px] font-extrabold tracking-wide text-ink-faint uppercase">{% translate "The teacher's explanation" %}</p><div class="prose-lesson mt-1">{{ turn.teacher_explanation|rich|default:"—" }}</div></div>
+            <div><p class="text-[12px] font-extrabold tracking-wide text-ink-faint uppercase">{% translate "Task" %}</p><div class="prose-lesson mt-1">{{ turn.task|rich|default:"—" }}</div></div>
+          </div>
+        </details>
+
+        {# ---- step 4: the AI student's answer ---- #}
+        <section id="answer" class="flex flex-col gap-3" aria-labelledby="ans-title">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h2 id="ans-title" class="flex items-center gap-2.5 text-[14px] font-extrabold"><span class="num grid size-7 place-items-center rounded-full bg-(--tone) text-[12.5px] text-white">4</span>{% translate "The AI student's answer" %}</h2>
+            {% if not turn.analysed_at %}
+              <span class="num inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[12.5px] font-bold" :class="(now - start) / 1000 > limit ? 'bg-warning-50 text-warning-700' : 'bg-canvas text-ink-soft'" aria-live="off">
+                {% include "components/icons.html#timer" with size=14 %}<span x-text="`${String(Math.floor((now - start) / 60000)).padStart(2, '0')}:${String(Math.floor((now - start) / 1000) % 60).padStart(2, '0')}`">00:00</span> / {{ turn.time_minutes|default:stage.minutes }}:00
+              </span>
+            {% endif %}
+          </div>
+          <div class="flex items-start gap-3">
+            {% include "student/designer/partials/ai_student.html" with level=trial.level size=60 %}
+            <div class="min-w-0 flex-1 rounded-[18px] rounded-tl-[6px] border border-primary-100 bg-primary-50/60 px-4 py-3">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <span class="text-[12.5px] font-bold text-primary-700">{% translate "The AI student" %} ({{ trial.get_level_display|lower }})</span>
+                <span class="badge {% if turn.answer_type == 'correct' %}badge-success{% elif turn.answer_type == 'partial' %}badge-warning{% else %}badge-danger{% endif %} text-[11px] font-bold">{{ turn.get_answer_type_display }}</span>
+              </div>
+              <p class="mt-1.5 text-[14.5px] leading-[23px] whitespace-pre-line">{{ turn.answer }}</p>
+            </div>
+          </div>
+          <div class="grid gap-3 md:grid-cols-2">
+            <div class="flex gap-3 rounded-lg border border-danger-600/25 bg-danger-50 p-3.5"><span class="grid size-7 shrink-0 place-items-center rounded-full bg-danger-600 text-white">{% include "components/icons.html#x" with size=13 %}</span><div><h3 class="text-[12.5px] font-extrabold text-danger-700">{% translate "The student's possible error" %}</h3><p class="mt-0.5 text-[13.5px] leading-[20px]">{{ turn.possible_error|default:"—" }}</p></div></div>
+            <div class="flex gap-3 rounded-lg border border-primary-600/20 bg-primary-50 p-3.5"><span class="grid size-7 shrink-0 place-items-center rounded-full bg-primary-600 text-white">{% include "components/icons.html#help" with size=13 %}</span><div><h3 class="text-[12.5px] font-extrabold text-primary-700">{% translate "Where it was difficult" %}</h3><p class="mt-0.5 text-[13.5px] leading-[20px]">{{ turn.difficulty|default:"—" }}</p></div></div>
+          </div>
+          <div class="rounded-lg border border-success-600/25 bg-success-50/60">
+            <button type="button" class="flex w-full items-center justify-between gap-2 px-4 py-2.5 text-[13px] font-extrabold text-success-700" @click="hint = !hint" :aria-expanded="hint">
+              <span class="flex items-center gap-2">{% include "components/icons.html#sparkle" with size=14 %}{% translate "The AI assistant's explanation" %}</span>
+              <span class="text-[12px] font-semibold text-ink-soft" x-text="hint ? '{{ _('Hide')|escapejs }}' : '{{ _('Analyse it yourself first, then compare')|escapejs }}'"></span>
+            </button>
+            <p x-show="hint" x-cloak x-transition.opacity class="border-t border-success-600/20 px-4 py-3 text-[13.5px] leading-[20px]">{{ turn.suggestion }}</p>
+          </div>
+        </section>
+
+        {# ---- step 5: analysing the answer (the analysis sheet, VI) ---- #}
+        {% if turn.analysed_at %}
+          <section class="flex flex-col gap-3 rounded-lg border border-line p-4" aria-labelledby="an-title">
+            <h2 id="an-title" class="flex items-center gap-2.5 text-[14px] font-extrabold"><span class="num grid size-7 place-items-center rounded-full bg-success-600 text-[12px] text-white">✓</span>{% translate "Analysing the answer" %}</h2>
+            <dl class="grid gap-3 md:grid-cols-2 text-[13.5px]">
+              <div><dt class="text-[12px] font-extrabold text-ink-faint uppercase">{% translate "The student's explanation" %}</dt><dd class="prose-lesson mt-0.5">{{ turn.student_analysis|rich }}</dd></div>
+              <div><dt class="text-[12px] font-extrabold text-ink-faint uppercase">{% translate "Follow-up question" %}</dt><dd class="prose-lesson mt-0.5">{{ turn.follow_up_question|rich|default:"—" }}</dd></div>
+              <div><dt class="text-[12px] font-extrabold text-ink-faint uppercase">{% translate "Pedagogical correction made" %}</dt><dd class="prose-lesson mt-0.5">{{ turn.correction|rich|default:"—" }}</dd></div>
+              <div><dt class="text-[12px] font-extrabold text-ink-faint uppercase">{% translate "Improved task" %}</dt><dd class="prose-lesson mt-0.5">{{ turn.improved_task|rich|default:"—" }}</dd></div>
+            </dl>
+          </section>
+          <div class="flex justify-end">
+            {% for s in trial_stages %}{% if s.order == stage.order|add:1 and s.open %}<a class="btn btn-primary" href="{% url 'student:practice_step' section.number lesson.pk trial.pk s.order %}">{% translate "Go on to the next stage" %}{% include "components/icons.html#arrow-right" %}</a>{% endif %}{% endfor %}
+            {% if is_last %}<a class="btn btn-primary" href="{% url 'student:practice_results' section.number lesson.pk %}">{% include "components/icons.html#chart" %}{% translate "Analysis sheet" %}</a>{% endif %}
+          </div>
+        {% else %}
+          <form method="post" class="flex flex-col gap-3 rounded-lg border-2 border-(--tone)/30 p-4" aria-labelledby="an-title">{% csrf_token %}
+            <input type="hidden" name="action" value="analyse">
+            <input type="hidden" name="duration_s" :value="Math.round((now - start) / 1000)">
+            <h2 id="an-title" class="flex items-center gap-2.5 text-[14px] font-extrabold"><span class="num grid size-7 place-items-center rounded-full bg-(--tone) text-[12.5px] text-white">5</span>{% translate "Analysing the answer" %}</h2>
+            <p class="text-[12.5px] text-ink-soft">{% translate "Check the AI student's answer, find the errors and give an explanation; ask an extra question to improve the student's understanding." %}</p>
+            <div class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "The student's explanation" %} <span class="text-danger-600">*</span></span>
+              <textarea name="analysis" rows="3" class="input" x-rich.answer data-rt="short" aria-label="{% translate "The student's explanation" %}"></textarea></div>
+            <div class="grid gap-3 md:grid-cols-2">
+              <label class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Follow-up question" %}</span><textarea name="follow_up" rows="2" class="input"></textarea></label>
+              <label class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Pedagogical correction made" %}</span><textarea name="correction" rows="2" class="input"></textarea></label>
+            </div>
+            <div class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Improved task" %}</span>
+              <textarea name="improved_task" rows="2" class="input" x-rich.answer data-rt="short" aria-label="{% translate 'Improved task' %}"></textarea></div>
+            <div class="flex justify-end border-t border-line pt-3">
+              <button type="submit" class="btn btn-primary h-[46px] px-5 font-bold">
+                <span class="num grid size-6 place-items-center rounded-full bg-white/25 text-[12px]">6</span>{% if is_last %}{% translate "Finish the stages" %}{% else %}{% translate "Go on to the next stage" %}{% endif %}{% include "components/icons.html#arrow-right" %}
+              </button>
+            </div>
+          </form>
+        {% endif %}
+      </div>
+    {% endif %}
+  </section>
+
+  {# ---- the stage in the sheet ---- #}
+  <aside class="card flex flex-col gap-3 xl:sticky xl:top-20" aria-labelledby="plan-title">
+    <h2 id="plan-title" class="text-[14px] font-extrabold">{% translate "The stage in your sheet" %}</h2>
+    {% if spec %}<p class="rounded-lg bg-warning-50/70 px-3 py-2.5 text-[13px] leading-[19px]"><span class="font-extrabold">{% translate "Aim" %}:</span> {{ spec.aim }}</p>{% endif %}
+    <div class="flex max-h-[520px] flex-col gap-2.5 overflow-y-auto pr-1">
+      {% for f in spec.fields %}{% with v=stage.fields|get:f.key %}{% if v and v != f.key %}
+        <div><p class="flex items-center gap-1.5 text-[12px] font-extrabold text-(--tone)">{% include "components/icons.html#"|add:f.icon with size=13 %}{{ f.label }}</p><div class="prose-lesson mt-0.5 text-[13px] leading-[19px] text-ink-soft">{% if f.number %}{{ v }} {% translate "min" %}{% else %}{{ v|rich }}{% endif %}</div></div>
+      {% endif %}{% endwith %}{% endfor %}
+    </div>
+  </aside>
+</div>
+{% endblock %}
+{% block scripts %}{% rich_text_assets %}{% endblock %}
