@@ -448,6 +448,14 @@ class MicroTests(TestCase):
         with self.assertRaises(services.LessonError):
             services.start_dialog(self.lesson, grade="11", level="medium")
 
+    def test_a_wrong_criterion_blocks_the_trial_too(self):
+        fill_micro(self.lesson)
+        wrong = {**CHECK_OK, "criteria": {**CHECK_OK["criteria"], "complete": "wrong"}}
+        self.fake.replies = [self.answer(json.dumps(wrong))]
+        self.assertFalse(services.check_micro(self.lesson).passed)
+        with self.assertRaises(services.LessonError):
+            services.start_dialog(self.lesson, grade="11", level="medium")
+
     def test_the_dialogue_and_its_timer(self):
         trial = self.dialog()
         m = services.send(trial, kind="question", text="Неліктен электрондар мырыштан мысқа қозғалады?")

@@ -63,6 +63,8 @@ def call(
         raise CallFailed(f"{type(exc).__name__} {exc.status_code}: {exc.message}") from exc
     if response.stop_reason == "refusal":
         raise CallFailed("refusal")
+    if response.stop_reason == "max_tokens" and schema:  # a cut JSON cannot be read: say so plainly
+        raise CallFailed(f"max_tokens: the answer did not fit in {max_tokens} tokens")
     text = "".join(b.text for b in response.content if b.type == "text").strip()
     if not text:
         raise CallFailed(f"empty answer (stop_reason={response.stop_reason})")

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ChemEduTech\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-25 00:40+0500\n"
+"POT-Creation-Date: 2026-10-25 01:48+0500\n"
 "PO-Revision-Date: 2026-10-16 21:00+0500\n"
 "Last-Translator: ChemEduTech\n"
 "Language-Team: ChemEduTech\n"
@@ -8260,7 +8260,7 @@ msgid "The AI assistant did not answer this time. Try again in a minute."
 msgstr ""
 "ЖИ-ассистент бұл жолы жауап бермеді. Бір минуттан кейін қайталап көріңіз."
 
-#: apps/student/micro.py:202 ui/templates/student/micro/trial_start.html:15
+#: apps/student/micro.py:202
 msgid "First every stage must be marked correct by the AI assistant's check."
 msgstr "Алдымен ЖИ-ассистенттің тексеруінде барлық кезең «Дұрыс» болуы керек."
 
@@ -12798,8 +12798,9 @@ msgid "Checking…"
 msgstr "Тексерілуде…"
 
 #: ui/templates/student/micro/editor.html:143
-msgid "The trial opens when every stage is marked ✓ CORRECT."
-msgstr "Сынақ барлық кезең ✓ ДҰРЫС болғанда ашылады."
+msgid ""
+"The trial opens when every stage and every criterion is marked ✓ CORRECT."
+msgstr "Сынақ әр кезең мен әр критерий ✓ ДҰРЫС деп белгіленгенде ашылады."
 
 #: ui/templates/student/micro/editor.html:155
 msgid ""
@@ -12997,6 +12998,12 @@ msgstr ""
 msgid ""
 "The sheet of developing the microlesson and trying it out professionally"
 msgstr "Микросабақты әзірлеу және кәсіби сынақтан өткізу парағы"
+
+#: ui/templates/student/micro/trial_start.html:15
+msgid ""
+"First every stage and every criterion must be marked correct by the AI "
+"assistant's check."
+msgstr "Алдымен ЖИ-ассистенттің тексеруінде әр кезең мен әр критерий дұрыс деп белгіленуі керек."
 
 #: ui/templates/student/micro/trial_start.html:32
 #: ui/templates/student/practice/trial_start.html:35

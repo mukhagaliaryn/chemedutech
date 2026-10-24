@@ -1,5 +1,6 @@
 """The AI layer (D73) — always with a fake client: no network in tests."""
 
+import json
 from types import SimpleNamespace
 from unittest import mock
 
@@ -119,6 +120,26 @@ class AskTests(Base):
         errors = list(AIMessage.objects.filter(role="assistant").values_list("error", flat=True))
         self.assertEqual(len(errors), 3)
         self.assertTrue(all(errors))
+
+
+class StructuredLimitTests(Base):
+    """The STEP-40 walkthrough: «Айгерім»'s Kazakh opinion ran past 2000 tokens and the cut JSON failed to parse."""
+
+    @override_settings(**ON)
+    def test_a_cut_answer_is_reported_as_max_tokens(self):
+        cut = answer(text='{"items": {"accuracy": {"status": "ok", "text": "Реакция теңдеу', stop="max_tokens")
+        with self.assertRaises(services.AIUnavailable) as caught:
+            services.review(self.user, context_type="lesson", context_id=1, context="Сабақ", client=FakeClient(cut))
+        self.assertIn("max_tokens", str(caught.exception))
+        self.assertIn("max_tokens", AIMessage.objects.get(role="assistant").error)
+
+    @override_settings(**ON)
+    def test_the_expert_has_room_for_its_opinion(self):
+        from apps.pedagogy.tests import DRAFT
+
+        client = FakeClient(answer(json.dumps(DRAFT)))
+        services.review(self.user, context_type="lesson", context_id=1, context="Сабақ", client=client)
+        self.assertGreaterEqual(client.calls[0]["max_tokens"], 8000)
 
 
 class FormatTests(TestCase):

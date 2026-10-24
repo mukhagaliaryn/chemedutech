@@ -9,6 +9,9 @@ from .chat import AIUnavailable
 from .structured import ask_structured, language
 
 STATUSES = ("ok", "needs_more", "revise")
+# six or seven conclusions of up to three sentences, a summary, strengths, suggestions, the change — in Kazakh this
+# ran past 2000 tokens and the JSON was cut (found by the STEP-40 walkthrough)
+EXPERT_MAX_TOKENS = 8000
 
 
 def review(user, *, context_type: str, context_id: int, context: str, after_trial: bool = False, client=None):
@@ -20,7 +23,7 @@ def review(user, *, context_type: str, context_id: int, context: str, after_tria
         user, mode=Mode.EXPERT, prompt_version=expert.PROMPT_VERSION, system=system,
         request="Give your expert opinion after the trial." if after_trial else "Give your expert opinion on the project.",
         schema=expert.schema(keys), context_type=context_type, context_id=context_id,
-        intent="trial" if after_trial else "draft", client=client,
+        intent="trial" if after_trial else "draft", max_tokens=EXPERT_MAX_TOKENS, client=client,
     )  # fmt: skip
     data = message.structured
     items = data.get("items") if isinstance(data.get("items"), dict) else None

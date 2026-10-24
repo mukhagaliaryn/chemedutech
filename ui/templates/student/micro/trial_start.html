@@ -11,7 +11,7 @@ AI check marked every stage correct.{% endcomment %}
 <a class="link inline-flex items-center gap-1.5 text-sm font-semibold" href="{% url 'student:micro' section.number %}">{% include "components/icons.html#arrow-left" %}{% translate "Microlesson" %}</a>
 {% if not state.passed %}
   <section class="card flex flex-col gap-2 border-2 border-warning-500/40">
-    <h1 class="text-[18px] font-extrabold">{% translate "First every stage must be marked correct by the AI assistant's check." %}</h1>
+    <h1 class="text-[18px] font-extrabold">{% translate "First every stage and every criterion must be marked correct by the AI assistant's check." %}</h1>
     <a class="btn btn-secondary self-start" href="{% url 'student:micro' section.number %}#checker">{% include "components/icons.html#check-square" %}{% translate "AI assistant: checker mode" %}</a>
   </section>
 {% else %}

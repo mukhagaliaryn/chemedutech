@@ -36,4 +36,7 @@ class Check(models.Model):
 
     @property
     def passed(self) -> bool:
-        return bool(self.stages) and all(v == "ok" for v in self.stages.values())
+        """Every stage and every one of the seven criteria ✓ (guide @S6 III: the student corrects what is marked ✕ and
+        sends it to be checked again; agreed after the STEP-40 walkthrough)."""
+        marks = [*self.stages.values(), *self.criteria.values()]
+        return bool(self.stages) and all(v == "ok" for v in marks)

@@ -31,10 +31,12 @@ def ask_structured(
     context_type: str,
     context_id: int,
     intent: str = "",
+    max_tokens: int = 4000,
     client=None,
 ) -> AIMessage:
     """Send ``request`` with ``system``; the answer must be JSON of ``schema`` with every required field. Returns the
-    AIMessage whose ``structured`` holds it. Raises LimitReached / AIUnavailable (the failed turn is logged)."""
+    AIMessage whose ``structured`` holds it. Raises LimitReached / AIUnavailable (the failed turn is logged).
+    ``max_tokens`` — room for the answer: Kazakh text takes many tokens, a cut JSON fails."""
     if not enabled():
         raise AIUnavailable("disabled")
     if remaining_today(user) <= 0:
@@ -49,7 +51,9 @@ def ask_structured(
     usage, _created = AIUsage.objects.get_or_create(user=user, date=timezone.localdate())
     AIUsage.objects.filter(pk=usage.pk).update(requests=F("requests") + 1)
     try:
-        reply = call(system, [{"role": "user", "content": request}], schema=schema, client=client)
+        reply = call(
+            system, [{"role": "user", "content": request}], schema=schema, max_tokens=max_tokens, client=client
+        )
         data = json.loads(reply.text)
         if not isinstance(data, dict) or any(k not in data for k in schema.get("required", ())):
             raise CallFailed("bad structured answer")

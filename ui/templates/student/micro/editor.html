@@ -140,7 +140,7 @@ stages (2 + 3 + 3 + 2 min) with their fields saved by themselves and «The AI as
             </button>
           </form>
           <a class="btn btn-primary w-full {% if not state.passed and not open_trial %}pointer-events-none opacity-50{% endif %}" :class="stale && 'pointer-events-none opacity-50'" href="{% url 'student:micro_trial' section.number %}">{% include "components/icons.html#play" %}{% if open_trial %}{% translate "Go on with the trial" %}{% else %}{% translate "Try it out" %}{% endif %}</a>
-          {% if not state.passed %}<p class="text-[12px] text-ink-soft">{% translate "The trial opens when every stage is marked ✓ CORRECT." %}</p>{% endif %}
+          {% if not state.passed %}<p class="text-[12px] text-ink-soft">{% translate "The trial opens when every stage and every criterion is marked ✓ CORRECT." %}</p>{% endif %}
         {% endif %}
         <p class="text-[11.5px] text-ink-faint">{% blocktranslate with n=remaining %}{{ n }} requests left today{% endblocktranslate %}</p>
       </div>
