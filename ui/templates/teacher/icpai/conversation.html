@@ -1,0 +1,42 @@
+{% extends "layouts/teacher.html" %}
+{% load i18n %}
+{% comment %}A student's AI dialogue for the teacher, read only (SPEC §4.9; STEP-39): the student's messages and the AI's
+answers (a structured answer shown as its fields), with the mode, the prompt version and the tokens.
+Context: teacher/icpai.py conversation.{% endcomment %}
+{% block title %}{% translate "AI dialogue" %} · {{ student.full_name }} · ChemEduTech{% endblock %}
+{% block crumb %}{% translate "Groups and students" %}{% endblock %}
+{% block page_title %}{{ student.full_name }}{% endblock %}
+{% block main_class %}max-w-[960px]{% endblock %}
+{% block content %}
+<a class="link inline-flex items-center gap-1.5 text-sm font-semibold" href="{% url 'teacher:student' student.pk %}?tab=icpai">{% include "components/icons.html#arrow-left" %}{{ student.full_name }} · ICPAI</a>
+<section class="card flex flex-wrap items-center gap-3">
+  <span class="grid size-12 place-items-center rounded-full bg-[linear-gradient(135deg,var(--color-stage-lab),var(--color-primary-600))] text-white">{% include "components/icons.html#sparkle" with size=22 %}</span>
+  <div class="min-w-0 flex-1">
+    <h1 class="text-[20px] leading-7 font-extrabold">{{ conversation.get_mode_display }}</h1>
+    <p class="num text-[13px] text-ink-soft">{{ conversation.context_type }} #{{ conversation.context_id }} · {{ conversation.prompt_version }} · {{ conversation.model }} · {{ conversation.created_at|date:"d.m.Y H:i" }}</p>
+  </div>
+  <p class="num text-caption text-ink-soft">{% blocktranslate with i=tokens.i|default:0 o=tokens.o|default:0 %}{{ i }} in · {{ o }} out tokens{% endblocktranslate %}</p>
+</section>
+<p class="text-caption text-ink-soft">{% translate "Read only. The student's messages and the AI's answers are kept as research data." %}</p>
+<ol class="flex flex-col gap-3">
+  {% for m in messages_ %}
+    {% if m.role == "user" %}
+      <li class="flex flex-col items-end gap-1">
+        <span class="text-caption text-ink-soft">{% translate "Student" %}{% if m.intent %} · {{ m.intent }}{% endif %} · <span class="num">{{ m.created_at|date:"d.m H:i" }}</span></span>
+        <p class="max-w-[85%] rounded-xl rounded-br-sm bg-primary-600 px-4 py-2.5 text-[14px] leading-[21px] whitespace-pre-line text-white">{{ m.content|default:"—" }}</p>
+      </li>
+    {% else %}
+      <li class="flex flex-col items-start gap-1">
+        <span class="text-caption text-ink-soft">{% translate "AI" %}{% if m.intent %} · {{ m.intent }}{% endif %} · <span class="num">{{ m.created_at|date:"d.m H:i" }} · {{ m.input_tokens }}+{{ m.output_tokens }} tok · {{ m.latency_ms }} ms</span></span>
+        <div class="max-w-[85%] rounded-xl rounded-bl-sm border border-line bg-surface px-4 py-2.5 text-[14px] leading-[21px] shadow-sm">
+          {% if m.error %}<p class="text-danger-700">{% translate "The call failed" %}: {{ m.error|truncatechars:200 }}</p>{% endif %}
+          {% if m.content %}<p class="whitespace-pre-line">{{ m.content }}</p>{% endif %}
+          {% if m.structured %}
+            <dl class="mt-1 flex flex-col gap-1 text-[12.5px]">{% for k, v in m.structured.items %}<div><dt class="inline font-bold text-ink-soft">{{ k }}:</dt> <dd class="inline break-words">{{ v }}</dd></div>{% endfor %}</dl>
+          {% endif %}
+        </div>
+      </li>
+    {% endif %}
+  {% empty %}<li class="text-sm text-ink-faint">—</li>{% endfor %}
+</ol>
+{% endblock %}

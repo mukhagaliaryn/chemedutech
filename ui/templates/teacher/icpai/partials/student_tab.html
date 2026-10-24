@@ -1,0 +1,111 @@
+{% load i18n %}
+{% comment %}The «ICPAI» tab of the teacher's student page (SPEC §4.9; STEP-39): the 8 sections (status, percent; a locked
+section opens by hand), diagnostics I/II/III with the components, the lessons of sections 4, 5, 6, 8 (versions, trials,
+grades → the read-only lesson and trial pages), the portfolio, the AI dialogues (read only). Context: teacher/icpai.py
+student_context.{% endcomment %}
+{% if not icpai %}
+  {% translate "Not in the ICPAI programme" as l_title %}{% translate "The student joins the programme with the course enrolment." as l_text %}
+  {% include "components/empty_state.html" with title=l_title text=l_text icon="award" %}
+{% else %}
+<section aria-labelledby="ic-sec" class="card flex flex-col gap-3">
+  <div class="flex flex-wrap items-baseline justify-between gap-2">
+    <h2 id="ic-sec" class="text-h3">{{ icpai.programme.title }}</h2>
+    <span class="text-caption text-ink-soft">{% include "teacher/partials/cohort.html" with cohort=icpai.research_cohort %}</span>
+  </div>
+  <ol class="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+    {% for r in section_rows %}
+      <li class="tone-{{ r.section.number }} flex items-center gap-3 rounded-lg border border-line p-3 {% if r.status == 'locked' %}bg-canvas{% endif %}">
+        <span class="relative grid size-11 shrink-0 place-items-center rounded-full" style="background: conic-gradient(var(--tone) {% if r.status == 'locked' %}0{% else %}{{ r.percent|stringformat:'.1f' }}{% endif %}%, var(--color-surface-sunken) 0)" aria-hidden="true">
+          <span class="num grid size-8 place-items-center rounded-full bg-surface text-[13px] font-extrabold">{{ r.section.number }}</span>
+        </span>
+        <span class="min-w-0 flex-1">
+          <span class="block truncate text-[13px] font-bold" title="{{ r.section.title }}">{{ r.section.title }}</span>
+          <span class="text-caption {% if r.status == 'passed' %}text-success-700{% elif r.status == 'locked' %}text-ink-faint{% else %}text-ink-soft{% endif %}">
+            {% if r.status == "passed" %}✓ {% endif %}{{ r.progress.get_status_display|default:_("Locked") }}{% if r.status != "locked" %} · <span class="num">{{ r.percent|floatformat:0 }}%</span>{% endif %}
+          </span>
+        </span>
+        {% if r.status == "locked" and enrollment %}
+          <form method="post" action="{% url 'teacher:unlock_section' student.pk r.section.number %}">{% csrf_token %}
+            <input type="hidden" name="course" value="{{ enrollment.course.slug }}"><input type="hidden" name="next" value="{{ request.get_full_path }}">
+            <button type="submit" class="btn btn-ghost btn-icon btn-sm text-ink-faint" aria-label="{% blocktranslate with n=r.section.number s=student.full_name|default:student.username %}Open section {{ n }} for {{ s }}{% endblocktranslate %}"
+                    data-confirm="{% blocktranslate with n=r.section.number s=student.full_name|default:student.username %}Open section {{ n }} for {{ s }}?{% endblocktranslate %}"
+                    data-confirm-text="{% translate 'The section stays open whatever the order says; the action is logged.' %}" data-confirm-label="{% translate 'Open' %}" data-confirm-icon="unlock">{% include "components/icons.html#lock" with size=14 %}</button>
+          </form>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ol>
+</section>
+
+<div class="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+  <section aria-labelledby="ic-diag" class="card flex flex-col gap-3">
+    <h2 id="ic-diag" class="text-h3">{% translate "ICPAI diagnostics" %}</h2>
+    <div class="grid grid-cols-3 gap-2">
+      {% for p in phases %}{% with d=diagnostics|get:p %}
+        <div class="rounded-lg border border-line p-3 text-center">
+          <p class="text-caption font-bold text-ink-soft">{% blocktranslate %}Stage {{ p }}{% endblocktranslate %}</p>
+          {% if d and d != p %}<p class="num text-[22px] font-extrabold">{{ d.percent|floatformat:0 }}%</p><p class="num text-caption text-ink-faint">{{ d.earned|floatformat:0 }}/{{ d.maximum|floatformat:0 }}</p>{% else %}<p class="text-[22px] font-extrabold text-ink-faint">—</p>{% endif %}
+        </div>
+      {% endwith %}{% endfor %}
+    </div>
+    <table class="table text-[13px]">
+      <thead><tr><th scope="col">{% translate "Component" %}</th>{% for p in phases %}<th scope="col" class="text-right">{{ p }}</th>{% endfor %}</tr></thead>
+      <tbody class="num">{% for r in dynamics %}<tr><td class="font-semibold">{{ r.label }}</td>{% for p in phases %}{% with v=r.phases|get:p %}<td class="text-right">{% if v is not None and v != p %}{{ v|floatformat:0 }}%{% else %}<span class="text-ink-faint">—</span>{% endif %}</td>{% endwith %}{% endfor %}</tr>{% endfor %}</tbody>
+    </table>
+  </section>
+
+  <section aria-labelledby="ic-pf" class="card flex flex-col gap-3">
+    <h2 id="ic-pf" class="text-h3">{% translate "Professional portfolio" %}</h2>
+    {% if portfolio %}
+      <p class="flex flex-wrap items-center gap-2 text-sm"><span class="badge {% if portfolio.status == 'accepted' %}badge-success{% elif portfolio.status == 'submitted' %}badge-info{% else %}badge-neutral{% endif %} font-bold">{{ portfolio.get_status_display }}</span>{% if portfolio.submitted_at %}<span class="text-ink-soft">{{ portfolio.submitted_at|date:"d.m.Y" }}</span>{% endif %}</p>
+      {% if portfolio.submitted_at %}<a class="btn btn-secondary btn-sm self-start" href="{% url 'teacher:portfolio' portfolio.pk %}">{% translate "Open the portfolio" %}{% include "components/icons.html#chevron-right" with size=16 %}</a>{% endif %}
+    {% else %}<p class="text-sm text-ink-soft">{% translate "Not started yet." %}</p>{% endif %}
+    <h2 class="mt-2 text-h3">{% translate "AI dialogues" %}</h2>
+    <ul class="flex flex-wrap gap-2 text-caption">{% for m in modes %}<li class="rounded-full bg-canvas px-3 py-1"><span class="font-bold">{{ m.label }}</span> · <span class="num">{{ m.n }}</span></li>{% endfor %}</ul>
+  </section>
+</div>
+
+<section aria-labelledby="ic-les" class="card flex flex-col gap-4">
+  <h2 id="ic-les" class="text-h3">{% translate "Lessons, versions and trials" %}</h2>
+  {% for block in lesson_sections %}
+    <div class="tone-{{ block.number }} flex flex-col gap-2">
+      <h3 class="flex items-center gap-2 text-[14px] font-extrabold"><span class="num grid size-6 place-items-center rounded-full bg-(--tone) text-[11px] text-white">{{ block.number }}</span>{{ block.label }}</h3>
+      {% for x in block.items %}
+        <div class="flex flex-col gap-2 rounded-lg border border-line p-3">
+          <div class="flex flex-wrap items-center gap-2">
+            <a class="link min-w-0 flex-1 truncate text-[14px] font-bold" href="{% url 'teacher:student_lesson' student.pk x.lesson.pk %}">{% if x.lesson.cycle %}{% blocktranslate with n=x.lesson.cycle %}Cycle {{ n }}{% endblocktranslate %} · {% endif %}{{ x.lesson.topic|default:x.lesson.title|default:"—" }}</a>
+            <span class="badge {% if x.lesson.status == 'final' %}badge-success{% else %}badge-neutral{% endif %} text-[11px] font-bold">{{ x.lesson.get_status_display }}</span>
+            <span class="num text-caption text-ink-soft">{% blocktranslate count n=x.lesson.n_versions %}{{ n }} version{% plural %}{{ n }} versions{% endblocktranslate %}</span>
+            {% if x.grade is not None %}<span class="num text-[13px] font-extrabold text-success-700">{{ x.grade }}/10</span>{% endif %}
+          </div>
+          {% if x.trials %}
+            <ul class="flex flex-wrap gap-1.5">
+              {% for t in x.trials %}
+                <li><a class="inline-flex items-center gap-1.5 rounded-full border border-line px-2.5 py-1 text-caption font-semibold hover:border-(--tone)" href="{% url 'teacher:student_trial' student.pk t.trial.pk %}">
+                  {% blocktranslate with n=forloop.counter %}Trial {{ n }}{% endblocktranslate %} · {% if t.trial.mode == "real" %}{% translate "A real audience" %}{% else %}{{ t.trial.get_level_display|default:"—" }}{% endif %}
+                  {% if not t.trial.finished_at %}<span class="text-warning-700">…</span>{% endif %}{% if t.grade is not None %}<span class="num text-success-700">{{ t.grade }}/10</span>{% endif %}</a></li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+      {% empty %}<p class="text-caption text-ink-faint">—</p>{% endfor %}
+    </div>
+  {% endfor %}
+</section>
+
+<section aria-labelledby="ic-ai" class="card flex flex-col gap-2">
+  <h2 id="ic-ai" class="text-h3">{% translate "AI dialogues" %} <span class="num text-ink-faint">· {{ conversations_total }}</span></h2>
+  <p class="text-caption text-ink-soft">{% translate "Read only. The student's messages and the AI's answers are kept as research data." %}</p>
+  <div class="table-wrap">
+    <table class="table text-[13px]">
+      <thead><tr><th scope="col">{% translate "Mode" %}</th><th scope="col">{% translate "About" %}</th><th scope="col" class="text-right">{% translate "Answers" %}</th><th scope="col" class="text-right">{% translate "Tokens" %}</th><th scope="col">{% translate "Started" %}</th><th></th></tr></thead>
+      <tbody>
+        {% for c in conversations %}
+          <tr><td class="font-semibold">{{ c.get_mode_display }}</td><td class="text-ink-soft">{{ c.context_type }} #{{ c.context_id }}</td><td class="num text-right">{{ c.answers }}</td><td class="num text-right">{{ c.tokens|default:0 }}</td><td class="num text-ink-soft">{{ c.created_at|date:"d.m.Y H:i" }}</td>
+            <td class="text-right"><a class="btn btn-secondary btn-sm" href="{% url 'teacher:student_ai' student.pk c.pk %}">{% translate "Open" %}</a></td></tr>
+        {% empty %}<tr><td colspan="6" class="py-6 text-center text-ink-soft">{% translate "No AI dialogues yet." %}</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endif %}

@@ -51,6 +51,8 @@ attention; my groups.
   {% with label=l value=queue_count note=n icon="check-square" series=queue_series warn=True %}{% partial kpi %}{% endwith %}
 </section>
 
+{% if icpai %}{% include "teacher/icpai/partials/dashboard.html" %}{% endif %}
+
 <div class="grid items-start gap-4 grid-cols-[repeat(auto-fit,minmax(min(380px,100%),1fr))]">
   <section aria-labelledby="queue" class="card flex flex-col gap-1">
     <div class="mb-2 flex items-center justify-between gap-3"><h2 id="queue" class="text-[17px] font-extrabold">{% translate "AI could not grade" %}</h2><a class="link text-sm font-bold" href="{% url 'teacher:grading' %}">{% translate "All works" %}</a></div>

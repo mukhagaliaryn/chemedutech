@@ -3,9 +3,10 @@ course analytics and CSV exports (UTF-8 BOM). A teacher sees the data of their o
 """
 
 import csv
+import json
 
 from django.contrib import messages
-from django.db.models import Avg, Count
+from django.db.models import Avg, Count, Sum
 from django.http import HttpResponse, StreamingHttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
@@ -13,6 +14,7 @@ from django.utils.translation import gettext as _
 from django.utils.translation import ngettext
 from django.views.decorators.http import require_POST
 
+from apps.ai.models import AIMessage
 from apps.assessments.models import AttemptAnswer
 from apps.core.permissions import ADMIN, TEACHER, has_role, role_required
 from apps.courses import selectors as course_selectors
@@ -20,9 +22,10 @@ from apps.courses.models import Topic
 from apps.labs.engine import all_labs
 from apps.labs.models import LabAttempt, LabEvent
 from apps.organizations.models import ResearchCohort
+from apps.pedagogy.models import Lesson, Review, Trial
 from apps.practice.models import TeacherReview
 from apps.practice.services import sampling
-from apps.programme.models import DiagnosticResult
+from apps.programme.models import DiagnosticResult, ProgrammeEnrollment
 
 from . import analytics
 
@@ -293,6 +296,150 @@ def export_ai_reviews(request):
         ]  # fmt: skip
 
     return _csv_response("ai_reviews.csv", header, (row(r) for r in qs.iterator(chunk_size=500)))
+
+
+# --- ICPAI works (STEP-39): lessons, trials, AI messages — one row per object, the student's own text kept ------
+
+
+def _icpai_students(request):
+    """The teacher's students (of their course enrolments); None — the admin's «everybody»."""
+    if has_role(request.user, ADMIN):
+        return None
+    return course_selectors.teacher_enrollments(request.user).values("student")
+
+
+def _cohorts() -> dict[int, str]:
+    """{student_id: research group} from the programme enrolments (the latest wins)."""
+    return dict(ProgrammeEnrollment.objects.order_by("created_at").values_list("student_id", "research_cohort"))
+
+
+def _review_totals(lessons) -> tuple[dict, dict]:
+    """The teacher's grades: ({lesson_id: total} for the whole lesson, {trial_id: total} for one trial)."""
+    by_lesson, by_trial = {}, {}
+    for lesson_id, trial_id, total in Review.objects.filter(lesson__in=lessons).values_list("lesson", "trial", "total"):
+        if trial_id:
+            by_trial[trial_id] = total
+        else:
+            by_lesson[lesson_id] = total
+    return by_lesson, by_trial
+
+
+@role_required(TEACHER, ADMIN)
+def export_lessons(request):
+    """Sections 4, 5, 6, 8: every lesson of a student — kind, frame, status, topic, stages, versions, trials and the
+    teacher's grade (section 5 — the lesson's, sections 6 and 8 — the best trial's)."""
+    qs = Lesson.objects.select_related("owner__student_profile__group", "source_template").annotate(
+        n_stages=Count("stages", distinct=True), n_versions=Count("versions", distinct=True),
+        n_trials=Count("trials", distinct=True),
+    ).order_by("owner__username", "kind", "cycle", "pk")  # fmt: skip
+    students = _icpai_students(request)
+    if students is not None:
+        qs = qs.filter(owner__in=students)
+    cohorts = _cohorts()
+    by_lesson, by_trial = _review_totals(qs)
+    best = {}
+    for trial_id, lesson_id in Trial.objects.filter(pk__in=by_trial).values_list("pk", "lesson"):
+        best[lesson_id] = max(best.get(lesson_id, 0), by_trial[trial_id])
+    header = [
+        "lesson_id", "username", "full_name", "study_group", "cohort", "kind", "frame", "status", "cycle", "template",
+        "title", "topic", "grade", "duration_min", "stages", "minutes", "versions", "trials", "teacher_total",
+        "created_at", "updated_at",
+    ]  # fmt: skip
+    minutes = dict(qs.order_by().values("pk").annotate(m=Sum("stages__minutes")).values_list("pk", "m"))
+    rows = (
+        [
+            x.pk,
+            x.owner.username,
+            x.owner.full_name,
+            _group_name(x.owner),
+            cohorts.get(x.owner_id, ""),
+            x.kind,
+            x.frame,
+            x.status,
+            x.cycle or "",
+            x.source_template.code if x.source_template else "",
+            x.title,
+            x.topic,
+            x.grade,
+            x.duration_min,
+            x.n_stages,
+            minutes.get(x.pk) or 0,
+            x.n_versions,
+            x.n_trials,
+            by_lesson.get(x.pk, best.get(x.pk, "")),
+            x.created_at.isoformat(),
+            x.updated_at.isoformat(),
+        ]  # fmt: skip
+        for x in qs.iterator(chunk_size=500)
+    )
+    return _csv_response("lessons.csv", header, rows)
+
+
+@role_required(TEACHER, ADMIN)
+def export_trials(request):
+    """Every trial: mode (assembled / stepwise / dialog / real), the AI student's level, the class, turns or messages,
+    the answer types, the time, the teacher's grade."""
+    qs = Trial.objects.select_related("lesson__owner__student_profile__group", "version").annotate(
+        n_turns=Count("turns", distinct=True), n_messages=Count("messages", distinct=True),
+    ).order_by("lesson__owner__username", "started_at", "pk")  # fmt: skip
+    students = _icpai_students(request)
+    if students is not None:
+        qs = qs.filter(lesson__owner__in=students)
+    cohorts = _cohorts()
+    totals = dict(Review.objects.filter(trial__in=qs).values_list("trial", "total"))
+    types: dict[int, dict[str, int]] = {}
+    for model in (Trial.turns.rel.related_model, Trial.messages.rel.related_model):
+        for trial_id, kind, n in (
+            model.objects.filter(trial__in=qs).values_list("trial", "answer_type").annotate(n=Count("pk"))
+        ):
+            types.setdefault(trial_id, {})[kind] = types.get(trial_id, {}).get(kind, 0) + n
+    header = [
+        "trial_id", "lesson_id", "username", "study_group", "cohort", "lesson_kind", "mode", "level", "class",
+        "version", "turns", "messages", "correct", "partial", "wrong", "started_at", "finished_at", "duration_s",
+        "teacher_total",
+    ]  # fmt: skip
+
+    def row(t):
+        owner = t.lesson.owner
+        n = types.get(t.pk, {})
+        duration = int((t.finished_at - t.started_at).total_seconds()) if t.finished_at else ""
+        return [
+            t.pk, t.lesson_id, owner.username, _group_name(owner), cohorts.get(owner.pk, ""), t.lesson.kind, t.mode,
+            t.level, t.grade, t.version.number if t.version_id else "", t.n_turns, t.n_messages, n.get("correct", 0),
+            n.get("partial", 0), n.get("wrong", 0), t.started_at.isoformat(),
+            t.finished_at.isoformat() if t.finished_at else "", duration, totals.get(t.pk, ""),
+        ]  # fmt: skip
+
+    return _csv_response("trials.csv", header, (row(t) for t in qs.iterator(chunk_size=500)))
+
+
+@role_required(TEACHER, ADMIN)
+def export_ai_messages(request):
+    """Every turn with the ICPAI AI (assistant, AI student, checker, «Айгерім»): what the student sent and what the AI
+    answered, in full (agreed for the qualitative analysis), with the mode, the prompt version, tokens and time."""
+    qs = AIMessage.objects.select_related("conversation__user__student_profile__group").order_by(
+        "conversation__user__username", "conversation_id", "created_at", "pk"
+    )
+    students = _icpai_students(request)
+    if students is not None:
+        qs = qs.filter(conversation__user__in=students)
+    cohorts = _cohorts()
+    header = [
+        "message_id", "conversation_id", "username", "study_group", "cohort", "mode", "about", "object_id",
+        "prompt_version", "model", "role", "intent", "text", "structured", "input_tokens", "output_tokens",
+        "latency_ms", "error", "created_at",
+    ]  # fmt: skip
+
+    def row(m):
+        c, user = m.conversation, m.conversation.user
+        return [
+            m.pk, c.pk, user.username, _group_name(user), cohorts.get(user.pk, ""), c.mode, c.context_type,
+            c.context_id, c.prompt_version, c.model, m.role, m.intent, m.content,
+            json.dumps(m.structured, ensure_ascii=False) if m.structured else "", m.input_tokens, m.output_tokens,
+            m.latency_ms, m.error, m.created_at.isoformat(),
+        ]  # fmt: skip
+
+    return _csv_response("ai_messages.csv", header, (row(m) for m in qs.iterator(chunk_size=500)))
 
 
 # --- course analytics ----------------------------------------------------------------------------

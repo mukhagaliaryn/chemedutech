@@ -49,8 +49,11 @@ def _student(request, pk):
 
 @teacher_only
 def dashboard(request):
+    from . import icpai  # icpai imports this module
+
     context = overview.dashboard(request.user)
     context["group_form"] = GroupForm(request.user)  # «Create a group» dialog
+    context["icpai"] = icpai.dashboard_block(request)
     return render(request, "teacher/dashboard.html", context)
 
 
@@ -414,7 +417,13 @@ def _enrollment(request, student):
 def student(request, pk):
     student = _student(request, pk)
     enrollments, enrollment = _enrollment(request, student)
-    context = {"student": student, "enrollments": enrollments, "enrollment": enrollment}
+    from . import icpai
+
+    tab = "icpai" if request.GET.get("tab") == "icpai" else "course"
+    context = {"student": student, "enrollments": enrollments, "enrollment": enrollment, "tab": tab}
+    if tab == "icpai":
+        context.update(icpai.student_context(student))
+        return render(request, "teacher/student.html", context)
     if enrollment:
         progress.recalculate(enrollment)
         context.update(overview.student_page(enrollment))

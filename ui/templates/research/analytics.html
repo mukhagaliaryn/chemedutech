@@ -239,6 +239,78 @@ agreement and the random spot-check, then the full descriptive table. Descriptiv
 </section>
 {% endif %}
 
+{# ---- ICPAI sections, grades of sections 5/6/8, the AI (STEP-39) ---- #}
+{% if has_programme %}
+<div class="grid items-start gap-4 xl:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
+  <section aria-labelledby="sfun" class="card flex flex-col gap-3">
+    <div>
+      <h2 id="sfun" class="text-[17px] font-extrabold">{% translate "ICPAI sections passed" %}</h2>
+      <p class="text-[13px] text-ink-soft">{% translate "The share of students who passed each section, by research group." %}</p>
+    </div>
+    <ol class="flex flex-col gap-2.5">
+      {% for row in section_funnel %}
+        <li class="grid grid-cols-[28px_minmax(0,1fr)] items-center gap-x-3 gap-y-1">
+          <span class="num grid size-7 place-items-center rounded-full bg-primary-50 text-[12px] font-bold text-primary-700" aria-hidden="true">{{ row.section.number }}</span>
+          <span class="truncate text-[13px] font-semibold" title="{{ row.section.title }}">{{ row.section.title }}</span>
+          <span></span>
+          <span class="flex flex-col gap-1">
+            {% for key in "experimental control"|split %}{% with c=row.cells|get:key %}
+              <span class="flex items-center gap-2 text-caption">
+                <span class="h-2.5 flex-1 overflow-hidden rounded-full bg-surface-sunken" role="img" aria-label="{% if key == 'experimental' %}{% translate 'Experimental' %}{% else %}{% translate 'Control' %}{% endif %}: {{ c.rate|default:0|floatformat:0 }}%"><span class="block h-full rounded-full {% if key == 'experimental' %}bg-primary-600{% else %}bg-chart-muted{% endif %}" style="width: {{ c.rate|default:0|stringformat:'.1f' }}%"></span></span>
+                <span class="num w-[72px] text-right text-ink-soft">{{ c.yes }}/{{ c.n }}{% if c.rate is not None %} · {{ c.rate|floatformat:0 }}%{% endif %}</span>
+              </span>
+            {% endwith %}{% endfor %}
+          </span>
+        </li>
+      {% endfor %}
+    </ol>
+    <p class="flex gap-4 text-caption text-ink-soft"><span class="inline-flex items-center gap-1.5"><span class="size-3 rounded-[4px] bg-primary-600"></span>{% translate "Experimental" %}</span><span class="inline-flex items-center gap-1.5"><span class="size-3 rounded-[4px] bg-chart-muted"></span>{% translate "Control" %}</span></p>
+  </section>
+
+  <div class="flex flex-col gap-4">
+    <section aria-labelledby="igr" class="overflow-hidden rounded-card border border-line bg-surface">
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-surface-sunken px-6 py-4">
+        <div>
+          <h2 id="igr" class="flex items-center gap-1.5 text-[17px] font-extrabold">{% translate "Grades of sections 5, 6 and 8" %}{% translate "each student's best 10-point grade; kept apart from the ICPAI component percents" as h_igr %}{% include "components/hint.html" with text=h_igr %}</h2>
+        </div>
+        <span class="flex gap-2"><a class="btn btn-secondary btn-sm" href="{% url 'research:export_lessons' %}">{% include "components/icons.html#download" %}{% translate "Lessons" %}</a><a class="btn btn-secondary btn-sm" href="{% url 'research:export_trials' %}">{% include "components/icons.html#download" %}{% translate "Trials" %}</a></span>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="table">
+          <thead><tr><th scope="col">{% translate "Work" %}</th>{% for key in "experimental control all"|split %}<th scope="col" class="text-right">{% if key == "experimental" %}{% translate "Experimental" %}{% elif key == "control" %}{% translate "Control" %}{% else %}{% translate "All students" %}{% endif %}</th>{% endfor %}</tr></thead>
+          <tbody class="num">
+            {% for row in icpai_grades %}
+              <tr><td class="font-semibold">{{ row.label }}</td>
+                {% for key in "experimental control all"|split %}{% with d=row.cells|get:key %}<td class="text-right">{% if d.n %}<span class="font-bold">{{ d.mean|floatformat:1 }}</span><span class="block text-caption text-ink-faint">{% blocktranslate with m=d.median|floatformat:1 %}median {{ m }}{% endblocktranslate %} · n = {{ d.n }}</span>{% else %}<span class="text-ink-faint">—</span>{% endif %}</td>{% endwith %}{% endfor %}
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="aiu" class="overflow-hidden rounded-card border border-line bg-surface">
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-surface-sunken px-6 py-4">
+        <h2 id="aiu" class="flex items-center gap-1.5 text-[17px] font-extrabold">{% translate "Use of the AI" %}{% translate "AI answers, students who used each mode, tokens (input + output)" as h_aiu %}{% include "components/hint.html" with text=h_aiu %}</h2>
+        <a class="btn btn-secondary btn-sm" href="{% url 'research:export_ai_messages' %}">{% include "components/icons.html#download" %}{% translate "AI dialogues" %}</a>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="table">
+          <thead><tr><th scope="col">{% translate "Mode" %}</th>{% for key in "experimental control all"|split %}<th scope="col" class="text-right">{% if key == "experimental" %}{% translate "Experimental" %}{% elif key == "control" %}{% translate "Control" %}{% else %}{% translate "All students" %}{% endif %}</th>{% endfor %}</tr></thead>
+          <tbody class="num">
+            {% for row in ai_usage %}
+              <tr><td class="font-semibold">{{ row.label }}</td>
+                {% for key in "experimental control all"|split %}{% with d=row.cells|get:key %}<td class="text-right">{% if d.answers %}<span class="font-bold">{{ d.answers }}</span><span class="block text-caption text-ink-faint">{% blocktranslate with a=d.students b=d.of %}{{ a }} of {{ b }} students{% endblocktranslate %} · {{ d.tokens }} tok{% if d.errors %} · {% blocktranslate with e=d.errors %}{{ e }} failed{% endblocktranslate %}{% endif %}</span>{% else %}<span class="text-ink-faint">—</span>{% endif %}</td>{% endwith %}{% endfor %}
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</div>
+{% endif %}
+
 {# ---- full descriptive table ---- #}
 <section aria-labelledby="cmp" class="overflow-hidden rounded-card border border-line bg-surface">
   <div class="flex flex-wrap items-center justify-between gap-3 border-b border-surface-sunken px-6 py-4">

@@ -63,6 +63,7 @@ def queue(request):
         "practice": practices.filter(reviews__isnull=True).count(),
         "micro": trials.filter(reviews__isnull=True).count(),
         "portfolio": waiting.count(),
+        "independent": _independent_waiting(request).count(),
     }
     if what == "portfolio":
         rows = (
@@ -191,6 +192,15 @@ def _independent(request):
     ).select_related("owner__student_profile__group")
 
 
+def _independent_waiting(request):
+    """Independent lessons with an analysis after a trial the teacher has not confirmed yet."""
+    return (
+        _independent(request)
+        .filter(expert_reviews__kind=ExpertReview.Kind.TRIAL, expert_reviews__confirmed_at__isnull=True)
+        .distinct()
+    )
+
+
 def _independent_section(request):
     """The section 8 of the programmes on the teacher's courses."""
     return (
@@ -218,9 +228,7 @@ def _independent_queue(request, show):
             messages.success(request, _("The dates are saved; the students are notified."))
         return redirect(f"{reverse('teacher:practice_queue')}?what=independent")
     lessons = _independent(request)
-    waiting = lessons.filter(
-        expert_reviews__kind=ExpertReview.Kind.TRIAL, expert_reviews__confirmed_at__isnull=True
-    ).distinct()
+    waiting = _independent_waiting(request)
     rows = (waiting if show != "graded" else lessons.exclude(pk__in=waiting)).order_by("-updated_at")[:300]
     schedules = {s.group_id: s for s in SectionSchedule.objects.filter(section=section)} if section else {}
     return render(request, "teacher/practice/queue.html", {

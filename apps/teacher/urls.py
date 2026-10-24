@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import content, gradebook, grading, practice, views
+from . import content, gradebook, grading, icpai, practice, views
 
 app_name = "teacher"
 
@@ -56,4 +56,7 @@ urlpatterns = [
     path("students/<int:pk>/stages/<int:stage_pk>/unlock/", views.unlock_stage, name="unlock_stage"),
     path("students/<int:pk>/sections/<int:number>/unlock/", views.unlock_section, name="unlock_section"),
     path("students/<int:pk>/lab/<int:attempt_pk>/", views.lab_log, name="lab_log"),
+    path("students/<int:pk>/lessons/<int:lesson_pk>/", icpai.lesson, name="student_lesson"),
+    path("students/<int:pk>/trials/<int:trial_pk>/", icpai.trial, name="student_trial"),
+    path("students/<int:pk>/ai/<int:conversation_pk>/", icpai.conversation, name="student_ai"),
 ]

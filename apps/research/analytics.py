@@ -6,18 +6,21 @@ Cohorts come from Enrollment.research_cohort (the snapshot at enrolment, D36).
 
 from collections import defaultdict
 
-from django.db.models import Count
+from django.db.models import Count, Q, Sum
 from django.utils.translation import gettext as _
 
+from apps.ai.models import AIMessage, Mode
 from apps.assessments.models import QuizAttempt
 from apps.core import stats
 from apps.courses import selectors as course_selectors
 from apps.courses.models import Stage, Topic
 from apps.labs.engine import get_lab
 from apps.labs.models import LabAttempt, LabEvent
+from apps.pedagogy.models import Lesson, Review
 from apps.practice.models import AIGrade, TeacherReview
 from apps.practice.services import sampling
 from apps.programme import selectors as programme_selectors
+from apps.programme.models import SectionProgress
 from apps.progress.models import StageProgress, TopicResult
 
 COHORTS = ("experimental", "control")
@@ -370,6 +373,90 @@ def diagnostics_table(enrollments, course) -> list[dict]:
     return rows
 
 
+GRADED_KINDS = (Lesson.Kind.RESEARCH_PRACTICE, Lesson.Kind.MICROLESSON, Lesson.Kind.INDEPENDENT)  # sections 5, 6, 8
+
+
+def _cohort_of(enrollments) -> dict[int, str]:
+    return {e.student_id: e.research_cohort or "" for e in enrollments}
+
+
+def _groups(cohort_of):
+    """(cohort, [student ids]) for experimental, control and everybody."""
+    return [(c, [s for s, x in cohort_of.items() if c == "all" or x == c]) for c in (*COHORTS, "all")]
+
+
+def section_funnel(enrollments, course) -> list[dict]:
+    """ICPAI sections × research groups: how many students passed each section (of the students in the scope)."""
+    programme = programme_selectors.programme_of_course(course)
+    if programme is None:
+        return []
+    cohort_of = _cohort_of(enrollments)
+    passed = defaultdict(set)
+    for section_id, student_id in SectionProgress.objects.filter(
+        enrollment__programme=programme, enrollment__student__in=list(cohort_of), status=SectionProgress.Status.PASSED
+    ).values_list("section", "enrollment__student"):
+        passed[section_id].add(student_id)
+    return [
+        {
+            "section": section,
+            "cells": {c: stats.share([s in passed[section.pk] for s in ids]) for c, ids in _groups(cohort_of)},
+        }
+        for section in programme.sections.order_by("number", "pk")
+    ]
+
+
+def icpai_grades(enrollments) -> list[dict]:
+    """The teacher's 10-point grades of sections 5, 6 and 8 by research group: each student's best grade (kept apart
+    from the ICPAI component percents, guide @S5 VII, @S8 VI) and the number of graded trials."""
+    cohort_of = _cohort_of(enrollments)
+    best: dict[tuple[str, int], int] = {}
+    count = defaultdict(int)
+    for kind, owner, total in Review.objects.filter(
+        lesson__kind__in=GRADED_KINDS, lesson__owner__in=list(cohort_of)
+    ).values_list("lesson__kind", "lesson__owner", "total"):
+        best[(kind, owner)] = max(best.get((kind, owner), 0), total)
+        count[(kind, owner)] += 1
+    labels = dict(Lesson.Kind.choices)
+    return [
+        {
+            "kind": kind,
+            "label": labels[kind],
+            "cells": {
+                c: {
+                    **stats.describe([best[(kind, s)] for s in ids if (kind, s) in best]),
+                    "reviews": sum(count[(kind, s)] for s in ids),
+                }
+                for c, ids in _groups(cohort_of)
+            },
+        }  # fmt: skip
+        for kind in GRADED_KINDS
+    ]
+
+
+def ai_usage(enrollments) -> list[dict]:
+    """The ICPAI AI by mode and research group: answers, students who used it, tokens, failed calls."""
+    cohort_of = _cohort_of(enrollments)
+    rows = (
+        AIMessage.objects.filter(role=AIMessage.Role.ASSISTANT, conversation__user__in=list(cohort_of))
+        .values("conversation__mode", "conversation__user")
+        .annotate(n=Count("pk"), tin=Sum("input_tokens"), tout=Sum("output_tokens"), errors=Count("pk", filter=~Q(error="")))
+    )  # fmt: skip
+    per: dict[str, dict[int, dict]] = defaultdict(dict)
+    for r in rows:
+        per[r["conversation__mode"]][r["conversation__user"]] = r
+    out = []
+    for mode, label in Mode.choices:
+        cells = {}
+        for c, ids in _groups(cohort_of):
+            used = [per[mode][s] for s in ids if s in per[mode]]
+            cells[c] = {
+                "students": len(used), "of": len(ids), "answers": sum(u["n"] for u in used),
+                "tokens": sum((u["tin"] or 0) + (u["tout"] or 0) for u in used), "errors": sum(u["errors"] for u in used),
+            }  # fmt: skip
+        out.append({"mode": mode, "label": label, "cells": cells})
+    return out
+
+
 def page(user, course, group=None, topic=None) -> dict:
     enrollments, topics, stages = scope(user, course, group, topic)
     per = measures(enrollments, topics, stages)
@@ -389,6 +476,9 @@ def page(user, course, group=None, topic=None) -> dict:
         "pre_post_rows": pre_post_table(enrollments, pre_post),
         "diagnostic_rows": diagnostics_table(enrollments, course),
         "has_programme": programme_selectors.programme_of_course(course) is not None,
+        "section_funnel": section_funnel(enrollments, course),
+        "icpai_grades": icpai_grades(enrollments),
+        "ai_usage": ai_usage(enrollments),
     }
 
 

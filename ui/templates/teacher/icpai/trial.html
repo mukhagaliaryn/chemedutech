@@ -1,0 +1,75 @@
+{% extends "layouts/teacher.html" %}
+{% load i18n %}
+{% comment %}A trial's protocol for the teacher, read only (SPEC §4.9; STEP-39): the AI student's answers and the
+student's analysis by stage (sections 4, 5, 8), the dialogue (section 6) or the real audience's protocol (section 8);
+the teacher's grade and «Айгерім»'s analysis. Context: teacher/icpai.py trial.{% endcomment %}
+{% block title %}{% translate "Trial protocol" %} · {{ student.full_name }} · ChemEduTech{% endblock %}
+{% block crumb %}{% translate "Groups and students" %}{% endblock %}
+{% block page_title %}{{ student.full_name }}{% endblock %}
+{% block main_class %}max-w-[1400px]{% endblock %}
+{% block content %}
+<a class="link inline-flex items-center gap-1.5 text-sm font-semibold" href="{% url 'teacher:student_lesson' student.pk lesson.pk %}">{% include "components/icons.html#arrow-left" %}{{ lesson.topic|default:lesson.title|default:"—" }}</a>
+<section class="card flex flex-wrap items-center gap-4">
+  {% if trial.mode == "real" %}<span class="grid size-14 place-items-center rounded-full bg-primary-50 text-primary-700">{% include "components/icons.html#users" with size=26 %}</span>{% else %}{% include "student/designer/partials/ai_student.html" with level=trial.level|default:"medium" size=56 %}{% endif %}
+  <div class="min-w-0 flex-1">
+    <h1 class="text-[20px] leading-7 font-extrabold">{{ trial.get_mode_display }}{% if trial.level %} · {{ trial.get_level_display|lower }}{% endif %}</h1>
+    <p class="num text-[13px] text-ink-soft">{{ trial.started_at|date:"d.m.Y H:i" }}{% if trial.finished_at %} – {{ trial.finished_at|date:"H:i" }}{% else %} · {% translate "in progress" %}{% endif %}{% if trial.grade %} · {% blocktranslate with g=trial.grade %}Grade {{ g }}{% endblocktranslate %}{% endif %}{% if trial.version_id %} · v{{ trial.version.number }}{% endif %}{% if trial.recorded_by %} · {% translate "recorded by" %} {{ trial.recorded_by.get_full_name|default:trial.recorded_by.username }}{% endif %}</p>
+  </div>
+  {% if review %}<span class="num text-[28px] font-extrabold text-success-700">{{ review.total }}<span class="text-[16px] text-ink-faint"> / 10</span></span>{% endif %}
+</section>
+
+<div class="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_420px]">
+  <section class="card flex min-w-0 flex-col gap-3" aria-labelledby="pr-title">
+    <h2 id="pr-title" class="text-h3">{% translate "Trial protocol" %}</h2>
+    {% if trial.mode == "real" %}
+      <p class="text-[14px] leading-[22px] whitespace-pre-line">{{ trial.notes }}</p>
+    {% elif trial.mode == "dialog" %}
+      <ol class="flex flex-col gap-2 text-[13px] leading-[19px]">
+        {% for m in messages_ %}
+          <li class="flex flex-col gap-1">
+            <p class="self-end rounded-lg rounded-br-sm bg-primary-600 px-3 py-2 text-white"><span class="block text-caption text-white/75">{{ m.get_kind_display }} · <span class="num">{{ m.at_s }} s</span></span>{{ m.text }}</p>
+            {% if m.reply %}<p class="self-start rounded-lg rounded-bl-sm bg-canvas px-3 py-2"><span class="block text-caption text-ink-soft">{% translate "The AI student" %} · {{ m.get_answer_type_display }}</span>{{ m.reply }}</p>{% endif %}
+          </li>
+        {% empty %}<li class="text-ink-faint">—</li>{% endfor %}
+      </ol>
+    {% else %}
+      {% for t in turns %}
+        <div class="tone-{% if t.stage_order > 8 %}8{% else %}{{ t.stage_order }}{% endif %} flex flex-col gap-1.5 rounded-lg border border-(--tone)/25 p-3 text-[13px] leading-[19px]">
+          <p class="flex flex-wrap items-center gap-2 font-extrabold text-(--tone)">{{ t.stage_order }}. {{ t.stage_title }}<span class="badge {% if t.answer_type == 'correct' %}badge-success{% elif t.answer_type == 'partial' %}badge-warning{% else %}badge-danger{% endif %} text-[10.5px] font-bold">{{ t.get_answer_type_display }}</span>{% if t.time_minutes %}<span class="num text-caption text-ink-soft">{{ t.time_minutes }} {% translate "min" %}</span>{% endif %}{% if t.duration_s %}<span class="num text-caption text-ink-soft">· {{ t.duration_s }} s</span>{% endif %}</p>
+          {% if t.teacher_explanation %}<p><span class="font-bold">{% translate "The teacher's explanation" %}:</span> <span class="prose-lesson">{{ t.teacher_explanation|rich }}</span></p>{% endif %}
+          <p><span class="font-bold">{% translate "Task" %}:</span> <span class="prose-lesson">{{ t.task|rich }}</span></p>
+          <p class="rounded-lg bg-primary-50/70 px-2.5 py-1.5"><span class="font-bold text-primary-700">{% translate "The AI student's answer" %}:</span> {{ t.answer }}</p>
+          {% if t.possible_error %}<p><span class="font-bold">{% translate "Possible error" %}:</span> {{ t.possible_error }}</p>{% endif %}
+          {% if t.student_analysis %}<p><span class="font-bold">{% translate "The student's explanation" %}:</span> <span class="prose-lesson">{{ t.student_analysis|rich }}</span></p>{% endif %}
+          {% if t.follow_up_question %}<p><span class="font-bold">{% translate "Follow-up question" %}:</span> <span class="prose-lesson">{{ t.follow_up_question|rich }}</span></p>{% endif %}
+          {% if t.correction %}<p><span class="font-bold">{% translate "Pedagogical correction made" %}:</span> <span class="prose-lesson">{{ t.correction|rich }}</span></p>{% endif %}
+          {% if t.improved_task %}<p><span class="font-bold">{% translate "Improved task" %}:</span> <span class="prose-lesson">{{ t.improved_task|rich }}</span></p>{% endif %}
+        </div>
+      {% empty %}<p class="text-[13px] text-ink-faint">—</p>{% endfor %}
+    {% endif %}
+  </section>
+
+  <aside class="flex flex-col gap-4 xl:sticky xl:top-20">
+    {% if review %}
+      <section class="card flex flex-col gap-1" aria-labelledby="gr-title">
+        <h2 id="gr-title" class="text-h3">{% translate "The teacher's grade" %}</h2>
+        <p class="num text-[14px]"><span class="font-extrabold">{{ review.total }}/10</span> · {{ review.teacher.get_full_name|default:review.teacher.username }} · {{ review.updated_at|date:"d.m.Y" }}</p>
+        {% if review.comment %}<p class="text-[13px] text-ink-soft">«{{ review.comment }}»</p>{% endif %}
+      </section>
+    {% endif %}
+    {% for rv in expert_reviews %}
+      <section class="overflow-hidden rounded-xl border border-line bg-surface" aria-label="{% translate "Айгерім's expert analysis" %}">
+        <header class="flex items-center gap-3 bg-[linear-gradient(120deg,var(--color-stage-lab),var(--color-primary-600))] px-4 py-3 text-white">
+          <span class="rounded-full ring-2 ring-white/40">{% include "student/independent/partials/aigerim.html" with size=40 %}</span>
+          <h2 class="text-[15px] font-extrabold">{% translate "Айгерім's expert analysis" %}</h2>
+        </header>
+        <div class="flex flex-col gap-2 p-4 text-[12.5px] leading-[18px]">
+          <p><span class="badge {% if rv.status == 'ok' %}badge-success{% elif rv.status == 'revise' %}badge-danger{% else %}badge-warning{% endif %} font-bold">{{ rv.get_status_display }}</span>{% if rv.confirmed_at %} <span class="text-success-700">· {% blocktranslate with s=rv.get_teacher_status_display %}Confirmed by the teacher: {{ s }}{% endblocktranslate %}</span>{% endif %}</p>
+          <p class="text-[13px]">{{ rv.summary }}</p>
+          <ul class="flex flex-col gap-1.5">{% for key, label in directions %}{% with item=rv.items|get:key %}<li class="rounded-[10px] bg-canvas px-2.5 py-2"><p class="flex items-center gap-1.5 font-bold"><span class="size-2 shrink-0 rounded-full {% if item.status == 'ok' %}bg-success-600{% elif item.status == 'revise' %}bg-danger-600{% else %}bg-warning-500{% endif %}"></span>{{ label }}</p><p class="mt-0.5 text-ink-soft">{{ item.text }}</p></li>{% endwith %}{% endfor %}</ul>
+        </div>
+      </section>
+    {% endfor %}
+  </aside>
+</div>
+{% endblock %}

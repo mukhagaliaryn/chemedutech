@@ -1,0 +1,74 @@
+{% extends "layouts/teacher.html" %}
+{% load i18n %}
+{% comment %}A student's ICPAI lesson for the teacher, read only (SPEC §4.9; STEP-39): the details, the stages with their
+content, the versions, the trials (→ protocols), the AI checks and «Айгерім»'s opinions. Context: teacher/icpai.py lesson.{% endcomment %}
+{% block title %}{{ lesson.topic|default:lesson.title }} · {{ student.full_name }} · ChemEduTech{% endblock %}
+{% block crumb %}{% translate "Groups and students" %}{% endblock %}
+{% block page_title %}{{ student.full_name }}{% endblock %}
+{% block main_class %}max-w-[1400px]{% endblock %}
+{% block content %}
+<a class="link inline-flex items-center gap-1.5 text-sm font-semibold" href="{% url 'teacher:student' student.pk %}?tab=icpai">{% include "components/icons.html#arrow-left" %}{{ student.full_name }} · ICPAI</a>
+<section class="card flex flex-col gap-2">
+  <p class="flex flex-wrap items-center gap-2 text-sm">
+    <span class="badge badge-info font-bold">{{ lesson.get_kind_display }}</span>
+    <span class="badge {% if lesson.status == 'final' %}badge-success{% else %}badge-neutral{% endif %} font-bold">{{ lesson.get_status_display }}</span>
+    {% if lesson.cycle %}<span>{% blocktranslate with n=lesson.cycle %}Cycle {{ n }}{% endblocktranslate %}</span>{% endif %}
+    {% if lesson.source_template %}<span class="text-ink-soft">{{ lesson.source_template.name }}</span>{% endif %}
+    {% if review %}<span class="num font-extrabold text-success-700">{{ review.total }}/10</span>{% endif %}
+  </p>
+  <h1 class="text-[22px] leading-7 font-extrabold">{{ lesson.topic|default:lesson.title|default:"—" }}</h1>
+  <dl class="grid gap-x-6 gap-y-1 text-[13.5px] md:grid-cols-2">
+    {% if lesson.grade %}<div><dt class="inline font-bold">{% translate "Class" %}:</dt> <dd class="inline">{{ lesson.grade }}</dd></div>{% endif %}
+    <div><dt class="inline font-bold">{% translate "Duration" %}:</dt> <dd class="inline num">{{ lesson.duration_min }} {% translate "min" %}</dd></div>
+    {% if lesson.aim %}<div class="md:col-span-2"><dt class="inline font-bold">{% translate "Learning aim" %}:</dt> <dd class="inline">{{ lesson.aim }}</dd></div>{% endif %}
+    {% if lesson.outcomes %}<div class="md:col-span-2"><dt class="font-bold">{% translate "Expected results" %}:</dt> <dd class="prose-lesson">{{ lesson.outcomes|rich }}</dd></div>{% endif %}
+    {% if lesson.method %}<div><dt class="inline font-bold">{% translate "Teaching methods used" %}:</dt> <dd class="inline">{{ lesson.method }}</dd></div>{% endif %}
+    {% if lesson.digital_tools %}<div><dt class="inline font-bold">{% translate "Digital tools" %}:</dt> <dd class="inline">{{ lesson.digital_tools }}</dd></div>{% endif %}
+    {% for k, v in details %}<div><dt class="inline font-bold text-ink-soft">{{ k }}:</dt> <dd class="inline">{{ v }}</dd></div>{% endfor %}
+  </dl>
+</section>
+
+<div class="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_400px]">
+  <section class="card flex min-w-0 flex-col gap-2" aria-labelledby="st-title">
+    <h2 id="st-title" class="text-h3">{% translate "Lesson stages" %}</h2>
+    {% for r in stages %}
+      <details class="tone-{% if r.stage.order > 8 %}8{% else %}{{ r.stage.order }}{% endif %} rounded-lg border border-line" {% if forloop.first %}open{% endif %}>
+        <summary class="flex cursor-pointer items-center gap-2.5 px-3 py-2 text-[13.5px] font-bold"><span class="num grid size-7 place-items-center rounded-full bg-(--tone) text-[12px] text-white">{{ r.stage.order }}</span><span class="min-w-0 flex-1">{{ r.stage.title }}</span>{% if r.stage.edited %}<span class="badge badge-info text-[10.5px]">{% translate "redesigned" %}</span>{% endif %}<span class="num text-[12px] text-(--tone)">{{ r.start }}–{{ r.end }}′</span></summary>
+        <div class="flex flex-col gap-1.5 px-3 pb-3 text-[13px]">
+          {% for f in r.fields %}{% if f.html %}<div><p class="font-bold text-(--tone)">{{ f.label }}</p><div class="prose-lesson">{{ f.html|rich }}</div></div>{% endif %}{% empty %}<p class="text-ink-faint">—</p>{% endfor %}
+        </div>
+      </details>
+    {% empty %}<p class="text-sm text-ink-faint">—</p>{% endfor %}
+  </section>
+
+  <aside class="flex flex-col gap-4 xl:sticky xl:top-20">
+    <section class="card flex flex-col gap-2" aria-labelledby="tr-title">
+      <h2 id="tr-title" class="text-h3">{% translate "Trials" %}</h2>
+      {% for t in trials %}
+        <a class="flex items-center gap-2 rounded-lg border border-line px-3 py-2 text-[13px] hover:border-primary-600" href="{% url 'teacher:student_trial' student.pk t.trial.pk %}">
+          <span class="min-w-0 flex-1"><span class="block font-bold">{% blocktranslate with n=forloop.counter %}Trial {{ n }}{% endblocktranslate %} · {% if t.trial.mode == "real" %}{% translate "A real audience" %}{% else %}{{ t.trial.get_level_display|default:t.trial.get_mode_display }}{% endif %}</span><span class="num text-caption text-ink-soft">{{ t.trial.started_at|date:"d.m.Y H:i" }}{% if t.trial.grade %} · {{ t.trial.grade }}{% endif %}{% if not t.trial.finished_at %} · {% translate "in progress" %}{% endif %}</span></span>
+          {% if t.review %}<span class="num font-extrabold text-success-700">{{ t.review.total }}/10</span>{% endif %}{% include "components/icons.html#chevron-right" with size=16 %}
+        </a>
+      {% empty %}<p class="text-[13px] text-ink-faint">{% translate "No trials yet." %}</p>{% endfor %}
+    </section>
+    <section class="card flex flex-col gap-2" aria-labelledby="vr-title">
+      <h2 id="vr-title" class="text-h3">{% translate "Versions" %}</h2>
+      <ol class="flex flex-col gap-1 text-[13px]">{% for v in versions %}<li class="flex justify-between gap-3"><span><span class="num font-bold">v{{ v.number }}</span> · {{ v.get_reason_display }}</span><span class="num text-ink-soft">{{ v.created_at|date:"d.m.Y H:i" }}</span></li>{% empty %}<li class="text-ink-faint">—</li>{% endfor %}</ol>
+    </section>
+    {% if checks %}
+      <section class="card flex flex-col gap-2" aria-labelledby="ck-title">
+        <h2 id="ck-title" class="text-h3">{% translate "AI checks" %}</h2>
+        <ul class="flex flex-col gap-1 text-[13px]">{% for c in checks %}<li class="flex justify-between gap-3"><span class="num text-ink-soft">{{ c.created_at|date:"d.m.Y H:i" }}</span><span class="font-bold {% if c.passed %}text-success-700{% else %}text-danger-700{% endif %}">{% if c.passed %}✓{% else %}✕{% endif %}</span></li>{% endfor %}</ul>
+      </section>
+    {% endif %}
+    {% if expert_reviews %}
+      <section class="card flex flex-col gap-2" aria-labelledby="ex-title">
+        <h2 id="ex-title" class="flex items-center gap-2 text-h3">{% include "student/independent/partials/aigerim.html" with size=30 %}{% translate "Айгерім's opinions on the project" %}</h2>
+        {% for rv in expert_reviews %}
+          <div class="rounded-lg bg-canvas p-3 text-[12.5px]"><p class="flex items-center gap-2 font-bold"><span class="num">{{ rv.created_at|date:"d.m H:i" }}</span><span class="badge {% if rv.status == 'ok' %}badge-success{% elif rv.status == 'revise' %}badge-danger{% else %}badge-warning{% endif %} text-[10.5px]">{{ rv.get_status_display }}</span></p><p class="mt-1">{{ rv.summary }}</p></div>
+        {% endfor %}
+      </section>
+    {% endif %}
+  </aside>
+</div>
+{% endblock %}

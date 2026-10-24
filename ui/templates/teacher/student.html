@@ -21,6 +21,14 @@
 </header>
 {% endwith %}
 
+<nav class="segmented segmented-outline self-start" aria-label="{% translate 'Sections of the student page' %}">
+  <a href="?{% if enrollment %}course={{ enrollment.course.slug }}{% endif %}" {% if tab != "icpai" %}aria-current="page"{% endif %}>{% include "components/icons.html#book" with size=16 %}{% translate "Course" %}</a>
+  <a href="?tab=icpai{% if enrollment %}&amp;course={{ enrollment.course.slug }}{% endif %}" {% if tab == "icpai" %}aria-current="page"{% endif %}>{% include "components/icons.html#award" with size=16 %}ICPAI</a>
+</nav>
+
+{% if tab == "icpai" %}
+  {% include "teacher/icpai/partials/student_tab.html" %}
+{% else %}
 {% if enrollments|length > 1 %}
 <nav class="flex flex-wrap gap-2" aria-label="{% translate 'Courses' %}">
   {% for e in enrollments %}<a href="?course={{ e.course.slug }}" class="btn btn-sm {% if e == enrollment %}btn-primary{% else %}btn-secondary{% endif %}">{{ e.course.title }}</a>{% endfor %}
@@ -194,5 +202,6 @@
     {% endfor %}
   </ol>
 </section>
+{% endif %}
 {% endif %}
 {% endblock %}
