@@ -1,15 +1,17 @@
 from django.urls import path
 
-from . import sections, views
+from . import designer, sections, views
 
 app_name = "student"
 
+LESSON = "me/sections/<int:number>/lessons/<int:pk>/"
 STAGE = "learn/<slug:course_slug>/<int:topic_number>/<int:stage_pk>/"
 
 urlpatterns = [
     path("me/", views.dashboard, name="dashboard"),
     path("me/sections/<int:number>/", sections.section, name="section"),
     path("me/sections/<int:number>/watch/", sections.section_watch, name="section_watch"),
+    path("me/sections/<int:number>/ai/", sections.section_ai, name="section_ai"),
     path("me/sections/<int:number>/diagnostic/<str:phase>/", sections.diagnostic, name="diagnostic"),
     path("me/sections/<int:number>/diagnostic/<str:phase>/start/", sections.diagnostic_start, name="diagnostic_start"),
     path(
@@ -17,6 +19,14 @@ urlpatterns = [
         sections.diagnostic_submit,
         name="diagnostic_submit",
     ),
+    path("me/sections/<int:number>/templates/<slug:code>/", designer.template, name="lesson_template"),
+    path("me/sections/<int:number>/templates/<slug:code>/start/", designer.lesson_start, name="lesson_start"),
+    path(LESSON, designer.lesson, name="lesson"),
+    path(LESSON + "<int:order>/", designer.lesson_stage, name="lesson_stage"),
+    path(LESSON + "<int:order>/clear/", designer.lesson_stage_clear, name="lesson_stage_clear"),
+    path(LESSON + "<int:order>/restore/", designer.lesson_stage_restore, name="lesson_stage_restore"),
+    path(LESSON + "<int:order>/save/", designer.lesson_stage_save, name="lesson_stage_save"),
+    path(LESSON + "<int:order>/ai/", designer.lesson_stage_ai, name="lesson_stage_ai"),
     path("me/icpai/", sections.results, name="icpai"),
     path("me/search/", views.search, name="search"),
     path("me/results/", views.results, name="results"),

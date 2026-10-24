@@ -2088,3 +2088,68 @@
   min-width: 26px;
   padding: 2px;
 }
+
+/* ---- ICPAI lesson designer (student/designer/*; guide pictures image12–18) ---------------------------------
+   The six stage tones of the template pictures (blue, green, orange, violet, rose, teal) as --tone / --tone-50,
+   the template gradients, and the template's text blocks. */
+@layer components {
+  .tone-1 {
+    --tone: var(--color-stage-theory);
+    --tone-50: var(--color-stage-theory-50);
+  }
+  .tone-2 {
+    --tone: var(--color-stage-test);
+    --tone-50: var(--color-success-50);
+  }
+  .tone-3 {
+    --tone: var(--color-stage-practice);
+    --tone-50: var(--color-stage-practice-50);
+  }
+  .tone-4 {
+    --tone: var(--color-stage-video);
+    --tone-50: var(--color-stage-video-50);
+  }
+  .tone-5 {
+    --tone: var(--color-danger-600);
+    --tone-50: var(--color-danger-50);
+  }
+  .tone-6 {
+    --tone: var(--color-stage-lab);
+    --tone-50: var(--color-stage-lab-50);
+  }
+  .tpl-chem_design {
+    background: linear-gradient(135deg, var(--color-primary-700), var(--color-primary-600) 45%, var(--color-stage-lab));
+  }
+  .tpl-chem_detective {
+    background: linear-gradient(135deg, var(--color-ai-900), var(--color-stage-video) 50%, var(--color-danger-600));
+  }
+  .tpl-chem_circuit {
+    background: linear-gradient(135deg, var(--color-stage-practice-700), var(--color-stage-practice) 50%, var(--color-warning-500));
+  }
+  .prose-lesson {
+    font-size: 14.5px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+  .prose-lesson > * + * {
+    margin-top: 0.45rem;
+  }
+  .prose-lesson ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+  }
+  .prose-lesson ol {
+    list-style: decimal;
+    padding-left: 1.4rem;
+  }
+  .prose-lesson li + li {
+    margin-top: 0.2rem;
+  }
+  .prose-lesson strong {
+    font-weight: 700;
+  }
+  .prose-lesson li::marker {
+    color: var(--tone, var(--color-ink-faint));
+    font-weight: 700;
+  }
+}

@@ -1,0 +1,158 @@
+{% extends "layouts/student.html" %}
+{% load i18n static %}
+{% comment %}
+The lesson designer's editor (guide @S4-AI; picture image18). Left (a strip on top below 2xl) — «Lesson structure»: the template's banner and the
+six stages with their minutes (redesigned ones marked). Middle — the chosen stage: the template's content with «Clear
+the content» (the original leaves the editor, an empty work area opens), then the student's fields with an editor,
+saved by themselves (static/js/designer.js), and «Restore the original». Right — the AI assistant with the stage's
+quick requests; its answers can be copied or added to the editor. Bottom — the lesson's minutes and redesigned stages.
+{% endcomment %}
+{% block title %}{{ stage.order }}. {{ stage.title }} · {{ lesson.title }} · ChemEduTech{% endblock %}
+{% block crumb %}{{ programme.title }} · {% blocktranslate with n=section.number %}Section {{ n }}{% endblocktranslate %}{% endblock %}
+{% block page_title %}{% translate "Pedagogical constructor" %}{% endblock %}
+{% block main_class %}max-w-[1600px]{% endblock %}
+{% block content %}
+{{ editor_opts|json_script:"editor-opts" }}
+<div x-data="stageEditor(JSON.parse(document.getElementById('editor-opts').textContent))" @ai-insert="insert($event.detail)" class="flex flex-col gap-4">
+
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <nav class="flex flex-wrap items-center gap-2 text-sm" aria-label="{% translate 'Breadcrumbs' %}">
+      <a class="link inline-flex items-center gap-1.5 font-semibold" href="{% url 'student:section' section.number %}">{% include "components/icons.html#arrow-left" %}{{ section.number }}. {{ section.title }}</a>
+      {% if template %}<span class="text-ink-faint">/</span><a class="link font-semibold" href="{% url 'student:lesson_template' section.number template.code %}">{% translate "Template" %} №{{ template.number }}</a>{% endif %}
+    </nav>
+    <span class="badge {% if lesson.status == 'final' %}badge-success{% else %}badge-info{% endif %} font-bold">{{ lesson.get_status_display }}</span>
+  </div>
+
+  <div class="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(340px,400px)] 2xl:grid-cols-[272px_minmax(0,1fr)_410px]">
+
+    {# ---- left: the lesson structure ---- #}
+    <aside aria-labelledby="structure-title" class="card flex min-w-0 flex-col gap-3 p-3 xl:col-span-2 2xl:sticky 2xl:top-20 2xl:col-span-1">
+      <h2 id="structure-title" class="flex items-center gap-2 px-2 pt-1 text-[15px] font-extrabold">{% include "components/icons.html#book" with size=18 %}{% translate "Lesson structure" %}</h2>
+      {% if template %}
+        <a href="{% url 'student:lesson_template' section.number template.code %}" class="tpl-{{ template.code }} relative hidden h-[104px] flex-col justify-end overflow-hidden rounded-lg p-3 text-white 2xl:flex">
+          <span class="absolute -top-1 -right-6 h-[96px] w-[140px] opacity-35">{% include "student/designer/partials/art.html#"|add:template.code %}</span>
+          <span class="relative text-[11px] font-bold tracking-wide text-white/80 uppercase">№{{ template.number }}</span>
+          <span class="relative text-[14px] leading-[18px] font-extrabold">{{ template.name|truncatechars:40 }}</span>
+        </a>
+      {% endif %}
+      <ol class="flex gap-1.5 overflow-x-auto 2xl:flex-col 2xl:overflow-visible">
+        {% for row in stages %}{% with s=row.stage %}
+          <li class="tone-{{ forloop.counter }} min-w-[190px] flex-1 2xl:min-w-0">
+            <a href="{% url 'student:lesson_stage' section.number lesson.pk s.order %}"
+               class="flex items-center gap-3 rounded-lg border px-2.5 py-2.5 transition-colors {% if s.pk == stage.pk %}border-(--tone) bg-(--tone-50) shadow-[0_0_0_3px_color-mix(in_srgb,var(--tone)_14%,transparent)]{% else %}border-transparent hover:bg-canvas{% endif %}"
+               {% if s.pk == stage.pk %}aria-current="step"{% endif %}>
+              <span class="num grid size-8 shrink-0 place-items-center rounded-full bg-(--tone) text-[14px] font-extrabold text-white">{{ s.order }}</span>
+              <span class="min-w-0 flex-1">
+                <span class="block truncate text-[13.5px] leading-[18px] font-bold">{% if s.pk == stage.pk %}<span x-text="title">{{ s.title }}</span>{% else %}{{ s.title }}{% endif %}</span>
+                <span class="num block text-[12px] font-semibold text-(--tone)">{{ row.start }}–{{ row.end }} {% translate "min" %}</span>
+              </span>
+              {% if s.pk == stage.pk %}
+                <span x-show="edited" x-cloak class="text-success-600" title="{% translate 'Redesigned' %}">{% include "components/icons.html#edit" with size=15 %}</span>
+              {% elif s.edited %}
+                <span class="text-success-600" title="{% translate 'Redesigned' %}">{% include "components/icons.html#edit" with size=15 %}</span>
+              {% elif s.cleared %}
+                <span class="text-warning-500" title="{% translate 'Cleared' %}">{% include "components/icons.html#trash" with size=14 %}</span>
+              {% endif %}
+            </a>
+          </li>
+        {% endwith %}{% endfor %}
+      </ol>
+    </aside>
+
+    {# ---- middle: the stage ---- #}
+    <section aria-labelledby="stage-title" class="tone-{{ stage.order }} flex min-w-0 flex-col gap-4">
+      <div class="card flex flex-col gap-0 overflow-hidden p-0">
+        <header class="flex flex-wrap items-center gap-3 border-b border-(--tone)/20 bg-(--tone-50) px-5 py-4">
+          <span class="num grid size-11 shrink-0 place-items-center rounded-full bg-(--tone) text-[18px] font-extrabold text-white shadow-[0_0_0_4px_white]">{{ stage.order }}</span>
+          <div class="min-w-0 flex-1">
+            <p class="text-[12px] font-bold tracking-wide text-(--tone) uppercase">{% blocktranslate with n=stage.order %}Stage {{ n }}{% endblocktranslate %}</p>
+            <h1 id="stage-title" class="text-[19px] leading-6 font-extrabold" x-text="title">{{ stage.title }}</h1>
+          </div>
+          <span class="num inline-flex h-8 items-center gap-1.5 rounded-full bg-white px-3 text-[13px] font-bold ring-1 ring-(--tone)/30">{% include "components/icons.html#clock" with size=14 %}<span x-text="minutes">{{ stage.minutes }}</span> {% translate "min" %}</span>
+        </header>
+
+        {% if not stage.cleared %}
+          {# the template's content and «Clear the content» (image18) #}
+          <div class="flex flex-col gap-5 p-5">
+            <div class="flex flex-wrap items-center gap-4 rounded-lg border border-warning-500/40 bg-warning-50 p-4">
+              <span class="grid size-11 shrink-0 place-items-center rounded-[14px] bg-white text-warning-700 shadow-[0_1px_2px_rgb(0_0_0/0.06)]">{% include "components/icons.html#trash" with size=20 %}</span>
+              <p class="min-w-0 flex-[1_1_260px] text-[14px] leading-[21px] font-semibold text-warning-700">{% translate "When a part is chosen, its original content is removed completely and an empty editor opens for the new content." %}</p>
+              {% if not locked %}
+                <form method="post" action="{% url 'student:lesson_stage_clear' section.number lesson.pk stage.order %}">{% csrf_token %}
+                  {% translate "Clear the content?" as c_title %}{% translate "The template's content of this stage leaves the editor and empty fields open. The AI assistant helps you write the stage anew." as c_text %}{% translate "Clear" as c_label %}
+                  <button type="submit" class="btn btn-danger" data-confirm="{{ c_title }}" data-confirm-text="{{ c_text }}" data-confirm-label="{{ c_label }}" data-confirm-variant="danger" data-confirm-icon="trash">{% include "components/icons.html#trash" %}{% translate "Clear the content" %}</button>
+                </form>
+              {% endif %}
+            </div>
+            <p class="text-caption font-bold tracking-wide text-ink-faint uppercase">{% translate "The template's content" %}</p>
+            {% for f in fields %}{% if f.html %}
+              <div class="flex flex-col gap-2 rounded-lg border border-line p-4">
+                <span class="inline-flex w-fit items-center gap-1.5 rounded-[8px] bg-(--tone-50) px-2 py-1 text-[12.5px] font-extrabold text-(--tone)">{% include "components/icons.html#"|add:f.icon with size=13 %}{{ f.label }}</span>
+                <div class="prose-lesson text-ink-soft">{{ f.html|rich }}</div>
+              </div>
+            {% endif %}{% endfor %}
+          </div>
+        {% else %}
+          {# the student's own stage #}
+          <div class="flex flex-col gap-4 p-5">
+            <div class="grid gap-3 sm:grid-cols-[1fr_140px]">
+              <label class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Stage title" %}</span>
+                <input class="input" type="text" maxlength="255" x-model="title" {% if locked %}disabled{% endif %}></label>
+              <label class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Minutes" %}</span>
+                <input class="input num" type="number" min="1" max="45" x-model.number="minutes" {% if locked %}disabled{% endif %}></label>
+            </div>
+            {% for f in fields %}
+              <div class="flex flex-col gap-2 rounded-lg border border-line p-3.5 transition-shadow focus-within:border-(--tone) focus-within:shadow-[0_0_0_3px_color-mix(in_srgb,var(--tone)_14%,transparent)]"
+                   data-field="{{ f.key }}" @focusin="active = '{{ f.key }}'">
+                <span class="flex items-center justify-between gap-2">
+                  <span class="inline-flex items-center gap-1.5 text-[13px] font-extrabold text-(--tone)">{% include "components/icons.html#"|add:f.icon with size=15 %}{{ f.label }}</span>
+                  <span x-show="active === '{{ f.key }}'" x-cloak class="inline-flex items-center gap-1 text-[11.5px] font-semibold text-stage-video">{% include "components/icons.html#sparkle" with size=12 %}{% translate "AI suggestions go here" %}</span>
+                </span>
+                <textarea rows="3" class="input" x-model="fields.{{ f.key }}" x-rich.answer{% if locked %}="true"{% endif %} data-rt="short" aria-label="{{ f.label }}" placeholder="{% translate 'Write your authorial task…' %}"></textarea>
+              </div>
+            {% endfor %}
+            <div class="flex flex-wrap items-center justify-between gap-3 border-t border-line pt-4">
+              <span class="inline-flex items-center gap-2 text-[13px] font-semibold" :class="state === 'failed' ? 'text-danger-600' : 'text-ink-soft'" aria-live="polite">
+                <span class="size-2 rounded-full" :class="{ 'bg-success-600': state === 'saved', 'bg-warning-500 animate-pulse': state === 'dirty' || state === 'saving', 'bg-danger-600': state === 'failed' }"></span>
+                <span x-text="stateText">{% translate "Saved" %}</span>
+                <button type="button" x-show="state === 'failed'" x-cloak class="link font-bold" @click="save()">{% translate "Retry" %}</button>
+              </span>
+              {% if not locked %}
+                <form method="post" action="{% url 'student:lesson_stage_restore' section.number lesson.pk stage.order %}">{% csrf_token %}
+                  {% translate "Restore the template's content?" as r_title %}{% translate "What you wrote in this stage is replaced by the template's content." as r_text %}{% translate "Restore" as r_label %}
+                  <button type="submit" class="btn btn-ghost btn-sm" data-confirm="{{ r_title }}" data-confirm-text="{{ r_text }}" data-confirm-label="{{ r_label }}" data-confirm-icon="refresh">{% include "components/icons.html#refresh" %}{% translate "Restore the original" %}</button>
+                </form>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="flex flex-wrap justify-between gap-2">
+        {% if previous %}<a class="btn btn-secondary" href="{% url 'student:lesson_stage' section.number lesson.pk previous.order %}">{% include "components/icons.html#arrow-left" %}{{ previous.order }}. {{ previous.title|truncatechars:28 }}</a>{% else %}<span></span>{% endif %}
+        {% if following %}<a class="btn btn-secondary" href="{% url 'student:lesson_stage' section.number lesson.pk following.order %}">{{ following.order }}. {{ following.title|truncatechars:28 }}{% include "components/icons.html#arrow-right" %}</a>{% endif %}
+      </div>
+    </section>
+
+    {# ---- right: the AI assistant ---- #}
+    <div class="min-w-0 xl:sticky xl:top-20">
+      {% include "ai/partials/panel.html" with enabled=ai_enabled %}
+    </div>
+  </div>
+
+  {# ---- bottom: the lesson at a glance ---- #}
+  <div class="sticky bottom-3 z-20 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line bg-surface/95 px-5 py-3 shadow-lift backdrop-blur">
+    <div class="flex flex-wrap items-center gap-x-6 gap-y-1 text-sm">
+      <span class="inline-flex items-center gap-2 font-semibold">{% include "components/icons.html#clock" with size=16 %}{% translate "Lesson" %}: <span class="num font-extrabold" :class="total === {{ lesson.duration_min }} ? 'text-success-700' : 'text-warning-700'" x-text="total">{{ editor_opts.total }}</span> / {{ lesson.duration_min }} {% translate "min" %}</span>
+      <span class="inline-flex items-center gap-2 font-semibold">{% include "components/icons.html#edit" with size=16 %}{% translate "Redesigned stages" %}: <span class="num font-extrabold" x-text="{{ edited_others }} + (edited ? 1 : 0)">{{ edited_others|add:stage.edited }}</span> / {{ stages|length }}</span>
+    </div>
+    <p x-show="total !== {{ lesson.duration_min }}" x-cloak class="text-[13px] font-semibold text-warning-700">{% blocktranslate with n=lesson.duration_min %}The stages should take {{ n }} minutes in total.{% endblocktranslate %}</p>
+  </div>
+
+  {# a short notice: «the suggestion is in the editor», «clear the content first» #}
+  <div x-show="notice" x-cloak x-transition.opacity class="fixed inset-x-4 bottom-24 z-[70] mx-auto flex w-fit max-w-md items-center gap-3 rounded-[18px] bg-ink py-3 pr-4 pl-3 text-sm font-semibold text-white shadow-modal" role="status">
+    <span class="grid size-8 shrink-0 place-items-center rounded-sm bg-stage-video">{% include "components/icons.html#sparkle" with size=16 %}</span><span x-text="notice"></span>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}<script defer src="{% static 'js/designer.js' %}"></script>{% rich_text_assets %}{% endblock %}

@@ -7,6 +7,7 @@ change in one place. Kinds that are not built yet report 0 % and ``ready = False
 from ..models import Section
 from .base import Provider, Upcoming
 from .course import CourseProvider
+from .designer import DesignerProvider
 from .diagnostic import DiagnosticProvider
 from .video import VideoProvider
 
@@ -14,6 +15,7 @@ PROVIDERS: dict[str, Provider] = {
     Section.Kind.COURSE: CourseProvider(),
     Section.Kind.DIAGNOSTIC: DiagnosticProvider(),
     Section.Kind.VIDEO: VideoProvider(),
+    Section.Kind.DESIGNER: DesignerProvider(),
 }
 
 

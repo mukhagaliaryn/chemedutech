@@ -7,8 +7,11 @@ from django.contrib import messages
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
+from apps.ai import services as ai
+from apps.ai.models import Mode
 from apps.assessments import services as quiz_services
 from apps.assessments.forms import collect_answers
 from apps.assessments.models import QuizAttempt
@@ -21,7 +24,7 @@ from apps.programme.services import diagnostics
 from apps.progress import selectors as progress_selectors
 from apps.progress.services import benchmark
 
-from . import cabinet
+from . import cabinet, designer
 
 LOCKED = SectionProgress.Status.LOCKED
 
@@ -69,6 +72,7 @@ def section(request, number):
     rows = programme_selectors.section_rows(enrollment)
     row = next(r for r in rows if r["section"].pk == section.pk)
     context = {"programme": enrollment.programme, "section": section, "row": row, "rows": rows}
+    context.update(_ai_panel(request, section))
     if row["status"] == LOCKED:
         blocking = programme.blocking_section(enrollment, section)
         context["blocking"] = next((r for r in rows if blocking and r["section"].pk == blocking.pk), None)
@@ -82,6 +86,8 @@ def section(request, number):
         watch = VideoWatch.objects.filter(enrollment=enrollment, section=section).first()
         context["video"] = video if video and video.youtube_id else None
         context["watched"] = watch.percent if watch else 0
+    elif section.kind == Section.Kind.DESIGNER:
+        context.update(designer.designer_context(request.user))
     return render(request, "student/section.html", context)
 
 
@@ -208,3 +214,60 @@ def section_watch(request, number):
     stored = programme.record_watch(enrollment, section, percent)
     row = SectionProgress.objects.get(enrollment=enrollment, section=section)
     return JsonResponse({"percent": stored, "done": row.status == SectionProgress.Status.PASSED})
+
+
+# --- «Let the AI explain» on every section page (guide @S4 «міндетті талап»; D73) -----------------------------
+
+
+def _ai_panel(request, section, error="") -> dict:
+    return {
+        "ai_enabled": ai.enabled(),
+        "panel_id": f"ai-section-{section.number}",
+        "post_url": reverse("student:section_ai", args=[section.number]),
+        "thread": ai.thread(request.user, Mode.ASSISTANT, "section", section.pk),
+        "remaining": ai.remaining_today(request.user),
+        "error": error,
+        "quick": [("explain_section", _("Explain the section"), "sparkle")],
+        "title": _("Let the AI explain"),
+        "subtitle": _("The AI assistant of the ICPAI programme"),
+        "placeholder": _("Ask about this section…"),
+    }
+
+
+def _section_context(enrollment, section, rows) -> str:
+    row = next(r for r in rows if r["section"].pk == section.pk)
+    outline = "\n".join(f"{r['section'].number}. {r['section'].title}" for r in rows)
+    return (
+        f"Programme «{enrollment.programme.title}», {len(rows)} sections taken in order; the next one opens when the "
+        f"previous one is {section.pass_percent}% done:\n{outline}\n\n"
+        f"The student is on section {section.number} «{section.title}» "
+        f"(state: {row['status']}, {row['percent']}% done).\n"
+        f"What the section does (the author's text):\n{section.purpose}"
+    )
+
+
+@require_POST
+@role_required(STUDENT)
+def section_ai(request, number):
+    """HTMX: a question (or the quick request) to the AI assistant about an open section; answers the thread."""
+    enrollment = programme.refresh(request.user)
+    if enrollment is None:
+        raise Http404
+    section = get_object_or_404(Section, programme=enrollment.programme, number=number)
+    if not programme.can_access(enrollment, section):
+        raise Http404
+    error = ""
+    try:
+        ai.ask(
+            request.user,
+            context_type="section",
+            context_id=section.pk,
+            context=_section_context(enrollment, section, programme_selectors.section_rows(enrollment)),
+            text=request.POST.get("text", ""),
+            intent=request.POST.get("intent", ""),
+        )
+    except ai.LimitReached:
+        error = "limit"
+    except ai.AIUnavailable as exc:
+        error = "" if str(exc) == "empty" else "failed"
+    return render(request, "ai/partials/thread.html", _ai_panel(request, section, error))

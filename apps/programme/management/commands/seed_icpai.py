@@ -1,10 +1,11 @@
-"""The ICPAI programme: the programme on the seeded course, its 8 sections and the three diagnostic tests of
-section 2 (docs/icpai/SPEC.md §0, §2.2).
+"""The ICPAI programme: the programme on the seeded course, its 8 sections, the three diagnostic tests of
+section 2 and the three authorial lesson templates of section 4 (docs/icpai/SPEC.md §0, §2.2, §2.3).
 
 Run after seed_course. Safe on every deploy: missing sections are added; existing ones keep the texts and
 pass marks an administrator may have edited, unless --replace (then titles, kinds, texts and anchors come
 from _icpai/ again). A diagnostic test somebody has taken keeps its questions (research data); only its texts
-are rewritten by --replace. The video section gets an empty video (its YouTube link is set in the admin). Student enrolments are made lazily when students open their cabinet.
+are rewritten by --replace. The lesson templates are created once and rewritten by --replace (the students' lessons
+are copies and do not change). The video section gets an empty video (its YouTube link is set in the admin). Student enrolments are made lazily when students open their cabinet.
 """
 
 from django.core.management.base import BaseCommand, CommandError
@@ -12,10 +13,12 @@ from django.db import transaction
 
 from apps.assessments.models import Choice, Question, Quiz
 from apps.courses.models import Course
+from apps.pedagogy.models import LessonTemplate, TemplateStage
 from apps.programme.models import DiagnosticTest, Programme, Section, SectionVideo
 
 from ._icpai import COURSE_SLUG, PROGRAMME, SECTIONS
 from ._icpai.diagnostics import DIAGNOSTICS
+from ._icpai.lessons import TEMPLATES
 
 
 class Command(BaseCommand):
@@ -47,6 +50,7 @@ class Command(BaseCommand):
             )  # the place of the video; the link is set in the admin
         section = programme.sections.filter(kind=Section.Kind.DIAGNOSTIC).order_by("number").first()
         notes = self.seed_diagnostics(section, replace) if section else []
+        self.seed_templates(replace)
         for note in notes:
             self.stdout.write(self.style.WARNING(note))
         if verbosity:
@@ -83,6 +87,30 @@ class Command(BaseCommand):
                 test.quiz.questions.all().delete()
                 self.fill(test.quiz, data["questions"])
         return notes
+
+    @staticmethod
+    def seed_templates(replace):
+        """The authorial lesson templates of section 4, verbatim from the guide (_icpai/lessons.py)."""
+        for number, data in enumerate(TEMPLATES, start=1):
+            values = {
+                "number": number, "name": data["name"], "topic": data["topic"], "subject": data["subject"],
+                "grade": data["grade"], "duration_min": int(data["duration"].split()[0]),
+                "technology": data["technology"], "aim": data["aim"], "feature": data["feature"],
+                "outcomes": data["outcomes"], "product": data["product"], "images": data["images"],
+            }  # fmt: skip
+            template, made = LessonTemplate.objects.get_or_create(code=data["code"], defaults=values)
+            if not made and not replace:
+                continue
+            for field, value in values.items():
+                setattr(template, field, value)
+            template.save()
+            template.stages.all().delete()
+            TemplateStage.objects.bulk_create(
+                TemplateStage(
+                    template=template, order=s["n"], title=s["title"], minutes=s["minutes"], blocks=s["blocks"]
+                )
+                for s in data["stages"]
+            )
 
     @staticmethod
     def fill(quiz, questions):

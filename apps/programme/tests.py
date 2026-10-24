@@ -1,6 +1,7 @@
 """STEP-29: the ICPAI programme — sections, the 80 % rule, manual opening, the student and teacher pages."""
 
 from decimal import Decimal
+from unittest import mock
 from unittest.mock import patch
 
 from django.core.management import call_command
@@ -263,7 +264,7 @@ class StudentPageTests(Base):
         self.assertContains(r, reverse("student:section", args=[1]))
 
     def test_an_open_section_not_built_yet(self):
-        Section.objects.filter(pk=self.section(2).pk).update(kind="designer")  # a kind not built yet
+        Section.objects.filter(pk=self.section(2).pk).update(kind="microlesson")  # a kind not built yet
         self.pass_stages(4)
         r = self.client.get(reverse("student:section", args=[2]))
         self.assertTemplateUsed(r, "student/section.html")
@@ -611,3 +612,197 @@ class VideoSectionTests(Base):
             reverse("student:section_watch", args=[1]), '{"percent": 90}', content_type="application/json"
         )
         self.assertEqual(r.status_code, 404)
+
+
+# --- «Let the AI explain» on the section pages (D73) --------------------------------------------------------
+
+
+class SectionAITests(Base):
+    def setUp(self):
+        super().setUp()
+        from apps.ai.services import client as ai_client
+        from apps.ai.tests import FakeClient, answer
+
+        self.fake = FakeClient(answer("1-бөлім — курс. Алдымен **дәрістерді** оқыңыз.\n- теория\n- зертхана"))
+        patcher = mock.patch.object(ai_client, "get_client", return_value=self.fake)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        self.client.force_login(self.student)
+
+    def test_panel_is_static_when_ai_is_off(self):
+        r = self.client.get(reverse("student:section", args=[1]))
+        self.assertFalse(r.context["ai_enabled"])
+        self.assertNotContains(r, reverse("student:section_ai", args=[1]))
+
+    @override_settings(AI_TUTOR_ENABLED=True)
+    def test_explain_the_section(self):
+        r = self.client.get(reverse("student:section", args=[1]))
+        self.assertContains(r, reverse("student:section_ai", args=[1]))
+        self.assertContains(r, 'value="explain_section"')
+        r = self.client.post(reverse("student:section_ai", args=[1]), {"intent": "explain_section"})
+        self.assertTemplateUsed(r, "ai/partials/thread.html")
+        self.assertContains(r, "<strong>дәрістерді</strong>", html=False)
+        system = self.fake.calls[0]["system"]
+        self.assertIn("section 1 «S1»", system)
+        self.assertIn("P1", system)  # the section's purpose goes to the AI as context
+        self.assertEqual(r.context["remaining"], 59)
+
+    @override_settings(AI_TUTOR_ENABLED=True)
+    def test_locked_section_is_not_explained(self):
+        self.assertEqual(self.client.post(reverse("student:section_ai", args=[3]), {"text": "?"}).status_code, 404)
+        self.assertEqual(self.fake.calls, [])
+
+
+class LessonTemplateSeedTests(TestCase):
+    """Section 4: the three authorial templates of the guide (_icpai/lessons.py, generated from guide.md)."""
+
+    def test_the_templates_come_from_the_guide_verbatim(self):
+        from apps.pedagogy.frames import keys_of
+
+        from .management.commands._icpai.lessons import TEMPLATES
+
+        self.assertEqual([t["code"] for t in TEMPLATES], ["chem_design", "chem_detective", "chem_circuit"])
+        for t in TEMPLATES:
+            self.assertEqual(len(t["stages"]), 6)
+            self.assertEqual(sum(s["minutes"] for s in t["stages"]), 45)
+            for s in t["stages"]:
+                self.assertTrue(s["blocks"])
+                self.assertTrue({b["field"] for b in s["blocks"]} <= set(keys_of("template")))
+        design = TEMPLATES[0]
+        self.assertEqual(design["name"], "CHEM-DESIGN LAB – Химиялық шешімдер зертханасы")
+        self.assertEqual([s["title"] for s in design["stages"]][:2], ["Химиялық миссия", "Ғылыми болжам конструкторы"])
+        self.assertIn(
+            "N<sub>2</sub>(g)+3H<sub>2</sub>(g) ⇄ 2NH<sub>3</sub>(g)", design["stages"][0]["blocks"][1]["html"]
+        )
+        self.assertEqual(TEMPLATES[2]["stages"][2]["blocks"][1]["label"], "1-тәжірибе. «Мырыш пен мыс элементі»")
+        self.assertEqual(TEMPLATES[2]["stages"][2]["blocks"][1]["field"], "experiment")
+
+    def test_seed_makes_the_templates_and_replace_keeps_the_students_lessons(self):
+        from apps.pedagogy import services as pedagogy
+        from apps.pedagogy.models import LessonTemplate
+
+        call_command("seed_course", topics=[1], verbosity=0)
+        call_command("seed_icpai", verbosity=0)
+        self.assertEqual(list(LessonTemplate.objects.values_list("code", "number", "duration_min")),
+                         [("chem_design", 1, 45), ("chem_detective", 2, 45), ("chem_circuit", 3, 45)])  # fmt: skip
+        template = LessonTemplate.objects.get(code="chem_circuit")
+        self.assertEqual(template.stages.count(), 6)
+        lesson = pedagogy.start(make_student("s9"), template)
+        LessonTemplate.objects.filter(pk=template.pk).update(name="Edited")
+        call_command("seed_icpai", verbosity=0)
+        self.assertEqual(LessonTemplate.objects.get(pk=template.pk).name, "Edited")
+        call_command("seed_icpai", replace=True, verbosity=0)
+        self.assertEqual(
+            LessonTemplate.objects.get(pk=template.pk).name, "CHEM-CIRCUIT LAB – Электрондар әлемінің инженерлері"
+        )
+        self.assertEqual(lesson.stages.count(), 6)  # the copy does not change
+
+
+class DesignerPageTests(Base):
+    """Section 4: templates → template page → «Create my version» → the editor with the AI assistant."""
+
+    def setUp(self):
+        super().setUp()
+        from apps.ai.services import client as ai_client
+        from apps.ai.tests import FakeClient, answer
+        from apps.pedagogy.tests import make_template
+
+        self.template = make_template()
+        self.fake = FakeClient(answer("**Идея:** NO₂ түсін бақылау."))
+        patcher = mock.patch.object(ai_client, "get_client", return_value=self.fake)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        teacher = User.objects.create_user("t", "t@example.kz", "x", role=User.Role.TEACHER)
+        services.unlock_section(self.enrollment(), self.section(4), teacher)
+        self.client.force_login(self.student)
+
+    def url(self, name, *args):
+        return reverse(f"student:{name}", args=[4, *args])
+
+    def lesson(self):
+        from apps.pedagogy.models import Lesson
+
+        return Lesson.objects.get(owner=self.student)
+
+    def test_the_section_shows_the_templates(self):
+        r = self.client.get(reverse("student:section", args=[4]))
+        self.assertTemplateUsed(r, "student/designer/partials/templates.html")
+        self.assertContains(r, self.url("lesson_template", "chem_design"))
+        self.assertTrue(r.context["row"]["ready"])
+
+    def test_template_page_then_create_my_version(self):
+        r = self.client.get(self.url("lesson_template", "chem_design"))
+        self.assertContains(r, "1-тәжірибе. Қысым")
+        self.assertContains(r, self.url("lesson_start", "chem_design"))
+        r = self.client.post(self.url("lesson_start", "chem_design"))
+        lesson = self.lesson()
+        self.assertRedirects(r, self.url("lesson_stage", lesson.pk, 1))
+        r = self.client.get(self.url("lesson_stage", lesson.pk, 1))
+        self.assertTemplateUsed(r, "student/designer/editor.html")
+        self.assertContains(r, self.url("lesson_stage_clear", lesson.pk, 1))
+        self.assertContains(r, "Мұғалім 1")
+
+    def test_clear_save_and_restore(self):
+        self.client.post(self.url("lesson_start", "chem_design"))
+        lesson = self.lesson()
+        self.client.post(self.url("lesson_stage_clear", lesson.pk, 2))
+        r = self.client.get(self.url("lesson_stage", lesson.pk, 2))
+        self.assertNotContains(r, "Мұғалім 2")  # the original left the editor
+        self.assertTrue(r.context["editor_opts"]["cleared"])
+        body = {"title": "Болжам", "minutes": 8, "fields": {"student_task": "<p>H<sub>2</sub>O</p>"}}
+        r = self.client.post(self.url("lesson_stage_save", lesson.pk, 2), body, content_type="application/json")
+        self.assertEqual(r.json(), {"edited": True, "title": "Болжам", "minutes": 8, "minutes_total": 46})
+        r = self.client.post(self.url("lesson_stage_save", lesson.pk, 2), "[", content_type="application/json")
+        self.assertEqual(r.status_code, 400)
+        r = self.client.post(self.url("lesson_stage_save", lesson.pk, 3), body, content_type="application/json")
+        self.assertEqual(r.status_code, 409)  # not cleared
+        self.client.post(self.url("lesson_stage_restore", lesson.pk, 2))
+        self.assertFalse(lesson.stages.get(order=2).edited)
+
+    def test_another_students_lesson_and_a_locked_section_are_404(self):
+        from apps.pedagogy import services as pedagogy
+
+        other = pedagogy.start(make_student("s2", group=self.group), self.template)
+        self.assertEqual(self.client.get(self.url("lesson_stage", other.pk, 1)).status_code, 404)
+        self.assertEqual(self.client.post(self.url("lesson_stage_clear", other.pk, 1)).status_code, 404)
+        SectionProgress.objects.filter(section__number=4).update(status=S.LOCKED, unlocked_by=None)
+        self.assertEqual(self.client.get(self.url("lesson_template", "chem_design")).status_code, 404)
+
+    @override_settings(AI_TUTOR_ENABLED=True)
+    def test_the_ai_assistant_knows_the_stage_and_the_draft(self):
+        self.client.post(self.url("lesson_start", "chem_design"))
+        lesson = self.lesson()
+        r = self.client.get(self.url("lesson_stage", lesson.pk, 3))
+        self.assertContains(r, 'value="experiment_idea"')
+        self.client.post(self.url("lesson_stage_clear", lesson.pk, 3))
+        body = {
+            "title": "Дәлел",
+            "minutes": 11,
+            "fields": {"experiment": "<p>N<sub>2</sub>O<sub>4</sub> ⇌ <b>2NO2</b></p>"},
+        }
+        self.client.post(self.url("lesson_stage_save", lesson.pk, 3), body, content_type="application/json")
+        r = self.client.post(self.url("lesson_stage_ai", lesson.pk, 3), {"intent": "experiment_idea"})
+        self.assertTemplateUsed(r, "ai/partials/thread.html")
+        self.assertContains(r, "<strong>Идея:</strong>", html=False)
+        self.assertContains(r, "ai-insert")  # «Add to the editor»
+        system = self.fake.calls[0]["system"]
+        self.assertIn("stage 3 «Дәлел» (12–23 min)", system)
+        self.assertIn(
+            "<student_text>\nВиртуалды зертханалық тәжірибелер мен зерттеушілік жұмыстар:\nN₂O₄ ⇌ 2NO2\n</student_text>",
+            system,
+        )
+
+    def test_section_four_percent_counts_the_final_versions(self):
+        from apps.pedagogy import services as pedagogy
+        from apps.pedagogy.models import Lesson
+        from apps.pedagogy.tests import make_template
+
+        make_template("chem_circuit", 2)
+        make_template("chem_detective", 3)
+        lesson = pedagogy.start(self.student, self.template)
+        Lesson.objects.filter(pk=lesson.pk).update(status=Lesson.Status.FINAL)
+        self.enrollment()
+        self.assertEqual(SectionProgress.objects.get(section__number=4).percent, Decimal("0.00"))  # nothing redesigned
+        lesson.stages.filter(order=1).update(edited=True)
+        self.enrollment()
+        self.assertEqual(SectionProgress.objects.get(section__number=4).percent, Decimal("33.33"))

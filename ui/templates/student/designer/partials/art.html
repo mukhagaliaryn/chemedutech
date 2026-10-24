@@ -1,0 +1,79 @@
+{% comment %}
+The illustrations of the three authorial templates (guide pictures image12–15), one partial per template code:
+{% include "student/designer/partials/art.html#chem_design" %}. Light lines on the card's gradient; bubbles, a
+glowing bulb, flowing electrons — still under prefers-reduced-motion (styles.css).
+{% endcomment %}
+{% partialdef chem_design %}
+<svg viewBox="0 0 220 150" class="h-full w-full" aria-hidden="true">
+  <g fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    {# the synthesis column with its gauge #}
+    <rect x="34" y="30" width="44" height="98" rx="20" fill="#ffffff22"/>
+    <path d="M34 64h44M34 96h44" stroke-opacity=".5"/>
+    <path d="M56 30V14h26" /><path d="M82 14v10" />
+    <rect x="40" y="70" width="32" height="22" rx="8" fill="#5fd3b866" stroke="none"/>
+    <circle class="bubble" style="--dur:2.2s" cx="48" cy="90" r="2.6" fill="#fff" stroke="none"/>
+    <circle class="bubble" style="--dur:2.8s;--delay:.6s" cx="58" cy="92" r="2" fill="#fff" stroke="none"/>
+    <circle class="bubble" style="--dur:2.4s;--delay:1.2s" cx="66" cy="90" r="2.4" fill="#fff" stroke="none"/>
+    <path d="M24 128h168" stroke-opacity=".6"/>
+    <circle cx="112" cy="46" r="18" fill="#ffffff1f"/><path d="M112 46l9-8" /><path d="M100 52a14 14 0 0 1 24 0" stroke-opacity=".6"/>
+    <path d="M78 46h16" class="dash-flow" stroke-dasharray="4 4"/>
+    {# the thermometer #}
+    <rect x="146" y="22" width="12" height="62" rx="6" fill="#ffffff22"/><circle cx="152" cy="92" r="10" fill="#ff8a7a" stroke="#fff"/>
+    <rect x="149.5" y="44" width="5" height="44" rx="2.5" fill="#ff8a7a" stroke="none" class="glow"/>
+  </g>
+  <text x="96" y="122" fill="#fff" font-size="13" font-weight="800" font-family="Inter, sans-serif">N₂ + 3H₂ ⇄ 2NH₃</text>
+</svg>
+{% endpartialdef %}
+
+{% partialdef chem_detective %}
+<svg viewBox="0 0 220 150" class="h-full w-full" aria-hidden="true">
+  <g fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    {# three unknown samples #}
+    {% for x in "30 66 102"|split %}
+      <path d="M{{ x }} 40v66a12 12 0 0 0 24 0V40" fill="#ffffff1f"/>
+      <path d="M{{ x|add:'-4' }} 40h32"/>
+    {% endfor %}
+    <path d="M32 84h20v22a10 10 0 0 1-20 0z" fill="#ff8a7a" stroke="none" opacity=".85"/>
+    <path d="M68 84h20v22a10 10 0 0 1-20 0z" fill="#9be7a8" stroke="none" opacity=".85"/>
+    <path d="M104 84h20v22a10 10 0 0 1-20 0z" fill="#8fb4ff" stroke="none" opacity=".9"/>
+    <text x="36" y="34" fill="#fff" stroke="none" font-size="11" font-weight="800" font-family="Inter, sans-serif">A</text>
+    <text x="72" y="34" fill="#fff" stroke="none" font-size="11" font-weight="800" font-family="Inter, sans-serif">B</text>
+    <text x="108" y="34" fill="#fff" stroke="none" font-size="11" font-weight="800" font-family="Inter, sans-serif">C</text>
+    {# the magnifier #}
+    <g class="float">
+      <circle cx="160" cy="62" r="26" fill="#ffffff26" stroke-width="5"/>
+      <path d="M179 81l22 22" stroke-width="8"/>
+      <text x="146" y="68" fill="#fff" stroke="none" font-size="16" font-weight="800" font-family="Inter, sans-serif">pH</text>
+    </g>
+  </g>
+  {# the pH scale #}
+  <g transform="translate(24 128)">
+    <rect width="22" height="8" rx="4" fill="#e5484d"/><rect x="24" width="22" height="8" rx="4" fill="#f2994a"/>
+    <rect x="48" width="22" height="8" rx="4" fill="#f2c94c"/><rect x="72" width="22" height="8" rx="4" fill="#6fcf97"/>
+    <rect x="96" width="22" height="8" rx="4" fill="#56ccf2"/><rect x="120" width="22" height="8" rx="4" fill="#2f80ed"/>
+    <rect x="144" width="22" height="8" rx="4" fill="#7b4fd6"/>
+  </g>
+</svg>
+{% endpartialdef %}
+
+{% partialdef chem_circuit %}
+<svg viewBox="0 0 220 150" class="h-full w-full" aria-hidden="true">
+  <g fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    {# two half-cells and the salt bridge #}
+    <path d="M24 70v46a8 8 0 0 0 8 8h48a8 8 0 0 0 8-8V70" fill="#ffffff1f"/>
+    <path d="M132 70v46a8 8 0 0 0 8 8h48a8 8 0 0 0 8-8V70" fill="#ffffff1f"/>
+    <path d="M26 92h60v24a6 6 0 0 1-6 6H32a6 6 0 0 1-6-6z" fill="#8fb4ff88" stroke="none"/>
+    <path d="M134 92h60v24a6 6 0 0 1-6 6h-48a6 6 0 0 1-6-6z" fill="#56ccf288" stroke="none"/>
+    <path d="M72 100V80a8 8 0 0 1 8-8h60a8 8 0 0 1 8 8v20" stroke-width="7" stroke-opacity=".45"/>
+    <rect x="44" y="52" width="10" height="62" rx="2" fill="#c9ccd6" stroke="none"/>
+    <rect x="166" y="52" width="10" height="62" rx="2" fill="#e08a4a" stroke="none"/>
+    {# the wire, the electrons and the bulb #}
+    <path d="M49 52V22h122v30" class="dash-flow" stroke-dasharray="6 6"/>
+    <circle cx="110" cy="22" r="13" fill="#ffd66b" stroke="#fff" class="glow"/>
+    <path d="M105 34h10M106 38h8"/>
+  </g>
+  <text x="34" y="46" fill="#fff" font-size="11" font-weight="800" font-family="Inter, sans-serif">Zn</text>
+  <text x="178" y="46" fill="#fff" font-size="11" font-weight="800" font-family="Inter, sans-serif">Cu</text>
+  <text x="92" y="146" fill="#fff" font-size="12" font-weight="800" font-family="Inter, sans-serif">1,10 В</text>
+</svg>
+{% endpartialdef %}

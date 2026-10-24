@@ -1,0 +1,68 @@
+{% load i18n %}{% comment %}
+The AI assistant panel (docs/icpai/SPEC.md §5; pictures image18–19): a gradient header with the assistant, quick
+actions, the conversation, a question box, «AI is writing…» while the answer comes, today's requests left.
+panel_id — unique id; post_url — the HTMX endpoint (returns ai/partials/thread.html); thread — AIMessage list;
+remaining; error; enabled; quick — [(intent, label, icon)]; quick_list — the quick requests as the list «Choose the kind
+of help» (image18), folded once the conversation has begun; insert — «Copy the suggestion» / «Add to the editor» under
+the AI's answers (thread.html); title, subtitle, placeholder.
+When AI is off the panel says so and the page works on without it.
+{% endcomment %}
+<section class="flex min-w-0 flex-col overflow-hidden rounded-xl border border-line bg-surface shadow-lift" aria-labelledby="{{ panel_id }}-title">
+  <header class="relative flex items-center gap-3.5 overflow-hidden bg-[linear-gradient(120deg,#5b34b0,#1f5fd1_70%,#0b7a7a)] px-5 py-4 text-white">
+    <svg aria-hidden="true" viewBox="0 0 200 80" class="pointer-events-none absolute -right-6 -bottom-6 h-24 opacity-25"><g fill="none" stroke="#fff" stroke-width="2"><path d="M20 40l14-8 14 8v16l-14 8-14-8z"/><path d="M76 24l14-8 14 8v16l-14 8-14-8z"/><path d="M48 44l28-12"/><circle cx="150" cy="40" r="22"/><circle cx="150" cy="40" r="8"/></g></svg>
+    <span class="relative grid size-12 shrink-0 place-items-center rounded-[16px] bg-white/15 ring-1 ring-white/30 backdrop-blur-sm">
+      {% include "components/icons.html#sparkle" with size=24 %}
+      {% if enabled %}<span class="absolute -right-0.5 -bottom-0.5 size-3.5 rounded-full border-2 border-[#3a52c0] bg-mint"></span>{% endif %}
+    </span>
+    <div class="relative min-w-0">
+      <h2 id="{{ panel_id }}-title" class="text-[17px] leading-6 font-extrabold">{{ title }}</h2>
+      <p class="text-[13px] text-white/80">{{ subtitle }}</p>
+    </div>
+  </header>
+
+  {% if not enabled %}
+    <div class="flex flex-col gap-2 p-5">
+      <p class="text-sm text-ink-soft">{% translate "The AI assistant will explain the section here: its aim and how to start." %}</p>
+      <p class="text-caption text-ink-faint">{% translate "Available when the AI assistant is connected." %}</p>
+    </div>
+  {% else %}
+    {% include "ai/partials/thread.html" %}
+    <div id="{{ panel_id }}-typing" class="htmx-indicator hidden items-center gap-2.5 px-5 pt-3 text-sm font-semibold text-stage-video [&.htmx-request]:flex" aria-live="polite">
+      <span class="typing flex gap-1"><span class="size-1.5 rounded-full bg-stage-video"></span><span class="size-1.5 rounded-full bg-stage-video"></span><span class="size-1.5 rounded-full bg-stage-video"></span></span>
+      {% translate "AI is writing…" %}
+    </div>
+    <form class="flex flex-col gap-3 border-t border-line p-4" hx-post="{{ post_url }}" hx-target="#{{ panel_id }}" hx-swap="outerHTML"
+          hx-indicator="#{{ panel_id }}-typing" hx-disabled-elt="find button, find textarea" hx-on::after-request="if (event.detail.successful) this.reset()">
+      {% csrf_token %}
+      {% if quick and quick_list %}
+        <div class="rounded-lg border border-stage-video/20 bg-ai-50/50" x-data="{ open: {{ thread|yesno:'false,true' }} }">
+          <button type="button" class="flex w-full items-center justify-between gap-2 px-3.5 py-2.5 text-[13px] font-extrabold text-ai-900" @click="open = !open" :aria-expanded="open">
+            {% translate "Choose the kind of help:" %}
+            <span class="transition-transform" :class="open && 'rotate-180'">{% include "components/icons.html#chevron-down" with size=15 %}</span>
+          </button>
+          <div x-show="open" x-transition.opacity class="grid gap-1 px-2 pb-2 sm:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2" role="group" aria-label="{% translate 'Quick requests' %}">
+            {% for intent, label, icon in quick %}
+              <button type="submit" name="intent" value="{{ intent }}" class="flex items-center gap-2.5 rounded-[10px] px-2 py-2 text-left text-[13px] leading-[17px] font-semibold text-ink transition-colors hover:bg-white disabled:opacity-50">
+                <span class="grid size-7 shrink-0 place-items-center rounded-[8px] bg-white text-stage-video shadow-[0_1px_2px_rgb(0_0_0/0.06)]">{% include "components/icons.html#"|add:icon with size=15 %}</span>{{ label }}
+              </button>
+            {% endfor %}
+          </div>
+        </div>
+      {% elif quick %}
+        <div class="flex flex-wrap gap-2" role="group" aria-label="{% translate 'Quick requests' %}">
+          {% for intent, label, icon in quick %}
+            <button type="submit" name="intent" value="{{ intent }}" class="inline-flex items-center gap-1.5 rounded-full border border-stage-video/30 bg-ai-50 px-3.5 py-2 text-[13px] font-semibold text-ai-700 transition-colors hover:border-stage-video hover:bg-white disabled:opacity-50">{% include "components/icons.html#"|add:icon with size=13 %}{{ label }}</button>
+          {% endfor %}
+        </div>
+      {% endif %}
+      <div class="flex items-end gap-2 rounded-[16px] border border-line-strong bg-canvas p-1.5 pl-3.5 focus-within:border-primary-600 focus-within:ring-2 focus-within:ring-primary-100">
+        <label for="{{ panel_id }}-text" class="sr-only">{% translate "Question to the AI assistant" %}</label>
+        <textarea id="{{ panel_id }}-text" name="text" rows="1" maxlength="4000" placeholder="{{ placeholder }}"
+                  class="max-h-40 min-h-9 flex-1 resize-none bg-transparent py-2 text-sm outline-none placeholder:text-ink-faint disabled:opacity-60"
+                  x-data @input="$el.style.height = 'auto'; $el.style.height = $el.scrollHeight + 'px'"
+                  @keydown.enter="if (!$event.shiftKey) { $event.preventDefault(); $el.form.requestSubmit() }"></textarea>
+        <button type="submit" class="grid size-10 shrink-0 place-items-center rounded-[12px] bg-primary-600 text-white transition-colors hover:bg-primary-700 disabled:opacity-50" aria-label="{% translate 'Send' %}">{% include "components/icons.html#send" with size=18 %}</button>
+      </div>
+    </form>
+  {% endif %}
+</section>

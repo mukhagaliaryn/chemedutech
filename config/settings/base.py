@@ -6,6 +6,7 @@ Secrets and environment-specific values come from environment variables
 """
 
 import os
+import sys
 from pathlib import Path
 
 from django.urls import reverse_lazy
@@ -58,10 +59,12 @@ INSTALLED_APPS = [
     "apps.courses",
     "apps.assessments",
     "apps.labs",
+    "apps.ai",  # ICPAI: the AI assistant layer (docs/icpai/SPEC.md §2.4, §5)
     "apps.progress",
     "apps.practice",
     "apps.feedback",
     "apps.certificates",
+    "apps.pedagogy",  # ICPAI: lesson templates and the students' lessons (docs/icpai/SPEC.md §2.3)
     "apps.programme",  # ICPAI: sections and the 80 % engine (docs/icpai/SPEC.md)
     # product layer: views and URLs only
     "apps.student",
@@ -409,6 +412,31 @@ UNFOLD = {
                         "link": reverse_lazy("admin:programme_diagnosticresult_changelist"),
                     },
                     {
+                        "title": _("Lesson templates"),
+                        "icon": "auto_stories",
+                        "link": reverse_lazy("admin:pedagogy_lessontemplate_changelist"),
+                    },
+                    {
+                        "title": _("Students' lessons"),
+                        "icon": "edit_note",
+                        "link": reverse_lazy("admin:pedagogy_lesson_changelist"),
+                    },
+                    {
+                        "title": _("Lesson events"),
+                        "icon": "history_edu",
+                        "link": reverse_lazy("admin:pedagogy_lessonevent_changelist"),
+                    },
+                    {
+                        "title": _("AI conversations"),
+                        "icon": "smart_toy",
+                        "link": reverse_lazy("admin:ai_aiconversation_changelist"),
+                    },
+                    {
+                        "title": _("AI usage"),
+                        "icon": "data_usage",
+                        "link": reverse_lazy("admin:ai_aiusage_changelist"),
+                    },
+                    {
                         "title": _("Section events"),
                         "icon": "history",
                         "link": reverse_lazy("admin:programme_sectionevent_changelist"),
@@ -468,6 +496,16 @@ AI_GRADING_TIMEOUT_S = int(os.environ.get("AI_GRADING_TIMEOUT_S", "30"))
 AI_GRADING_EFFORT = os.environ.get("AI_GRADING_EFFORT", "medium")  # low | medium | high
 # Server-side refusal fallback (beta) on models that support it; turn off if the API rejects it.
 AI_GRADING_FALLBACKS = env_bool("AI_GRADING_FALLBACKS", True)
+
+# ICPAI AI assistant / AI student / checker / «Айрегім» (apps/ai; D73). Off by default — tests never call the API.
+AI_TUTOR_ENABLED = env_bool("AI_TUTOR_ENABLED", False)
+AI_TUTOR_MODEL = os.environ.get("AI_TUTOR_MODEL", "claude-opus-5-5")
+AI_TUTOR_EFFORT = os.environ.get("AI_TUTOR_EFFORT", "low")  # low | medium | high — chat replies stay quick
+AI_TUTOR_TIMEOUT_S = int(os.environ.get("AI_TUTOR_TIMEOUT_S", "60"))
+AI_TUTOR_DAILY_REQUESTS = int(os.environ.get("AI_TUTOR_DAILY_REQUESTS", "60"))  # per student per day
+AI_TUTOR_FALLBACKS = env_bool("AI_TUTOR_FALLBACKS", True)
+if sys.argv[1:2] == ["test"]:  # a test never reaches the API, whatever .env says; tests switch AI on with fakes
+    AI_TUTOR_ENABLED = AI_GRADING_ENABLED = False
 
 # --- Background tasks (Django 6 django.tasks; ARCHITECTURE §9.6) -----------------
 # Production: the database backend + `python manage.py db_worker` (systemd). Dev/tests run inline.

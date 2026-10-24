@@ -1,0 +1,150 @@
+{% extends "layouts/student.html" %}
+{% load i18n %}
+{% comment %}
+An authorial lesson template in full (guide @S4-L1…L3, verbatim; pictures image12–15, the 45-minute bar of image16):
+the poster header with the topic, subject, grade, duration and aim; the authorial technology and feature; the
+timeline of the six stages; each stage with its labelled blocks (long ones fold); the expected results and the
+product; «Create my version» (or «Open my version»).
+{% endcomment %}
+{% block title %}{{ template.name }} · ChemEduTech{% endblock %}
+{% block crumb %}{{ programme.title }} · {% blocktranslate with n=section.number %}Section {{ n }}{% endblocktranslate %}{% endblock %}
+{% block page_title %}{% translate "Authorial lesson template" %}{% endblock %}
+{% block content %}
+<nav class="flex flex-wrap items-center gap-2 text-sm" aria-label="{% translate 'Breadcrumbs' %}">
+  <a class="link inline-flex items-center gap-1.5 font-semibold" href="{% url 'student:section' section.number %}">{% include "components/icons.html#arrow-left" %}{{ section.number }}. {{ section.title }}</a>
+</nav>
+
+{# ---- the poster header (image12) ---- #}
+<section aria-labelledby="tpl-name" class="tpl-{{ template.code }} relative overflow-hidden rounded-xl text-white shadow-lift">
+  <svg aria-hidden="true" class="pointer-events-none absolute inset-0 h-full w-full opacity-10" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid slice"><g fill="none" stroke="#fff" stroke-width="1.5"><path d="M40 60l26-15 26 15v30l-26 15-26-15z"/><path d="M92 75l60 30"/><path d="M152 105l26-15 26 15v30l-26 15-26-15z"/><path d="M640 200l26-15 26 15v30l-26 15-26-15z"/><circle cx="740" cy="70" r="40"/><circle cx="740" cy="70" r="14"/></g></svg>
+  <div class="relative grid items-center gap-6 p-[clamp(22px,4vw,40px)] lg:grid-cols-[1.25fr_1fr]">
+    <div class="flex flex-col gap-4">
+      <span class="inline-flex h-7 w-fit items-center rounded-full bg-white/20 px-3 text-[12.5px] font-extrabold tracking-wide uppercase ring-1 ring-white/30">{% translate "Authorial lesson template" %} · №{{ template.number }}</span>
+      <h1 id="tpl-name" class="text-[clamp(24px,3vw,34px)] leading-[1.15] font-extrabold tracking-[-0.02em]">«{{ template.name }}»</h1>
+      <dl class="grid gap-x-5 gap-y-2.5 rounded-lg bg-white/12 p-4 text-sm ring-1 ring-white/20 backdrop-blur-sm sm:grid-cols-[auto_1fr]">
+        <dt class="font-bold text-white/75">{% translate "Lesson topic" %}</dt><dd class="font-semibold">{{ template.topic }}</dd>
+        <dt class="font-bold text-white/75">{% translate "Subject" %}</dt><dd class="font-semibold">{{ template.subject }}</dd>
+        <dt class="font-bold text-white/75">{% translate "School grade" %}</dt><dd class="font-semibold">{{ template.grade }}</dd>
+        <dt class="font-bold text-white/75">{% translate "Lesson duration" %}</dt><dd class="font-semibold">{% blocktranslate with n=template.duration_min %}{{ n }} min{% endblocktranslate %}</dd>
+      </dl>
+    </div>
+    <div class="relative mx-auto aspect-[22/15] w-full max-w-[420px]">{% include "student/designer/partials/art.html#"|add:template.code %}</div>
+  </div>
+</section>
+
+<div class="grid items-start gap-4 lg:grid-cols-[1.25fr_1fr]">
+  <section aria-labelledby="aim-title" class="card flex gap-4">
+    <span class="tile tile-lg bg-primary-50 text-primary-700">{% include "components/icons.html#award" with size=22 %}</span>
+    <div class="min-w-0">
+      <h2 id="aim-title" class="text-[15px] font-extrabold text-primary-700">{% translate "Lesson aim" %}</h2>
+      <p class="mt-1 text-[15px] leading-6">{{ template.aim }}</p>
+    </div>
+  </section>
+  <section aria-labelledby="start-title" class="card flex flex-col gap-3 border-2 border-primary-600/30 bg-primary-50/40">
+    <h2 id="start-title" class="text-[15px] font-extrabold">{% if lesson %}{% translate "Your version of this lesson" %}{% else %}{% translate "Design your own version" %}{% endif %}</h2>
+    <p class="flex items-start gap-2.5 text-[13.5px] leading-5 text-ink-soft">{% include "components/icons.html#trash" with size=16 %}<span>{% translate "When a part is chosen, its original content is removed completely and an empty editor opens for the new content." %}</span></p>
+    {% if lesson %}
+      <a class="btn btn-primary self-start" href="{% url 'student:lesson' section.number lesson.pk %}">{% include "components/icons.html#edit" %}{% translate "Open my version" %}</a>
+    {% else %}
+      <form method="post" action="{% url 'student:lesson_start' section.number template.code %}">{% csrf_token %}
+        <button type="submit" class="btn btn-primary h-[46px] px-[22px] text-[15px] font-bold">{% include "components/icons.html#plus" %}{% translate "Create my version" %}</button>
+      </form>
+    {% endif %}
+  </section>
+</div>
+
+{% if template.technology or template.feature %}
+  <section aria-label="{% translate 'Authorial feature' %}" class="card grid gap-5 md:grid-cols-[1fr_1.6fr]">
+    {% if template.technology %}
+      <div>
+        <h2 class="text-[13px] font-extrabold tracking-wide text-stage-video uppercase">{% translate "Authorial teaching technology" %}</h2>
+        <p class="mt-1.5 text-[15px] leading-6 font-semibold">{{ template.technology }}</p>
+      </div>
+    {% endif %}
+    {% if template.feature %}
+      <div class="md:border-l md:border-line md:pl-5">
+        <h2 class="text-[13px] font-extrabold tracking-wide text-stage-video uppercase">{% translate "Authorial feature" %}</h2>
+        <div class="prose-lesson mt-1.5">{{ template.feature|sanitize }}</div>
+      </div>
+    {% endif %}
+  </section>
+{% endif %}
+
+{# ---- the timeline of the stages (image16) ---- #}
+<section aria-labelledby="timeline-title" class="card flex flex-col gap-4">
+  <h2 id="timeline-title" class="text-[17px] font-extrabold">{% blocktranslate with n=template.duration_min %}The {{ n }}-minute lesson{% endblocktranslate %}</h2>
+  <ol class="flex gap-1.5 overflow-x-auto pb-1">
+    {% for row in timeline %}
+      <li class="tone-{{ forloop.counter }} min-w-[118px]" style="flex: {{ row.stage.minutes }} 1 0">
+        <a href="#stage-{{ row.stage.order }}" class="group flex h-full flex-col gap-2 rounded-lg border border-(--tone)/25 bg-(--tone-50) p-3 transition-colors hover:border-(--tone)">
+          <span class="flex items-center justify-between gap-2">
+            <span class="num grid size-7 place-items-center rounded-full bg-(--tone) text-[13px] font-extrabold text-white">{{ row.stage.order }}</span>
+            <span class="num text-[11.5px] font-bold text-(--tone)">{{ row.start }}–{{ row.end }}′</span>
+          </span>
+          <span class="text-[13px] leading-[18px] font-bold">{{ row.stage.title }}</span>
+          <span class="mt-auto h-1.5 rounded-full bg-(--tone)/80"></span>
+        </a>
+      </li>
+    {% endfor %}
+  </ol>
+</section>
+
+{# ---- the six stages with their blocks (image12) ---- #}
+<ol class="grid items-start gap-4 xl:grid-cols-2">
+  {% for stage, blocks in stage_blocks %}
+    <li id="stage-{{ stage.order }}" class="tone-{{ forloop.counter }} card flex scroll-mt-24 flex-col gap-0 overflow-hidden p-0" data-reveal x-data="{ open: false }">
+      <div class="flex items-center gap-3 border-b border-(--tone)/20 bg-(--tone-50) px-5 py-3.5">
+        <span class="num grid size-10 shrink-0 place-items-center rounded-full bg-(--tone) text-[17px] font-extrabold text-white shadow-[0_0_0_4px_white]">{{ stage.order }}</span>
+        <h2 class="min-w-0 flex-1 text-[16px] leading-[22px] font-extrabold text-(--tone)">{{ stage.title }}</h2>
+        <span class="num inline-flex h-7 shrink-0 items-center gap-1 rounded-full bg-white px-2.5 text-[12.5px] font-bold ring-1 ring-(--tone)/30">{% include "components/icons.html#clock" with size=13 %}{% blocktranslate with n=stage.minutes %}{{ n }} min{% endblocktranslate %}</span>
+      </div>
+      <div class="relative">
+        <div class="flex flex-col gap-4 px-5 pt-4 pb-5" :class="open || 'max-h-[440px] overflow-hidden'">
+          {% for b in blocks %}
+            <div class="flex flex-col gap-1.5">
+              <span class="inline-flex w-fit items-center gap-1.5 rounded-[8px] bg-(--tone-50) px-2 py-1 text-[12.5px] font-extrabold text-(--tone)">{% include "components/icons.html#"|add:b.icon with size=13 %}{{ b.label }}</span>
+              <div class="prose-lesson">{{ b.html|sanitize }}</div>
+            </div>
+          {% endfor %}
+        </div>
+        <div x-show="!open" class="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-surface to-transparent"></div>
+      </div>
+      <button type="button" class="flex items-center justify-center gap-1.5 border-t border-line py-2.5 text-[13px] font-bold text-(--tone) hover:bg-(--tone-50)" @click="open = !open" :aria-expanded="open">
+        <span x-text="open ? '{{ _("Collapse")|escapejs }}' : '{{ _("Read in full")|escapejs }}'">{% translate "Read in full" %}</span>
+        <span class="transition-transform" :class="open && 'rotate-180'">{% include "components/icons.html#chevron-down" with size=15 %}</span>
+      </button>
+    </li>
+  {% endfor %}
+</ol>
+
+{# ---- the expected results and the product (image12 bottom) ---- #}
+<section aria-labelledby="outcomes-title" class="relative overflow-hidden rounded-xl bg-primary-900 p-[clamp(20px,3vw,32px)] text-white">
+  <svg aria-hidden="true" class="spin-slow pointer-events-none absolute -top-16 -right-16 size-64 opacity-10" viewBox="0 0 100 100"><g fill="none" stroke="#fff" stroke-width="2"><circle cx="50" cy="50" r="46"/><circle cx="50" cy="50" r="30" stroke-dasharray="4 6"/><circle cx="50" cy="50" r="12"/></g></svg>
+  <div class="relative grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+    <div>
+      <h2 id="outcomes-title" class="flex items-center gap-3 text-[19px] font-extrabold">{% include "components/icons.html#award" with size=22 %}{% translate "Expected results of the lesson" %}</h2>
+      <div class="mt-3 text-[14.5px] leading-6 text-white/90 [&_li]:mt-1.5 [&_li]:flex [&_li]:gap-2.5 [&_li]:before:mt-[9px] [&_li]:before:size-1.5 [&_li]:before:shrink-0 [&_li]:before:rounded-full [&_li]:before:bg-mint [&_li]:before:content-[''] [&_ul]:mt-2">{{ template.outcomes|sanitize }}</div>
+    </div>
+    {% if template.product %}
+      <div class="self-start rounded-lg bg-white/10 p-5 ring-1 ring-white/20">
+        <h3 class="text-[13px] font-extrabold tracking-wide text-mint uppercase">{% translate "Main pedagogical product of the authorial lesson" %}</h3>
+        <p class="mt-2 text-[15px] leading-6 font-semibold">{{ template.product }}</p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{# ---- the way on ---- #}
+<div class="flex flex-wrap items-center justify-between gap-3">
+  <div class="flex flex-wrap gap-2">
+    {% for t in others %}<a class="btn btn-secondary btn-sm" href="{% url 'student:lesson_template' section.number t.code %}">№{{ t.number }} · {{ t.name|truncatechars:34 }}</a>{% endfor %}
+  </div>
+  {% if lesson %}
+    <a class="btn btn-primary" href="{% url 'student:lesson' section.number lesson.pk %}">{% include "components/icons.html#edit" %}{% translate "Open my version" %}</a>
+  {% else %}
+    <form method="post" action="{% url 'student:lesson_start' section.number template.code %}">{% csrf_token %}
+      <button type="submit" class="btn btn-primary">{% include "components/icons.html#plus" %}{% translate "Create my version" %}</button>
+    </form>
+  {% endif %}
+</div>
+{% endblock %}

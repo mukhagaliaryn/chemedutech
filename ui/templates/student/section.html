@@ -2,8 +2,9 @@
 {% load i18n static %}
 {% comment %}
 An ICPAI section (docs/icpai/SPEC.md §4.0): its purpose (the guide's «what it does»), its state and percent,
-the «Let the AI explain» place (the AI assistant comes in STEP-32; until then the purpose text stands alone) and
-the section's own content — section 1 leads to the course; kinds not built yet say so.
+«Let the AI explain» — the AI assistant panel (ai/partials/panel.html; D73) — and
+the section's own content — section 1 leads to the course, section 4 shows the lesson templates; kinds not built yet
+say so.
 {% endcomment %}
 {% block title %}{{ section.title }} · ChemEduTech{% endblock %}
 {% block crumb %}{{ programme.title }} · {% blocktranslate with n=section.number %}Section {{ n }}{% endblocktranslate %}{% endblock %}
@@ -23,21 +24,13 @@ the section's own content — section 1 leads to the course; kinds not built yet
   {% include "components/ring.html" with value=row.percent size=72 stroke=8 label=done %}
 </section>
 
-<div class="grid items-start gap-4 grid-cols-[repeat(auto-fit,minmax(min(360px,100%),1fr))]">
+<div class="grid items-start gap-4 lg:grid-cols-[1fr_1.15fr]">
   <section aria-labelledby="purpose-title" class="card flex flex-col gap-3">
     <h2 id="purpose-title" class="text-[17px] font-bold">{% translate "What the section does" %}</h2>
     <p class="text-[15px] leading-[25px] whitespace-pre-line">{{ section.purpose }}</p>
   </section>
 
-  <section aria-labelledby="ai-title" class="card flex flex-col gap-3">
-    <div class="flex items-center gap-3">
-      <span class="tile bg-primary-50 text-primary-600">{% include "components/icons.html#sparkle" %}</span>
-      <h2 id="ai-title" class="text-[17px] font-bold">{% translate "Let the AI explain" %}</h2>
-    </div>
-    <p class="text-sm text-ink-soft">{% translate "The AI assistant will explain the section here: its aim and how to start." %}</p>
-    <button type="button" class="btn btn-secondary self-start" disabled aria-describedby="ai-soon">{% include "components/icons.html#sparkle" %}{% translate "Explain the section" %}</button>
-    <p id="ai-soon" class="text-caption text-ink-faint">{% translate "Available when the AI assistant is connected." %}</p>
-  </section>
+  {% include "ai/partials/panel.html" with enabled=ai_enabled %}
 </div>
 
 {% if section.kind == "course" %}
@@ -127,6 +120,9 @@ the section's own content — section 1 leads to the course; kinds not built yet
       </div>
     {% endif %}
   </section>
+{% elif section.kind == "designer" %}
+  {# ---- section 4: the lesson design constructor (guide @S4; STEP-33) ---- #}
+  {% include "student/designer/partials/templates.html" %}
 {% elif not row.ready %}
   {% translate "The section is in development" as l_title %}{% translate "Its tasks will appear here in the next versions of the platform." as l_text %}
   {% include "components/empty_state.html" with title=l_title text=l_text icon="clock" %}

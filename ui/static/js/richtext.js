@@ -7,6 +7,8 @@
  * The modifier is the config (compact | answer, default compact); the optional expression makes the editor
  * read-only while it is true. The textarea keeps the HTML and fires «input», so x-model and plain forms both work.
  * data-rt sets the height (line | short | long, see styles.css).
+ * el.dispatchEvent(new CustomEvent("rich-insert", { detail: html })) puts HTML at the cursor (the lesson designer's
+ * «Add to the editor»); without the editor the text is appended to the textarea.
  */
 (function () {
   "use strict";
@@ -22,11 +24,23 @@
 
   document.addEventListener("alpine:init", () => {
     window.Alpine.directive("rich", (el, { modifiers, expression }, { evaluateLater, effect, cleanup }) => {
+      let editor = null;
+      let destroyed = false;
+      el.addEventListener("rich-insert", (e) => {
+        if (editor) {
+          const fragment = editor.data.toModel(editor.data.processor.toView(e.detail));
+          editor.model.insertContent(fragment);
+          editor.editing.view.focus();
+        } else {
+          const box = document.createElement("div");
+          box.innerHTML = e.detail;
+          el.value = (el.value ? el.value + "\n" : "") + box.innerText;
+          el.dispatchEvent(new Event("input", { bubbles: true }));
+        }
+      });
       if (!window.ClassicEditor) return; // the bundle did not load: the plain textarea still works
       const name = modifiers[0] || "compact";
       const readOnly = expression ? evaluateLater(expression) : null;
-      let editor = null;
-      let destroyed = false;
 
       window.Alpine.nextTick(() => {
         // x-model has written the initial value by now

@@ -1,0 +1,52 @@
+{% load i18n ai_tags %}{% comment %}
+The conversation of the AI panel (ai/partials/panel.html) — also the HTMX answer of a question: panel_id, thread,
+error, remaining, insert. The latest message is scrolled into view. With insert, an answer has «Copy the suggestion»
+and «Add to the editor» (guide @S4-AI 3): the latter sends the browser event «ai-insert» {id, html} to the page.
+{% endcomment %}
+<div id="{{ panel_id }}" class="flex flex-col">
+  <div class="flex max-h-[460px] min-h-[120px] flex-col gap-4 overflow-y-auto px-5 py-5" x-data x-init="$el.scrollTop = $el.scrollHeight" aria-live="polite">
+    {% for m in thread %}
+      {% if m.role == "user" %}
+        <div class="flex justify-end">
+          <p class="max-w-[85%] rounded-[18px] rounded-br-[6px] bg-primary-600 px-4 py-2.5 text-sm leading-[21px] whitespace-pre-line text-white">{{ m.content }}</p>
+        </div>
+      {% elif m.content %}
+        <div class="flex items-start gap-2.5" data-ai-msg>
+          <span class="grid size-8 shrink-0 place-items-center rounded-[10px] bg-[linear-gradient(135deg,#7b4fd6,#1f5fd1)] text-white" aria-hidden="true">{% include "components/icons.html#sparkle" with size=15 %}</span>
+          <div class="flex min-w-0 max-w-[90%] flex-col gap-1.5">
+            <div class="rounded-[18px] rounded-tl-[6px] border border-stage-video/20 bg-ai-50/60 px-4 py-3 text-sm leading-[22px] text-ink [&_li]:mt-1 [&_p+p]:mt-2 [&_p+ul]:mt-2 [&_strong]:font-bold [&_ul]:list-disc [&_ul]:pl-5 [&_ul+p]:mt-2">
+              <span class="sr-only">{% translate "AI assistant" %}:</span><div data-ai-body>{{ m.content|ai_text }}</div>
+            </div>
+            {% if insert %}
+              <div class="flex flex-wrap gap-1.5" x-data="{ copied: false }">
+                <button type="button" class="inline-flex h-7 items-center gap-1.5 rounded-full border border-line bg-surface px-2.5 text-[12px] font-semibold text-ink-soft transition-colors hover:border-stage-video hover:text-ai-700"
+                        @click="navigator.clipboard?.writeText($el.closest('[data-ai-msg]').querySelector('[data-ai-body]').innerText).then(() => { copied = true; setTimeout(() => copied = false, 1600) })">
+                  {% include "components/icons.html#copy" with size=13 %}<span x-text="copied ? '{{ _('Copied')|escapejs }}' : '{{ _('Copy the suggestion')|escapejs }}'">{% translate "Copy the suggestion" %}</span>
+                </button>
+                <button type="button" class="inline-flex h-7 items-center gap-1.5 rounded-full bg-stage-video px-2.5 text-[12px] font-semibold text-white transition-colors hover:bg-ai-700"
+                        @click="$dispatch('ai-insert', { id: {{ m.pk }}, html: $el.closest('[data-ai-msg]').querySelector('[data-ai-body]').innerHTML })">
+                  {% include "components/icons.html#plus" with size=13 %}{% translate "Add to the editor" %}
+                </button>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+    {% empty %}
+      <div class="flex flex-col items-center gap-2 py-4 text-center">
+        <span class="grid size-12 place-items-center rounded-full bg-ai-50 text-stage-video">{% include "components/icons.html#message" with size=22 %}</span>
+        <p class="max-w-[300px] text-sm text-ink-soft">{% translate "Ask a question or choose a quick request — the assistant guides, the work stays yours." %}</p>
+      </div>
+    {% endfor %}
+    {% if error %}
+      <div class="flex items-start gap-2.5 rounded-lg bg-warning-50 px-4 py-3 text-sm text-warning-700" role="alert">
+        {% include "components/icons.html#warn" with size=16 %}
+        <span>{% if error == "limit" %}{% translate "Today's AI requests are used up. They renew tomorrow." %}{% else %}{% translate "The AI assistant did not answer this time. Try again in a minute." %}{% endif %}</span>
+      </div>
+    {% endif %}
+  </div>
+  <p class="flex flex-wrap items-center justify-between gap-2 border-t border-surface-sunken px-5 py-2 text-caption text-ink-faint">
+    <span>{% translate "AI can be wrong — check the chemistry yourself." %}</span>
+    <span class="num font-semibold">{% blocktranslate with n=remaining %}{{ n }} requests left today{% endblocktranslate %}</span>
+  </p>
+</div>
