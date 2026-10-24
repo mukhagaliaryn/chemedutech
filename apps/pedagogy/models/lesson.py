@@ -14,6 +14,7 @@ class Lesson(TimeStampedModel):
     class Kind(models.TextChoices):
         TEMPLATE_COPY = "template_copy", _("Template copy")
         RESEARCH_PRACTICE = "research_practice", _("Digital research practice")
+        MICROLESSON = "microlesson", _("Microlesson")
 
     class Status(models.TextChoices):
         DRAFT = "draft", _("Draft")
@@ -51,6 +52,12 @@ class Lesson(TimeStampedModel):
     outcomes = models.TextField(_("expected results"), blank=True, help_text=_("HTML"))
     method = models.TextField(_("authorial method used"), blank=True)
     digital_tools = models.TextField(_("digital tools used"), blank=True)
+    details = models.JSONField(
+        _("other details"),
+        default=dict,
+        blank=True,
+        help_text=_("Section 6: education programme, study year, source part"),
+    )
     status = models.CharField(_("status"), max_length=16, choices=Status.choices, default=Status.DRAFT)
 
     class Meta:
@@ -68,10 +75,16 @@ class Lesson(TimeStampedModel):
                 condition=Q(kind="research_practice"),
                 name="lesson_one_practice_per_template",
             ),
+            models.UniqueConstraint(fields=("owner",), condition=Q(kind="microlesson"), name="lesson_one_microlesson"),
         ]
 
     def __str__(self):
         return f"{self.owner} · {self.title}"
+
+    @property
+    def review(self):
+        """The teacher's grade of the whole lesson (section 5); section 6 grades each trial (``reviews``)."""
+        return next((r for r in self.reviews.all() if r.trial_id is None), None)
 
 
 class LessonStage(models.Model):

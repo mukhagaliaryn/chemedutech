@@ -12,6 +12,20 @@ from .assembly import (
     task_html,
 )
 from .lessons import LessonError, clean, clear, restore, save, start, template_fields
+from .micro import (
+    DURATION_S,
+    assemble_micro,
+    check_micro,
+    check_state,
+    elapsed_s,
+    finish_dialog,
+    save_micro_details,
+    send,
+    stage_at,
+    start_dialog,
+    start_micro,
+    trial_number,
+)
 from .practice import (
     analyse,
     current_order,
@@ -27,7 +41,19 @@ from .practice import (
 )
 
 __all__ = [
+    "DURATION_S",
     "LessonError",
+    "assemble_micro",
+    "check_micro",
+    "check_state",
+    "elapsed_s",
+    "finish_dialog",
+    "save_micro_details",
+    "send",
+    "stage_at",
+    "start_dialog",
+    "start_micro",
+    "trial_number",
     "analyse",
     "current_order",
     "finish",

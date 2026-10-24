@@ -23,6 +23,7 @@ urlpatterns = [
     path("grading/", grading.queue, name="grading"),
     path("practice/", practice.queue, name="practice_queue"),
     path("practice/<int:pk>/", practice.detail, name="practice"),
+    path("practice/micro/<int:trial_pk>/", practice.micro, name="micro"),
     path("grading/<int:pk>/", grading.detail, name="grading_detail"),
     path("comments/", grading.comment, name="comment"),
     path("courses/", content.courses, name="courses"),

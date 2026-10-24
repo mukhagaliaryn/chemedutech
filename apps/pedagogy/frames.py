@@ -7,7 +7,11 @@ docs/icpai/tools/gen_lessons.py. The stages themselves come from the template.
 RESEARCH_8 — «The development sheet of the digital research practice» (section 5, guide @S5 II): eight fixed stages
 with their minutes, aim and fields (names verbatim from the guide in the kk translation). ``explain`` and ``task`` say
 which fields prefill «The teacher's explanation» and «Giving the task» of the stepwise trial (@S5 IV); ``time`` is
-the minutes field. The other frames (MICRO_4, FREE) come with their sections.
+the minutes field.
+
+MICRO_4 — «The sheet of developing the microlesson and trying it out professionally» (section 6, guide @S6 II): four
+fixed stages of a 10-minute microlesson (2 + 3 + 3 + 2) and the fields the student fills in. FREE comes with
+section 8.
 """
 
 from dataclasses import dataclass
@@ -127,12 +131,46 @@ RESEARCH_8 = (
     ),
 )  # fmt: skip
 
-FRAMES = {"template": TEMPLATE, "research_8": RESEARCH_8}
+MICRO_4 = (
+    Stage(
+        "interest", _("Arousing interest"), 0, 2,
+        _("To draw the student's attention to the lesson topic and to find out their prior knowledge."),
+        (Field("intro", _("The teacher's opening words"), "user"),
+         Field("problem_question", _("Problem question"), "help"),
+         Field("visual", _("Visual aids used"), "eye"),
+         Field("expected_action", _("The action expected from the student"), "activity")),
+    ),
+    Stage(
+        "explain", _("Explaining new knowledge"), 2, 5,
+        _("To convey the chosen chemical concept scientifically correctly and clearly for the student."),
+        (Field("concept", _("Explanation of the chemical concept"), "book"),
+         Field("equation", _("Chemical formula or equation"), "activity"),
+         Field("model", _("Model or diagram used"), "grid"),
+         Field("key_points", _("The main statements of the explanation"), "list")),
+    ),
+    Stage(
+        "apply", _("Applying knowledge"), 5, 8,
+        _("To check how the student applies the explained knowledge while doing a task."),
+        (Field("task", _("Authorial task"), "list"),
+         Field("instructions", _("Instructions for doing the task"), "settings"),
+         Field("expected_answer", _("Expected correct answer"), "check"),
+         Field("criterion", _("Checking criterion"), "check-square")),
+    ),
+    Stage(
+        "check", _("Checking knowledge and summary"), 8, 10,
+        _("To find out what the student has learnt and to give short feedback."),
+        (Field("question", _("Consolidation question"), "help"),
+         Field("assessment", _("Way of assessment"), "check-square"),
+         Field("summary", _("Concluding explanation"), "award")),
+    ),
+)  # fmt: skip
+
+FRAMES = {"template": TEMPLATE, "research_8": RESEARCH_8, "micro_4": MICRO_4}
 
 
 def stages_of(frame: str) -> tuple[Stage, ...]:
     """The fixed stages of a frame (empty for TEMPLATE: its stages come from the template)."""
-    return RESEARCH_8 if frame == "research_8" else ()
+    return {"research_8": RESEARCH_8, "micro_4": MICRO_4}.get(frame, ())
 
 
 def stage_spec(frame: str, key: str) -> Stage | None:

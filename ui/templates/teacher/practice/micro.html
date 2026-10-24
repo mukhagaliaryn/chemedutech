@@ -1,0 +1,59 @@
+{% extends "layouts/teacher.html" %}
+{% load i18n %}
+{% comment %}A microlesson trial for the teacher (guide @S6 IV–VI; STEP-36): the microlesson as tried (its four
+stages), the dialogue by stage — the student-teacher's explanations, questions and actions, the AI student's answers —
+and the rubric of @S6 VI (five criteria × 0–2) with a comment; each trial is graded apart.{% endcomment %}
+{% block title %}{% blocktranslate with n=number %}Trial {{ n }}{% endblocktranslate %} · {{ lesson.owner.get_full_name|default:lesson.owner.username }} · ChemEduTech{% endblock %}
+{% block crumb %}{% translate "Section 6 microlessons" %}{% endblock %}
+{% block page_title %}{{ lesson.owner.get_full_name|default:lesson.owner.username }}{% endblock %}
+{% block main_class %}max-w-[1400px]{% endblock %}
+{% block content %}
+<a class="link inline-flex items-center gap-1.5 text-sm font-semibold" href="{% url 'teacher:practice_queue' %}?what=micro">{% include "components/icons.html#arrow-left" %}{% translate "Section 6 microlessons" %}</a>
+<div class="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_400px]">
+  <div class="flex min-w-0 flex-col gap-4">
+    <section class="card flex flex-col gap-2">
+      <p class="flex flex-wrap items-center gap-2 text-sm text-ink-soft"><span class="inline-flex h-7 items-center rounded-full bg-stage-video px-3 text-[12.5px] font-bold text-white">{% blocktranslate with n=number %}Trial {{ n }}{% endblocktranslate %}</span>{% translate "The AI student" %}: {{ trial.get_level_display|lower }} · {% blocktranslate with g=trial.grade %}Grade {{ g }}{% endblocktranslate %} · {{ seconds|duration_s }} · v{{ trial.version.number }}</p>
+      <h1 class="text-[22px] leading-7 font-extrabold">{{ plan.topic }}</h1>
+      <p class="text-[13.5px]"><span class="font-bold">{% translate "Aim of the microlesson" %}:</span> {{ plan.aim }}</p>
+    </section>
+    {% for r in rows %}
+      <section class="tone-{{ forloop.counter }} card flex flex-col gap-3 overflow-hidden p-0" x-data="{ open: false }">
+        <button type="button" class="flex items-center gap-3 bg-(--tone-50) px-5 py-3 text-left" @click="open = !open" :aria-expanded="open">
+          <span class="num grid size-9 shrink-0 place-items-center rounded-full bg-(--tone) text-[15px] font-extrabold text-white">{{ forloop.counter }}</span>
+          <span class="min-w-0 flex-1 text-[15px] font-extrabold">{{ r.stage.title }} <span class="num text-[12.5px] font-semibold text-(--tone)">{{ r.spec.start }}–{{ r.spec.end }} {% translate "min" %}</span></span>
+          <span class="text-[12px] font-semibold text-ink-soft">{% translate "The sheet" %}</span>
+          <span class="transition-transform" :class="open && 'rotate-180'">{% include "components/icons.html#chevron-down" with size=16 %}</span>
+        </button>
+        <div x-show="open" x-cloak class="flex flex-col gap-1 px-5 text-[13px]">{% for f in r.fields %}<p><span class="font-bold text-(--tone)">{{ f.label }}:</span> <span class="prose-lesson">{{ f.html|rich }}</span></p>{% endfor %}</div>
+        <div class="flex flex-col gap-2 px-5 pb-4">
+          {% for m in r.messages %}
+            <p class="text-[13.5px] leading-[20px]"><span class="font-bold">{% translate "Student-teacher" %} · {{ m.get_kind_display|lower }} <span class="num text-ink-faint">{{ m.at_s|duration_s }}</span>:</span> {{ m.text|linebreaksbr }}</p>
+            <p class="rounded-lg bg-ai-50/60 px-3 py-2 text-[13.5px] leading-[20px]"><span class="font-bold text-ai-700">{% translate "The AI student" %}:</span> {{ m.reply|linebreaksbr }}{% if m.answer_type != "none" %} <span class="badge {% if m.answer_type == 'correct' %}badge-success{% elif m.answer_type == 'partial' %}badge-warning{% else %}badge-danger{% endif %} text-[10.5px] font-bold">{{ m.get_answer_type_display }}</span>{% endif %}</p>
+          {% empty %}<p class="text-[13px] text-ink-faint">—</p>{% endfor %}
+        </div>
+      </section>
+    {% endfor %}
+  </div>
+  <form method="post" class="card flex flex-col gap-4 xl:sticky xl:top-20" aria-labelledby="rubric-title">{% csrf_token %}
+    <div class="flex items-center justify-between gap-3">
+      <h2 id="rubric-title" class="text-[17px] font-extrabold">{% translate "Result of the microlesson" %}</h2>
+      {% if review %}<span class="num text-[22px] font-extrabold text-success-700">{{ review.total }}/10</span>{% endif %}
+    </div>
+    {% for c in criteria %}
+      <fieldset class="flex flex-col gap-2 rounded-lg bg-canvas p-3">
+        <legend class="sr-only">{{ c.label }}</legend>
+        <p class="flex gap-2 text-[13px] leading-[18px] font-semibold"><span class="num grid size-6 shrink-0 place-items-center rounded-full bg-primary-600 text-[11.5px] font-extrabold text-white">{{ c.number }}</span>{{ c.label }}</p>
+        <div class="flex gap-1.5 pl-8">
+          {% for v in "012"|make_list %}
+            <label class="cursor-pointer"><input type="radio" name="c{{ c.number }}" value="{{ v }}" class="peer sr-only" {% if c.points|stringformat:"s" == v %}checked{% endif %} required>
+              <span class="num grid h-9 w-11 place-items-center rounded-[10px] border border-line-strong bg-surface text-[14px] font-bold peer-checked:border-primary-600 peer-checked:bg-primary-600 peer-checked:text-white">{{ v }}</span></label>
+          {% endfor %}
+        </div>
+      </fieldset>
+    {% endfor %}
+    <label class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Comment" %}</span><textarea name="comment" rows="3" class="input">{{ review.comment }}</textarea></label>
+    <button type="submit" class="btn btn-primary">{% include "components/icons.html#save" %}{% translate "Save the grade" %}</button>
+    <p class="text-caption text-ink-faint">{% translate "Each trial's result is kept apart so the student's professional progress can be compared." %}</p>
+  </form>
+</div>
+{% endblock %}

@@ -20,6 +20,7 @@ document.addEventListener("alpine:init", () => {
     edited: opts.edited,
     active: opts.first,
     state: "saved", // saved | dirty | saving | failed
+    changed: false, // edited on this page (section 6: the AI check is out of date)
     inserted: null,
     notice: "",
     timer: null,
@@ -37,6 +38,8 @@ document.addEventListener("alpine:init", () => {
 
     queue() {
       this.state = "dirty";
+      if (!this.changed) window.dispatchEvent(new CustomEvent("stage-changed"));
+      this.changed = true;
       clearTimeout(this.timer);
       this.timer = setTimeout(() => this.save(), 1500);
     },
@@ -103,4 +106,37 @@ document.addEventListener("DOMContentLoaded", () => {
   dialog?.addEventListener("close", () => {
     if (document.querySelector("#turn-body [data-fresh]")) window.location.reload();
   });
+});
+
+// The microlesson's 10-minute timer (student/micro/dialog.html): it stands while the AI student answers (that time
+// is not counted on the server either), takes the time left from each answer and finishes the trial at 0:00.
+document.addEventListener("alpine:init", () => {
+  window.Alpine.data("microTimer", (opts) => ({
+    left: opts.left,
+    total: opts.total,
+    waiting: false,
+    init() {
+      this.timer = setInterval(() => {
+        if (this.waiting || this.left <= 0) return;
+        this.left -= 1;
+        if (this.left === 0) this.$refs.finish.requestSubmit();
+      }, 1000);
+    },
+    sync() {
+      const box = document.getElementById("dialog");
+      if (box && box.dataset.left) this.left = Number(box.dataset.left);
+      if (box) box.scrollTop = box.scrollHeight;
+    },
+    get clock() {
+      const m = Math.floor(this.left / 60);
+      return `${m}:${String(this.left % 60).padStart(2, "0")}`;
+    },
+    get elapsed() {
+      return this.total - this.left;
+    },
+    get stage() {
+      const e = this.elapsed;
+      return e < 120 ? 1 : e < 300 ? 2 : e < 480 ? 3 : 4;
+    },
+  }));
 });

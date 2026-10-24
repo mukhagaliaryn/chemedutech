@@ -1,5 +1,6 @@
 """STEP-29: the ICPAI programme — sections, the 80 % rule, manual opening, the student and teacher pages."""
 
+from datetime import timedelta
 from decimal import Decimal
 from unittest import mock
 from unittest.mock import patch
@@ -264,7 +265,7 @@ class StudentPageTests(Base):
         self.assertContains(r, reverse("student:section", args=[1]))
 
     def test_an_open_section_not_built_yet(self):
-        Section.objects.filter(pk=self.section(2).pk).update(kind="microlesson")  # a kind not built yet
+        Section.objects.filter(pk=self.section(2).pk).update(kind="portfolio")  # a kind not built yet
         self.pass_stages(4)
         r = self.client.get(reverse("student:section", args=[2]))
         self.assertTemplateUsed(r, "student/section.html")
@@ -1074,3 +1075,130 @@ class ResearchPracticeTests(Base):
         self.assertEqual(r.context["practice_grades"][0]["review"].total, 8)
         self.assertContains(self.client.get(self.url("practice_results")), "8<span")
         self.assertEqual(self.client.get(url).status_code, 403)
+
+
+@override_settings(AI_TUTOR_ENABLED=True)
+class MicrolessonTests(Base):
+    """Section 6: choose a part → the one microlesson → the checker → the dialogue trial → the protocol → again →
+    assemble; the teacher grades each trial; the section's percent."""
+
+    def setUp(self):
+        super().setUp()
+        import json
+
+        from apps.ai.services import client as ai_client
+        from apps.ai.tests import FakeClient, answer
+        from apps.pedagogy import services as pedagogy
+        from apps.pedagogy.tests import CHECK_OK, make_template
+
+        self.json, self.answer, self.check_ok = json, answer, CHECK_OK
+        self.fake = FakeClient(answer(json.dumps(CHECK_OK)))
+        patcher = mock.patch.object(ai_client, "get_client", return_value=self.fake)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        self.practice = pedagogy.start_practice(self.student, make_template())
+        self.teacher = User.objects.create_user("ta", "ta@example.kz", "x", role=User.Role.TEACHER)
+        CourseTeacher.objects.create(course=self.course, teacher=self.teacher)
+        services.unlock_section(self.enrollment(), self.section(6), self.teacher)
+        self.client.force_login(self.student)
+
+    def url(self, name, *args):
+        return reverse(f"student:{name}", args=[6, *args])
+
+    def create(self):
+        from apps.pedagogy.models import Lesson
+
+        self.client.post(self.url("micro_start"), {"practice": self.practice.pk, "stage": 3})
+        self.lesson = Lesson.objects.get(owner=self.student, kind="microlesson")
+        return self.lesson
+
+    def ready(self):
+        from apps.pedagogy.tests import fill_micro
+
+        self.create()
+        fill_micro(self.lesson)
+        self.client.post(self.url("micro_check"))
+
+    def test_choose_a_part_and_create_one_microlesson(self):
+        r = self.client.get(reverse("student:section", args=[6]))
+        self.assertTemplateUsed(r, "student/micro/partials/entry.html")
+        self.assertContains(r, self.url("micro_start"))
+        self.assertRedirects(
+            self.client.post(self.url("micro_start"), {"practice": self.practice.pk, "stage": 3}), self.url("micro")
+        )
+        self.client.post(self.url("micro_start"), {"practice": self.practice.pk, "stage": 5})
+        lesson = self.create()
+        self.assertEqual(lesson.details["source_stage"], 3)
+        r = self.client.get(self.url("micro"))
+        self.assertTemplateUsed(r, "student/micro/editor.html")
+        self.assertContains(r, 'id="opts-4"')
+        r = self.client.post(
+            self.url("micro_stage_save", 2),
+            {"fields": {"equation": "<p>Zn<sup>2+</sup></p>"}},
+            content_type="application/json",
+        )
+        self.assertEqual(r.json()["edited"], True)
+
+    def test_check_then_trial_dialog_and_protocol(self):
+        self.ready()
+        r = self.client.get(self.url("micro"))
+        self.assertTrue(r.context["state"]["passed"])
+        self.assertContains(r, "✓")
+        self.fake.replies = [self.answer(self.json.dumps({"reply": "Мырыш тотығады.", "answer_type": "correct"}))]
+        r = self.client.post(self.url("micro_trial"), {"grade": "11", "level": "high"})
+        trial = self.lesson.trials.get()
+        self.assertRedirects(r, self.url("micro_dialog", trial.pk))
+        self.assertRedirects(self.client.get(self.url("micro_trial")), self.url("micro_dialog", trial.pk))  # goes on
+        r = self.client.post(self.url("micro_send", trial.pk), {"kind": "question", "text": "Анод қайсысы?"})
+        self.assertTemplateUsed(r, "student/micro/partials/messages.html")
+        self.assertContains(r, "Мырыш тотығады.")
+        self.assertContains(r, 'data-left="')
+        self.assertRedirects(self.client.post(self.url("micro_finish", trial.pk)), self.url("micro_protocol", trial.pk))
+        r = self.client.get(self.url("micro_protocol", trial.pk))
+        self.assertContains(r, "Анод қайсысы?")
+        self.assertContains(r, self.url("micro_trial"))  # «Try it out again»
+        r = self.client.post(self.url("micro_send", trial.pk), {"kind": "question", "text": "?"})
+        self.assertEqual(r["HX-Redirect"], self.url("micro_protocol", trial.pk))
+
+    def test_the_trial_waits_for_a_passed_check(self):
+        self.create()
+        r = self.client.get(self.url("micro_trial"))
+        self.assertFalse(r.context["state"]["passed"])
+        self.client.post(self.url("micro_trial"), {"grade": "11", "level": "high"})
+        self.assertFalse(self.lesson.trials.exists())
+
+    def test_time_up_finishes_the_trial(self):
+        from apps.pedagogy.models import Trial
+
+        self.ready()
+        self.client.post(self.url("micro_trial"), {"grade": "9", "level": "low"})
+        trial = self.lesson.trials.get()
+        Trial.objects.filter(pk=trial.pk).update(started_at=trial.started_at - timedelta(minutes=12))
+        self.assertRedirects(self.client.get(self.url("micro_dialog", trial.pk)), self.url("micro_protocol", trial.pk))
+        trial.refresh_from_db()
+        self.assertIsNotNone(trial.finished_at)
+
+    def test_teacher_grades_each_trial_and_assemble_gives_the_section(self):
+        self.ready()
+        self.client.post(self.url("micro_trial"), {"grade": "9", "level": "low"})
+        trial = self.lesson.trials.get()
+        self.client.post(self.url("micro_finish", trial.pk))
+        self.client.force_login(self.teacher)
+        r = self.client.get(reverse("teacher:practice_queue") + "?what=micro")
+        self.assertContains(r, reverse("teacher:micro", args=[trial.pk]))
+        self.client.post(
+            reverse("teacher:micro", args=[trial.pk]), {"c1": "2", "c2": "2", "c3": "1", "c4": "1", "c5": "2"}
+        )
+        self.assertEqual(trial.reviews.get().total, 8)
+        other = User.objects.create_user("tb", "tb@example.kz", "x", role=User.Role.TEACHER)
+        self.client.force_login(other)
+        self.assertEqual(self.client.get(reverse("teacher:micro", args=[trial.pk])).status_code, 404)
+        self.client.force_login(self.student)
+        self.assertEqual(self.client.get(reverse("student:icpai")).context["micro_grades"][0]["review"].total, 8)
+        self.assertContains(self.client.get(self.url("micro_protocol", trial.pk)), "8<span")
+        self.client.post(self.url("micro_assemble"))
+        self.lesson.refresh_from_db()
+        self.assertEqual(self.lesson.status, "final")
+        self.assertTrue(self.client.get(self.url("micro_pdf")).content.startswith(b"%PDF"))
+        self.enrollment()
+        self.assertEqual(SectionProgress.objects.get(section__number=6).percent, Decimal("100.00"))

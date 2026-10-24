@@ -1,12 +1,14 @@
 import json
+from datetime import timedelta
 from unittest import mock
 
 from django.test import TestCase, override_settings
+from django.utils import timezone
 
 from apps.organizations.testing import make_student
 
 from . import frames, selectors, services
-from .models import Lesson, LessonEvent, LessonTemplate, LessonVersion, Review, TemplateStage, Trial
+from .models import Lesson, LessonEvent, LessonTemplate, LessonVersion, Review, TemplateStage, Trial, TrialMessage
 
 E = LessonEvent.Action
 
@@ -374,3 +376,141 @@ class PracticeTests(TestCase):
         self.assertEqual((review.total, review.comment), (7, "Жақсы"))
         review = services.grade(self.lesson, teacher, dict.fromkeys("12345", "2"))
         self.assertEqual((review.total, Review.objects.count()), (10, 1))
+
+
+CHECK_OK = {"stages": dict.fromkeys("1234", "ok"), "criteria": dict.fromkeys(
+    ("aim", "explanation", "chemistry", "task_aim", "assessment", "time", "complete"), "ok")}  # fmt: skip
+REPLY = {"reply": "Себебі мырыш электрондарын береді.", "answer_type": "partial"}
+
+
+def fill_micro(lesson):
+    services.save_micro_details(lesson, {"topic": "Гальваникалық элемент", "grade": "11", "aim": "Мақсат",
+                                         "programme": "6B01504 Химия", "study_year": "3"})  # fmt: skip
+    for stage in lesson.stages.all():
+        services.save(stage, title="", minutes=None, fields={k: f"<p>{stage.key} {k}</p>" for k in stage.fields})
+
+
+@override_settings(AI_TUTOR_ENABLED=True)
+class MicroTests(TestCase):
+    def setUp(self):
+        from apps.ai.services import client as ai_client
+        from apps.ai.tests import FakeClient, answer
+
+        self.answer = answer
+        self.fake = FakeClient(answer(json.dumps(CHECK_OK)))
+        patcher = mock.patch.object(ai_client, "get_client", return_value=self.fake)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        self.student = make_student("s1")
+        self.practice = services.start_practice(self.student, make_template())
+        self.lesson = services.start_micro(self.student, self.practice, 3)
+
+    def checked(self):
+        fill_micro(self.lesson)
+        self.lesson.refresh_from_db()
+        return services.check_micro(self.lesson)
+
+    def dialog(self):
+        self.checked()
+        self.fake.replies = [self.answer(json.dumps(REPLY))]
+        return services.start_dialog(self.lesson, grade="11", level="medium")
+
+    def test_one_microlesson_from_a_part_of_a_practice(self):
+        self.assertEqual([s.key for s in self.lesson.stages.all()], ["interest", "explain", "apply", "check"])
+        self.assertEqual([s.minutes for s in self.lesson.stages.all()], [2, 3, 3, 2])
+        self.assertEqual((self.lesson.duration_min, self.lesson.details["source_stage"]), (10, 3))
+        self.assertEqual(self.lesson.stages.get(order=1).fields["intro"], "")  # the part is not copied
+        other = services.start_practice(self.student, make_template("chem_circuit", 2))
+        self.assertEqual(services.start_micro(self.student, other, 1), self.lesson)  # no second microlesson
+        self.assertEqual(Lesson.objects.filter(kind="microlesson").count(), 1)
+        with self.assertRaises(services.LessonError):
+            services.start_micro(make_student("s2"), self.practice, 1)  # not their practice
+
+    def test_the_checker_marks_only_correct_or_wrong(self):
+        check = self.checked()
+        self.assertTrue(check.passed)
+        call = self.fake.calls[-1]
+        self.assertEqual(call["output_config"]["format"]["type"], "json_schema")
+        self.assertIn("never explain", call["system"])
+        self.assertIn("<student_text>", call["system"])
+        self.assertTrue(services.check_state(self.lesson)["passed"])
+        stage = self.lesson.stages.get(order=2)
+        services.save(
+            stage, title="", minutes=None, fields={**stage.fields, "equation": "<p>Zn → Zn<sup>2+</sup> + 2e</p>"}
+        )
+        self.assertEqual(services.check_state(self.lesson), {"check": check, "current": False, "passed": False})
+
+    def test_a_wrong_stage_blocks_the_trial(self):
+        fill_micro(self.lesson)
+        self.fake.replies = [self.answer(json.dumps({**CHECK_OK, "stages": {**CHECK_OK["stages"], "2": "wrong"}}))]
+        check = services.check_micro(self.lesson)
+        self.assertFalse(check.passed)
+        with self.assertRaises(services.LessonError):
+            services.start_dialog(self.lesson, grade="11", level="medium")
+
+    def test_the_dialogue_and_its_timer(self):
+        trial = self.dialog()
+        m = services.send(trial, kind="question", text="Неліктен электрондар мырыштан мысқа қозғалады?")
+        self.assertEqual((m.number, m.stage_order, m.answer_type, m.reply), (1, 1, "partial", REPLY["reply"]))
+        self.assertIn("Readiness level: medium.", self.fake.calls[-1]["system"])
+        self.assertIn("мырыштан мысқа", self.fake.calls[-1]["system"])
+        with self.assertRaises(services.LessonError):
+            services.send(trial, kind="lecture", text="x")
+        Trial.objects.filter(pk=trial.pk).update(started_at=timezone.now() - timedelta(minutes=6))
+        trial.refresh_from_db()
+        self.assertEqual(services.send(trial, kind="action", text="Түсіндіремін").stage_order, 3)
+        Trial.objects.filter(pk=trial.pk).update(started_at=timezone.now() - timedelta(minutes=11))
+        trial.refresh_from_db()
+        with self.assertRaises(services.LessonError):
+            services.send(trial, kind="explanation", text="тағы")
+        trial.refresh_from_db()
+        self.assertIsNotNone(trial.finished_at)  # the time is up: the trial is finished
+        self.lesson.refresh_from_db()
+        self.assertEqual(self.lesson.status, "tested")
+
+    def test_the_ai_students_thinking_is_not_counted(self):
+        trial = self.dialog()
+        Trial.objects.filter(pk=trial.pk).update(started_at=timezone.now() - timedelta(seconds=100))
+        trial.refresh_from_db()
+        services.send(trial, kind="explanation", text="Бүгін гальваникалық элемент")
+        TrialMessage.objects.filter(trial=trial).update(wait_ms=40000)
+        self.assertLessEqual(services.elapsed_s(trial), 61)
+        self.assertEqual(
+            [services.stage_at(s) for s in (0, 119, 120, 299, 300, 479, 480, 900)], [1, 1, 2, 2, 3, 3, 4, 4]
+        )
+
+    def test_trials_are_kept_apart_and_graded_apart(self):
+        first = self.dialog()
+        services.send(first, kind="question", text="?")
+        services.finish_dialog(first)
+        teacher = make_student("t1")
+        with self.assertRaises(services.LessonError):
+            services.grade(self.lesson, teacher, dict.fromkeys("12345", 2))  # a trial is needed
+        services.grade(self.lesson, teacher, dict.fromkeys("12345", 1), trial=first)
+        stage = self.lesson.stages.get(order=1)
+        services.save(stage, title="", minutes=None, fields={**stage.fields, "intro": "<p>Жаңа кіріспе</p>"})
+        with self.assertRaises(services.LessonError):
+            services.start_dialog(self.lesson, grade="11", level="high")  # changed: check again
+        self.fake.replies = [self.answer(json.dumps(CHECK_OK))]
+        services.check_micro(self.lesson)
+        second = services.start_dialog(self.lesson, grade="11", level="high")
+        services.finish_dialog(second)
+        services.grade(self.lesson, teacher, dict.fromkeys("12345", 2), trial=second)
+        self.assertEqual(services.trial_number(second), 2)
+        self.assertEqual(sorted(Review.objects.values_list("total", flat=True)), [5, 10])
+        self.assertNotEqual(
+            first.version.snapshot["stages"][0]["fields"], second.version.snapshot["stages"][0]["fields"]
+        )
+
+    def test_assemble_needs_a_finished_trial_and_closes_it(self):
+        with self.assertRaises(services.LessonError):
+            services.assemble_micro(self.lesson)
+        trial = self.dialog()
+        services.send(trial, kind="question", text="?")
+        services.finish_dialog(trial)
+        version = services.assemble_micro(self.lesson)
+        self.lesson.refresh_from_db()
+        self.assertEqual((self.lesson.status, version.reason), ("final", "final"))
+        self.assertEqual(version.snapshot["trials"][0]["messages"][0]["reply"], REPLY["reply"])
+        with self.assertRaises(services.LessonError):
+            services.check_micro(self.lesson)

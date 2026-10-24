@@ -1,0 +1,188 @@
+{% extends "layouts/student.html" %}
+{% load i18n static %}
+{% comment %}
+«The sheet of developing the microlesson and trying it out professionally» (guide @S6 I–III, V–VII; picture image21):
+part I (details; the student's name from the account; 10 minutes), the chosen part of the section 5 lesson, the four
+stages (2 + 3 + 3 + 2 min) with their fields saved by themselves and «The AI assistant's check» under each (✓ CORRECT /
+✕ WRONG, or out of date after a change); the checker panel with the seven criteria and «Check again»; «Try it out»
+(only when every stage is ✓); the trials (1st, 2nd … each with the teacher's grade); «Assemble the microlesson».
+{% endcomment %}
+{% block title %}{% translate "Microlesson" %} · {{ lesson.topic|default:lesson.title }} · ChemEduTech{% endblock %}
+{% block crumb %}{{ programme.title }} · {% blocktranslate with n=section.number %}Section {{ n }}{% endblocktranslate %}{% endblock %}
+{% block page_title %}{% translate "Microlesson and professional trial ground" %}{% endblock %}
+{% block main_class %}max-w-[1600px]{% endblock %}
+{% block content %}
+<nav class="flex flex-wrap items-center gap-2 text-sm" aria-label="{% translate 'Breadcrumbs' %}">
+  <a class="link inline-flex items-center gap-1.5 font-semibold" href="{% url 'student:section' section.number %}">{% include "components/icons.html#arrow-left" %}{{ section.number }}. {{ section.title }}</a>
+</nav>
+
+{% if lesson.status == "final" %}
+  <section class="relative flex flex-wrap items-center gap-4 overflow-hidden rounded-xl bg-[linear-gradient(120deg,var(--color-success-700),var(--color-stage-lab))] px-6 py-5 text-white">
+    <span class="pulse-ring absolute left-6 size-14 rounded-full border-2 border-white/40" aria-hidden="true"></span>
+    <span class="relative grid size-14 shrink-0 place-items-center rounded-full bg-white/20">{% include "components/icons.html#award" with size=28 %}</span>
+    <div class="relative min-w-0 flex-[1_1_320px]">
+      <p class="text-[18px] font-extrabold">{% translate "The microlesson is assembled" %}</p>
+      <p class="text-sm text-white/85">{% translate "The authorial microlesson improved over several trials and the professional trial portfolio are kept together." %}</p>
+    </div>
+    <a class="btn relative bg-white text-success-700 hover:bg-white/90" href="{% url 'student:micro_pdf' section.number %}">{% include "components/icons.html#download" %}PDF</a>
+  </section>
+{% endif %}
+
+{# ---- I. the details ---- #}
+<details class="card group p-0" {% if not lesson.aim %}open{% endif %}>
+  <summary class="flex cursor-pointer flex-wrap items-center gap-3 px-5 py-4">
+    <span class="grid size-9 place-items-center rounded-full bg-primary-900 text-[13px] font-extrabold text-white">I</span>
+    <span class="min-w-0 flex-1"><span class="block text-[12px] font-bold tracking-wide text-ink-faint uppercase">{% translate "The microlesson's initial details" %}</span><span class="block text-[18px] leading-6 font-extrabold">{{ lesson.topic|default:lesson.title }}</span></span>
+    <span class="flex flex-wrap gap-1.5 text-[12px] font-semibold"><span class="inline-flex h-7 items-center rounded-full bg-canvas px-3">{% if lesson.grade %}{% blocktranslate with g=lesson.grade %}Grade {{ g }}{% endblocktranslate %}{% else %}—{% endif %}</span><span class="inline-flex h-7 items-center gap-1 rounded-full bg-canvas px-3">{% include "components/icons.html#clock" with size=12 %}{% blocktranslate with n=10 %}{{ n }} min{% endblocktranslate %}</span></span>
+    <span class="transition-transform group-open:rotate-180">{% include "components/icons.html#chevron-down" with size=16 %}</span>
+  </summary>
+  <form method="post" class="grid gap-4 border-t border-line px-5 py-4 lg:grid-cols-[minmax(0,1fr)_340px]">{% csrf_token %}
+    <div class="flex flex-col gap-3">
+      <div class="grid gap-3 md:grid-cols-3">
+        <label class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Student's full name" %}</span><input class="input" value="{{ user.get_full_name|default:user.username }}" disabled></label>
+        <label class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Education programme" %}</span><input class="input" name="programme" maxlength="255" value="{{ lesson.details.programme|default:'' }}" {% if locked %}disabled{% endif %}></label>
+        <label class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Study year" %}</span><input class="input" name="study_year" maxlength="64" value="{{ lesson.details.study_year|default:'' }}" {% if locked %}disabled{% endif %}></label>
+      </div>
+      <label class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Topic of the microlesson" %}</span><input class="input" name="topic" maxlength="255" value="{{ lesson.topic }}" {% if locked %}disabled{% endif %}></label>
+      <fieldset class="flex flex-wrap items-center gap-3"><legend class="sr-only">{% translate "Class" %}</legend><span class="text-[13px] font-bold">{% translate "Class" %}</span>
+        {% for g in grades %}<label class="cursor-pointer"><input type="radio" name="grade" value="{{ g }}" class="peer sr-only" {% if lesson.grade == g %}checked{% endif %} {% if locked %}disabled{% endif %}><span class="num grid h-9 w-11 place-items-center rounded-[10px] border border-line-strong text-[14px] font-bold peer-checked:border-primary-600 peer-checked:bg-primary-600 peer-checked:text-white">{{ g }}</span></label>{% endfor %}
+        <span class="ml-2 text-sm text-ink-soft">{% translate "Length of the microlesson" %}: {% blocktranslate with n=10 %}{{ n }} min{% endblocktranslate %}</span>
+      </fieldset>
+      <div class="grid gap-3 md:grid-cols-2">
+        <label class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Aim of the microlesson" %}</span><textarea class="input" name="aim" rows="2" {% if locked %}disabled{% endif %}>{{ lesson.aim }}</textarea></label>
+        <div class="flex flex-col gap-1.5" x-data><span class="text-[13px] font-bold">{% translate "Expected result" %}</span><textarea name="outcomes" rows="2" class="input" x-rich.answer{% if locked %}="true"{% endif %} data-rt="line" aria-label="{% translate 'Expected result' %}">{{ lesson.outcomes }}</textarea></div>
+        <label class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Pedagogical method used" %}</span><input class="input" name="method" value="{{ lesson.method }}" {% if locked %}disabled{% endif %}></label>
+        <label class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Digital tool used" %}</span><input class="input" name="digital_tools" value="{{ lesson.digital_tools }}" {% if locked %}disabled{% endif %}></label>
+      </div>
+      {% if not locked %}<div class="flex justify-end"><button type="submit" class="btn btn-primary">{% include "components/icons.html#save" %}{% translate "Save" %}</button></div>{% endif %}
+    </div>
+    <aside class="flex flex-col gap-2 rounded-lg bg-canvas p-4">
+      <p class="text-[12px] font-extrabold tracking-wide text-ink-faint uppercase">{% translate "Choosing the microlesson" %}</p>
+      {% if part %}
+        <p class="text-[13px] text-ink-soft">{% translate "Practice" %} №{{ source.source_template.number }} · {{ source.title }}</p>
+        <p class="tone-{{ part.order }} flex items-center gap-2 text-[15px] font-extrabold"><span class="num grid size-7 place-items-center rounded-full bg-(--tone) text-[12px] text-white">{{ part.order }}</span>{{ part.title }}</p>
+        <div class="flex max-h-56 flex-col gap-1.5 overflow-y-auto text-[12.5px] leading-[18px]">
+          {% for f in part_spec.fields %}{% with v=part.fields|get:f.key %}{% if v and v != f.key %}<div><span class="font-bold">{{ f.label }}:</span> {% if f.number %}{{ v }} {% translate "min" %}{% else %}<span class="prose-lesson">{{ v|rich }}</span>{% endif %}</div>{% endif %}{% endwith %}{% endfor %}
+        </div>
+      {% endif %}
+    </aside>
+  </form>
+</details>
+
+<div class="grid items-start gap-4 2xl:grid-cols-[minmax(0,1fr)_360px]" x-data="{ stale: false }" @stage-changed.window="stale = true">
+  {# ---- II. the four stages ---- #}
+  <section aria-labelledby="ii-title" class="flex min-w-0 flex-col gap-3">
+    <div class="flex flex-wrap items-center justify-between gap-2">
+      <h2 id="ii-title" class="flex items-center gap-2.5 text-[18px] font-extrabold"><span class="grid size-8 place-items-center rounded-full bg-primary-900 text-[12px] text-white">II</span>{% translate "The structure of the microlesson" %}</h2>
+      <span class="inline-flex items-center gap-2 rounded-full bg-warning-50 px-3 py-1.5 text-[12.5px] font-bold text-warning-700">{% include "components/icons.html#award" with size=14 %}{% translate "One microlesson (one topic)" %}</span>
+    </div>
+    <div class="grid gap-4 lg:grid-cols-2">
+      {% for r in rows %}
+        {{ r.opts|json_script:r.opts_id }}
+      {% endfor %}
+      {% for r in rows %}
+        <article class="tone-{{ r.stage.order }} card flex flex-col gap-0 overflow-hidden p-0" aria-labelledby="st-{{ r.stage.order }}"
+                 x-data="stageEditor(JSON.parse(document.getElementById('opts-{{ r.stage.order }}').textContent))">
+          <header class="flex items-center gap-3 border-b border-(--tone)/20 bg-(--tone-50) px-4 py-3">
+            <span class="num grid size-9 shrink-0 place-items-center rounded-full bg-(--tone) text-[15px] font-extrabold text-white">{{ r.stage.order }}</span>
+            <h3 id="st-{{ r.stage.order }}" class="min-w-0 flex-1 text-[15.5px] font-extrabold">{{ r.stage.title }} – {% blocktranslate with n=r.spec.minutes %}{{ n }} min{% endblocktranslate %}</h3>
+            <span class="text-(--tone)">{% include "components/icons.html#edit" with size=15 %}</span>
+          </header>
+          <div class="flex flex-1 flex-col gap-2.5 p-4">
+            <p class="text-[13px] leading-[19px]"><span class="font-extrabold">{% translate "Aim" %}:</span> {{ r.spec.aim }}</p>
+            {% for f in r.fields %}
+              <div class="flex flex-col gap-1">
+                <span class="flex items-center gap-1.5 text-[12.5px] font-extrabold text-(--tone)">{% include "components/icons.html#"|add:f.icon with size=13 %}{{ f.label }}</span>
+                <textarea rows="1" class="input" x-model="fields.{{ f.key }}" x-rich.answer{% if locked %}="true"{% endif %} data-rt="line" aria-label="{{ f.label }}"></textarea>
+              </div>
+            {% endfor %}
+          </div>
+          <footer class="flex flex-wrap items-center justify-between gap-2 border-t border-line px-4 py-3">
+            <span class="text-[12.5px] font-bold">{% translate "The AI assistant's check" %}:</span>
+            <span x-show="changed" x-cloak class="badge badge-neutral text-[11px] font-bold">{% translate "Changed — check again" %}</span>
+            <span x-show="!changed">
+              {% if r.verdict == "ok" and state.current %}<span class="inline-flex items-center gap-1 rounded-[8px] bg-success-50 px-2.5 py-1 text-[12px] font-extrabold text-success-700">✓ {% translate "CORRECT" %}</span>
+              {% elif r.verdict == "wrong" and state.current %}<span class="inline-flex items-center gap-1 rounded-[8px] bg-danger-50 px-2.5 py-1 text-[12px] font-extrabold text-danger-700">✕ {% translate "WRONG" %}</span>
+              {% elif r.verdict %}<span class="badge badge-neutral text-[11px] font-bold">{% translate "Changed — check again" %}</span>
+              {% else %}<span class="text-[12px] text-ink-faint">{% translate "Not checked yet" %}</span>{% endif %}
+            </span>
+            <span class="inline-flex items-center gap-1.5 text-[11.5px] text-ink-faint" aria-live="polite"><span class="size-1.5 rounded-full" :class="{ 'bg-success-600': state === 'saved', 'bg-warning-500 animate-pulse': state === 'dirty' || state === 'saving', 'bg-danger-600': state === 'failed' }"></span><span x-text="stateText"></span></span>
+          </footer>
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+
+  {# ---- III. the checker ---- #}
+  <aside id="checker" class="flex flex-col gap-4 2xl:sticky 2xl:top-20" aria-labelledby="checker-title">
+    <section class="overflow-hidden rounded-xl border border-line bg-surface shadow-lift">
+      <header class="relative flex items-center gap-3 bg-[linear-gradient(120deg,var(--color-primary-900),var(--color-primary-600))] px-5 py-4 text-white">
+        <span class="grid size-11 place-items-center rounded-[14px] bg-white/15 ring-1 ring-white/30">{% include "components/icons.html#check-square" with size=22 %}</span>
+        <div><h2 id="checker-title" class="text-[15px] leading-5 font-extrabold uppercase">{% translate "AI assistant: checker mode" %}</h2><p class="text-[12.5px] text-white/80">{% translate "It checks only whether the structure is placed correctly." %}</p></div>
+      </header>
+      <ul class="flex flex-col gap-1.5 p-4">
+        {% for c in criteria %}
+          <li class="flex items-center justify-between gap-3 rounded-lg bg-canvas px-3 py-2 text-[13px] leading-[18px]">
+            <span>{{ c.label }}</span>
+            <span x-show="!stale">{% if c.verdict and state.current %}{% if c.verdict == "ok" %}<span class="shrink-0 rounded-[8px] bg-success-600 px-2 py-1 text-[11px] font-extrabold whitespace-nowrap text-white">✓ {% translate "CORRECT" %}</span>{% else %}<span class="shrink-0 rounded-[8px] bg-danger-600 px-2 py-1 text-[11px] font-extrabold whitespace-nowrap text-white">✕ {% translate "WRONG" %}</span>{% endif %}{% else %}<span class="text-ink-faint">—</span>{% endif %}</span>
+            <span x-show="stale" x-cloak class="text-ink-faint">—</span>
+          </li>
+        {% endfor %}
+      </ul>
+      <div class="flex flex-col gap-2.5 border-t border-line p-4">
+        <p class="flex items-start gap-2.5 rounded-lg border border-danger-600/25 bg-danger-50 px-3 py-2.5 text-[12.5px] leading-[18px] text-danger-700">{% include "components/icons.html#alert" with size=16 %}<span><strong>{% translate "It gives no ready answer." %}</strong> {% translate "It only checks the structure and marks it «CORRECT» / «WRONG». The AI assistant does not correct an error itself: you look at the content marked wrong, change it and send it to be checked again." %}</span></p>
+        {% if state.check %}<p class="text-[12px] text-ink-faint">{% blocktranslate with t=state.check.created_at|date:"d.m H:i" %}Checked: {{ t }}{% endblocktranslate %}{% if not state.current %} · <span class="font-bold text-warning-700">{% translate "the content has changed since" %}</span>{% endif %}</p>{% endif %}
+        {% if not locked %}
+          <form method="post" action="{% url 'student:micro_check' section.number %}" x-data="{ busy: false }" @submit="busy = true">{% csrf_token %}
+            <button type="submit" class="btn btn-secondary w-full" :disabled="busy" {% if not ai_enabled %}disabled{% endif %}>
+              <span x-show="!busy" class="inline-flex items-center gap-2">{% include "components/icons.html#refresh" %}{% if state.check %}{% translate "Check again" %}{% else %}{% translate "Send for checking" %}{% endif %}</span>
+              <span x-show="busy" x-cloak>{% translate "Checking…" %}</span>
+            </button>
+          </form>
+          <a class="btn btn-primary w-full {% if not state.passed and not open_trial %}pointer-events-none opacity-50{% endif %}" :class="stale && 'pointer-events-none opacity-50'" href="{% url 'student:micro_trial' section.number %}">{% include "components/icons.html#play" %}{% if open_trial %}{% translate "Go on with the trial" %}{% else %}{% translate "Try it out" %}{% endif %}</a>
+          {% if not state.passed %}<p class="text-[12px] text-ink-soft">{% translate "The trial opens when every stage is marked ✓ CORRECT." %}</p>{% endif %}
+        {% endif %}
+        <p class="text-[11.5px] text-ink-faint">{% blocktranslate with n=remaining %}{{ n }} requests left today{% endblocktranslate %}</p>
+      </div>
+    </section>
+  </aside>
+</div>
+
+{# ---- V–VII. the trials and the assembly ---- #}
+<section class="card flex flex-col gap-4" aria-labelledby="trials-title">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <h2 id="trials-title" class="text-[18px] font-extrabold">{% translate "Trial results" %}</h2>
+    <p class="text-[13px] text-ink-soft">{% translate "One microlesson may be tried out several times; each trial is kept apart." %}</p>
+  </div>
+  {% if trials %}
+    <ol class="flex flex-col gap-2">
+      {% for t in trials %}
+        <li class="flex flex-wrap items-center gap-4 rounded-lg border border-line px-4 py-3">
+          <span class="w-36 shrink-0"><span class="block text-[14px] font-extrabold">{% blocktranslate with n=t.number %}Trial {{ n }}{% endblocktranslate %}</span><span class="text-[12px] text-ink-soft">{% if t.number == 1 %}{% translate "the initial version" %}{% else %}{% translate "the changed version" %}{% endif %} · v{{ t.trial.version.number }}</span></span>
+          <span class="min-w-[180px] flex-1">
+            {% if t.review %}
+              <span class="flex items-center gap-3"><span class="block h-3 flex-1 overflow-hidden rounded-full bg-surface-sunken"><span class="block h-full rounded-full {% if t.review.total >= 8 %}bg-success-600{% elif t.review.total >= 5 %}bg-warning-500{% else %}bg-danger-600{% endif %}" style="width: {{ t.review.total }}0%"></span></span><span class="num w-12 text-right text-[15px] font-extrabold">{{ t.review.total }}0%</span></span>
+            {% else %}
+              <span class="flex flex-wrap gap-1.5 text-[11.5px] font-bold"><span class="rounded-full bg-success-50 px-2 py-0.5 text-success-700">✓ {{ t.counts.correct }}</span><span class="rounded-full bg-warning-50 px-2 py-0.5 text-warning-700">~ {{ t.counts.partial }}</span><span class="rounded-full bg-danger-50 px-2 py-0.5 text-danger-700">✕ {{ t.counts.wrong }}</span><span class="text-ink-faint">· {% if t.trial.finished_at %}{% translate "Not graded by the teacher yet" %}{% else %}{% translate "in progress" %}{% endif %}</span></span>
+            {% endif %}
+          </span>
+          <span class="num text-[12.5px] text-ink-soft">{{ t.seconds|duration_s }} · {{ t.trial.get_level_display|lower }} · {% blocktranslate with g=t.trial.grade %}Grade {{ g }}{% endblocktranslate %}</span>
+          <a class="btn btn-secondary btn-sm" href="{% if t.trial.finished_at %}{% url 'student:micro_protocol' section.number t.trial.pk %}{% else %}{% url 'student:micro_dialog' section.number t.trial.pk %}{% endif %}">{% if t.trial.finished_at %}{% translate "Protocol" %}{% else %}{% translate "Go on" %}{% endif %}</a>
+        </li>
+      {% endfor %}
+    </ol>
+    {% if not locked %}
+      <div class="flex flex-wrap items-center justify-between gap-3 border-t border-line pt-4">
+        <p class="max-w-[640px] text-[13px] text-ink-soft">{% translate "When the trials you need are done, the last version, its four stages, the history of the trials, the AI student's answers, your changes and the grades are gathered together." %}</p>
+        <form method="post" action="{% url 'student:micro_assemble' section.number %}">{% csrf_token %}
+          {% translate "Assemble the microlesson?" as a_title %}{% translate "After that the microlesson can no longer be changed or tried out." as a_text %}{% translate "Assemble" as a_label %}
+          <button type="submit" class="btn btn-primary" data-confirm="{{ a_title }}" data-confirm-text="{{ a_text }}" data-confirm-label="{{ a_label }}" data-confirm-variant="success" data-confirm-icon="check">{% include "components/icons.html#check-square" %}{% translate "Assemble the microlesson" %}</button>
+        </form>
+      </div>
+    {% endif %}
+  {% else %}
+    <p class="text-sm text-ink-faint">{% translate "No trials yet." %}</p>
+  {% endif %}
+</section>
+{% endblock %}
+{% block scripts %}<script defer src="{% static 'js/designer.js' %}"></script>{% rich_text_assets %}{% endblock %}

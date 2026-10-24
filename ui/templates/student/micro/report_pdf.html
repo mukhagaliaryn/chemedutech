@@ -1,0 +1,38 @@
+{% load i18n %}<!doctype html>{% comment %}
+The assembled microlesson as a PDF (WeasyPrint, A4; guide @S6 VII): part I, the four stages, the history of the trials
+with the dialogues, the AI student's answers and the teacher's grades.
+{% endcomment %}
+<html lang="{{ LANGUAGE_CODE|default:'kk' }}"><head><meta charset="utf-8"><title>{{ plan.topic }}</title>
+<style>
+  @page { size: A4; margin: 14mm; }
+  body { font-family: "Inter", "DejaVu Sans", sans-serif; font-size: 9.5pt; color: #13213b; line-height: 1.45; }
+  .head { background: #15336b; color: #fff; border-radius: 10px; padding: 12px 16px; }
+  .head h1 { margin: 0; font-size: 13pt; text-transform: uppercase; } .head p { margin: 3px 0 0; color: #c9d6f0; }
+  h2 { font-size: 11.5pt; margin: 14px 0 6px; color: #15336b; } h3 { margin: 0 0 4px; font-size: 10pt; }
+  .grid { display: flex; flex-wrap: wrap; gap: 6px; } .box { border: 1px solid #d7deea; border-radius: 8px; padding: 6px 9px; flex: 1 1 45%; }
+  .k { color: #0b7a7a; font-size: 7.5pt; font-weight: 800; text-transform: uppercase; }
+  .stage { border: 1px solid #d7deea; border-radius: 8px; padding: 8px 10px; margin-bottom: 6px; page-break-inside: avoid; }
+  .t { color: #5b34b0; } .msg { margin: 3px 0; } .ai { background: #f1ebfc; border-radius: 6px; padding: 3px 6px; }
+  p { margin: 0 0 3px; } ul, ol { margin: 2px 0 3px; padding-left: 14px; }
+</style></head>
+<body>
+  <div class="head"><h1>{% translate "The sheet of developing the microlesson and trying it out professionally" %}</h1><p>{{ lesson.owner.get_full_name|default:lesson.owner.username }} · {{ plan.topic }} · {% blocktranslate with n=10 %}{{ n }} min{% endblocktranslate %}</p></div>
+  <h2>I. {% translate "The microlesson's initial details" %}</h2>
+  <div class="grid">
+    <div class="box"><div class="k">{% translate "Topic of the microlesson" %}</div>{{ plan.topic }}</div>
+    <div class="box"><div class="k">{% translate "Class" %}</div>{{ plan.grade }}</div>
+    <div class="box"><div class="k">{% translate "Aim of the microlesson" %}</div>{{ plan.aim }}</div>
+    <div class="box"><div class="k">{% translate "Expected result" %}</div>{{ plan.outcomes|rich }}</div>
+    <div class="box"><div class="k">{% translate "Pedagogical method used" %}</div>{{ plan.method|default:"—" }}</div>
+    <div class="box"><div class="k">{% translate "Digital tool used" %}</div>{{ plan.digital_tools|default:"—" }}</div>
+  </div>
+  <h2>II. {% translate "The structure of the microlesson" %}</h2>
+  {% for r in rows %}<div class="stage"><h3>{{ r.stage.order }}. {{ r.stage.title }} – {% blocktranslate with n=r.spec.minutes %}{{ n }} min{% endblocktranslate %}</h3>{% for f in r.fields %}<p><b>{{ f.label }}:</b> {{ f.html|rich }}</p>{% endfor %}</div>{% endfor %}
+  <h2>{% translate "Trial results" %}</h2>
+  {% for t in trials %}
+    <div class="stage"><h3>{% blocktranslate with n=t.number %}Trial {{ n }}{% endblocktranslate %} · {{ levels|get:t.level }} · {% blocktranslate with g=t.grade %}Grade {{ g }}{% endblocktranslate %} · {{ t.seconds|duration_s }}{% if t.review %} · {{ t.review.total }}/10{% endif %}</h3>
+      {% for m in t.messages %}<p class="msg"><b class="t">{{ kinds|get:m.kind }}:</b> {{ m.text }}</p><p class="msg ai"><b>{% translate "The AI student" %}:</b> {{ m.reply }}{% if m.answer_type != "none" %} ({{ types|get:m.answer_type }}){% endif %}</p>{% endfor %}
+      {% if t.review.comment %}<p><b>{% translate "Teacher's comment" %}:</b> {{ t.review.comment }}</p>{% endif %}
+    </div>
+  {% endfor %}
+</body></html>

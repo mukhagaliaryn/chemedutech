@@ -3,7 +3,7 @@
 {% comment %}
 An ICPAI section (docs/icpai/SPEC.md §4.0): its purpose (the guide's «what it does»), its state and percent,
 «Let the AI explain» — the AI assistant panel (ai/partials/panel.html; D73) — and
-the section's own content — section 1 leads to the course, section 4 shows the lesson templates, section 5 the practices; kinds not built yet
+the section's own content — section 1 leads to the course, section 4 shows the lesson templates, section 5 the practices, section 6 the microlesson; kinds not built yet
 say so.
 {% endcomment %}
 {% block title %}{{ section.title }} · ChemEduTech{% endblock %}
@@ -126,6 +126,9 @@ say so.
 {% elif section.kind == "research_practice" %}
   {# ---- section 5: the digital research practice (guide @S5; STEP-35) ---- #}
   {% include "student/practice/partials/cards.html" %}
+{% elif section.kind == "microlesson" %}
+  {# ---- section 6: the microlesson (guide @S6; STEP-36) ---- #}
+  {% include "student/micro/partials/entry.html" %}
 {% elif not row.ready %}
   {% translate "The section is in development" as l_title %}{% translate "Its tasks will appear here in the next versions of the platform." as l_text %}
   {% include "components/empty_state.html" with title=l_title text=l_text icon="clock" %}

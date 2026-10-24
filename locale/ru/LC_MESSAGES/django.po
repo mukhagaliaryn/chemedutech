@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ChemEduTech\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 21:38+0500\n"
+"POT-Creation-Date: 2026-10-24 22:05+0500\n"
 "PO-Revision-Date: 2026-10-16 21:00+0500\n"
 "Last-Translator: ChemEduTech\n"
 "Language-Team: ChemEduTech\n"
@@ -166,7 +166,8 @@ msgstr "Преподаватель"
 #: ui/templates/research/dashboard.html:85
 #: ui/templates/teacher/gradebook.html:35 ui/templates/teacher/group.html:118
 #: ui/templates/teacher/group.html:187
-#: ui/templates/teacher/practice/queue.html:24
+#: ui/templates/teacher/practice/queue.html:32
+#: ui/templates/teacher/practice/queue.html:46
 #: ui/templates/teacher/students.html:29 ui/templates/ui/styleguide.html:140
 #: ui/views.py:21
 msgid "Student"
@@ -246,7 +247,7 @@ msgstr "ИИ-проверяющий"
 msgid "«Айрегім» expert"
 msgstr "Эксперт «Айрегім»"
 
-#: apps/ai/models/conversation.py:22 apps/pedagogy/models/trial.py:25
+#: apps/ai/models/conversation.py:22 apps/pedagogy/models/trial.py:26
 msgid "mode"
 msgstr "режим"
 
@@ -272,8 +273,9 @@ msgstr "модель"
 
 #: apps/ai/models/conversation.py:27 apps/core/models.py:8
 #: apps/feedback/models/comment.py:32 apps/feedback/models/notification.py:28
-#: apps/pedagogy/models/lesson.py:118 apps/pedagogy/models/review.py:29
-#: apps/pedagogy/models/trial.py:69 apps/practice/models/submission.py:107
+#: apps/pedagogy/models/lesson.py:131 apps/pedagogy/models/review.py:46
+#: apps/pedagogy/models/trial.py:70 apps/pedagogy/models/trial.py:109
+#: apps/practice/models/submission.py:107
 #: apps/practice/models/submission.py:143
 msgid "created at"
 msgstr "создано"
@@ -330,13 +332,14 @@ msgstr "задержка, мс"
 msgid "error"
 msgstr "ошибка"
 
-#: apps/ai/models/conversation.py:57 apps/pedagogy/models/lesson.py:149
+#: apps/ai/models/conversation.py:57 apps/pedagogy/models/lesson.py:162
 #: apps/programme/models/diagnostics.py:73
 #: apps/programme/models/progress.py:116 apps/progress/models/progress.py:172
 msgid "at"
 msgstr "время"
 
-#: apps/ai/models/conversation.py:61 apps/pedagogy/models/trial.py:59
+#: apps/ai/models/conversation.py:61 apps/pedagogy/models/check.py:26
+#: apps/pedagogy/models/trial.py:60 apps/pedagogy/models/trial.py:108
 msgid "AI message"
 msgstr "Сообщение ИИ"
 
@@ -453,7 +456,10 @@ msgid ""
 "Give feedback on my stage under four headings: Successfully organised parts; "
 "Parts that need improving; Methodical suggestions; Remarks on the scientific "
 "content."
-msgstr "Дай обратную связь по этапу по четырём разделам: Удачно организованные моменты; Моменты, требующие доработки; Методические рекомендации; Замечания по научному содержанию."
+msgstr ""
+"Дай обратную связь по этапу по четырём разделам: Удачно организованные "
+"моменты; Моменты, требующие доработки; Методические рекомендации; Замечания "
+"по научному содержанию."
 
 #: apps/assessments/admin.py:24 apps/assessments/admin.py:81
 #: apps/assessments/models/attempt.py:73 apps/assessments/models/quiz.py:85
@@ -538,12 +544,12 @@ msgid "attempt number"
 msgstr "номер попытки"
 
 #: apps/assessments/models/attempt.py:35 apps/labs/models/attempt.py:40
-#: apps/pedagogy/models/trial.py:28 apps/progress/models/progress.py:36
+#: apps/pedagogy/models/trial.py:29 apps/progress/models/progress.py:36
 msgid "started at"
 msgstr "начато"
 
 #: apps/assessments/models/attempt.py:36 apps/labs/models/attempt.py:41
-#: apps/pedagogy/models/trial.py:29
+#: apps/pedagogy/models/trial.py:30
 msgid "finished at"
 msgstr "завершено"
 
@@ -680,7 +686,7 @@ msgstr "Первая попытка"
 #: apps/certificates/models/certificate.py:18 apps/courses/models/content.py:34
 #: apps/courses/models/course.py:31 apps/courses/models/structure.py:17
 #: apps/courses/models/structure.py:36 apps/courses/models/structure.py:76
-#: apps/pedagogy/models/lesson.py:46 apps/pedagogy/models/lesson.py:84
+#: apps/pedagogy/models/lesson.py:47 apps/pedagogy/models/lesson.py:97
 #: apps/pedagogy/models/template.py:43 apps/practice/models/task.py:24
 #: apps/programme/models/programme.py:12 apps/programme/models/programme.py:51
 msgid "title"
@@ -688,8 +694,8 @@ msgstr "название"
 
 #: apps/assessments/models/quiz.py:25 apps/assessments/models/quiz.py:84
 #: apps/courses/models/structure.py:75 apps/feedback/models/notification.py:24
-#: apps/pedagogy/models/lesson.py:27 apps/practice/models/task.py:58
-#: apps/programme/models/programme.py:50
+#: apps/pedagogy/models/lesson.py:28 apps/pedagogy/models/trial.py:100
+#: apps/practice/models/task.py:58 apps/programme/models/programme.py:50
 msgid "kind"
 msgstr "вид"
 
@@ -999,9 +1005,10 @@ msgid "certificate templates"
 msgstr "шаблоны сертификатов"
 
 #: apps/certificates/models/certificate.py:45
-#: apps/courses/models/structure.py:35 apps/pedagogy/models/lesson.py:82
-#: apps/pedagogy/models/lesson.py:115 apps/pedagogy/models/template.py:12
-#: apps/pedagogy/models/template.py:42 apps/programme/models/programme.py:49
+#: apps/courses/models/structure.py:35 apps/pedagogy/models/lesson.py:95
+#: apps/pedagogy/models/lesson.py:128 apps/pedagogy/models/template.py:12
+#: apps/pedagogy/models/template.py:42 apps/pedagogy/models/trial.py:98
+#: apps/programme/models/programme.py:49
 msgid "number"
 msgstr "номер"
 
@@ -1048,8 +1055,8 @@ msgstr "сертификаты"
 msgid "Core"
 msgstr "Основное"
 
-#: apps/core/models.py:9 apps/pedagogy/models/lesson.py:90
-#: apps/pedagogy/models/review.py:30 apps/programme/models/video.py:47
+#: apps/core/models.py:9 apps/pedagogy/models/lesson.py:103
+#: apps/pedagogy/models/review.py:47 apps/programme/models/video.py:47
 msgid "updated at"
 msgstr "изменено"
 
@@ -1115,9 +1122,10 @@ msgstr "Курсы"
 #: apps/courses/models/content.py:17 apps/courses/models/content.py:53
 #: apps/courses/models/content.py:107 apps/courses/models/content.py:151
 #: apps/courses/models/structure.py:113 apps/feedback/models/comment.py:22
-#: apps/labs/models/attempt.py:32 apps/pedagogy/models/lesson.py:145
-#: apps/pedagogy/models/trial.py:51 apps/practice/models/submission.py:24
-#: apps/practice/models/task.py:22 apps/programme/models/diagnostics.py:31
+#: apps/labs/models/attempt.py:32 apps/pedagogy/models/lesson.py:158
+#: apps/pedagogy/models/trial.py:52 apps/pedagogy/models/trial.py:99
+#: apps/practice/models/submission.py:24 apps/practice/models/task.py:22
+#: apps/programme/models/diagnostics.py:31
 #: apps/programme/models/diagnostics.py:64 apps/progress/models/progress.py:25
 #: apps/progress/models/progress.py:156
 msgid "stage"
@@ -1226,7 +1234,7 @@ msgstr "тест по теме"
 msgid "topic tests"
 msgstr "тесты по темам"
 
-#: apps/courses/models/course.py:22 apps/pedagogy/models/lesson.py:19
+#: apps/courses/models/course.py:22 apps/pedagogy/models/lesson.py:20
 #: ui/templates/teacher/content/course.html:61
 msgid "Draft"
 msgstr "Черновик"
@@ -1268,7 +1276,7 @@ msgid "cover"
 msgstr "обложка"
 
 #: apps/courses/models/course.py:36 apps/courses/models/enrollment.py:46
-#: apps/labs/models/attempt.py:39 apps/pedagogy/models/lesson.py:54
+#: apps/labs/models/attempt.py:39 apps/pedagogy/models/lesson.py:61
 #: apps/practice/models/submission.py:28 apps/programme/models/progress.py:61
 #: apps/progress/models/progress.py:27 apps/progress/models/progress.py:81
 msgid "status"
@@ -1347,7 +1355,7 @@ msgid "Assistant"
 msgstr "Ассистент"
 
 #: apps/courses/models/course.py:108 apps/courses/models/course.py:135
-#: apps/pedagogy/models/review.py:24 apps/practice/models/submission.py:137
+#: apps/pedagogy/models/review.py:41 apps/practice/models/submission.py:137
 #: ui/templates/feedback/partials/comment.html:7
 msgid "teacher"
 msgstr "преподаватель"
@@ -1414,7 +1422,7 @@ msgid "Dropped"
 msgstr "Отчислен"
 
 #: apps/courses/models/enrollment.py:24 apps/labs/models/attempt.py:15
-#: apps/pedagogy/models/lesson.py:25 apps/programme/models/progress.py:19
+#: apps/pedagogy/models/lesson.py:26 apps/programme/models/progress.py:19
 #: ui/templates/partials/shell/sidebar_student.html:61
 msgid "student"
 msgstr "студент"
@@ -1622,7 +1630,7 @@ msgstr "прочитано"
 msgid "Read by the other side"
 msgstr "Прочитано другой стороной"
 
-#: apps/feedback/models/comment.py:36 apps/pedagogy/models/review.py:28
+#: apps/feedback/models/comment.py:36 apps/pedagogy/models/review.py:45
 msgid "comment"
 msgstr "комментарий"
 
@@ -4419,6 +4427,7 @@ msgid "In progress"
 msgstr "В процессе"
 
 #: apps/labs/models/attempt.py:11 ui/templates/assessments/result.html:86
+#: ui/templates/teacher/practice/queue.html:32
 #: ui/templates/teacher/student.html:140
 msgid "Finished"
 msgstr "Завершено"
@@ -4548,7 +4557,8 @@ msgstr "Подсказка"
 msgid "Journal saved"
 msgstr "Журнал сохранён"
 
-#: apps/labs/models/attempt.py:91 ui/templates/student/practice/results.html:99
+#: apps/labs/models/attempt.py:91 ui/templates/student/micro/dialog.html:28
+#: ui/templates/student/practice/results.html:99
 msgid "Finish"
 msgstr "Завершение"
 
@@ -4692,6 +4702,7 @@ msgid "Measurements"
 msgstr "Измерения"
 
 #: apps/labs/views.py:59 ui/templates/labs/run.html:53
+#: ui/templates/student/micro/protocol.html:22
 #: ui/templates/student/stages/test.html:8 ui/templates/teacher/lab_log.html:35
 #: ui/templates/teacher/partials/student_drawer.html:16
 msgid "Time"
@@ -4714,6 +4725,7 @@ msgstr "Объём"
 #: ui/templates/student/designer/plan_pdf.html:49
 #: ui/templates/student/designer/results.html:42
 #: ui/templates/student/designer/trial.html:82
+#: ui/templates/student/micro/editor.html:65
 #: ui/templates/student/partials/kind_pill.html:4
 #: ui/templates/student/practice/partials/nav.html:25
 #: ui/templates/student/practice/report_pdf.html:37
@@ -4727,6 +4739,7 @@ msgstr "Объём"
 #: ui/templates/student/practice/step.html:172
 #: ui/templates/student/topic.html:10
 #: ui/templates/teacher/practice/detail.html:35
+#: ui/templates/teacher/practice/micro.html:24
 msgid "min"
 msgstr "мин"
 
@@ -4978,7 +4991,7 @@ msgstr "Закрыть"
 msgid "Briefing"
 msgstr "Вводная"
 
-#: apps/labs/views.py:125
+#: apps/labs/views.py:125 apps/pedagogy/models/trial.py:87
 msgid "Explanation"
 msgstr "Пояснение"
 
@@ -5205,235 +5218,397 @@ msgstr "образовательные программы"
 msgid "Pedagogical design"
 msgstr "Педагогическое проектирование"
 
-#: apps/pedagogy/frames.py:44
+#: apps/pedagogy/frames.py:48
 #: ui/templates/student/designer/partials/plan_sheet.html:32
 #: ui/templates/student/designer/plan_pdf.html:42
 msgid "Teacher's actions"
 msgstr "Действия учителя"
 
-#: apps/pedagogy/frames.py:45
+#: apps/pedagogy/frames.py:49
 msgid "Tasks the students do"
 msgstr "Задания, которые выполняют ученики"
 
-#: apps/pedagogy/frames.py:46
+#: apps/pedagogy/frames.py:50
 msgid "Virtual lab experiments and research work"
 msgstr "Виртуальные лабораторные опыты и исследовательские работы"
 
-#: apps/pedagogy/frames.py:47
+#: apps/pedagogy/frames.py:51
 msgid "Digital tools and authorial methods"
 msgstr "Цифровые инструменты и авторские методы"
 
-#: apps/pedagogy/frames.py:48
+#: apps/pedagogy/frames.py:52
 msgid "Assessment criteria and feedback"
 msgstr "Критерии оценивания и способы обратной связи"
 
-#: apps/pedagogy/frames.py:49
+#: apps/pedagogy/frames.py:53
 msgid "Stage result"
 msgstr "Результат этапа"
 
-#: apps/pedagogy/frames.py:54
+#: apps/pedagogy/frames.py:58
 msgid "Time to do it, minutes"
 msgstr "Время выполнения, минут"
 
-#: apps/pedagogy/frames.py:57
+#: apps/pedagogy/frames.py:61
 msgid "The task given to the student"
 msgstr "Задание для ученика"
 
-#: apps/pedagogy/frames.py:61
+#: apps/pedagogy/frames.py:65 apps/pedagogy/frames.py:136
 msgid "Arousing interest"
 msgstr "Пробуждение интереса"
 
-#: apps/pedagogy/frames.py:62
+#: apps/pedagogy/frames.py:66
 msgid ""
 "To find out the student's prior knowledge and to arouse interest in the "
 "research problem."
-msgstr "Выявить исходные знания ученика и сформировать интерес к исследовательской проблеме."
+msgstr ""
+"Выявить исходные знания ученика и сформировать интерес к исследовательской "
+"проблеме."
 
-#: apps/pedagogy/frames.py:63 ui/templates/student/practice/step.html:58
+#: apps/pedagogy/frames.py:67 ui/templates/student/practice/step.html:58
 #: ui/templates/student/practice/step.html:60
 #: ui/templates/student/practice/step.html:88
 #: ui/templates/student/practice/trial_start.html:56
 msgid "The teacher's explanation"
 msgstr "Объяснение учителя"
 
-#: apps/pedagogy/frames.py:64
+#: apps/pedagogy/frames.py:68 apps/pedagogy/frames.py:139
 msgid "Problem question"
 msgstr "Проблемный вопрос"
 
-#: apps/pedagogy/frames.py:65
+#: apps/pedagogy/frames.py:69 ui/templates/student/micro/editor.html:53
+#: ui/templates/student/micro/report_pdf.html:25
 msgid "Expected result"
 msgstr "Ожидаемый результат"
 
-#: apps/pedagogy/frames.py:69
+#: apps/pedagogy/frames.py:73
 msgid "Finding misconceptions"
 msgstr "Выявление ошибочных представлений"
 
-#: apps/pedagogy/frames.py:70
+#: apps/pedagogy/frames.py:74
 msgid ""
 "To find out the student's initial understanding of chemical phenomena and to "
 "direct them to correct wrong scientific reasoning."
-msgstr "Выявить исходные представления ученика о химических явлениях и направить на исправление ошибочных суждений."
+msgstr ""
+"Выявить исходные представления ученика о химических явлениях и направить на "
+"исправление ошибочных суждений."
 
-#: apps/pedagogy/frames.py:72
+#: apps/pedagogy/frames.py:76
 msgid "Statement offered for analysis"
 msgstr "Утверждение для анализа"
 
-#: apps/pedagogy/frames.py:73
+#: apps/pedagogy/frames.py:77
 msgid "Assessment criterion"
 msgstr "Критерий оценивания"
 
-#: apps/pedagogy/frames.py:77
+#: apps/pedagogy/frames.py:81
 msgid "Gathering evidence"
 msgstr "Сбор доказательств"
 
-#: apps/pedagogy/frames.py:78
+#: apps/pedagogy/frames.py:82
 msgid ""
 "To gather scientific data through a virtual experiment or digital modelling."
-msgstr "Собрать научные данные с помощью виртуального эксперимента или цифрового моделирования."
+msgstr ""
+"Собрать научные данные с помощью виртуального эксперимента или цифрового "
+"моделирования."
 
-#: apps/pedagogy/frames.py:79
+#: apps/pedagogy/frames.py:83
 msgid "Research question"
 msgstr "Исследовательский вопрос"
 
-#: apps/pedagogy/frames.py:80
+#: apps/pedagogy/frames.py:84
 msgid "Initial hypothesis"
 msgstr "Исходная гипотеза"
 
-#: apps/pedagogy/frames.py:81
+#: apps/pedagogy/frames.py:85
 msgid "Content of the experiment"
 msgstr "Содержание опыта"
 
-#: apps/pedagogy/frames.py:82
+#: apps/pedagogy/frames.py:86
 msgid "Parameters to change"
 msgstr "Изменяемые параметры"
 
-#: apps/pedagogy/frames.py:83
+#: apps/pedagogy/frames.py:87
 msgid "Indicators to observe"
 msgstr "Наблюдаемые показатели"
 
-#: apps/pedagogy/frames.py:84
+#: apps/pedagogy/frames.py:88
 msgid "How the results are recorded"
 msgstr "Способ фиксации результатов"
 
-#: apps/pedagogy/frames.py:88
+#: apps/pedagogy/frames.py:92
 msgid "Explaining at three levels"
 msgstr "Объяснение на трёх уровнях"
 
-#: apps/pedagogy/frames.py:89
+#: apps/pedagogy/frames.py:93
 msgid ""
 "To explain a chemical phenomenon by connecting the macroscopic, "
 "submicroscopic and symbolic levels."
-msgstr "Объяснить химическое явление, связывая макро-, субмикро- и символьный уровни."
+msgstr ""
+"Объяснить химическое явление, связывая макро-, субмикро- и символьный уровни."
 
-#: apps/pedagogy/frames.py:90
+#: apps/pedagogy/frames.py:94
 msgid "Macroscopic explanation"
 msgstr "Макроскопическое объяснение"
 
-#: apps/pedagogy/frames.py:91
+#: apps/pedagogy/frames.py:95
 msgid "Submicroscopic model"
 msgstr "Субмикроскопическая модель"
 
-#: apps/pedagogy/frames.py:92
+#: apps/pedagogy/frames.py:96
 msgid "Chemical equation or formula"
 msgstr "Химическое уравнение или формула"
 
-#: apps/pedagogy/frames.py:96
+#: apps/pedagogy/frames.py:100
 msgid "Teaching the AI student"
 msgstr "Обучение ИИ-ученика"
 
-#: apps/pedagogy/frames.py:97
+#: apps/pedagogy/frames.py:101
 msgid ""
 "To improve the future teacher's skills of explaining chemistry knowledge and "
 "answering the student's questions."
-msgstr "Совершенствовать навыки будущего учителя объяснять химию и отвечать на вопросы ученика."
+msgstr ""
+"Совершенствовать навыки будущего учителя объяснять химию и отвечать на "
+"вопросы ученика."
 
-#: apps/pedagogy/frames.py:99
+#: apps/pedagogy/frames.py:103
 msgid "The chemical concept to explain"
 msgstr "Объясняемое химическое понятие"
 
-#: apps/pedagogy/frames.py:100
+#: apps/pedagogy/frames.py:104
 msgid "The teacher's authorial explanation"
 msgstr "Авторское объяснение учителя"
 
-#: apps/pedagogy/frames.py:101
+#: apps/pedagogy/frames.py:105 apps/pedagogy/frames.py:140
 msgid "Visual aids used"
 msgstr "Используемая наглядность"
 
-#: apps/pedagogy/frames.py:101
+#: apps/pedagogy/frames.py:105
 msgid "Length of the explanation, minutes"
 msgstr "Длительность объяснения, минут"
 
-#: apps/pedagogy/frames.py:105
+#: apps/pedagogy/frames.py:109
 msgid "Checking in a new situation"
 msgstr "Проверка в новой ситуации"
 
-#: apps/pedagogy/frames.py:106
+#: apps/pedagogy/frames.py:110
 msgid ""
 "To find out whether the student applies the knowledge gained in a new "
 "chemical situation."
 msgstr "Выяснить, применяет ли ученик знания в новой химической ситуации."
 
-#: apps/pedagogy/frames.py:107
+#: apps/pedagogy/frames.py:111
 msgid "New problem situation"
 msgstr "Новая проблемная ситуация"
 
-#: apps/pedagogy/frames.py:108
+#: apps/pedagogy/frames.py:112
 #: ui/templates/student/designer/partials/turn.html:16
 #: ui/templates/student/practice/step.html:89
 #: ui/templates/teacher/practice/detail.html:46
 msgid "Task"
 msgstr "Задание"
 
-#: apps/pedagogy/frames.py:109
+#: apps/pedagogy/frames.py:113
 msgid "Expected scientific result"
 msgstr "Ожидаемый научный результат"
 
-#: apps/pedagogy/frames.py:113
+#: apps/pedagogy/frames.py:117
 msgid "Peer assessment"
 msgstr "Взаимооценивание"
 
-#: apps/pedagogy/frames.py:114
+#: apps/pedagogy/frames.py:118
 msgid ""
 "To assess the results of the task by criteria and to give reasoned feedback."
-msgstr "Оценить результаты задания по критериям и дать аргументированную обратную связь."
+msgstr ""
+"Оценить результаты задания по критериям и дать аргументированную обратную "
+"связь."
 
-#: apps/pedagogy/frames.py:115
+#: apps/pedagogy/frames.py:119
 msgid "Assessment criteria"
 msgstr "Критерии оценивания"
 
-#: apps/pedagogy/frames.py:116
+#: apps/pedagogy/frames.py:120
 msgid "Descriptors"
 msgstr "Дескрипторы"
 
-#: apps/pedagogy/frames.py:117
+#: apps/pedagogy/frames.py:121
 msgid "Way of feedback"
 msgstr "Способ обратной связи"
 
-#: apps/pedagogy/frames.py:117
+#: apps/pedagogy/frames.py:121
 msgid "Assessment time, minutes"
 msgstr "Время оценивания, минут"
 
-#: apps/pedagogy/frames.py:121
+#: apps/pedagogy/frames.py:125
 msgid "Reflection"
 msgstr "Рефлексия"
 
-#: apps/pedagogy/frames.py:122
+#: apps/pedagogy/frames.py:126
 msgid ""
 "To find out what the student has learnt, the difficulties met and the "
 "directions of further development."
-msgstr "Выявить усвоенное учеником, встреченные трудности и направления дальнейшего развития."
+msgstr ""
+"Выявить усвоенное учеником, встреченные трудности и направления дальнейшего "
+"развития."
 
-#: apps/pedagogy/frames.py:123
+#: apps/pedagogy/frames.py:127
 msgid "Reflection questions"
 msgstr "Рефлексивные вопросы"
 
-#: apps/pedagogy/frames.py:124
+#: apps/pedagogy/frames.py:128
 msgid "Way of self-assessment"
 msgstr "Способ самооценивания"
 
-#: apps/pedagogy/frames.py:125
+#: apps/pedagogy/frames.py:129
 msgid "Summary of the lesson"
 msgstr "Итог урока"
+
+#: apps/pedagogy/frames.py:137
+msgid ""
+"To draw the student's attention to the lesson topic and to find out their "
+"prior knowledge."
+msgstr "Привлечь внимание ученика к теме и выявить исходные знания."
+
+#: apps/pedagogy/frames.py:138
+msgid "The teacher's opening words"
+msgstr "Вступительное слово учителя"
+
+#: apps/pedagogy/frames.py:141
+msgid "The action expected from the student"
+msgstr "Ожидаемое действие ученика"
+
+#: apps/pedagogy/frames.py:144
+msgid "Explaining new knowledge"
+msgstr "Объяснение нового знания"
+
+#: apps/pedagogy/frames.py:145
+msgid ""
+"To convey the chosen chemical concept scientifically correctly and clearly "
+"for the student."
+msgstr "Донести выбранное химическое понятие научно верно и понятно ученику."
+
+#: apps/pedagogy/frames.py:146
+msgid "Explanation of the chemical concept"
+msgstr "Объяснение химического понятия"
+
+#: apps/pedagogy/frames.py:147
+msgid "Chemical formula or equation"
+msgstr "Химическая формула или уравнение"
+
+#: apps/pedagogy/frames.py:148
+msgid "Model or diagram used"
+msgstr "Используемая модель или схема"
+
+#: apps/pedagogy/frames.py:149
+msgid "The main statements of the explanation"
+msgstr "Основные положения объяснения"
+
+#: apps/pedagogy/frames.py:152
+msgid "Applying knowledge"
+msgstr "Применение знаний"
+
+#: apps/pedagogy/frames.py:153
+msgid ""
+"To check how the student applies the explained knowledge while doing a task."
+msgstr "Проверить, как ученик применяет объяснённое знание при выполнении задания."
+
+#: apps/pedagogy/frames.py:154
+msgid "Authorial task"
+msgstr "Авторское задание"
+
+#: apps/pedagogy/frames.py:155
+msgid "Instructions for doing the task"
+msgstr "Инструкция к выполнению задания"
+
+#: apps/pedagogy/frames.py:156
+msgid "Expected correct answer"
+msgstr "Ожидаемый правильный ответ"
+
+#: apps/pedagogy/frames.py:157
+msgid "Checking criterion"
+msgstr "Критерий проверки"
+
+#: apps/pedagogy/frames.py:160
+msgid "Checking knowledge and summary"
+msgstr "Проверка знаний и итог"
+
+#: apps/pedagogy/frames.py:161
+msgid "To find out what the student has learnt and to give short feedback."
+msgstr "Выявить усвоенное учеником и дать краткую обратную связь."
+
+#: apps/pedagogy/frames.py:162
+msgid "Consolidation question"
+msgstr "Вопрос на закрепление"
+
+#: apps/pedagogy/frames.py:163
+msgid "Way of assessment"
+msgstr "Способ оценивания"
+
+#: apps/pedagogy/frames.py:164
+msgid "Concluding explanation"
+msgstr "Заключительное объяснение"
+
+#: apps/pedagogy/models/check.py:11
+msgid "The lesson aim is placed correctly"
+msgstr "Цель урока размещена верно"
+
+#: apps/pedagogy/models/check.py:12
+msgid "The explanation is put in the right stage"
+msgstr "Объяснение включено в нужный этап"
+
+#: apps/pedagogy/models/check.py:13
+msgid "The chemical formulas and equations are correct"
+msgstr "Химические формулы и уравнения верны"
+
+#: apps/pedagogy/models/check.py:14
+msgid "The task fits the stated learning aim"
+msgstr "Задание соответствует заявленной цели"
+
+#: apps/pedagogy/models/check.py:15
+msgid "The assessment criterion is connected with the task"
+msgstr "Критерий оценивания связан с заданием"
+
+#: apps/pedagogy/models/check.py:16
+msgid "The lesson stages fit the time"
+msgstr "Этапы урока соответствуют времени"
+
+#: apps/pedagogy/models/check.py:17
+msgid "The lesson structure is complete"
+msgstr "Структура урока полная"
+
+#: apps/pedagogy/models/check.py:21 apps/pedagogy/models/lesson.py:65
+#: apps/pedagogy/models/lesson.py:94 apps/pedagogy/models/lesson.py:127
+#: apps/pedagogy/models/lesson.py:156 apps/pedagogy/models/review.py:29
+#: apps/pedagogy/models/trial.py:15
+msgid "lesson"
+msgstr "урок"
+
+#: apps/pedagogy/models/check.py:23
+msgid "content checked"
+msgstr "проверенное содержание"
+
+#: apps/pedagogy/models/check.py:24
+msgid "verdicts by stage"
+msgstr "вердикты по этапам"
+
+#: apps/pedagogy/models/check.py:24
+msgid "{\"1\": \"ok\", \"2\": \"wrong\", …}"
+msgstr "{\"1\": \"ok\", \"2\": \"wrong\", …}"
+
+#: apps/pedagogy/models/check.py:25
+msgid "verdicts by criterion"
+msgstr "вердикты по критериям"
+
+#: apps/pedagogy/models/check.py:27
+msgid "checked at"
+msgstr "проверено"
+
+#: apps/pedagogy/models/check.py:31
+msgid "AI check"
+msgstr "Проверка ИИ"
+
+#: apps/pedagogy/models/check.py:32
+msgid "AI checks"
+msgstr "Проверки ИИ"
 
 #: apps/pedagogy/models/lesson.py:15
 msgid "Template copy"
@@ -5446,15 +5621,28 @@ msgstr "Копия шаблона"
 msgid "Digital research practice"
 msgstr "Цифровая исследовательская практика"
 
-#: apps/pedagogy/models/lesson.py:20 apps/pedagogy/models/lesson.py:110
+#: apps/pedagogy/models/lesson.py:17 apps/programme/models/programme.py:42
+#: ui/templates/student/icpai_results.html:120
+#: ui/templates/student/micro/dialog.html:9
+#: ui/templates/student/micro/dialog.html:71
+#: ui/templates/student/micro/editor.html:10
+#: ui/templates/student/micro/protocol.html:14
+#: ui/templates/student/micro/trial_start.html:7
+#: ui/templates/student/micro/trial_start.html:12
+#: ui/templates/teacher/practice/queue.html:32
+msgid "Microlesson"
+msgstr "Микроурок"
+
+#: apps/pedagogy/models/lesson.py:21 apps/pedagogy/models/lesson.py:123
+#: ui/templates/student/micro/partials/entry.html:28
 msgid "Assembled"
 msgstr "Собран"
 
-#: apps/pedagogy/models/lesson.py:21 apps/pedagogy/models/lesson.py:111
+#: apps/pedagogy/models/lesson.py:22 apps/pedagogy/models/lesson.py:124
 msgid "Tried out"
 msgstr "Апробирован"
 
-#: apps/pedagogy/models/lesson.py:22 apps/pedagogy/models/lesson.py:112
+#: apps/pedagogy/models/lesson.py:23 apps/pedagogy/models/lesson.py:125
 #: ui/templates/student/designer/assemble.html:71
 #: ui/templates/student/designer/editor.html:155
 #: ui/templates/student/designer/partials/flow.html:11
@@ -5462,212 +5650,245 @@ msgstr "Апробирован"
 msgid "Final version"
 msgstr "Итоговая версия"
 
-#: apps/pedagogy/models/lesson.py:28
+#: apps/pedagogy/models/lesson.py:29
 msgid "frame"
 msgstr "фрейм"
 
-#: apps/pedagogy/models/lesson.py:28 apps/pedagogy/models/lesson.py:83
+#: apps/pedagogy/models/lesson.py:29 apps/pedagogy/models/lesson.py:96
 msgid "pedagogy/frames.py"
 msgstr "pedagogy/frames.py"
 
-#: apps/pedagogy/models/lesson.py:35 apps/pedagogy/models/template.py:40
+#: apps/pedagogy/models/lesson.py:36 apps/pedagogy/models/template.py:40
 msgid "template"
 msgstr "шаблон"
 
-#: apps/pedagogy/models/lesson.py:43
+#: apps/pedagogy/models/lesson.py:44
 msgid "source lesson"
 msgstr "исходный урок"
 
-#: apps/pedagogy/models/lesson.py:44
+#: apps/pedagogy/models/lesson.py:45
 msgid ""
 "Section 5: the student's section 4 lesson, shown beside the sheet (not "
 "copied)"
-msgstr "Раздел 5: урок студента из раздела 4, показывается рядом с листом (не копируется)"
+msgstr ""
+"Раздел 5: урок студента из раздела 4, показывается рядом с листом (не "
+"копируется)"
 
-#: apps/pedagogy/models/lesson.py:47 apps/pedagogy/models/template.py:14
+#: apps/pedagogy/models/lesson.py:48 apps/pedagogy/models/template.py:14
 msgid "lesson topic"
 msgstr "тема урока"
 
-#: apps/pedagogy/models/lesson.py:48 apps/pedagogy/models/template.py:16
-#: apps/pedagogy/models/trial.py:26
+#: apps/pedagogy/models/lesson.py:49 apps/pedagogy/models/template.py:16
+#: apps/pedagogy/models/trial.py:27
 msgid "grade"
 msgstr "класс"
 
-#: apps/pedagogy/models/lesson.py:49 apps/pedagogy/models/template.py:17
+#: apps/pedagogy/models/lesson.py:50 apps/pedagogy/models/template.py:17
 msgid "duration, min"
 msgstr "длительность, мин"
 
-#: apps/pedagogy/models/lesson.py:50 apps/pedagogy/models/template.py:19
+#: apps/pedagogy/models/lesson.py:51 apps/pedagogy/models/template.py:19
 msgid "lesson aim"
 msgstr "цель урока"
 
-#: apps/pedagogy/models/lesson.py:51 apps/pedagogy/models/template.py:21
+#: apps/pedagogy/models/lesson.py:52 apps/pedagogy/models/template.py:21
 msgid "expected results"
 msgstr "ожидаемые результаты"
 
-#: apps/pedagogy/models/lesson.py:51 apps/pedagogy/models/template.py:20
+#: apps/pedagogy/models/lesson.py:52 apps/pedagogy/models/template.py:20
 #: apps/pedagogy/models/template.py:21
 msgid "HTML"
 msgstr "HTML"
 
-#: apps/pedagogy/models/lesson.py:52
+#: apps/pedagogy/models/lesson.py:53
 msgid "authorial method used"
 msgstr "используемый авторский метод"
 
-#: apps/pedagogy/models/lesson.py:53
+#: apps/pedagogy/models/lesson.py:54
 msgid "digital tools used"
 msgstr "используемые цифровые инструменты"
 
-#: apps/pedagogy/models/lesson.py:58 apps/pedagogy/models/lesson.py:81
-#: apps/pedagogy/models/lesson.py:114 apps/pedagogy/models/lesson.py:143
-#: apps/pedagogy/models/review.py:21 apps/pedagogy/models/trial.py:15
-msgid "lesson"
-msgstr "урок"
+#: apps/pedagogy/models/lesson.py:56
+msgid "other details"
+msgstr "прочие сведения"
 
 #: apps/pedagogy/models/lesson.py:59
+msgid "Section 6: education programme, study year, source part"
+msgstr "Раздел 6: образовательная программа, курс, исходная часть"
+
+#: apps/pedagogy/models/lesson.py:66
 msgid "lessons"
 msgstr "уроки"
 
-#: apps/pedagogy/models/lesson.py:83
+#: apps/pedagogy/models/lesson.py:96
 msgid "frame stage"
 msgstr "этап фрейма"
 
-#: apps/pedagogy/models/lesson.py:85 apps/pedagogy/models/template.py:44
+#: apps/pedagogy/models/lesson.py:98 apps/pedagogy/models/template.py:44
 msgid "minutes"
 msgstr "минуты"
 
-#: apps/pedagogy/models/lesson.py:86
+#: apps/pedagogy/models/lesson.py:99
 msgid "content"
 msgstr "содержание"
 
-#: apps/pedagogy/models/lesson.py:87
+#: apps/pedagogy/models/lesson.py:100
 msgid "original content"
 msgstr "исходное содержание"
 
-#: apps/pedagogy/models/lesson.py:88
+#: apps/pedagogy/models/lesson.py:101
 msgid "cleared at"
 msgstr "очищено"
 
-#: apps/pedagogy/models/lesson.py:89
+#: apps/pedagogy/models/lesson.py:102
 msgid "redesigned"
 msgstr "переработан"
 
-#: apps/pedagogy/models/lesson.py:89
+#: apps/pedagogy/models/lesson.py:102
 msgid "The student wrote this stage anew"
 msgstr "Студент написал этап заново"
 
-#: apps/pedagogy/models/lesson.py:94
+#: apps/pedagogy/models/lesson.py:107
 msgid "lesson stage"
 msgstr "этап урока"
 
-#: apps/pedagogy/models/lesson.py:95
+#: apps/pedagogy/models/lesson.py:108
 msgid "lesson stages"
 msgstr "этапы урока"
 
-#: apps/pedagogy/models/lesson.py:116 apps/practice/models/submission.py:142
+#: apps/pedagogy/models/lesson.py:129 apps/practice/models/submission.py:142
 msgid "reason"
 msgstr "причина"
 
-#: apps/pedagogy/models/lesson.py:117
+#: apps/pedagogy/models/lesson.py:130
 msgid "snapshot"
 msgstr "снимок"
 
-#: apps/pedagogy/models/lesson.py:122
+#: apps/pedagogy/models/lesson.py:135
 msgid "lesson version"
 msgstr "версия урока"
 
-#: apps/pedagogy/models/lesson.py:123
+#: apps/pedagogy/models/lesson.py:136
 msgid "lesson versions"
 msgstr "версии урока"
 
-#: apps/pedagogy/models/lesson.py:134
+#: apps/pedagogy/models/lesson.py:147
 msgid "Lesson created"
 msgstr "Урок создан"
 
-#: apps/pedagogy/models/lesson.py:135
+#: apps/pedagogy/models/lesson.py:148
 msgid "Stage content cleared"
 msgstr "Содержание этапа очищено"
 
-#: apps/pedagogy/models/lesson.py:136
+#: apps/pedagogy/models/lesson.py:149
 msgid "Original content restored"
 msgstr "Исходное содержание восстановлено"
 
-#: apps/pedagogy/models/lesson.py:137
+#: apps/pedagogy/models/lesson.py:150
 msgid "Stage saved"
 msgstr "Этап сохранён"
 
-#: apps/pedagogy/models/lesson.py:138
+#: apps/pedagogy/models/lesson.py:151
 msgid "AI suggestion added to the editor"
 msgstr "Предложение ИИ добавлено в редактор"
 
-#: apps/pedagogy/models/lesson.py:139
+#: apps/pedagogy/models/lesson.py:152
 msgid "Lesson details saved"
 msgstr "Сведения об уроке сохранены"
 
-#: apps/pedagogy/models/lesson.py:140
+#: apps/pedagogy/models/lesson.py:153
 msgid "Lesson assembled"
 msgstr "Урок собран"
 
-#: apps/pedagogy/models/lesson.py:141
+#: apps/pedagogy/models/lesson.py:154
 msgid "Final version assembled"
 msgstr "Итоговая версия собрана"
 
-#: apps/pedagogy/models/lesson.py:147 apps/programme/models/progress.py:105
+#: apps/pedagogy/models/lesson.py:160 apps/programme/models/progress.py:105
 #: apps/progress/models/progress.py:161
 msgid "action"
 msgstr "действие"
 
-#: apps/pedagogy/models/lesson.py:148
+#: apps/pedagogy/models/lesson.py:161
 msgid "data"
 msgstr "данные"
 
-#: apps/pedagogy/models/lesson.py:153
+#: apps/pedagogy/models/lesson.py:166
 msgid "lesson event"
 msgstr "событие урока"
 
-#: apps/pedagogy/models/lesson.py:154
+#: apps/pedagogy/models/lesson.py:167
 msgid "lesson events"
 msgstr "события урока"
 
-#: apps/pedagogy/models/review.py:12
+#: apps/pedagogy/models/review.py:13
 msgid ""
 "Organising the structure of the authorial lesson correctly from the "
 "scientific and methodical side"
 msgstr "Научно-методически верная организация структуры авторского урока"
 
-#: apps/pedagogy/models/review.py:13
+#: apps/pedagogy/models/review.py:14
 msgid "Designing research tasks and virtual experiments"
 msgstr "Проектирование исследовательских заданий и виртуальных опытов"
 
-#: apps/pedagogy/models/review.py:14
+#: apps/pedagogy/models/review.py:15
 msgid "Analysing the AI student's answers and correcting scientific errors"
 msgstr "Анализ ответов ИИ-ученика и исправление научных ошибок"
 
-#: apps/pedagogy/models/review.py:15
+#: apps/pedagogy/models/review.py:16
 msgid "Managing the stages of conducting the lesson systematically"
 msgstr "Системное управление этапами проведения урока"
 
-#: apps/pedagogy/models/review.py:16
+#: apps/pedagogy/models/review.py:17
 msgid "Improving the authorial lesson and reflection"
 msgstr "Совершенствование авторского урока и рефлексия"
 
-#: apps/pedagogy/models/review.py:26
+#: apps/pedagogy/models/review.py:20
+msgid "Organising the lesson structure correctly"
+msgstr "Правильная организация структуры урока"
+
+#: apps/pedagogy/models/review.py:21
+msgid "Explaining the chemistry content scientifically correctly"
+msgstr "Научно верное объяснение химического содержания"
+
+#: apps/pedagogy/models/review.py:22
+msgid "Asking the student effective questions"
+msgstr "Эффективные вопросы ученику"
+
+#: apps/pedagogy/models/review.py:23
+msgid "Acting pedagogically according to the student's answer"
+msgstr "Педагогическое действие по ответу ученика"
+
+#: apps/pedagogy/models/review.py:24
+msgid "Keeping to the time and summing up the microlesson"
+msgstr "Соблюдение времени и подведение итогов микроурока"
+
+#: apps/pedagogy/models/review.py:37 apps/pedagogy/models/trial.py:51
+#: apps/pedagogy/models/trial.py:97
+msgid "trial"
+msgstr "апробация"
+
+#: apps/pedagogy/models/review.py:38
+msgid "Section 6: the trial graded"
+msgstr "Раздел 6: оцениваемая апробация"
+
+#: apps/pedagogy/models/review.py:43
 msgid "points by criterion"
 msgstr "баллы по критериям"
 
-#: apps/pedagogy/models/review.py:26
+#: apps/pedagogy/models/review.py:43
 msgid "{\"1\": 2, \"2\": 1, …}"
 msgstr "{\"1\": 2, \"2\": 1, …}"
 
-#: apps/pedagogy/models/review.py:27
+#: apps/pedagogy/models/review.py:44
 msgid "total"
 msgstr "итого"
 
-#: apps/pedagogy/models/review.py:33
+#: apps/pedagogy/models/review.py:50
 msgid "teacher's grade"
 msgstr "оценка учителя"
 
-#: apps/pedagogy/models/review.py:34
+#: apps/pedagogy/models/review.py:51
 msgid "teachers' grades"
 msgstr "оценки учителей"
 
@@ -5720,16 +5941,19 @@ msgid "template stages"
 msgstr "этапы шаблона"
 
 #: apps/pedagogy/models/trial.py:10 ui/templates/student/designer/trial.html:46
+#: ui/templates/student/micro/trial_start.html:38
 #: ui/templates/student/practice/trial_start.html:41
 msgid "High level"
 msgstr "Высокий уровень"
 
 #: apps/pedagogy/models/trial.py:11 ui/templates/student/designer/trial.html:46
+#: ui/templates/student/micro/trial_start.html:38
 #: ui/templates/student/practice/trial_start.html:41
 msgid "Medium level"
 msgstr "Средний уровень"
 
 #: apps/pedagogy/models/trial.py:12 ui/templates/student/designer/trial.html:46
+#: ui/templates/student/micro/trial_start.html:38
 #: ui/templates/student/practice/trial_start.html:41
 msgid "Low level"
 msgstr "Низкий уровень"
@@ -5746,111 +5970,159 @@ msgstr "Собранный урок, этапы по запросу"
 msgid "Conducting the lesson stage by stage"
 msgstr "Проведение урока по этапам"
 
-#: apps/pedagogy/models/trial.py:26
+#: apps/pedagogy/models/trial.py:24
+msgid "A microlesson in dialogue"
+msgstr "Микроурок в диалоге"
+
+#: apps/pedagogy/models/trial.py:27
 msgid "Section 5: the class, 7–11"
 msgstr "Раздел 5: класс, 7–11"
 
-#: apps/pedagogy/models/trial.py:27
+#: apps/pedagogy/models/trial.py:28
 msgid "AI student's level"
 msgstr "Уровень ИИ-ученика"
 
-#: apps/pedagogy/models/trial.py:33
+#: apps/pedagogy/models/trial.py:34
 msgid "trial with the AI student"
 msgstr "апробация с ИИ-учеником"
 
-#: apps/pedagogy/models/trial.py:34
+#: apps/pedagogy/models/trial.py:35
 msgid "trials with the AI student"
 msgstr "апробации с ИИ-учеником"
 
-#: apps/pedagogy/models/trial.py:46 ui/templates/assessments/result.html:50
+#: apps/pedagogy/models/trial.py:47 apps/pedagogy/models/trial.py:92
+#: ui/templates/assessments/result.html:50
 #: ui/templates/student/practice/results.html:58
 #: ui/templates/teacher/practice/detail.html:36
 msgid "Correct"
 msgstr "Верно"
 
-#: apps/pedagogy/models/trial.py:47
+#: apps/pedagogy/models/trial.py:48 apps/pedagogy/models/trial.py:93
 #: ui/templates/student/practice/results.html:59
 #: ui/templates/teacher/practice/detail.html:36
 msgid "Partly correct"
 msgstr "Частично верно"
 
-#: apps/pedagogy/models/trial.py:48 ui/templates/assessments/result.html:50
+#: apps/pedagogy/models/trial.py:49 apps/pedagogy/models/trial.py:94
+#: ui/templates/assessments/result.html:50
 #: ui/templates/student/practice/results.html:60
 #: ui/templates/teacher/practice/detail.html:36
 msgid "Wrong"
 msgstr "Неверно"
 
-#: apps/pedagogy/models/trial.py:50
-msgid "trial"
-msgstr "апробация"
-
-#: apps/pedagogy/models/trial.py:52
+#: apps/pedagogy/models/trial.py:53
 msgid "stage title"
 msgstr "название этапа"
 
-#: apps/pedagogy/models/trial.py:53 apps/practice/models/task.py:54
+#: apps/pedagogy/models/trial.py:54 apps/practice/models/task.py:54
 msgid "task"
 msgstr "задание"
 
-#: apps/pedagogy/models/trial.py:53
+#: apps/pedagogy/models/trial.py:54
 msgid "HTML, the stage as assembled"
 msgstr "HTML, этап в собранном виде"
 
-#: apps/pedagogy/models/trial.py:54 apps/pedagogy/models/trial.py:73
+#: apps/pedagogy/models/trial.py:55 apps/pedagogy/models/trial.py:74
 msgid "AI student's answer"
 msgstr "Ответ ИИ-ученика"
 
-#: apps/pedagogy/models/trial.py:55
+#: apps/pedagogy/models/trial.py:56 apps/pedagogy/models/trial.py:103
 msgid "answer type"
 msgstr "тип ответа"
 
-#: apps/pedagogy/models/trial.py:56
+#: apps/pedagogy/models/trial.py:57
 msgid "possible error"
 msgstr "возможная ошибка"
 
-#: apps/pedagogy/models/trial.py:57
+#: apps/pedagogy/models/trial.py:58
 msgid "difficulty"
 msgstr "трудность"
 
-#: apps/pedagogy/models/trial.py:58
+#: apps/pedagogy/models/trial.py:59
 msgid "methodical suggestion"
 msgstr "методическая рекомендация"
 
-#: apps/pedagogy/models/trial.py:61
+#: apps/pedagogy/models/trial.py:62
 msgid "teacher's explanation"
 msgstr "объяснение учителя"
 
-#: apps/pedagogy/models/trial.py:62
+#: apps/pedagogy/models/trial.py:63
 msgid "time set, minutes"
 msgstr "заданное время, минут"
 
-#: apps/pedagogy/models/trial.py:63
+#: apps/pedagogy/models/trial.py:64
 msgid "the student's explanation"
 msgstr "объяснение студента"
 
-#: apps/pedagogy/models/trial.py:64
+#: apps/pedagogy/models/trial.py:65
 msgid "follow-up question"
 msgstr "дополнительный вопрос"
 
-#: apps/pedagogy/models/trial.py:65
+#: apps/pedagogy/models/trial.py:66
 msgid "pedagogical correction made"
 msgstr "внесённая педагогическая коррекция"
 
-#: apps/pedagogy/models/trial.py:66
+#: apps/pedagogy/models/trial.py:67
 msgid "improved task"
 msgstr "улучшенное задание"
 
-#: apps/pedagogy/models/trial.py:67 apps/progress/models/progress.py:38
+#: apps/pedagogy/models/trial.py:68 apps/progress/models/progress.py:38
 msgid "time spent, s"
 msgstr "затрачено времени, с"
 
-#: apps/pedagogy/models/trial.py:68
+#: apps/pedagogy/models/trial.py:69
 msgid "analysed at"
 msgstr "проанализировано"
 
-#: apps/pedagogy/models/trial.py:74
+#: apps/pedagogy/models/trial.py:75
 msgid "AI student's answers"
 msgstr "Ответы ИИ-ученика"
+
+#: apps/pedagogy/models/trial.py:88
+#: ui/templates/teacher/content/question.html:3
+#: ui/templates/teacher/content/quiz.html:20
+msgid "Question"
+msgstr "Вопрос"
+
+#: apps/pedagogy/models/trial.py:89
+msgid "Pedagogical action"
+msgstr "Педагогическое действие"
+
+#: apps/pedagogy/models/trial.py:95
+msgid "Not an answer"
+msgstr "Не ответ"
+
+#: apps/pedagogy/models/trial.py:99
+msgid "By the timer: 1 (0–2 min) … 4 (8–10 min)"
+msgstr "По таймеру: 1 (0–2 мин) … 4 (8–10 мин)"
+
+#: apps/pedagogy/models/trial.py:101
+msgid "the teacher's message"
+msgstr "сообщение учителя"
+
+#: apps/pedagogy/models/trial.py:102
+msgid "the AI student's reply"
+msgstr "ответ ИИ-ученика"
+
+#: apps/pedagogy/models/trial.py:105
+msgid "time from the start, s"
+msgstr "время от начала, с"
+
+#: apps/pedagogy/models/trial.py:105
+msgid "The AI student's thinking not counted"
+msgstr "Время ответа ИИ-ученика не учитывается"
+
+#: apps/pedagogy/models/trial.py:107
+msgid "the AI's answer time, ms"
+msgstr "время ответа ИИ, мс"
+
+#: apps/pedagogy/models/trial.py:113
+msgid "microlesson turn"
+msgstr "реплика микроурока"
+
+#: apps/pedagogy/models/trial.py:114
+msgid "microlesson turns"
+msgstr "реплики микроурока"
 
 #: apps/practice/admin.py:49 apps/practice/models/task.py:73
 msgid "answer fields"
@@ -6031,7 +6303,7 @@ msgid "Being graded"
 msgstr "Оценивается"
 
 #: apps/practice/models/submission.py:16
-#: ui/templates/teacher/practice/queue.html:18
+#: ui/templates/teacher/practice/queue.html:25
 msgid "Graded"
 msgstr "Оценено"
 
@@ -6448,10 +6720,6 @@ msgstr "Видео"
 msgid "Lesson design constructor"
 msgstr "Конструктор педагогического проектирования"
 
-#: apps/programme/models/programme.py:42
-msgid "Microlesson"
-msgstr "Микроурок"
-
 #: apps/programme/models/programme.py:43
 msgid "Portfolio"
 msgstr "Портфолио"
@@ -6617,16 +6885,16 @@ msgstr "просмотр видео"
 msgid "This diagnostic test is not open."
 msgstr "Этот диагностический тест не открыт."
 
-#: apps/programme/tests.py:238 ui/templates/student/dashboard.html:68
+#: apps/programme/tests.py:239 ui/templates/student/dashboard.html:68
 #: ui/templates/teacher/dashboard.html:27 ui/templates/teacher/student.html:35
 msgid "Key figures"
 msgstr "Показатели"
 
-#: apps/programme/tests.py:272 ui/templates/student/section.html:130
+#: apps/programme/tests.py:273 ui/templates/student/section.html:133
 msgid "The section is in development"
 msgstr "Раздел в разработке"
 
-#: apps/programme/tests.py:578 ui/templates/student/section.html:117
+#: apps/programme/tests.py:579 ui/templates/student/section.html:117
 msgid "The video is being prepared"
 msgstr "Видео готовится"
 
@@ -6975,7 +7243,8 @@ msgstr[3] "%(a)s / %(b)s опытов"
 #: ui/templates/teacher/dashboard.html:80 ui/templates/teacher/group.html:79
 #: ui/templates/teacher/group.html:124 ui/templates/teacher/group.html:208
 #: ui/templates/teacher/partials/groups_table.html:15
-#: ui/templates/teacher/practice/queue.html:33
+#: ui/templates/teacher/practice/queue.html:41
+#: ui/templates/teacher/practice/queue.html:55
 #: ui/templates/teacher/student.html:82 ui/templates/teacher/students.html:32
 msgid "Open"
 msgstr "Открыть"
@@ -7092,7 +7361,7 @@ msgstr "Проанализировать соответствие времени
 msgid "Suggest alternative teaching methods"
 msgstr "Предложить альтернативные методы"
 
-#: apps/student/designer.py:126 apps/student/practice.py:151
+#: apps/student/designer.py:126 apps/student/practice.py:153
 msgid "AI-assistant"
 msgstr "ИИ-ассистент"
 
@@ -7100,22 +7369,25 @@ msgstr "ИИ-ассистент"
 msgid "How can I help?"
 msgstr "Чем помочь?"
 
-#: apps/student/designer.py:128 apps/student/practice.py:153
+#: apps/student/designer.py:128 apps/student/practice.py:155
 msgid "Ask about this stage…"
 msgstr "Вопрос об этом этапе…"
 
-#: apps/student/designer.py:162 apps/student/practice.py:181
+#: apps/student/designer.py:162 apps/student/micro.py:108
+#: apps/student/practice.py:183
 msgid "Saving…"
 msgstr "Сохранение…"
 
 #: apps/student/designer.py:163 apps/student/designer.py:308
-#: apps/student/practice.py:127 apps/student/practice.py:182
+#: apps/student/micro.py:108 apps/student/micro.py:124
+#: apps/student/practice.py:129 apps/student/practice.py:184
 #: ui/templates/student/designer/editor.html:120
 #: ui/templates/student/practice/stage.html:51
 msgid "Saved"
 msgstr "Сохранено"
 
-#: apps/student/designer.py:164 apps/student/practice.py:183
+#: apps/student/designer.py:164 apps/student/micro.py:108
+#: apps/student/practice.py:185
 msgid "Not saved — check the connection"
 msgstr "Не сохранено — проверьте соединение"
 
@@ -7123,12 +7395,13 @@ msgstr "Не сохранено — проверьте соединение"
 msgid "To write the stage anew, first clear its content."
 msgstr "Чтобы написать этап заново, сначала очистите его содержание."
 
-#: apps/student/designer.py:166 apps/student/practice.py:185
+#: apps/student/designer.py:166 apps/student/practice.py:187
 msgid "The suggestion is in the editor — rework it in your own words."
 msgstr "Предложение в редакторе — переработайте его своими словами."
 
 #: apps/student/designer.py:182 apps/student/designer.py:193
-#: apps/student/designer.py:292 apps/student/practice.py:125
+#: apps/student/designer.py:292 apps/student/micro.py:122
+#: apps/student/micro.py:181 apps/student/practice.py:127
 msgid "The final version cannot be changed."
 msgstr "Итоговую версию изменить нельзя."
 
@@ -7152,6 +7425,37 @@ msgstr "Сначала апробируйте урок с ИИ-учеником.
 #: apps/student/designer.py:484
 msgid "The final version is assembled and saved to your portfolio."
 msgstr "Итоговая версия собрана и сохранена в портфолио."
+
+#: apps/student/micro.py:91
+msgid "Choose a part of your lesson."
+msgstr "Выберите часть урока."
+
+#: apps/student/micro.py:177 ui/templates/ai/partials/thread.html:44
+#: ui/templates/student/designer/partials/turn.html:49
+#: ui/templates/student/micro/partials/messages.html:32
+#: ui/templates/student/practice/step.html:39
+msgid "Today's AI requests are used up. They renew tomorrow."
+msgstr "Запросы к ИИ на сегодня закончились. Завтра они обновятся."
+
+#: apps/student/micro.py:179 ui/templates/ai/partials/thread.html:44
+msgid "The AI assistant did not answer this time. Try again in a minute."
+msgstr "ИИ-ассистент в этот раз не ответил. Попробуйте через минуту."
+
+#: apps/student/micro.py:200 apps/student/practice.py:266
+msgid "Choose the class and the AI student's level."
+msgstr "Выберите класс и уровень ИИ-ученика."
+
+#: apps/student/micro.py:202 ui/templates/student/micro/trial_start.html:15
+msgid "First every stage must be marked correct by the AI assistant's check."
+msgstr "Сначала проверка ИИ-ассистента должна отметить все этапы как верные."
+
+#: apps/student/micro.py:303
+msgid "First try the microlesson out with the AI student."
+msgstr "Сначала апробируйте микроурок с ИИ-учеником."
+
+#: apps/student/micro.py:306
+msgid "The microlesson is assembled into your professional trial portfolio."
+msgstr "Микроурок собран в портфолио профессиональной апробации."
 
 #: apps/student/practice.py:33
 msgid "The AI assistant's feedback"
@@ -7185,41 +7489,37 @@ msgstr "Достаточность времени этапа"
 msgid "Make the assessment criteria and descriptors precise"
 msgstr "Уточнить критерии и дескрипторы"
 
-#: apps/student/practice.py:152
+#: apps/student/practice.py:154
 msgid "I analyse your task and help to improve it."
 msgstr "Я анализирую ваше задание и помогаю его улучшить."
 
-#: apps/student/practice.py:264
-msgid "Choose the class and the AI student's level."
-msgstr "Выберите класс и уровень ИИ-ученика."
-
-#: apps/student/practice.py:266
+#: apps/student/practice.py:268
 #: ui/templates/student/practice/trial_start.html:19
 msgid "Fill in the sheet first — see what is missing."
 msgstr "Сначала заполните лист — посмотрите, чего не хватает."
 
-#: apps/student/practice.py:398 ui/templates/student/practice/results.html:94
+#: apps/student/practice.py:400 ui/templates/student/practice/results.html:94
 msgid "First analyse the AI student's answer at every stage."
 msgstr "Сначала проанализируйте ответ ИИ-ученика на каждом этапе."
 
-#: apps/student/practice.py:401
+#: apps/student/practice.py:403
 msgid ""
 "The trial is finished; the results are gathered into your research portfolio."
 msgstr "Апробация завершена; результаты собраны в исследовательское портфолио."
 
-#: apps/student/sections.py:233
+#: apps/student/sections.py:236
 msgid "Explain the section"
 msgstr "Объяснить раздел"
 
-#: apps/student/sections.py:234
+#: apps/student/sections.py:237
 msgid "Let the AI explain"
 msgstr "Пусть объяснит ИИ"
 
-#: apps/student/sections.py:235
+#: apps/student/sections.py:238
 msgid "The AI assistant of the ICPAI programme"
 msgstr "ИИ-ассистент программы ICPAI"
 
-#: apps/student/sections.py:236
+#: apps/student/sections.py:239
 msgid "Ask about this section…"
 msgstr "Вопрос об этом разделе…"
 
@@ -7439,7 +7739,8 @@ msgstr "ИИ ещё оценивает эту работу. Повторить �
 msgid "The work is returned to the student; the attempt is given back."
 msgstr "Работа возвращена студенту; попытка возвращена."
 
-#: apps/teacher/grading.py:133 apps/teacher/practice.py:50
+#: apps/teacher/grading.py:133 apps/teacher/practice.py:76
+#: apps/teacher/practice.py:110
 msgid "The grade is saved."
 msgstr "Оценка сохранена."
 
@@ -7484,7 +7785,7 @@ msgstr "Ещё не начал"
 msgid "experiment %(n)s"
 msgstr "опыт %(n)s"
 
-#: apps/teacher/practice.py:48
+#: apps/teacher/practice.py:74 apps/teacher/practice.py:108
 msgid "Give every criterion 0, 1 or 2 points."
 msgstr "Поставьте по каждому критерию 0, 1 или 2 балла."
 
@@ -8056,6 +8357,7 @@ msgstr "Вопрос ИИ-ассистенту"
 #: ui/templates/ai/partials/panel.html:64
 #: ui/templates/feedback/partials/thread.html:18
 #: ui/templates/feedback/partials/thread.html:29
+#: ui/templates/student/micro/dialog.html:65
 msgid "Send"
 msgstr "Отправить"
 
@@ -8079,22 +8381,13 @@ msgstr ""
 "Задайте вопрос или выберите быстрый запрос — ассистент направляет, работа "
 "остаётся вашей."
 
-#: ui/templates/ai/partials/thread.html:44
-#: ui/templates/student/designer/partials/turn.html:49
-#: ui/templates/student/practice/step.html:39
-msgid "Today's AI requests are used up. They renew tomorrow."
-msgstr "Запросы к ИИ на сегодня закончились. Завтра они обновятся."
-
-#: ui/templates/ai/partials/thread.html:44
-msgid "The AI assistant did not answer this time. Try again in a minute."
-msgstr "ИИ-ассистент в этот раз не ответил. Попробуйте через минуту."
-
 #: ui/templates/ai/partials/thread.html:49
 msgid "AI can be wrong — check the chemistry yourself."
 msgstr "ИИ может ошибаться — проверяйте химию сами."
 
 #: ui/templates/ai/partials/thread.html:50
 #: ui/templates/student/designer/trial.html:95
+#: ui/templates/student/micro/editor.html:145
 #: ui/templates/student/practice/step.html:71
 #, python-format
 msgid "%(n)s requests left today"
@@ -8105,6 +8398,7 @@ msgstr "Сегодня осталось запросов: %(n)s"
 #: ui/templates/student/designer/editor.html:20
 #: ui/templates/student/designer/template.html:13
 #: ui/templates/student/diagnostic.html:14
+#: ui/templates/student/micro/editor.html:15
 #: ui/templates/student/practice/sheet.html:14
 msgid "Breadcrumbs"
 msgstr "Навигационная цепочка"
@@ -8457,6 +8751,7 @@ msgstr ""
 "учебных достижений обучающихся, а также самостоятельной рефлексии."
 
 #: ui/templates/core/about.html:178 ui/templates/student/diagnostic.html:63
+#: ui/templates/student/micro/editor.html:92
 #: ui/templates/student/practice/report_pdf.html:38
 #: ui/templates/student/practice/stage.html:32
 #: ui/templates/student/practice/step.html:169
@@ -8981,13 +9276,10 @@ msgid "Practice works"
 msgstr "Практические работы"
 
 #: ui/templates/partials/shell/sidebar_teacher.html:20
-#: ui/templates/teacher/practice/detail.html:7
-#: ui/templates/teacher/practice/detail.html:8
-#: ui/templates/teacher/practice/detail.html:12
-#: ui/templates/teacher/practice/queue.html:6
-#: ui/templates/teacher/practice/queue.html:8
-msgid "Section 5 practices"
-msgstr "Практики раздела 5"
+#: ui/templates/teacher/practice/queue.html:7
+#: ui/templates/teacher/practice/queue.html:9
+msgid "Sections 5–6 works"
+msgstr "Работы разделов 5–6"
 
 #: ui/templates/partials/shell/sidebar_teacher.html:21
 #: ui/templates/research/dashboard.html:4
@@ -9815,6 +10107,8 @@ msgstr "Здесь появятся результаты тестов, опыт�
 
 #: ui/templates/student/dashboard.html:153
 #: ui/templates/student/dashboard.html:162 ui/templates/student/home.html:75
+#: ui/templates/student/micro/protocol.html:67
+#: ui/templates/student/micro/report_pdf.html:35
 #: ui/templates/student/practice/report_pdf.html:50
 #: ui/templates/student/practice/results.html:45
 #: ui/templates/student/stages/practice.html:20
@@ -9851,6 +10145,10 @@ msgstr "Собрать урок"
 #: ui/templates/student/designer/template.html:10
 #: ui/templates/student/designer/trial.html:10
 #: ui/templates/student/diagnostic.html:10
+#: ui/templates/student/micro/dialog.html:10
+#: ui/templates/student/micro/editor.html:11
+#: ui/templates/student/micro/protocol.html:10
+#: ui/templates/student/micro/trial_start.html:8
 #: ui/templates/student/practice/results.html:10
 #: ui/templates/student/practice/sheet.html:10
 #: ui/templates/student/practice/stage.html:10
@@ -9902,6 +10200,7 @@ msgid "Expected results of the lesson"
 msgstr "Ожидаемые результаты урока"
 
 #: ui/templates/student/designer/assemble.html:34
+#: ui/templates/student/micro/editor.html:57
 #: ui/templates/student/practice/sheet.html:58
 #: ui/templates/student/profile.html:38
 #: ui/templates/teacher/content/course_form.html:39
@@ -10101,7 +10400,7 @@ msgid "Restore the original"
 msgstr "Вернуть исходное"
 
 #: ui/templates/student/designer/editor.html:149
-#: ui/templates/teacher/practice/queue.html:24
+#: ui/templates/teacher/practice/queue.html:46
 msgid "Lesson"
 msgstr "Урок"
 
@@ -10121,11 +10420,18 @@ msgstr "Шаги проектирования урока"
 #: ui/templates/student/designer/partials/flow.html:11
 #: ui/templates/student/designer/results.html:21
 #: ui/templates/student/designer/trial.html:66
+#: ui/templates/student/micro/dialog.html:21
+#: ui/templates/student/micro/partials/messages.html:17
+#: ui/templates/student/micro/protocol.html:19
+#: ui/templates/student/micro/protocol.html:43
+#: ui/templates/student/micro/report_pdf.html:34
 #: ui/templates/student/practice/report_pdf.html:23
 #: ui/templates/student/practice/results.html:55
 #: ui/templates/student/practice/step.html:19
 #: ui/templates/student/practice/step.html:107
 #: ui/templates/teacher/practice/detail.html:18
+#: ui/templates/teacher/practice/micro.html:16
+#: ui/templates/teacher/practice/micro.html:32
 msgid "The AI student"
 msgstr "ИИ-ученик"
 
@@ -10133,6 +10439,9 @@ msgstr "ИИ-ученик"
 #: ui/templates/student/designer/results.html:8
 #: ui/templates/student/designer/results.html:10
 #: ui/templates/student/designer/trial.html:97
+#: ui/templates/student/micro/editor.html:154
+#: ui/templates/student/micro/protocol.html:71
+#: ui/templates/student/micro/report_pdf.html:31
 msgid "Trial results"
 msgstr "Результаты апробации"
 
@@ -10169,6 +10478,12 @@ msgstr "Длительность"
 #: ui/templates/student/designer/plan_pdf.html:33
 #: ui/templates/student/designer/template.html:28
 #: ui/templates/student/designer/template.html:99
+#: ui/templates/student/micro/editor.html:36
+#: ui/templates/student/micro/editor.html:49
+#: ui/templates/student/micro/editor.html:88
+#: ui/templates/student/micro/partials/entry.html:25
+#: ui/templates/student/micro/report_pdf.html:19
+#: ui/templates/student/micro/report_pdf.html:30
 #: ui/templates/student/practice/report_pdf.html:29
 #: ui/templates/student/practice/sheet.html:46
 #: ui/templates/student/practice/trial_start.html:47
@@ -10236,6 +10551,9 @@ msgid "Advice, task, experiment, assessment"
 msgstr "Совет, задание, опыт, оценивание"
 
 #: ui/templates/student/designer/partials/templates.html:13
+#: ui/templates/student/micro/editor.html:142
+#: ui/templates/student/micro/partials/entry.html:12
+#: ui/templates/student/micro/trial_start.html:7
 #: ui/templates/student/practice/partials/cards.html:10
 msgid "Try it out"
 msgstr "Апробация"
@@ -10307,6 +10625,7 @@ msgid "The AI assistant's methodical suggestion"
 msgstr "Методическая рекомендация ИИ-ассистента"
 
 #: ui/templates/student/designer/partials/turn.html:49
+#: ui/templates/student/micro/partials/messages.html:32
 #: ui/templates/student/practice/step.html:39
 msgid "The AI student did not answer this time. Try again in a minute."
 msgstr "ИИ-ученик не ответил. Повторите через минуту."
@@ -10446,6 +10765,7 @@ msgid "The lesson is saved as your final version and can no longer be changed."
 msgstr "Урок сохранится как итоговая версия, изменить его будет нельзя."
 
 #: ui/templates/student/designer/results.html:75
+#: ui/templates/student/micro/editor.html:178
 msgid "Assemble"
 msgstr "Собрать"
 
@@ -10560,6 +10880,7 @@ msgstr ""
 "уровня подготовки."
 
 #: ui/templates/student/designer/trial.html:55
+#: ui/templates/student/micro/trial_start.html:49
 #: ui/templates/student/practice/trial_start.html:48
 msgid "Start the trial"
 msgstr "Начать апробацию"
@@ -10775,19 +11096,40 @@ msgstr ""
 "не объединяются с ними и хранятся отдельно."
 
 #: ui/templates/student/icpai_results.html:109
+#: ui/templates/student/micro/editor.html:62
+#: ui/templates/student/micro/partials/entry.html:48
 #: ui/templates/student/practice/partials/nav.html:10
 #: ui/templates/student/practice/sheet.html:24
 #: ui/templates/teacher/practice/detail.html:17
-#: ui/templates/teacher/practice/queue.html:24
+#: ui/templates/teacher/practice/queue.html:46
 msgid "Practice"
 msgstr "Практика"
 
 #: ui/templates/student/icpai_results.html:111
+#: ui/templates/student/icpai_results.html:122
+#: ui/templates/student/micro/editor.html:166
+#: ui/templates/student/micro/protocol.html:57
 #: ui/templates/student/practice/results.html:33
 msgid "Not graded by the teacher yet"
 msgstr "Учитель ещё не оценил"
 
-#: ui/templates/student/icpai_results.html:116
+#: ui/templates/student/icpai_results.html:121
+#: ui/templates/student/micro/dialog.html:9
+#: ui/templates/student/micro/dialog.html:20
+#: ui/templates/student/micro/editor.html:161
+#: ui/templates/student/micro/protocol.html:9
+#: ui/templates/student/micro/protocol.html:18
+#: ui/templates/student/micro/protocol.html:74
+#: ui/templates/student/micro/report_pdf.html:33
+#: ui/templates/student/micro/trial_start.html:21
+#: ui/templates/teacher/practice/micro.html:7
+#: ui/templates/teacher/practice/micro.html:16
+#: ui/templates/teacher/practice/queue.html:37
+#, python-format
+msgid "Trial %(n)s"
+msgstr "Апробация %(n)s"
+
+#: ui/templates/student/icpai_results.html:128
 msgid "No grades yet."
 msgstr "Оценок пока нет."
 
@@ -10824,6 +11166,449 @@ msgstr "Этапы открываются по очереди. Следующи�
 #: ui/templates/student/locked.html:22 ui/templates/student/topic.html:29
 msgid "Topic stages"
 msgstr "Этапы темы"
+
+#: ui/templates/student/micro/dialog.html:11
+#: ui/templates/student/micro/trial_start.html:9
+msgid "Trying the microlesson out"
+msgstr "Апробация микроурока"
+
+#: ui/templates/student/micro/dialog.html:16
+msgid "Timer"
+msgstr "Таймер"
+
+#: ui/templates/student/micro/dialog.html:21
+#: ui/templates/student/micro/editor.html:36
+#: ui/templates/student/micro/editor.html:169
+#: ui/templates/student/micro/protocol.html:19
+#: ui/templates/student/micro/report_pdf.html:33
+#: ui/templates/student/practice/report_pdf.html:23
+#: ui/templates/student/practice/results.html:55
+#: ui/templates/student/practice/step.html:19
+#: ui/templates/teacher/practice/detail.html:18
+#: ui/templates/teacher/practice/micro.html:16
+#, python-format
+msgid "Grade %(g)s"
+msgstr "%(g)s класс"
+
+#: ui/templates/student/micro/dialog.html:26
+msgid "paused while the AI student answers"
+msgstr "на паузе, пока отвечает ИИ-ученик"
+
+#: ui/templates/student/micro/dialog.html:28
+msgid "Finish the microlesson?"
+msgstr "Завершить микроурок?"
+
+#: ui/templates/student/micro/dialog.html:28
+msgid "The dialogue is gathered into the trial protocol."
+msgstr "Диалог собирается в протокол апробации."
+
+#: ui/templates/student/micro/dialog.html:29
+msgid "Finish the microlesson"
+msgstr "Завершить микроурок"
+
+#: ui/templates/student/micro/dialog.html:45
+msgid "Dialogue"
+msgstr "Диалог"
+
+#: ui/templates/student/micro/dialog.html:48
+msgid "The AI student is thinking…"
+msgstr "ИИ-ученик думает…"
+
+#: ui/templates/student/micro/dialog.html:53
+msgid "Kind of message"
+msgstr "Тип сообщения"
+
+#: ui/templates/student/micro/dialog.html:60
+msgid "Message to the AI student"
+msgstr "Сообщение ИИ-ученику"
+
+#: ui/templates/student/micro/dialog.html:61
+msgid "Explain, ask or act…"
+msgstr "Объясните, спросите или действуйте…"
+
+#: ui/templates/student/micro/dialog.html:72
+#: ui/templates/student/micro/partials/entry.html:25
+msgid "Your microlesson"
+msgstr "Ваш микроурок"
+
+#: ui/templates/student/micro/editor.html:12
+msgid "Microlesson and professional trial ground"
+msgstr "Микроурок и площадка профессиональной апробации"
+
+#: ui/templates/student/micro/editor.html:24
+msgid "The microlesson is assembled"
+msgstr "Микроурок собран"
+
+#: ui/templates/student/micro/editor.html:25
+msgid ""
+"The authorial microlesson improved over several trials and the professional "
+"trial portfolio are kept together."
+msgstr "Авторский микроурок, улучшенный по итогам нескольких апробаций, и портфолио сохранены вместе."
+
+#: ui/templates/student/micro/editor.html:35
+#: ui/templates/student/micro/report_pdf.html:20
+msgid "The microlesson's initial details"
+msgstr "Исходные сведения микроурока"
+
+#: ui/templates/student/micro/editor.html:42
+msgid "Student's full name"
+msgstr "ФИО студента"
+
+#: ui/templates/student/micro/editor.html:43
+msgid "Education programme"
+msgstr "Образовательная программа"
+
+#: ui/templates/student/micro/editor.html:44
+msgid "Study year"
+msgstr "Курс обучения"
+
+#: ui/templates/student/micro/editor.html:46
+#: ui/templates/student/micro/report_pdf.html:22
+msgid "Topic of the microlesson"
+msgstr "Тема микроурока"
+
+#: ui/templates/student/micro/editor.html:47
+#: ui/templates/student/micro/report_pdf.html:23
+#: ui/templates/student/micro/trial_start.html:24
+#: ui/templates/student/practice/trial_start.html:27
+msgid "Class"
+msgstr "Класс"
+
+#: ui/templates/student/micro/editor.html:49
+msgid "Length of the microlesson"
+msgstr "Длительность микроурока"
+
+#: ui/templates/student/micro/editor.html:52
+#: ui/templates/student/micro/report_pdf.html:24
+#: ui/templates/teacher/practice/micro.html:18
+msgid "Aim of the microlesson"
+msgstr "Цель микроурока"
+
+#: ui/templates/student/micro/editor.html:54
+#: ui/templates/student/micro/report_pdf.html:26
+msgid "Pedagogical method used"
+msgstr "Используемый педагогический метод"
+
+#: ui/templates/student/micro/editor.html:55
+#: ui/templates/student/micro/report_pdf.html:27
+msgid "Digital tool used"
+msgstr "Используемый цифровой инструмент"
+
+#: ui/templates/student/micro/editor.html:60
+#: ui/templates/student/micro/partials/entry.html:39
+msgid "Choosing the microlesson"
+msgstr "Выбор микроурока"
+
+#: ui/templates/student/micro/editor.html:76
+#: ui/templates/student/micro/report_pdf.html:29
+msgid "The structure of the microlesson"
+msgstr "Структура микроурока"
+
+#: ui/templates/student/micro/editor.html:77
+msgid "One microlesson (one topic)"
+msgstr "Один микроурок (одна тема)"
+
+#: ui/templates/student/micro/editor.html:101
+msgid "The AI assistant's check"
+msgstr "Проверка ИИ-ассистента"
+
+#: ui/templates/student/micro/editor.html:102
+#: ui/templates/student/micro/editor.html:106
+msgid "Changed — check again"
+msgstr "Изменено — проверьте снова"
+
+#: ui/templates/student/micro/editor.html:104
+#: ui/templates/student/micro/editor.html:127
+msgid "CORRECT"
+msgstr "ВЕРНО"
+
+#: ui/templates/student/micro/editor.html:105
+#: ui/templates/student/micro/editor.html:127
+msgid "WRONG"
+msgstr "НЕВЕРНО"
+
+#: ui/templates/student/micro/editor.html:107
+msgid "Not checked yet"
+msgstr "Ещё не проверено"
+
+#: ui/templates/student/micro/editor.html:121
+#: ui/templates/student/micro/trial_start.html:16
+msgid "AI assistant: checker mode"
+msgstr "ИИ-ассистент: режим проверки"
+
+#: ui/templates/student/micro/editor.html:121
+msgid "It checks only whether the structure is placed correctly."
+msgstr "ИИ проверяет только правильность структуры."
+
+#: ui/templates/student/micro/editor.html:133
+msgid "It gives no ready answer."
+msgstr "Готовых ответов не даёт."
+
+#: ui/templates/student/micro/editor.html:133
+msgid ""
+"It only checks the structure and marks it «CORRECT» / «WRONG». The AI "
+"assistant does not correct an error itself: you look at the content marked "
+"wrong, change it and send it to be checked again."
+msgstr "Только проверяет структуру и отмечает «ВЕРНО» / «НЕВЕРНО». ИИ-ассистент сам ошибку не исправляет: вы просматриваете отмеченное, исправляете и отправляете на повторную проверку."
+
+#: ui/templates/student/micro/editor.html:134
+#, python-format
+msgid "Checked: %(t)s"
+msgstr "Проверено: %(t)s"
+
+#: ui/templates/student/micro/editor.html:134
+msgid "the content has changed since"
+msgstr "с тех пор содержание изменилось"
+
+#: ui/templates/student/micro/editor.html:138
+msgid "Check again"
+msgstr "Проверить снова"
+
+#: ui/templates/student/micro/editor.html:138
+msgid "Send for checking"
+msgstr "Отправить на проверку"
+
+#: ui/templates/student/micro/editor.html:139
+msgid "Checking…"
+msgstr "Проверка…"
+
+#: ui/templates/student/micro/editor.html:142
+msgid "Go on with the trial"
+msgstr "Продолжить апробацию"
+
+#: ui/templates/student/micro/editor.html:143
+msgid "The trial opens when every stage is marked ✓ CORRECT."
+msgstr "Апробация откроется, когда все этапы отмечены ✓ ВЕРНО."
+
+#: ui/templates/student/micro/editor.html:155
+msgid ""
+"One microlesson may be tried out several times; each trial is kept apart."
+msgstr "Один микроурок можно апробировать несколько раз; каждая апробация сохраняется отдельно."
+
+#: ui/templates/student/micro/editor.html:161
+msgid "the initial version"
+msgstr "исходная версия"
+
+#: ui/templates/student/micro/editor.html:161
+msgid "the changed version"
+msgstr "изменённая версия"
+
+#: ui/templates/student/micro/editor.html:166
+msgid "in progress"
+msgstr "идёт"
+
+#: ui/templates/student/micro/editor.html:170
+#: ui/templates/student/micro/protocol.html:9
+msgid "Protocol"
+msgstr "Протокол"
+
+#: ui/templates/student/micro/editor.html:170
+msgid "Go on"
+msgstr "Продолжить"
+
+#: ui/templates/student/micro/editor.html:176
+msgid ""
+"When the trials you need are done, the last version, its four stages, the "
+"history of the trials, the AI student's answers, your changes and the grades "
+"are gathered together."
+msgstr "Когда нужные апробации пройдены, объединяются последняя версия, четыре этапа, история апробаций, ответы ИИ-ученика, ваши изменения и оценки."
+
+#: ui/templates/student/micro/editor.html:178
+msgid "Assemble the microlesson?"
+msgstr "Собрать микроурок?"
+
+#: ui/templates/student/micro/editor.html:178
+msgid "After that the microlesson can no longer be changed or tried out."
+msgstr "После этого микроурок нельзя изменять и апробировать."
+
+#: ui/templates/student/micro/editor.html:179
+#: ui/templates/student/micro/partials/entry.html:12
+msgid "Assemble the microlesson"
+msgstr "Собрать микроурок"
+
+#: ui/templates/student/micro/editor.html:184
+msgid "No trials yet."
+msgstr "Апробаций пока нет."
+
+#: ui/templates/student/micro/partials/entry.html:10
+msgid ""
+"In section 5 the lesson was developed with the help of AI, and in section 6 "
+"the student conducts the MICROLESSON ON THEIR OWN and improves it."
+msgstr "В разделе 5 урок разрабатывался с помощью ИИ, а в разделе 6 студент САМ проводит МИКРОУРОК и совершенствует его."
+
+#: ui/templates/student/micro/partials/entry.html:12
+msgid "Analyse the answer"
+msgstr "Анализ ответа"
+
+#: ui/templates/student/micro/partials/entry.html:12
+msgid "Change"
+msgstr "Изменение"
+
+#: ui/templates/student/micro/partials/entry.html:12
+#: ui/templates/student/micro/protocol.html:28
+msgid "Try it out again"
+msgstr "Апробировать снова"
+
+#: ui/templates/student/micro/partials/entry.html:28
+msgid "Being tried out"
+msgstr "Апробируется"
+
+#: ui/templates/student/micro/partials/entry.html:28
+msgid "Being developed"
+msgstr "Разрабатывается"
+
+#: ui/templates/student/micro/partials/entry.html:29
+#, python-format
+msgid "%(n)s trial"
+msgid_plural "%(n)s trials"
+msgstr[0] "%(n)s апробация"
+msgstr[1] "%(n)s апробации"
+msgstr[2] "%(n)s апробаций"
+msgstr[3] "%(n)s апробации"
+
+#: ui/templates/student/micro/partials/entry.html:33
+msgid "Open the microlesson"
+msgstr "Открыть микроурок"
+
+#: ui/templates/student/micro/partials/entry.html:40
+msgid ""
+"Choose the authorial lesson you developed in section 5. Take one content "
+"part of it and adapt it to an independent 10-minute microlesson. The "
+"microlesson covers one concrete learning aim, not the whole content of the "
+"topic."
+msgstr "Выберите авторский урок из раздела 5. Возьмите одну его содержательную часть и адаптируйте в самостоятельный 10-минутный микроурок. Микроурок охватывает одну конкретную цель, а не всю тему."
+
+#: ui/templates/student/micro/partials/entry.html:42
+#: ui/templates/student/practice/partials/cards.html:42
+msgid "Your lesson"
+msgstr "Ваш урок"
+
+#: ui/templates/student/micro/partials/entry.html:55
+msgid "Choose the part of the lesson"
+msgstr "Выберите часть урока"
+
+#: ui/templates/student/micro/partials/entry.html:61
+msgid "filled in"
+msgstr "заполнен"
+
+#: ui/templates/student/micro/partials/entry.html:61
+msgid "empty"
+msgstr "пусто"
+
+#: ui/templates/student/micro/partials/entry.html:68
+msgid ""
+"Only one microlesson is made. Later corrections are kept as its updated "
+"versions."
+msgstr "Создаётся только один микроурок. Последующие правки сохраняются как его обновлённые версии."
+
+#: ui/templates/student/micro/partials/entry.html:69
+msgid "Create the microlesson?"
+msgstr "Создать микроурок?"
+
+#: ui/templates/student/micro/partials/entry.html:69
+msgid ""
+"One microlesson is made from the chosen part; it cannot be made again from "
+"another part."
+msgstr "Из выбранной части создаётся один микроурок; создать другой из иной части нельзя."
+
+#: ui/templates/student/micro/partials/entry.html:69
+msgid "Create"
+msgstr "Создать"
+
+#: ui/templates/student/micro/partials/entry.html:70
+msgid "Create the microlesson"
+msgstr "Создать микроурок"
+
+#: ui/templates/student/micro/partials/entry.html:74
+msgid "No section 5 lessons yet"
+msgstr "Уроков раздела 5 пока нет"
+
+#: ui/templates/student/micro/partials/entry.html:74
+msgid "The microlesson is made from a part of your section 5 practice."
+msgstr "Микроурок создаётся из части практики раздела 5."
+
+#: ui/templates/student/micro/partials/messages.html:11
+#: ui/templates/student/micro/protocol.html:42
+#: ui/templates/teacher/practice/micro.html:31
+msgid "Student-teacher"
+msgstr "Студент-учитель"
+
+#: ui/templates/student/micro/partials/messages.html:26
+msgid "The AI student is ready. Start the microlesson: explain the topic."
+msgstr "ИИ-ученик готов. Начните микроурок: объясните тему."
+
+#: ui/templates/student/micro/partials/messages.html:27
+msgid "Question → Answer → Explanation → Conclusion = a deep understanding!"
+msgstr "Вопрос → Ответ → Объяснение → Вывод = глубокое понимание!"
+
+#: ui/templates/student/micro/partials/messages.html:32
+msgid "Write the message."
+msgstr "Напишите сообщение."
+
+#: ui/templates/student/micro/protocol.html:11
+msgid "Trial protocol"
+msgstr "Протокол апробации"
+
+#: ui/templates/student/micro/protocol.html:23
+msgid "Turns"
+msgstr "Реплики"
+
+#: ui/templates/student/micro/protocol.html:27
+msgid "Change the microlesson"
+msgstr "Изменить микроурок"
+
+#: ui/templates/student/micro/protocol.html:35
+msgid "The microlesson dialogue"
+msgstr "Диалог микроурока"
+
+#: ui/templates/student/micro/protocol.html:56
+#: ui/templates/teacher/practice/micro.html:40
+msgid "Result of the microlesson"
+msgstr "Результат микроурока"
+
+#: ui/templates/student/micro/protocol.html:68
+msgid ""
+"The AI assistant's «Correct / Wrong» check applies only to preparing the "
+"content; the professional trial is graded apart by the protocol and the "
+"criteria."
+msgstr "Проверка ИИ-ассистента «Верно/Неверно» относится только к подготовке содержания; профессиональная апробация оценивается отдельно по протоколу и критериям."
+
+#: ui/templates/student/micro/report_pdf.html:19
+msgid ""
+"The sheet of developing the microlesson and trying it out professionally"
+msgstr "Лист разработки микроурока и профессиональной апробации"
+
+#: ui/templates/student/micro/trial_start.html:32
+#: ui/templates/student/practice/trial_start.html:35
+msgid "The AI student's level"
+msgstr "Уровень ИИ-ученика"
+
+#: ui/templates/student/micro/trial_start.html:44
+msgid "Starting the trial: the 10-minute timer starts."
+msgstr "Начало: запускается 10-минутный таймер."
+
+#: ui/templates/student/micro/trial_start.html:44
+msgid ""
+"The teacher's explanation: you explain the topic to the virtual student."
+msgstr "Объяснение учителя: вы объясняете тему виртуальному ученику."
+
+#: ui/templates/student/micro/trial_start.html:44
+msgid "Asking a question: you ask the AI student your question."
+msgstr "Вопрос: вы задаёте ИИ-ученику свой вопрос."
+
+#: ui/templates/student/micro/trial_start.html:44
+msgid "The AI student's answer: fully correct, partly correct or wrong."
+msgstr "Ответ ИИ-ученика: полностью верный, частично верный или ошибочный."
+
+#: ui/templates/student/micro/trial_start.html:44
+msgid ""
+"The teacher's pedagogical action: an extra explanation, a leading question "
+"or checking again."
+msgstr "Педагогическое действие: дополнительное объяснение, наводящий вопрос или повторная проверка."
+
+#: ui/templates/student/micro/trial_start.html:44
+msgid "Finishing: the dialogue is gathered into the trial protocol."
+msgstr "Завершение: диалог собирается в протокол апробации."
 
 #: ui/templates/student/partials/benchmark_card.html:13
 msgid "Before the first stage · one attempt · not graded"
@@ -11203,7 +11988,9 @@ msgstr "Совершенствование"
 msgid ""
 "In this section you conduct your authorial lesson stage by stage, analyse "
 "the AI student's answers and improve it."
-msgstr "В этом разделе вы проводите свой авторский урок по этапам, анализируете ответы ИИ-ученика и совершенствуете урок."
+msgstr ""
+"В этом разделе вы проводите свой авторский урок по этапам, анализируете "
+"ответы ИИ-ученика и совершенствуете урок."
 
 #: ui/templates/student/practice/partials/cards.html:28
 msgid "Choose the authorial lesson"
@@ -11212,10 +11999,6 @@ msgstr "Выбор авторского урока"
 #: ui/templates/student/practice/partials/cards.html:29
 msgid "Three practice lessons — one for each of your authorial lessons."
 msgstr "Три практических урока — по одному на каждый авторский урок."
-
-#: ui/templates/student/practice/partials/cards.html:42
-msgid "Your lesson"
-msgstr "Ваш урок"
 
 #: ui/templates/student/practice/partials/cards.html:44
 #: ui/templates/student/practice/sheet.html:76
@@ -11276,14 +12059,6 @@ msgstr "Лист анализа"
 #: ui/templates/student/practice/sheet.html:25
 msgid "The development sheet of the digital research practice"
 msgstr "Лист разработки цифровой исследовательской практики"
-
-#: ui/templates/student/practice/report_pdf.html:23
-#: ui/templates/student/practice/results.html:55
-#: ui/templates/student/practice/step.html:19
-#: ui/templates/teacher/practice/detail.html:18
-#, python-format
-msgid "Grade %(g)s"
-msgstr "%(g)s класс"
 
 #: ui/templates/student/practice/report_pdf.html:24
 #: ui/templates/student/practice/sheet.html:30
@@ -11379,13 +12154,17 @@ msgstr "Исследовательское портфолио собрано"
 msgid ""
 "Your authorial lesson, the AI student's modelled answers, your corrections "
 "and the final reflection are kept together."
-msgstr "Ваш авторский урок, смоделированные ответы ИИ-ученика, ваши исправления и итоговая рефлексия сохранены вместе."
+msgstr ""
+"Ваш авторский урок, смоделированные ответы ИИ-ученика, ваши исправления и "
+"итоговая рефлексия сохранены вместе."
 
 #: ui/templates/student/practice/results.html:46
 msgid ""
 "This grade is kept apart from the diagnostic percents of the four ICPAI "
 "components; those go to «Results» automatically."
-msgstr "Эта оценка хранится отдельно от диагностических процентов четырёх компонентов ICPAI; они автоматически попадают в «Результаты»."
+msgstr ""
+"Эта оценка хранится отдельно от диагностических процентов четырёх "
+"компонентов ICPAI; они автоматически попадают в «Результаты»."
 
 #: ui/templates/student/practice/results.html:84
 msgid "Not tried out yet"
@@ -11401,7 +12180,10 @@ msgid ""
 "The student's main task is not to get a correct answer from the AI student, "
 "but to conduct the authorial lesson, respond pedagogically to the student's "
 "answer, explain the errors and improve the lesson content."
-msgstr "Главная задача студента — не получить правильный ответ от ИИ-ученика, а провести авторский урок, педагогически отреагировать на ответ, объяснить ошибки и улучшить содержание урока."
+msgstr ""
+"Главная задача студента — не получить правильный ответ от ИИ-ученика, а "
+"провести авторский урок, педагогически отреагировать на ответ, объяснить "
+"ошибки и улучшить содержание урока."
 
 #: ui/templates/student/practice/results.html:99
 msgid "Finish the trial and gather the results?"
@@ -11411,7 +12193,9 @@ msgstr "Завершить апробацию и собрать результа
 msgid ""
 "The sheet, the AI student's answers and your corrections are gathered into "
 "your research portfolio and can no longer be changed."
-msgstr "Лист, ответы ИИ-ученика и ваши исправления собираются в портфолио и больше не изменяются."
+msgstr ""
+"Лист, ответы ИИ-ученика и ваши исправления собираются в портфолио и больше "
+"не изменяются."
 
 #: ui/templates/student/practice/results.html:100
 msgid "Finish the trial and gather the results"
@@ -11429,7 +12213,9 @@ msgstr "Выбор структуры авторского урока"
 msgid ""
 "Your authorial lesson from section 4 is shown with all its stages. Use it as "
 "a source: the eight stages of the sheet are filled in by you."
-msgstr "Ваш авторский урок из раздела 4 показан со всеми этапами. Используйте его как источник: восемь этапов листа вы заполняете сами."
+msgstr ""
+"Ваш авторский урок из раздела 4 показан со всеми этапами. Используйте его "
+"как источник: восемь этапов листа вы заполняете сами."
 
 #: ui/templates/student/practice/sheet.html:73
 msgid "Open the lesson"
@@ -11456,7 +12242,9 @@ msgstr "Когда все этапы готовы, урок апробирует
 msgid ""
 "The AI assistant does not do the task for you: it analyses what you entered "
 "and helps to organise it correctly. You make the changes yourself."
-msgstr "ИИ-ассистент не выполняет задание за вас: он анализирует введённое и помогает правильно его организовать. Изменения вносите вы сами."
+msgstr ""
+"ИИ-ассистент не выполняет задание за вас: он анализирует введённое и "
+"помогает правильно его организовать. Изменения вносите вы сами."
 
 #: ui/templates/student/practice/step.html:23
 msgid "Lesson stages"
@@ -11526,7 +12314,9 @@ msgstr "Перейти к следующему этапу"
 msgid ""
 "Check the AI student's answer, find the errors and give an explanation; ask "
 "an extra question to improve the student's understanding."
-msgstr "Проверьте ответ ИИ-ученика, найдите ошибки и дайте объяснение; задайте дополнительный вопрос для улучшения понимания."
+msgstr ""
+"Проверьте ответ ИИ-ученика, найдите ошибки и дайте объяснение; задайте "
+"дополнительный вопрос для улучшения понимания."
 
 #: ui/templates/student/practice/step.html:157
 msgid "Finish the stages"
@@ -11540,19 +12330,13 @@ msgstr "Этап в вашем листе"
 msgid "Choosing the class and the level"
 msgstr "Выбор класса и уровня"
 
-#: ui/templates/student/practice/trial_start.html:27
-msgid "Class"
-msgstr "Класс"
-
-#: ui/templates/student/practice/trial_start.html:35
-msgid "The AI student's level"
-msgstr "Уровень ИИ-ученика"
-
 #: ui/templates/student/practice/trial_start.html:54
 msgid ""
 "During the trial the whole lesson is not shown at once. Each stage opens "
 "separately and goes in this order:"
-msgstr "Во время апробации урок не показывается целиком. Каждый этап открывается отдельно в таком порядке:"
+msgstr ""
+"Во время апробации урок не показывается целиком. Каждый этап открывается "
+"отдельно в таком порядке:"
 
 #: ui/templates/student/practice/trial_start.html:56
 msgid "Going on to the next stage"
@@ -11562,7 +12346,9 @@ msgstr "Переход к следующему этапу"
 msgid ""
 "Not all the answers must be correct. To model a real learning situation, "
 "correct, partly correct and wrong answers are included."
-msgstr "Не все ответы должны быть правильными. Чтобы смоделировать реальную ситуацию, включаются правильные, частично правильные и ошибочные ответы."
+msgstr ""
+"Не все ответы должны быть правильными. Чтобы смоделировать реальную "
+"ситуацию, включаются правильные, частично правильные и ошибочные ответы."
 
 #: ui/templates/student/practice/trial_start.html:66
 msgid "Correct answer"
@@ -11572,7 +12358,9 @@ msgstr "Правильный ответ"
 msgid ""
 "the chemical law is explained correctly from the scientific side, the "
 "necessary evidence is given."
-msgstr "химическая закономерность объяснена научно верно, приведены необходимые доказательства."
+msgstr ""
+"химическая закономерность объяснена научно верно, приведены необходимые "
+"доказательства."
 
 #: ui/templates/student/practice/trial_start.html:67
 msgid "Partly correct answer"
@@ -11582,7 +12370,9 @@ msgstr "Частично правильный ответ"
 msgid ""
 "the main idea is right, but the scientific reasoning is not fully revealed "
 "or a statement is inaccurate."
-msgstr "основная мысль верна, но научное обоснование раскрыто не полностью или есть неточность."
+msgstr ""
+"основная мысль верна, но научное обоснование раскрыто не полностью или есть "
+"неточность."
 
 #: ui/templates/student/practice/trial_start.html:68
 msgid "Wrong answer"
@@ -11592,7 +12382,9 @@ msgstr "Ошибочный ответ"
 msgid ""
 "a chemical misconception typical of students is shown. You find the error "
 "and suggest a pedagogical action to correct it."
-msgstr "показано типичное для учеников ошибочное представление. Вы находите ошибку и предлагаете педагогическое действие для её исправления."
+msgstr ""
+"показано типичное для учеников ошибочное представление. Вы находите ошибку и "
+"предлагаете педагогическое действие для её исправления."
 
 #: ui/templates/student/profile.html:24
 msgid "Personal data"
@@ -11807,7 +12599,7 @@ msgstr ""
 "Оно появится здесь, когда будет готово. Пока раздел считается выполненным, "
 "следующий открыт."
 
-#: ui/templates/student/section.html:130
+#: ui/templates/student/section.html:133
 msgid "Its tasks will appear here in the next versions of the platform."
 msgstr "Задания раздела появятся здесь в следующих версиях платформы."
 
@@ -12219,11 +13011,6 @@ msgstr "Выше"
 msgid "Move down"
 msgstr "Ниже"
 
-#: ui/templates/teacher/content/question.html:3
-#: ui/templates/teacher/content/quiz.html:20
-msgid "Question"
-msgstr "Вопрос"
-
 #: ui/templates/teacher/content/question.html:5
 #: ui/templates/teacher/content/question.html:10
 msgid "Edit the question"
@@ -12466,8 +13253,10 @@ msgid "AI: %(p)s%%"
 msgstr "AI: %(p)s%%"
 
 #: ui/templates/teacher/dashboard.html:64
-#: ui/templates/teacher/practice/queue.html:24
-#: ui/templates/teacher/practice/queue.html:33
+#: ui/templates/teacher/practice/queue.html:32
+#: ui/templates/teacher/practice/queue.html:41
+#: ui/templates/teacher/practice/queue.html:46
+#: ui/templates/teacher/practice/queue.html:55
 msgid "Grade"
 msgstr "Оценить"
 
@@ -12665,6 +13454,7 @@ msgstr "Изменить оценку"
 
 #: ui/templates/teacher/grading_detail.html:130
 #: ui/templates/teacher/practice/detail.html:81
+#: ui/templates/teacher/practice/micro.html:56
 msgid "Save the grade"
 msgstr "Сохранить оценку"
 
@@ -13058,7 +13848,15 @@ msgstr "Исключить"
 msgid "Remove from the group"
 msgstr "Исключить из группы"
 
+#: ui/templates/teacher/practice/detail.html:7
+#: ui/templates/teacher/practice/detail.html:8
+#: ui/templates/teacher/practice/detail.html:12
+#: ui/templates/teacher/practice/queue.html:20
+msgid "Section 5 practices"
+msgstr "Практики раздела 5"
+
 #: ui/templates/teacher/practice/detail.html:41
+#: ui/templates/teacher/practice/micro.html:25
 msgid "The sheet"
 msgstr "Лист"
 
@@ -13068,39 +13866,65 @@ msgid "Time spent: %(m)s (set: %(n)s min)"
 msgstr "Затрачено: %(m)s (задано: %(n)s мин)"
 
 #: ui/templates/teacher/practice/detail.html:80
+#: ui/templates/teacher/practice/micro.html:55
 msgid "Comment"
 msgstr "Комментарий"
 
 #: ui/templates/teacher/practice/detail.html:82
 msgid ""
 "Kept apart from the ICPAI component percents; it does not open sections."
-msgstr "Хранится отдельно от процентов компонентов ICPAI; разделы не открывает."
+msgstr ""
+"Хранится отдельно от процентов компонентов ICPAI; разделы не открывает."
 
-#: ui/templates/teacher/practice/queue.html:13
+#: ui/templates/teacher/practice/micro.html:8
+#: ui/templates/teacher/practice/micro.html:12
+#: ui/templates/teacher/practice/queue.html:21
+msgid "Section 6 microlessons"
+msgstr "Микроуроки раздела 6"
+
+#: ui/templates/teacher/practice/micro.html:57
+msgid ""
+"Each trial's result is kept apart so the student's professional progress can "
+"be compared."
+msgstr "Результат каждой апробации хранится отдельно, чтобы сравнивать профессиональный рост."
+
+#: ui/templates/teacher/practice/queue.html:14
+msgid "Microlesson trials"
+msgstr "Апробации микроуроков"
+
+#: ui/templates/teacher/practice/queue.html:14
 msgid "Digital research practices"
 msgstr "Цифровые исследовательские практики"
 
-#: ui/templates/teacher/practice/queue.html:14
+#: ui/templates/teacher/practice/queue.html:15
 msgid ""
-"The 10-point grade of section 5 (five criteria × 2 points). It is kept apart "
-"from the ICPAI component percents and does not open sections."
-msgstr "10-балльная оценка раздела 5 (5 критериев × 2 балла). Хранится отдельно от процентов ICPAI и не открывает разделы."
+"The 10-point grade (five criteria × 2 points). It is kept apart from the "
+"ICPAI component percents and does not open sections."
+msgstr "10-балльная оценка (5 критериев × 2 балла). Хранится отдельно от процентов ICPAI и не открывает разделы."
 
-#: ui/templates/teacher/practice/queue.html:17
+#: ui/templates/teacher/practice/queue.html:19
+msgid "Section"
+msgstr "Раздел"
+
+#: ui/templates/teacher/practice/queue.html:24
 msgid "To grade"
 msgstr "К оценке"
 
-#: ui/templates/teacher/practice/queue.html:24
+#: ui/templates/teacher/practice/queue.html:32
+msgid "Trial"
+msgstr "Апробация"
+
+#: ui/templates/teacher/practice/queue.html:46
 msgid "Gathered"
 msgstr "Собрано"
 
-#: ui/templates/teacher/practice/queue.html:40
-msgid "No practices here yet"
-msgstr "Практик пока нет"
+#: ui/templates/teacher/practice/queue.html:63
+msgid "Nothing here yet"
+msgstr "Пока пусто"
 
-#: ui/templates/teacher/practice/queue.html:40
-msgid "They appear when students finish the trial and gather the results."
-msgstr "Появятся, когда студенты завершат апробацию и соберут результаты."
+#: ui/templates/teacher/practice/queue.html:63
+msgid "Works appear when students finish their trials."
+msgstr "Работы появятся, когда студенты завершат апробации."
 
 #: ui/templates/teacher/search.html:8
 msgid "Search for a student, a group or a topic."
@@ -13262,6 +14086,9 @@ msgstr "Практическая работа 3"
 #: ui/views.py:24
 msgid "Conditions"
 msgstr "Условие"
+
+#~ msgid "No practices here yet"
+#~ msgstr "Практик пока нет"
 
 #~ msgid "pre/post phase"
 #~ msgstr "фаза до/после"
@@ -13581,9 +14408,6 @@ msgstr "Условие"
 
 #~ msgid "The grade is confirmed."
 #~ msgstr "Оценка подтверждена."
-
-#~ msgid "Checking works"
-#~ msgstr "Проверка работ"
 
 #~ msgid "Option text (H<sub>2</sub>O is allowed)"
 #~ msgstr "Текст варианта (можно H<sub>2</sub>O)"

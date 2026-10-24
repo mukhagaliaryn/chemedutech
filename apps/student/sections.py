@@ -24,7 +24,7 @@ from apps.programme.services import diagnostics
 from apps.progress import selectors as progress_selectors
 from apps.progress.services import benchmark
 
-from . import cabinet, designer, practice
+from . import cabinet, designer, micro, practice
 
 LOCKED = SectionProgress.Status.LOCKED
 
@@ -90,6 +90,8 @@ def section(request, number):
         context.update(designer.designer_context(request.user))
     elif section.kind == Section.Kind.RESEARCH_PRACTICE:
         context.update(practice.practice_context(request.user))
+    elif section.kind == Section.Kind.MICROLESSON:
+        context.update(micro.micro_context(request.user))
     return render(request, "student/section.html", context)
 
 
@@ -193,6 +195,7 @@ def results(request):
             "section": section,
             "stages": programme_selectors.diagnostic_rows(enrollment, section) if section else [],
             "practice_grades": practice.practice_grades(request.user),
+            "micro_grades": micro.micro_grades(request.user),
         },
     )
 

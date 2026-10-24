@@ -1,0 +1,88 @@
+{% extends "layouts/student.html" %}
+{% load i18n static %}
+{% comment %}
+The microlesson with the AI student (guide @S6 IV; picture image23 «The dialogue sample»): the 10-minute timer over
+the four stages (2 + 3 + 3 + 2; it stands while the AI student answers), the dialogue, the message box — explanation,
+question or pedagogical action — and the microlesson beside for reference; «Finish the microlesson», or the timer
+finishes it at 0:00 (agreed with the user); then the protocol opens.
+{% endcomment %}
+{% block title %}{% blocktranslate with n=number %}Trial {{ n }}{% endblocktranslate %} · {% translate "Microlesson" %} · ChemEduTech{% endblock %}
+{% block crumb %}{{ programme.title }} · {% blocktranslate with n=section.number %}Section {{ n }}{% endblocktranslate %}{% endblock %}
+{% block page_title %}{% translate "Trying the microlesson out" %}{% endblock %}
+{% block main_class %}max-w-[1500px]{% endblock %}
+{% block content %}
+<div x-data="microTimer({ left: {{ left }}, total: 600 })" @htmx:before-request="waiting = true" @htmx:after-request="waiting = false; sync()" class="flex flex-col gap-4">
+  {# ---- the timer over the four stages ---- #}
+  <section class="card flex flex-col gap-3" aria-label="{% translate 'Timer' %}">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        {% include "student/designer/partials/ai_student.html" with level=trial.level size=46 %}
+        <div><p class="text-[16px] font-extrabold">{% blocktranslate with n=number %}Trial {{ n }}{% endblocktranslate %} · {{ lesson.topic|default:lesson.title }}</p>
+          <p class="text-[13px] text-ink-soft">{% translate "The AI student" %}: {{ trial.get_level_display|lower }} · {% blocktranslate with g=trial.grade %}Grade {{ g }}{% endblocktranslate %}</p></div>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="num inline-flex items-center gap-2 rounded-[14px] px-4 py-2 text-[26px] leading-none font-extrabold" :class="left <= 60 ? 'bg-danger-50 text-danger-600' : 'bg-primary-50 text-primary-900'" role="timer" aria-live="off">
+          {% include "components/icons.html#timer" with size=22 %}<span x-text="clock">{{ left }}</span></span>
+        <span x-show="waiting" x-cloak class="text-[12px] font-semibold text-stage-video">{% translate "paused while the AI student answers" %}</span>
+        <form method="post" action="{% url 'student:micro_finish' section.number trial.pk %}" x-ref="finish">{% csrf_token %}
+          {% translate "Finish the microlesson?" as f_title %}{% translate "The dialogue is gathered into the trial protocol." as f_text %}{% translate "Finish" as f_label %}
+          <button type="submit" class="btn btn-secondary" data-confirm="{{ f_title }}" data-confirm-text="{{ f_text }}" data-confirm-label="{{ f_label }}">{% include "components/icons.html#check-square" %}{% translate "Finish the microlesson" %}</button>
+        </form>
+      </div>
+    </div>
+    <div class="flex gap-1" aria-hidden="true">
+      {% for r in rows %}
+        <div class="tone-{{ forloop.counter }} flex flex-col gap-1" style="flex: {{ r.spec.minutes }} 1 0">
+          <div class="relative h-2.5 overflow-hidden rounded-full bg-(--tone-50)"><span class="absolute inset-y-0 left-0 rounded-full bg-(--tone) transition-[width] duration-1000 ease-linear" :style="`width: ${Math.max(0, Math.min(100, (elapsed - {{ r.spec.start }} * 60) / ({{ r.spec.minutes }} * 60) * 100))}%`"></span></div>
+          <span class="truncate text-[11.5px] font-bold" :class="stage === {{ forloop.counter }} ? 'text-(--tone)' : 'text-ink-faint'">{{ forloop.counter }}. {{ r.stage.title }} · {{ r.spec.start }}–{{ r.spec.end }}′</span>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <div class="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_380px]">
+    {# ---- the dialogue ---- #}
+    <section class="card flex min-w-0 flex-col gap-0 overflow-hidden p-0" aria-label="{% translate 'Dialogue' %}">
+      {% include "student/micro/partials/messages.html" %}
+      <div id="micro-typing" class="htmx-indicator hidden items-center justify-end gap-2.5 px-5 pb-3 text-sm font-semibold text-stage-video [&.htmx-request]:flex">
+        <span class="typing flex gap-1"><span class="size-1.5 rounded-full bg-stage-video"></span><span class="size-1.5 rounded-full bg-stage-video"></span><span class="size-1.5 rounded-full bg-stage-video"></span></span>{% translate "The AI student is thinking…" %}
+      </div>
+      <form class="flex flex-col gap-3 border-t border-line p-4" hx-post="{% url 'student:micro_send' section.number trial.pk %}" hx-target="#dialog" hx-swap="outerHTML"
+            hx-indicator="#micro-typing" hx-disabled-elt="find button, find textarea" hx-on::after-request="if (event.detail.successful) this.querySelector('textarea').value = ''">
+        {% csrf_token %}
+        <div class="flex flex-wrap gap-2" role="radiogroup" aria-label="{% translate 'Kind of message' %}">
+          {% for value, label in kinds %}
+            <label class="cursor-pointer"><input type="radio" name="kind" value="{{ value }}" class="peer sr-only" {% if forloop.first %}checked{% endif %}>
+              <span class="inline-flex h-9 items-center gap-1.5 rounded-full border border-line px-3.5 text-[13px] font-bold transition-colors peer-checked:border-primary-600 peer-checked:bg-primary-600 peer-checked:text-white hover:border-primary-600">{% if value == "explanation" %}{% include "components/icons.html#book" with size=14 %}{% elif value == "question" %}{% include "components/icons.html#help" with size=14 %}{% else %}{% include "components/icons.html#user" with size=14 %}{% endif %}{{ label }}</span></label>
+          {% endfor %}
+        </div>
+        <div class="flex items-end gap-2 rounded-[16px] border border-line-strong bg-canvas p-1.5 pl-3.5 focus-within:border-primary-600 focus-within:ring-2 focus-within:ring-primary-100">
+          <label for="micro-text" class="sr-only">{% translate "Message to the AI student" %}</label>
+          <textarea id="micro-text" name="text" rows="2" maxlength="3000" placeholder="{% translate 'Explain, ask or act…' %}"
+                    class="max-h-48 min-h-12 flex-1 resize-none bg-transparent py-2 text-[14px] outline-none placeholder:text-ink-faint disabled:opacity-60"
+                    x-data @input="$el.style.height = 'auto'; $el.style.height = $el.scrollHeight + 'px'"
+                    @keydown.enter="if (!$event.shiftKey) { $event.preventDefault(); $el.form.requestSubmit() }"></textarea>
+          <button type="submit" class="grid size-11 shrink-0 place-items-center rounded-[12px] bg-primary-600 text-white hover:bg-primary-700 disabled:opacity-50" aria-label="{% translate 'Send' %}" {% if not ai_enabled %}disabled{% endif %}>{% include "components/icons.html#send" with size=18 %}</button>
+        </div>
+      </form>
+    </section>
+
+    {# ---- the microlesson beside ---- #}
+    <aside class="card flex flex-col gap-2 p-3 xl:sticky xl:top-20" aria-label="{% translate 'Microlesson' %}">
+      <p class="px-2 pt-1 text-[13px] font-extrabold">{% translate "Your microlesson" %}</p>
+      {% for r in rows %}
+        <details class="tone-{{ forloop.counter }} group rounded-lg border border-line" :open="stage === {{ forloop.counter }}">
+          <summary class="flex cursor-pointer items-center gap-2.5 px-3 py-2.5 text-[13.5px] font-bold">
+            <span class="num grid size-7 shrink-0 place-items-center rounded-full bg-(--tone) text-[12px] text-white">{{ forloop.counter }}</span>
+            <span class="min-w-0 flex-1">{{ r.stage.title }} <span class="num text-[11.5px] text-(--tone)">{{ r.spec.start }}–{{ r.spec.end }}′</span></span>
+          </summary>
+          <div class="flex max-h-72 flex-col gap-1.5 overflow-y-auto border-t border-line px-3 py-2.5 text-[12.5px] leading-[18px]">
+            {% for f in r.spec.fields %}{% with v=r.stage.fields|get:f.key %}{% if v and v != f.key %}<div><span class="font-bold text-(--tone)">{{ f.label }}:</span> <span class="prose-lesson">{{ v|rich }}</span></div>{% endif %}{% endwith %}{% endfor %}
+          </div>
+        </details>
+      {% endfor %}
+    </aside>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}<script defer src="{% static 'js/designer.js' %}"></script>{% endblock %}

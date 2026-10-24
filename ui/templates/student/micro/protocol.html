@@ -1,0 +1,82 @@
+{% extends "layouts/student.html" %}
+{% load i18n %}
+{% comment %}
+The trial protocol (guide @S6 IV 6, V, VI; picture image21 «Trial results»): the explanations, questions, the AI
+student's answers and the student's pedagogical actions by stage of the microlesson; the length; the counts of the
+answers; the teacher's 10-point grade of this trial (apart from ICPAI); «Change the microlesson» / «Try it out again»;
+all the trials to compare.
+{% endcomment %}
+{% block title %}{% blocktranslate with n=number %}Trial {{ n }}{% endblocktranslate %} · {% translate "Protocol" %} · ChemEduTech{% endblock %}
+{% block crumb %}{{ programme.title }} · {% blocktranslate with n=section.number %}Section {{ n }}{% endblocktranslate %}{% endblock %}
+{% block page_title %}{% translate "Trial protocol" %}{% endblock %}
+{% block main_class %}max-w-[1400px]{% endblock %}
+{% block content %}
+<a class="link inline-flex items-center gap-1.5 text-sm font-semibold" href="{% url 'student:micro' section.number %}">{% include "components/icons.html#arrow-left" %}{% translate "Microlesson" %}</a>
+<section class="card flex flex-wrap items-center gap-5">
+  {% include "student/designer/partials/ai_student.html" with level=trial.level size=56 %}
+  <div class="min-w-0 flex-[1_1_320px]">
+    <h1 class="text-[22px] leading-7 font-extrabold">{% blocktranslate with n=number %}Trial {{ n }}{% endblocktranslate %} · {{ lesson.topic|default:lesson.title }}</h1>
+    <p class="text-[13px] text-ink-soft">{% translate "The AI student" %}: {{ trial.get_level_display|lower }} · {% blocktranslate with g=trial.grade %}Grade {{ g }}{% endblocktranslate %} · v{{ trial.version.number }} · {{ trial.started_at|date:"d.m.Y H:i" }}</p>
+  </div>
+  <dl class="flex flex-wrap gap-2 text-center">
+    <div class="rounded-lg bg-canvas px-4 py-2"><dt class="text-[11px] font-bold text-ink-faint uppercase">{% translate "Time" %}</dt><dd class="num text-[18px] font-extrabold">{{ seconds|duration_s }}</dd></div>
+    <div class="rounded-lg bg-canvas px-4 py-2"><dt class="text-[11px] font-bold text-ink-faint uppercase">{% translate "Turns" %}</dt><dd class="num text-[18px] font-extrabold">{{ messages_|length }}</dd></div>
+  </dl>
+  {% if lesson.status != "final" %}
+    <div class="flex flex-wrap gap-2">
+      <a class="btn btn-secondary" href="{% url 'student:micro' section.number %}">{% include "components/icons.html#edit" %}{% translate "Change the microlesson" %}</a>
+      <a class="btn btn-primary" href="{% url 'student:micro_trial' section.number %}">{% include "components/icons.html#refresh" %}{% translate "Try it out again" %}</a>
+    </div>
+  {% endif %}
+</section>
+
+<div class="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_380px]">
+  <section class="card flex min-w-0 flex-col gap-4" aria-labelledby="dlg-title">
+    <h2 id="dlg-title" class="text-[17px] font-extrabold">{% translate "The microlesson dialogue" %}</h2>
+    {% for s in stages %}
+      {% with order=forloop.counter %}
+        <div class="tone-{{ order }} flex flex-col gap-3 rounded-lg border border-(--tone)/25 p-4">
+          <p class="flex items-center gap-2 text-[14px] font-extrabold text-(--tone)"><span class="num grid size-7 place-items-center rounded-full bg-(--tone) text-[12px] text-white">{{ order }}</span>{{ s.title }} <span class="num text-[12px] font-semibold">{{ s.start }}–{{ s.end }}′</span></p>
+          {% for m in messages_ %}{% if m.stage_order == order %}
+            <div class="flex flex-col gap-2 border-l-2 border-(--tone)/30 pl-3">
+              <p class="text-[13.5px] leading-[20px]"><span class="font-bold">{% translate "Student-teacher" %} · {{ m.get_kind_display|lower }} <span class="num text-ink-faint">{{ m.at_s|duration_s }}</span>:</span> {{ m.text|linebreaksbr }}</p>
+              <p class="rounded-lg bg-ai-50/60 px-3 py-2 text-[13.5px] leading-[20px]"><span class="font-bold text-ai-700">{% translate "The AI student" %}:</span> {{ m.reply|linebreaksbr }}
+                {% if m.answer_type != "none" %}<span class="badge {% if m.answer_type == 'correct' %}badge-success{% elif m.answer_type == 'partial' %}badge-warning{% else %}badge-danger{% endif %} ml-1 text-[10.5px] font-bold">{{ m.get_answer_type_display }}</span>{% endif %}</p>
+            </div>
+          {% endif %}{% endfor %}
+          {% if not messages_ %}<p class="text-[13px] text-ink-faint">—</p>{% endif %}
+        </div>
+      {% endwith %}
+    {% endfor %}
+  </section>
+
+  <aside class="flex flex-col gap-4 xl:sticky xl:top-20">
+    <section class="card flex flex-col gap-3" aria-labelledby="grade-title">
+      <div class="flex items-center justify-between gap-3">
+        <h2 id="grade-title" class="text-[16px] font-extrabold">{% translate "Result of the microlesson" %}</h2>
+        {% if review %}<span class="num text-[24px] font-extrabold text-success-700">{{ review.total }}<span class="text-[15px] text-ink-faint">/10</span></span>{% else %}<span class="badge badge-info text-[11px] font-bold">{% translate "Not graded by the teacher yet" %}</span>{% endif %}
+      </div>
+      <ul class="flex flex-col gap-1.5">
+        {% for c in score_rows %}
+          <li class="flex items-center gap-2.5 rounded-lg bg-canvas px-3 py-2 text-[12.5px] leading-[17px]">
+            <span class="num grid size-6 shrink-0 place-items-center rounded-full bg-primary-600 text-[11px] font-extrabold text-white">{{ c.number }}</span>
+            <span class="min-w-0 flex-1">{{ c.label }}</span><span class="num font-bold">{% if c.points is not None %}{{ c.points }}{% else %}—{% endif %}/2</span>
+          </li>
+        {% endfor %}
+      </ul>
+      {% if review.comment %}<p class="rounded-lg border border-line px-3 py-2 text-[13px]"><span class="font-bold">{% translate "Teacher's comment" %}:</span> {{ review.comment|linebreaksbr }}</p>{% endif %}
+      <p class="text-[11.5px] text-ink-faint">{% translate "The AI assistant's «Correct / Wrong» check applies only to preparing the content; the professional trial is graded apart by the protocol and the criteria." %}</p>
+    </section>
+    <section class="card flex flex-col gap-2" aria-labelledby="all-title">
+      <h2 id="all-title" class="text-[15px] font-extrabold">{% translate "Trial results" %}</h2>
+      {% for t in trials %}
+        <a href="{% if t.trial.finished_at %}{% url 'student:micro_protocol' section.number t.trial.pk %}{% else %}{% url 'student:micro_dialog' section.number t.trial.pk %}{% endif %}" class="flex items-center gap-3 rounded-lg border px-3 py-2 text-[13px] {% if t.trial.pk == trial.pk %}border-primary-600 bg-primary-50{% else %}border-line hover:border-primary-600{% endif %}">
+          <span class="w-20 shrink-0 font-bold">{% blocktranslate with n=t.number %}Trial {{ n }}{% endblocktranslate %}</span>
+          <span class="block h-2.5 flex-1 overflow-hidden rounded-full bg-surface-sunken">{% if t.review %}<span class="block h-full rounded-full {% if t.review.total >= 8 %}bg-success-600{% elif t.review.total >= 5 %}bg-warning-500{% else %}bg-danger-600{% endif %}" style="width: {{ t.review.total }}0%"></span>{% endif %}</span>
+          <span class="num w-12 text-right font-extrabold">{% if t.review %}{{ t.review.total }}0%{% else %}—{% endif %}</span>
+        </a>
+      {% endfor %}
+    </section>
+  </aside>
+</div>
+{% endblock %}

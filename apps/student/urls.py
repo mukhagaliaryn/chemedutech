@@ -1,11 +1,12 @@
 from django.urls import path
 
-from . import designer, practice, sections, views
+from . import designer, micro, practice, sections, views
 
 app_name = "student"
 
 LESSON = "me/sections/<int:number>/lessons/<int:pk>/"
 PRACTICE = "me/sections/<int:number>/practices/<int:pk>/"
+MICRO = "me/sections/<int:number>/microlesson/"
 STAGE = "learn/<slug:course_slug>/<int:topic_number>/<int:stage_pk>/"
 
 urlpatterns = [
@@ -46,6 +47,17 @@ urlpatterns = [
     path(PRACTICE + "<int:order>/", practice.practice_stage, name="practice_stage"),
     path(PRACTICE + "<int:order>/save/", practice.practice_stage_save, name="practice_stage_save"),
     path(PRACTICE + "<int:order>/ai/", practice.practice_stage_ai, name="practice_stage_ai"),
+    path(MICRO + "start/", micro.micro_start, name="micro_start"),
+    path(MICRO, micro.micro, name="micro"),
+    path(MICRO + "check/", micro.micro_check, name="micro_check"),
+    path(MICRO + "trial/", micro.micro_trial, name="micro_trial"),
+    path(MICRO + "trial/<int:trial_pk>/", micro.micro_dialog, name="micro_dialog"),
+    path(MICRO + "trial/<int:trial_pk>/send/", micro.micro_send, name="micro_send"),
+    path(MICRO + "trial/<int:trial_pk>/finish/", micro.micro_finish, name="micro_finish"),
+    path(MICRO + "trial/<int:trial_pk>/protocol/", micro.micro_protocol, name="micro_protocol"),
+    path(MICRO + "assemble/", micro.micro_assemble, name="micro_assemble"),
+    path(MICRO + "pdf/", micro.micro_pdf, name="micro_pdf"),
+    path(MICRO + "<int:order>/save/", micro.micro_stage_save, name="micro_stage_save"),
     path("me/icpai/", sections.results, name="icpai"),
     path("me/search/", views.search, name="search"),
     path("me/results/", views.results, name="results"),

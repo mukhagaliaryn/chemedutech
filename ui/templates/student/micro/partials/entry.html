@@ -1,0 +1,76 @@
+{% load i18n %}{% comment %}
+Section 6 on its section page (guide @S6; picture image21): the idea of the section, the way of the work (try out →
+analyse → change → try out again → assemble) and either the student's one microlesson or «Choose the microlesson» —
+a part (stage) of one of the section 5 practices — with «Create the microlesson».
+micro, micro_trials or micro_sources (student.micro.micro_context); section.
+{% endcomment %}
+<section class="relative overflow-hidden rounded-xl bg-[linear-gradient(120deg,var(--color-primary-900),var(--color-primary-600)_55%,var(--color-stage-video))] p-[clamp(20px,3vw,30px)] text-white" aria-labelledby="micro-hero">
+  <svg aria-hidden="true" class="pointer-events-none absolute -right-6 -bottom-10 h-52 opacity-15" viewBox="0 0 200 160"><g fill="none" stroke="#fff" stroke-width="2"><rect x="30" y="30" width="90" height="60" rx="8"/><path d="M50 110h50M75 90v20"/><circle cx="160" cy="50" r="22" class="spin-slow" stroke-dasharray="6 6"/><path d="M150 50l8 8 14-16"/></g></svg>
+  <div class="relative flex flex-col gap-4">
+    <p id="micro-hero" class="max-w-[760px] text-[17px] leading-[26px] font-semibold">{% translate "In section 5 the lesson was developed with the help of AI, and in section 6 the student conducts the MICROLESSON ON THEIR OWN and improves it." %}</p>
+    <ol class="flex flex-wrap items-center gap-1.5 text-[12.5px] font-bold">
+      {% translate "Try it out" as w1 %}{% translate "Analyse the answer" as w2 %}{% translate "Change" as w3 %}{% translate "Try it out again" as w4 %}{% translate "Assemble the microlesson" as w5 %}
+      {% for w in w1|add:"|"|add:w2|add:"|"|add:w3|add:"|"|add:w4|add:"|"|add:w5|split:"|" %}
+        <li class="flex items-center gap-2 rounded-full bg-white/15 py-1.5 pr-3.5 pl-1.5 ring-1 ring-white/25"><span class="num grid size-6 place-items-center rounded-full bg-white text-[12px] text-primary-900">{{ forloop.counter }}</span>{{ w }}</li>
+        {% if not forloop.last %}<li aria-hidden="true" class="text-white/60">{% include "components/icons.html#chevron-right" with size=14 %}</li>{% endif %}
+      {% endfor %}
+    </ol>
+  </div>
+</section>
+
+{% if micro %}
+  <section class="card flex flex-wrap items-center gap-5" aria-labelledby="my-micro">
+    <span class="grid size-14 shrink-0 place-items-center rounded-[18px] bg-[linear-gradient(135deg,var(--color-stage-video),var(--color-primary-600))] text-white">{% include "components/icons.html#play" with size=24 %}</span>
+    <div class="min-w-0 flex-[1_1_360px]">
+      <p class="text-[12px] font-bold tracking-wide text-ink-faint uppercase">{% translate "Your microlesson" %} · {% blocktranslate with n=10 %}{{ n }} min{% endblocktranslate %}</p>
+      <h2 id="my-micro" class="text-[18px] leading-6 font-extrabold">{{ micro.topic|default:micro.title }}</h2>
+      <p class="mt-1 flex flex-wrap items-center gap-2 text-[13px] text-ink-soft">
+        <span class="badge {% if micro.status == 'final' %}badge-success{% else %}badge-info{% endif %} text-[11px] font-bold">{% if micro.status == "final" %}{% translate "Assembled" %}{% elif micro_trials %}{% translate "Being tried out" %}{% else %}{% translate "Being developed" %}{% endif %}</span>
+        {% blocktranslate count n=micro_trials|length %}{{ n }} trial{% plural %}{{ n }} trials{% endblocktranslate %}
+        {% for t in micro_trials %}{% if t.review %}<span class="num font-bold text-success-700">· {{ t.number }}: {{ t.review.total }}/10</span>{% endif %}{% endfor %}
+      </p>
+    </div>
+    <a class="btn btn-primary" href="{% url 'student:micro' section.number %}">{% translate "Open the microlesson" %}{% include "components/icons.html#arrow-right" %}</a>
+  </section>
+{% elif micro_sources %}
+  <form method="post" action="{% url 'student:micro_start' section.number %}" class="card flex flex-col gap-4" aria-labelledby="choose-title"
+        x-data="{ practice: '{{ micro_sources.0.pk }}', stage: '' }">{% csrf_token %}
+    <div>
+      <h2 id="choose-title" class="text-[19px] font-extrabold">{% translate "Choosing the microlesson" %}</h2>
+      <p class="mt-1 max-w-[860px] text-[14px] leading-[21px] text-ink-soft">{% translate "Choose the authorial lesson you developed in section 5. Take one content part of it and adapt it to an independent 10-minute microlesson. The microlesson covers one concrete learning aim, not the whole content of the topic." %}</p>
+    </div>
+    <div class="grid gap-3 lg:grid-cols-3" role="radiogroup" aria-label="{% translate 'Your lesson' %}">
+      {% for p in micro_sources %}
+        <label class="tone-{{ forloop.counter }} cursor-pointer rounded-lg border-2 p-3 transition-all" :class="practice === '{{ p.pk }}' ? 'border-(--tone) bg-(--tone-50) shadow-lift' : 'border-line hover:border-(--tone)/50'">
+          <input type="radio" name="practice" value="{{ p.pk }}" class="sr-only" x-model="practice" @change="stage = ''">
+          <span class="flex items-center gap-3">
+            <span class="tpl-{{ p.source_template.code }} relative block h-12 w-16 shrink-0 overflow-hidden rounded-[10px]"><span class="absolute inset-0.5">{% include "student/designer/partials/art.html#"|add:p.source_template.code %}</span></span>
+            <span class="min-w-0"><span class="block text-[11.5px] font-bold text-(--tone) uppercase">{% translate "Practice" %} №{{ p.source_template.number }}</span><span class="line-clamp-2 text-[14px] font-bold">{{ p.title|default:p.source_template.name }}</span></span>
+          </span>
+        </label>
+      {% endfor %}
+    </div>
+    {% for p in micro_sources %}
+      <fieldset x-show="practice === '{{ p.pk }}'" x-cloak class="flex flex-col gap-2">
+        <legend class="mb-2 text-[14px] font-bold">{% translate "Choose the part of the lesson" %}</legend>
+        <div class="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+          {% for s in p.stages.all %}
+            <label class="tone-{{ s.order }} flex cursor-pointer items-start gap-2.5 rounded-lg border p-3 transition-colors" :class="stage === '{{ s.order }}' && practice === '{{ p.pk }}' ? 'border-(--tone) bg-(--tone-50)' : 'border-line hover:border-(--tone)/50'">
+              <input type="radio" name="stage" value="{{ s.order }}" class="sr-only" x-model="stage" :disabled="practice !== '{{ p.pk }}'">
+              <span class="num grid size-7 shrink-0 place-items-center rounded-full bg-(--tone) text-[12.5px] font-extrabold text-white">{{ s.order }}</span>
+              <span class="min-w-0"><span class="block text-[13.5px] font-bold">{{ s.title }}</span>{% if s.edited %}<span class="text-[11.5px] text-success-700">{% translate "filled in" %}</span>{% else %}<span class="text-[11.5px] text-ink-faint">{% translate "empty" %}</span>{% endif %}</span>
+            </label>
+          {% endfor %}
+        </div>
+      </fieldset>
+    {% endfor %}
+    <div class="flex flex-wrap items-center justify-between gap-3 border-t border-line pt-4">
+      <p class="flex items-center gap-2 text-[13px] text-ink-soft">{% include "components/icons.html#info" with size=15 %}{% translate "Only one microlesson is made. Later corrections are kept as its updated versions." %}</p>
+      {% translate "Create the microlesson?" as c_title %}{% translate "One microlesson is made from the chosen part; it cannot be made again from another part." as c_text %}{% translate "Create" as c_label %}
+      <button type="submit" class="btn btn-primary h-[46px] px-5 font-bold" :disabled="!stage" data-confirm="{{ c_title }}" data-confirm-text="{{ c_text }}" data-confirm-label="{{ c_label }}">{% include "components/icons.html#plus" %}{% translate "Create the microlesson" %}</button>
+    </div>
+  </form>
+{% else %}
+  {% translate "No section 5 lessons yet" as l_title %}{% translate "The microlesson is made from a part of your section 5 practice." as l_text %}
+  {% include "components/empty_state.html" with title=l_title text=l_text icon="book" %}
+{% endif %}

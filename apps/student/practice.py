@@ -83,7 +83,7 @@ def practice_context(user) -> dict:
         for p in Lesson.objects.filter(owner=user, kind=Lesson.Kind.RESEARCH_PRACTICE).prefetch_related("stages")
     }
     sources = {p.source_template_id: p for p in Lesson.objects.filter(owner=user, kind=Lesson.Kind.TEMPLATE_COPY)}
-    reviews = {r.lesson_id: r for r in Review.objects.filter(lesson__in=practices.values())}
+    reviews = {r.lesson_id: r for r in Review.objects.filter(lesson__in=practices.values(), trial__isnull=True)}
     cards = []
     for template in pedagogy_selectors.templates():
         practice = practices.get(template.pk)
@@ -100,8 +100,10 @@ def practice_grades(user) -> list[dict]:
     """The finished section 5 practices with the teacher's 10-point grade («Results», kept apart from ICPAI)."""
     lessons = Lesson.objects.filter(owner=user, kind=Lesson.Kind.RESEARCH_PRACTICE, status=Lesson.Status.FINAL)
     return [
-        {"lesson": lesson, "review": getattr(lesson, "review", None)}
-        for lesson in lessons.select_related("source_template", "review").order_by("source_template__number")
+        {"lesson": lesson, "review": lesson.review}
+        for lesson in lessons.select_related("source_template")
+        .prefetch_related("reviews")
+        .order_by("source_template__number")
     ]
 
 
@@ -370,7 +372,7 @@ def _report(lesson, trial) -> dict:
             "fields": [{"label": labels.get(k, k), "html": v} for k, v in s["fields"].items() if v],
         })  # fmt: skip
     kinds = [t.answer_type for t in turns.values()]
-    review = getattr(lesson, "review", None) if lesson.status == Lesson.Status.FINAL else None
+    review = lesson.review if lesson.status == Lesson.Status.FINAL else None
     return {
         "trial": trial,
         "version": version,

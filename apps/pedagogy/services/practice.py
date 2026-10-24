@@ -225,12 +225,16 @@ def finish(trial: Trial) -> LessonVersion:
 
 
 @transaction.atomic
-def grade(lesson: Lesson, teacher, scores: dict, comment: str = "") -> Review:
-    """The teacher's 10-point grade of a finished practice (@S5 VII): each of the five criteria 0–2."""
-    if lesson.kind != Lesson.Kind.RESEARCH_PRACTICE or lesson.status != Lesson.Status.FINAL:
+def grade(lesson: Lesson, teacher, scores: dict, comment: str = "", trial: Trial | None = None) -> Review:
+    """The teacher's 10-point grade, each of the five criteria 0–2: a finished section 5 practice (@S5 VII) or one
+    finished trial of the section 6 microlesson (@S6 VI — each trial is graded apart)."""
+    if lesson.kind == Lesson.Kind.MICROLESSON:
+        if trial is None or trial.lesson_id != lesson.pk or trial.finished_at is None:
+            raise LessonError("not_finished")
+    elif lesson.kind != Lesson.Kind.RESEARCH_PRACTICE or lesson.status != Lesson.Status.FINAL or trial is not None:
         raise LessonError("not_final")
     clean_scores = {}
-    for number, _label in Review.CRITERIA:
+    for number, _label in Review.criteria_for(lesson):
         try:
             value = int(scores.get(str(number), scores.get(number)))
         except (TypeError, ValueError):
@@ -240,6 +244,7 @@ def grade(lesson: Lesson, teacher, scores: dict, comment: str = "") -> Review:
         clean_scores[str(number)] = value
     review, _created = Review.objects.update_or_create(
         lesson=lesson,
+        trial=trial,
         defaults={"teacher": teacher, "scores": clean_scores, "total": sum(clean_scores.values()),
                   "comment": (comment or "").strip()[:4000]},
     )  # fmt: skip

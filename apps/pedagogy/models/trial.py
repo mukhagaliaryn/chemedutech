@@ -21,6 +21,7 @@ class Trial(models.Model):
     class Mode(models.TextChoices):
         ASSEMBLED = "assembled", _("The assembled lesson, stage by stage on demand")
         STEPWISE = "stepwise", _("Conducting the lesson stage by stage")
+        DIALOG = "dialog", _("A microlesson in dialogue")
 
     mode = models.CharField(_("mode"), max_length=12, choices=Mode.choices, default=Mode.ASSEMBLED)
     grade = models.CharField(_("grade"), max_length=8, blank=True, help_text=_("Section 5: the class, 7–11"))
@@ -76,3 +77,42 @@ class TrialTurn(models.Model):
 
     def __str__(self):
         return f"{self.trial} · {self.stage_order}"
+
+
+class TrialMessage(models.Model):
+    """A turn of the microlesson dialogue (guide @S6 IV; picture image23): the future teacher's explanation, question
+    or pedagogical action and the AI student's reply (with its correctness when it answers a question)."""
+
+    class Kind(models.TextChoices):
+        EXPLANATION = "explanation", _("Explanation")
+        QUESTION = "question", _("Question")
+        ACTION = "action", _("Pedagogical action")
+
+    class AnswerType(models.TextChoices):
+        CORRECT = "correct", _("Correct")
+        PARTIAL = "partial", _("Partly correct")
+        WRONG = "wrong", _("Wrong")
+        NONE = "none", _("Not an answer")
+
+    trial = models.ForeignKey(Trial, on_delete=models.PROTECT, related_name="messages", verbose_name=_("trial"))
+    number = models.PositiveSmallIntegerField(_("number"))
+    stage_order = models.PositiveSmallIntegerField(_("stage"), help_text=_("By the timer: 1 (0–2 min) … 4 (8–10 min)"))
+    kind = models.CharField(_("kind"), max_length=12, choices=Kind.choices)
+    text = models.TextField(_("the teacher's message"))
+    reply = models.TextField(_("the AI student's reply"), blank=True)
+    answer_type = models.CharField(_("answer type"), max_length=8, choices=AnswerType.choices, default=AnswerType.NONE)
+    at_s = models.PositiveIntegerField(
+        _("time from the start, s"), help_text=_("The AI student's thinking not counted")
+    )
+    wait_ms = models.PositiveIntegerField(_("the AI's answer time, ms"), default=0)
+    message_id = models.PositiveIntegerField(_("AI message"), null=True, blank=True)
+    created_at = models.DateTimeField(_("created at"), auto_now_add=True)
+
+    class Meta:
+        ordering = ("trial", "number")
+        verbose_name = _("microlesson turn")
+        verbose_name_plural = _("microlesson turns")
+        constraints = [models.UniqueConstraint(fields=("trial", "number"), name="trial_message_number_unique")]
+
+    def __str__(self):
+        return f"{self.trial} · {self.number}"
