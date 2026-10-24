@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% comment %}Public pages (certificate verification, catalogue): white top bar + centred content up to 1240px. The landing has its own hero navbar.{% endcomment %}
+{% comment %}Public pages (certificate verification, catalogue, «About»): white top bar + centred content up to 1240px. The landing has its own hero navbar.{% endcomment %}
 {% block body %}
 <header class="sticky top-0 z-40 border-b border-line bg-white/90 backdrop-blur-md">
   <div class="mx-auto flex h-[72px] max-w-[1240px] items-center gap-4 px-4 sm:px-6">
@@ -11,7 +11,7 @@
         <a class="btn btn-primary btn-sm h-[42px]" href="{% url 'core:home' %}">{% include "components/icons.html#grid" %}{% translate "My cabinet" %}</a>
       {% else %}
         <a class="btn btn-ghost btn-sm h-[42px] max-sm:hidden" href="{% url 'accounts:login' %}">{% include "components/icons.html#login" %}{% translate "Log in" %}</a>
-        <a class="btn btn-primary btn-sm h-[42px]" href="{% url 'accounts:signup' %}">{% include "components/icons.html#user-plus" %}{% translate "Sign up" %}</a>
+        <a class="btn btn-primary btn-sm h-[42px]" href="{% url 'core:about' %}">{% include "components/icons.html#user-plus" %}{% translate "Sign up" %}</a>
       {% endif %}
     </nav>
   </div>

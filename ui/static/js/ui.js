@@ -103,7 +103,45 @@ const store = {
   },
 };
 
+// Public pages (core/about.html): [data-reveal] blocks fade in when scrolled into view. Without JS, without
+// IntersectionObserver or under prefers-reduced-motion nothing is hidden (the class below is never added).
+const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+if (!calm && "IntersectionObserver" in window) {
+  const seen = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          seen.unobserve(entry.target);
+        }
+      }
+    },
+    { rootMargin: "0px 0px -8% 0px" },
+  );
+  document.addEventListener("DOMContentLoaded", () => {
+    const blocks = document.querySelectorAll("[data-reveal]");
+    if (blocks.length) document.documentElement.classList.add("reveal-on");
+    blocks.forEach((el) => seen.observe(el));
+  });
+}
+
 document.addEventListener("alpine:init", () => {
+  // core/about.html: a card that leans towards the pointer (class "tilt" reads --rx / --ry).
+  window.Alpine.data("tilt", () => ({
+    move(event) {
+      if (calm) return;
+      const box = this.$el.getBoundingClientRect();
+      const x = (event.clientX - box.left) / box.width - 0.5;
+      const y = (event.clientY - box.top) / box.height - 0.5;
+      this.$el.style.setProperty("--ry", `${(x * 8).toFixed(2)}deg`);
+      this.$el.style.setProperty("--rx", `${(-y * 8).toFixed(2)}deg`);
+    },
+    leave() {
+      this.$el.style.setProperty("--rx", "0deg");
+      this.$el.style.setProperty("--ry", "0deg");
+    },
+  }));
+
   // layouts/cabinet.html: mobile drawer (nav) and the collapsible desktop rail.
   window.Alpine.data("cabinet", () => ({
     nav: false,

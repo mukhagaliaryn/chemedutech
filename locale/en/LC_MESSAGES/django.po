@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 17:24+0500\n"
+"POT-Creation-Date: 2026-10-24 18:58+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -385,7 +385,7 @@ msgstr ""
 msgid "answers"
 msgstr ""
 
-#: apps/assessments/models/quiz.py:12 ui/templates/core/home.html:100
+#: apps/assessments/models/quiz.py:12
 #: ui/templates/teacher/content/stage.html:59
 msgid "Checkpoint quiz"
 msgstr ""
@@ -786,7 +786,7 @@ msgid "Learning and grading"
 msgstr ""
 
 #: apps/courses/admin.py:64 apps/research/apps.py:8
-#: ui/templates/core/home.html:33 ui/templates/research/dashboard.html:3
+#: ui/templates/research/dashboard.html:3
 msgid "Research"
 msgstr ""
 
@@ -1208,13 +1208,11 @@ msgstr ""
 msgid "This course already has a topic with this number."
 msgstr ""
 
-#: apps/courses/models/structure.py:67 ui/templates/core/home.html:197
-#: ui/views.py:10
+#: apps/courses/models/structure.py:67 ui/views.py:10
 msgid "Theory"
 msgstr ""
 
-#: apps/courses/models/structure.py:68 ui/templates/core/home.html:198
-#: ui/views.py:11
+#: apps/courses/models/structure.py:68 ui/views.py:11
 msgid "Video lesson"
 msgstr ""
 
@@ -1380,7 +1378,8 @@ msgstr ""
 msgid "The reply belongs to another work."
 msgstr ""
 
-#: apps/labs/apps.py:8 ui/templates/student/stages/lab.html:6
+#: apps/labs/apps.py:8 ui/templates/core/home.html:22
+#: ui/templates/student/stages/lab.html:6
 msgid "Virtual lab"
 msgstr ""
 
@@ -4225,6 +4224,7 @@ msgid "In progress…"
 msgstr ""
 
 #: apps/labs/views.py:50 ui/templates/accounts/signup.html:130
+#: ui/templates/core/about.html:362
 msgid "Next"
 msgstr ""
 
@@ -4349,8 +4349,7 @@ msgid ""
 "unfinished attempt."
 msgstr ""
 
-#: apps/labs/views.py:83 ui/templates/core/home.html:90
-#: ui/templates/research/analytics.html:100
+#: apps/labs/views.py:83 ui/templates/research/analytics.html:100
 msgid "Safety"
 msgstr ""
 
@@ -4503,8 +4502,8 @@ msgid "Show the panel"
 msgstr ""
 
 #: apps/labs/views.py:123 ui/templates/components/alert.html:10
-#: ui/templates/components/toast.html:16 ui/templates/core/home.html:114
-#: ui/templates/layouts/learn.html:49
+#: ui/templates/components/toast.html:16 ui/templates/layouts/learn.html:49
+#: ui/templates/layouts/site.html:45
 #: ui/templates/student/partials/quiz_panel.html:93
 #: ui/templates/teacher/dashboard.html:101 ui/templates/teacher/group.html:77
 #: ui/templates/teacher/group.html:225 ui/templates/teacher/group.html:242
@@ -5436,6 +5435,15 @@ msgstr ""
 msgid "section events"
 msgstr ""
 
+#: apps/programme/tests.py:222 ui/templates/student/dashboard.html:68
+#: ui/templates/teacher/dashboard.html:27 ui/templates/teacher/student.html:35
+msgid "Key figures"
+msgstr ""
+
+#: apps/programme/tests.py:255 ui/templates/student/section.html:62
+msgid "The section is in development"
+msgstr ""
+
 #: apps/progress/admin.py:30
 msgid "Open the selected stages for the student"
 msgstr ""
@@ -5696,7 +5704,7 @@ msgstr ""
 msgid "Teacher cabinet"
 msgstr ""
 
-#: apps/research/admin_dashboard.py:54 ui/templates/core/home.html:293
+#: apps/research/admin_dashboard.py:54
 #: ui/templates/partials/shell/sidebar_teacher.html:22
 #: ui/templates/research/analytics.html:8
 msgid "Statistics"
@@ -5776,7 +5784,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: apps/student/cabinet.py:95 ui/templates/labs/run.html:282
-#: ui/templates/student/home.html:60 ui/templates/student/results.html:92
+#: ui/templates/student/home.html:63 ui/templates/student/results.html:92
 #: ui/templates/student/topic.html:43
 #: ui/templates/teacher/content/course.html:32
 #: ui/templates/teacher/content/courses.html:22
@@ -5821,8 +5829,6 @@ msgid "Quiz · attempt %(n)s"
 msgstr ""
 
 #: apps/student/cabinet.py:187 config/settings/base.py:377
-#: ui/templates/core/home.html:31 ui/templates/core/home.html:199
-#: ui/templates/core/home.html:359
 msgid "Lab"
 msgstr ""
 
@@ -5950,8 +5956,7 @@ msgstr ""
 msgid "Kind"
 msgstr ""
 
-#: apps/teacher/content_forms.py:130 ui/templates/core/home.html:228
-#: ui/templates/labs/run.html:37
+#: apps/teacher/content_forms.py:130 ui/templates/labs/run.html:37
 msgid "Experiments"
 msgstr ""
 
@@ -6355,9 +6360,9 @@ msgstr ""
 
 #: ui/templates/accounts/login.html:3 ui/templates/accounts/login.html:46
 #: ui/templates/accounts/password_reset_complete.html:9
-#: ui/templates/accounts/signup.html:16 ui/templates/core/home.html:40
-#: ui/templates/core/home.html:118 ui/templates/core/home.html:360
-#: ui/templates/layouts/public.html:14
+#: ui/templates/accounts/signup.html:16 ui/templates/core/home.html:39
+#: ui/templates/layouts/public.html:14 ui/templates/layouts/site.html:31
+#: ui/templates/layouts/site.html:52
 msgid "Log in"
 msgstr ""
 
@@ -6394,7 +6399,7 @@ msgid "or"
 msgstr ""
 
 #: ui/templates/accounts/login.html:49 ui/templates/accounts/signup.html:9
-#: ui/templates/accounts/signup.html:28 ui/templates/core/home.html:347
+#: ui/templates/accounts/signup.html:28
 msgid "Sign up as a student"
 msgstr ""
 
@@ -6553,13 +6558,13 @@ msgstr "Are the details correct?"
 msgid "Full name"
 msgstr ""
 
-#: ui/templates/accounts/signup.html:129
+#: ui/templates/accounts/signup.html:129 ui/templates/core/about.html:357
 msgid "Back"
 msgstr ""
 
-#: ui/templates/accounts/signup.html:131 ui/templates/core/home.html:41
-#: ui/templates/core/home.html:119 ui/templates/core/home.html:360
-#: ui/templates/layouts/public.html:15
+#: ui/templates/accounts/signup.html:131 ui/templates/core/about.html:366
+#: ui/templates/core/home.html:38 ui/templates/layouts/public.html:15
+#: ui/templates/layouts/site.html:32 ui/templates/layouts/site.html:53
 msgid "Sign up"
 msgstr ""
 
@@ -6775,7 +6780,7 @@ msgid "The certificate is real: it was issued by ChemEduTech."
 msgstr ""
 
 #: ui/templates/certificates/verify.html:10
-#: ui/templates/certificates/verify.html:12 ui/templates/core/home.html:64
+#: ui/templates/certificates/verify.html:12
 #: ui/templates/student/partials/certificate_card.html:10
 msgid "Certificate"
 msgstr ""
@@ -6813,426 +6818,253 @@ msgstr ""
 msgid "Confirm"
 msgstr ""
 
-#: ui/templates/core/home.html:8
-msgid "virtual chemistry lab"
+#: ui/templates/core/about.html:13 ui/templates/core/about.html:34
+#: ui/templates/layouts/site.html:20
+msgid "Platform introduction"
 msgstr ""
 
-#: ui/templates/core/home.html:28
-msgid "Main"
+#: ui/templates/core/about.html:13 ui/templates/core/about.html:16
+#: ui/templates/core/about.html:34 ui/templates/layouts/site.html:21
+msgid "Expected results"
 msgstr ""
 
-#: ui/templates/core/home.html:30 ui/templates/core/home.html:138
-#: ui/templates/core/home.html:359
-msgid "Features"
+#: ui/templates/core/about.html:13 ui/templates/core/about.html:34
+#: ui/templates/layouts/site.html:22
+msgid "ICPAI model"
 msgstr ""
 
-#: ui/templates/core/home.html:32 ui/templates/core/home.html:191
-msgid "Learning path"
+#: ui/templates/core/about.html:15
+msgid "ChemEduTech platform introduction"
 msgstr ""
 
-#: ui/templates/core/home.html:34 ui/templates/core/home.html:359
-#: ui/templates/student/stages/test.html:6
-#: ui/templates/teacher/content/quiz.html:19
-msgid "Questions"
+#: ui/templates/core/about.html:17 ui/templates/core/about.html:339
+msgid "ICPAI authorial model"
 msgstr ""
 
-#: ui/templates/core/home.html:42
-msgid "Open menu"
-msgstr ""
-
-#: ui/templates/core/home.html:52
-msgid "New"
-msgstr ""
-
-#: ui/templates/core/home.html:53
+#: ui/templates/core/about.html:31
 #, python-format
-msgid "Topic %(n)s: %(k)s virtual experiment ready"
-msgid_plural "Topic %(n)s: %(k)s virtual experiments ready"
-msgstr[0] ""
-msgstr[1] ""
-
-#: ui/templates/core/home.html:56
-msgid "Learn chemistry in a safe lab"
+msgid "About the platform · %(n)s / %(total)s"
 msgstr ""
 
-#: ui/templates/core/home.html:57
+#: ui/templates/core/about.html:33 ui/templates/core/about.html:355
+#: ui/templates/feedback/notifications.html:28
+msgid "Pages"
+msgstr ""
+
+#: ui/templates/core/about.html:62 ui/templates/core/home.html:19
 msgid ""
-"An online course for future chemistry teachers: theory, video lessons, an "
-"interactive virtual lab and automatic grading — on one platform, in Kazakh."
+"ChemEduTech is a digital platform that brings together the information "
+"educational environment, chemistry subject content, pedagogical design and "
+"artificial intelligence tools in the professional training of future "
+"chemistry teachers."
 msgstr ""
 
-#: ui/templates/core/home.html:59
-msgid "Start for free"
-msgstr ""
-
-#: ui/templates/core/home.html:61
-msgid "See the lab"
-msgstr ""
-
-#: ui/templates/core/home.html:64
-msgid "Kazakh · Russian · English"
-msgstr ""
-
-#: ui/templates/core/home.html:64
-msgid "In the browser, nothing to install"
-msgstr ""
-
-#: ui/templates/core/home.html:91
-msgid "First assemble the gas delivery system."
-msgstr ""
-
-#: ui/templates/core/home.html:95
-msgid "ml"
-msgstr ""
-
-#: ui/templates/core/home.html:100
-msgid "Stage completed"
-msgstr ""
-
-#: ui/templates/core/home.html:112
-msgid "Mobile menu"
-msgstr ""
-
-#: ui/templates/core/home.html:126
-msgid "About the course"
-msgstr ""
-
-#: ui/templates/core/home.html:128
-msgid "modules and topics"
-msgstr ""
-
-#: ui/templates/core/home.html:129
-msgid "virtual lab experiments"
-msgstr ""
-
-#: ui/templates/core/home.html:130
-msgid "kinds of stages: from theory to the test"
-msgstr ""
-
-#: ui/templates/core/home.html:131
-msgid "the lab is open at any time"
-msgstr ""
-
-#: ui/templates/core/home.html:139
-msgid "Just like a real lab, but safe and repeatable"
-msgstr ""
-
-#: ui/templates/core/home.html:145
-msgid "Interactive 2D lab"
-msgstr ""
-
-#: ui/templates/core/home.html:146
+#: ui/templates/core/about.html:67
 msgid ""
-"Drag the equipment onto the bench, add reagents and watch the gas being "
-"collected. The system warns at once about a wrong order and dangerous "
-"actions."
+"On the platform a student not only masters chemical concepts but also "
+"chooses digital resources for teaching them, organises research and virtual "
+"experiments, prepares lesson materials, analyses the results and reflects on "
+"his or her own teaching. The theoretical content of the platform follows the "
+"chapters of the textbook «Pedagogical foundations of informatisation in the "
+"training of chemistry teachers», its practical side — the materials of the "
+"course «Methods of teaching chemistry»."
 msgstr ""
 
-#: ui/templates/core/home.html:160
-msgid "Step-by-step learning"
+#: ui/templates/core/about.html:71
+msgid "Theoretical content"
 msgstr ""
 
-#: ui/templates/core/home.html:161
+#: ui/templates/core/about.html:72
 msgid ""
-"The next stage opens only when the previous one is finished. Theory and "
-"video end with a short 3–4 question checkpoint quiz."
+"«Pedagogical foundations of informatisation in the training of chemistry "
+"teachers»"
 msgstr ""
 
-#: ui/templates/core/home.html:165
-msgid "Automatic and AI grading"
+#: ui/templates/core/about.html:77
+msgid "Practical side"
 msgstr ""
 
-#: ui/templates/core/home.html:166
+#: ui/templates/core/about.html:78
+msgid "«Methods of teaching chemistry»"
+msgstr ""
+
+#: ui/templates/core/about.html:144
+msgid "Tasks"
+msgstr ""
+
+#: ui/templates/core/about.html:147
 msgid ""
-"Formulas and equations are checked by meaning; open answers are graded by AI "
-"against criteria and confirmed by the teacher."
+"To master the scientific and pedagogical foundations of the informatisation "
+"of education."
 msgstr ""
 
-#: ui/templates/core/home.html:170
-msgid "Analytics for the teacher"
-msgstr ""
-
-#: ui/templates/core/home.html:171
+#: ui/templates/core/about.html:148
 msgid ""
-"Groups, the grade register, frequent mistakes and time on each stage — all "
-"in one cabinet."
+"To create conditions for integrating the subject, pedagogical and digital "
+"knowledge of future chemistry teachers."
 msgstr ""
 
-#: ui/templates/core/home.html:175
-msgid "Certificate and grade book"
-msgstr ""
-
-#: ui/templates/core/home.html:176
+#: ui/templates/core/about.html:149
 msgid ""
-"Stage → topic → module → course scores are calculated automatically. When "
-"the course is finished you get a certificate verifiable by its QR code."
-msgstr ""
-"Stage → topic → module → course scores are calculated automatically. A "
-"finished course earns a certificate verifiable by its QR code."
-
-#: ui/templates/core/home.html:192
-msgid "Every topic is a full cycle of stages"
+"To guide the use of digital resources, virtual laboratories and modelling "
+"tools according to the learning aim."
 msgstr ""
 
-#: ui/templates/core/home.html:194
+#: ui/templates/core/about.html:150
 msgid ""
-"The author decides how many stages a topic has: one topic may contain "
-"several practice works."
+"To build the skills of preparing learning tasks and materials with the help "
+"of artificial intelligence, checking the information obtained scientifically "
+"and keeping to ethical requirements."
 msgstr ""
 
-#: ui/templates/core/home.html:197
-msgid "Text with formulas and pictures + a checkpoint quiz"
-msgstr ""
-
-#: ui/templates/core/home.html:198
-msgid "Watching is tracked + a checkpoint quiz"
-msgstr ""
-
-#: ui/templates/core/home.html:199
-msgid "Virtual experiments, journal, analysis"
-msgstr ""
-
-#: ui/templates/core/home.html:200
-msgid "Practice"
-msgstr ""
-
-#: ui/templates/core/home.html:200
-msgid "Problems: automatic and AI grading"
-msgstr ""
-
-#: ui/templates/core/home.html:201
-msgid "Test"
-msgstr ""
-
-#: ui/templates/core/home.html:201
-msgid "The final test of the topic"
-msgstr ""
-
-#: ui/templates/core/home.html:225
-#, python-format
-msgid "Lab work of topic %(n)s"
-msgstr ""
-
-#: ui/templates/core/home.html:243
-#, python-format
-msgid "%(n)s step with order checks and safety warnings"
-msgid_plural "%(n)s steps with order checks and safety warnings"
-msgstr[0] ""
-msgstr[1] ""
-
-#: ui/templates/core/home.html:244
-msgid "Equipment:"
-msgstr ""
-
-#: ui/templates/core/home.html:245
-#, python-format
-msgid "Lab journal: %(n)s field"
-msgid_plural "Lab journal: %(n)s fields"
-msgstr[0] ""
-msgstr[1] ""
-
-#: ui/templates/core/home.html:247
-msgid "Try the experiment"
-msgstr ""
-
-#: ui/templates/core/home.html:272
-msgid "Convenient for students and teachers alike"
-msgstr ""
-
-#: ui/templates/core/home.html:273
-msgid "For whom"
-msgstr ""
-
-#: ui/templates/core/home.html:274
-msgid "For students"
-msgstr ""
-
-#: ui/templates/core/home.html:275
-msgid "For teachers"
-msgstr ""
-
-#: ui/templates/core/home.html:286
-msgid "A clear path"
-msgstr ""
-
-#: ui/templates/core/home.html:286
+#: ui/templates/core/about.html:151
 msgid ""
-"What to do next is always visible: «Continue learning» is one button away."
+"To develop the skills of assessing students' digital research activity and "
+"learning achievements and of self-reflection."
 msgstr ""
 
-#: ui/templates/core/home.html:287
-msgid "Mistakes without risk"
+#: ui/templates/core/about.html:178
+msgid "Aim"
 msgstr ""
 
-#: ui/templates/core/home.html:287
+#: ui/templates/core/about.html:179
 msgid ""
-"When you make a mistake the system explains why — without the danger of a "
-"real lab."
-msgstr ""
-"Every mistake is explained by the system — without the danger of a real lab."
-
-#: ui/templates/core/home.html:288
-msgid "A fair grade"
+"To build a digital research learning environment for developing the "
+"professional readiness of future chemistry teachers under informatisation, "
+"and to develop the skills of designing chemistry content pedagogically and "
+"of using digital technologies and artificial intelligence competently."
 msgstr ""
 
-#: ui/templates/core/home.html:288
-msgid "Every stage score and how it was calculated is shown in the grade book."
-msgstr ""
-
-#: ui/templates/core/home.html:291
-msgid "Group management"
-msgstr ""
-
-#: ui/templates/core/home.html:291
+#: ui/templates/core/about.html:186
 msgid ""
-"Create a group, share the join code and assign the research group (control / "
-"experimental)."
+"designs chemistry content in a digital educational environment and organises "
+"it according to the learning aim;"
 msgstr ""
 
-#: ui/templates/core/home.html:292
-msgid "AI assistant"
+#: ui/templates/core/about.html:187
+msgid "explains chemical processes at the macro, submicro and symbolic levels;"
 msgstr ""
 
-#: ui/templates/core/home.html:292
+#: ui/templates/core/about.html:188
+msgid "designs digital research tasks and virtual chemical experiments;"
+msgstr ""
+
+#: ui/templates/core/about.html:189
 msgid ""
-"AI grades open answers of practice works against the criteria — you only "
-"confirm."
+"chooses and uses artificial intelligence tools according to the aims of "
+"teaching chemistry and checks the results they offer;"
 msgstr ""
-"AI grades open answers of practice works against the criteria — the teacher "
-"only confirms."
 
-#: ui/templates/core/home.html:293
+#: ui/templates/core/about.html:190
 msgid ""
-"See at which step students make mistakes most often and adapt the lesson."
+"prepares his or her own learning material or lesson model and analyses its "
+"effectiveness;"
 msgstr ""
 
-#: ui/templates/core/home.html:301
-msgid "Pedagogical research"
-msgstr ""
-
-#: ui/templates/core/home.html:302
-msgid "Every action is evidence"
-msgstr ""
-
-#: ui/templates/core/home.html:303
+#: ui/templates/core/about.html:191
 msgid ""
-"The platform records every step of a student in the lab, quiz answers and "
-"time spent. Comparing control and experimental groups takes one click."
+"identifies his or her professional difficulties and plans ways of improving "
+"digital pedagogical competence."
 msgstr ""
 
-#: ui/templates/core/home.html:305
-msgid "Action log: order errors, safety warnings, time on each step"
-msgstr ""
-
-#: ui/templates/core/home.html:305
-msgid "Group comparison: mean, median, n"
-msgstr ""
-
-#: ui/templates/core/home.html:305
-msgid "CSV export (UTF-8, ready for Excel)"
-msgstr ""
-
-#: ui/templates/core/home.html:310
-msgid "Average score by stage (example)"
-msgstr ""
-
-#: ui/templates/core/home.html:316 ui/templates/research/analytics.html:41
-#: ui/templates/research/analytics.html:61
-#: ui/templates/research/analytics.html:180
-#: ui/templates/research/analytics.html:211 ui/templates/teacher/groups.html:35
-#: ui/templates/teacher/partials/cohort.html:2
-msgid "Experimental"
-msgstr ""
-
-#: ui/templates/core/home.html:316 ui/templates/research/analytics.html:41
-#: ui/templates/research/analytics.html:62
-#: ui/templates/research/analytics.html:180
-#: ui/templates/research/analytics.html:212 ui/templates/teacher/groups.html:36
-#: ui/templates/teacher/partials/cohort.html:3
-msgid "Control"
-msgstr ""
-
-#: ui/templates/core/home.html:323
-msgid "Frequently asked questions"
-msgstr ""
-
-#: ui/templates/core/home.html:331
-msgid "Who is the platform for?"
-msgstr ""
-
-#: ui/templates/core/home.html:331
+#: ui/templates/core/about.html:247
 msgid ""
-"For students of pedagogical universities training to become chemistry "
-"teachers."
+"The results can be monitored by the motivational, cognitive, activity and "
+"reflective criteria."
 msgstr ""
 
-#: ui/templates/core/home.html:332
-msgid "How does the virtual lab work?"
+#: ui/templates/core/about.html:250
+msgid "Motivational"
 msgstr ""
 
-#: ui/templates/core/home.html:332
+#: ui/templates/core/about.html:250
+msgid "Cognitive"
+msgstr ""
+
+#: ui/templates/core/about.html:250
+msgid "Activity-based"
+msgstr ""
+
+#: ui/templates/core/about.html:250
+msgid "Reflective"
+msgstr ""
+
+#: ui/templates/core/about.html:272
+msgid "information educational environment"
+msgstr ""
+
+#: ui/templates/core/about.html:272
+msgid "ChemEduTech, LMS, electronic resources, digital assessment and feedback"
+msgstr ""
+
+#: ui/templates/core/about.html:273
+msgid "chemistry subject content"
+msgstr ""
+
+#: ui/templates/core/about.html:273
+msgid "grounding the design of authorial tasks for teaching chemistry"
+msgstr ""
+
+#: ui/templates/core/about.html:274
+msgid "pedagogical design"
+msgstr ""
+
+#: ui/templates/core/about.html:274
 msgid ""
-"It opens in the browser, nothing to install. You drag the equipment onto the "
-"bench and carry out the commands in order; the reaction is animated and you "
-"record the result in the journal."
-msgstr ""
-"It opens in the browser, nothing to install. Equipment is dragged onto the "
-"bench and the commands are carried out in order; the reaction is animated "
-"and the result is recorded in the journal."
-
-#: ui/templates/core/home.html:333
-msgid "Why does the next stage not open?"
+"Setting the lesson aim and method, building research tasks, teaching, "
+"assessment and reflection"
 msgstr ""
 
-#: ui/templates/core/home.html:333
+#: ui/templates/core/about.html:275
+msgid "pedagogical use of artificial intelligence"
+msgstr ""
+
+#: ui/templates/core/about.html:275
 msgid ""
-"Each stage opens when the previous one is finished. After the theory and the "
-"video you need to pass a 3–4 question checkpoint quiz."
-msgstr ""
-"Each stage opens when the previous one is finished. After the theory and the "
-"video comes a 3–4 question checkpoint quiz."
-
-#: ui/templates/core/home.html:334
-msgid "Who grades the practice works?"
+"Supporting task design, checking results critically, keeping ethics and "
+"responsibility"
 msgstr ""
 
-#: ui/templates/core/home.html:334
+#: ui/templates/core/about.html:286
+msgid "Component"
+msgstr ""
+
+#: ui/templates/core/about.html:291
+msgid "What it means on the platform"
+msgstr ""
+
+#: ui/templates/core/about.html:351
 msgid ""
-"Numbers, formulas and equations are checked automatically. Free text is "
-"graded by AI against the criteria and confirmed by the teacher."
+"A digital educational platform based on the ICPAI model for the professional "
+"training of future chemistry teachers. The platform links chemistry subject "
+"knowledge with teaching methods and the practice of using digital tools. It "
+"is meant for students of the chemistry teacher education programme."
 msgstr ""
 
-#: ui/templates/core/home.html:335
-msgid "How do I sign up as a teacher?"
+#: ui/templates/core/about.html:359
+msgid "Home page"
 msgstr ""
 
-#: ui/templates/core/home.html:335
-msgid ""
-"Teacher accounts are created by the platform administrator. Contact the "
-"administrator."
+#: ui/templates/core/about.html:364 ui/templates/core/home.html:36
+#: ui/templates/layouts/public.html:12 ui/templates/layouts/site.html:29
+#: ui/templates/layouts/site.html:50
+msgid "My cabinet"
 msgstr ""
 
-#: ui/templates/core/home.html:344
-msgid "Try your first experiment today"
-msgstr "Try the first experiment today"
-
-#: ui/templates/core/home.html:345
-msgid "Signing up takes a minute. Ask your teacher for your group's join code."
-msgstr ""
-"Signing up takes a minute. The group's join code is given by the teacher."
-
-#: ui/templates/core/home.html:356
-msgid ""
-"A virtual lab and an online course for future chemistry teachers. A doctoral "
-"dissertation project."
+#: ui/templates/core/home.html:8 ui/templates/core/home.html:17
+msgid "Educational platform"
 msgstr ""
 
-#: ui/templates/core/home.html:359
-msgid "Platform"
+#: ui/templates/core/home.html:22
+msgid "Interactive models"
 msgstr ""
 
-#: ui/templates/core/home.html:360 ui/templates/layouts/public.html:9
-msgid "Account"
+#: ui/templates/core/home.html:22
+msgid "Professional readiness"
+msgstr ""
+
+#: ui/templates/core/home.html:80
+msgid "General chemistry"
 msgstr ""
 
 #: ui/templates/feedback/notifications.html:4
@@ -7252,10 +7084,6 @@ msgstr[1] ""
 #: ui/templates/feedback/notifications.html:15
 #: ui/templates/feedback/partials/menu.html:7
 msgid "Mark all as read"
-msgstr ""
-
-#: ui/templates/feedback/notifications.html:28
-msgid "Pages"
 msgstr ""
 
 #: ui/templates/feedback/notifications.html:29
@@ -7286,7 +7114,7 @@ msgstr ""
 
 #: ui/templates/feedback/partials/thread.html:12
 #: ui/templates/feedback/partials/thread.html:16
-#: ui/templates/student/dashboard.html:156 ui/templates/student/home.html:75
+#: ui/templates/student/dashboard.html:156 ui/templates/student/home.html:78
 msgid "Reply"
 msgstr ""
 
@@ -7451,8 +7279,20 @@ msgstr ""
 msgid "Course map"
 msgstr ""
 
-#: ui/templates/layouts/public.html:12
-msgid "My cabinet"
+#: ui/templates/layouts/public.html:9
+msgid "Account"
+msgstr ""
+
+#: ui/templates/layouts/site.html:18
+msgid "Main"
+msgstr ""
+
+#: ui/templates/layouts/site.html:34
+msgid "Open menu"
+msgstr ""
+
+#: ui/templates/layouts/site.html:43
+msgid "Mobile menu"
 msgstr ""
 
 #: ui/templates/layouts/student.html:7
@@ -7532,7 +7372,7 @@ msgid "%(a)s of %(b)s stages"
 msgstr ""
 
 #: ui/templates/partials/shell/sidebar_student.html:53
-#: ui/templates/student/courses.html:27 ui/templates/student/home.html:39
+#: ui/templates/student/courses.html:27 ui/templates/student/home.html:42
 #: ui/templates/student/topic.html:20 ui/templates/student/topic.html:43
 msgid "Continue"
 msgstr ""
@@ -7628,6 +7468,22 @@ msgstr ""
 
 #: ui/templates/research/analytics.html:36
 msgid "Key measures"
+msgstr ""
+
+#: ui/templates/research/analytics.html:41
+#: ui/templates/research/analytics.html:61
+#: ui/templates/research/analytics.html:180
+#: ui/templates/research/analytics.html:211 ui/templates/teacher/groups.html:35
+#: ui/templates/teacher/partials/cohort.html:2
+msgid "Experimental"
+msgstr ""
+
+#: ui/templates/research/analytics.html:41
+#: ui/templates/research/analytics.html:62
+#: ui/templates/research/analytics.html:180
+#: ui/templates/research/analytics.html:212 ui/templates/teacher/groups.html:36
+#: ui/templates/teacher/partials/cohort.html:3
+msgid "Control"
 msgstr ""
 
 #: ui/templates/research/analytics.html:50
@@ -8208,11 +8064,6 @@ msgstr ""
 msgid "Your works are being checked or the next topic is not published yet."
 msgstr "Works are being checked or the next topic is not published yet."
 
-#: ui/templates/student/dashboard.html:68
-#: ui/templates/teacher/dashboard.html:27 ui/templates/teacher/student.html:35
-msgid "Key figures"
-msgstr ""
-
 #: ui/templates/student/dashboard.html:79
 #, python-format
 msgid "+%(n)s stage this week"
@@ -8297,12 +8148,12 @@ msgid "Results of quizzes, experiments and practice works will appear here."
 msgstr ""
 
 #: ui/templates/student/dashboard.html:153
-#: ui/templates/student/dashboard.html:162 ui/templates/student/home.html:72
+#: ui/templates/student/dashboard.html:162 ui/templates/student/home.html:75
 #: ui/templates/student/stages/practice.html:20
 msgid "Teacher's comment"
 msgstr ""
 
-#: ui/templates/student/dashboard.html:154 ui/templates/student/home.html:73
+#: ui/templates/student/dashboard.html:154 ui/templates/student/home.html:76
 #, python-format
 msgid "about «%(s)s»"
 msgstr ""
@@ -8314,50 +8165,54 @@ msgid_plural "%(n)s more comments"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ui/templates/student/home.html:14
+#: ui/templates/student/home.html:15
 #, python-format
 msgid "Welcome, %(name)s!"
 msgstr ""
 
-#: ui/templates/student/home.html:15
+#: ui/templates/student/home.html:16
 msgid "The guide below shows how to use the ChemEduTech platform."
 msgstr ""
 
-#: ui/templates/student/home.html:25
-#, python-format
-msgid "Sections passed: %(a)s of %(b)s"
+#: ui/templates/student/home.html:18
+msgid "About the platform"
 msgstr ""
 
 #: ui/templates/student/home.html:28
 #, python-format
+msgid "Sections passed: %(a)s of %(b)s"
+msgstr ""
+
+#: ui/templates/student/home.html:31
+#, python-format
 msgid "Topic %(n)s · %(t)s — next: %(s)s"
 msgstr ""
 
-#: ui/templates/student/home.html:30
+#: ui/templates/student/home.html:33
 msgid "Every open section is passed."
 msgstr ""
 
-#: ui/templates/student/home.html:34
+#: ui/templates/student/home.html:37
 msgid "Section done"
 msgstr ""
 
-#: ui/templates/student/home.html:36
+#: ui/templates/student/home.html:39
 #, python-format
 msgid "the next section opens at %(p)s%%"
 msgstr ""
 
-#: ui/templates/student/home.html:47
+#: ui/templates/student/home.html:50
 msgid "Guide to using the platform"
 msgstr ""
 
-#: ui/templates/student/home.html:48
+#: ui/templates/student/home.html:51
 #, python-format
 msgid ""
 "Sections open one after another: the next one opens when the previous one is "
 "%(p)s%% done."
 msgstr ""
 
-#: ui/templates/student/home.html:60 ui/templates/teacher/lab_log.html:36
+#: ui/templates/student/home.html:63 ui/templates/teacher/lab_log.html:36
 msgid "Details"
 msgstr ""
 
@@ -8940,10 +8795,6 @@ msgid "Section 1 is the course; the teacher adds the group to it."
 msgstr ""
 
 #: ui/templates/student/section.html:62
-msgid "The section is in development"
-msgstr ""
-
-#: ui/templates/student/section.html:62
 msgid "Its tasks will appear here in the next versions of the platform."
 msgstr ""
 
@@ -9061,6 +8912,11 @@ msgstr ""
 
 #: ui/templates/student/stages/practice.html:55
 msgid "Comments with the teacher"
+msgstr ""
+
+#: ui/templates/student/stages/test.html:6
+#: ui/templates/teacher/content/quiz.html:19
+msgid "Questions"
 msgstr ""
 
 #: ui/templates/student/stages/test.html:7
@@ -10286,3 +10142,48 @@ msgstr ""
 #: ui/views.py:24
 msgid "Conditions"
 msgstr ""
+
+#~ msgid ""
+#~ "Stage → topic → module → course scores are calculated automatically. When "
+#~ "the course is finished you get a certificate verifiable by its QR code."
+#~ msgstr ""
+#~ "Stage → topic → module → course scores are calculated automatically. A "
+#~ "finished course earns a certificate verifiable by its QR code."
+
+#~ msgid ""
+#~ "When you make a mistake the system explains why — without the danger of a "
+#~ "real lab."
+#~ msgstr ""
+#~ "Every mistake is explained by the system — without the danger of a real "
+#~ "lab."
+
+#~ msgid ""
+#~ "AI grades open answers of practice works against the criteria — you only "
+#~ "confirm."
+#~ msgstr ""
+#~ "AI grades open answers of practice works against the criteria — the "
+#~ "teacher only confirms."
+
+#~ msgid ""
+#~ "It opens in the browser, nothing to install. You drag the equipment onto "
+#~ "the bench and carry out the commands in order; the reaction is animated "
+#~ "and you record the result in the journal."
+#~ msgstr ""
+#~ "It opens in the browser, nothing to install. Equipment is dragged onto "
+#~ "the bench and the commands are carried out in order; the reaction is "
+#~ "animated and the result is recorded in the journal."
+
+#~ msgid ""
+#~ "Each stage opens when the previous one is finished. After the theory and "
+#~ "the video you need to pass a 3–4 question checkpoint quiz."
+#~ msgstr ""
+#~ "Each stage opens when the previous one is finished. After the theory and "
+#~ "the video comes a 3–4 question checkpoint quiz."
+
+#~ msgid "Try your first experiment today"
+#~ msgstr "Try the first experiment today"
+
+#~ msgid ""
+#~ "Signing up takes a minute. Ask your teacher for your group's join code."
+#~ msgstr ""
+#~ "Signing up takes a minute. The group's join code is given by the teacher."

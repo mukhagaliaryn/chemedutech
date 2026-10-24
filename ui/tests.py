@@ -6,7 +6,7 @@ from django.urls import reverse
 from apps.accounts.models import User
 from apps.courses import services
 from apps.courses.models import Topic
-from apps.labs.engine import all_labs, get_lab
+from apps.labs.engine import get_lab
 from apps.organizations.testing import make_group, make_student
 from ui.templatetags.ui_tags import initials, percent_of, status_variant
 
@@ -241,16 +241,13 @@ class PublicPagesTests(TestCase):
         cls.group = make_group(name="Хим-23-1")
         cls.student = make_student("taken.name", group=cls.group)
 
-    def test_landing_uses_real_numbers(self):
+    def test_landing_is_one_screen_with_the_introduction_links(self):
         r = self.client.get(reverse("core:home"))
-        facts = r.context["facts"]
-        self.assertEqual((facts["modules"], facts["topics"]), (2, 15))
-        labs = list(all_labs().values())
-        self.assertEqual(facts["experiments"], sum(len(lab.experiments) for lab in labs))
-        self.assertEqual(len(facts["lab"]["experiments"]), len(get_lab("t01").experiments))  # the showcase lab
-        self.assertContains(r, 'id="lab"')
-        self.assertContains(r, reverse("accounts:signup"))
-        self.assertContains(r, "Zn + 2HCl → ZnCl<sub>2</sub>")  # equation HTML from the lab spec
+        self.assertEqual(r.content.decode().count("<section"), 1)  # ICPAI @S0-INTRO: the landing is the hero only
+        for n in (1, 2, 3):
+            self.assertContains(r, reverse("core:about_page", args=[n]))
+        self.assertContains(r, reverse("core:about"))  # «Sign up» leads through the introduction (@S0-RULES)
+        self.assertContains(r, reverse("accounts:login"))
 
     def test_login_page(self):
         r = self.client.get(reverse("accounts:login"))

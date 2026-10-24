@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ChemEduTech\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 17:24+0500\n"
+"POT-Creation-Date: 2026-10-24 18:58+0500\n"
 "PO-Revision-Date: 2026-10-16 21:00+0500\n"
 "Last-Translator: ChemEduTech\n"
 "Language-Team: ChemEduTech\n"
@@ -385,7 +385,7 @@ msgstr "ответ"
 msgid "answers"
 msgstr "ответы"
 
-#: apps/assessments/models/quiz.py:12 ui/templates/core/home.html:100
+#: apps/assessments/models/quiz.py:12
 #: ui/templates/teacher/content/stage.html:59
 msgid "Checkpoint quiz"
 msgstr "Закрепляющий тест"
@@ -794,7 +794,7 @@ msgid "Learning and grading"
 msgstr "Обучение и оценивание"
 
 #: apps/courses/admin.py:64 apps/research/apps.py:8
-#: ui/templates/core/home.html:33 ui/templates/research/dashboard.html:3
+#: ui/templates/research/dashboard.html:3
 msgid "Research"
 msgstr "Исследование"
 
@@ -1226,13 +1226,11 @@ msgstr "темы"
 msgid "This course already has a topic with this number."
 msgstr "В курсе уже есть тема с таким номером."
 
-#: apps/courses/models/structure.py:67 ui/templates/core/home.html:197
-#: ui/views.py:10
+#: apps/courses/models/structure.py:67 ui/views.py:10
 msgid "Theory"
 msgstr "Теория"
 
-#: apps/courses/models/structure.py:68 ui/templates/core/home.html:198
-#: ui/views.py:11
+#: apps/courses/models/structure.py:68 ui/views.py:11
 msgid "Video lesson"
 msgstr "Видеоурок"
 
@@ -1406,7 +1404,8 @@ msgstr "Эта работа не относится к курсу."
 msgid "The reply belongs to another work."
 msgstr "Ответ относится к другой работе."
 
-#: apps/labs/apps.py:8 ui/templates/student/stages/lab.html:6
+#: apps/labs/apps.py:8 ui/templates/core/home.html:22
+#: ui/templates/student/stages/lab.html:6
 msgid "Virtual lab"
 msgstr "Виртуальная лаборатория"
 
@@ -4384,6 +4383,7 @@ msgid "In progress…"
 msgstr "Идёт…"
 
 #: apps/labs/views.py:50 ui/templates/accounts/signup.html:130
+#: ui/templates/core/about.html:362
 msgid "Next"
 msgstr "Далее"
 
@@ -4509,8 +4509,7 @@ msgid ""
 msgstr ""
 "Начать опыт заново? Текущий прогресс сохранится как незавершённая попытка."
 
-#: apps/labs/views.py:83 ui/templates/core/home.html:90
-#: ui/templates/research/analytics.html:100
+#: apps/labs/views.py:83 ui/templates/research/analytics.html:100
 msgid "Safety"
 msgstr "Безопасность"
 
@@ -4668,8 +4667,8 @@ msgid "Show the panel"
 msgstr "Показать панель"
 
 #: apps/labs/views.py:123 ui/templates/components/alert.html:10
-#: ui/templates/components/toast.html:16 ui/templates/core/home.html:114
-#: ui/templates/layouts/learn.html:49
+#: ui/templates/components/toast.html:16 ui/templates/layouts/learn.html:49
+#: ui/templates/layouts/site.html:45
 #: ui/templates/student/partials/quiz_panel.html:93
 #: ui/templates/teacher/dashboard.html:101 ui/templates/teacher/group.html:77
 #: ui/templates/teacher/group.html:225 ui/templates/teacher/group.html:242
@@ -5607,6 +5606,15 @@ msgstr "событие раздела"
 msgid "section events"
 msgstr "события разделов"
 
+#: apps/programme/tests.py:222 ui/templates/student/dashboard.html:68
+#: ui/templates/teacher/dashboard.html:27 ui/templates/teacher/student.html:35
+msgid "Key figures"
+msgstr "Показатели"
+
+#: apps/programme/tests.py:255 ui/templates/student/section.html:62
+msgid "The section is in development"
+msgstr "Раздел в разработке"
+
 #: apps/progress/admin.py:30
 msgid "Open the selected stages for the student"
 msgstr "Открыть выбранные этапы студенту"
@@ -5867,7 +5875,7 @@ msgstr "Выдано сертификатов"
 msgid "Teacher cabinet"
 msgstr "Кабинет преподавателя"
 
-#: apps/research/admin_dashboard.py:54 ui/templates/core/home.html:293
+#: apps/research/admin_dashboard.py:54
 #: ui/templates/partials/shell/sidebar_teacher.html:22
 #: ui/templates/research/analytics.html:8
 msgid "Statistics"
@@ -5951,7 +5959,7 @@ msgstr[2] "%(a)s / %(b)s опытов"
 msgstr[3] "%(a)s / %(b)s опытов"
 
 #: apps/student/cabinet.py:95 ui/templates/labs/run.html:282
-#: ui/templates/student/home.html:60 ui/templates/student/results.html:92
+#: ui/templates/student/home.html:63 ui/templates/student/results.html:92
 #: ui/templates/student/topic.html:43
 #: ui/templates/teacher/content/course.html:32
 #: ui/templates/teacher/content/courses.html:22
@@ -5998,8 +6006,6 @@ msgid "Quiz · attempt %(n)s"
 msgstr "Тест · попытка %(n)s"
 
 #: apps/student/cabinet.py:187 config/settings/base.py:377
-#: ui/templates/core/home.html:31 ui/templates/core/home.html:199
-#: ui/templates/core/home.html:359
 msgid "Lab"
 msgstr "Лаборатория"
 
@@ -6132,8 +6138,7 @@ msgstr "Для записи по коду нужен код курса."
 msgid "Kind"
 msgstr "Тип"
 
-#: apps/teacher/content_forms.py:130 ui/templates/core/home.html:228
-#: ui/templates/labs/run.html:37
+#: apps/teacher/content_forms.py:130 ui/templates/labs/run.html:37
 msgid "Experiments"
 msgstr "Опыты"
 
@@ -6561,9 +6566,9 @@ msgstr "ChemEduTech: сброс пароля"
 
 #: ui/templates/accounts/login.html:3 ui/templates/accounts/login.html:46
 #: ui/templates/accounts/password_reset_complete.html:9
-#: ui/templates/accounts/signup.html:16 ui/templates/core/home.html:40
-#: ui/templates/core/home.html:118 ui/templates/core/home.html:360
-#: ui/templates/layouts/public.html:14
+#: ui/templates/accounts/signup.html:16 ui/templates/core/home.html:39
+#: ui/templates/layouts/public.html:14 ui/templates/layouts/site.html:31
+#: ui/templates/layouts/site.html:52
 msgid "Log in"
 msgstr "Войти"
 
@@ -6600,7 +6605,7 @@ msgid "or"
 msgstr "или"
 
 #: ui/templates/accounts/login.html:49 ui/templates/accounts/signup.html:9
-#: ui/templates/accounts/signup.html:28 ui/templates/core/home.html:347
+#: ui/templates/accounts/signup.html:28
 msgid "Sign up as a student"
 msgstr "Зарегистрироваться как студент"
 
@@ -6763,13 +6768,13 @@ msgstr "Данные верны?"
 msgid "Full name"
 msgstr "ФИО"
 
-#: ui/templates/accounts/signup.html:129
+#: ui/templates/accounts/signup.html:129 ui/templates/core/about.html:357
 msgid "Back"
 msgstr "Назад"
 
-#: ui/templates/accounts/signup.html:131 ui/templates/core/home.html:41
-#: ui/templates/core/home.html:119 ui/templates/core/home.html:360
-#: ui/templates/layouts/public.html:15
+#: ui/templates/accounts/signup.html:131 ui/templates/core/about.html:366
+#: ui/templates/core/home.html:38 ui/templates/layouts/public.html:15
+#: ui/templates/layouts/site.html:32 ui/templates/layouts/site.html:53
 msgid "Sign up"
 msgstr "Зарегистрироваться"
 
@@ -6990,7 +6995,7 @@ msgid "The certificate is real: it was issued by ChemEduTech."
 msgstr "Сертификат подлинный: он выдан ChemEduTech."
 
 #: ui/templates/certificates/verify.html:10
-#: ui/templates/certificates/verify.html:12 ui/templates/core/home.html:64
+#: ui/templates/certificates/verify.html:12
 #: ui/templates/student/partials/certificate_card.html:10
 msgid "Certificate"
 msgstr "Сертификат"
@@ -7030,463 +7035,302 @@ msgstr "Отмена"
 msgid "Confirm"
 msgstr "Подтвердить"
 
-#: ui/templates/core/home.html:8
-msgid "virtual chemistry lab"
-msgstr "виртуальная химическая лаборатория"
+#: ui/templates/core/about.html:13 ui/templates/core/about.html:34
+#: ui/templates/layouts/site.html:20
+msgid "Platform introduction"
+msgstr "Знакомство с платформой"
 
-#: ui/templates/core/home.html:28
-msgid "Main"
-msgstr "Основное"
+#: ui/templates/core/about.html:13 ui/templates/core/about.html:16
+#: ui/templates/core/about.html:34 ui/templates/layouts/site.html:21
+msgid "Expected results"
+msgstr "Ожидаемые результаты"
 
-#: ui/templates/core/home.html:30 ui/templates/core/home.html:138
-#: ui/templates/core/home.html:359
-msgid "Features"
-msgstr "Возможности"
+#: ui/templates/core/about.html:13 ui/templates/core/about.html:34
+#: ui/templates/layouts/site.html:22
+msgid "ICPAI model"
+msgstr "Модель ICPAI"
 
-#: ui/templates/core/home.html:32 ui/templates/core/home.html:191
-msgid "Learning path"
-msgstr "Путь обучения"
+#: ui/templates/core/about.html:15
+msgid "ChemEduTech platform introduction"
+msgstr "Знакомство с платформой ChemEduTech"
 
-#: ui/templates/core/home.html:34 ui/templates/core/home.html:359
-#: ui/templates/student/stages/test.html:6
-#: ui/templates/teacher/content/quiz.html:19
-msgid "Questions"
-msgstr "Вопросы"
+#: ui/templates/core/about.html:17 ui/templates/core/about.html:339
+msgid "ICPAI authorial model"
+msgstr "Авторская модель ICPAI"
 
-#: ui/templates/core/home.html:42
-msgid "Open menu"
-msgstr "Открыть меню"
-
-#: ui/templates/core/home.html:52
-msgid "New"
-msgstr "Новое"
-
-#: ui/templates/core/home.html:53
+#: ui/templates/core/about.html:31
 #, python-format
-msgid "Topic %(n)s: %(k)s virtual experiment ready"
-msgid_plural "Topic %(n)s: %(k)s virtual experiments ready"
-msgstr[0] "Тема %(n)s: готов %(k)s виртуальный опыт"
-msgstr[1] "Тема %(n)s: готовы %(k)s виртуальных опыта"
-msgstr[2] "Тема %(n)s: готово %(k)s виртуальных опытов"
-msgstr[3] "Тема %(n)s: готово %(k)s виртуальных опытов"
+msgid "About the platform · %(n)s / %(total)s"
+msgstr "О платформе · %(n)s / %(total)s"
 
-#: ui/templates/core/home.html:56
-msgid "Learn chemistry in a safe lab"
-msgstr "Химия в безопасной лаборатории"
+#: ui/templates/core/about.html:33 ui/templates/core/about.html:355
+#: ui/templates/feedback/notifications.html:28
+msgid "Pages"
+msgstr "Страницы"
 
-#: ui/templates/core/home.html:57
+#: ui/templates/core/about.html:62 ui/templates/core/home.html:19
 msgid ""
-"An online course for future chemistry teachers: theory, video lessons, an "
-"interactive virtual lab and automatic grading — on one platform, in Kazakh."
+"ChemEduTech is a digital platform that brings together the information "
+"educational environment, chemistry subject content, pedagogical design and "
+"artificial intelligence tools in the professional training of future "
+"chemistry teachers."
 msgstr ""
-"Онлайн-курс для будущих учителей химии: теория, видеоуроки, интерактивная "
-"виртуальная лаборатория и автоматическая проверка — на одной платформе, на "
-"казахском языке."
+"ChemEduTech — цифровая платформа, объединяющая в профессиональной подготовке "
+"будущих учителей химии информационную образовательную среду, предметное "
+"содержание химии, педагогическое проектирование и инструменты искусственного "
+"интеллекта."
 
-#: ui/templates/core/home.html:59
-msgid "Start for free"
-msgstr "Начать бесплатно"
-
-#: ui/templates/core/home.html:61
-msgid "See the lab"
-msgstr "Посмотреть лабораторию"
-
-#: ui/templates/core/home.html:64
-msgid "Kazakh · Russian · English"
-msgstr "Казахский · русский · английский"
-
-#: ui/templates/core/home.html:64
-msgid "In the browser, nothing to install"
-msgstr "В браузере, без установки"
-
-#: ui/templates/core/home.html:91
-msgid "First assemble the gas delivery system."
-msgstr "Сначала нужно собрать газоотводную систему."
-
-#: ui/templates/core/home.html:95
-msgid "ml"
-msgstr "мл"
-
-#: ui/templates/core/home.html:100
-msgid "Stage completed"
-msgstr "Этап завершён"
-
-#: ui/templates/core/home.html:112
-msgid "Mobile menu"
-msgstr "Мобильное меню"
-
-#: ui/templates/core/home.html:126
-msgid "About the course"
-msgstr "О курсе"
-
-#: ui/templates/core/home.html:128
-msgid "modules and topics"
-msgstr "модулей и тем"
-
-#: ui/templates/core/home.html:129
-msgid "virtual lab experiments"
-msgstr "виртуальных лабораторных опытов"
-
-#: ui/templates/core/home.html:130
-msgid "kinds of stages: from theory to the test"
-msgstr "видов этапов: от теории до теста"
-
-#: ui/templates/core/home.html:131
-msgid "the lab is open at any time"
-msgstr "лаборатория открыта в любое время"
-
-#: ui/templates/core/home.html:139
-msgid "Just like a real lab, but safe and repeatable"
-msgstr "Как в настоящей лаборатории, но безопасно и можно повторить"
-
-#: ui/templates/core/home.html:145
-msgid "Interactive 2D lab"
-msgstr "Интерактивная 2D-лаборатория"
-
-#: ui/templates/core/home.html:146
+#: ui/templates/core/about.html:67
 msgid ""
-"Drag the equipment onto the bench, add reagents and watch the gas being "
-"collected. The system warns at once about a wrong order and dangerous "
-"actions."
+"On the platform a student not only masters chemical concepts but also "
+"chooses digital resources for teaching them, organises research and virtual "
+"experiments, prepares lesson materials, analyses the results and reflects on "
+"his or her own teaching. The theoretical content of the platform follows the "
+"chapters of the textbook «Pedagogical foundations of informatisation in the "
+"training of chemistry teachers», its practical side — the materials of the "
+"course «Methods of teaching chemistry»."
 msgstr ""
-"Оборудование перетаскивается на стол, затем добавляются реактивы и "
-"наблюдается сбор газа. Система сразу предупреждает о неверном порядке и "
-"опасных действиях."
+"На платформе обучающийся не только осваивает химические понятия, но и "
+"выбирает цифровые ресурсы для их преподавания, организует исследовательские "
+"и виртуальные эксперименты, разрабатывает материалы урока, анализирует "
+"результаты и рефлексирует свою педагогическую деятельность. Теоретическое "
+"содержание платформы согласовано с главами учебного пособия «Педагогические "
+"основы информатизации в подготовке учителей химии», практическая часть — с "
+"материалами курса «Методика преподавания химии»."
 
-#: ui/templates/core/home.html:160
-msgid "Step-by-step learning"
-msgstr "Поэтапное обучение"
+#: ui/templates/core/about.html:71
+msgid "Theoretical content"
+msgstr "Теоретическое содержание"
 
-#: ui/templates/core/home.html:161
+#: ui/templates/core/about.html:72
 msgid ""
-"The next stage opens only when the previous one is finished. Theory and "
-"video end with a short 3–4 question checkpoint quiz."
-msgstr ""
-"Следующий этап открывается только после завершения предыдущего. После теории "
-"и видео — короткий закрепляющий тест из 3–4 вопросов."
+"«Pedagogical foundations of informatisation in the training of chemistry "
+"teachers»"
+msgstr "«Педагогические основы информатизации в подготовке учителей химии»"
 
-#: ui/templates/core/home.html:165
-msgid "Automatic and AI grading"
-msgstr "Автоматическая и AI-проверка"
+#: ui/templates/core/about.html:77
+msgid "Practical side"
+msgstr "Практическая часть"
 
-#: ui/templates/core/home.html:166
+#: ui/templates/core/about.html:78
+msgid "«Methods of teaching chemistry»"
+msgstr "«Методика преподавания химии»"
+
+#: ui/templates/core/about.html:144
+msgid "Tasks"
+msgstr "Задачи"
+
+#: ui/templates/core/about.html:147
 msgid ""
-"Formulas and equations are checked by meaning; open answers are graded by AI "
-"against criteria and confirmed by the teacher."
-msgstr ""
-"Формулы и уравнения проверяются по смыслу; открытые ответы оценивает AI по "
-"критериям, а подтверждает преподаватель."
+"To master the scientific and pedagogical foundations of the informatisation "
+"of education."
+msgstr "Освоение научно-педагогических основ информатизации образования."
 
-#: ui/templates/core/home.html:170
-msgid "Analytics for the teacher"
-msgstr "Аналитика для преподавателя"
-
-#: ui/templates/core/home.html:171
+#: ui/templates/core/about.html:148
 msgid ""
-"Groups, the grade register, frequent mistakes and time on each stage — all "
-"in one cabinet."
+"To create conditions for integrating the subject, pedagogical and digital "
+"knowledge of future chemistry teachers."
 msgstr ""
-"Группы, журнал оценок, частые ошибки и время на этапах — всё в одном "
-"кабинете."
+"Создание условий для интеграции предметных, педагогических и цифровых знаний "
+"будущих учителей химии."
 
-#: ui/templates/core/home.html:175
-msgid "Certificate and grade book"
-msgstr "Сертификат и зачётная книжка"
-
-#: ui/templates/core/home.html:176
+#: ui/templates/core/about.html:149
 msgid ""
-"Stage → topic → module → course scores are calculated automatically. When "
-"the course is finished you get a certificate verifiable by its QR code."
+"To guide the use of digital resources, virtual laboratories and modelling "
+"tools according to the learning aim."
 msgstr ""
-"Баллы этапа → темы → модуля → курса считаются автоматически. По окончании "
-"курса выдаётся сертификат, проверяемый по QR-коду."
+"Ориентация на использование цифровых ресурсов, виртуальных лабораторий и "
+"средств моделирования в соответствии с целью обучения."
 
-#: ui/templates/core/home.html:192
-msgid "Every topic is a full cycle of stages"
-msgstr "Каждая тема — полный цикл этапов"
-
-#: ui/templates/core/home.html:194
+#: ui/templates/core/about.html:150
 msgid ""
-"The author decides how many stages a topic has: one topic may contain "
-"several practice works."
+"To build the skills of preparing learning tasks and materials with the help "
+"of artificial intelligence, checking the information obtained scientifically "
+"and keeping to ethical requirements."
 msgstr ""
-"Автор сам решает, сколько этапов в теме: в одной теме может быть несколько "
-"практических работ."
+"Формирование навыков разработки учебных заданий и материалов с помощью "
+"искусственного интеллекта, научной проверки полученной информации и "
+"соблюдения этических требований."
 
-#: ui/templates/core/home.html:197
-msgid "Text with formulas and pictures + a checkpoint quiz"
-msgstr "Текст с формулами и рисунками + закрепляющий тест"
-
-#: ui/templates/core/home.html:198
-msgid "Watching is tracked + a checkpoint quiz"
-msgstr "Просмотр отслеживается + закрепляющий тест"
-
-#: ui/templates/core/home.html:199
-msgid "Virtual experiments, journal, analysis"
-msgstr "Виртуальные опыты, журнал, анализ"
-
-#: ui/templates/core/home.html:200
-msgid "Practice"
-msgstr "Практика"
-
-#: ui/templates/core/home.html:200
-msgid "Problems: automatic and AI grading"
-msgstr "Задачи: автопроверка и AI-оценка"
-
-#: ui/templates/core/home.html:201
-msgid "Test"
-msgstr "Тест"
-
-#: ui/templates/core/home.html:201
-msgid "The final test of the topic"
-msgstr "Итоговый тест темы"
-
-#: ui/templates/core/home.html:225
-#, python-format
-msgid "Lab work of topic %(n)s"
-msgstr "Лабораторная работа темы %(n)s"
-
-#: ui/templates/core/home.html:243
-#, python-format
-msgid "%(n)s step with order checks and safety warnings"
-msgid_plural "%(n)s steps with order checks and safety warnings"
-msgstr[0] "%(n)s шаг с проверкой порядка и предупреждениями безопасности"
-msgstr[1] "%(n)s шага с проверкой порядка и предупреждениями безопасности"
-msgstr[2] "%(n)s шагов с проверкой порядка и предупреждениями безопасности"
-msgstr[3] "%(n)s шагов с проверкой порядка и предупреждениями безопасности"
-
-#: ui/templates/core/home.html:244
-msgid "Equipment:"
-msgstr "Оборудование:"
-
-#: ui/templates/core/home.html:245
-#, python-format
-msgid "Lab journal: %(n)s field"
-msgid_plural "Lab journal: %(n)s fields"
-msgstr[0] "Лабораторный журнал: %(n)s поле"
-msgstr[1] "Лабораторный журнал: %(n)s поля"
-msgstr[2] "Лабораторный журнал: %(n)s полей"
-msgstr[3] "Лабораторный журнал: %(n)s полей"
-
-#: ui/templates/core/home.html:247
-msgid "Try the experiment"
-msgstr "Открыть опыт"
-
-#: ui/templates/core/home.html:272
-msgid "Convenient for students and teachers alike"
-msgstr "Удобно и студентам, и преподавателям"
-
-#: ui/templates/core/home.html:273
-msgid "For whom"
-msgstr "Для кого"
-
-#: ui/templates/core/home.html:274
-msgid "For students"
-msgstr "Студентам"
-
-#: ui/templates/core/home.html:275
-msgid "For teachers"
-msgstr "Преподавателям"
-
-#: ui/templates/core/home.html:286
-msgid "A clear path"
-msgstr "Понятный путь"
-
-#: ui/templates/core/home.html:286
+#: ui/templates/core/about.html:151
 msgid ""
-"What to do next is always visible: «Continue learning» is one button away."
-msgstr "Что делать дальше, всегда видно: «Продолжить обучение» — одна кнопка."
+"To develop the skills of assessing students' digital research activity and "
+"learning achievements and of self-reflection."
+msgstr ""
+"Развитие навыков оценивания цифровой исследовательской деятельности и "
+"учебных достижений обучающихся, а также самостоятельной рефлексии."
 
-#: ui/templates/core/home.html:287
-msgid "Mistakes without risk"
-msgstr "Ошибки без риска"
+#: ui/templates/core/about.html:178
+msgid "Aim"
+msgstr "Цель"
 
-#: ui/templates/core/home.html:287
+#: ui/templates/core/about.html:179
 msgid ""
-"When you make a mistake the system explains why — without the danger of a "
-"real lab."
+"To build a digital research learning environment for developing the "
+"professional readiness of future chemistry teachers under informatisation, "
+"and to develop the skills of designing chemistry content pedagogically and "
+"of using digital technologies and artificial intelligence competently."
 msgstr ""
-"При ошибке система объясняет причину — без опасности настоящей лаборатории."
+"Формирование цифровой исследовательской среды обучения для развития "
+"профессиональной готовности будущих учителей химии в условиях "
+"информатизации, развитие навыков педагогического проектирования химического "
+"содержания и грамотного использования цифровых технологий и искусственного "
+"интеллекта."
 
-#: ui/templates/core/home.html:288
-msgid "A fair grade"
-msgstr "Честная оценка"
-
-#: ui/templates/core/home.html:288
-msgid "Every stage score and how it was calculated is shown in the grade book."
-msgstr "Балл каждого этапа и способ его расчёта видны в зачётной книжке."
-
-#: ui/templates/core/home.html:291
-msgid "Group management"
-msgstr "Управление группами"
-
-#: ui/templates/core/home.html:291
+#: ui/templates/core/about.html:186
 msgid ""
-"Create a group, share the join code and assign the research group (control / "
-"experimental)."
+"designs chemistry content in a digital educational environment and organises "
+"it according to the learning aim;"
 msgstr ""
-"Создание группы, раздача кода присоединения и назначение исследовательской "
-"группы (контрольная / экспериментальная)."
+"проектирует химическое содержание в цифровой образовательной среде и "
+"организует его в соответствии с целью обучения;"
 
-#: ui/templates/core/home.html:292
-msgid "AI assistant"
-msgstr "AI-помощник"
+#: ui/templates/core/about.html:187
+msgid "explains chemical processes at the macro, submicro and symbolic levels;"
+msgstr ""
+"объясняет химические процессы на макро-, субмикро- и символическом уровнях;"
 
-#: ui/templates/core/home.html:292
+#: ui/templates/core/about.html:188
+msgid "designs digital research tasks and virtual chemical experiments;"
+msgstr ""
+"разрабатывает цифровые исследовательские задания и виртуальные химические "
+"эксперименты;"
+
+#: ui/templates/core/about.html:189
 msgid ""
-"AI grades open answers of practice works against the criteria — you only "
-"confirm."
+"chooses and uses artificial intelligence tools according to the aims of "
+"teaching chemistry and checks the results they offer;"
 msgstr ""
-"Открытые ответы практических работ AI оценивает по критериям — преподавателю "
-"остаётся только подтвердить."
+"выбирает и применяет инструменты искусственного интеллекта в соответствии с "
+"целями обучения химии и проверяет предложенные ими результаты;"
 
-#: ui/templates/core/home.html:293
+#: ui/templates/core/about.html:190
 msgid ""
-"See at which step students make mistakes most often and adapt the lesson."
+"prepares his or her own learning material or lesson model and analyses its "
+"effectiveness;"
 msgstr ""
-"Видно, на каком шаге студенты ошибаются чаще всего, — занятие можно "
-"скорректировать."
+"разрабатывает собственный учебный материал или модель урока и анализирует "
+"его эффективность;"
 
-#: ui/templates/core/home.html:301
-msgid "Pedagogical research"
-msgstr "Педагогическое исследование"
-
-#: ui/templates/core/home.html:302
-msgid "Every action is evidence"
-msgstr "Каждое действие — доказательство"
-
-#: ui/templates/core/home.html:303
+#: ui/templates/core/about.html:191
 msgid ""
-"The platform records every step of a student in the lab, quiz answers and "
-"time spent. Comparing control and experimental groups takes one click."
+"identifies his or her professional difficulties and plans ways of improving "
+"digital pedagogical competence."
 msgstr ""
-"Платформа записывает каждый шаг студента в лаборатории, ответы на тесты и "
-"затраченное время. Сравнение контрольной и экспериментальной групп — в один "
-"клик."
+"выявляет свои профессиональные затруднения и планирует пути "
+"совершенствования цифровой педагогической компетентности."
 
-#: ui/templates/core/home.html:305
-msgid "Action log: order errors, safety warnings, time on each step"
-msgstr ""
-"Журнал действий: ошибки порядка, предупреждения безопасности, время на "
-"каждом шаге"
-
-#: ui/templates/core/home.html:305
-msgid "Group comparison: mean, median, n"
-msgstr "Сравнение групп: среднее, медиана, n"
-
-#: ui/templates/core/home.html:305
-msgid "CSV export (UTF-8, ready for Excel)"
-msgstr "Экспорт CSV (UTF-8, готов для Excel)"
-
-#: ui/templates/core/home.html:310
-msgid "Average score by stage (example)"
-msgstr "Средний балл по этапам (пример)"
-
-#: ui/templates/core/home.html:316 ui/templates/research/analytics.html:41
-#: ui/templates/research/analytics.html:61
-#: ui/templates/research/analytics.html:180
-#: ui/templates/research/analytics.html:211 ui/templates/teacher/groups.html:35
-#: ui/templates/teacher/partials/cohort.html:2
-msgid "Experimental"
-msgstr "Экспериментальная"
-
-#: ui/templates/core/home.html:316 ui/templates/research/analytics.html:41
-#: ui/templates/research/analytics.html:62
-#: ui/templates/research/analytics.html:180
-#: ui/templates/research/analytics.html:212 ui/templates/teacher/groups.html:36
-#: ui/templates/teacher/partials/cohort.html:3
-msgid "Control"
-msgstr "Контрольная"
-
-#: ui/templates/core/home.html:323
-msgid "Frequently asked questions"
-msgstr "Частые вопросы"
-
-#: ui/templates/core/home.html:331
-msgid "Who is the platform for?"
-msgstr "Для кого платформа?"
-
-#: ui/templates/core/home.html:331
+#: ui/templates/core/about.html:247
 msgid ""
-"For students of pedagogical universities training to become chemistry "
-"teachers."
+"The results can be monitored by the motivational, cognitive, activity and "
+"reflective criteria."
 msgstr ""
-"Для студентов педагогических университетов, обучающихся на учителей химии."
+"Результаты можно отслеживать по мотивационному, когнитивному, "
+"деятельностному и рефлексивному критериям."
 
-#: ui/templates/core/home.html:332
-msgid "How does the virtual lab work?"
-msgstr "Как работает виртуальная лаборатория?"
+#: ui/templates/core/about.html:250
+msgid "Motivational"
+msgstr "Мотивационный"
 
-#: ui/templates/core/home.html:332
+#: ui/templates/core/about.html:250
+msgid "Cognitive"
+msgstr "Когнитивный"
+
+#: ui/templates/core/about.html:250
+msgid "Activity-based"
+msgstr "Деятельностный"
+
+#: ui/templates/core/about.html:250
+msgid "Reflective"
+msgstr "Рефлексивный"
+
+#: ui/templates/core/about.html:272
+msgid "information educational environment"
+msgstr "информационная образовательная среда"
+
+#: ui/templates/core/about.html:272
+msgid "ChemEduTech, LMS, electronic resources, digital assessment and feedback"
+msgstr ""
+"ChemEduTech, LMS, электронные ресурсы, цифровое оценивание и обратная связь"
+
+#: ui/templates/core/about.html:273
+msgid "chemistry subject content"
+msgstr "предметное содержание химии"
+
+#: ui/templates/core/about.html:273
+msgid "grounding the design of authorial tasks for teaching chemistry"
+msgstr "обоснование разработки авторских заданий для освоения химии"
+
+#: ui/templates/core/about.html:274
+msgid "pedagogical design"
+msgstr "педагогическое проектирование"
+
+#: ui/templates/core/about.html:274
 msgid ""
-"It opens in the browser, nothing to install. You drag the equipment onto the "
-"bench and carry out the commands in order; the reaction is animated and you "
-"record the result in the journal."
+"Setting the lesson aim and method, building research tasks, teaching, "
+"assessment and reflection"
 msgstr ""
-"Открывается в браузере, ничего устанавливать не нужно. Оборудование "
-"перетаскивается на стол, команды выполняются по порядку; реакция показана "
-"анимацией, результат записывается в журнал."
+"Определение цели и методики урока, составление исследовательских заданий, "
+"обучение, оценивание и рефлексия"
 
-#: ui/templates/core/home.html:333
-msgid "Why does the next stage not open?"
-msgstr "Почему не открывается следующий этап?"
+#: ui/templates/core/about.html:275
+msgid "pedagogical use of artificial intelligence"
+msgstr "педагогическое применение искусственного интеллекта"
 
-#: ui/templates/core/home.html:333
+#: ui/templates/core/about.html:275
 msgid ""
-"Each stage opens when the previous one is finished. After the theory and the "
-"video you need to pass a 3–4 question checkpoint quiz."
+"Supporting task design, checking results critically, keeping ethics and "
+"responsibility"
 msgstr ""
-"Каждый этап открывается после завершения предыдущего. После теории и видео "
-"нужно пройти закрепляющий тест из 3–4 вопросов."
+"Поддержка разработки заданий, критическая проверка результатов, соблюдение "
+"этики и ответственности"
 
-#: ui/templates/core/home.html:334
-msgid "Who grades the practice works?"
-msgstr "Кто оценивает практические работы?"
+#: ui/templates/core/about.html:286
+msgid "Component"
+msgstr "Компонент"
 
-#: ui/templates/core/home.html:334
+#: ui/templates/core/about.html:291
+msgid "What it means on the platform"
+msgstr "Содержание, реализуемое на платформе"
+
+#: ui/templates/core/about.html:351
 msgid ""
-"Numbers, formulas and equations are checked automatically. Free text is "
-"graded by AI against the criteria and confirmed by the teacher."
+"A digital educational platform based on the ICPAI model for the professional "
+"training of future chemistry teachers. The platform links chemistry subject "
+"knowledge with teaching methods and the practice of using digital tools. It "
+"is meant for students of the chemistry teacher education programme."
 msgstr ""
-"Числа, формулы и уравнения проверяются автоматически. Свободный текст "
-"оценивает AI по критериям, подтверждает преподаватель."
+"Цифровая образовательная платформа для профессиональной подготовки будущих "
+"учителей химии, основанная на модели ICPAI. Платформа связывает предметные "
+"знания по химии с методикой обучения и практикой применения цифровых "
+"инструментов. Предназначена для обучающихся образовательной программы "
+"подготовки учителей химии."
 
-#: ui/templates/core/home.html:335
-msgid "How do I sign up as a teacher?"
-msgstr "Как зарегистрироваться преподавателю?"
+#: ui/templates/core/about.html:359
+msgid "Home page"
+msgstr "Главная страница"
 
-#: ui/templates/core/home.html:335
-msgid ""
-"Teacher accounts are created by the platform administrator. Contact the "
-"administrator."
-msgstr ""
-"Аккаунты преподавателей создаёт администратор платформы. Обратитесь к "
-"администратору."
+#: ui/templates/core/about.html:364 ui/templates/core/home.html:36
+#: ui/templates/layouts/public.html:12 ui/templates/layouts/site.html:29
+#: ui/templates/layouts/site.html:50
+msgid "My cabinet"
+msgstr "Личный кабинет"
 
-#: ui/templates/core/home.html:344
-msgid "Try your first experiment today"
-msgstr "Первый опыт — уже сегодня"
+#: ui/templates/core/home.html:8 ui/templates/core/home.html:17
+msgid "Educational platform"
+msgstr "Образовательная платформа"
 
-#: ui/templates/core/home.html:345
-msgid "Signing up takes a minute. Ask your teacher for your group's join code."
-msgstr ""
-"Регистрация займёт минуту. Код присоединения группы выдаёт преподаватель."
+#: ui/templates/core/home.html:22
+msgid "Interactive models"
+msgstr "Интерактивные модели"
 
-#: ui/templates/core/home.html:356
-msgid ""
-"A virtual lab and an online course for future chemistry teachers. A doctoral "
-"dissertation project."
-msgstr ""
-"Виртуальная лаборатория и онлайн-курс для будущих учителей химии. Проект "
-"докторской диссертации."
+#: ui/templates/core/home.html:22
+msgid "Professional readiness"
+msgstr "Профессиональная готовность"
 
-#: ui/templates/core/home.html:359
-msgid "Platform"
-msgstr "Платформа"
-
-#: ui/templates/core/home.html:360 ui/templates/layouts/public.html:9
-msgid "Account"
-msgstr "Аккаунт"
+#: ui/templates/core/home.html:80
+msgid "General chemistry"
+msgstr "Общая химия"
 
 #: ui/templates/feedback/notifications.html:4
 #: ui/templates/partials/shell/sidebar_student.html:37
@@ -7508,10 +7352,6 @@ msgstr[3] "%(n)s непрочитанных"
 #: ui/templates/feedback/partials/menu.html:7
 msgid "Mark all as read"
 msgstr "Отметить все как прочитанные"
-
-#: ui/templates/feedback/notifications.html:28
-msgid "Pages"
-msgstr "Страницы"
 
 #: ui/templates/feedback/notifications.html:29
 msgid "Newer"
@@ -7541,7 +7381,7 @@ msgstr "Все уведомления"
 
 #: ui/templates/feedback/partials/thread.html:12
 #: ui/templates/feedback/partials/thread.html:16
-#: ui/templates/student/dashboard.html:156 ui/templates/student/home.html:75
+#: ui/templates/student/dashboard.html:156 ui/templates/student/home.html:78
 msgid "Reply"
 msgstr "Ответить"
 
@@ -7712,9 +7552,21 @@ msgstr "Этапы темы %(n)s"
 msgid "Course map"
 msgstr "Карта курса"
 
-#: ui/templates/layouts/public.html:12
-msgid "My cabinet"
-msgstr "Личный кабинет"
+#: ui/templates/layouts/public.html:9
+msgid "Account"
+msgstr "Аккаунт"
+
+#: ui/templates/layouts/site.html:18
+msgid "Main"
+msgstr "Основное"
+
+#: ui/templates/layouts/site.html:34
+msgid "Open menu"
+msgstr "Открыть меню"
+
+#: ui/templates/layouts/site.html:43
+msgid "Mobile menu"
+msgstr "Мобильное меню"
 
 #: ui/templates/layouts/student.html:7
 msgid "Topic or material"
@@ -7793,7 +7645,7 @@ msgid "%(a)s of %(b)s stages"
 msgstr "%(a)s из %(b)s этапов"
 
 #: ui/templates/partials/shell/sidebar_student.html:53
-#: ui/templates/student/courses.html:27 ui/templates/student/home.html:39
+#: ui/templates/student/courses.html:27 ui/templates/student/home.html:42
 #: ui/templates/student/topic.html:20 ui/templates/student/topic.html:43
 msgid "Continue"
 msgstr "Продолжить"
@@ -7890,6 +7742,22 @@ msgstr "Скачать данные (CSV)"
 #: ui/templates/research/analytics.html:36
 msgid "Key measures"
 msgstr "Основные показатели"
+
+#: ui/templates/research/analytics.html:41
+#: ui/templates/research/analytics.html:61
+#: ui/templates/research/analytics.html:180
+#: ui/templates/research/analytics.html:211 ui/templates/teacher/groups.html:35
+#: ui/templates/teacher/partials/cohort.html:2
+msgid "Experimental"
+msgstr "Экспериментальная"
+
+#: ui/templates/research/analytics.html:41
+#: ui/templates/research/analytics.html:62
+#: ui/templates/research/analytics.html:180
+#: ui/templates/research/analytics.html:212 ui/templates/teacher/groups.html:36
+#: ui/templates/teacher/partials/cohort.html:3
+msgid "Control"
+msgstr "Контрольная"
 
 #: ui/templates/research/analytics.html:50
 #: ui/templates/research/analytics.html:58
@@ -8500,11 +8368,6 @@ msgstr "Ожидание следующего шага"
 msgid "Your works are being checked or the next topic is not published yet."
 msgstr "Работы проверяются или следующая тема ещё не опубликована."
 
-#: ui/templates/student/dashboard.html:68
-#: ui/templates/teacher/dashboard.html:27 ui/templates/teacher/student.html:35
-msgid "Key figures"
-msgstr "Показатели"
-
 #: ui/templates/student/dashboard.html:79
 #, python-format
 msgid "+%(n)s stage this week"
@@ -8595,12 +8458,12 @@ msgid "Results of quizzes, experiments and practice works will appear here."
 msgstr "Здесь появятся результаты тестов, опытов и практических работ."
 
 #: ui/templates/student/dashboard.html:153
-#: ui/templates/student/dashboard.html:162 ui/templates/student/home.html:72
+#: ui/templates/student/dashboard.html:162 ui/templates/student/home.html:75
 #: ui/templates/student/stages/practice.html:20
 msgid "Teacher's comment"
 msgstr "Комментарий преподавателя"
 
-#: ui/templates/student/dashboard.html:154 ui/templates/student/home.html:73
+#: ui/templates/student/dashboard.html:154 ui/templates/student/home.html:76
 #, python-format
 msgid "about «%(s)s»"
 msgstr "о «%(s)s»"
@@ -8614,50 +8477,56 @@ msgstr[1] "ещё %(n)s комментария"
 msgstr[2] "ещё %(n)s комментариев"
 msgstr[3] "ещё %(n)s комментариев"
 
-#: ui/templates/student/home.html:14
+#: ui/templates/student/home.html:15
 #, python-format
 msgid "Welcome, %(name)s!"
 msgstr "Добрый день, %(name)s!"
 
-#: ui/templates/student/home.html:15
+#: ui/templates/student/home.html:16
 msgid "The guide below shows how to use the ChemEduTech platform."
 msgstr "Как пользоваться платформой ChemEduTech — в руководстве ниже."
 
-#: ui/templates/student/home.html:25
+#: ui/templates/student/home.html:18
+msgid "About the platform"
+msgstr "О платформе"
+
+#: ui/templates/student/home.html:28
 #, python-format
 msgid "Sections passed: %(a)s of %(b)s"
 msgstr "Пройдено разделов: %(a)s из %(b)s"
 
-#: ui/templates/student/home.html:28
+#: ui/templates/student/home.html:31
 #, python-format
 msgid "Topic %(n)s · %(t)s — next: %(s)s"
 msgstr "Тема %(n)s · %(t)s — далее: %(s)s"
 
-#: ui/templates/student/home.html:30
+#: ui/templates/student/home.html:33
 msgid "Every open section is passed."
 msgstr "Все открытые разделы пройдены."
 
-#: ui/templates/student/home.html:34
+#: ui/templates/student/home.html:37
 msgid "Section done"
 msgstr "Выполнение раздела"
 
-#: ui/templates/student/home.html:36
+#: ui/templates/student/home.html:39
 #, python-format
 msgid "the next section opens at %(p)s%%"
 msgstr "следующий раздел откроется при %(p)s%%"
 
-#: ui/templates/student/home.html:47
+#: ui/templates/student/home.html:50
 msgid "Guide to using the platform"
 msgstr "Руководство по использованию платформы"
 
-#: ui/templates/student/home.html:48
+#: ui/templates/student/home.html:51
 #, python-format
 msgid ""
 "Sections open one after another: the next one opens when the previous one is "
 "%(p)s%% done."
-msgstr "Разделы открываются по порядку: следующий открывается, когда предыдущий выполнен на %(p)s%%."
+msgstr ""
+"Разделы открываются по порядку: следующий открывается, когда предыдущий "
+"выполнен на %(p)s%%."
 
-#: ui/templates/student/home.html:60 ui/templates/teacher/lab_log.html:36
+#: ui/templates/student/home.html:63 ui/templates/teacher/lab_log.html:36
 msgid "Details"
 msgstr "Подробности"
 
@@ -9254,10 +9123,6 @@ msgid "Section 1 is the course; the teacher adds the group to it."
 msgstr "Раздел 1 — это курс; группу на курс добавляет преподаватель."
 
 #: ui/templates/student/section.html:62
-msgid "The section is in development"
-msgstr "Раздел в разработке"
-
-#: ui/templates/student/section.html:62
 msgid "Its tasks will appear here in the next versions of the platform."
 msgstr "Задания раздела появятся здесь в следующих версиях платформы."
 
@@ -9265,7 +9130,9 @@ msgstr "Задания раздела появятся здесь в следу�
 #, python-format
 msgid ""
 "The section opens when section %(n)s «%(t)s» is %(p)s%% done (now %(d)s%%)."
-msgstr "Раздел откроется, когда раздел %(n)s «%(t)s» будет выполнен на %(p)s%% (сейчас %(d)s%%)."
+msgstr ""
+"Раздел откроется, когда раздел %(n)s «%(t)s» будет выполнен на %(p)s%% "
+"(сейчас %(d)s%%)."
 
 #: ui/templates/student/section_locked.html:15
 #, python-format
@@ -9380,6 +9247,11 @@ msgstr "Отправить ответы"
 #: ui/templates/student/stages/practice.html:55
 msgid "Comments with the teacher"
 msgstr "Переписка с преподавателем"
+
+#: ui/templates/student/stages/test.html:6
+#: ui/templates/teacher/content/quiz.html:19
+msgid "Questions"
+msgstr "Вопросы"
 
 #: ui/templates/student/stages/test.html:7
 msgid "Pass mark"
@@ -10342,7 +10214,9 @@ msgstr "Разделы %(t)s"
 msgid ""
 "Percent done per section; a locked section can be opened for one student by "
 "hand."
-msgstr "Процент выполнения по разделам; закрытый раздел можно открыть одному студенту вручную."
+msgstr ""
+"Процент выполнения по разделам; закрытый раздел можно открыть одному "
+"студенту вручную."
 
 #: ui/templates/teacher/group.html:199
 msgid "opened by the teacher"
@@ -10360,7 +10234,9 @@ msgstr "Открыть раздел %(n)s: %(s)s?"
 
 #: ui/templates/teacher/group.html:206
 msgid "The section stays open whatever the order says; the action is logged."
-msgstr "Раздел остаётся открытым независимо от порядка; действие записывается в журнал."
+msgstr ""
+"Раздел остаётся открытым независимо от порядка; действие записывается в "
+"журнал."
 
 #: ui/templates/teacher/group.html:228
 #, python-format
@@ -10662,6 +10538,340 @@ msgstr "Практическая работа 3"
 #: ui/views.py:24
 msgid "Conditions"
 msgstr "Условие"
+
+#~ msgid "Features"
+#~ msgstr "Возможности"
+
+#~ msgid "Learning path"
+#~ msgstr "Путь обучения"
+
+#~ msgid "New"
+#~ msgstr "Новое"
+
+#, python-format
+#~ msgid "Topic %(n)s: %(k)s virtual experiment ready"
+#~ msgid_plural "Topic %(n)s: %(k)s virtual experiments ready"
+#~ msgstr[0] "Тема %(n)s: готов %(k)s виртуальный опыт"
+#~ msgstr[1] "Тема %(n)s: готовы %(k)s виртуальных опыта"
+#~ msgstr[2] "Тема %(n)s: готово %(k)s виртуальных опытов"
+#~ msgstr[3] "Тема %(n)s: готово %(k)s виртуальных опытов"
+
+#~ msgid "Learn chemistry in a safe lab"
+#~ msgstr "Химия в безопасной лаборатории"
+
+#~ msgid ""
+#~ "An online course for future chemistry teachers: theory, video lessons, an "
+#~ "interactive virtual lab and automatic grading — on one platform, in "
+#~ "Kazakh."
+#~ msgstr ""
+#~ "Онлайн-курс для будущих учителей химии: теория, видеоуроки, интерактивная "
+#~ "виртуальная лаборатория и автоматическая проверка — на одной платформе, "
+#~ "на казахском языке."
+
+#~ msgid "Start for free"
+#~ msgstr "Начать бесплатно"
+
+#~ msgid "See the lab"
+#~ msgstr "Посмотреть лабораторию"
+
+#~ msgid "Kazakh · Russian · English"
+#~ msgstr "Казахский · русский · английский"
+
+#~ msgid "In the browser, nothing to install"
+#~ msgstr "В браузере, без установки"
+
+#~ msgid "First assemble the gas delivery system."
+#~ msgstr "Сначала нужно собрать газоотводную систему."
+
+#~ msgid "ml"
+#~ msgstr "мл"
+
+#~ msgid "Stage completed"
+#~ msgstr "Этап завершён"
+
+#~ msgid "About the course"
+#~ msgstr "О курсе"
+
+#~ msgid "modules and topics"
+#~ msgstr "модулей и тем"
+
+#~ msgid "virtual lab experiments"
+#~ msgstr "виртуальных лабораторных опытов"
+
+#~ msgid "kinds of stages: from theory to the test"
+#~ msgstr "видов этапов: от теории до теста"
+
+#~ msgid "the lab is open at any time"
+#~ msgstr "лаборатория открыта в любое время"
+
+#~ msgid "Just like a real lab, but safe and repeatable"
+#~ msgstr "Как в настоящей лаборатории, но безопасно и можно повторить"
+
+#~ msgid ""
+#~ "Drag the equipment onto the bench, add reagents and watch the gas being "
+#~ "collected. The system warns at once about a wrong order and dangerous "
+#~ "actions."
+#~ msgstr ""
+#~ "Оборудование перетаскивается на стол, затем добавляются реактивы и "
+#~ "наблюдается сбор газа. Система сразу предупреждает о неверном порядке и "
+#~ "опасных действиях."
+
+#~ msgid "Step-by-step learning"
+#~ msgstr "Поэтапное обучение"
+
+#~ msgid ""
+#~ "The next stage opens only when the previous one is finished. Theory and "
+#~ "video end with a short 3–4 question checkpoint quiz."
+#~ msgstr ""
+#~ "Следующий этап открывается только после завершения предыдущего. После "
+#~ "теории и видео — короткий закрепляющий тест из 3–4 вопросов."
+
+#~ msgid "Automatic and AI grading"
+#~ msgstr "Автоматическая и AI-проверка"
+
+#~ msgid ""
+#~ "Formulas and equations are checked by meaning; open answers are graded by "
+#~ "AI against criteria and confirmed by the teacher."
+#~ msgstr ""
+#~ "Формулы и уравнения проверяются по смыслу; открытые ответы оценивает AI "
+#~ "по критериям, а подтверждает преподаватель."
+
+#~ msgid "Analytics for the teacher"
+#~ msgstr "Аналитика для преподавателя"
+
+#~ msgid ""
+#~ "Groups, the grade register, frequent mistakes and time on each stage — "
+#~ "all in one cabinet."
+#~ msgstr ""
+#~ "Группы, журнал оценок, частые ошибки и время на этапах — всё в одном "
+#~ "кабинете."
+
+#~ msgid "Certificate and grade book"
+#~ msgstr "Сертификат и зачётная книжка"
+
+#~ msgid ""
+#~ "Stage → topic → module → course scores are calculated automatically. When "
+#~ "the course is finished you get a certificate verifiable by its QR code."
+#~ msgstr ""
+#~ "Баллы этапа → темы → модуля → курса считаются автоматически. По окончании "
+#~ "курса выдаётся сертификат, проверяемый по QR-коду."
+
+#~ msgid "Authorial model"
+#~ msgstr "Авторская модель"
+
+#~ msgid "More about the platform"
+#~ msgstr "Подробнее о платформе"
+
+#~ msgid "Every topic is a full cycle of stages"
+#~ msgstr "Каждая тема — полный цикл этапов"
+
+#~ msgid ""
+#~ "The author decides how many stages a topic has: one topic may contain "
+#~ "several practice works."
+#~ msgstr ""
+#~ "Автор сам решает, сколько этапов в теме: в одной теме может быть "
+#~ "несколько практических работ."
+
+#~ msgid "Text with formulas and pictures + a checkpoint quiz"
+#~ msgstr "Текст с формулами и рисунками + закрепляющий тест"
+
+#~ msgid "Watching is tracked + a checkpoint quiz"
+#~ msgstr "Просмотр отслеживается + закрепляющий тест"
+
+#~ msgid "Virtual experiments, journal, analysis"
+#~ msgstr "Виртуальные опыты, журнал, анализ"
+
+#~ msgid "Problems: automatic and AI grading"
+#~ msgstr "Задачи: автопроверка и AI-оценка"
+
+#~ msgid "Test"
+#~ msgstr "Тест"
+
+#~ msgid "The final test of the topic"
+#~ msgstr "Итоговый тест темы"
+
+#, python-format
+#~ msgid "Lab work of topic %(n)s"
+#~ msgstr "Лабораторная работа темы %(n)s"
+
+#, python-format
+#~ msgid "%(n)s step with order checks and safety warnings"
+#~ msgid_plural "%(n)s steps with order checks and safety warnings"
+#~ msgstr[0] "%(n)s шаг с проверкой порядка и предупреждениями безопасности"
+#~ msgstr[1] "%(n)s шага с проверкой порядка и предупреждениями безопасности"
+#~ msgstr[2] "%(n)s шагов с проверкой порядка и предупреждениями безопасности"
+#~ msgstr[3] "%(n)s шагов с проверкой порядка и предупреждениями безопасности"
+
+#~ msgid "Equipment:"
+#~ msgstr "Оборудование:"
+
+#, python-format
+#~ msgid "Lab journal: %(n)s field"
+#~ msgid_plural "Lab journal: %(n)s fields"
+#~ msgstr[0] "Лабораторный журнал: %(n)s поле"
+#~ msgstr[1] "Лабораторный журнал: %(n)s поля"
+#~ msgstr[2] "Лабораторный журнал: %(n)s полей"
+#~ msgstr[3] "Лабораторный журнал: %(n)s полей"
+
+#~ msgid "Try the experiment"
+#~ msgstr "Открыть опыт"
+
+#~ msgid "Convenient for students and teachers alike"
+#~ msgstr "Удобно и студентам, и преподавателям"
+
+#~ msgid "For whom"
+#~ msgstr "Для кого"
+
+#~ msgid "For students"
+#~ msgstr "Студентам"
+
+#~ msgid "For teachers"
+#~ msgstr "Преподавателям"
+
+#~ msgid "A clear path"
+#~ msgstr "Понятный путь"
+
+#~ msgid ""
+#~ "What to do next is always visible: «Continue learning» is one button away."
+#~ msgstr ""
+#~ "Что делать дальше, всегда видно: «Продолжить обучение» — одна кнопка."
+
+#~ msgid "Mistakes without risk"
+#~ msgstr "Ошибки без риска"
+
+#~ msgid ""
+#~ "When you make a mistake the system explains why — without the danger of a "
+#~ "real lab."
+#~ msgstr ""
+#~ "При ошибке система объясняет причину — без опасности настоящей "
+#~ "лаборатории."
+
+#~ msgid "A fair grade"
+#~ msgstr "Честная оценка"
+
+#~ msgid ""
+#~ "Every stage score and how it was calculated is shown in the grade book."
+#~ msgstr "Балл каждого этапа и способ его расчёта видны в зачётной книжке."
+
+#~ msgid "Group management"
+#~ msgstr "Управление группами"
+
+#~ msgid ""
+#~ "Create a group, share the join code and assign the research group "
+#~ "(control / experimental)."
+#~ msgstr ""
+#~ "Создание группы, раздача кода присоединения и назначение "
+#~ "исследовательской группы (контрольная / экспериментальная)."
+
+#~ msgid "AI assistant"
+#~ msgstr "AI-помощник"
+
+#~ msgid ""
+#~ "AI grades open answers of practice works against the criteria — you only "
+#~ "confirm."
+#~ msgstr ""
+#~ "Открытые ответы практических работ AI оценивает по критериям — "
+#~ "преподавателю остаётся только подтвердить."
+
+#~ msgid ""
+#~ "See at which step students make mistakes most often and adapt the lesson."
+#~ msgstr ""
+#~ "Видно, на каком шаге студенты ошибаются чаще всего, — занятие можно "
+#~ "скорректировать."
+
+#~ msgid "Pedagogical research"
+#~ msgstr "Педагогическое исследование"
+
+#~ msgid "Every action is evidence"
+#~ msgstr "Каждое действие — доказательство"
+
+#~ msgid ""
+#~ "The platform records every step of a student in the lab, quiz answers and "
+#~ "time spent. Comparing control and experimental groups takes one click."
+#~ msgstr ""
+#~ "Платформа записывает каждый шаг студента в лаборатории, ответы на тесты и "
+#~ "затраченное время. Сравнение контрольной и экспериментальной групп — в "
+#~ "один клик."
+
+#~ msgid "Action log: order errors, safety warnings, time on each step"
+#~ msgstr ""
+#~ "Журнал действий: ошибки порядка, предупреждения безопасности, время на "
+#~ "каждом шаге"
+
+#~ msgid "Group comparison: mean, median, n"
+#~ msgstr "Сравнение групп: среднее, медиана, n"
+
+#~ msgid "CSV export (UTF-8, ready for Excel)"
+#~ msgstr "Экспорт CSV (UTF-8, готов для Excel)"
+
+#~ msgid "Average score by stage (example)"
+#~ msgstr "Средний балл по этапам (пример)"
+
+#~ msgid "Frequently asked questions"
+#~ msgstr "Частые вопросы"
+
+#~ msgid "Who is the platform for?"
+#~ msgstr "Для кого платформа?"
+
+#~ msgid "How does the virtual lab work?"
+#~ msgstr "Как работает виртуальная лаборатория?"
+
+#~ msgid ""
+#~ "It opens in the browser, nothing to install. You drag the equipment onto "
+#~ "the bench and carry out the commands in order; the reaction is animated "
+#~ "and you record the result in the journal."
+#~ msgstr ""
+#~ "Открывается в браузере, ничего устанавливать не нужно. Оборудование "
+#~ "перетаскивается на стол, команды выполняются по порядку; реакция показана "
+#~ "анимацией, результат записывается в журнал."
+
+#~ msgid "Why does the next stage not open?"
+#~ msgstr "Почему не открывается следующий этап?"
+
+#~ msgid ""
+#~ "Each stage opens when the previous one is finished. After the theory and "
+#~ "the video you need to pass a 3–4 question checkpoint quiz."
+#~ msgstr ""
+#~ "Каждый этап открывается после завершения предыдущего. После теории и "
+#~ "видео нужно пройти закрепляющий тест из 3–4 вопросов."
+
+#~ msgid "Who grades the practice works?"
+#~ msgstr "Кто оценивает практические работы?"
+
+#~ msgid ""
+#~ "Numbers, formulas and equations are checked automatically. Free text is "
+#~ "graded by AI against the criteria and confirmed by the teacher."
+#~ msgstr ""
+#~ "Числа, формулы и уравнения проверяются автоматически. Свободный текст "
+#~ "оценивает AI по критериям, подтверждает преподаватель."
+
+#~ msgid "How do I sign up as a teacher?"
+#~ msgstr "Как зарегистрироваться преподавателю?"
+
+#~ msgid ""
+#~ "Teacher accounts are created by the platform administrator. Contact the "
+#~ "administrator."
+#~ msgstr ""
+#~ "Аккаунты преподавателей создаёт администратор платформы. Обратитесь к "
+#~ "администратору."
+
+#~ msgid "Try your first experiment today"
+#~ msgstr "Первый опыт — уже сегодня"
+
+#~ msgid ""
+#~ "Signing up takes a minute. Ask your teacher for your group's join code."
+#~ msgstr ""
+#~ "Регистрация займёт минуту. Код присоединения группы выдаёт преподаватель."
+
+#~ msgid ""
+#~ "A virtual lab and an online course for future chemistry teachers. A "
+#~ "doctoral dissertation project."
+#~ msgstr ""
+#~ "Виртуальная лаборатория и онлайн-курс для будущих учителей химии. Проект "
+#~ "докторской диссертации."
+
+#~ msgid "Platform"
+#~ msgstr "Платформа"
 
 #~ msgid "Leave empty to use the course share of this stage kind"
 #~ msgstr "Оставьте пустым, чтобы использовать долю этого вида этапа в курсе"

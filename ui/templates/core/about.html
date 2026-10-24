@@ -1,0 +1,370 @@
+{% extends "layouts/site.html" %}
+{% load i18n %}
+{% comment %}
+The platform introduction — ICPAI guide @S0-INTRO pages 2–4, one page each, laid out after the guide's pictures:
+1 the platform, its aim and tasks (image3–4) · 2 expected results around a flask (image5) · 3 the ICPAI model:
+four components around the hub (image6–8). Page 1 of the guide (name, log in / sign up) is the landing.
+«Sign up» leads through these pages; the last one opens the sign-up form (@S0-RULES).
+Motion (styles.css «ICPAI public pages»): CSS 3D molecules, orbits with electrons, flowing connectors, pulsing rings,
+cards leaning towards the pointer (Alpine "tilt"), blocks fading in on scroll ([data-reveal]) — all still under
+prefers-reduced-motion. Pictures are decorative (aria-hidden); every text is in the markup.
+Texts are gettext strings; their kk translation is the guide's text, verbatim («ICPAT» → «ICPAI», SPEC О-9).
+{% endcomment %}
+{% block title %}{% if page == 1 %}{% translate "Platform introduction" %}{% elif page == 2 %}{% translate "Expected results" %}{% else %}{% translate "ICPAI model" %}{% endif %} · ChemEduTech{% endblock %}
+{% block site %}
+{% if page == 1 %}{% translate "ChemEduTech platform introduction" as heading %}
+{% elif page == 2 %}{% translate "Expected results" as heading %}
+{% else %}{% translate "ICPAI authorial model" as heading %}{% endif %}
+
+{# ---- title band: 3D molecules, drifting particles ---- #}
+<section class="brand-ground brand-ground-plain relative pt-[132px] pb-[104px]" aria-labelledby="about-title">
+  <div aria-hidden="true" class="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:56px_56px]"></div>
+  <div aria-hidden="true" class="glow pointer-events-none absolute -top-[220px] left-1/2 size-[680px] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(31,95,209,.5),rgba(31,95,209,0))]"></div>
+  <div aria-hidden="true" class="pointer-events-none absolute inset-0 overflow-hidden">
+    {% for d in "8:22:6:0 18:70:4:-3 30:34:5:-6 70:28:4:-2 82:64:6:-5 92:30:3:-8 56:80:4:-4"|split %}{% with p=d|split:":" %}
+      <span class="drift absolute rounded-full bg-mint/40" style="left: {{ p.0 }}%; top: {{ p.1 }}%; width: {{ p.2 }}px; height: {{ p.2 }}px; animation-delay: {{ p.3 }}s"></span>
+    {% endwith %}{% endfor %}
+    <div class="drift absolute top-[118px] left-[3%] max-lg:hidden">{% include "core/partials/molecule3d.html" with box="150px" r="46px" s="18px" core="30px" %}</div>
+    <div class="drift absolute top-[150px] right-[4%] max-lg:hidden" style="animation-delay: -5s">{% include "core/partials/molecule3d.html" with box="130px" r="40px" s="16px" core="26px" c1="#5fd3b8" c2="#8aaef7" %}</div>
+  </div>
+  <div class="relative z-[2] mx-auto flex max-w-[1240px] flex-col items-center px-4 text-center sm:px-6">
+    <p class="rise text-[13px] font-bold tracking-[.06em] text-mint uppercase">{% blocktranslate with n=page total=pages|length %}About the platform · {{ n }} / {{ total }}{% endblocktranslate %}</p>
+    <h1 id="about-title" class="rise rise-2 mt-3 max-w-[900px] text-[clamp(28px,4vw,50px)] leading-[1.12] font-extrabold tracking-[-0.025em]">{{ heading }}</h1>
+    <nav class="rise rise-3 mt-8 flex w-full max-w-[900px] gap-2 rounded-[18px] border border-white/[.12] bg-white/[.06] p-1.5 backdrop-blur-sm" aria-label="{% translate 'Pages' %}">
+      {% translate "Platform introduction" as p1 %}{% translate "Expected results" as p2 %}{% translate "ICPAI model" as p3 %}
+      {% partialdef tab %}
+        <a href="{% url 'core:about_page' n %}" class="flex min-w-0 flex-1 items-center justify-center gap-2 rounded-[13px] px-3 py-2.5 text-sm font-semibold transition-colors {% if n == page %}bg-white text-primary-900 shadow-[0_8px_20px_rgba(0,0,0,.2)]{% else %}text-on-dark-soft hover:bg-white/10 hover:text-white{% endif %}"{% if n == page %} aria-current="page"{% endif %}>
+          <span class="num grid size-6 shrink-0 place-items-center rounded-full text-[12px] font-extrabold {% if n == page %}bg-primary-600 text-white{% elif n < page %}bg-mint text-primary-950{% else %}bg-white/15 text-white{% endif %}">{{ n }}</span>
+          <span class="truncate max-sm:hidden">{{ label }}</span>
+        </a>
+      {% endpartialdef %}
+      {% with n=1 label=p1 %}{% partial tab %}{% endwith %}
+      {% with n=2 label=p2 %}{% partial tab %}{% endwith %}
+      {% with n=3 label=p3 %}{% partial tab %}{% endwith %}
+    </nav>
+  </div>
+</section>
+
+<main id="main" class="relative z-[3] mx-auto -mt-14 flex max-w-[1240px] flex-col gap-5 px-4 pb-20 sm:px-6">
+
+{% if page == 1 %}
+  {# ===== 1 · the platform, its aim and tasks (image3–4) ===== #}
+  <div class="grid gap-5 lg:grid-cols-[1fr_1.05fr_1fr]">
+    <div class="flex flex-col gap-5">
+      <div data-reveal>
+        <article class="tilt card flex flex-col gap-4 shadow-lift" x-data="tilt" @pointermove="move" @pointerleave="leave">
+          <div class="flex gap-2" aria-hidden="true">
+            <span class="tile bg-primary-50 text-primary-600">{% include "components/icons.html#globe" %}</span>
+            <span class="tile bg-stage-lab-50 text-stage-lab">{% include "components/icons.html#lab" %}</span>
+            <span class="tile bg-stage-practice-50 text-stage-practice">{% include "components/icons.html#theory" %}</span>
+            <span class="tile bg-ai-50 text-stage-video">{% include "components/icons.html#sparkle" %}</span>
+          </div>
+          <p class="text-[15px] leading-[25px]">{% translate "ChemEduTech is a digital platform that brings together the information educational environment, chemistry subject content, pedagogical design and artificial intelligence tools in the professional training of future chemistry teachers." %}</p>
+        </article>
+      </div>
+      <div data-reveal style="--d: .12s">
+        <article class="tilt card flex flex-col gap-4 shadow-lift" x-data="tilt" @pointermove="move" @pointerleave="leave">
+          <p class="text-[15px] leading-[25px]">{% translate "On the platform a student not only masters chemical concepts but also chooses digital resources for teaching them, organises research and virtual experiments, prepares lesson materials, analyses the results and reflects on his or her own teaching. The theoretical content of the platform follows the chapters of the textbook «Pedagogical foundations of informatisation in the training of chemistry teachers», its practical side — the materials of the course «Methods of teaching chemistry»." %}</p>
+          <div class="grid grid-cols-[1fr_auto_1fr] items-stretch gap-2 text-[13px] leading-[18px]">
+            <div class="flex flex-col gap-2 rounded-lg bg-primary-50 p-3">
+              <span class="text-primary-600">{% include "components/icons.html#book" with size=20 %}</span>
+              <span class="font-bold text-primary-900">{% translate "Theoretical content" %}</span>
+              <span class="text-ink-soft">{% translate "«Pedagogical foundations of informatisation in the training of chemistry teachers»" %}</span>
+            </div>
+            <svg aria-hidden="true" viewBox="0 0 24 40" class="w-5 self-center text-primary-300"><path d="M2 14h18m-5-5 5 5-5 5M22 26H4m5 5-5-5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div class="flex flex-col gap-2 rounded-lg bg-success-50 p-3">
+              <span class="text-success-600">{% include "components/icons.html#award" with size=20 %}</span>
+              <span class="font-bold text-success-700">{% translate "Practical side" %}</span>
+              <span class="text-ink-soft">{% translate "«Methods of teaching chemistry»" %}</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    {# the platform at work — a living picture, not a control #}
+    <div data-reveal style="--d: .2s" class="relative">
+      <div class="relative h-full min-h-[460px] overflow-hidden rounded-xl border border-line bg-surface shadow-lift" aria-hidden="true">
+        <div class="flex h-9 items-center gap-1.5 border-b border-line bg-canvas px-4"><span class="size-2.5 rounded-full bg-danger-600/70"></span><span class="size-2.5 rounded-full bg-warning-500/80"></span><span class="size-2.5 rounded-full bg-success-600/70"></span><span class="ml-3 h-4 flex-1 rounded-full bg-surface-sunken"></span></div>
+        <div class="grid h-[calc(100%-36px)] grid-cols-[78px_1fr]">
+          <div class="flex flex-col items-center gap-3 border-r border-line bg-primary-950 py-4">
+            <span class="mb-1 size-7 rounded-[8px] bg-primary-600"></span>
+            {% for i in "1 2 3 4 5"|split %}<span class="grid size-9 place-items-center rounded-[10px] {% if i == '3' %}bg-white/15 ring-1 ring-mint/60{% endif %}"><span class="size-3.5 rounded-[4px] {% if i == '3' %}bg-mint{% else %}bg-white/25{% endif %}"></span></span>{% endfor %}
+          </div>
+          <div class="flex flex-col gap-3 bg-[radial-gradient(circle_at_70%_30%,var(--color-primary-50),transparent_60%)] p-4">
+            <span class="h-3 w-2/3 rounded-full bg-ink/80"></span>
+            <span class="h-2 w-1/2 rounded-full bg-line-strong"></span>
+            <div class="relative mt-1 h-[230px] shrink-0 overflow-hidden rounded-lg border border-line bg-lab-bench">
+              <div class="absolute top-3 right-3">{% include "core/partials/molecule3d.html" with box="96px" r="28px" s="12px" core="20px" %}</div>
+              <svg viewBox="0 0 200 170" class="absolute inset-x-0 bottom-2 mx-auto h-[78%] w-[78%]">
+                <defs><clipPath id="about-flask"><path d="M84,24 V62 L44,138 Q40,152 54,152 H146 Q160,152 156,138 L116,62 V24 Z"/></clipPath></defs>
+                <g clip-path="url(#about-flask)">
+                  <g class="wave"><path d="M20,104 q15,-7 30,0 t30,0 t30,0 t30,0 t30,0 t30,0 V170 H20 Z" class="fill-stage-lab" opacity=".85"/></g>
+                  {% for b in "86,146,5,0 104,150,4,.8 120,144,5,1.6 96,148,3,2.2"|split %}{% with p=b|split:"," %}<circle class="bubble" cx="{{ p.0 }}" cy="{{ p.1 }}" r="{{ p.2 }}" fill="#fff" style="--rise:-60px;--dur:2.8s;--delay:{{ p.3 }}s"/>{% endwith %}{% endfor %}
+                </g>
+                <path d="M84,24 V62 L44,138 Q40,152 54,152 H146 Q160,152 156,138 L116,62 V24" fill="rgba(255,255,255,.45)" class="stroke-lab-glass" stroke-width="3.5" stroke-linejoin="round"/>
+                <path d="M78,24 H122" class="stroke-lab-glass" stroke-width="3.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="flex h-[150px] shrink-0 flex-col justify-end gap-2 rounded-lg border border-line bg-surface p-3">
+              <span class="flex items-center justify-between"><span class="h-2 w-1/3 rounded-full bg-ink/70"></span><span class="h-2 w-10 rounded-full bg-success-600/60"></span></span>
+              <span class="flex flex-1 items-end gap-2 border-b border-line pt-2">
+                {% for h in "40 62 48 78 66 92"|split %}<span class="bar-grow flex-1 rounded-t-[6px] {% if forloop.last %}bg-primary-600{% else %}bg-primary-100{% endif %}" style="height: {{ h }}%; animation-delay: {{ forloop.counter }}00ms"></span>{% endfor %}
+              </span>
+            </div>
+            <div class="flex flex-1 flex-col justify-center gap-3 rounded-lg border border-line bg-surface p-3">
+              <span class="flex items-center gap-3 border-b border-line pb-3">
+                {% include "components/ring.html" with value=80 size=56 stroke=6 text="80%" color="stroke-success-600" track="stroke-success-50" %}
+                <span class="flex flex-1 flex-col gap-2"><span class="h-2.5 w-3/4 rounded-full bg-ink/70"></span><span class="h-2 w-1/2 rounded-full bg-line-strong"></span></span>
+              </span>
+              {% partialdef meter %}
+                <span class="flex items-center gap-2.5">
+                  <span class="size-3 shrink-0 rounded-full {{ tone }}"></span>
+                  <span class="h-2 w-1/4 shrink-0 rounded-full bg-line-strong"></span>
+                  <span class="h-2 flex-1 overflow-hidden rounded-full bg-surface-sunken"><span class="block h-full rounded-full {{ tone }}" style="width: {{ w }}%"></span></span>
+                </span>
+              {% endpartialdef %}
+              {% with tone="bg-stage-theory" w=86 %}{% partial meter %}{% endwith %}
+              {% with tone="bg-stage-lab" w=64 %}{% partial meter %}{% endwith %}
+              {% with tone="bg-stage-practice" w=42 %}{% partial meter %}{% endwith %}
+            </div>
+            <div class="flex items-center gap-2.5 rounded-lg bg-ai-50 p-3">
+              <span class="tile size-8 shrink-0 rounded-[9px] bg-stage-video text-white">{% include "components/icons.html#sparkle" with size=15 %}</span>
+              <span class="typing flex gap-1.5"><span class="size-2 rounded-full bg-stage-video"></span><span class="size-2 rounded-full bg-stage-video"></span><span class="size-2 rounded-full bg-stage-video"></span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span aria-hidden="true" class="float absolute top-16 -left-3 rounded-[12px] border border-line bg-surface px-3 py-1.5 text-sm font-bold text-stage-lab shadow-lift max-lg:hidden">H₂O</span>
+      <span aria-hidden="true" class="float float-2 absolute -right-3 bottom-24 grid size-10 place-items-center rounded-full bg-success-600 text-white shadow-lift max-lg:hidden">{% include "components/icons.html#check" with size=18 %}</span>
+    </div>
+
+    <div data-reveal style="--d: .28s">
+      <section aria-labelledby="tasks-title" class="tilt card flex h-full flex-col gap-4 shadow-lift" x-data="tilt" @pointermove="move" @pointerleave="leave">
+        <h2 id="tasks-title" class="text-[19px] font-extrabold">{% translate "Tasks" %}</h2>
+        <ol class="relative flex flex-col gap-4">
+          <li aria-hidden="true" class="absolute top-4 bottom-4 left-[15px] w-0.5 rounded-full bg-[linear-gradient(var(--color-primary-600),var(--color-stage-lab),var(--color-stage-video),var(--color-stage-practice),var(--color-success-600))] opacity-40"></li>
+          {% translate "To master the scientific and pedagogical foundations of the informatisation of education." as t1 %}
+          {% translate "To create conditions for integrating the subject, pedagogical and digital knowledge of future chemistry teachers." as t2 %}
+          {% translate "To guide the use of digital resources, virtual laboratories and modelling tools according to the learning aim." as t3 %}
+          {% translate "To build the skills of preparing learning tasks and materials with the help of artificial intelligence, checking the information obtained scientifically and keeping to ethical requirements." as t4 %}
+          {% translate "To develop the skills of assessing students' digital research activity and learning achievements and of self-reflection." as t5 %}
+          {% partialdef task %}
+            <li class="relative flex items-start gap-3" data-reveal style="--d: {{ d }}">
+              <span class="num grid size-8 shrink-0 place-items-center rounded-full text-sm font-extrabold text-white ring-4 ring-surface {{ tone }}">{{ n }}</span>
+              <span class="pt-1 text-[14px] leading-[22px]">{{ t }}</span>
+            </li>
+          {% endpartialdef %}
+          {% with n=1 t=t1 tone="bg-primary-600" d=".35s" %}{% partial task %}{% endwith %}
+          {% with n=2 t=t2 tone="bg-stage-lab" d=".45s" %}{% partial task %}{% endwith %}
+          {% with n=3 t=t3 tone="bg-stage-video" d=".55s" %}{% partial task %}{% endwith %}
+          {% with n=4 t=t4 tone="bg-stage-practice" d=".65s" %}{% partial task %}{% endwith %}
+          {% with n=5 t=t5 tone="bg-success-600" d=".75s" %}{% partial task %}{% endwith %}
+        </ol>
+      </section>
+    </div>
+  </div>
+
+  <section data-reveal aria-labelledby="aim-title" class="relative flex flex-wrap items-center gap-6 overflow-hidden rounded-xl border-2 border-warning-500/60 bg-[linear-gradient(110deg,var(--color-warning-50),var(--color-surface)_70%)] p-[clamp(20px,3vw,32px)] shadow-lift">
+    <svg aria-hidden="true" viewBox="0 0 100 100" class="size-[92px] shrink-0">
+      <circle cx="50" cy="50" r="44" fill="none" stroke="#e3a008" stroke-width="2" stroke-dasharray="6 6" class="spin-slow"/>
+      <circle cx="50" cy="50" r="34" fill="#fff" stroke="#e3a008" stroke-width="3"/>
+      <circle cx="50" cy="50" r="22" fill="#fff6dd" stroke="#e3a008" stroke-width="3"/>
+      <circle cx="50" cy="50" r="9" fill="#e3a008"/>
+      <path d="M50 50 L84 16" stroke="#8a5a00" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M78 14 L86 14 L86 22" fill="none" stroke="#8a5a00" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div class="min-w-0 flex-[1_1_420px]">
+      <h2 id="aim-title" class="text-[20px] font-extrabold text-warning-700">{% translate "Aim" %}</h2>
+      <p class="mt-1.5 text-[16px] leading-[27px]">{% translate "To build a digital research learning environment for developing the professional readiness of future chemistry teachers under informatisation, and to develop the skills of designing chemistry content pedagogically and of using digital technologies and artificial intelligence competently." %}</p>
+    </div>
+    <div aria-hidden="true" class="pointer-events-none absolute -right-6 -bottom-10 opacity-30 max-md:hidden">{% include "core/partials/molecule3d.html" with box="160px" r="48px" s="18px" core="28px" c1="#e3a008" c2="#b0570e" %}</div>
+  </section>
+
+{% elif page == 2 %}
+  {# ===== 2 · expected results around the flask (image5) ===== #}
+  {% translate "designs chemistry content in a digital educational environment and organises it according to the learning aim;" as r1 %}
+  {% translate "explains chemical processes at the macro, submicro and symbolic levels;" as r2 %}
+  {% translate "designs digital research tasks and virtual chemical experiments;" as r3 %}
+  {% translate "chooses and uses artificial intelligence tools according to the aims of teaching chemistry and checks the results they offer;" as r4 %}
+  {% translate "prepares his or her own learning material or lesson model and analyses its effectiveness;" as r5 %}
+  {% translate "identifies his or her professional difficulties and plans ways of improving digital pedagogical competence." as r6 %}
+  {% partialdef result %}
+    <li data-reveal style="--d: {{ d }}">
+      <div class="tilt group relative flex items-start gap-4 rounded-[28px] border-2 bg-surface p-5 shadow-lift {{ ring }}" x-data="tilt" @pointermove="move" @pointerleave="leave">
+        <span class="grid size-12 shrink-0 place-items-center rounded-full transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 {{ tone }}">{% include "components/icons.html#"|add:icon with size=22 %}</span>
+        <span class="pt-1 text-[15px] leading-6">{{ r }}</span>
+      </div>
+    </li>
+  {% endpartialdef %}
+  <div class="relative grid items-center gap-5 lg:grid-cols-[1fr_320px_1fr]">
+    {# connectors from the results to the flask (wide screens) #}
+    <svg aria-hidden="true" class="pointer-events-none absolute inset-0 h-full w-full max-lg:hidden" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <g fill="none" stroke="#8aaef7" stroke-width="2" vector-effect="non-scaling-stroke">
+        {% for y in "16 50 84"|split %}
+          <path class="dash-flow" vector-effect="non-scaling-stroke" d="M37 {{ y }} Q43 {{ y }} 46 50"/>
+          <path class="dash-flow" vector-effect="non-scaling-stroke" d="M63 {{ y }} Q57 {{ y }} 54 50"/>
+        {% endfor %}
+      </g>
+    </svg>
+    <ul class="relative flex flex-col gap-5">
+      {% with r=r1 icon="grid" ring="border-stage-lab/50" tone="bg-stage-lab-50 text-stage-lab" d="0s" %}{% partial result %}{% endwith %}
+      {% with r=r2 icon="lab" ring="border-primary-500/50" tone="bg-primary-50 text-primary-600" d=".1s" %}{% partial result %}{% endwith %}
+      {% with r=r3 icon="search" ring="border-stage-video/50" tone="bg-ai-50 text-stage-video" d=".2s" %}{% partial result %}{% endwith %}
+    </ul>
+    <div data-reveal style="--d: .15s" class="relative mx-auto grid size-[300px] place-items-center max-lg:order-first max-sm:size-[250px]" aria-hidden="true">
+      <span class="pulse-ring absolute inset-6 rounded-full border-2 border-primary-400"></span>
+      <span class="pulse-ring pulse-ring-2 absolute inset-6 rounded-full border-2 border-mint"></span>
+      <svg viewBox="0 0 300 300" class="absolute inset-0 h-full w-full">
+        <circle cx="150" cy="150" r="146" fill="none" stroke="#b7ceff" stroke-width="2" stroke-dasharray="3 9" class="spin-slow"/>
+      </svg>
+      <div class="absolute inset-6 rounded-full bg-[radial-gradient(circle_at_35%_30%,#183f87,#0d2149_70%)] shadow-[0_0_0_10px_rgba(31,95,209,.12),0_30px_60px_rgba(13,33,73,.35)]"></div>
+      <svg viewBox="0 0 200 200" class="relative w-[66%]">
+        <defs><clipPath id="results-flask"><path d="M84,40 V82 L50,150 Q46,162 58,162 H142 Q154,162 150,150 L116,82 V40 Z"/></clipPath></defs>
+        {% for a in "0 60 -60"|split %}
+          <ellipse cx="100" cy="104" rx="92" ry="32" fill="none" stroke="#8aaef7" stroke-width="1.6" opacity=".7" transform="rotate({{ a }} 100 104)"/>
+        {% endfor %}
+        <g clip-path="url(#results-flask)">
+          <g class="wave"><path d="M20,116 q15,-7 30,0 t30,0 t30,0 t30,0 t30,0 t30,0 V170 H20 Z" fill="#5fd3b8" opacity=".9"/></g>
+          {% for b in "88,158,4,0 104,160,3,.9 116,156,4,1.7"|split %}{% with p=b|split:"," %}<circle class="bubble" cx="{{ p.0 }}" cy="{{ p.1 }}" r="{{ p.2 }}" fill="#e3f4f4" style="--rise:-50px;--dur:2.6s;--delay:{{ p.3 }}s"/>{% endwith %}{% endfor %}
+        </g>
+        <path d="M84,40 V82 L50,150 Q46,162 58,162 H142 Q154,162 150,150 L116,82 V40" fill="rgba(255,255,255,.08)" stroke="#d9e6ff" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M78,40 H122" stroke="#d9e6ff" stroke-width="4" stroke-linecap="round"/>
+        {# electrons along the three orbits #}
+        {% for o in "0:6s:#5fd3b8 60:7.5s:#8aaef7 -60:9s:#f4c95d"|split %}{% with q=o|split:":" %}
+          <g transform="rotate({{ q.0 }} 100 104)"><circle class="electron" r="5" fill="{{ q.2 }}"><animateMotion dur="{{ q.1 }}" repeatCount="indefinite" path="M8,104 a92,32 0 1,0 184,0 a92,32 0 1,0 -184,0"/></circle></g>
+        {% endwith %}{% endfor %}
+      </svg>
+    </div>
+    <ul class="relative flex flex-col gap-5">
+      {% with r=r4 icon="sparkle" ring="border-success-600/50" tone="bg-success-50 text-success-600" d=".1s" %}{% partial result %}{% endwith %}
+      {% with r=r5 icon="chart" ring="border-warning-500/60" tone="bg-warning-50 text-warning-700" d=".2s" %}{% partial result %}{% endwith %}
+      {% with r=r6 icon="activity" ring="border-stage-practice/50" tone="bg-stage-practice-50 text-stage-practice" d=".3s" %}{% partial result %}{% endwith %}
+    </ul>
+  </div>
+
+  <section data-reveal aria-labelledby="criteria-title" class="flex flex-col items-center gap-7 rounded-xl border border-line bg-surface p-[clamp(20px,3vw,32px)] shadow-lift">
+    <h2 id="criteria-title" class="rounded-full bg-primary-950 px-6 py-2.5 text-center text-[15px] leading-6 font-semibold text-white">{% translate "The results can be monitored by the motivational, cognitive, activity and reflective criteria." %}</h2>
+    <ul class="relative grid w-full max-w-[860px] grid-cols-2 gap-6 sm:grid-cols-4">
+      <li aria-hidden="true" class="absolute top-[44px] right-[12%] left-[12%] max-sm:hidden"><svg class="h-1 w-full" preserveAspectRatio="none" viewBox="0 0 100 2"><line x1="0" y1="1" x2="100" y2="1" stroke="#c9d2de" stroke-width="2" vector-effect="non-scaling-stroke" class="dash-flow"/></svg></li>
+      {% translate "Motivational" as c1 %}{% translate "Cognitive" as c2 %}{% translate "Activity-based" as c3 %}{% translate "Reflective" as c4 %}
+      {% partialdef criterion %}
+        <li class="relative flex flex-col items-center gap-2.5 text-center" data-reveal style="--d: {{ d }}">
+          <span class="relative grid size-[88px] place-items-center rounded-full bg-surface">
+            <svg aria-hidden="true" viewBox="0 0 88 88" class="absolute inset-0 -rotate-90">
+              <circle cx="44" cy="44" r="40" fill="none" stroke="#eef1f6" stroke-width="5"/>
+              <circle cx="44" cy="44" r="40" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-dasharray="251.3" style="--len: 251.3" class="draw {{ tone }}"/>
+            </svg>
+            <span class="{{ tone }}">{% include "components/icons.html#"|add:icon with size=30 %}</span>
+          </span>
+          <span class="text-[15px] font-bold">{{ label }}</span>
+        </li>
+      {% endpartialdef %}
+      {% with label=c1 icon="sparkle" tone="text-warning-500" d=".1s" %}{% partial criterion %}{% endwith %}
+      {% with label=c2 icon="theory" tone="text-primary-600" d=".25s" %}{% partial criterion %}{% endwith %}
+      {% with label=c3 icon="practice" tone="text-stage-lab" d=".4s" %}{% partial criterion %}{% endwith %}
+      {% with label=c4 icon="user" tone="text-stage-video" d=".55s" %}{% partial criterion %}{% endwith %}
+    </ul>
+  </section>
+
+{% else %}
+  {# ===== 3 · the ICPAI model: four components around the hub (image6–8) ===== #}
+  {% translate "information educational environment" as s1 %}{% translate "ChemEduTech, LMS, electronic resources, digital assessment and feedback" as d1 %}
+  {% translate "chemistry subject content" as s2 %}{% translate "grounding the design of authorial tasks for teaching chemistry" as d2 %}
+  {% translate "pedagogical design" as s3 %}{% translate "Setting the lesson aim and method, building research tasks, teaching, assessment and reflection" as d3 %}
+  {% translate "pedagogical use of artificial intelligence" as s4 %}{% translate "Supporting task design, checking results critically, keeping ethics and responsibility" as d4 %}
+  {% partialdef part %}
+    <div data-reveal style="--d: {{ d }}">
+      <article class="tilt relative flex h-full flex-col gap-4 overflow-hidden rounded-xl border-2 bg-surface p-5 shadow-lift {{ ring }}" x-data="tilt" @pointermove="move" @pointerleave="leave">
+        <div class="flex items-center gap-3">
+          <span class="grid size-12 shrink-0 place-items-center rounded-full text-white {{ tone }}">{% include "components/icons.html#"|add:icon with size=22 %}</span>
+          <span class="num text-[28px] font-extrabold {{ ink }}">{{ letter }}</span>
+          <span class="ml-auto" aria-hidden="true">{% partial art %}</span>
+        </div>
+        <div class="grid gap-3 sm:grid-cols-[1fr_1.25fr]">
+          <div class="rounded-lg bg-canvas p-3.5">
+            <p class="text-caption font-semibold text-ink-faint">{% translate "Component" %}</p>
+            <h3 class="mt-1 text-[16px] leading-[22px] font-bold">{{ name }}</h3>
+            <p class="mt-1 text-[13px] leading-5 text-ink-soft">{{ sub }}</p>
+          </div>
+          <div class="rounded-lg bg-canvas p-3.5">
+            <p class="text-caption font-semibold text-ink-faint">{% translate "What it means on the platform" %}</p>
+            <p class="mt-1 text-[14px] leading-[21px]">{{ text }}</p>
+          </div>
+        </div>
+      </article>
+    </div>
+  {% endpartialdef %}
+  {% partialdef art %}
+    <svg viewBox="0 0 120 72" class="h-[60px] w-[100px]">
+      {% if letter == "I" %}{# monitor, bars, a cloud (LMS) #}
+        <rect x="14" y="10" width="70" height="44" rx="6" fill="#eef4ff" stroke="#1f5fd1" stroke-width="2.5"/>
+        <path d="M40 66h22M51 54v12" stroke="#1f5fd1" stroke-width="2.5" stroke-linecap="round"/>
+        <rect x="24" y="34" width="8" height="12" rx="2" fill="#8aaef7"/><rect x="36" y="27" width="8" height="19" rx="2" fill="#3570df"/><rect x="48" y="20" width="8" height="26" rx="2" fill="#1f5fd1"/>
+        <g class="float"><path d="M78 30a8 8 0 0 1 15-3 7 7 0 0 1 4 13H79a6 6 0 0 1-1-10z" fill="#fff" stroke="#1f5fd1" stroke-width="2.2"/></g>
+      {% elif letter == "C" %}{# flask and a benzene ring #}
+        <path d="M30 8v18L14 56q-3 8 6 8h34q9 0 6-8L44 26V8" fill="#e3f4f4" stroke="#0b7a7a" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M18 50h38l2 6q1 4-3 4H19q-4 0-3-4z" fill="#5fd3b8"/>
+        <path d="M26 8h22" stroke="#0b7a7a" stroke-width="2.5" stroke-linecap="round"/>
+        <g class="spin-slow"><path d="M92 14l14 8v16l-14 8-14-8V22z" fill="none" stroke="#0b7a7a" stroke-width="2.5"/><circle cx="92" cy="30" r="6" fill="none" stroke="#5fd3b8" stroke-width="2"/></g>
+      {% elif letter == "P" %}{# open book, compass, plan grid #}
+        <path d="M10 18q14-6 28 0v40q-14-6-28 0z" fill="#fbf0e6" stroke="#b0570e" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M38 18q14-6 28 0v40q-14-6-28 0z" fill="#fff" stroke="#b0570e" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M44 28h16M44 36h16M44 44h10" stroke="#e3a008" stroke-width="2" stroke-linecap="round"/>
+        <g class="float float-2"><path d="M92 10l-12 46M92 10l12 46" stroke="#8a4209" stroke-width="2.5" stroke-linecap="round"/><circle cx="92" cy="10" r="4" fill="#b0570e"/><path d="M84 40q8 5 16 0" fill="none" stroke="#8a4209" stroke-width="2"/></g>
+      {% else %}{# AI chip and a shield (ethics) #}
+        <rect x="12" y="16" width="44" height="40" rx="7" fill="#f1ebfc" stroke="#7b4fd6" stroke-width="2.5"/>
+        {% for x in "22 34 46"|split %}<path d="M{{ x }} 10v6M{{ x }} 56v6" stroke="#7b4fd6" stroke-width="2.5" stroke-linecap="round"/>{% endfor %}
+        <text x="34" y="42" text-anchor="middle" font-size="15" font-weight="800" fill="#5b34b0" font-family="Inter, sans-serif">AI</text>
+        <g class="float float-3"><path d="M92 10l16 6v14q0 14-16 22-16-8-16-22V16z" fill="#fff" stroke="#7b4fd6" stroke-width="2.5" stroke-linejoin="round"/><path d="M85 30l5 5 9-10" fill="none" stroke="#0c7f57" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g>
+      {% endif %}
+    </svg>
+  {% endpartialdef %}
+  <div class="relative grid gap-5 lg:grid-cols-2 lg:gap-x-[220px] lg:gap-y-10 lg:py-4">
+    <svg aria-hidden="true" class="pointer-events-none absolute inset-0 h-full w-full max-lg:hidden" preserveAspectRatio="none" viewBox="0 0 100 100">
+      <g stroke="#8aaef7" stroke-width="2" fill="none">
+        {% for d in "M50,50 L40,26 M50,50 L60,26 M50,50 L40,74 M50,50 L60,74"|split:"M" %}{% if d %}<path class="dash-flow" vector-effect="non-scaling-stroke" d="M{{ d }}"/>{% endif %}{% endfor %}
+      </g>
+    </svg>
+    <div data-reveal class="relative mx-auto grid size-[230px] place-items-center lg:absolute lg:top-1/2 lg:left-1/2 lg:z-[2] lg:-translate-x-1/2 lg:-translate-y-1/2">
+      <span aria-hidden="true" class="pulse-ring absolute inset-4 rounded-full border-2 border-primary-400"></span>
+      <span aria-hidden="true" class="pulse-ring pulse-ring-2 absolute inset-4 rounded-full border-2 border-mint"></span>
+      <svg aria-hidden="true" viewBox="0 0 230 230" class="absolute inset-0 h-full w-full">
+        <circle cx="115" cy="115" r="111" fill="none" stroke="#b7ceff" stroke-width="2" stroke-dasharray="3 9" class="spin-slow"/>
+        <g class="spin-rev"><circle cx="115" cy="115" r="100" fill="none" stroke="#5fd3b8" stroke-width="1.5" stroke-dasharray="40 260" stroke-linecap="round"/><circle cx="215" cy="115" r="5" fill="#5fd3b8"/><circle cx="15" cy="115" r="4" fill="#8aaef7"/></g>
+      </svg>
+      <div class="relative grid size-[176px] place-items-center rounded-full bg-[radial-gradient(circle_at_35%_30%,#183f87,#0d2149_70%)] text-center text-white shadow-[0_0_0_10px_rgba(31,95,209,.12),0_30px_60px_rgba(13,33,73,.35)]">
+        <span class="flex flex-col items-center px-5">
+          {% include "core/partials/molecule3d.html" with box="64px" r="20px" s="10px" core="16px" class="-my-1" %}
+          <span class="text-[17px] leading-[22px] font-extrabold">{% translate "ICPAI authorial model" %}</span>
+        </span>
+      </div>
+    </div>
+    {% with letter="I" name="I — Information" sub=s1 text=d1 icon="globe" tone="bg-primary-600" ink="text-primary-600" ring="border-primary-200" d="0s" %}{% partial part %}{% endwith %}
+    {% with letter="C" name="C — Chemistry" sub=s2 text=d2 icon="lab" tone="bg-stage-lab" ink="text-stage-lab" ring="border-stage-lab/30" d=".12s" %}{% partial part %}{% endwith %}
+    {% with letter="P" name="P — Pedagogy" sub=s3 text=d3 icon="theory" tone="bg-stage-practice" ink="text-stage-practice" ring="border-stage-practice/30" d=".24s" %}{% partial part %}{% endwith %}
+    {% with letter="AI" name="AI — Artificial Intelligence" sub=s4 text=d4 icon="sparkle" tone="bg-stage-video" ink="text-stage-video" ring="border-stage-video/30" d=".36s" %}{% partial part %}{% endwith %}
+  </div>
+
+  <section data-reveal class="flex flex-wrap items-start gap-4 rounded-xl border border-primary-200 bg-[linear-gradient(110deg,var(--color-primary-50),var(--color-surface))] p-[clamp(20px,3vw,28px)]">
+    <span class="grid size-11 shrink-0 place-items-center rounded-full bg-primary-600 text-white" aria-hidden="true">{% include "components/icons.html#info" with size=20 %}</span>
+    <p class="min-w-0 flex-[1_1_420px] text-[16px] leading-[27px] text-primary-950">{% translate "A digital educational platform based on the ICPAI model for the professional training of future chemistry teachers. The platform links chemistry subject knowledge with teaching methods and the practice of using digital tools. It is meant for students of the chemistry teacher education programme." %}</p>
+  </section>
+{% endif %}
+
+  <nav class="mt-3 flex flex-wrap items-center justify-between gap-3" aria-label="{% translate 'Pages' %}">
+    {% if previous_url %}
+      <a href="{{ previous_url }}" class="btn btn-secondary btn-lg">{% include "components/icons.html#arrow-left" %}{% translate "Back" %}</a>
+    {% else %}
+      <a href="{% url 'core:home' %}" class="btn btn-secondary btn-lg">{% include "components/icons.html#arrow-left" %}{% translate "Home page" %}</a>
+    {% endif %}
+    {% if next_url %}
+      <a href="{{ next_url }}" class="btn btn-primary btn-lg">{% translate "Next" %}{% include "components/icons.html#arrow-right" %}</a>
+    {% elif user.is_authenticated %}
+      <a href="{% url 'core:home' %}" class="btn btn-primary btn-lg">{% include "components/icons.html#grid" %}{% translate "My cabinet" %}</a>
+    {% else %}
+      <a href="{% url 'accounts:signup' %}" class="btn btn-primary btn-lg">{% include "components/icons.html#user-plus" %}{% translate "Sign up" %}</a>
+    {% endif %}
+  </nav>
+</main>
+{% endblock %}

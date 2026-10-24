@@ -1,0 +1,15 @@
+{% comment %}
+A CSS 3D molecule (tetrahedral, like CH₄) that turns slowly; still under prefers-reduced-motion. Decorative.
+box — size of the square (default 160px); r — bond length (default 56px); s — outer atoms (default 22px);
+core — centre atom size (default 34px); c1 / c2 — centre / outer colours (default primary / mint); class.
+{% endcomment %}<div aria-hidden="true" class="mol3d {{ class }}" style="--box: {{ box|default:'160px' }}; --r: {{ r|default:'56px' }}">
+  <div class="mol3d-spin">
+    {% for arm in "0:-90 0:19.47 120:19.47 240:19.47"|split %}{% with a=arm|split:":" %}
+      <div class="mol3d-arm" style="--p: {{ a.0 }}deg; --e: {{ a.1 }}deg">
+        <span class="mol3d-bond"></span><span class="mol3d-bond"></span>
+        <span class="mol3d-atom"><span class="mol3d-ball" style="--s: {{ s|default:'22px' }}; --c: {{ c2|default:'#5fd3b8' }}"></span></span>
+      </div>
+    {% endwith %}{% endfor %}
+    <span class="mol3d-atom" style="--r: 0px"><span class="mol3d-ball" style="--s: {{ core|default:'34px' }}; --c: {{ c1|default:'#3570df' }}"></span></span>
+  </div>
+</div>

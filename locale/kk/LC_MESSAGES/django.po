@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ChemEduTech\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 17:24+0500\n"
+"POT-Creation-Date: 2026-10-24 18:58+0500\n"
 "PO-Revision-Date: 2026-10-16 21:00+0500\n"
 "Last-Translator: ChemEduTech\n"
 "Language-Team: ChemEduTech\n"
@@ -382,7 +382,7 @@ msgstr "жауап"
 msgid "answers"
 msgstr "жауаптар"
 
-#: apps/assessments/models/quiz.py:12 ui/templates/core/home.html:100
+#: apps/assessments/models/quiz.py:12
 #: ui/templates/teacher/content/stage.html:59
 msgid "Checkpoint quiz"
 msgstr "Бекіту тесті"
@@ -792,7 +792,7 @@ msgid "Learning and grading"
 msgstr "Оқу және бағалау"
 
 #: apps/courses/admin.py:64 apps/research/apps.py:8
-#: ui/templates/core/home.html:33 ui/templates/research/dashboard.html:3
+#: ui/templates/research/dashboard.html:3
 msgid "Research"
 msgstr "Зерттеу"
 
@@ -1222,13 +1222,11 @@ msgstr "тақырыптар"
 msgid "This course already has a topic with this number."
 msgstr "Бұл курста осы нөмірлі тақырып бар."
 
-#: apps/courses/models/structure.py:67 ui/templates/core/home.html:197
-#: ui/views.py:10
+#: apps/courses/models/structure.py:67 ui/views.py:10
 msgid "Theory"
 msgstr "Теория"
 
-#: apps/courses/models/structure.py:68 ui/templates/core/home.html:198
-#: ui/views.py:11
+#: apps/courses/models/structure.py:68 ui/views.py:11
 msgid "Video lesson"
 msgstr "Видеосабақ"
 
@@ -1403,7 +1401,8 @@ msgstr "Бұл жұмыс курсқа жатпайды."
 msgid "The reply belongs to another work."
 msgstr "Жауап басқа жұмысқа жатады."
 
-#: apps/labs/apps.py:8 ui/templates/student/stages/lab.html:6
+#: apps/labs/apps.py:8 ui/templates/core/home.html:22
+#: ui/templates/student/stages/lab.html:6
 msgid "Virtual lab"
 msgstr "Виртуалды зертхана"
 
@@ -4386,6 +4385,7 @@ msgid "In progress…"
 msgstr "Жүріп жатыр…"
 
 #: apps/labs/views.py:50 ui/templates/accounts/signup.html:130
+#: ui/templates/core/about.html:362
 msgid "Next"
 msgstr "Келесі"
 
@@ -4512,8 +4512,7 @@ msgstr ""
 "Тәжірибені қайта бастайсыз ба? Ағымдағы барыс аяқталмаған талпыныс ретінде "
 "сақталады."
 
-#: apps/labs/views.py:83 ui/templates/core/home.html:90
-#: ui/templates/research/analytics.html:100
+#: apps/labs/views.py:83 ui/templates/research/analytics.html:100
 msgid "Safety"
 msgstr "Қауіпсіздік"
 
@@ -4671,8 +4670,8 @@ msgid "Show the panel"
 msgstr "Панельді көрсету"
 
 #: apps/labs/views.py:123 ui/templates/components/alert.html:10
-#: ui/templates/components/toast.html:16 ui/templates/core/home.html:114
-#: ui/templates/layouts/learn.html:49
+#: ui/templates/components/toast.html:16 ui/templates/layouts/learn.html:49
+#: ui/templates/layouts/site.html:45
 #: ui/templates/student/partials/quiz_panel.html:93
 #: ui/templates/teacher/dashboard.html:101 ui/templates/teacher/group.html:77
 #: ui/templates/teacher/group.html:225 ui/templates/teacher/group.html:242
@@ -5608,6 +5607,15 @@ msgstr "бөлім оқиғасы"
 msgid "section events"
 msgstr "бөлім оқиғалары"
 
+#: apps/programme/tests.py:222 ui/templates/student/dashboard.html:68
+#: ui/templates/teacher/dashboard.html:27 ui/templates/teacher/student.html:35
+msgid "Key figures"
+msgstr "Көрсеткіштер"
+
+#: apps/programme/tests.py:255 ui/templates/student/section.html:62
+msgid "The section is in development"
+msgstr "Бөлім әзірленуде"
+
 #: apps/progress/admin.py:30
 msgid "Open the selected stages for the student"
 msgstr "Таңдалған кезеңдерді студентке ашу"
@@ -5868,7 +5876,7 @@ msgstr "Берілген сертификаттар"
 msgid "Teacher cabinet"
 msgstr "Мұғалім кабинеті"
 
-#: apps/research/admin_dashboard.py:54 ui/templates/core/home.html:293
+#: apps/research/admin_dashboard.py:54
 #: ui/templates/partials/shell/sidebar_teacher.html:22
 #: ui/templates/research/analytics.html:8
 msgid "Statistics"
@@ -5948,7 +5956,7 @@ msgstr[0] "%(a)s / %(b)s тәжірибе"
 msgstr[1] "%(a)s / %(b)s тәжірибе"
 
 #: apps/student/cabinet.py:95 ui/templates/labs/run.html:282
-#: ui/templates/student/home.html:60 ui/templates/student/results.html:92
+#: ui/templates/student/home.html:63 ui/templates/student/results.html:92
 #: ui/templates/student/topic.html:43
 #: ui/templates/teacher/content/course.html:32
 #: ui/templates/teacher/content/courses.html:22
@@ -5993,8 +6001,6 @@ msgid "Quiz · attempt %(n)s"
 msgstr "Тест · %(n)s-талпыныс"
 
 #: apps/student/cabinet.py:187 config/settings/base.py:377
-#: ui/templates/core/home.html:31 ui/templates/core/home.html:199
-#: ui/templates/core/home.html:359
 msgid "Lab"
 msgstr "Зертхана"
 
@@ -6125,8 +6131,7 @@ msgstr "Код арқылы жазылу үшін курс коды қажет."
 msgid "Kind"
 msgstr "Түрі"
 
-#: apps/teacher/content_forms.py:130 ui/templates/core/home.html:228
-#: ui/templates/labs/run.html:37
+#: apps/teacher/content_forms.py:130 ui/templates/labs/run.html:37
 msgid "Experiments"
 msgstr "Тәжірибелер"
 
@@ -6538,9 +6543,9 @@ msgstr "ChemEduTech: құпиясөзді қалпына келтіру"
 
 #: ui/templates/accounts/login.html:3 ui/templates/accounts/login.html:46
 #: ui/templates/accounts/password_reset_complete.html:9
-#: ui/templates/accounts/signup.html:16 ui/templates/core/home.html:40
-#: ui/templates/core/home.html:118 ui/templates/core/home.html:360
-#: ui/templates/layouts/public.html:14
+#: ui/templates/accounts/signup.html:16 ui/templates/core/home.html:39
+#: ui/templates/layouts/public.html:14 ui/templates/layouts/site.html:31
+#: ui/templates/layouts/site.html:52
 msgid "Log in"
 msgstr "Кіру"
 
@@ -6577,7 +6582,7 @@ msgid "or"
 msgstr "немесе"
 
 #: ui/templates/accounts/login.html:49 ui/templates/accounts/signup.html:9
-#: ui/templates/accounts/signup.html:28 ui/templates/core/home.html:347
+#: ui/templates/accounts/signup.html:28
 msgid "Sign up as a student"
 msgstr "Студент ретінде тіркелу"
 
@@ -6739,13 +6744,13 @@ msgstr "Деректер дұрыс па?"
 msgid "Full name"
 msgstr "Аты-жөні"
 
-#: ui/templates/accounts/signup.html:129
+#: ui/templates/accounts/signup.html:129 ui/templates/core/about.html:357
 msgid "Back"
 msgstr "Артқа"
 
-#: ui/templates/accounts/signup.html:131 ui/templates/core/home.html:41
-#: ui/templates/core/home.html:119 ui/templates/core/home.html:360
-#: ui/templates/layouts/public.html:15
+#: ui/templates/accounts/signup.html:131 ui/templates/core/about.html:366
+#: ui/templates/core/home.html:38 ui/templates/layouts/public.html:15
+#: ui/templates/layouts/site.html:32 ui/templates/layouts/site.html:53
 msgid "Sign up"
 msgstr "Тіркелу"
 
@@ -6966,7 +6971,7 @@ msgid "The certificate is real: it was issued by ChemEduTech."
 msgstr "Сертификат түпнұсқа: оны ChemEduTech берген."
 
 #: ui/templates/certificates/verify.html:10
-#: ui/templates/certificates/verify.html:12 ui/templates/core/home.html:64
+#: ui/templates/certificates/verify.html:12
 #: ui/templates/student/partials/certificate_card.html:10
 msgid "Certificate"
 msgstr "Сертификат"
@@ -7006,454 +7011,305 @@ msgstr "Болдырмау"
 msgid "Confirm"
 msgstr "Растау"
 
-#: ui/templates/core/home.html:8
-msgid "virtual chemistry lab"
-msgstr "виртуалды химия зертханасы"
+#: ui/templates/core/about.html:13 ui/templates/core/about.html:34
+#: ui/templates/layouts/site.html:20
+msgid "Platform introduction"
+msgstr "Платформа таныстырылымы"
 
-#: ui/templates/core/home.html:28
-msgid "Main"
-msgstr "Негізгі"
+#: ui/templates/core/about.html:13 ui/templates/core/about.html:16
+#: ui/templates/core/about.html:34 ui/templates/layouts/site.html:21
+msgid "Expected results"
+msgstr "Күтілетін нәтижелер"
 
-#: ui/templates/core/home.html:30 ui/templates/core/home.html:138
-#: ui/templates/core/home.html:359
-msgid "Features"
-msgstr "Мүмкіндіктер"
+#: ui/templates/core/about.html:13 ui/templates/core/about.html:34
+#: ui/templates/layouts/site.html:22
+msgid "ICPAI model"
+msgstr "ICPAI моделі"
 
-#: ui/templates/core/home.html:32 ui/templates/core/home.html:191
-msgid "Learning path"
-msgstr "Оқу жолы"
+#: ui/templates/core/about.html:15
+msgid "ChemEduTech platform introduction"
+msgstr "ChemEduTech платформа таныстырылымы"
 
-#: ui/templates/core/home.html:34 ui/templates/core/home.html:359
-#: ui/templates/student/stages/test.html:6
-#: ui/templates/teacher/content/quiz.html:19
-msgid "Questions"
-msgstr "Сұрақтар"
+#: ui/templates/core/about.html:17 ui/templates/core/about.html:339
+msgid "ICPAI authorial model"
+msgstr "ICPAI авторлық моделі"
 
-#: ui/templates/core/home.html:42
-msgid "Open menu"
-msgstr "Мәзірді ашу"
-
-#: ui/templates/core/home.html:52
-msgid "New"
-msgstr "Жаңа"
-
-#: ui/templates/core/home.html:53
+#: ui/templates/core/about.html:31
 #, python-format
-msgid "Topic %(n)s: %(k)s virtual experiment ready"
-msgid_plural "Topic %(n)s: %(k)s virtual experiments ready"
-msgstr[0] "%(n)s-тақырып: %(k)s виртуалды тәжірибе дайын"
-msgstr[1] "%(n)s-тақырып: %(k)s виртуалды тәжірибе дайын"
+msgid "About the platform · %(n)s / %(total)s"
+msgstr "Платформа туралы · %(n)s / %(total)s"
 
-#: ui/templates/core/home.html:56
-msgid "Learn chemistry in a safe lab"
-msgstr "Химияны қауіпсіз зертханада үйрену"
+#: ui/templates/core/about.html:33 ui/templates/core/about.html:355
+#: ui/templates/feedback/notifications.html:28
+msgid "Pages"
+msgstr "Беттер"
 
-#: ui/templates/core/home.html:57
+#: ui/templates/core/about.html:62 ui/templates/core/home.html:19
 msgid ""
-"An online course for future chemistry teachers: theory, video lessons, an "
-"interactive virtual lab and automatic grading — on one platform, in Kazakh."
+"ChemEduTech is a digital platform that brings together the information "
+"educational environment, chemistry subject content, pedagogical design and "
+"artificial intelligence tools in the professional training of future "
+"chemistry teachers."
 msgstr ""
-"Болашақ химия мұғалімдеріне арналған онлайн курс: теория, видеосабақ, "
-"интерактивті виртуалды зертхана және автоматты бағалау — бір платформада, "
-"қазақ тілінде."
+"ChemEduTech — болашақ химия мұғалімдерін кәсіби даярлау үдерісінде "
+"ақпараттық білім беру ортасын, химиялық пәндік мазмұнды, педагогикалық "
+"жобалауды және жасанды интеллект құралдарын өзара кіріктіретін цифрлық "
+"платформа."
 
-#: ui/templates/core/home.html:59
-msgid "Start for free"
-msgstr "Тегін бастау"
-
-#: ui/templates/core/home.html:61
-msgid "See the lab"
-msgstr "Зертхананы көру"
-
-#: ui/templates/core/home.html:64
-msgid "Kazakh · Russian · English"
-msgstr "Қазақ · орыс · ағылшын"
-
-#: ui/templates/core/home.html:64
-msgid "In the browser, nothing to install"
-msgstr "Браузерде, орнатусыз"
-
-#: ui/templates/core/home.html:91
-msgid "First assemble the gas delivery system."
-msgstr "Алдымен газөткізгіш жүйені құрастыру керек."
-
-#: ui/templates/core/home.html:95
-msgid "ml"
-msgstr "мл"
-
-#: ui/templates/core/home.html:100
-msgid "Stage completed"
-msgstr "Кезең аяқталды"
-
-#: ui/templates/core/home.html:112
-msgid "Mobile menu"
-msgstr "Мобильді мәзір"
-
-#: ui/templates/core/home.html:126
-msgid "About the course"
-msgstr "Курс туралы"
-
-#: ui/templates/core/home.html:128
-msgid "modules and topics"
-msgstr "модуль және тақырып"
-
-#: ui/templates/core/home.html:129
-msgid "virtual lab experiments"
-msgstr "виртуалды зертханалық тәжірибе"
-
-#: ui/templates/core/home.html:130
-msgid "kinds of stages: from theory to the test"
-msgstr "кезең түрі: теориядан тестке дейін"
-
-#: ui/templates/core/home.html:131
-msgid "the lab is open at any time"
-msgstr "зертхана кез келген уақытта ашық"
-
-#: ui/templates/core/home.html:139
-msgid "Just like a real lab, but safe and repeatable"
-msgstr "Нақты зертханадағыдай, бірақ қауіпсіз әрі қайталауға болады"
-
-#: ui/templates/core/home.html:145
-msgid "Interactive 2D lab"
-msgstr "2D интерактивті зертхана"
-
-#: ui/templates/core/home.html:146
+#: ui/templates/core/about.html:67
 msgid ""
-"Drag the equipment onto the bench, add reagents and watch the gas being "
-"collected. The system warns at once about a wrong order and dangerous "
-"actions."
+"On the platform a student not only masters chemical concepts but also "
+"chooses digital resources for teaching them, organises research and virtual "
+"experiments, prepares lesson materials, analyses the results and reflects on "
+"his or her own teaching. The theoretical content of the platform follows the "
+"chapters of the textbook «Pedagogical foundations of informatisation in the "
+"training of chemistry teachers», its practical side — the materials of the "
+"course «Methods of teaching chemistry»."
 msgstr ""
-"Құралдар үстелге сүйреліп қойылады, реагент қосылады, газдың жиналуы "
-"бақыланады. Жүйе қате рет пен қауіпті әрекетті бірден ескертеді."
+"Платформада білім алушы химиялық ұғымдарды меңгеріп қана қоймай, оларды "
+"оқытуға арналған цифрлық ресурстарды таңдайды, зерттеушілік және виртуалды "
+"тәжірибелерді ұйымдастырады, сабақ материалдарын әзірлейді, нәтижелерін "
+"талдап, өз педагогикалық әрекетіне рефлексия жасайды. Платформаның теориялық "
+"мазмұны «Химия мұғалімдерін даярлауда ақпараттандырудың педагогикалық "
+"негіздері» атты оқу құралындағы тараулармен, практикалық бағыты «Химияны "
+"оқыту әдістемесі» курсының материалдарымен үйлестіріледі."
 
-#: ui/templates/core/home.html:160
-msgid "Step-by-step learning"
-msgstr "Кезеңдік оқу"
+#: ui/templates/core/about.html:71
+msgid "Theoretical content"
+msgstr "Теориялық мазмұны"
 
-#: ui/templates/core/home.html:161
+#: ui/templates/core/about.html:72
 msgid ""
-"The next stage opens only when the previous one is finished. Theory and "
-"video end with a short 3–4 question checkpoint quiz."
+"«Pedagogical foundations of informatisation in the training of chemistry "
+"teachers»"
 msgstr ""
-"Бір кезеңді аяқтамай келесісі ашылмайды. Теория мен видеодан кейін — 3–4 "
-"сұрақтық бекіту тесті."
+"«Химия мұғалімдерін даярлауда ақпараттандырудың педагогикалық негіздері»"
 
-#: ui/templates/core/home.html:165
-msgid "Automatic and AI grading"
-msgstr "Автоматты және AI бағалау"
+#: ui/templates/core/about.html:77
+msgid "Practical side"
+msgstr "Практикалық бағыты"
 
-#: ui/templates/core/home.html:166
+#: ui/templates/core/about.html:78
+msgid "«Methods of teaching chemistry»"
+msgstr "«Химияны оқыту әдістемесі»"
+
+#: ui/templates/core/about.html:144
+msgid "Tasks"
+msgstr "Міндеттері"
+
+#: ui/templates/core/about.html:147
 msgid ""
-"Formulas and equations are checked by meaning; open answers are graded by AI "
-"against criteria and confirmed by the teacher."
+"To master the scientific and pedagogical foundations of the informatisation "
+"of education."
 msgstr ""
-"Формула мен теңдеуді мағынасы бойынша тексереді, ашық жауапты AI критерийлер "
-"арқылы бағалап, мұғалім растайды."
+"Білім беруді ақпараттандырудың ғылыми-педагогикалық негіздерін меңгерту."
 
-#: ui/templates/core/home.html:170
-msgid "Analytics for the teacher"
-msgstr "Мұғалімге аналитика"
-
-#: ui/templates/core/home.html:171
+#: ui/templates/core/about.html:148
 msgid ""
-"Groups, the grade register, frequent mistakes and time on each stage — all "
-"in one cabinet."
+"To create conditions for integrating the subject, pedagogical and digital "
+"knowledge of future chemistry teachers."
 msgstr ""
-"Топтар, бағалар журналы, жиі қателер мен кезеңдегі уақыт — бәрі бір "
-"кабинетте."
+"Болашақ химия мұғалімдерінің пәндік, педагогикалық және цифрлық білімдерін "
+"кіріктіруге жағдай жасау."
 
-#: ui/templates/core/home.html:175
-msgid "Certificate and grade book"
-msgstr "Сертификат және бағалар кітапшасы"
-
-#: ui/templates/core/home.html:176
+#: ui/templates/core/about.html:149
 msgid ""
-"Stage → topic → module → course scores are calculated automatically. When "
-"the course is finished you get a certificate verifiable by its QR code."
+"To guide the use of digital resources, virtual laboratories and modelling "
+"tools according to the learning aim."
 msgstr ""
-"Кезең → тақырып → модуль → курс ұпайы автоматты есептеледі. Курсты "
-"аяқтағанда QR-кодпен тексерілетін сертификат беріледі."
+"Цифрлық ресурстарды, виртуалды зертханаларды және модельдеу құралдарын оқу "
+"мақсатына сай қолдануға бағыттау."
 
-#: ui/templates/core/home.html:192
-msgid "Every topic is a full cycle of stages"
-msgstr "Әр тақырып — кезеңдерден тұратын толық цикл"
-
-#: ui/templates/core/home.html:194
+#: ui/templates/core/about.html:150
 msgid ""
-"The author decides how many stages a topic has: one topic may contain "
-"several practice works."
+"To build the skills of preparing learning tasks and materials with the help "
+"of artificial intelligence, checking the information obtained scientifically "
+"and keeping to ethical requirements."
 msgstr ""
-"Автор кезеңдердің санын өзі анықтайды: бір тақырыпта бірнеше практикалық "
-"жұмыс болуы мүмкін."
+"Жасанды интеллект көмегімен оқу тапсырмалары мен материалдарын әзірлеу, "
+"алынған ақпаратты ғылыми тұрғыдан тексеру және этикалық талаптарды сақтау "
+"дағдыларын қалыптастыру."
 
-#: ui/templates/core/home.html:197
-msgid "Text with formulas and pictures + a checkpoint quiz"
-msgstr "Формулалары мен суреттері бар мәтін + бекіту тесті"
-
-#: ui/templates/core/home.html:198
-msgid "Watching is tracked + a checkpoint quiz"
-msgstr "Көру пайызы бақыланады + бекіту тесті"
-
-#: ui/templates/core/home.html:199
-msgid "Virtual experiments, journal, analysis"
-msgstr "Виртуалды тәжірибелер, журнал, талдау"
-
-#: ui/templates/core/home.html:200
-msgid "Practice"
-msgstr "Практика"
-
-#: ui/templates/core/home.html:200
-msgid "Problems: automatic and AI grading"
-msgstr "Есептер: автотексеру және AI бағалау"
-
-#: ui/templates/core/home.html:201
-msgid "Test"
-msgstr "Тест"
-
-#: ui/templates/core/home.html:201
-msgid "The final test of the topic"
-msgstr "Тақырыптың қорытынды тесті"
-
-#: ui/templates/core/home.html:225
-#, python-format
-msgid "Lab work of topic %(n)s"
-msgstr "%(n)s-тақырыптың зертханалық жұмысы"
-
-#: ui/templates/core/home.html:243
-#, python-format
-msgid "%(n)s step with order checks and safety warnings"
-msgid_plural "%(n)s steps with order checks and safety warnings"
-msgstr[0] "Рет тексерісі мен қауіпсіздік ескертулері бар %(n)s қадам"
-msgstr[1] "Рет тексерісі мен қауіпсіздік ескертулері бар %(n)s қадам"
-
-#: ui/templates/core/home.html:244
-msgid "Equipment:"
-msgstr "Құралдар:"
-
-#: ui/templates/core/home.html:245
-#, python-format
-msgid "Lab journal: %(n)s field"
-msgid_plural "Lab journal: %(n)s fields"
-msgstr[0] "Зертханалық журнал: %(n)s өріс"
-msgstr[1] "Зертханалық журнал: %(n)s өріс"
-
-#: ui/templates/core/home.html:247
-msgid "Try the experiment"
-msgstr "Тәжірибені ашу"
-
-#: ui/templates/core/home.html:272
-msgid "Convenient for students and teachers alike"
-msgstr "Студентке де, мұғалімге де ыңғайлы"
-
-#: ui/templates/core/home.html:273
-msgid "For whom"
-msgstr "Кімге"
-
-#: ui/templates/core/home.html:274
-msgid "For students"
-msgstr "Студенттерге"
-
-#: ui/templates/core/home.html:275
-msgid "For teachers"
-msgstr "Мұғалімдерге"
-
-#: ui/templates/core/home.html:286
-msgid "A clear path"
-msgstr "Түсінікті жол"
-
-#: ui/templates/core/home.html:286
+#: ui/templates/core/about.html:151
 msgid ""
-"What to do next is always visible: «Continue learning» is one button away."
+"To develop the skills of assessing students' digital research activity and "
+"learning achievements and of self-reflection."
 msgstr ""
-"Келесі не істеу керегі әрқашан көрінеді: «Оқуды жалғастыру» бір батырмада."
+"Білім алушылардың цифрлық-зерттеушілік әрекетін, оқу жетістіктерін бағалау "
+"және өзіндік рефлексия жасау дағдыларын дамыту."
 
-#: ui/templates/core/home.html:287
-msgid "Mistakes without risk"
-msgstr "Қатенің қаупі жоқ"
+#: ui/templates/core/about.html:178
+msgid "Aim"
+msgstr "Мақсаты"
 
-#: ui/templates/core/home.html:287
+#: ui/templates/core/about.html:179
 msgid ""
-"When you make a mistake the system explains why — without the danger of a "
-"real lab."
+"To build a digital research learning environment for developing the "
+"professional readiness of future chemistry teachers under informatisation, "
+"and to develop the skills of designing chemistry content pedagogically and "
+"of using digital technologies and artificial intelligence competently."
 msgstr ""
-"Қателескен жерде жүйе себебін түсіндіреді — нақты зертханадағы қаупі жоқ."
+"Болашақ химия мұғалімдерінің кәсіби даярлығын ақпараттандыру жағдайында "
+"дамытуға арналған цифрлық-зерттеушілік оқыту ортасын қалыптастыру, химиялық "
+"мазмұнды педагогикалық тұрғыдан жобалау, цифрлық технологиялар мен жасанды "
+"интеллектіні сауатты қолдану дағдыларын дамыту."
 
-#: ui/templates/core/home.html:288
-msgid "A fair grade"
-msgstr "Әділ баға"
-
-#: ui/templates/core/home.html:288
-msgid "Every stage score and how it was calculated is shown in the grade book."
-msgstr ""
-"Әр кезеңнің ұпайы мен оның қалай есептелгені бағалар кітапшасында көрінеді."
-
-#: ui/templates/core/home.html:291
-msgid "Group management"
-msgstr "Топтарды басқару"
-
-#: ui/templates/core/home.html:291
+#: ui/templates/core/about.html:186
 msgid ""
-"Create a group, share the join code and assign the research group (control / "
-"experimental)."
+"designs chemistry content in a digital educational environment and organises "
+"it according to the learning aim;"
 msgstr ""
-"Топ құру, қосылу кодын беру, зерттеу тобын (бақылау/эксперименттік) "
-"тағайындау."
+"химиялық мазмұнды цифрлық білім беру ортасында жобалап, оқу мақсатына сай "
+"ұйымдастырады;"
 
-#: ui/templates/core/home.html:292
-msgid "AI assistant"
-msgstr "AI көмекші"
+#: ui/templates/core/about.html:187
+msgid "explains chemical processes at the macro, submicro and symbolic levels;"
+msgstr ""
+"химиялық үдерістерді макро-, субмикро- және символдық деңгейлерде "
+"түсіндіреді;"
 
-#: ui/templates/core/home.html:292
+#: ui/templates/core/about.html:188
+msgid "designs digital research tasks and virtual chemical experiments;"
+msgstr ""
+"цифрлық-зерттеушілік тапсырмалар мен виртуалды химиялық тәжірибелерді "
+"әзірлейді;"
+
+#: ui/templates/core/about.html:189
 msgid ""
-"AI grades open answers of practice works against the criteria — you only "
-"confirm."
+"chooses and uses artificial intelligence tools according to the aims of "
+"teaching chemistry and checks the results they offer;"
 msgstr ""
-"Практиканың ашық жауаптарын AI критерийлер бойынша бағалайды — мұғалім тек "
-"растайды."
+"жасанды интеллект құралдарын химияны оқыту мақсатына сай таңдап қолданады "
+"және олардың ұсынған нәтижелерін тексереді;"
 
-#: ui/templates/core/home.html:293
+#: ui/templates/core/about.html:190
 msgid ""
-"See at which step students make mistakes most often and adapt the lesson."
+"prepares his or her own learning material or lesson model and analyses its "
+"effectiveness;"
 msgstr ""
-"Студенттер қай қадамда жиі қателесетіні көрінеді — сабақты соған бейімдеуге "
-"болады."
+"жеке оқу материалын немесе сабақ үлгісін әзірлеп, оның тиімділігіне талдау "
+"жасайды;"
 
-#: ui/templates/core/home.html:301
-msgid "Pedagogical research"
-msgstr "Педагогикалық зерттеу"
-
-#: ui/templates/core/home.html:302
-msgid "Every action is evidence"
-msgstr "Әр әрекет — дәлелді дерек"
-
-#: ui/templates/core/home.html:303
+#: ui/templates/core/about.html:191
 msgid ""
-"The platform records every step of a student in the lab, quiz answers and "
-"time spent. Comparing control and experimental groups takes one click."
+"identifies his or her professional difficulties and plans ways of improving "
+"digital pedagogical competence."
 msgstr ""
-"Платформа студенттің зертханадағы әр қадамын, тест жауаптарын және жұмсаған "
-"уақытын жазып отырады. Бақылау және эксперименттік топтарды салыстыру — бір "
-"батырмамен."
+"өзіндегі кәсіби қиындықтарды анықтап, цифрлық-педагогикалық құзыреттілігін "
+"жетілдіру жолдарын жоспарлайды."
 
-#: ui/templates/core/home.html:305
-msgid "Action log: order errors, safety warnings, time on each step"
-msgstr ""
-"Әрекеттер журналы: рет қатесі, қауіпсіздік ескертуі, әр қадамдағы уақыт"
-
-#: ui/templates/core/home.html:305
-msgid "Group comparison: mean, median, n"
-msgstr "Топтарды салыстыру: орташа, медиана, n"
-
-#: ui/templates/core/home.html:305
-msgid "CSV export (UTF-8, ready for Excel)"
-msgstr "CSV экспорт (UTF-8, Excel-ге дайын)"
-
-#: ui/templates/core/home.html:310
-msgid "Average score by stage (example)"
-msgstr "Кезеңдер бойынша орташа ұпай (мысал)"
-
-#: ui/templates/core/home.html:316 ui/templates/research/analytics.html:41
-#: ui/templates/research/analytics.html:61
-#: ui/templates/research/analytics.html:180
-#: ui/templates/research/analytics.html:211 ui/templates/teacher/groups.html:35
-#: ui/templates/teacher/partials/cohort.html:2
-msgid "Experimental"
-msgstr "Эксперименттік"
-
-#: ui/templates/core/home.html:316 ui/templates/research/analytics.html:41
-#: ui/templates/research/analytics.html:62
-#: ui/templates/research/analytics.html:180
-#: ui/templates/research/analytics.html:212 ui/templates/teacher/groups.html:36
-#: ui/templates/teacher/partials/cohort.html:3
-msgid "Control"
-msgstr "Бақылау"
-
-#: ui/templates/core/home.html:323
-msgid "Frequently asked questions"
-msgstr "Жиі қойылатын сұрақтар"
-
-#: ui/templates/core/home.html:331
-msgid "Who is the platform for?"
-msgstr "Платформа кімге арналған?"
-
-#: ui/templates/core/home.html:331
+#: ui/templates/core/about.html:247
 msgid ""
-"For students of pedagogical universities training to become chemistry "
-"teachers."
+"The results can be monitored by the motivational, cognitive, activity and "
+"reflective criteria."
 msgstr ""
-"Педагогикалық университетте химия мұғалімі мамандығында оқитын студенттерге."
+"Нәтижелерді мотивациялық, когнитивтік, іс-әрекеттік және рефлексивтік "
+"критерийлер бойынша бақылауға болады."
 
-#: ui/templates/core/home.html:332
-msgid "How does the virtual lab work?"
-msgstr "Виртуалды зертхана қалай жұмыс істейді?"
+#: ui/templates/core/about.html:250
+msgid "Motivational"
+msgstr "Мотивациялық"
 
-#: ui/templates/core/home.html:332
-msgid ""
-"It opens in the browser, nothing to install. You drag the equipment onto the "
-"bench and carry out the commands in order; the reaction is animated and you "
-"record the result in the journal."
+#: ui/templates/core/about.html:250
+msgid "Cognitive"
+msgstr "Когнитивтік"
+
+#: ui/templates/core/about.html:250
+msgid "Activity-based"
+msgstr "Іс-әрекеттік"
+
+#: ui/templates/core/about.html:250
+msgid "Reflective"
+msgstr "Рефлексивтік"
+
+#: ui/templates/core/about.html:272
+msgid "information educational environment"
+msgstr "ақпараттық білім беру ортасы"
+
+#: ui/templates/core/about.html:272
+msgid "ChemEduTech, LMS, electronic resources, digital assessment and feedback"
 msgstr ""
-"Браузерде ашылады, ештеңе орнатудың қажеті жоқ. Құралдарды үстелге сүйреп "
-"қойып, командаларды ретпен орындайсыз; реакция анимациямен көрсетіледі, "
-"нәтижені журналға жазасыз."
+"ChemEduTech, LMS, электрондық ресурстар, цифрлық бағалау және кері байланыс"
 
-#: ui/templates/core/home.html:333
-msgid "Why does the next stage not open?"
-msgstr "Неге келесі кезең ашылмайды?"
+#: ui/templates/core/about.html:273
+msgid "chemistry subject content"
+msgstr "химиялық пәндік мазмұн"
 
-#: ui/templates/core/home.html:333
-msgid ""
-"Each stage opens when the previous one is finished. After the theory and the "
-"video you need to pass a 3–4 question checkpoint quiz."
+#: ui/templates/core/about.html:273
+msgid "grounding the design of authorial tasks for teaching chemistry"
 msgstr ""
-"Әр кезең алдыңғысы аяқталғанда ашылады. Теория мен видеодан кейін 3–4 "
-"сұрақтық бекіту тестінен өту керек."
+"химия пәнін меңгертуге арналған авторлық тапсырмаларды әзірлеуді негіздеу"
 
-#: ui/templates/core/home.html:334
-msgid "Who grades the practice works?"
-msgstr "Практикалық жұмысты кім бағалайды?"
+#: ui/templates/core/about.html:274
+msgid "pedagogical design"
+msgstr "педагогикалық жобалау"
 
-#: ui/templates/core/home.html:334
+#: ui/templates/core/about.html:274
 msgid ""
-"Numbers, formulas and equations are checked automatically. Free text is "
-"graded by AI against the criteria and confirmed by the teacher."
+"Setting the lesson aim and method, building research tasks, teaching, "
+"assessment and reflection"
 msgstr ""
-"Сан, формула және теңдеу жауаптарын платформа автоматты тексереді. Еркін "
-"мәтінді AI критерийлер бойынша бағалайды, мұғалім растайды."
+"Сабақ мақсаты мен әдістемесін анықтау, зерттеушілік тапсырмалар құрастыру, "
+"оқыту, бағалау және рефлексия"
 
-#: ui/templates/core/home.html:335
-msgid "How do I sign up as a teacher?"
-msgstr "Мұғалім ретінде қалай тіркелемін?"
+#: ui/templates/core/about.html:275
+msgid "pedagogical use of artificial intelligence"
+msgstr "жасанды интеллектіні педагогикалық қолдану"
 
-#: ui/templates/core/home.html:335
+#: ui/templates/core/about.html:275
 msgid ""
-"Teacher accounts are created by the platform administrator. Contact the "
-"administrator."
-msgstr "Мұғалім аккаунттарын платформа әкімшісі ашады."
-
-#: ui/templates/core/home.html:344
-msgid "Try your first experiment today"
-msgstr "Алғашқы тәжірибені бүгін-ақ бастау"
-
-#: ui/templates/core/home.html:345
-msgid "Signing up takes a minute. Ask your teacher for your group's join code."
-msgstr "Тіркелу бір минутты алады. Топтың қосылу коды мұғалімде болады."
-
-#: ui/templates/core/home.html:356
-msgid ""
-"A virtual lab and an online course for future chemistry teachers. A doctoral "
-"dissertation project."
+"Supporting task design, checking results critically, keeping ethics and "
+"responsibility"
 msgstr ""
-"Болашақ химия мұғалімдеріне арналған виртуалды зертхана және онлайн курс. "
-"Докторлық диссертациялық жоба."
+"Тапсырма әзірлеуді қолдау, нәтижелерді сыни тексеру, этика мен "
+"жауапкершілікті сақтау"
 
-#: ui/templates/core/home.html:359
-msgid "Platform"
-msgstr "Платформа"
+#: ui/templates/core/about.html:286
+msgid "Component"
+msgstr "Құрамдас бөлік"
 
-#: ui/templates/core/home.html:360 ui/templates/layouts/public.html:9
-msgid "Account"
-msgstr "Аккаунт"
+#: ui/templates/core/about.html:291
+msgid "What it means on the platform"
+msgstr "Платформада жүзеге асатын мазмұны"
+
+#: ui/templates/core/about.html:351
+msgid ""
+"A digital educational platform based on the ICPAI model for the professional "
+"training of future chemistry teachers. The platform links chemistry subject "
+"knowledge with teaching methods and the practice of using digital tools. It "
+"is meant for students of the chemistry teacher education programme."
+msgstr ""
+"ICPAI моделіне негізделген, болашақ химия мұғалімдерін кәсіби даярлауға "
+"арналған цифрлық білім беру платформасы. Платформа химиялық пәндік білімді "
+"оқыту әдістемесімен және цифрлық құралдарды қолдану тәжірибесімен "
+"байланыстырады. Химия мұғалімін даярлау білім беру бағдарламасының білім "
+"алушыларына арналған."
+
+#: ui/templates/core/about.html:359
+msgid "Home page"
+msgstr "Басты бет"
+
+#: ui/templates/core/about.html:364 ui/templates/core/home.html:36
+#: ui/templates/layouts/public.html:12 ui/templates/layouts/site.html:29
+#: ui/templates/layouts/site.html:50
+msgid "My cabinet"
+msgstr "Жеке кабинет"
+
+#: ui/templates/core/home.html:8 ui/templates/core/home.html:17
+msgid "Educational platform"
+msgstr "Білім беру платформасы"
+
+#: ui/templates/core/home.html:22
+msgid "Interactive models"
+msgstr "Интерактивті модельдер"
+
+#: ui/templates/core/home.html:22
+msgid "Professional readiness"
+msgstr "Кәсіби даярлық"
+
+#: ui/templates/core/home.html:80
+msgid "General chemistry"
+msgstr "Жалпы химия"
 
 #: ui/templates/feedback/notifications.html:4
 #: ui/templates/partials/shell/sidebar_student.html:37
@@ -7473,10 +7329,6 @@ msgstr[1] "%(n)s оқылмаған"
 #: ui/templates/feedback/partials/menu.html:7
 msgid "Mark all as read"
 msgstr "Барлығын оқылды деп белгілеу"
-
-#: ui/templates/feedback/notifications.html:28
-msgid "Pages"
-msgstr "Беттер"
 
 #: ui/templates/feedback/notifications.html:29
 msgid "Newer"
@@ -7506,7 +7358,7 @@ msgstr "Барлық хабарламалар"
 
 #: ui/templates/feedback/partials/thread.html:12
 #: ui/templates/feedback/partials/thread.html:16
-#: ui/templates/student/dashboard.html:156 ui/templates/student/home.html:75
+#: ui/templates/student/dashboard.html:156 ui/templates/student/home.html:78
 msgid "Reply"
 msgstr "Жауап беру"
 
@@ -7677,9 +7529,21 @@ msgstr "%(n)s-тақырып кезеңдері"
 msgid "Course map"
 msgstr "Курс картасы"
 
-#: ui/templates/layouts/public.html:12
-msgid "My cabinet"
-msgstr "Жеке кабинет"
+#: ui/templates/layouts/public.html:9
+msgid "Account"
+msgstr "Аккаунт"
+
+#: ui/templates/layouts/site.html:18
+msgid "Main"
+msgstr "Негізгі"
+
+#: ui/templates/layouts/site.html:34
+msgid "Open menu"
+msgstr "Мәзірді ашу"
+
+#: ui/templates/layouts/site.html:43
+msgid "Mobile menu"
+msgstr "Мобильді мәзір"
 
 #: ui/templates/layouts/student.html:7
 msgid "Topic or material"
@@ -7758,7 +7622,7 @@ msgid "%(a)s of %(b)s stages"
 msgstr "%(b)s кезеңнің %(a)s-і"
 
 #: ui/templates/partials/shell/sidebar_student.html:53
-#: ui/templates/student/courses.html:27 ui/templates/student/home.html:39
+#: ui/templates/student/courses.html:27 ui/templates/student/home.html:42
 #: ui/templates/student/topic.html:20 ui/templates/student/topic.html:43
 msgid "Continue"
 msgstr "Жалғастыру"
@@ -7855,6 +7719,22 @@ msgstr "Деректерді жүктеу (CSV)"
 #: ui/templates/research/analytics.html:36
 msgid "Key measures"
 msgstr "Негізгі көрсеткіштер"
+
+#: ui/templates/research/analytics.html:41
+#: ui/templates/research/analytics.html:61
+#: ui/templates/research/analytics.html:180
+#: ui/templates/research/analytics.html:211 ui/templates/teacher/groups.html:35
+#: ui/templates/teacher/partials/cohort.html:2
+msgid "Experimental"
+msgstr "Эксперименттік"
+
+#: ui/templates/research/analytics.html:41
+#: ui/templates/research/analytics.html:62
+#: ui/templates/research/analytics.html:180
+#: ui/templates/research/analytics.html:212 ui/templates/teacher/groups.html:36
+#: ui/templates/teacher/partials/cohort.html:3
+msgid "Control"
+msgstr "Бақылау"
 
 #: ui/templates/research/analytics.html:50
 #: ui/templates/research/analytics.html:58
@@ -8447,11 +8327,6 @@ msgstr "Келесі қадамды күтуде"
 msgid "Your works are being checked or the next topic is not published yet."
 msgstr "Жұмыстар тексерілуде немесе келесі тақырып әлі жарияланбаған."
 
-#: ui/templates/student/dashboard.html:68
-#: ui/templates/teacher/dashboard.html:27 ui/templates/teacher/student.html:35
-msgid "Key figures"
-msgstr "Көрсеткіштер"
-
 #: ui/templates/student/dashboard.html:79
 #, python-format
 msgid "+%(n)s stage this week"
@@ -8538,12 +8413,12 @@ msgstr ""
 "шығады."
 
 #: ui/templates/student/dashboard.html:153
-#: ui/templates/student/dashboard.html:162 ui/templates/student/home.html:72
+#: ui/templates/student/dashboard.html:162 ui/templates/student/home.html:75
 #: ui/templates/student/stages/practice.html:20
 msgid "Teacher's comment"
 msgstr "Мұғалімнің пікірі"
 
-#: ui/templates/student/dashboard.html:154 ui/templates/student/home.html:73
+#: ui/templates/student/dashboard.html:154 ui/templates/student/home.html:76
 #, python-format
 msgid "about «%(s)s»"
 msgstr "«%(s)s» туралы"
@@ -8555,50 +8430,56 @@ msgid_plural "%(n)s more comments"
 msgstr[0] "тағы %(n)s пікір"
 msgstr[1] "тағы %(n)s пікір"
 
-#: ui/templates/student/home.html:14
+#: ui/templates/student/home.html:15
 #, python-format
 msgid "Welcome, %(name)s!"
 msgstr "Сәлем, %(name)s!"
 
-#: ui/templates/student/home.html:15
+#: ui/templates/student/home.html:16
 msgid "The guide below shows how to use the ChemEduTech platform."
 msgstr "ChemEduTech платформасын пайдалану тәртібі — төмендегі нұсқаулықта."
 
-#: ui/templates/student/home.html:25
+#: ui/templates/student/home.html:18
+msgid "About the platform"
+msgstr "Платформа туралы"
+
+#: ui/templates/student/home.html:28
 #, python-format
 msgid "Sections passed: %(a)s of %(b)s"
 msgstr "Өткен бөлімдер: %(a)s / %(b)s"
 
-#: ui/templates/student/home.html:28
+#: ui/templates/student/home.html:31
 #, python-format
 msgid "Topic %(n)s · %(t)s — next: %(s)s"
 msgstr "%(n)s-тақырып · %(t)s — келесі: %(s)s"
 
-#: ui/templates/student/home.html:30
+#: ui/templates/student/home.html:33
 msgid "Every open section is passed."
 msgstr "Ашық бөлімдердің бәрі өтті."
 
-#: ui/templates/student/home.html:34
+#: ui/templates/student/home.html:37
 msgid "Section done"
 msgstr "Бөлімнің орындалуы"
 
-#: ui/templates/student/home.html:36
+#: ui/templates/student/home.html:39
 #, python-format
 msgid "the next section opens at %(p)s%%"
 msgstr "келесі бөлім %(p)s%%-да ашылады"
 
-#: ui/templates/student/home.html:47
+#: ui/templates/student/home.html:50
 msgid "Guide to using the platform"
 msgstr "Платформаны пайдалану жөніндегі нұсқаулық"
 
-#: ui/templates/student/home.html:48
+#: ui/templates/student/home.html:51
 #, python-format
 msgid ""
 "Sections open one after another: the next one opens when the previous one is "
 "%(p)s%% done."
-msgstr "Бөлімдер ретімен ашылады: алдыңғы бөлім %(p)s%%-ға орындалғанда келесісі ашылады."
+msgstr ""
+"Бөлімдер ретімен ашылады: алдыңғы бөлім %(p)s%%-ға орындалғанда келесісі "
+"ашылады."
 
-#: ui/templates/student/home.html:60 ui/templates/teacher/lab_log.html:36
+#: ui/templates/student/home.html:63 ui/templates/teacher/lab_log.html:36
 msgid "Details"
 msgstr "Мәліметтер"
 
@@ -9163,7 +9044,9 @@ msgstr "ЖИ түсіндірсін"
 #: ui/templates/student/section.html:37
 msgid ""
 "The AI assistant will explain the section here: its aim and how to start."
-msgstr "Мұнда ЖИ-ассистент бөлімнің мақсатын және оны неден бастау керегін түсіндіреді."
+msgstr ""
+"Мұнда ЖИ-ассистент бөлімнің мақсатын және оны неден бастау керегін "
+"түсіндіреді."
 
 #: ui/templates/student/section.html:38
 msgid "Explain the section"
@@ -9192,18 +9075,17 @@ msgid "Section 1 is the course; the teacher adds the group to it."
 msgstr "1-бөлім — курс; топты курсқа мұғалім қосады."
 
 #: ui/templates/student/section.html:62
-msgid "The section is in development"
-msgstr "Бөлім әзірленуде"
-
-#: ui/templates/student/section.html:62
 msgid "Its tasks will appear here in the next versions of the platform."
-msgstr "Бөлімнің тапсырмалары платформаның келесі нұсқаларында осында пайда болады."
+msgstr ""
+"Бөлімнің тапсырмалары платформаның келесі нұсқаларында осында пайда болады."
 
 #: ui/templates/student/section_locked.html:14
 #, python-format
 msgid ""
 "The section opens when section %(n)s «%(t)s» is %(p)s%% done (now %(d)s%%)."
-msgstr "Бұл бөлім %(n)s-бөлім «%(t)s» %(p)s%%-ға орындалғанда ашылады (қазір %(d)s%%)."
+msgstr ""
+"Бұл бөлім %(n)s-бөлім «%(t)s» %(p)s%%-ға орындалғанда ашылады (қазір "
+"%(d)s%%)."
 
 #: ui/templates/student/section_locked.html:15
 #, python-format
@@ -9316,6 +9198,11 @@ msgstr "Жауаптарды жіберу"
 #: ui/templates/student/stages/practice.html:55
 msgid "Comments with the teacher"
 msgstr "Мұғаліммен пікір алмасу"
+
+#: ui/templates/student/stages/test.html:6
+#: ui/templates/teacher/content/quiz.html:19
+msgid "Questions"
+msgstr "Сұрақтар"
 
 #: ui/templates/student/stages/test.html:7
 msgid "Pass mark"
@@ -10265,7 +10152,8 @@ msgstr "%(t)s бөлімдері"
 msgid ""
 "Percent done per section; a locked section can be opened for one student by "
 "hand."
-msgstr "Әр бөлімнің орындалу пайызы; жабық бөлімді бір студентке қолмен ашуға болады."
+msgstr ""
+"Әр бөлімнің орындалу пайызы; жабық бөлімді бір студентке қолмен ашуға болады."
 
 #: ui/templates/teacher/group.html:199
 msgid "opened by the teacher"
@@ -10581,6 +10469,330 @@ msgstr "Практикалық жұмыс 3"
 #: ui/views.py:24
 msgid "Conditions"
 msgstr "Шарты"
+
+#~ msgid "Features"
+#~ msgstr "Мүмкіндіктер"
+
+#~ msgid "Learning path"
+#~ msgstr "Оқу жолы"
+
+#~ msgid "New"
+#~ msgstr "Жаңа"
+
+#, python-format
+#~ msgid "Topic %(n)s: %(k)s virtual experiment ready"
+#~ msgid_plural "Topic %(n)s: %(k)s virtual experiments ready"
+#~ msgstr[0] "%(n)s-тақырып: %(k)s виртуалды тәжірибе дайын"
+#~ msgstr[1] "%(n)s-тақырып: %(k)s виртуалды тәжірибе дайын"
+
+#~ msgid "Learn chemistry in a safe lab"
+#~ msgstr "Химияны қауіпсіз зертханада үйрену"
+
+#~ msgid ""
+#~ "An online course for future chemistry teachers: theory, video lessons, an "
+#~ "interactive virtual lab and automatic grading — on one platform, in "
+#~ "Kazakh."
+#~ msgstr ""
+#~ "Болашақ химия мұғалімдеріне арналған онлайн курс: теория, видеосабақ, "
+#~ "интерактивті виртуалды зертхана және автоматты бағалау — бір платформада, "
+#~ "қазақ тілінде."
+
+#~ msgid "Start for free"
+#~ msgstr "Тегін бастау"
+
+#~ msgid "See the lab"
+#~ msgstr "Зертхананы көру"
+
+#~ msgid "Kazakh · Russian · English"
+#~ msgstr "Қазақ · орыс · ағылшын"
+
+#~ msgid "In the browser, nothing to install"
+#~ msgstr "Браузерде, орнатусыз"
+
+#~ msgid "First assemble the gas delivery system."
+#~ msgstr "Алдымен газөткізгіш жүйені құрастыру керек."
+
+#~ msgid "ml"
+#~ msgstr "мл"
+
+#~ msgid "Stage completed"
+#~ msgstr "Кезең аяқталды"
+
+#~ msgid "About the course"
+#~ msgstr "Курс туралы"
+
+#~ msgid "modules and topics"
+#~ msgstr "модуль және тақырып"
+
+#~ msgid "virtual lab experiments"
+#~ msgstr "виртуалды зертханалық тәжірибе"
+
+#~ msgid "kinds of stages: from theory to the test"
+#~ msgstr "кезең түрі: теориядан тестке дейін"
+
+#~ msgid "the lab is open at any time"
+#~ msgstr "зертхана кез келген уақытта ашық"
+
+#~ msgid "Just like a real lab, but safe and repeatable"
+#~ msgstr "Нақты зертханадағыдай, бірақ қауіпсіз әрі қайталауға болады"
+
+#~ msgid ""
+#~ "Drag the equipment onto the bench, add reagents and watch the gas being "
+#~ "collected. The system warns at once about a wrong order and dangerous "
+#~ "actions."
+#~ msgstr ""
+#~ "Құралдар үстелге сүйреліп қойылады, реагент қосылады, газдың жиналуы "
+#~ "бақыланады. Жүйе қате рет пен қауіпті әрекетті бірден ескертеді."
+
+#~ msgid "Step-by-step learning"
+#~ msgstr "Кезеңдік оқу"
+
+#~ msgid ""
+#~ "The next stage opens only when the previous one is finished. Theory and "
+#~ "video end with a short 3–4 question checkpoint quiz."
+#~ msgstr ""
+#~ "Бір кезеңді аяқтамай келесісі ашылмайды. Теория мен видеодан кейін — 3–4 "
+#~ "сұрақтық бекіту тесті."
+
+#~ msgid "Automatic and AI grading"
+#~ msgstr "Автоматты және AI бағалау"
+
+#~ msgid ""
+#~ "Formulas and equations are checked by meaning; open answers are graded by "
+#~ "AI against criteria and confirmed by the teacher."
+#~ msgstr ""
+#~ "Формула мен теңдеуді мағынасы бойынша тексереді, ашық жауапты AI "
+#~ "критерийлер арқылы бағалап, мұғалім растайды."
+
+#~ msgid "Analytics for the teacher"
+#~ msgstr "Мұғалімге аналитика"
+
+#~ msgid ""
+#~ "Groups, the grade register, frequent mistakes and time on each stage — "
+#~ "all in one cabinet."
+#~ msgstr ""
+#~ "Топтар, бағалар журналы, жиі қателер мен кезеңдегі уақыт — бәрі бір "
+#~ "кабинетте."
+
+#~ msgid "Certificate and grade book"
+#~ msgstr "Сертификат және бағалар кітапшасы"
+
+#~ msgid ""
+#~ "Stage → topic → module → course scores are calculated automatically. When "
+#~ "the course is finished you get a certificate verifiable by its QR code."
+#~ msgstr ""
+#~ "Кезең → тақырып → модуль → курс ұпайы автоматты есептеледі. Курсты "
+#~ "аяқтағанда QR-кодпен тексерілетін сертификат беріледі."
+
+#~ msgid "Authorial model"
+#~ msgstr "Авторлық модель"
+
+#~ msgid "More about the platform"
+#~ msgstr "Платформа туралы толығырақ"
+
+#~ msgid "Every topic is a full cycle of stages"
+#~ msgstr "Әр тақырып — кезеңдерден тұратын толық цикл"
+
+#~ msgid ""
+#~ "The author decides how many stages a topic has: one topic may contain "
+#~ "several practice works."
+#~ msgstr ""
+#~ "Автор кезеңдердің санын өзі анықтайды: бір тақырыпта бірнеше практикалық "
+#~ "жұмыс болуы мүмкін."
+
+#~ msgid "Text with formulas and pictures + a checkpoint quiz"
+#~ msgstr "Формулалары мен суреттері бар мәтін + бекіту тесті"
+
+#~ msgid "Watching is tracked + a checkpoint quiz"
+#~ msgstr "Көру пайызы бақыланады + бекіту тесті"
+
+#~ msgid "Virtual experiments, journal, analysis"
+#~ msgstr "Виртуалды тәжірибелер, журнал, талдау"
+
+#~ msgid "Problems: automatic and AI grading"
+#~ msgstr "Есептер: автотексеру және AI бағалау"
+
+#~ msgid "Test"
+#~ msgstr "Тест"
+
+#~ msgid "The final test of the topic"
+#~ msgstr "Тақырыптың қорытынды тесті"
+
+#, python-format
+#~ msgid "Lab work of topic %(n)s"
+#~ msgstr "%(n)s-тақырыптың зертханалық жұмысы"
+
+#, python-format
+#~ msgid "%(n)s step with order checks and safety warnings"
+#~ msgid_plural "%(n)s steps with order checks and safety warnings"
+#~ msgstr[0] "Рет тексерісі мен қауіпсіздік ескертулері бар %(n)s қадам"
+#~ msgstr[1] "Рет тексерісі мен қауіпсіздік ескертулері бар %(n)s қадам"
+
+#~ msgid "Equipment:"
+#~ msgstr "Құралдар:"
+
+#, python-format
+#~ msgid "Lab journal: %(n)s field"
+#~ msgid_plural "Lab journal: %(n)s fields"
+#~ msgstr[0] "Зертханалық журнал: %(n)s өріс"
+#~ msgstr[1] "Зертханалық журнал: %(n)s өріс"
+
+#~ msgid "Try the experiment"
+#~ msgstr "Тәжірибені ашу"
+
+#~ msgid "Convenient for students and teachers alike"
+#~ msgstr "Студентке де, мұғалімге де ыңғайлы"
+
+#~ msgid "For whom"
+#~ msgstr "Кімге"
+
+#~ msgid "For students"
+#~ msgstr "Студенттерге"
+
+#~ msgid "For teachers"
+#~ msgstr "Мұғалімдерге"
+
+#~ msgid "A clear path"
+#~ msgstr "Түсінікті жол"
+
+#~ msgid ""
+#~ "What to do next is always visible: «Continue learning» is one button away."
+#~ msgstr ""
+#~ "Келесі не істеу керегі әрқашан көрінеді: «Оқуды жалғастыру» бір батырмада."
+
+#~ msgid "Mistakes without risk"
+#~ msgstr "Қатенің қаупі жоқ"
+
+#~ msgid ""
+#~ "When you make a mistake the system explains why — without the danger of a "
+#~ "real lab."
+#~ msgstr ""
+#~ "Қателескен жерде жүйе себебін түсіндіреді — нақты зертханадағы қаупі жоқ."
+
+#~ msgid "A fair grade"
+#~ msgstr "Әділ баға"
+
+#~ msgid ""
+#~ "Every stage score and how it was calculated is shown in the grade book."
+#~ msgstr ""
+#~ "Әр кезеңнің ұпайы мен оның қалай есептелгені бағалар кітапшасында "
+#~ "көрінеді."
+
+#~ msgid "Group management"
+#~ msgstr "Топтарды басқару"
+
+#~ msgid ""
+#~ "Create a group, share the join code and assign the research group "
+#~ "(control / experimental)."
+#~ msgstr ""
+#~ "Топ құру, қосылу кодын беру, зерттеу тобын (бақылау/эксперименттік) "
+#~ "тағайындау."
+
+#~ msgid "AI assistant"
+#~ msgstr "AI көмекші"
+
+#~ msgid ""
+#~ "AI grades open answers of practice works against the criteria — you only "
+#~ "confirm."
+#~ msgstr ""
+#~ "Практиканың ашық жауаптарын AI критерийлер бойынша бағалайды — мұғалім "
+#~ "тек растайды."
+
+#~ msgid ""
+#~ "See at which step students make mistakes most often and adapt the lesson."
+#~ msgstr ""
+#~ "Студенттер қай қадамда жиі қателесетіні көрінеді — сабақты соған "
+#~ "бейімдеуге болады."
+
+#~ msgid "Pedagogical research"
+#~ msgstr "Педагогикалық зерттеу"
+
+#~ msgid "Every action is evidence"
+#~ msgstr "Әр әрекет — дәлелді дерек"
+
+#~ msgid ""
+#~ "The platform records every step of a student in the lab, quiz answers and "
+#~ "time spent. Comparing control and experimental groups takes one click."
+#~ msgstr ""
+#~ "Платформа студенттің зертханадағы әр қадамын, тест жауаптарын және "
+#~ "жұмсаған уақытын жазып отырады. Бақылау және эксперименттік топтарды "
+#~ "салыстыру — бір батырмамен."
+
+#~ msgid "Action log: order errors, safety warnings, time on each step"
+#~ msgstr ""
+#~ "Әрекеттер журналы: рет қатесі, қауіпсіздік ескертуі, әр қадамдағы уақыт"
+
+#~ msgid "Group comparison: mean, median, n"
+#~ msgstr "Топтарды салыстыру: орташа, медиана, n"
+
+#~ msgid "CSV export (UTF-8, ready for Excel)"
+#~ msgstr "CSV экспорт (UTF-8, Excel-ге дайын)"
+
+#~ msgid "Average score by stage (example)"
+#~ msgstr "Кезеңдер бойынша орташа ұпай (мысал)"
+
+#~ msgid "Frequently asked questions"
+#~ msgstr "Жиі қойылатын сұрақтар"
+
+#~ msgid "Who is the platform for?"
+#~ msgstr "Платформа кімге арналған?"
+
+#~ msgid "How does the virtual lab work?"
+#~ msgstr "Виртуалды зертхана қалай жұмыс істейді?"
+
+#~ msgid ""
+#~ "It opens in the browser, nothing to install. You drag the equipment onto "
+#~ "the bench and carry out the commands in order; the reaction is animated "
+#~ "and you record the result in the journal."
+#~ msgstr ""
+#~ "Браузерде ашылады, ештеңе орнатудың қажеті жоқ. Құралдарды үстелге сүйреп "
+#~ "қойып, командаларды ретпен орындайсыз; реакция анимациямен көрсетіледі, "
+#~ "нәтижені журналға жазасыз."
+
+#~ msgid "Why does the next stage not open?"
+#~ msgstr "Неге келесі кезең ашылмайды?"
+
+#~ msgid ""
+#~ "Each stage opens when the previous one is finished. After the theory and "
+#~ "the video you need to pass a 3–4 question checkpoint quiz."
+#~ msgstr ""
+#~ "Әр кезең алдыңғысы аяқталғанда ашылады. Теория мен видеодан кейін 3–4 "
+#~ "сұрақтық бекіту тестінен өту керек."
+
+#~ msgid "Who grades the practice works?"
+#~ msgstr "Практикалық жұмысты кім бағалайды?"
+
+#~ msgid ""
+#~ "Numbers, formulas and equations are checked automatically. Free text is "
+#~ "graded by AI against the criteria and confirmed by the teacher."
+#~ msgstr ""
+#~ "Сан, формула және теңдеу жауаптарын платформа автоматты тексереді. Еркін "
+#~ "мәтінді AI критерийлер бойынша бағалайды, мұғалім растайды."
+
+#~ msgid "How do I sign up as a teacher?"
+#~ msgstr "Мұғалім ретінде қалай тіркелемін?"
+
+#~ msgid ""
+#~ "Teacher accounts are created by the platform administrator. Contact the "
+#~ "administrator."
+#~ msgstr "Мұғалім аккаунттарын платформа әкімшісі ашады."
+
+#~ msgid "Try your first experiment today"
+#~ msgstr "Алғашқы тәжірибені бүгін-ақ бастау"
+
+#~ msgid ""
+#~ "Signing up takes a minute. Ask your teacher for your group's join code."
+#~ msgstr "Тіркелу бір минутты алады. Топтың қосылу коды мұғалімде болады."
+
+#~ msgid ""
+#~ "A virtual lab and an online course for future chemistry teachers. A "
+#~ "doctoral dissertation project."
+#~ msgstr ""
+#~ "Болашақ химия мұғалімдеріне арналған виртуалды зертхана және онлайн курс. "
+#~ "Докторлық диссертациялық жоба."
+
+#~ msgid "Platform"
+#~ msgstr "Платформа"
 
 #~ msgid "Leave empty to use the course share of this stage kind"
 #~ msgstr "Бос болса, курстағы осы кезең түрінің үлесі қолданылады"

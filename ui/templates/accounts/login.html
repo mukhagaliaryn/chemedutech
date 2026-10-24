@@ -46,7 +46,7 @@
     <span x-text="busy ? '{% translate "Logging in…" %}' : '{% translate "Log in" %}'">{% translate "Log in" %}</span>
   </button>
   <div class="flex items-center gap-3 text-[13px] text-ink-faint"><span class="h-px flex-1 bg-line"></span>{% translate "or" %}<span class="h-px flex-1 bg-line"></span></div>
-  <a class="btn btn-secondary btn-lg w-full rounded-md" href="{% url 'accounts:signup' %}">{% include "components/icons.html#user-plus" %}{% translate "Sign up as a student" %}</a>
+  <a class="btn btn-secondary btn-lg w-full rounded-md" href="{% url 'core:about' %}">{% include "components/icons.html#user-plus" %}{% translate "Sign up as a student" %}</a>
   <p class="text-center text-[13px] leading-5 text-ink-soft">{% translate "Teacher accounts are created by the platform administrator." %}</p>
 </form>
 {% endblock %}

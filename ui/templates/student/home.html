@@ -10,9 +10,12 @@ card stays (research, STEP-22).
 {% block crumb %}{{ programme.title }}{% endblock %}
 {% block page_title %}{% translate "Home" %}{% endblock %}
 {% block content %}
-<div>
-  <h1 class="text-[30px] leading-[38px] font-extrabold tracking-[-0.02em]">{% blocktranslate with name=user.first_name|default:user.get_username %}Welcome, {{ name }}!{% endblocktranslate %}</h1>
-  <p class="mt-1 text-ink-soft">{% translate "The guide below shows how to use the ChemEduTech platform." %}</p>
+<div class="flex flex-wrap items-end justify-between gap-4">
+  <div>
+    <h1 class="text-[30px] leading-[38px] font-extrabold tracking-[-0.02em]">{% blocktranslate with name=user.first_name|default:user.get_username %}Welcome, {{ name }}!{% endblocktranslate %}</h1>
+    <p class="mt-1 text-ink-soft">{% translate "The guide below shows how to use the ChemEduTech platform." %}</p>
+  </div>
+  <a href="{% url 'core:about' %}" class="btn btn-secondary">{% include "components/icons.html#info" %}{% translate "About the platform" %}</a>
 </div>
 
 {% if benchmark.pre == "open" or benchmark.post == "open" %}{% include "student/partials/benchmark_card.html" with course=course_block.course %}{% endif %}

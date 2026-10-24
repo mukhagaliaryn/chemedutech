@@ -2,12 +2,13 @@ from decimal import Decimal
 from types import SimpleNamespace
 
 from django.conf import settings
-from django.test import RequestFactory, SimpleTestCase, TestCase
+from django.test import RequestFactory, SimpleTestCase, TestCase, override_settings
+from django.urls import reverse
 
 from apps.core.middleware import KazakhFirstLocaleMiddleware
 
-KK_TITLE = "Химияны қауіпсіз зертханада үйрену"
-RU_TITLE = "Химия в безопасной лаборатории"
+KK_TITLE = "Білім беру платформасы"
+RU_TITLE = "Образовательная платформа"
 
 
 class KazakhFirstLocaleTests(TestCase):
@@ -95,3 +96,46 @@ class RichTextTests(SimpleTestCase):
 
         self.assertEqual(rich("<p>H<sub>2</sub>O<script>x</script></p>"), "<p>H<sub>2</sub>O</p>")
         self.assertEqual(rich("line 1\nline <2>"), "line 1<br>line &lt;2&gt;")
+
+
+@override_settings(ALLOWED_HOSTS=["testserver"])
+class AboutPagesTests(TestCase):
+    """STEP-30: the platform introduction (ICPAI guide @S0-INTRO) — public pages on the way to sign-up."""
+
+    def test_three_public_pages_with_the_guide_texts(self):
+        r = self.client.get(reverse("core:about"))
+        self.assertContains(r, "ChemEduTech платформа таныстырылымы")
+        self.assertContains(r, "Мақсаты")
+        self.assertContains(r, "Білім беруді ақпараттандырудың ғылыми-педагогикалық негіздерін меңгерту.")
+        self.assertContains(r, reverse("core:about_page", args=[2]))
+        r = self.client.get(reverse("core:about_page", args=[2]))
+        self.assertContains(r, "Күтілетін нәтижелер")
+        self.assertContains(r, "химиялық үдерістерді макро-, субмикро- және символдық деңгейлерде түсіндіреді;")
+        r = self.client.get(reverse("core:about_page", args=[3]))
+        self.assertContains(r, "ICPAI авторлық моделі")
+        self.assertContains(r, "ICPAI моделіне негізделген")
+        self.assertNotContains(r, "ICPAT")
+        self.assertEqual(self.client.get(reverse("core:about_page", args=[4])).status_code, 404)
+
+    def test_sign_up_goes_through_the_pages_log_in_does_not(self):
+        landing = self.client.get(reverse("core:home"))
+        self.assertNotContains(landing, reverse("accounts:signup"))
+        self.assertContains(landing, reverse("core:about"))
+        self.assertContains(landing, reverse("accounts:login"))
+        self.assertNotContains(self.client.get(reverse("core:about")), f'href="{reverse("accounts:signup")}"')
+        last = self.client.get(reverse("core:about_page", args=[3]))
+        self.assertContains(last, f'href="{reverse("accounts:signup")}"')
+        login = self.client.get(reverse("accounts:login"))
+        self.assertContains(login, reverse("core:about"))
+
+    def test_navbar_links_lead_to_the_pages(self):
+        r = self.client.get(reverse("core:about_page", args=[2]))
+        for n in (1, 2, 3):
+            self.assertContains(r, reverse("core:about_page", args=[n]))
+        self.assertContains(r, 'aria-current="page"', count=3)  # navbar, mobile menu, the page tabs
+
+    def test_model_page_shows_the_four_components(self):
+        r = self.client.get(reverse("core:about_page", args=[3]))
+        for part in ("I — Information", "C — Chemistry", "P — Pedagogy", "AI — Artificial Intelligence"):
+            self.assertContains(r, part)
+        self.assertContains(r, "Платформада жүзеге асатын мазмұны")
