@@ -1,0 +1,12 @@
+{% load i18n %}{% comment %}Section 1 for the teacher: the course behind it — the grade register and the content editor.{% endcomment %}
+<section class="card flex flex-wrap items-center gap-5" aria-labelledby="crs-title">
+  <span class="tile tile-lg stage-theory">{% include "components/icons.html#book" with size=22 %}</span>
+  <div class="min-w-0 flex-[1_1_320px]">
+    <h2 id="crs-title" class="text-[17px] font-bold">{{ course.title }}</h2>
+    <p class="mt-1 text-sm text-ink-soft">{% translate "The section's percent is the share of the course's required stages a student has passed." %}</p>
+  </div>
+  <div class="flex flex-wrap gap-2">
+    <a class="btn btn-secondary" href="{% url 'teacher:gradebook_course' course.slug %}">{% include "components/icons.html#grid" %}{% translate "Grade register" %}</a>
+    <a class="btn btn-secondary" href="{% url 'teacher:course_content' course.slug %}">{% include "components/icons.html#edit" %}{% translate "Course content" %}</a>
+  </div>
+</section>

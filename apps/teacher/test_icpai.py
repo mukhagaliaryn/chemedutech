@@ -140,3 +140,63 @@ class IcpaiCabinetTests(Base):
             [g["kind"] for g in r.context["icpai_grades"]], ["research_practice", "microlesson", "independent"]
         )
         self.assertContains(r, reverse("research:export_ai_messages"))
+
+
+class SectionPageTests(Base):
+    """STEP-41: the teacher's ICPAI section pages, the sidebar's sections and the active group."""
+
+    def setUp(self):
+        super().setUp()
+        from apps.organizations.testing import make_group, make_student
+
+        self.teacher = User.objects.create_user("ta", "ta@example.kz", "x", role=User.Role.TEACHER)
+        CourseTeacher.objects.create(course=self.course, teacher=self.teacher)
+        self.group.curator = self.teacher
+        self.group.save()
+        self.other_group = make_group(name="Хим-23-2", department=self.group.department, curator=self.teacher)
+        self.other = make_student("s2", group=self.other_group)
+        from apps.courses import services as course_services
+
+        course_services.enroll(self.other, self.course, "group", group=self.other_group)
+        self.enrollment()
+        services.refresh(self.other)
+        self.client.force_login(self.teacher)
+
+    def students_on(self, number):
+        r = self.client.get(reverse("teacher:section", args=[number]))
+        self.assertEqual(r.status_code, 200)
+        return r, {row["student"] for row in r.context["rows"]}
+
+    def test_every_section_has_a_page_and_a_sidebar_link(self):
+        for number in range(1, 9):
+            r, students = self.students_on(number)
+            self.assertTemplateUsed(r, "teacher/sections/section.html")
+            self.assertEqual(students, {self.student, self.other})
+        self.assertContains(r, 'aria-current="page"', count=1)
+        for number in range(1, 9):
+            self.assertContains(r, reverse("teacher:section", args=[number]))
+        self.assertContains(r, reverse("teacher:set_group"))
+        self.assertNotContains(r, reverse("teacher:practice_queue"))  # «ICPAI works» lives in the sections now
+
+    def test_the_active_group_narrows_the_pages(self):
+        page = reverse("teacher:section", args=[2])
+        self.client.post(reverse("teacher:set_group"), {"group": self.other_group.pk, "next": page})
+        _r, students = self.students_on(2)
+        self.assertEqual(students, {self.other})
+        self.client.post(reverse("teacher:set_group"), {"group": "999999", "next": page})  # not theirs: all groups
+        _r, students = self.students_on(2)
+        self.assertEqual(students, {self.student, self.other})
+        r = self.client.post(reverse("teacher:set_group"), {"group": "", "next": "https://evil.example/"})
+        self.assertEqual(r["Location"], "/teacher/")
+
+    def test_the_old_works_page_leads_to_the_section(self):
+        r = self.client.get(reverse("teacher:practice_queue") + "?what=independent&show=graded")
+        self.assertRedirects(r, reverse("teacher:section", args=[8]) + "?show=graded")
+        self.assertRedirects(self.client.get(reverse("teacher:practice_queue")), reverse("teacher:section", args=[5]))
+
+    def test_a_teacher_without_a_programme_gets_404(self):
+        stranger = User.objects.create_user("tb", "tb@example.kz", "x", role=User.Role.TEACHER)
+        self.client.force_login(stranger)
+        self.assertEqual(self.client.get(reverse("teacher:section", args=[1])).status_code, 404)
+        self.client.force_login(self.student)
+        self.assertNotEqual(self.client.get(reverse("teacher:section", args=[1])).status_code, 200)

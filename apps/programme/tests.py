@@ -1062,7 +1062,7 @@ class ResearchPracticeTests(Base):
     def test_the_teacher_grades_and_the_student_sees_it_apart(self):
         self.finished()
         self.client.force_login(self.teacher)
-        r = self.client.get(reverse("teacher:practice_queue"))
+        r = self.client.get(reverse("teacher:section", args=[5]))
         self.assertContains(r, reverse("teacher:practice", args=[self.lesson.pk]))
         url = reverse("teacher:practice", args=[self.lesson.pk])
         self.assertContains(self.client.get(url), "талдау")
@@ -1185,7 +1185,7 @@ class MicrolessonTests(Base):
         trial = self.lesson.trials.get()
         self.client.post(self.url("micro_finish", trial.pk))
         self.client.force_login(self.teacher)
-        r = self.client.get(reverse("teacher:practice_queue") + "?what=micro")
+        r = self.client.get(reverse("teacher:section", args=[6]))
         self.assertContains(r, reverse("teacher:micro", args=[trial.pk]))
         self.client.post(
             reverse("teacher:micro", args=[trial.pk]), {"c1": "2", "c2": "2", "c3": "1", "c4": "1", "c5": "2"}
@@ -1313,7 +1313,7 @@ class PortfolioTests(DiagnosticsBase):
         self.ps.submit(portfolio)
         self.client.force_login(self.teacher)
         self.assertContains(
-            self.client.get(reverse("teacher:practice_queue") + "?what=portfolio"),
+            self.client.get(reverse("teacher:section", args=[7])),
             reverse("teacher:portfolio", args=[portfolio.pk]),
         )
         url = reverse("teacher:portfolio", args=[portfolio.pk])
@@ -1432,7 +1432,7 @@ class IndependentLessonTests(Base):
         lesson = self.create()
         self.client.post(self.url("independent_submit", lesson.pk))
         self.client.force_login(self.teacher)
-        queue = reverse("teacher:practice_queue") + "?what=independent"
+        queue = reverse("teacher:section", args=[8])
         self.assertContains(self.client.get(queue), 'name="trial_on"')
         later = date.today() + timedelta(days=5)
         with self.captureOnCommitCallbacks(execute=True):
@@ -1469,7 +1469,7 @@ class IndependentLessonTests(Base):
         self.assertTemplateUsed(r, "student/independent/trial.html")
         self.assertContains(r, "Талдадым")
         self.client.force_login(self.teacher)
-        r = self.client.get(reverse("teacher:practice_queue") + "?what=independent")
+        r = self.client.get(reverse("teacher:section", args=[8]))
         self.assertContains(r, reverse("teacher:independent", args=[self.lesson.pk]))
         page = reverse("teacher:independent", args=[self.lesson.pk])
         self.assertContains(self.client.get(page), 'name="score"')

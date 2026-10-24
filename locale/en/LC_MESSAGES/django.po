@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-25 01:48+0500\n"
+"POT-Creation-Date: 2026-10-25 02:08+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -93,6 +93,7 @@ msgstr ""
 
 #: apps/accounts/forms.py:56 apps/teacher/gradebook.py:21
 #: ui/templates/accounts/signup.html:123
+#: ui/templates/partials/shell/sidebar_teacher.html:19
 #: ui/templates/research/analytics.html:25
 #: ui/templates/research/analytics.html:169
 #: ui/templates/research/analytics.html:217
@@ -167,10 +168,11 @@ msgstr ""
 #: ui/templates/teacher/gradebook.html:35 ui/templates/teacher/group.html:118
 #: ui/templates/teacher/group.html:187
 #: ui/templates/teacher/icpai/conversation.html:25
-#: ui/templates/teacher/practice/queue.html:53
-#: ui/templates/teacher/practice/queue.html:66
-#: ui/templates/teacher/practice/queue.html:78
-#: ui/templates/teacher/practice/queue.html:92
+#: ui/templates/teacher/practice/partials/queue_table.html:9
+#: ui/templates/teacher/practice/partials/queue_table.html:22
+#: ui/templates/teacher/practice/partials/queue_table.html:34
+#: ui/templates/teacher/practice/partials/queue_table.html:48
+#: ui/templates/teacher/sections/section.html:58
 #: ui/templates/teacher/students.html:29 ui/templates/ui/styleguide.html:140
 #: ui/views.py:21
 msgid "Student"
@@ -576,6 +578,7 @@ msgstr ""
 #: apps/assessments/models/attempt.py:42 apps/progress/models/progress.py:124
 #: ui/templates/partials/shell/sidebar_student.html:27
 #: ui/templates/student/partials/stage_tile.html:2
+#: ui/templates/teacher/sections/section.html:31
 msgid "passed"
 msgstr ""
 
@@ -4299,7 +4302,7 @@ msgstr ""
 #: apps/labs/models/attempt.py:11 ui/templates/assessments/result.html:86
 #: ui/templates/student/independent/editor.html:211
 #: ui/templates/teacher/practice/independent.html:34
-#: ui/templates/teacher/practice/queue.html:78
+#: ui/templates/teacher/practice/partials/queue_table.html:34
 #: ui/templates/teacher/student.html:148
 msgid "Finished"
 msgstr ""
@@ -5683,7 +5686,7 @@ msgstr ""
 #: ui/templates/student/micro/protocol.html:14
 #: ui/templates/student/micro/trial_start.html:7
 #: ui/templates/student/micro/trial_start.html:12
-#: ui/templates/teacher/practice/queue.html:78
+#: ui/templates/teacher/practice/partials/queue_table.html:34
 msgid "Microlesson"
 msgstr ""
 
@@ -6408,7 +6411,7 @@ msgid "%(n)s of %(total)s steps are in the right place."
 msgstr ""
 
 #: apps/practice/models/submission.py:14
-#: ui/templates/teacher/practice/queue.html:66
+#: ui/templates/teacher/practice/partials/queue_table.html:22
 msgid "Submitted"
 msgstr ""
 
@@ -6417,12 +6420,14 @@ msgid "Being graded"
 msgstr ""
 
 #: apps/practice/models/submission.py:16
-#: ui/templates/teacher/practice/queue.html:27
+#: ui/templates/teacher/sections/partials/queue.html:26
 msgid "Graded"
 msgstr ""
 
 #: apps/practice/models/submission.py:17
+#: ui/templates/partials/shell/sidebar_teacher.html:45
 #: ui/templates/teacher/icpai/partials/dashboard.html:45
+#: ui/templates/teacher/sections/section.html:40
 msgid "Waiting for the teacher"
 msgstr ""
 
@@ -6715,6 +6720,7 @@ msgstr ""
 
 #: apps/programme/apps.py:8 config/settings/base.py:391
 #: ui/templates/partials/shell/sidebar_student.html:20
+#: ui/templates/partials/shell/sidebar_teacher.html:37
 msgid "ICPAI programme"
 msgstr ""
 
@@ -7100,6 +7106,7 @@ msgstr ""
 #: apps/programme/models/programme.py:37 apps/teacher/forms.py:41
 #: ui/templates/teacher/gradebook.html:38
 #: ui/templates/teacher/partials/grading_queue.html:15
+#: ui/templates/teacher/sections/section.html:64
 #: ui/templates/teacher/student.html:25
 msgid "Course"
 msgstr ""
@@ -7118,6 +7125,7 @@ msgid "Lesson design constructor"
 msgstr ""
 
 #: apps/programme/models/programme.py:43
+#: ui/templates/teacher/sections/section.html:65
 msgid "Portfolio"
 msgstr ""
 
@@ -7179,6 +7187,7 @@ msgstr ""
 #: ui/templates/student/results.html:92 ui/templates/student/stages/lab.html:23
 #: ui/templates/student/topic.html:37
 #: ui/templates/teacher/icpai/partials/student_tab.html:25
+#: ui/templates/teacher/sections/section.html:77
 #: ui/templates/teacher/student.html:68 ui/templates/teacher/student.html:90
 msgid "Locked"
 msgstr ""
@@ -7198,7 +7207,9 @@ msgstr ""
 #: ui/templates/student/portfolio/partials/sheet.html:31
 #: ui/templates/student/portfolio/pdf.html:44
 #: ui/templates/student/results.html:92 ui/templates/student/topic.html:37
-#: ui/templates/teacher/group.html:198 ui/templates/teacher/student.html:90
+#: ui/templates/teacher/group.html:198
+#: ui/templates/teacher/sections/section.html:36
+#: ui/templates/teacher/student.html:90
 msgid "Passed"
 msgstr ""
 
@@ -7438,7 +7449,9 @@ msgid ""
 msgstr ""
 
 #: apps/programme/tests.py:239 ui/templates/student/dashboard.html:68
-#: ui/templates/teacher/dashboard.html:27 ui/templates/teacher/student.html:43
+#: ui/templates/teacher/dashboard.html:27
+#: ui/templates/teacher/sections/section.html:35
+#: ui/templates/teacher/student.html:43
 msgid "Key figures"
 msgstr ""
 
@@ -7447,6 +7460,7 @@ msgid "The section is in development"
 msgstr ""
 
 #: apps/programme/tests.py:580 ui/templates/student/section.html:117
+#: ui/templates/teacher/sections/partials/video.html:6
 msgid "The video is being prepared"
 msgstr ""
 
@@ -7457,6 +7471,8 @@ msgstr ""
 #: apps/progress/apps.py:8 ui/templates/teacher/group.html:120
 #: ui/templates/teacher/partials/groups_table.html:13
 #: ui/templates/teacher/partials/student_drawer.html:15
+#: ui/templates/teacher/sections/section.html:60
+#: ui/templates/teacher/sections/section.html:79
 msgid "Progress"
 msgstr ""
 
@@ -7698,19 +7714,19 @@ msgid "Certificates issued"
 msgstr ""
 
 #: apps/research/admin_dashboard.py:53 apps/teacher/apps.py:8
-#: ui/templates/partials/shell/sidebar_teacher.html:9
+#: ui/templates/partials/shell/sidebar_teacher.html:11
 #: ui/templates/teacher/dashboard.html:9
 msgid "Teacher cabinet"
 msgstr ""
 
 #: apps/research/admin_dashboard.py:54
-#: ui/templates/partials/shell/sidebar_teacher.html:23
+#: ui/templates/partials/shell/sidebar_teacher.html:65
 #: ui/templates/research/analytics.html:8
 msgid "Statistics"
 msgstr ""
 
 #: apps/research/admin_dashboard.py:55
-#: ui/templates/partials/shell/sidebar_teacher.html:24
+#: ui/templates/partials/shell/sidebar_teacher.html:66
 #: ui/templates/research/dashboard.html:5
 #: ui/templates/research/dashboard.html:9
 msgid "Research data"
@@ -7796,10 +7812,11 @@ msgstr[1] ""
 #: ui/templates/teacher/icpai/partials/student_tab.html:33
 #: ui/templates/teacher/icpai/partials/student_tab.html:106
 #: ui/templates/teacher/partials/groups_table.html:15
-#: ui/templates/teacher/practice/queue.html:61
-#: ui/templates/teacher/practice/queue.html:73
-#: ui/templates/teacher/practice/queue.html:87
-#: ui/templates/teacher/practice/queue.html:101
+#: ui/templates/teacher/practice/partials/queue_table.html:17
+#: ui/templates/teacher/practice/partials/queue_table.html:29
+#: ui/templates/teacher/practice/partials/queue_table.html:43
+#: ui/templates/teacher/practice/partials/queue_table.html:57
+#: ui/templates/teacher/sections/section.html:94
 #: ui/templates/teacher/student.html:90 ui/templates/teacher/students.html:32
 msgid "Open"
 msgstr ""
@@ -7950,7 +7967,7 @@ msgstr ""
 #: apps/student/designer.py:292 apps/student/independent.py:152
 #: apps/student/independent.py:186 apps/student/independent.py:221
 #: apps/student/micro.py:122 apps/student/micro.py:181
-#: apps/student/practice.py:127 apps/teacher/practice.py:270
+#: apps/student/practice.py:127 apps/teacher/practice.py:256
 msgid "The final version cannot be changed."
 msgstr ""
 
@@ -8419,8 +8436,8 @@ msgstr ""
 msgid "The work is returned to the student; the attempt is given back."
 msgstr ""
 
-#: apps/teacher/grading.py:133 apps/teacher/practice.py:105
-#: apps/teacher/practice.py:139
+#: apps/teacher/grading.py:133 apps/teacher/practice.py:132
+#: apps/teacher/practice.py:166
 msgid "The grade is saved."
 msgstr ""
 
@@ -8491,53 +8508,53 @@ msgstr ""
 msgid "experiment %(n)s"
 msgstr ""
 
-#: apps/teacher/practice.py:103 apps/teacher/practice.py:137
+#: apps/teacher/practice.py:130 apps/teacher/practice.py:164
 msgid "Give every criterion 0, 1 or 2 points."
 msgstr ""
 
-#: apps/teacher/practice.py:170
+#: apps/teacher/practice.py:197
 #, fuzzy
 #| msgid "Thank you, the test is done"
 msgid "Choose the status of the work."
 msgstr "Test complete. Thanks!"
 
-#: apps/teacher/practice.py:172
+#: apps/teacher/practice.py:199
 msgid "The portfolio is not waiting for feedback."
 msgstr ""
 
-#: apps/teacher/practice.py:176
+#: apps/teacher/practice.py:203
 #, fuzzy
 #| msgid "Thank you, the test is done"
 msgid "The feedback is saved and shown to the student."
 msgstr "Test complete. Thanks!"
 
-#: apps/teacher/practice.py:228
-#, fuzzy
-#| msgid "Thank you, the test is done"
-msgid "The dates are saved; the students are notified."
-msgstr "Test complete. Thanks!"
-
-#: apps/teacher/practice.py:261
+#: apps/teacher/practice.py:247
 msgid "Confirmed."
 msgstr ""
 
-#: apps/teacher/practice.py:265
+#: apps/teacher/practice.py:251
 msgid "The real-audience trial protocol is saved."
 msgstr ""
 
-#: apps/teacher/practice.py:268
+#: apps/teacher/practice.py:254
 msgid "Give a grade from 0 to 10."
 msgstr ""
 
-#: apps/teacher/practice.py:268
+#: apps/teacher/practice.py:254
 #, fuzzy
 #| msgid "Thank you, the test is done"
 msgid "Choose the status."
 msgstr "Test complete. Thanks!"
 
-#: apps/teacher/practice.py:269
+#: apps/teacher/practice.py:255
 msgid "Write the protocol."
 msgstr ""
+
+#: apps/teacher/sections.py:203
+#, fuzzy
+#| msgid "Thank you, the test is done"
+msgid "The dates are saved; the students are notified."
+msgstr "Test complete. Thanks!"
 
 #: apps/teacher/views.py:115
 msgid "The group is saved."
@@ -9349,7 +9366,7 @@ msgstr ""
 #: ui/templates/components/modal.html:20
 #: ui/templates/teacher/practice/independent.html:52
 #: ui/templates/teacher/practice/independent.html:71
-#: ui/templates/teacher/practice/queue.html:61
+#: ui/templates/teacher/practice/partials/queue_table.html:17
 msgid "Confirm"
 msgstr ""
 
@@ -9545,6 +9562,7 @@ msgstr ""
 #: ui/templates/student/portfolio/partials/sheet.html:25
 #: ui/templates/student/portfolio/pdf.html:38
 #: ui/templates/teacher/icpai/partials/student_tab.html:53
+#: ui/templates/teacher/sections/partials/diagnostic.html:10
 msgid "Component"
 msgstr ""
 
@@ -9743,7 +9761,7 @@ msgstr ""
 #: ui/templates/layouts/cabinet.html:63
 #: ui/templates/partials/shell/sidebar_student.html:44
 #: ui/templates/partials/shell/sidebar_student.html:57
-#: ui/templates/partials/shell/sidebar_teacher.html:27
+#: ui/templates/partials/shell/sidebar_teacher.html:69
 #: ui/templates/student/profile.html:5 ui/templates/student/profile.html:7
 #: ui/templates/teacher/partials/student_drawer.html:39
 msgid "Profile"
@@ -9840,7 +9858,7 @@ msgid "Student menu"
 msgstr ""
 
 #: ui/templates/partials/shell/sidebar_student.html:17
-#: ui/templates/partials/shell/sidebar_teacher.html:16
+#: ui/templates/partials/shell/sidebar_teacher.html:33
 #: ui/templates/student/dashboard.html:7 ui/templates/student/dashboard.html:9
 #: ui/templates/student/home.html:9 ui/templates/student/home.html:11
 #: ui/templates/student/section_locked.html:18
@@ -9849,6 +9867,7 @@ msgid "Home"
 msgstr ""
 
 #: ui/templates/partials/shell/sidebar_student.html:21
+#: ui/templates/partials/shell/sidebar_teacher.html:38
 msgid "Programme sections"
 msgstr ""
 
@@ -9899,17 +9918,37 @@ msgstr ""
 msgid "Continue"
 msgstr ""
 
-#: ui/templates/partials/shell/sidebar_teacher.html:14
+#: ui/templates/partials/shell/sidebar_teacher.html:23
+#: ui/templates/research/analytics.html:27
+#: ui/templates/teacher/dashboard.html:93
+#: ui/templates/teacher/gradebook.html:26
+#: ui/templates/teacher/sections/section.html:20
+msgid "All groups"
+msgstr ""
+
+#: ui/templates/partials/shell/sidebar_teacher.html:28
+#: ui/templates/research/analytics.html:30
+msgid "Show"
+msgstr ""
+
+#: ui/templates/partials/shell/sidebar_teacher.html:32
 msgid "Teacher menu"
 msgstr ""
 
-#: ui/templates/partials/shell/sidebar_teacher.html:15
+#: ui/templates/partials/shell/sidebar_teacher.html:47
+#: ui/templates/teacher/sections/section.html:28
+#, python-format
+msgid "passed %(a)s of %(b)s"
+msgstr ""
+
+#: ui/templates/partials/shell/sidebar_teacher.html:57
+#: ui/templates/partials/shell/sidebar_teacher.html:58
 #: ui/templates/research/analytics.html:280
 #: ui/templates/teacher/student.html:169
 msgid "Work"
 msgstr ""
 
-#: ui/templates/partials/shell/sidebar_teacher.html:17
+#: ui/templates/partials/shell/sidebar_teacher.html:59
 #: ui/templates/teacher/content/course.html:4
 #: ui/templates/teacher/content/course.html:7
 #: ui/templates/teacher/content/course_form.html:4
@@ -9925,10 +9964,11 @@ msgstr ""
 #: ui/templates/teacher/content/simple_form.html:8
 #: ui/templates/teacher/content/stage.html:4
 #: ui/templates/teacher/content/stage_new.html:4
+#: ui/templates/teacher/sections/partials/course.html:11
 msgid "Course content"
 msgstr ""
 
-#: ui/templates/partials/shell/sidebar_teacher.html:18
+#: ui/templates/partials/shell/sidebar_teacher.html:60
 #: ui/templates/teacher/group.html:4 ui/templates/teacher/group_form.html:4
 #: ui/templates/teacher/groups.html:6
 #: ui/templates/teacher/icpai/conversation.html:8
@@ -9938,7 +9978,7 @@ msgstr ""
 msgid "Groups and students"
 msgstr ""
 
-#: ui/templates/partials/shell/sidebar_teacher.html:19
+#: ui/templates/partials/shell/sidebar_teacher.html:61
 #: ui/templates/teacher/dashboard.html:23 ui/templates/teacher/grading.html:5
 #: ui/templates/teacher/grading.html:6 ui/templates/teacher/grading.html:7
 #: ui/templates/teacher/grading_detail.html:11
@@ -9947,23 +9987,21 @@ msgstr ""
 msgid "Practice works"
 msgstr ""
 
-#: ui/templates/partials/shell/sidebar_teacher.html:20
-#: ui/templates/teacher/icpai/partials/dashboard.html:13
-#: ui/templates/teacher/practice/queue.html:7
-#: ui/templates/teacher/practice/queue.html:9
+#: ui/templates/partials/shell/sidebar_teacher.html:62
 msgid "ICPAI works"
 msgstr ""
 
-#: ui/templates/partials/shell/sidebar_teacher.html:21
+#: ui/templates/partials/shell/sidebar_teacher.html:63
 #: ui/templates/research/dashboard.html:4
 #: ui/templates/student/practice/partials/cards.html:10
 #: ui/templates/teacher/gradebook.html:4 ui/templates/teacher/lab_log.html:29
 msgid "Analysis"
 msgstr ""
 
-#: ui/templates/partials/shell/sidebar_teacher.html:22
+#: ui/templates/partials/shell/sidebar_teacher.html:64
 #: ui/templates/teacher/gradebook.html:3 ui/templates/teacher/gradebook.html:5
 #: ui/templates/teacher/gradebook.html:9 ui/templates/teacher/gradebook.html:32
+#: ui/templates/teacher/sections/partials/course.html:10
 msgid "Grade register"
 msgstr ""
 
@@ -9984,16 +10022,6 @@ msgstr "No course assigned yet."
 
 #: ui/templates/research/analytics.html:18
 msgid "Whole course"
-msgstr ""
-
-#: ui/templates/research/analytics.html:27
-#: ui/templates/teacher/dashboard.html:93
-#: ui/templates/teacher/gradebook.html:26
-msgid "All groups"
-msgstr ""
-
-#: ui/templates/research/analytics.html:30
-msgid "Show"
 msgstr ""
 
 #: ui/templates/research/analytics.html:31
@@ -10451,8 +10479,9 @@ msgstr ""
 #: ui/templates/student/results.html:75 ui/templates/teacher/groups.html:23
 #: ui/templates/teacher/partials/grading_queue.html:7
 #: ui/templates/teacher/practice/independent.html:49
-#: ui/templates/teacher/practice/queue.html:53
-#: ui/templates/teacher/practice/queue.html:66
+#: ui/templates/teacher/practice/partials/queue_table.html:9
+#: ui/templates/teacher/practice/partials/queue_table.html:22
+#: ui/templates/teacher/sections/section.html:59
 #: ui/templates/teacher/student.html:77 ui/templates/teacher/student.html:119
 #: ui/templates/teacher/student.html:169
 msgid "Status"
@@ -10885,6 +10914,8 @@ msgstr ""
 #: ui/templates/student/section.html:10 ui/templates/student/section.html:16
 #: ui/templates/student/section_locked.html:6
 #: ui/templates/student/section_locked.html:11
+#: ui/templates/teacher/sections/section.html:10
+#: ui/templates/teacher/sections/section.html:19
 #, python-format
 msgid "Section %(n)s"
 msgstr ""
@@ -10939,7 +10970,7 @@ msgstr ""
 #: ui/templates/teacher/content/simple_form.html:16
 #: ui/templates/teacher/content/stage.html:51
 #: ui/templates/teacher/group_form.html:25
-#: ui/templates/teacher/practice/queue.html:42
+#: ui/templates/teacher/sections/partials/queue.html:15
 msgid "Save"
 msgstr ""
 
@@ -11138,8 +11169,8 @@ msgstr ""
 
 #: ui/templates/student/designer/editor.html:149
 #: ui/templates/student/independent/editor.html:159
-#: ui/templates/teacher/practice/queue.html:53
-#: ui/templates/teacher/practice/queue.html:92
+#: ui/templates/teacher/practice/partials/queue_table.html:9
+#: ui/templates/teacher/practice/partials/queue_table.html:48
 msgid "Lesson"
 msgstr ""
 
@@ -11319,6 +11350,7 @@ msgid "Save the new stage"
 msgstr ""
 
 #: ui/templates/student/designer/partials/templates.html:40
+#: ui/templates/teacher/sections/partials/designer.html:4
 msgid "Authorial lesson templates"
 msgstr ""
 
@@ -11813,7 +11845,7 @@ msgstr ""
 #: ui/templates/student/practice/partials/nav.html:10
 #: ui/templates/student/practice/sheet.html:24
 #: ui/templates/teacher/practice/detail.html:17
-#: ui/templates/teacher/practice/queue.html:92
+#: ui/templates/teacher/practice/partials/queue_table.html:48
 msgid "Practice"
 msgstr ""
 
@@ -11843,7 +11875,7 @@ msgstr ""
 #: ui/templates/teacher/practice/independent.html:33
 #: ui/templates/teacher/practice/micro.html:7
 #: ui/templates/teacher/practice/micro.html:16
-#: ui/templates/teacher/practice/queue.html:83
+#: ui/templates/teacher/practice/partials/queue_table.html:39
 #, python-format
 msgid "Trial %(n)s"
 msgstr ""
@@ -11862,6 +11894,7 @@ msgstr ""
 #: ui/templates/teacher/icpai/lesson.html:16
 #: ui/templates/teacher/icpai/partials/student_tab.html:77
 #: ui/templates/teacher/practice/independent.html:17
+#: ui/templates/teacher/sections/section.html:91
 #, python-format
 msgid "Cycle %(n)s"
 msgstr ""
@@ -12039,7 +12072,7 @@ msgstr ""
 #: ui/templates/student/independent/editor.html:169
 #: ui/templates/student/independent/partials/home.html:50
 #: ui/templates/student/independent/partials/home.html:53
-#: ui/templates/teacher/practice/queue.html:41
+#: ui/templates/teacher/sections/partials/queue.html:14
 msgid "Trial date"
 msgstr ""
 
@@ -12168,7 +12201,7 @@ msgstr ""
 
 #: ui/templates/student/independent/partials/home.html:50
 #: ui/templates/student/independent/partials/home.html:53
-#: ui/templates/teacher/practice/queue.html:40
+#: ui/templates/teacher/sections/partials/queue.html:13
 msgid "Hand in the project by"
 msgstr ""
 
@@ -13933,6 +13966,7 @@ msgid "The next section opens at %(p)s%%."
 msgstr ""
 
 #: ui/templates/student/section.html:29
+#: ui/templates/teacher/sections/section.html:24
 msgid "What the section does"
 msgstr ""
 
@@ -13976,6 +14010,7 @@ msgstr ""
 
 #: ui/templates/student/section.html:101
 #: ui/templates/student/stages/video.html:25
+#: ui/templates/teacher/sections/section.html:62
 msgid "Watched"
 msgstr ""
 
@@ -14601,10 +14636,10 @@ msgstr ""
 
 #: ui/templates/teacher/dashboard.html:66
 #: ui/templates/teacher/practice/independent.html:51
-#: ui/templates/teacher/practice/queue.html:78
-#: ui/templates/teacher/practice/queue.html:87
-#: ui/templates/teacher/practice/queue.html:92
-#: ui/templates/teacher/practice/queue.html:101
+#: ui/templates/teacher/practice/partials/queue_table.html:34
+#: ui/templates/teacher/practice/partials/queue_table.html:43
+#: ui/templates/teacher/practice/partials/queue_table.html:48
+#: ui/templates/teacher/practice/partials/queue_table.html:57
 msgid "Grade"
 msgstr ""
 
@@ -15000,6 +15035,7 @@ msgid ""
 msgstr ""
 
 #: ui/templates/teacher/group.html:189
+#: ui/templates/teacher/sections/section.html:61
 msgid "D"
 msgstr ""
 
@@ -15133,21 +15169,18 @@ msgstr "The student is not enrolled in this course yet."
 #: ui/templates/teacher/practice/detail.html:7
 #: ui/templates/teacher/practice/detail.html:8
 #: ui/templates/teacher/practice/detail.html:12
-#: ui/templates/teacher/practice/queue.html:20
 msgid "Section 5 practices"
 msgstr ""
 
 #: ui/templates/teacher/icpai/partials/dashboard.html:50
 #: ui/templates/teacher/practice/micro.html:8
 #: ui/templates/teacher/practice/micro.html:12
-#: ui/templates/teacher/practice/queue.html:21
 msgid "Section 6 microlessons"
 msgstr ""
 
 #: ui/templates/teacher/icpai/partials/dashboard.html:50
 #: ui/templates/teacher/practice/portfolio.html:9
 #: ui/templates/teacher/practice/portfolio.html:13
-#: ui/templates/teacher/practice/queue.html:22
 msgid "Section 7 portfolios"
 msgstr ""
 
@@ -15155,12 +15188,11 @@ msgstr ""
 #: ui/templates/teacher/practice/independent.html:8
 #: ui/templates/teacher/practice/independent.html:9
 #: ui/templates/teacher/practice/independent.html:13
-#: ui/templates/teacher/practice/queue.html:23
 msgid "Section 8 lessons"
 msgstr ""
 
 #: ui/templates/teacher/icpai/partials/dashboard.html:56
-#: ui/templates/teacher/practice/queue.html:32
+#: ui/templates/teacher/sections/partials/queue.html:6
 msgid "Deadlines of section 8"
 msgstr ""
 
@@ -15189,6 +15221,7 @@ msgid "The student joins the programme with the course enrolment."
 msgstr "The student is not enrolled in this course yet."
 
 #: ui/templates/teacher/icpai/partials/student_tab.html:47
+#: ui/templates/teacher/sections/partials/diagnostic.html:10
 #, python-format
 msgid "Stage %(p)s"
 msgstr ""
@@ -15376,6 +15409,32 @@ msgid ""
 "be compared."
 msgstr ""
 
+#: ui/templates/teacher/practice/partials/queue_table.html:9
+msgid "Cycle"
+msgstr ""
+
+#: ui/templates/teacher/practice/partials/queue_table.html:29
+msgid "Give feedback"
+msgstr ""
+
+#: ui/templates/teacher/practice/partials/queue_table.html:34
+msgid "Trial"
+msgstr ""
+
+#: ui/templates/teacher/practice/partials/queue_table.html:48
+msgid "Gathered"
+msgstr ""
+
+#: ui/templates/teacher/practice/partials/queue_table.html:65
+msgid "Nothing here yet"
+msgstr ""
+
+#: ui/templates/teacher/practice/partials/queue_table.html:65
+#, fuzzy
+#| msgid "Grades appear when you open the first topic."
+msgid "Works appear when students finish their trials."
+msgstr "Grades appear once the first topic is opened."
+
 #: ui/templates/teacher/practice/portfolio.html:22
 #, fuzzy
 #| msgid "The teacher opened a stage for you"
@@ -15397,87 +15456,140 @@ msgid ""
 "again."
 msgstr ""
 
-#: ui/templates/teacher/practice/queue.html:14
-msgid "Microlesson trials"
+#: ui/templates/teacher/search.html:8
+msgid "Search for a student, a group or a topic."
 msgstr ""
 
-#: ui/templates/teacher/practice/queue.html:14
-msgid "Professional portfolios"
-msgstr ""
-
-#: ui/templates/teacher/practice/queue.html:14
-#, fuzzy
-#| msgid "Your answers"
-msgid "Independent authorial lessons"
-msgstr "Answers"
-
-#: ui/templates/teacher/practice/queue.html:14
-msgid "Digital research practices"
-msgstr ""
-
-#: ui/templates/teacher/practice/queue.html:15
+#: ui/templates/teacher/sections/partials/course.html:7
 msgid ""
-"The teacher's professional feedback on the submitted portfolios; «Accepted» "
-"completes section 7."
+"The section's percent is the share of the course's required stages a student "
+"has passed."
 msgstr ""
 
-#: ui/templates/teacher/practice/queue.html:15
-msgid ""
-"Айгерім's opinion is an automated expert assessment; the important "
-"scientific and final decisions are confirmed by the teacher."
+#: ui/templates/teacher/sections/partials/designer.html:12
+msgid "final versions"
 msgstr ""
 
-#: ui/templates/teacher/practice/queue.html:15
-msgid ""
-"The 10-point grade (five criteria × 2 points). It is kept apart from the "
-"ICPAI component percents and does not open sections."
+#: ui/templates/teacher/sections/partials/diagnostic.html:5
+msgid "ICPAI components by stage"
 msgstr ""
 
-#: ui/templates/teacher/practice/queue.html:19
-msgid "Section"
-msgstr ""
-
-#: ui/templates/teacher/practice/queue.html:26
-#, fuzzy
-#| msgid "Your work is graded"
-msgid "To grade"
-msgstr "Work graded"
-
-#: ui/templates/teacher/practice/queue.html:33
+#: ui/templates/teacher/sections/partials/queue.html:7
 msgid ""
 "The hand-in and trial dates of the independent lesson for each group; the "
 "students get the notifications by them."
 msgstr ""
 
-#: ui/templates/teacher/practice/queue.html:53
-msgid "Cycle"
+#: ui/templates/teacher/sections/partials/queue.html:23
+msgid "Microlesson trials"
 msgstr ""
 
-#: ui/templates/teacher/practice/queue.html:73
-msgid "Give feedback"
+#: ui/templates/teacher/sections/partials/queue.html:23
+msgid "Professional portfolios"
 msgstr ""
 
-#: ui/templates/teacher/practice/queue.html:78
-msgid "Trial"
-msgstr ""
-
-#: ui/templates/teacher/practice/queue.html:92
-msgid "Gathered"
-msgstr ""
-
-#: ui/templates/teacher/practice/queue.html:109
-msgid "Nothing here yet"
-msgstr ""
-
-#: ui/templates/teacher/practice/queue.html:109
+#: ui/templates/teacher/sections/partials/queue.html:23
 #, fuzzy
-#| msgid "Grades appear when you open the first topic."
-msgid "Works appear when students finish their trials."
-msgstr "Grades appear once the first topic is opened."
+#| msgid "Your answers"
+msgid "Independent authorial lessons"
+msgstr "Answers"
 
-#: ui/templates/teacher/search.html:8
-msgid "Search for a student, a group or a topic."
+#: ui/templates/teacher/sections/partials/queue.html:23
+msgid "Digital research practices"
 msgstr ""
+
+#: ui/templates/teacher/sections/partials/queue.html:25
+#, fuzzy
+#| msgid "Your work is graded"
+msgid "To grade"
+msgstr "Work graded"
+
+#: ui/templates/teacher/sections/partials/queue.html:29
+msgid ""
+"The teacher's professional feedback on the submitted portfolios; «Accepted» "
+"completes section 7."
+msgstr ""
+
+#: ui/templates/teacher/sections/partials/queue.html:30
+msgid ""
+"Айгерім's opinion is an automated expert assessment; the important "
+"scientific and final decisions are confirmed by the teacher."
+msgstr ""
+
+#: ui/templates/teacher/sections/partials/video.html:6
+msgid "The section's video"
+msgstr ""
+
+#: ui/templates/teacher/sections/partials/video.html:7
+#, python-format
+msgid ""
+"A student passes the section having watched 80%% of the video; skipped parts "
+"do not count."
+msgstr ""
+
+#: ui/templates/teacher/sections/partials/video.html:7
+msgid "Until the video is added in the admin the section counts as passed."
+msgstr ""
+
+#: ui/templates/teacher/sections/partials/video.html:9
+msgid "Watch"
+msgstr ""
+
+#: ui/templates/teacher/sections/section.html:37
+msgid "Mean progress"
+msgstr ""
+
+#: ui/templates/teacher/sections/section.html:38
+msgid "Section open"
+msgstr ""
+
+#: ui/templates/teacher/sections/section.html:42
+msgid "Pass threshold"
+msgstr ""
+
+#: ui/templates/teacher/sections/section.html:53
+#, fuzzy
+#| msgid "Thank you, the test is done"
+msgid "Students in this section"
+msgstr "Test complete. Thanks!"
+
+#: ui/templates/teacher/sections/section.html:63
+#, fuzzy
+#| msgid "Thank you, the test is done"
+msgid "Template lessons"
+msgstr "Test complete. Thanks!"
+
+#: ui/templates/teacher/sections/section.html:66
+msgid "Works"
+msgstr ""
+
+#: ui/templates/teacher/sections/section.html:66
+#, fuzzy
+#| msgid "Your work is graded"
+msgid "Best grade"
+msgstr "Work graded"
+
+#: ui/templates/teacher/sections/section.html:74
+#, fuzzy
+#| msgid "Not enrolled in your courses"
+msgid "Not in the programme"
+msgstr "Not enrolled in the teacher's courses"
+
+#: ui/templates/teacher/sections/section.html:91
+msgid "finished"
+msgstr ""
+
+#: ui/templates/teacher/sections/section.html:101
+#, fuzzy
+#| msgid "Your answers"
+msgid "No students yet"
+msgstr "Answers"
+
+#: ui/templates/teacher/sections/section.html:101
+#, fuzzy
+#| msgid "The course appears here when your teacher assigns it to your group."
+msgid "Students appear here when their group is attached to your course."
+msgstr "The course appears here once the teacher assigns it to the group."
 
 #: ui/templates/teacher/student.html:24
 #, fuzzy

@@ -1,50 +1,7 @@
-{% extends "layouts/teacher.html" %}
-{% load i18n %}
-{% comment %}The works of sections 5 and 6 (guide @S5 VII, @S6 VI; STEP-35/36): the finished digital research
-practices and the finished microlesson trials (each trial graded apart) of the teacher's students — «To grade» and
-«Graded» — with the 10-point grade, kept apart from ICPAI.{% endcomment %}
-{% block title %}{% translate "ICPAI works" %} · ChemEduTech{% endblock %}
-{% block crumb %}ICPAI{% endblock %}
-{% block page_title %}{% translate "ICPAI works" %}{% endblock %}
-{% block main_class %}max-w-[1200px]{% endblock %}
-{% block content %}
-<div class="flex flex-wrap items-end justify-between gap-3">
-  <div>
-    <h1 class="text-[26px] leading-8 font-extrabold">{% if what == "micro" %}{% translate "Microlesson trials" %}{% elif what == "portfolio" %}{% translate "Professional portfolios" %}{% elif what == "independent" %}{% translate "Independent authorial lessons" %}{% else %}{% translate "Digital research practices" %}{% endif %}</h1>
-    <p class="mt-1 max-w-[720px] text-ink-soft">{% if what == "portfolio" %}{% translate "The teacher's professional feedback on the submitted portfolios; «Accepted» completes section 7." %}{% elif what == "independent" %}{% translate "Айгерім's opinion is an automated expert assessment; the important scientific and final decisions are confirmed by the teacher." %}{% else %}{% translate "The 10-point grade (five criteria × 2 points). It is kept apart from the ICPAI component percents and does not open sections." %}{% endif %}</p>
-  </div>
-</div>
-<div class="flex flex-wrap items-center justify-between gap-3">
-  <div class="flex flex-wrap gap-1.5" role="tablist" aria-label="{% translate 'Section' %}">
-    <a role="tab" href="?what=practice" class="inline-flex h-10 items-center gap-2 rounded-[12px] px-4 text-sm font-bold {% if what == 'practice' %}bg-primary-900 text-white{% else %}bg-surface text-ink-soft ring-1 ring-line{% endif %}">{% translate "Section 5 practices" %}{% if counts.practice %}<span class="num rounded-full bg-warning-500 px-2 text-[12px] text-ink">{{ counts.practice }}</span>{% endif %}</a>
-    <a role="tab" href="?what=micro" class="inline-flex h-10 items-center gap-2 rounded-[12px] px-4 text-sm font-bold {% if what == 'micro' %}bg-primary-900 text-white{% else %}bg-surface text-ink-soft ring-1 ring-line{% endif %}">{% translate "Section 6 microlessons" %}{% if counts.micro %}<span class="num rounded-full bg-warning-500 px-2 text-[12px] text-ink">{{ counts.micro }}</span>{% endif %}</a>
-    <a role="tab" href="?what=portfolio" class="inline-flex h-10 items-center gap-2 rounded-[12px] px-4 text-sm font-bold {% if what == 'portfolio' %}bg-primary-900 text-white{% else %}bg-surface text-ink-soft ring-1 ring-line{% endif %}">{% translate "Section 7 portfolios" %}{% if counts.portfolio %}<span class="num rounded-full bg-warning-500 px-2 text-[12px] text-ink">{{ counts.portfolio }}</span>{% endif %}</a>
-    <a role="tab" href="?what=independent" class="inline-flex h-10 items-center gap-2 rounded-[12px] px-4 text-sm font-bold {% if what == 'independent' %}bg-primary-900 text-white{% else %}bg-surface text-ink-soft ring-1 ring-line{% endif %}">{% translate "Section 8 lessons" %}{% if counts.independent %}<span class="num rounded-full bg-warning-500 px-2 text-[12px] text-ink">{{ counts.independent }}</span>{% endif %}</a>
-  </div>
-  <div class="flex gap-1.5" role="tablist">
-    <a role="tab" href="?what={{ what }}&amp;show=new" class="inline-flex h-9 items-center gap-2 rounded-full border px-4 text-sm font-bold {% if show != 'graded' %}border-primary-600 bg-primary-50 text-primary-700{% else %}border-line bg-surface text-ink-soft{% endif %}">{% translate "To grade" %}<span class="num rounded-full bg-white px-2 text-[12px]">{{ new }}</span></a>
-    <a role="tab" href="?what={{ what }}&amp;show=graded" class="inline-flex h-9 items-center gap-2 rounded-full border px-4 text-sm font-bold {% if show == 'graded' %}border-primary-600 bg-primary-50 text-primary-700{% else %}border-line bg-surface text-ink-soft{% endif %}">{% translate "Graded" %}<span class="num rounded-full bg-white px-2 text-[12px]">{{ graded }}</span></a>
-  </div>
-</div>
-{% if what == "independent" %}
-  <section class="card flex flex-col gap-3" aria-labelledby="sch-title">
-    <h2 id="sch-title" class="flex items-center gap-2 text-[16px] font-extrabold">{% include "components/icons.html#timer" with size=17 %}{% translate "Deadlines of section 8" %}</h2>
-    <p class="text-[13px] text-ink-soft">{% translate "The hand-in and trial dates of the independent lesson for each group; the students get the notifications by them." %}</p>
-    {% if section8 %}
-      <div class="flex flex-col gap-2">
-        {% for g in group_rows %}
-          <form method="post" class="grid grid-cols-1 items-end gap-3 rounded-lg border border-line p-3 sm:grid-cols-[1fr_180px_180px_auto]">{% csrf_token %}
-            <input type="hidden" name="group" value="{{ g.group.pk }}">
-            <span class="text-[14px] font-bold">{{ g.group }}</span>
-            <label class="flex flex-col gap-1"><span class="text-[12px] font-bold">{% translate "Hand in the project by" %}</span><input class="input" type="date" name="hand_in_on" value="{{ g.schedule.hand_in_on|date:'Y-m-d' }}"></label>
-            <label class="flex flex-col gap-1"><span class="text-[12px] font-bold">{% translate "Trial date" %}</span><input class="input" type="date" name="trial_on" value="{{ g.schedule.trial_on|date:'Y-m-d' }}"></label>
-            <button type="submit" class="btn btn-secondary">{% include "components/icons.html#save" %}{% translate "Save" %}</button>
-          </form>
-        {% empty %}<p class="text-[13px] text-ink-faint">—</p>{% endfor %}
-      </div>
-    {% endif %}
-  </section>
-{% endif %}
+{% load i18n %}{% comment %}
+A review queue's table (sections 5–8; STEP-41 moved it from «ICPAI works» to the section pages). Context: what
+(practice | micro | portfolio | independent), rows, show (new | graded).
+{% endcomment %}
 {% if rows %}
   <div class="table-wrap">
     <table class="table">
@@ -108,4 +65,3 @@ practices and the finished microlesson trials (each trial graded apart) of the t
   {% translate "Nothing here yet" as l_title %}{% translate "Works appear when students finish their trials." as l_text %}
   {% include "components/empty_state.html" with title=l_title text=l_text icon="award" %}
 {% endif %}
-{% endblock %}

@@ -1,0 +1,22 @@
+{% load i18n %}{% comment %}Section 2 for the teacher: the mean component percent at stages I, II, III (the active group).{% endcomment %}
+<section class="card flex flex-col gap-3" aria-labelledby="dg-title">
+  <div class="flex flex-wrap items-baseline justify-between gap-2">
+    <h2 id="dg-title" class="text-[17px] font-extrabold">{% translate "ICPAI components by stage" %}</h2>
+    <a class="link text-sm font-bold" href="{% url 'research:export_diagnostics' %}">{% include "components/icons.html#download" with size=15 %} CSV</a>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="w-full min-w-[520px] text-[13.5px]">
+      <thead><tr class="text-caption text-ink-faint"><th scope="col" class="py-1.5 text-left font-semibold">{% translate "Component" %}</th>{% for p in phases %}<th scope="col" class="py-1.5 text-left font-semibold">{% blocktranslate %}Stage {{ p }}{% endblocktranslate %}</th>{% endfor %}</tr></thead>
+      <tbody>
+        {% for c in components %}
+          <tr class="border-t border-line">
+            <th scope="row" class="py-2.5 pr-3 text-left font-semibold">{{ c.label }}</th>
+            {% for cell in c.cells %}
+              <td class="py-2.5 pr-3">{% if cell %}<span class="flex items-center gap-2"><span class="progress progress-sm w-24"><span style="width: {{ cell.mean|floatformat:0 }}%"></span></span><span class="num font-bold">{{ cell.mean|floatformat:0 }}%</span><span class="num text-caption text-ink-faint">n={{ cell.n }}</span></span>{% else %}<span class="text-ink-faint">—</span>{% endif %}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>

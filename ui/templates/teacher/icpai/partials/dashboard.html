@@ -9,7 +9,7 @@ teacher/icpai.py dashboard_block.{% endcomment %}
       <p class="text-caption font-bold tracking-[0.08em] text-white/70 uppercase">{% translate "Programme" %}</p>
       <h2 id="icpai-title" class="text-[17px] font-extrabold">{{ icpai.programme.title }}</h2>
     </div>
-    <a class="btn btn-inverse btn-sm" href="{% url 'teacher:practice_queue' %}">{% include "components/icons.html#check-square" with size=16 %}{% translate "ICPAI works" %}</a>
+    <span></span>
   </div>
   <div class="grid grid-cols-1 gap-0 xl:grid-cols-[minmax(0,1fr)_340px]">
     <div class="min-w-0 overflow-x-auto p-5">
@@ -25,11 +25,11 @@ teacher/icpai.py dashboard_block.{% endcomment %}
               <th scope="row" class="pr-2 text-left"><a class="link font-bold" href="{% url 'teacher:group' row.group.pk %}">{{ row.group.name }}</a><span class="block text-caption font-normal text-ink-faint">{% blocktranslate count n=row.students %}{{ n }} student{% plural %}{{ n }} students{% endblocktranslate %}</span></th>
               {% for c in row.cells %}
                 <td class="tone-{{ c.section.number }} p-0">
-                  <span class="tip relative flex h-11 flex-col items-center justify-center overflow-hidden rounded-[10px] bg-surface-sunken" tabindex="0">
+                  <a href="{% url 'teacher:section' c.section.number %}" class="tip relative flex h-11 flex-col items-center justify-center overflow-hidden rounded-[10px] bg-surface-sunken transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-(--tone)">
                     <span class="absolute inset-0 bg-(--tone)" style="opacity: {% if c.share %}{{ c.share|floatformat:0|add:'15' }}{% else %}0{% endif %}%" aria-hidden="true"></span>
                     <span class="num relative font-extrabold {% if c.share > 55 %}text-white{% endif %}">{{ c.passed }}/{{ row.students }}</span>
                     <span class="tipbox">{% blocktranslate with n=c.section.number p=c.passed m=c.mean|floatformat:0 %}Section {{ n }}: passed {{ p }} · mean {{ m }}%{% endblocktranslate %}</span>
-                  </span>
+                  </a>
                 </td>
               {% endfor %}
             </tr>
@@ -44,7 +44,7 @@ teacher/icpai.py dashboard_block.{% endcomment %}
         <h3 class="mb-2 text-[14px] font-extrabold">{% translate "Waiting for the teacher" %}</h3>
         <ul class="grid grid-cols-2 gap-2">
           {% for q in icpai.queues %}
-            <li><a class="tone-{% if q.what == 'practice' %}5{% elif q.what == 'micro' %}6{% elif q.what == 'portfolio' %}7{% else %}8{% endif %} flex flex-col gap-0.5 rounded-lg border border-line p-3 transition-colors hover:border-(--tone)" href="{% url 'teacher:practice_queue' %}?what={{ q.what }}">
+            <li><a class="tone-{% if q.what == 'practice' %}5{% elif q.what == 'micro' %}6{% elif q.what == 'portfolio' %}7{% else %}8{% endif %} flex flex-col gap-0.5 rounded-lg border border-line p-3 transition-colors hover:border-(--tone)" href="{{ q.url }}">
               <span class="num text-[22px] leading-none font-extrabold {% if q.n %}text-(--tone){% else %}text-ink-faint{% endif %}">{{ q.n }}</span>
               <span class="text-caption font-semibold text-ink-soft">{% if q.what == "practice" %}{% translate "Section 5 practices" %}{% elif q.what == "micro" %}{% translate "Section 6 microlessons" %}{% elif q.what == "portfolio" %}{% translate "Section 7 portfolios" %}{% else %}{% translate "Section 8 lessons" %}{% endif %}</span>
             </a></li>
@@ -57,7 +57,7 @@ teacher/icpai.py dashboard_block.{% endcomment %}
           {% for d in icpai.deadlines %}
             <li class="flex items-center justify-between gap-2 rounded-lg bg-canvas px-3 py-2"><span class="font-bold">{{ d.group.name }}</span><span class="num text-right text-caption text-ink-soft">{% if d.hand_in_on and d.hand_in_on >= icpai.today %}{% translate "hand-in" %} {{ d.hand_in_on|date:"d.m" }}{% endif %}{% if d.trial_on and d.trial_on >= icpai.today %} · {% translate "trial" %} {{ d.trial_on|date:"d.m" }}{% endif %}</span></li>
           {% empty %}
-            <li class="text-caption text-ink-soft">{% translate "No dates ahead." %} <a class="link font-bold" href="{% url 'teacher:practice_queue' %}?what=independent">{% translate "Set the dates" %}</a></li>
+            <li class="text-caption text-ink-soft">{% translate "No dates ahead." %} <a class="link font-bold" href="{% for q in icpai.queues %}{% if q.what == 'independent' %}{{ q.url }}{% endif %}{% endfor %}">{% translate "Set the dates" %}</a></li>
           {% endfor %}
         </ul>
       </div>

@@ -1,9 +1,11 @@
 {% load i18n teacher_tags %}{% comment %}
-Teacher sidebar (mockup «TeacherSidebar»): dark primary-950 rail, «Work» and «Analysis» groups,
-the grading queue counter. Collapses like the student sidebar.
-{% endcomment %}{% grading_pending as pending %}
-<div class="nav-dark flex h-full flex-col gap-2 bg-primary-950 px-3.5 py-5">
-  <div class="flex h-11 items-center justify-between gap-2 in-data-[collapsed=true]:h-auto in-data-[collapsed=true]:flex-col">
+Teacher sidebar (mockup «TeacherSidebar»; STEP-41): dark primary-950 rail. With an ICPAI programme on the teacher's
+courses: the active group picker (kept in the session; the figures follow it), the 8 sections — number, title, the
+share of the group's students who passed (ring) or the works waiting in its review queue (counter) — each leading to
+the section's teacher page; then «Work» and «Analysis». Collapses like the student sidebar.
+{% endcomment %}{% grading_pending as pending %}{% teacher_programme as nav %}
+<div class="nav-dark flex h-full flex-col gap-2 overflow-y-auto bg-primary-950 px-3.5 py-5">
+  <div class="flex h-11 shrink-0 items-center justify-between gap-2 in-data-[collapsed=true]:h-auto in-data-[collapsed=true]:flex-col">
     <a href="{% url 'teacher:dashboard' %}" class="flex min-w-0 items-center gap-2.5 overflow-hidden text-[17px] font-extrabold whitespace-nowrap text-white">
       {% include "partials/logo.html" with size=32 inverse=True %}
       <span class="nav-label flex flex-col leading-[18px]">ChemEduTech<span class="text-[11px] font-semibold text-primary-300">{% translate "Teacher cabinet" %}</span></span>
@@ -11,20 +13,60 @@ the grading queue counter. Collapses like the student sidebar.
     {% include "partials/shell/collapse_button.html" with dark=True %}
   </div>
 
+  {% if nav and nav.groups %}
+    <form method="post" action="{% url 'teacher:set_group' %}" class="nav-hide mt-1 shrink-0" x-data>{% csrf_token %}
+      <input type="hidden" name="next" value="{{ request.get_full_path }}">
+      <label for="active-group" class="mb-1 block px-1 text-[11px] font-bold tracking-[0.06em] text-primary-300 uppercase">{% translate "Group" %}</label>
+      <span class="relative block">
+        <select id="active-group" name="group" @change="$el.form.requestSubmit()"
+                class="h-10 w-full appearance-none rounded-[12px] border border-white/15 bg-white/[.07] pr-9 pl-3 text-[13.5px] font-bold text-white focus:border-primary-300 focus:outline-none [&>option]:text-ink">
+          <option value="">{% translate "All groups" %}</option>
+          {% for g in nav.groups %}<option value="{{ g.pk }}" {% if g == nav.group %}selected{% endif %}>{{ g.name }}</option>{% endfor %}
+        </select>
+        <span class="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-primary-300">{% include "components/icons.html#chevron-down" with size=16 %}</span>
+      </span>
+      <noscript><button type="submit" class="btn btn-sm mt-1 w-full">{% translate "Show" %}</button></noscript>
+    </form>
+  {% endif %}
+
   <nav class="flex flex-col gap-1" aria-label="{% translate 'Teacher menu' %}">
-    <p class="nav-section nav-hide">{% translate "Work" %}</p>
     {% translate "Home" as l %}{% include "components/nav_item.html" with url_name="teacher:dashboard" icon="home" label=l %}
+  </nav>
+
+  {% if nav %}
+    <p class="nav-section nav-hide">{% translate "ICPAI programme" %}</p>
+    <nav class="flex flex-col gap-0.5" aria-label="{% translate 'Programme sections' %}">
+      {% for r in nav.rows %}
+        <a href="{% url 'teacher:section' r.section.number %}" class="nav-item h-10 tone-{{ r.section.number }}"{% if nav.current == r.section.number %} aria-current="page"{% endif %} title="{{ r.section.number }}. {{ r.section.title }}">
+          <span class="num grid size-6 shrink-0 place-items-center rounded-[8px] text-[12px] font-extrabold {% if r.total and r.passed == r.total %}bg-success-600 text-white{% else %}bg-(--tone) text-white{% endif %}">{{ r.section.number }}</span>
+          <span class="nav-label min-w-0 flex-1 truncate">{{ r.section.title }}</span>
+          <span class="nav-hide shrink-0">
+            {% if r.waiting %}
+              <span class="count" title="{% translate 'Waiting for the teacher' %}">{{ r.waiting }}</span>
+            {% else %}
+              {% blocktranslate with a=r.passed b=r.total asvar state %}passed {{ a }} of {{ b }}{% endblocktranslate %}
+              {% include "components/ring.html" with value=r.share size=22 stroke=3 text=" " label=state color="stroke-mint" track="stroke-white/15" %}
+            {% endif %}
+          </span>
+          <span class="nav-tip" role="tooltip">{{ r.section.number }}. {{ r.section.title }}</span>
+        </a>
+      {% endfor %}
+    </nav>
+  {% endif %}
+
+  <nav class="flex flex-col gap-1" aria-label="{% translate 'Work' %}">
+    <p class="nav-section nav-hide">{% translate "Work" %}</p>
     {% translate "Course content" as l %}{% include "components/nav_item.html" with url_name="teacher:courses" match="teacher:courses teacher:course_content teacher:course_settings teacher:module_new teacher:module teacher:topic_new teacher:topic teacher:stage_new teacher:stage teacher:item_new teacher:item teacher:quiz teacher:question_new teacher:question" icon="book" label=l %}
-    {% translate "Groups and students" as l %}{% include "components/nav_item.html" with url_name="teacher:groups" match="teacher:groups teacher:group teacher:group_new teacher:group_edit teacher:students teacher:student teacher:lab_log" icon="users" label=l %}
+    {% translate "Groups and students" as l %}{% include "components/nav_item.html" with url_name="teacher:groups" match="teacher:groups teacher:group teacher:group_new teacher:group_edit teacher:students teacher:student teacher:lab_log teacher:student_lesson teacher:student_trial teacher:student_ai" icon="users" label=l %}
     {% translate "Practice works" as l %}{% include "components/nav_item.html" with url_name="teacher:grading" match="teacher:grading teacher:grading_detail" icon="check-square" label=l badge=pending %}
-    {% translate "ICPAI works" as l %}{% include "components/nav_item.html" with url_name="teacher:practice_queue" match="teacher:practice_queue teacher:practice teacher:micro teacher:portfolio teacher:independent" icon="award" label=l %}
+    {% if not nav %}{% translate "ICPAI works" as l %}{% include "components/nav_item.html" with url_name="teacher:practice_queue" match="teacher:practice_queue teacher:practice teacher:micro teacher:portfolio teacher:independent" icon="award" label=l %}{% endif %}
     <p class="nav-section nav-hide">{% translate "Analysis" %}</p>
     {% translate "Grade register" as l %}{% include "components/nav_item.html" with url_name="teacher:gradebook" match="teacher:gradebook teacher:gradebook_course" icon="grid" label=l %}
     {% translate "Statistics" as l %}{% include "components/nav_item.html" with url_name="research:analytics" match="research:analytics research:analytics_course" icon="activity" label=l %}
     {% translate "Research data" as l %}{% include "components/nav_item.html" with url_name="research:dashboard" match="research:dashboard" icon="search" label=l %}
   </nav>
 
-  <a href="{% url 'student:profile' %}" class="mt-auto flex items-center gap-2.5 rounded-md bg-white/[.06] p-2.5 hover:bg-white/10" title="{% translate 'Profile' %}">
+  <a href="{% url 'student:profile' %}" class="mt-auto flex shrink-0 items-center gap-2.5 rounded-md bg-white/[.06] p-2.5 hover:bg-white/10" title="{% translate 'Profile' %}">
     {% include "components/avatar.html" with person=user shape="square" tone="inverse" %}
     <span class="nav-label flex min-w-0 flex-col leading-[18px]">
       <span class="truncate text-sm font-bold text-white">{{ user.get_full_name|default:user.get_username }}</span>

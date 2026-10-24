@@ -5,7 +5,6 @@ the finished trials of the microlessons (@S6 VI; STEP-36, each trial graded apar
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.utils.dateparse import parse_date
 from django.utils.translation import gettext as _
 
 from apps.courses import selectors as course_selectors
@@ -16,7 +15,7 @@ from apps.pedagogy import services as pedagogy
 from apps.pedagogy.models import ExpertReview, Lesson, Review, Trial
 from apps.pedagogy.services import independent as ind
 from apps.programme import services as programme_services
-from apps.programme.models import FEEDBACK_DIRECTIONS, PARTS, Portfolio, PortfolioFeedback, Section, SectionSchedule
+from apps.programme.models import FEEDBACK_DIRECTIONS, PARTS, Portfolio, PortfolioFeedback, Section
 from apps.programme.services import portfolio as portfolio_services
 from apps.programme.services import schedule as schedule_services
 
@@ -50,43 +49,73 @@ def _micro_trials(request):
     ).select_related("lesson__owner__student_profile__group", "version")
 
 
-@teacher_only
-def queue(request):
-    """Section 5 practices or section 6 microlesson trials: «To grade» first, then «Graded»."""
-    show = request.GET.get("show", "new")
-    what = request.GET.get("what") if request.GET.get("what") in ("micro", "portfolio", "independent") else "practice"
-    if what == "independent":
-        return _independent_queue(request, show)
-    practices, trials, portfolios = _practices(request), _micro_trials(request), _portfolios(request)
-    waiting = portfolios.filter(status=Portfolio.Status.SUBMITTED)
-    counts = {
-        "practice": practices.filter(reviews__isnull=True).count(),
-        "micro": trials.filter(reviews__isnull=True).count(),
-        "portfolio": waiting.count(),
-        "independent": _independent_waiting(request).count(),
+WHAT_KINDS = {
+    "practice": Section.Kind.RESEARCH_PRACTICE, "micro": Section.Kind.MICROLESSON,
+    "portfolio": Section.Kind.PORTFOLIO, "independent": Section.Kind.INDEPENDENT,
+}  # fmt: skip
+
+
+def _mine(qs, field, ids):
+    return qs if ids is None else qs.filter(**{f"{field}__in": ids})
+
+
+def waiting_counts(request, ids=None) -> dict:
+    """Works waiting for the teacher in sections 5–8 (of the given students)."""
+    return {
+        "practice": _mine(_practices(request), "owner", ids).filter(reviews__isnull=True).count(),
+        "micro": _mine(_micro_trials(request), "lesson__owner", ids).filter(reviews__isnull=True).count(),
+        "portfolio": _mine(_portfolios(request), "enrollment__student", ids)
+        .filter(status=Portfolio.Status.SUBMITTED)
+        .count(),
+        "independent": _mine(_independent_waiting(request), "owner", ids).count(),
     }
+
+
+def queue_rows(request, what, show, ids=None) -> dict:
+    """A section's review queue (sections 5–8): {rows, new, graded} — «To grade» first, then «Graded»."""
     if what == "portfolio":
-        rows = (
-            waiting
-            if show != "graded"
-            else portfolios.exclude(status=Portfolio.Status.SUBMITTED).filter(feedbacks__isnull=False).distinct()
-        ).order_by("-submitted_at")[:300]
-        graded = portfolios.filter(feedbacks__isnull=False).distinct().count()
-        return render(request, "teacher/practice/queue.html", {
-            "rows": rows, "show": show, "what": what, "counts": counts, "new": counts[what], "graded": graded,
-        })  # fmt: skip
-    items = trials if what == "micro" else practices
-    graded = items.filter(reviews__isnull=False).count()
+        portfolios = _mine(_portfolios(request), "enrollment__student", ids)
+        waiting = portfolios.filter(status=Portfolio.Status.SUBMITTED)
+        done = portfolios.exclude(status=Portfolio.Status.SUBMITTED).filter(feedbacks__isnull=False).distinct()
+        rows = (waiting if show != "graded" else done).order_by("-submitted_at")[:300]
+        return {"rows": rows, "new": waiting.count(), "graded": done.count()}
+    if what == "independent":
+        lessons = _mine(_independent(request), "owner", ids)
+        waiting = _mine(_independent_waiting(request), "owner", ids)
+        done = lessons.exclude(pk__in=waiting)
+        rows = (waiting if show != "graded" else done).order_by("-updated_at")[:300]
+        return {"rows": rows, "new": waiting.count(), "graded": done.count()}
     if what == "micro":
+        trials = _mine(_micro_trials(request), "lesson__owner", ids)
         rows = trials.filter(reviews__isnull=(show != "graded")).prefetch_related("reviews").order_by("-finished_at")
         rows = [{"trial": t, "number": pedagogy.trial_number(t), "review": next(iter(t.reviews.all()), None)}
                 for t in rows[:300]]  # fmt: skip
-    else:
-        rows = practices.filter(reviews__isnull=(show != "graded")).order_by("-updated_at")[:300]
-    return render(request, "teacher/practice/queue.html", {
-        "rows": rows, "show": show, "what": what, "counts": counts,
-        "new": counts[what], "graded": graded,
-    })  # fmt: skip
+        return {"rows": rows, "new": trials.filter(reviews__isnull=True).count(),
+                "graded": trials.filter(reviews__isnull=False).count()}  # fmt: skip
+    practices = _mine(_practices(request), "owner", ids)
+    rows = practices.filter(reviews__isnull=(show != "graded")).order_by("-updated_at")[:300]
+    return {"rows": rows, "new": practices.filter(reviews__isnull=True).count(),
+            "graded": practices.filter(reviews__isnull=False).count()}  # fmt: skip
+
+
+def section_url(request, what) -> str:
+    """The teacher's page of the ICPAI section a queue belongs to (STEP-41)."""
+    section = (
+        Section.objects.filter(
+            kind=WHAT_KINDS[what], programme__course__in=course_selectors.teacher_courses(request.user)
+        )
+        .order_by("programme__pk")
+        .first()
+    )
+    return reverse("teacher:section", args=[section.number]) if section else reverse("teacher:dashboard")
+
+
+@teacher_only
+def queue(request):
+    """The old «ICPAI works» page: each queue now lives on its section's page (STEP-41)."""
+    what = request.GET.get("what") if request.GET.get("what") in WHAT_KINDS else "practice"
+    url = section_url(request, what)
+    return redirect(f"{url}?show=graded" if request.GET.get("show") == "graded" else url)
 
 
 @teacher_only
@@ -103,7 +132,7 @@ def detail(request, pk):
             messages.error(request, _("Give every criterion 0, 1 or 2 points."))
         else:
             messages.success(request, _("The grade is saved."))
-            return redirect("teacher:practice_queue")
+            return redirect(section_url(request, "practice"))
         return redirect("teacher:practice", lesson.pk)
     version = lesson.versions.filter(reason="final").first()
     snapshot = version.snapshot if version else {"stages": []}
@@ -137,7 +166,7 @@ def micro(request, trial_pk):
             messages.error(request, _("Give every criterion 0, 1 or 2 points."))
             return redirect("teacher:micro", trial.pk)
         messages.success(request, _("The grade is saved."))
-        return redirect(f"{reverse('teacher:practice_queue')}?what=micro")
+        return redirect(section_url(request, "micro"))
     stages = trial.version.snapshot["stages"]
     rows = []
     for s in stages:
@@ -174,7 +203,7 @@ def portfolio(request, pk):
             return redirect("teacher:portfolio", item.pk)
         programme_services.refresh(item.enrollment.student)
         messages.success(request, _("The feedback is saved and shown to the student."))
-        return redirect(f"{reverse('teacher:practice_queue')}?what=portfolio")
+        return redirect(section_url(request, "portfolio"))
     version = portfolio_services.latest_version(item)
     return render(request, "teacher/practice/portfolio.html", {
         "portfolio": item, "version": version, "data": version.snapshot if version else {}, "parts": PARTS,
@@ -199,47 +228,6 @@ def _independent_waiting(request):
         .filter(expert_reviews__kind=ExpertReview.Kind.TRIAL, expert_reviews__confirmed_at__isnull=True)
         .distinct()
     )
-
-
-def _independent_section(request):
-    """The section 8 of the programmes on the teacher's courses."""
-    return (
-        Section.objects.filter(
-            kind=Section.Kind.INDEPENDENT, programme__course__in=course_selectors.teacher_courses(request.user)
-        )
-        .select_related("programme")
-        .first()
-    )
-
-
-def _independent_queue(request, show):
-    """Section 8: the groups' dates (hand-in and trial) and the independent lessons — those with an analysis after a
-    trial waiting for the teacher's confirmation first."""
-    section = _independent_section(request)
-    groups = list(course_selectors.teacher_groups(request.user))
-    if request.method == "POST" and section:
-        group = next((g for g in groups if str(g.pk) == request.POST.get("group")), None)
-        if group:
-            schedule_services.set_schedule(
-                section, group, request.user,
-                hand_in_on=parse_date(request.POST.get("hand_in_on") or "") or None,
-                trial_on=parse_date(request.POST.get("trial_on") or "") or None,
-            )  # fmt: skip
-            messages.success(request, _("The dates are saved; the students are notified."))
-        return redirect(f"{reverse('teacher:practice_queue')}?what=independent")
-    lessons = _independent(request)
-    waiting = _independent_waiting(request)
-    rows = (waiting if show != "graded" else lessons.exclude(pk__in=waiting)).order_by("-updated_at")[:300]
-    schedules = {s.group_id: s for s in SectionSchedule.objects.filter(section=section)} if section else {}
-    return render(request, "teacher/practice/queue.html", {
-        "rows": rows, "show": show, "what": "independent", "new": waiting.count(),
-        "graded": lessons.exclude(pk__in=waiting).count(),
-        "counts": {"practice": _practices(request).filter(reviews__isnull=True).count(),
-                   "micro": _micro_trials(request).filter(reviews__isnull=True).count(),
-                   "portfolio": _portfolios(request).filter(status=Portfolio.Status.SUBMITTED).count(),
-                   "independent": waiting.count()},
-        "section8": section, "group_rows": [{"group": g, "schedule": schedules.get(g.pk)} for g in groups],
-    })  # fmt: skip
 
 
 @teacher_only

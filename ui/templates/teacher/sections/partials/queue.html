@@ -1,0 +1,31 @@
+{% load i18n %}{% comment %}Sections 5–8 for the teacher: the review queue — «To grade» / «Graded» — and, in section 8, the group's
+hand-in and trial dates (the students are notified by them).{% endcomment %}
+{% if what == "independent" %}
+  <section class="card flex flex-col gap-3" aria-labelledby="sch-title">
+    <h2 id="sch-title" class="flex items-center gap-2 text-[16px] font-extrabold">{% include "components/icons.html#timer" with size=17 %}{% translate "Deadlines of section 8" %}</h2>
+    <p class="text-[13px] text-ink-soft">{% translate "The hand-in and trial dates of the independent lesson for each group; the students get the notifications by them." %}</p>
+    <div class="flex flex-col gap-2">
+      {% for g in schedule_rows %}
+        <form method="post" class="grid grid-cols-1 items-end gap-3 rounded-lg border border-line p-3 sm:grid-cols-[1fr_180px_180px_auto]">{% csrf_token %}
+          <input type="hidden" name="group" value="{{ g.group.pk }}">
+          <span class="text-[14px] font-bold">{{ g.group }}</span>
+          <label class="flex flex-col gap-1"><span class="text-[12px] font-bold">{% translate "Hand in the project by" %}</span><input class="input" type="date" name="hand_in_on" value="{{ g.schedule.hand_in_on|date:'Y-m-d' }}"></label>
+          <label class="flex flex-col gap-1"><span class="text-[12px] font-bold">{% translate "Trial date" %}</span><input class="input" type="date" name="trial_on" value="{{ g.schedule.trial_on|date:'Y-m-d' }}"></label>
+          <button type="submit" class="btn btn-secondary">{% include "components/icons.html#save" %}{% translate "Save" %}</button>
+        </form>
+      {% empty %}<p class="text-[13px] text-ink-faint">—</p>{% endfor %}
+    </div>
+  </section>
+{% endif %}
+<section class="flex flex-col gap-3" aria-labelledby="q-title">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <h2 id="q-title" class="text-[17px] font-extrabold">{% if what == "micro" %}{% translate "Microlesson trials" %}{% elif what == "portfolio" %}{% translate "Professional portfolios" %}{% elif what == "independent" %}{% translate "Independent authorial lessons" %}{% else %}{% translate "Digital research practices" %}{% endif %}</h2>
+    <div class="flex gap-1.5" role="tablist">
+      <a role="tab" href="?show=new" aria-selected="{% if show != 'graded' %}true{% else %}false{% endif %}" class="inline-flex h-9 items-center gap-2 rounded-full border px-4 text-sm font-bold {% if show != 'graded' %}border-primary-600 bg-primary-50 text-primary-700{% else %}border-line bg-surface text-ink-soft{% endif %}">{% translate "To grade" %}<span class="num rounded-full bg-white px-2 text-[12px]">{{ new }}</span></a>
+      <a role="tab" href="?show=graded" aria-selected="{% if show == 'graded' %}true{% else %}false{% endif %}" class="inline-flex h-9 items-center gap-2 rounded-full border px-4 text-sm font-bold {% if show == 'graded' %}border-primary-600 bg-primary-50 text-primary-700{% else %}border-line bg-surface text-ink-soft{% endif %}">{% translate "Graded" %}<span class="num rounded-full bg-white px-2 text-[12px]">{{ graded }}</span></a>
+    </div>
+  </div>
+  {% if what == "portfolio" %}<p class="text-[13px] text-ink-soft">{% translate "The teacher's professional feedback on the submitted portfolios; «Accepted» completes section 7." %}</p>
+  {% elif what == "independent" %}<p class="text-[13px] text-ink-soft">{% translate "Айгерім's opinion is an automated expert assessment; the important scientific and final decisions are confirmed by the teacher." %}</p>{% endif %}
+  {% include "teacher/practice/partials/queue_table.html" with rows=queue_rows %}
+</section>

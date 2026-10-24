@@ -84,10 +84,8 @@ def dashboard_block(request) -> dict | None:
         "sections": sections,
         "group_rows": group_rows,
         "queues": [
-            {"what": "practice", "n": practice._practices(request).filter(reviews__isnull=True).count()},
-            {"what": "micro", "n": practice._micro_trials(request).filter(reviews__isnull=True).count()},
-            {"what": "portfolio", "n": practice._portfolios(request).filter(status=Portfolio.Status.SUBMITTED).count()},
-            {"what": "independent", "n": practice._independent_waiting(request).count()},
+            {"what": what, "n": n, "url": practice.section_url(request, what)}
+            for what, n in practice.waiting_counts(request).items()
         ],
         "deadlines": list(deadlines),
         "today": today,

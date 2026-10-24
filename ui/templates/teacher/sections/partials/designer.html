@@ -1,0 +1,16 @@
+{% load i18n %}{% comment %}Section 4 for the teacher: the three template lessons and how many students finished each.{% endcomment %}
+<section class="flex flex-col gap-3" aria-labelledby="ds-title">
+  <h2 id="ds-title" class="text-[17px] font-extrabold">{% translate "Authorial lesson templates" %}</h2>
+  <ul class="grid grid-cols-1 gap-3 md:grid-cols-3">
+    {% for t in templates %}
+      <li class="card flex flex-col gap-2 overflow-hidden p-0">
+        <span class="tpl-{{ t.template.code }} flex h-16 items-end px-4 pb-2 text-[12px] font-extrabold text-white">№{{ t.template.number }}</span>
+        <div class="flex flex-col gap-1 px-4 pb-4">
+          <p class="text-[14px] leading-5 font-bold">{{ t.template.name }}</p>
+          <p class="line-clamp-2 text-caption text-ink-soft">{{ t.template.topic }}</p>
+          <p class="mt-1 text-[13px]"><span class="num font-extrabold text-success-700">{{ t.final }}</span> <span class="text-ink-soft">/ {{ rows|length }} {% translate "final versions" %}</span></p>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+</section>

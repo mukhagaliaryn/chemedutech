@@ -1,0 +1,9 @@
+{% load i18n %}{% comment %}Section 3 for the teacher: the video set in the admin (or «being prepared») and the share watched.{% endcomment %}
+<section class="card flex flex-wrap items-center gap-5" aria-labelledby="vd-title">
+  <span class="tile tile-lg stage-video">{% include "components/icons.html#video" with size=22 %}</span>
+  <div class="min-w-0 flex-[1_1_320px]">
+    <h2 id="vd-title" class="text-[17px] font-bold">{% if video.url %}{% translate "The section's video" %}{% else %}{% translate "The video is being prepared" %}{% endif %}</h2>
+    <p class="mt-1 text-sm text-ink-soft">{% if video.url %}{% translate "A student passes the section having watched 80% of the video; skipped parts do not count." %}{% else %}{% translate "Until the video is added in the admin the section counts as passed." %}{% endif %}</p>
+  </div>
+  {% if video.url %}<a class="btn btn-secondary" href="{{ video.url }}" target="_blank" rel="noopener">{% include "components/icons.html#play" %}{% translate "Watch" %}</a>{% endif %}
+</section>

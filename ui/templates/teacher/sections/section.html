@@ -1,0 +1,105 @@
+{% extends "layouts/teacher.html" %}
+{% load i18n %}
+{% comment %}
+An ICPAI section for the teacher (STEP-41), opened from the sidebar: the header (number, title, the guide's purpose,
+the share of the active group's students who passed), the figures, the section's own block (teacher/sections/
+partials/<kind>.html: the course, the diagnostics, the video, the template lessons or the review queue with the
+section 8 dates) and every student's progress in the section. Context: apps/teacher/sections.py section.
+{% endcomment %}
+{% block title %}{{ section.number }}. {{ section.title }} · ChemEduTech{% endblock %}
+{% block crumb %}{{ programme.title }} · {% blocktranslate with n=section.number %}Section {{ n }}{% endblocktranslate %}{% endblock %}
+{% block page_title %}{{ section.title }}{% endblock %}
+{% block main_class %}max-w-[1400px]{% endblock %}
+{% block content %}
+<section aria-labelledby="sec-title" class="tone-{{ section.number }} card relative flex flex-wrap items-center gap-5 overflow-hidden">
+  <span aria-hidden="true" class="pointer-events-none absolute -top-16 -right-10 size-56 rounded-full bg-(--tone) opacity-[.07]"></span>
+  <span class="num relative grid size-[60px] shrink-0 place-items-center rounded-[20px] bg-(--tone) text-[24px] font-extrabold text-white shadow-[0_10px_24px_-12px_var(--tone)]">{{ section.number }}</span>
+  <div class="relative min-w-0 flex-[1_1_360px]">
+    <p class="flex flex-wrap items-center gap-2 text-[13px] font-semibold text-ink-faint">
+      {% blocktranslate with n=section.number %}Section {{ n }}{% endblocktranslate %} ·
+      <span class="inline-flex items-center gap-1 rounded-full bg-canvas px-2 py-0.5 text-ink-soft">{% include "components/icons.html#users" with size=13 %}{% if group %}{{ group.name }}{% else %}{% translate "All groups" %}{% endif %}</span>
+    </p>
+    <h1 id="sec-title" class="text-[clamp(22px,2.4vw,28px)] leading-[1.25] font-extrabold tracking-[-0.02em]">{{ section.title }}</h1>
+    <details class="group mt-1.5 max-w-[860px]">
+      <summary class="link inline-flex cursor-pointer list-none items-center gap-1 text-[13px] font-bold">{% translate "What the section does" %}<span class="transition-transform group-open:rotate-180">{% include "components/icons.html#chevron-down" with size=14 %}</span></summary>
+      <p class="mt-1.5 text-[14px] leading-[22px] whitespace-pre-line text-ink-soft">{{ section.purpose }}</p>
+    </details>
+  </div>
+  {% blocktranslate with a=figures.passed b=figures.total asvar state %}passed {{ a }} of {{ b }}{% endblocktranslate %}
+  <span class="relative flex flex-col items-center gap-1">
+    {% include "components/ring.html" with value=figures.share size=76 stroke=8 label=state color="stroke-success-600" track="stroke-success-50" %}
+    <span class="text-caption font-semibold text-ink-soft">{% translate "passed" %}</span>
+  </span>
+</section>
+
+<section aria-label="{% translate 'Key figures' %}" class="grid grid-cols-2 gap-3 lg:grid-cols-4">
+  <div class="card flex flex-col gap-0.5 py-4"><span class="text-caption font-semibold text-ink-soft">{% translate "Passed" %}</span><span class="num text-[26px] leading-8 font-extrabold text-success-700">{{ figures.passed }}<span class="text-[15px] text-ink-faint"> / {{ figures.total }}</span></span></div>
+  <div class="card flex flex-col gap-0.5 py-4"><span class="text-caption font-semibold text-ink-soft">{% translate "Mean progress" %}</span><span class="num text-[26px] leading-8 font-extrabold">{{ figures.mean|floatformat:0 }}%</span></div>
+  <div class="card flex flex-col gap-0.5 py-4"><span class="text-caption font-semibold text-ink-soft">{% translate "Section open" %}</span><span class="num text-[26px] leading-8 font-extrabold">{{ figures.opened }}<span class="text-[15px] text-ink-faint"> / {{ figures.total }}</span></span></div>
+  {% if waiting is not None %}
+    <div class="card flex flex-col gap-0.5 py-4 {% if waiting %}border-warning-500/50 bg-warning-50{% endif %}"><span class="text-caption font-semibold {% if waiting %}text-warning-700{% else %}text-ink-soft{% endif %}">{% translate "Waiting for the teacher" %}</span><span class="num text-[26px] leading-8 font-extrabold">{{ waiting }}</span></div>
+  {% else %}
+    <div class="card flex flex-col gap-0.5 py-4"><span class="text-caption font-semibold text-ink-soft">{% translate "Pass threshold" %}</span><span class="num text-[26px] leading-8 font-extrabold">{{ section.pass_percent }}%</span></div>
+  {% endif %}
+</section>
+
+{% if section.kind == "course" %}{% include "teacher/sections/partials/course.html" %}
+{% elif section.kind == "diagnostic" %}{% include "teacher/sections/partials/diagnostic.html" %}
+{% elif section.kind == "video" %}{% include "teacher/sections/partials/video.html" %}
+{% elif section.kind == "designer" %}{% include "teacher/sections/partials/designer.html" %}
+{% else %}{% include "teacher/sections/partials/queue.html" %}{% endif %}
+
+<section aria-labelledby="st-title" class="flex flex-col gap-3">
+  <h2 id="st-title" class="text-[17px] font-extrabold">{% translate "Students in this section" %} <span class="num font-medium text-ink-faint">· {{ rows|length }}</span></h2>
+  {% if rows %}
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr>
+          <th scope="col">{% translate "Student" %}</th>
+          <th scope="col">{% translate "Status" %}</th>
+          <th scope="col" class="min-w-[160px]">{% translate "Progress" %}</th>
+          {% if section.kind == "diagnostic" %}{% for p in phases %}<th scope="col" class="text-center">{% translate "D" %}-{{ p }}</th>{% endfor %}
+          {% elif section.kind == "video" %}<th scope="col" class="text-right">{% translate "Watched" %}</th>
+          {% elif section.kind == "designer" %}<th scope="col">{% translate "Template lessons" %}</th>
+          {% elif section.kind == "course" %}<th scope="col">{% translate "Course" %}</th>
+          {% elif section.kind == "portfolio" %}<th scope="col">{% translate "Portfolio" %}</th>
+          {% else %}<th scope="col">{% translate "Works" %}</th><th scope="col" class="text-right">{% translate "Best grade" %}</th>{% endif %}
+          <th></th>
+        </tr></thead>
+        <tbody>
+          {% for r in rows %}{% with p=r.progress %}
+            <tr>
+              <td><span class="flex items-center gap-2.5">{% include "components/avatar.html" with person=r.student size="sm" %}<span class="min-w-0"><span class="block truncate font-semibold">{{ r.student.full_name|default:r.student.username }}</span><span class="text-caption text-ink-faint">{{ r.student.student_profile.group|default:"" }}</span></span></span></td>
+              <td>
+                {% if not r.joined %}<span class="badge badge-neutral text-[11px]">{% translate "Not in the programme" %}</span>
+                {% elif p and p.status == "passed" %}<span class="badge badge-success text-[11px] font-bold">✓ {{ p.get_status_display }}</span>
+                {% elif p and p.status != "locked" %}<span class="badge badge-info text-[11px] font-bold">{{ p.get_status_display }}</span>
+                {% else %}<span class="inline-flex items-center gap-1 text-caption text-ink-faint">{% include "components/icons.html#lock" with size=12 %}{% translate "Locked" %}</span>{% endif %}
+              </td>
+              <td>{% if p and p.status != "locked" %}<span class="flex items-center gap-2"><span class="progress progress-sm flex-1" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ p.percent|floatformat:0 }}" aria-label="{% translate 'Progress' %}"><span style="width: {{ p.percent|floatformat:0 }}%"></span></span><span class="num w-10 text-right text-caption font-bold">{{ p.percent|floatformat:0 }}%</span></span>{% else %}<span class="text-ink-faint">—</span>{% endif %}</td>
+              {% if section.kind == "diagnostic" %}
+                {% for d in r.phases %}<td class="text-center">{% if d.summary %}<span class="badge font-bold {% if d.summary.level == 'high' %}badge-success{% elif d.summary.level == 'medium' %}badge-info{% else %}badge-warning{% endif %}">{{ d.summary.earned|floatformat:0 }}/{{ d.summary.maximum|floatformat:0 }}</span>{% else %}<span class="text-ink-faint">—</span>{% endif %}</td>{% endfor %}
+              {% elif section.kind == "video" %}
+                <td class="num text-right font-bold">{% if r.watched is not None %}{{ r.watched }}%{% else %}<span class="font-normal text-ink-faint">—</span>{% endif %}</td>
+              {% elif section.kind == "designer" %}
+                <td><span class="flex flex-wrap gap-1">{% for x in r.lessons %}{% if x.lesson %}<a class="tpl-{{ x.template.code }} inline-flex h-6 items-center gap-1 rounded-full px-2 text-[11.5px] font-bold text-white {% if x.lesson.status != 'final' %}opacity-60{% endif %}" href="{% url 'teacher:student_lesson' r.student.pk x.lesson.pk %}" title="{{ x.template.name }} · {{ x.lesson.get_status_display }}">№{{ x.template.number }}{% if x.lesson.status == "final" %} ✓{% endif %}</a>{% else %}<span class="inline-flex h-6 items-center rounded-full border border-dashed border-line px-2 text-[11.5px] font-bold text-ink-faint" title="{{ x.template.name }}">№{{ x.template.number }}</span>{% endif %}{% endfor %}</span></td>
+              {% elif section.kind == "course" %}
+                <td>{% if r.enrollment %}<span class="badge badge-neutral text-[11px]">{{ r.enrollment.get_status_display }}</span>{% else %}<span class="text-ink-faint">—</span>{% endif %}</td>
+              {% elif section.kind == "portfolio" %}
+                <td>{% if r.portfolio %}<span class="badge {% if r.portfolio.status == 'accepted' %}badge-success{% elif r.portfolio.status == 'submitted' %}badge-info{% else %}badge-neutral{% endif %} text-[11px] font-bold">{{ r.portfolio.get_status_display }}</span>{% else %}<span class="text-ink-faint">—</span>{% endif %}</td>
+              {% else %}
+                <td class="text-[13px]">{% if r.work %}{% if section.kind == "independent" and r.work.latest %}{% blocktranslate with n=r.work.latest.cycle %}Cycle {{ n }}{% endblocktranslate %} · {{ r.work.latest.get_status_display }}{% else %}<span class="num">{{ r.work.final }}/{{ r.work.lessons }}</span> {% translate "finished" %}{% endif %}{% else %}<span class="text-ink-faint">—</span>{% endif %}</td>
+                <td class="num text-right font-extrabold">{% if r.work.best is not None %}{{ r.work.best }}/10{% else %}<span class="font-normal text-ink-faint">—</span>{% endif %}</td>
+              {% endif %}
+              <td class="text-right"><a class="btn btn-secondary btn-sm" href="{% url 'teacher:student' r.student.pk %}?tab=icpai">{% translate "Open" %}</a></td>
+            </tr>
+          {% endwith %}{% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    {% translate "No students yet" as l_title %}{% translate "Students appear here when their group is attached to your course." as l_text %}
+    {% include "components/empty_state.html" with title=l_title text=l_text icon="users" %}
+  {% endif %}
+</section>
+{% endblock %}
