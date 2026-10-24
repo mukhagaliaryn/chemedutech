@@ -1,0 +1,75 @@
+{% load i18n %}{% comment %}
+The assembled portfolio in its ten parts (guide @S7 VI): the student, the ICPAI results (I/II/III), the register of the
+course works, the authorial lessons, the research practice, the microlesson and its trial protocols, the teacher's
+feedback, the reflection, the development map, the final portfolio. data — PortfolioVersion.snapshot; parts; version.
+{% endcomment %}
+<article class="overflow-hidden rounded-xl border border-line bg-surface shadow-lift print:border-0 print:shadow-none" aria-labelledby="sheet-title">
+  <header class="relative overflow-hidden bg-[linear-gradient(120deg,var(--color-primary-900),var(--color-primary-600))] px-[clamp(20px,3vw,32px)] py-6 text-white">
+    <p class="text-[12px] font-extrabold tracking-wide text-white/75 uppercase">ICPAI PROFESSIONAL PORTFOLIO</p>
+    <h2 id="sheet-title" class="mt-1 text-[clamp(20px,2.4vw,26px)] font-extrabold">{{ data.student.name }}</h2>
+    <p class="mt-1 text-[13.5px] text-white/80">{% blocktranslate with n=version.number t=version.created_at|date:"d.m.Y" %}Version {{ n }} · {{ t }}{% endblocktranslate %}</p>
+  </header>
+  <div class="flex flex-col gap-5 p-[clamp(16px,2.6vw,28px)]">
+    {# 1 #}
+    <section><h3 class="mb-2 text-[15px] font-extrabold text-primary-700">1. {{ parts.0 }}</h3>
+      <dl class="grid gap-2 text-[13.5px] sm:grid-cols-2 lg:grid-cols-4">
+        <div class="rounded-lg bg-canvas px-3 py-2"><dt class="text-[11px] font-bold text-ink-faint uppercase">{% translate "Student's full name" %}</dt><dd class="font-bold">{{ data.student.name }}</dd></div>
+        <div class="rounded-lg bg-canvas px-3 py-2"><dt class="text-[11px] font-bold text-ink-faint uppercase">{% translate "Education programme" %}</dt><dd class="font-bold">{{ data.student.programme|default:"—" }}</dd></div>
+        <div class="rounded-lg bg-canvas px-3 py-2"><dt class="text-[11px] font-bold text-ink-faint uppercase">{% translate "Study group" %}</dt><dd class="font-bold">{{ data.student.group|default:"—" }}</dd></div>
+        <div class="rounded-lg bg-canvas px-3 py-2"><dt class="text-[11px] font-bold text-ink-faint uppercase">{% translate "Study year" %}</dt><dd class="font-bold">{{ data.student.study_year|default:"—" }}</dd></div>
+      </dl>
+      <p class="mt-2 text-[13px] text-ink-soft"><span class="font-bold text-ink">{% translate "Aim of the portfolio" %}:</span> {% translate "To gather the results of mastering chemistry subject knowledge, digital technologies, pedagogical design methods and professional reflection." %}</p>
+    </section>
+    {# 2 #}
+    <section><h3 class="mb-2 text-[15px] font-extrabold text-primary-700">2. {{ parts.1 }}</h3>
+      <div class="table-wrap"><table class="table text-[13px]"><thead><tr><th scope="col">{% translate "Component" %}</th><th scope="col" class="text-right">{% translate "Stage I" %}</th><th scope="col" class="text-right">{% translate "Stage II" %}</th><th scope="col" class="text-right">{% translate "Stage III" %}</th></tr></thead>
+        <tbody class="num">{% for r in data.icpai %}<tr><td class="font-semibold">{{ r.label }}</td>{% for p in "I II III"|split %}{% with v=r.phases|get:p %}<td class="text-right font-bold">{% if v is not None and v != p %}{{ v|floatformat:1 }}%{% else %}—{% endif %}</td>{% endwith %}{% endfor %}</tr>{% endfor %}</tbody></table></div>
+      <p class="mt-1 text-[12px] text-ink-faint">{% translate "The grades of sections 5 and 6 are not combined with these percents and are kept separately." %}</p>
+    </section>
+    {# 3 #}
+    <section><h3 class="mb-2 text-[15px] font-extrabold text-primary-700">3. {{ parts.2 }}</h3>
+      <p class="text-[13px]">{{ data.course.title }}{% if data.course.score is not None %} · <span class="num font-bold">{{ data.course.score|floatformat:0 }}%</span>{% endif %}{% if data.course.passed %} · <span class="font-bold text-success-700">{% translate "Passed" %}</span>{% endif %}</p>
+      <ul class="mt-1 grid gap-1 text-[12.5px] sm:grid-cols-2">{% for t in data.course.topics %}<li class="flex justify-between gap-2 rounded-[8px] bg-canvas px-3 py-1.5"><span>{{ t.title }}</span><span class="num text-ink-soft">{{ t.status }}{% if t.score is not None %} · {{ t.score|floatformat:0 }}%{% endif %}</span></li>{% empty %}<li class="text-ink-faint">—</li>{% endfor %}</ul>
+    </section>
+    {# 4 #}
+    <section><h3 class="mb-2 text-[15px] font-extrabold text-primary-700">4. {{ parts.3 }}</h3>
+      <ul class="grid gap-2 sm:grid-cols-3">{% for x in data.lessons %}<li class="rounded-lg border border-line px-3 py-2 text-[12.5px]"><p class="font-bold">{{ x.title }}</p><p class="text-ink-soft">{{ x.status }} · {% blocktranslate with n=x.redesigned %}{{ n }} stages redesigned{% endblocktranslate %}</p></li>{% empty %}<li class="text-ink-faint">—</li>{% endfor %}</ul>
+    </section>
+    {# 5 #}
+    <section><h3 class="mb-2 text-[15px] font-extrabold text-primary-700">5. {{ parts.4 }}</h3>
+      <ul class="grid gap-2 sm:grid-cols-3">{% for x in data.practices %}<li class="rounded-lg border border-line px-3 py-2 text-[12.5px]"><p class="font-bold">{{ x.title }}</p><p class="text-ink-soft">{{ x.status }}{% if x.grade is not None %} · <span class="num font-bold text-ink">{{ x.grade }}/10</span>{% endif %}</p>{% if x.comment %}<p class="mt-1 text-ink-soft italic">«{{ x.comment }}»</p>{% endif %}</li>{% empty %}<li class="text-ink-faint">—</li>{% endfor %}</ul>
+    </section>
+    {# 6 #}
+    <section><h3 class="mb-2 text-[15px] font-extrabold text-primary-700">6. {{ parts.5 }}</h3>
+      {% if data.micro %}
+        <p class="text-[13px]"><span class="font-bold">{{ data.micro.topic }}</span> · {{ data.micro.status }}</p>
+        <ul class="mt-1 flex flex-col gap-1 text-[12.5px]">{% for t in data.micro.trials %}<li class="flex flex-wrap justify-between gap-2 rounded-[8px] bg-canvas px-3 py-1.5"><span>{% blocktranslate with n=t.number %}Trial {{ n }}{% endblocktranslate %} · {{ t.level }} · {% blocktranslate with g=t.grade %}Grade {{ g }}{% endblocktranslate %} · {% blocktranslate count n=t.messages %}{{ n }} turn{% plural %}{{ n }} turns{% endblocktranslate %}</span><span class="num font-bold">{% if t.review is not None %}{{ t.review }}/10{% else %}—{% endif %}</span></li>{% endfor %}</ul>
+      {% else %}<p class="text-[13px] text-ink-faint">—</p>{% endif %}
+      <p class="mt-1 text-[12px] text-ink-faint">{% blocktranslate with n=data.trials %}Trials with the AI student in all: {{ n }}{% endblocktranslate %}</p>
+    </section>
+    {# 7 #}
+    <section><h3 class="mb-2 text-[15px] font-extrabold text-primary-700">7. {{ parts.6 }}</h3>
+      {% for f in data.feedback %}
+        <div class="mb-2 rounded-lg border border-line px-3 py-2 text-[12.5px]"><p class="font-bold">{{ f.teacher }} · {{ f.date }} · {{ f.status }}</p>
+          {% for d in feedback_directions %}{% with t=f.directions|get:d.0 %}{% if t and t != d.0 %}<p><span class="font-semibold">{{ d.1 }}:</span> {{ t }}</p>{% endif %}{% endwith %}{% endfor %}
+          {% if f.strengths %}<p><span class="font-semibold">{% translate "Strengths of the work" %}:</span> {{ f.strengths }}</p>{% endif %}
+          {% if f.improvements %}<p><span class="font-semibold">{% translate "Parts that need improving" %}:</span> {{ f.improvements }}</p>{% endif %}
+          {% if f.recommendations %}<p><span class="font-semibold">{% translate "Professional recommendations" %}:</span> {{ f.recommendations }}</p>{% endif %}
+        </div>
+      {% empty %}<p class="text-[13px] text-ink-faint">{% translate "The teacher gives feedback after the portfolio is submitted." %}</p>{% endfor %}
+    </section>
+    {# 8 #}
+    <section><h3 class="mb-2 text-[15px] font-extrabold text-primary-700">8. {{ parts.7 }}</h3>
+      <ol class="flex flex-col gap-2 text-[13px]">{% for r in data.reflection %}<li><p class="font-bold">{{ forloop.counter }}. {{ r.question }}</p><p class="mt-0.5 whitespace-pre-line text-ink-soft">{{ r.answer|default:"—" }}</p></li>{% endfor %}</ol>
+    </section>
+    {# 9 #}
+    <section><h3 class="mb-2 text-[15px] font-extrabold text-primary-700">9. {{ parts.8 }}</h3>
+      <div class="table-wrap"><table class="table text-[12.5px]"><thead><tr><th scope="col">{% translate "Direction to develop" %}</th><th scope="col">{% translate "Planned action" %}</th><th scope="col">{% translate "Expected result" %}</th><th scope="col">{% translate "Result" %}</th></tr></thead>
+        <tbody>{% for r in data.plan %}<tr><td class="font-bold">{{ r.label }}</td><td>{{ r.action|default:"—" }}</td><td>{{ r.expected|default:"—" }}</td><td>{% if r.done %}✓ {% endif %}{{ r.result|default:"—" }}</td></tr>{% endfor %}</tbody></table></div>
+    </section>
+    {# 10 #}
+    <section class="rounded-lg bg-success-50 px-4 py-3"><h3 class="text-[15px] font-extrabold text-success-700">10. {{ parts.9 }}</h3>
+      <p class="mt-1 text-[13px]">{% translate "The main pedagogical product of the module — the digital professional portfolio of the future chemistry teacher formed on the basis of the authorial ICPAI model, and the personal development trajectory." %}</p>
+    </section>
+  </div>
+</article>

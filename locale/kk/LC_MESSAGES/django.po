@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ChemEduTech\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 22:05+0500\n"
+"POT-Creation-Date: 2026-10-24 22:28+0500\n"
 "PO-Revision-Date: 2026-10-16 21:00+0500\n"
 "Last-Translator: ChemEduTech\n"
 "Language-Team: ChemEduTech\n"
@@ -163,8 +163,9 @@ msgstr "Оқытушы"
 #: ui/templates/research/dashboard.html:85
 #: ui/templates/teacher/gradebook.html:35 ui/templates/teacher/group.html:118
 #: ui/templates/teacher/group.html:187
-#: ui/templates/teacher/practice/queue.html:32
-#: ui/templates/teacher/practice/queue.html:46
+#: ui/templates/teacher/practice/queue.html:33
+#: ui/templates/teacher/practice/queue.html:45
+#: ui/templates/teacher/practice/queue.html:59
 #: ui/templates/teacher/students.html:29 ui/templates/ui/styleguide.html:140
 #: ui/views.py:21
 msgid "Student"
@@ -331,7 +332,8 @@ msgstr "қате"
 
 #: apps/ai/models/conversation.py:57 apps/pedagogy/models/lesson.py:162
 #: apps/programme/models/diagnostics.py:73
-#: apps/programme/models/progress.py:116 apps/progress/models/progress.py:172
+#: apps/programme/models/portfolio.py:222 apps/programme/models/progress.py:116
+#: apps/progress/models/progress.py:172
 msgid "at"
 msgstr "уақыты"
 
@@ -521,7 +523,9 @@ msgstr "III диагностика"
 #: apps/certificates/models/certificate.py:43 apps/courses/models/course.py:38
 #: apps/courses/models/enrollment.py:52 apps/feedback/models/comment.py:19
 #: apps/labs/models/attempt.py:23 apps/practice/models/submission.py:21
-#: apps/programme/models/diagnostics.py:61 apps/programme/models/progress.py:56
+#: apps/programme/models/diagnostics.py:61
+#: apps/programme/models/portfolio.py:70 apps/programme/models/portfolio.py:157
+#: apps/programme/models/portfolio.py:178 apps/programme/models/progress.py:56
 #: apps/programme/models/progress.py:100 apps/programme/models/video.py:41
 #: apps/progress/models/activity.py:14 apps/progress/models/progress.py:22
 #: apps/progress/models/progress.py:76 apps/progress/models/progress.py:98
@@ -638,7 +642,7 @@ msgstr "ұпай"
 msgid "answer"
 msgstr "жауап"
 
-#: apps/assessments/models/attempt.py:85
+#: apps/assessments/models/attempt.py:85 apps/programme/models/portfolio.py:159
 msgid "answers"
 msgstr "жауаптар"
 
@@ -1008,7 +1012,7 @@ msgstr "сертификат үлгілері"
 #: apps/courses/models/structure.py:35 apps/pedagogy/models/lesson.py:95
 #: apps/pedagogy/models/lesson.py:128 apps/pedagogy/models/template.py:12
 #: apps/pedagogy/models/template.py:42 apps/pedagogy/models/trial.py:98
-#: apps/programme/models/programme.py:49
+#: apps/programme/models/portfolio.py:96 apps/programme/models/programme.py:49
 msgid "number"
 msgstr "нөмірі"
 
@@ -1056,7 +1060,8 @@ msgid "Core"
 msgstr "Негізгі"
 
 #: apps/core/models.py:9 apps/pedagogy/models/lesson.py:103
-#: apps/pedagogy/models/review.py:47 apps/programme/models/video.py:47
+#: apps/pedagogy/models/review.py:47 apps/programme/models/portfolio.py:185
+#: apps/programme/models/video.py:47
 msgid "updated at"
 msgstr "өзгертілген уақыты"
 
@@ -1276,8 +1281,9 @@ msgstr "мұқаба"
 
 #: apps/courses/models/course.py:36 apps/courses/models/enrollment.py:46
 #: apps/labs/models/attempt.py:39 apps/pedagogy/models/lesson.py:61
-#: apps/practice/models/submission.py:28 apps/programme/models/progress.py:61
-#: apps/progress/models/progress.py:27 apps/progress/models/progress.py:81
+#: apps/practice/models/submission.py:28 apps/programme/models/portfolio.py:74
+#: apps/programme/models/progress.py:61 apps/progress/models/progress.py:27
+#: apps/progress/models/progress.py:81
 msgid "status"
 msgstr "күйі"
 
@@ -1355,6 +1361,7 @@ msgstr "Ассистент"
 
 #: apps/courses/models/course.py:108 apps/courses/models/course.py:135
 #: apps/pedagogy/models/review.py:41 apps/practice/models/submission.py:137
+#: apps/programme/models/portfolio.py:129
 #: ui/templates/feedback/partials/comment.html:7
 msgid "teacher"
 msgstr "мұғалім"
@@ -4420,6 +4427,13 @@ msgstr ""
 "символдық) қалай байланыстыруға болады?"
 
 #: apps/labs/models/attempt.py:10 apps/programme/models/progress.py:52
+#: apps/programme/portfolio_selectors.py:66
+#: apps/programme/portfolio_selectors.py:83
+#: apps/programme/portfolio_selectors.py:97
+#: apps/programme/portfolio_selectors.py:109
+#: apps/programme/portfolio_selectors.py:122
+#: apps/programme/portfolio_selectors.py:135
+#: apps/programme/portfolio_selectors.py:149
 #: apps/progress/models/progress.py:17 apps/progress/models/progress.py:72
 #: apps/student/cabinet.py:94 apps/student/learning.py:97
 #: ui/templates/components/stage_stepper.html:24
@@ -4430,7 +4444,7 @@ msgid "In progress"
 msgstr "Орындалуда"
 
 #: apps/labs/models/attempt.py:11 ui/templates/assessments/result.html:86
-#: ui/templates/teacher/practice/queue.html:32
+#: ui/templates/teacher/practice/queue.html:45
 #: ui/templates/teacher/student.html:140
 msgid "Finished"
 msgstr "Аяқталды"
@@ -4663,7 +4677,9 @@ msgstr "Журналдың барлық өрісін толтыру керек."
 msgid "The journal opens at the «%(step)s» step."
 msgstr "Журнал «%(step)s» қадамында ашылады."
 
-#: apps/labs/views.py:48
+#: apps/labs/views.py:48 apps/programme/portfolio_selectors.py:109
+#: apps/programme/portfolio_selectors.py:135
+#: ui/templates/student/portfolio/plan.html:45
 msgid "Done"
 msgstr "Орындалды"
 
@@ -5216,7 +5232,8 @@ msgstr "мысалы, 6B01501"
 msgid "specialties"
 msgstr "білім беру бағдарламалары"
 
-#: apps/pedagogy/apps.py:8
+#: apps/pedagogy/apps.py:8 apps/programme/models/portfolio.py:22
+#: apps/programme/models/portfolio.py:31
 msgid "Pedagogical design"
 msgstr "Педагогикалық жобалау"
 
@@ -5279,6 +5296,11 @@ msgstr "Проблемалық сұрақ"
 
 #: apps/pedagogy/frames.py:69 ui/templates/student/micro/editor.html:53
 #: ui/templates/student/micro/report_pdf.html:25
+#: ui/templates/student/portfolio/partials/dashboard.html:135
+#: ui/templates/student/portfolio/partials/sheet.html:67
+#: ui/templates/student/portfolio/pdf.html:80
+#: ui/templates/student/portfolio/plan.html:22
+#: ui/templates/student/portfolio/plan.html:28
 msgid "Expected result"
 msgstr "Күтілетін нәтиже"
 
@@ -5468,7 +5490,8 @@ msgstr "Сабақтың қорытындысы"
 msgid ""
 "To draw the student's attention to the lesson topic and to find out their "
 "prior knowledge."
-msgstr "Оқушының назарын сабақ тақырыбына аудару және бастапқы білімін анықтау."
+msgstr ""
+"Оқушының назарын сабақ тақырыбына аудару және бастапқы білімін анықтау."
 
 #: apps/pedagogy/frames.py:138
 msgid "The teacher's opening words"
@@ -5511,7 +5534,8 @@ msgstr "Білімді қолдану"
 #: apps/pedagogy/frames.py:153
 msgid ""
 "To check how the student applies the explained knowledge while doing a task."
-msgstr "Оқушының түсіндірілген білімді тапсырма орындау барысында қолдануын тексеру."
+msgstr ""
+"Оқушының түсіндірілген білімді тапсырма орындау барысында қолдануын тексеру."
 
 #: apps/pedagogy/frames.py:154
 msgid "Authorial task"
@@ -5617,6 +5641,7 @@ msgid "Template copy"
 msgstr "Үлгінің көшірмесі"
 
 #: apps/pedagogy/models/lesson.py:16 apps/programme/models/programme.py:41
+#: apps/programme/portfolio_selectors.py:119
 #: ui/templates/student/practice/results.html:11
 #: ui/templates/student/practice/sheet.html:11
 #: ui/templates/student/practice/stage.html:11
@@ -5624,6 +5649,7 @@ msgid "Digital research practice"
 msgstr "Цифрлық-зерттеушілік практика"
 
 #: apps/pedagogy/models/lesson.py:17 apps/programme/models/programme.py:42
+#: apps/programme/portfolio_selectors.py:147
 #: ui/templates/student/icpai_results.html:120
 #: ui/templates/student/micro/dialog.html:9
 #: ui/templates/student/micro/dialog.html:71
@@ -5631,11 +5657,12 @@ msgstr "Цифрлық-зерттеушілік практика"
 #: ui/templates/student/micro/protocol.html:14
 #: ui/templates/student/micro/trial_start.html:7
 #: ui/templates/student/micro/trial_start.html:12
-#: ui/templates/teacher/practice/queue.html:32
+#: ui/templates/teacher/practice/queue.html:45
 msgid "Microlesson"
 msgstr "Микросабақ"
 
 #: apps/pedagogy/models/lesson.py:21 apps/pedagogy/models/lesson.py:123
+#: apps/programme/portfolio_selectors.py:149
 #: ui/templates/student/micro/partials/entry.html:28
 msgid "Assembled"
 msgstr "Жинақталды"
@@ -5762,7 +5789,7 @@ msgstr "сабақ кезеңдері"
 msgid "reason"
 msgstr "себебі"
 
-#: apps/pedagogy/models/lesson.py:130
+#: apps/pedagogy/models/lesson.py:130 apps/programme/models/portfolio.py:97
 msgid "snapshot"
 msgstr "көшірме"
 
@@ -5806,12 +5833,12 @@ msgstr "Сабақ жинақталды"
 msgid "Final version assembled"
 msgstr "Соңғы нұсқа жинақталды"
 
-#: apps/pedagogy/models/lesson.py:160 apps/programme/models/progress.py:105
-#: apps/progress/models/progress.py:161
+#: apps/pedagogy/models/lesson.py:160 apps/programme/models/portfolio.py:212
+#: apps/programme/models/progress.py:105 apps/progress/models/progress.py:161
 msgid "action"
 msgstr "әрекет"
 
-#: apps/pedagogy/models/lesson.py:161
+#: apps/pedagogy/models/lesson.py:161 apps/programme/models/portfolio.py:213
 msgid "data"
 msgstr "деректер"
 
@@ -5961,7 +5988,7 @@ msgstr "Орта деңгей"
 msgid "Low level"
 msgstr "Төмен деңгей"
 
-#: apps/pedagogy/models/trial.py:18
+#: apps/pedagogy/models/trial.py:18 apps/programme/models/portfolio.py:123
 msgid "version"
 msgstr "нұсқа"
 
@@ -6299,6 +6326,7 @@ msgid "%(n)s of %(total)s steps are in the right place."
 msgstr "%(total)s қадамның %(n)s-ы өз орнында."
 
 #: apps/practice/models/submission.py:14
+#: ui/templates/teacher/practice/queue.html:33
 msgid "Submitted"
 msgstr "Жіберілді"
 
@@ -6307,7 +6335,7 @@ msgid "Being graded"
 msgstr "Бағалануда"
 
 #: apps/practice/models/submission.py:16
-#: ui/templates/teacher/practice/queue.html:25
+#: ui/templates/teacher/practice/queue.html:26
 msgid "Graded"
 msgstr "Бағаланды"
 
@@ -6319,7 +6347,7 @@ msgstr "Мұғалімді күтуде"
 msgid "Returned"
 msgstr "Қайтарылды"
 
-#: apps/practice/models/submission.py:27
+#: apps/practice/models/submission.py:27 apps/programme/models/portfolio.py:75
 msgid "submitted at"
 msgstr "жіберілген уақыт"
 
@@ -6693,6 +6721,298 @@ msgstr "диагностика нәтижесі"
 msgid "diagnostic results"
 msgstr "диагностика нәтижелері"
 
+#: apps/programme/models/portfolio.py:9
+msgid "What professional knowledge and skills have I gained?"
+msgstr "Мен қандай кәсіби білім мен дағдыларды меңгердім?"
+
+#: apps/programme/models/portfolio.py:10
+msgid ""
+"What pedagogical decisions did I make on my own while developing the "
+"authorial lesson?"
+msgstr "Авторлық сабақ әзірлеу барысында қандай педагогикалық шешімдерді өздігінен қабылдадым?"
+
+#: apps/programme/models/portfolio.py:11
+msgid "What difficulties did I meet in the digital research practice?"
+msgstr "Цифрлық-зерттеушілік практикада қандай қиындықтарға кездестім?"
+
+#: apps/programme/models/portfolio.py:12
+msgid ""
+"What changes did I notice when conducting the microlesson the first time and "
+"again?"
+msgstr "Микросабақты алғаш және қайта өткізу барысында қандай өзгерістер байқадым?"
+
+#: apps/programme/models/portfolio.py:13
+msgid "Which of the teacher's suggestions did I take into account?"
+msgstr "Оқытушының қандай ұсыныстарын ескердім?"
+
+#: apps/programme/models/portfolio.py:14
+msgid "Which professional skills do I still need to improve?"
+msgstr "Қандай кәсіби дағдыларымды әлі де жетілдіруім қажет?"
+
+#: apps/programme/models/portfolio.py:15
+msgid "What is my next professional goal as a future chemistry teacher?"
+msgstr "Болашақ химия мұғалімі ретіндегі келесі кәсіби мақсатым қандай?"
+
+#: apps/programme/models/portfolio.py:20 apps/programme/models/portfolio.py:29
+msgid "Chemistry subject knowledge"
+msgstr "Химиялық пәндік білім"
+
+#: apps/programme/models/portfolio.py:21 apps/programme/models/portfolio.py:34
+msgid "Using digital technologies"
+msgstr "Цифрлық технологияларды қолдану"
+
+#: apps/programme/models/portfolio.py:23
+msgid "Conducting a microlesson"
+msgstr "Микросабақ жүргізу"
+
+#: apps/programme/models/portfolio.py:24
+msgid "Professional reflection"
+msgstr "Кәсіби рефлексия"
+
+#: apps/programme/models/portfolio.py:30
+msgid ""
+"The student's correct use of chemical concepts, laws, reaction equations and "
+"scientific explanations."
+msgstr "Студенттің химиялық ұғымдарды, заңдылықтарды, реакция теңдеулерін және ғылыми түсіндірмелерді дұрыс қолдануы."
+
+#: apps/programme/models/portfolio.py:32
+msgid ""
+"The student's skills of defining the lesson aim, organising tasks, choosing "
+"teaching methods and developing assessment criteria."
+msgstr "Студенттің сабақ мақсатын анықтау, тапсырмаларды жүйелеу, оқыту әдістерін таңдау және бағалау критерийлерін әзірлеу дағдылары."
+
+#: apps/programme/models/portfolio.py:35
+msgid ""
+"The student's use of virtual labs, digital models and interactive tools in "
+"line with the learning aim."
+msgstr "Студенттің виртуалды зертханаларды, цифрлық модельдерді және интерактивті құралдарды оқу мақсатына сәйкес қолдануы."
+
+#: apps/programme/models/portfolio.py:36
+msgid "Professional activity and reflection"
+msgstr "Кәсіби іс-әрекет және рефлексия"
+
+#: apps/programme/models/portfolio.py:37
+msgid ""
+"The student's skills of conducting a microlesson, answering students' "
+"questions, making pedagogical decisions and improving their own work."
+msgstr "Студенттің микросабақ өткізу, оқушы сұрақтарына жауап беру, педагогикалық шешім қабылдау және өзінің жұмысын жетілдіру дағдылары."
+
+#: apps/programme/models/portfolio.py:44
+msgid "Basic details of the student"
+msgstr "Студент туралы негізгі мәліметтер"
+
+#: apps/programme/models/portfolio.py:45
+msgid "Professional readiness results by the ICPAI model"
+msgstr "ICPAI моделі бойынша кәсіби даярлық нәтижелері"
+
+#: apps/programme/models/portfolio.py:46
+msgid "The register of theoretical, practical and lab works"
+msgstr "Теориялық, практикалық және зертханалық жұмыстардың тізілімі"
+
+#: apps/programme/models/portfolio.py:47
+msgid "The collection of authorial lessons"
+msgstr "Авторлық сабақтар жинағы"
+
+#: apps/programme/models/portfolio.py:48
+msgid "Results of the digital research practice"
+msgstr "Цифрлық-зерттеушілік практика нәтижелері"
+
+#: apps/programme/models/portfolio.py:49
+msgid "Microlessons and the protocols of the professional trial"
+msgstr "Микросабақтар және кәсіби сынақ хаттамалары"
+
+#: apps/programme/models/portfolio.py:50
+msgid "The teacher's expert feedback"
+msgstr "Оқытушының сараптамалық пікірлері"
+
+#: apps/programme/models/portfolio.py:51
+msgid "The student's professional reflection"
+msgstr "Студенттің кәсіби рефлексиясы"
+
+#: apps/programme/models/portfolio.py:52
+msgid "The personal professional development map"
+msgstr "Жеке кәсіби даму картасы"
+
+#: apps/programme/models/portfolio.py:53
+msgid "The final professional portfolio"
+msgstr "Қорытынды кәсіби портфолио"
+
+#: apps/programme/models/portfolio.py:63
+msgid "Being prepared"
+msgstr "Дайындалуда"
+
+#: apps/programme/models/portfolio.py:64 apps/programme/models/portfolio.py:205
+msgid "Submitted to the teacher"
+msgstr "Оқытушыға ұсынылды"
+
+#: apps/programme/models/portfolio.py:65 apps/programme/models/portfolio.py:115
+msgid "Accepted"
+msgstr "Қабылданды"
+
+#: apps/programme/models/portfolio.py:66 apps/programme/models/portfolio.py:116
+msgid "Needs more work"
+msgstr "Толықтыру қажет"
+
+#: apps/programme/models/portfolio.py:67 apps/programme/models/portfolio.py:117
+msgid "Needs revising"
+msgstr "Қайта қарау қажет"
+
+#: apps/programme/models/portfolio.py:72
+msgid "education programme"
+msgstr "білім беру бағдарламасы"
+
+#: apps/programme/models/portfolio.py:73
+msgid "study year"
+msgstr "оқу курсы"
+
+#: apps/programme/models/portfolio.py:76 apps/programme/models/portfolio.py:207
+msgid "AI completeness check"
+msgstr "ЖИ толықтық тексеруі"
+
+#: apps/programme/models/portfolio.py:79 apps/programme/models/portfolio.py:94
+#: apps/programme/models/portfolio.py:120
+#: apps/programme/models/portfolio.py:210
+msgid "portfolio"
+msgstr "портфолио"
+
+#: apps/programme/models/portfolio.py:80
+msgid "portfolios"
+msgstr "портфолиолар"
+
+#: apps/programme/models/portfolio.py:98
+msgid "assembled at"
+msgstr "жинақталған уақыты"
+
+#: apps/programme/models/portfolio.py:102
+msgid "portfolio version"
+msgstr "портфолио нұсқасы"
+
+#: apps/programme/models/portfolio.py:103
+msgid "portfolio versions"
+msgstr "портфолио нұсқалары"
+
+#: apps/programme/models/portfolio.py:131
+msgid "chemistry subject knowledge"
+msgstr "химиялық пәндік білім"
+
+#: apps/programme/models/portfolio.py:132 ui/templates/core/about.html:274
+msgid "pedagogical design"
+msgstr "педагогикалық жобалау"
+
+#: apps/programme/models/portfolio.py:133
+msgid "using digital technologies"
+msgstr "цифрлық технологияларды қолдану"
+
+#: apps/programme/models/portfolio.py:134
+msgid "professional activity and reflection"
+msgstr "кәсіби іс-әрекет және рефлексия"
+
+#: apps/programme/models/portfolio.py:135
+msgid "strengths of the work"
+msgstr "жұмыстың күшті жақтары"
+
+#: apps/programme/models/portfolio.py:136
+msgid "parts that need improving"
+msgstr "жетілдіруді қажет ететін тұстар"
+
+#: apps/programme/models/portfolio.py:137
+msgid "professional recommendations"
+msgstr "кәсіби ұсыныстар"
+
+#: apps/programme/models/portfolio.py:138
+msgid "status of the work"
+msgstr "жұмыстың мәртебесі"
+
+#: apps/programme/models/portfolio.py:139
+msgid "given at"
+msgstr "берілген күні"
+
+#: apps/programme/models/portfolio.py:143
+msgid "teacher's feedback on a portfolio"
+msgstr "портфолиоға оқытушы пікірі"
+
+#: apps/programme/models/portfolio.py:144
+msgid "teachers' feedback on portfolios"
+msgstr "портфолиоларға оқытушы пікірлері"
+
+#: apps/programme/models/portfolio.py:159
+msgid "{\"1\": \"…\", … \"7\": \"…\"}"
+msgstr "{\"1\": \"…\", … \"7\": \"…\"}"
+
+#: apps/programme/models/portfolio.py:160
+msgid "saved at"
+msgstr "сақталған уақыты"
+
+#: apps/programme/models/portfolio.py:163
+msgid "professional reflection"
+msgstr "кәсіби рефлексия"
+
+#: apps/programme/models/portfolio.py:164
+msgid "professional reflections"
+msgstr "кәсіби рефлексиялар"
+
+#: apps/programme/models/portfolio.py:180
+msgid "direction"
+msgstr "бағыт"
+
+#: apps/programme/models/portfolio.py:181
+msgid "planned action"
+msgstr "жоспарланған әрекет"
+
+#: apps/programme/models/portfolio.py:182
+msgid "expected result"
+msgstr "күтілетін нәтиже"
+
+#: apps/programme/models/portfolio.py:183
+msgid "done"
+msgstr "орындалды"
+
+#: apps/programme/models/portfolio.py:184
+msgid "result"
+msgstr "нәтиже"
+
+#: apps/programme/models/portfolio.py:189
+msgid "development plan item"
+msgstr "даму жоспарының бағыты"
+
+#: apps/programme/models/portfolio.py:190
+msgid "development plan items"
+msgstr "даму жоспарының бағыттары"
+
+#: apps/programme/models/portfolio.py:201
+#: apps/programme/portfolio_selectors.py:165
+msgid "Reflection saved"
+msgstr "Рефлексия сақталды"
+
+#: apps/programme/models/portfolio.py:202
+msgid "Development goals set"
+msgstr "Даму мақсаттары белгіленді"
+
+#: apps/programme/models/portfolio.py:203
+msgid "Development results updated"
+msgstr "Даму нәтижелері жаңартылды"
+
+#: apps/programme/models/portfolio.py:204
+msgid "Portfolio assembled"
+msgstr "Портфолио жинақталды"
+
+#: apps/programme/models/portfolio.py:206
+msgid "Teacher's feedback"
+msgstr "Оқытушы пікірі"
+
+#: apps/programme/models/portfolio.py:220 apps/programme/models/progress.py:113
+#: apps/progress/models/progress.py:168
+msgid "by"
+msgstr "кім"
+
+#: apps/programme/models/portfolio.py:226
+msgid "portfolio event"
+msgstr "портфолио оқиғасы"
+
+#: apps/programme/models/portfolio.py:227
+msgid "portfolio events"
+msgstr "портфолио оқиғалары"
+
 #: apps/programme/models/programme.py:20
 msgid "The course of section 1; its students take part in the programme"
 msgstr "1-бөлімнің курсы; оның студенттері бағдарламаға қатысады"
@@ -6713,6 +7033,7 @@ msgid "Course"
 msgstr "Курс"
 
 #: apps/programme/models/programme.py:38
+#: apps/programme/portfolio_selectors.py:81
 msgid "Diagnostics"
 msgstr "Диагностика"
 
@@ -6797,9 +7118,12 @@ msgid "Available"
 msgstr "Ашық"
 
 #: apps/programme/models/progress.py:53 apps/programme/models/progress.py:95
-#: apps/progress/models/progress.py:19 apps/progress/models/progress.py:143
-#: apps/student/cabinet.py:80 ui/templates/components/stage_stepper.html:22
+#: apps/programme/portfolio_selectors.py:66 apps/progress/models/progress.py:19
+#: apps/progress/models/progress.py:143 apps/student/cabinet.py:80
+#: ui/templates/components/stage_stepper.html:22
 #: ui/templates/student/partials/section_state.html:4
+#: ui/templates/student/portfolio/partials/sheet.html:31
+#: ui/templates/student/portfolio/pdf.html:44
 #: ui/templates/student/results.html:92 ui/templates/student/topic.html:37
 #: ui/templates/teacher/group.html:198 ui/templates/teacher/student.html:82
 msgid "Passed"
@@ -6845,10 +7169,6 @@ msgstr "Мұғалім ашты"
 msgid "Percent changed"
 msgstr "Пайыз өзгерді"
 
-#: apps/programme/models/progress.py:113 apps/progress/models/progress.py:168
-msgid "by"
-msgstr "кім"
-
 #: apps/programme/models/progress.py:114
 msgid "Empty when it follows from the student's work"
 msgstr "Студенттің жұмысынан туындаса — бос"
@@ -6885,16 +7205,119 @@ msgstr "қаралды, %"
 msgid "video watching"
 msgstr "бейнені қарау"
 
+#: apps/programme/portfolio_selectors.py:37
+#: ui/templates/student/designer/partials/templates.html:75
+#: ui/templates/student/practice/partials/cards.html:62
+msgid "Not started"
+msgstr "Басталмаған"
+
+#: apps/programme/portfolio_selectors.py:63
+msgid "Lectures learnt and practical and lab works done in general chemistry"
+msgstr "Жалпы химия бойынша меңгерілген дәрістер мен орындалған практикалық, зертханалық жұмыстар"
+
+#: apps/programme/portfolio_selectors.py:64
+msgid "Theoretical, practical and lab works"
+msgstr "Теориялық, практикалық және зертханалық жұмыстар"
+
+#: apps/programme/portfolio_selectors.py:68
+#, python-format
+msgid "%(a)s of %(b)s topics completed"
+msgstr "%(b)s тақырыптың %(a)s-і аяқталды"
+
+#: apps/programme/portfolio_selectors.py:80
+msgid ""
+"Results of the initial, formative and final diagnostics of professional "
+"readiness"
+msgstr "Кәсіби даярлықтың бастапқы, қалыптастырушы және қорытынды диагностика нәтижелері"
+
+#: apps/programme/portfolio_selectors.py:83
+msgid "Taken"
+msgstr "Тапсырылды"
+
+#: apps/programme/portfolio_selectors.py:94
+msgid "Authorial pedagogical design samples"
+msgstr "Авторлық педагогикалық жобалау үлгілері"
+
+#: apps/programme/portfolio_selectors.py:94
+msgid "Authorial lessons"
+msgstr "Авторлық сабақтар"
+
+#: apps/programme/portfolio_selectors.py:97
+msgid "Final versions"
+msgstr "Соңғы нұсқалар"
+
+#: apps/programme/portfolio_selectors.py:98
+#, python-format
+msgid "%(n)s final versions"
+msgstr "%(n)s соңғы нұсқа"
+
+#: apps/programme/portfolio_selectors.py:107
+msgid "Tasks developed with the AI assistant and corrected by the student"
+msgstr "ЖИ-ассистент көмегімен әзірленген және студент түзеткен тапсырмалар"
+
+#: apps/programme/portfolio_selectors.py:107 ui/templates/core/about.html:144
+msgid "Tasks"
+msgstr "Міндеттері"
+
+#: apps/programme/portfolio_selectors.py:110
+#, python-format
+msgid "%(a)s stages redesigned, %(b)s AI suggestions reworked"
+msgstr "%(a)s кезең қайта құрастырылды, %(b)s ЖИ ұсынысы өңделді"
+
+#: apps/programme/portfolio_selectors.py:119
+msgid "Lessons developed in the digital research practice"
+msgstr "Цифрлық-зерттеушілік практика барысында әзірленген сабақтар"
+
+#: apps/programme/portfolio_selectors.py:122
+msgid "Results gathered"
+msgstr "Нәтижелер жинақталды"
+
+#: apps/programme/portfolio_selectors.py:124
+#, python-format
+msgid "%(n)s practices"
+msgstr "%(n)s практика"
+
+#: apps/programme/portfolio_selectors.py:133
+msgid "Protocols of the pedagogical trials with the AI student"
+msgstr "ЖИ-оқушы арқылы жүргізілген педагогикалық сынақ хаттамалары"
+
+#: apps/programme/portfolio_selectors.py:133
+msgid "Trial protocols"
+msgstr "Сынақ хаттамалары"
+
+#: apps/programme/portfolio_selectors.py:136
+#: apps/programme/portfolio_selectors.py:151
+#, python-format
+msgid "%(n)s trials"
+msgstr "%(n)s сынақ"
+
+#: apps/programme/portfolio_selectors.py:147
+msgid "The initial and improved versions of the microlesson"
+msgstr "Микросабақтың бастапқы және жетілдірілген нұсқалары"
+
+#: apps/programme/portfolio_selectors.py:161
+msgid "The teacher's expert feedback and the student's professional reflection"
+msgstr "Оқытушының сараптамалық пікірлері мен студенттің кәсіби рефлексиясы"
+
+#: apps/programme/portfolio_selectors.py:162
+msgid "Feedback and reflection"
+msgstr "Пікір және рефлексия"
+
 #: apps/programme/services/diagnostics.py:70
 msgid "This diagnostic test is not open."
 msgstr "Бұл диагностикалық тест ашылмаған."
+
+#: apps/programme/services/portfolio.py:294
+#, python-format
+msgid "Portfolio: %(status)s"
+msgstr "Портфолио: %(status)s"
 
 #: apps/programme/tests.py:239 ui/templates/student/dashboard.html:68
 #: ui/templates/teacher/dashboard.html:27 ui/templates/teacher/student.html:35
 msgid "Key figures"
 msgstr "Көрсеткіштер"
 
-#: apps/programme/tests.py:273 ui/templates/student/section.html:133
+#: apps/programme/tests.py:273 ui/templates/student/section.html:136
 msgid "The section is in development"
 msgstr "Бөлім әзірленуде"
 
@@ -7243,8 +7666,9 @@ msgstr[1] "%(a)s / %(b)s тәжірибе"
 #: ui/templates/teacher/dashboard.html:80 ui/templates/teacher/group.html:79
 #: ui/templates/teacher/group.html:124 ui/templates/teacher/group.html:208
 #: ui/templates/teacher/partials/groups_table.html:15
-#: ui/templates/teacher/practice/queue.html:41
-#: ui/templates/teacher/practice/queue.html:55
+#: ui/templates/teacher/practice/queue.html:40
+#: ui/templates/teacher/practice/queue.html:54
+#: ui/templates/teacher/practice/queue.html:68
 #: ui/templates/teacher/student.html:82 ui/templates/teacher/students.html:32
 msgid "Open"
 msgstr "Ашу"
@@ -7426,14 +7850,16 @@ msgstr "Соңғы нұсқа жинақталып, портфолиоңызға
 msgid "Choose a part of your lesson."
 msgstr "Сабағыңыздың бір бөлігін таңдаңыз."
 
-#: apps/student/micro.py:177 ui/templates/ai/partials/thread.html:44
+#: apps/student/micro.py:177 apps/student/portfolio.py:160
+#: ui/templates/ai/partials/thread.html:44
 #: ui/templates/student/designer/partials/turn.html:49
 #: ui/templates/student/micro/partials/messages.html:32
 #: ui/templates/student/practice/step.html:39
 msgid "Today's AI requests are used up. They renew tomorrow."
 msgstr "Бүгінгі ЖИ сұраныстары бітті. Ертең жаңарады."
 
-#: apps/student/micro.py:179 ui/templates/ai/partials/thread.html:44
+#: apps/student/micro.py:179 apps/student/portfolio.py:162
+#: ui/templates/ai/partials/thread.html:44
 msgid "The AI assistant did not answer this time. Try again in a minute."
 msgstr ""
 "ЖИ-ассистент бұл жолы жауап бермеді. Бір минуттан кейін қайталап көріңіз."
@@ -7453,6 +7879,42 @@ msgstr "Алдымен микросабақты ЖИ-оқушымен сынақ
 #: apps/student/micro.py:306
 msgid "The microlesson is assembled into your professional trial portfolio."
 msgstr "Микросабақ кәсіби сынақ портфолиоңызға жинақталды."
+
+#: apps/student/portfolio.py:92 apps/student/portfolio.py:128
+#: apps/student/portfolio.py:148 apps/student/portfolio.py:164
+#: apps/student/portfolio.py:177 apps/student/portfolio.py:198
+msgid "The portfolio is with the teacher now and cannot be changed."
+msgstr "Портфолио қазір оқытушыда, оны өзгертуге болмайды."
+
+#: apps/student/portfolio.py:94
+msgid "The reflection is saved to your portfolio."
+msgstr "Рефлексия портфолиоңызға тіркелді."
+
+#: apps/student/portfolio.py:120
+msgid "The development results are updated."
+msgstr "Даму нәтижелері жаңартылды."
+
+#: apps/student/portfolio.py:126
+msgid "The professional development goals are set."
+msgstr "Кәсіби даму мақсаттары белгіленді."
+
+#: apps/student/portfolio.py:179
+msgid ""
+"Fill in the reflection and the development map first; the final diagnostics "
+"must be taken."
+msgstr "Алдымен рефлексия мен даму картасын толтырыңыз; қорытынды диагностика тапсырылуы керек."
+
+#: apps/student/portfolio.py:182
+msgid "The portfolio is assembled."
+msgstr "Портфолио жинақталды."
+
+#: apps/student/portfolio.py:196
+msgid "Assemble the portfolio again — it has changed since."
+msgstr "Портфолионы қайта жинақтаңыз — содан бері өзгерді."
+
+#: apps/student/portfolio.py:202
+msgid "The portfolio is submitted to the teacher."
+msgstr "Портфолио оқытушыға ұсынылды."
 
 #: apps/student/practice.py:33
 msgid "The AI assistant's feedback"
@@ -7504,19 +7966,19 @@ msgid ""
 "The trial is finished; the results are gathered into your research portfolio."
 msgstr "Сынақ аяқталды; нәтижелер зерттеу портфолиоңызға жинақталды."
 
-#: apps/student/sections.py:236
+#: apps/student/sections.py:238
 msgid "Explain the section"
 msgstr "Бөлімді түсіндіру"
 
-#: apps/student/sections.py:237
+#: apps/student/sections.py:239
 msgid "Let the AI explain"
 msgstr "ЖИ түсіндірсін"
 
-#: apps/student/sections.py:238
+#: apps/student/sections.py:240
 msgid "The AI assistant of the ICPAI programme"
 msgstr "ICPAI бағдарламасының ЖИ-ассистенті"
 
-#: apps/student/sections.py:239
+#: apps/student/sections.py:241
 msgid "Ask about this section…"
 msgstr "Осы бөлім туралы сұрақ…"
 
@@ -7736,8 +8198,8 @@ msgstr "AI бұл жұмысты әлі бағалап жатыр. Бір мин
 msgid "The work is returned to the student; the attempt is given back."
 msgstr "Жұмыс студентке қайтарылды; талпыныс қайтарылды."
 
-#: apps/teacher/grading.py:133 apps/teacher/practice.py:76
-#: apps/teacher/practice.py:110
+#: apps/teacher/grading.py:133 apps/teacher/practice.py:97
+#: apps/teacher/practice.py:131
 msgid "The grade is saved."
 msgstr "Баға сақталды."
 
@@ -7776,9 +8238,21 @@ msgstr "Әлі бастамаған"
 msgid "experiment %(n)s"
 msgstr "%(n)s-тәжірибе"
 
-#: apps/teacher/practice.py:74 apps/teacher/practice.py:108
+#: apps/teacher/practice.py:95 apps/teacher/practice.py:129
 msgid "Give every criterion 0, 1 or 2 points."
 msgstr "Әр критерийге 0, 1 немесе 2 балл қойыңыз."
+
+#: apps/teacher/practice.py:162
+msgid "Choose the status of the work."
+msgstr "Жұмыстың мәртебесін таңдаңыз."
+
+#: apps/teacher/practice.py:164
+msgid "The portfolio is not waiting for feedback."
+msgstr "Портфолио пікір күтіп тұрған жоқ."
+
+#: apps/teacher/practice.py:168
+msgid "The feedback is saved and shown to the student."
+msgstr "Пікір сақталып, студентке көрсетілді."
 
 #: apps/teacher/views.py:112
 msgid "The group is saved."
@@ -8689,10 +9163,6 @@ msgstr "Практикалық бағыты"
 msgid "«Methods of teaching chemistry»"
 msgstr "«Химияны оқыту әдістемесі»"
 
-#: ui/templates/core/about.html:144
-msgid "Tasks"
-msgstr "Міндеттері"
-
 #: ui/templates/core/about.html:147
 msgid ""
 "To master the scientific and pedagogical foundations of the informatisation "
@@ -8825,10 +9295,6 @@ msgstr ""
 "химия пәнін меңгертуге арналған авторлық тапсырмаларды әзірлеуді негіздеу"
 
 #: ui/templates/core/about.html:274
-msgid "pedagogical design"
-msgstr "педагогикалық жобалау"
-
-#: ui/templates/core/about.html:274
 msgid ""
 "Setting the lesson aim and method, building research tasks, teaching, "
 "assessment and reflection"
@@ -8850,6 +9316,8 @@ msgstr ""
 
 #: ui/templates/core/about.html:286 ui/templates/research/analytics.html:216
 #: ui/templates/student/icpai_results.html:81
+#: ui/templates/student/portfolio/partials/sheet.html:25
+#: ui/templates/student/portfolio/pdf.html:38
 msgid "Component"
 msgstr "Құрамдас бөлік"
 
@@ -9178,6 +9646,7 @@ msgstr "%(p)s%% орындалды"
 #: ui/templates/partials/shell/sidebar_student.html:35
 #: ui/templates/student/icpai_results.html:8
 #: ui/templates/student/icpai_results.html:10
+#: ui/templates/student/portfolio/partials/dashboard.html:48
 #: ui/templates/student/practice/partials/nav.html:33
 #: ui/templates/student/practice/results.html:46
 #: ui/templates/student/search.html:11
@@ -9261,8 +9730,8 @@ msgstr "Практикалық жұмыстар"
 #: ui/templates/partials/shell/sidebar_teacher.html:20
 #: ui/templates/teacher/practice/queue.html:7
 #: ui/templates/teacher/practice/queue.html:9
-msgid "Sections 5–6 works"
-msgstr "5–6-бөлім жұмыстары"
+msgid "ICPAI works"
+msgstr "ICPAI жұмыстары"
 
 #: ui/templates/partials/shell/sidebar_teacher.html:21
 #: ui/templates/research/dashboard.html:4
@@ -9585,18 +10054,24 @@ msgstr ""
 #: ui/templates/research/analytics.html:218
 #: ui/templates/student/icpai_results.html:55
 #: ui/templates/student/icpai_results.html:82
+#: ui/templates/student/portfolio/partials/sheet.html:25
+#: ui/templates/student/portfolio/pdf.html:38
 msgid "Stage I"
 msgstr "I кезең"
 
 #: ui/templates/research/analytics.html:219
 #: ui/templates/student/icpai_results.html:56
 #: ui/templates/student/icpai_results.html:83
+#: ui/templates/student/portfolio/partials/sheet.html:25
+#: ui/templates/student/portfolio/pdf.html:38
 msgid "Stage II"
 msgstr "II кезең"
 
 #: ui/templates/research/analytics.html:220
 #: ui/templates/student/icpai_results.html:57
 #: ui/templates/student/icpai_results.html:84
+#: ui/templates/student/portfolio/partials/sheet.html:25
+#: ui/templates/student/portfolio/pdf.html:38
 msgid "Stage III"
 msgstr "III кезең"
 
@@ -9650,6 +10125,8 @@ msgid "Experiment"
 msgstr "Тәжірибе"
 
 #: ui/templates/research/dashboard.html:38
+#: ui/templates/student/portfolio/partials/sheet.html:18
+#: ui/templates/student/portfolio/pdf.html:31
 msgid "Study group"
 msgstr "Оқу тобы"
 
@@ -9687,6 +10164,7 @@ msgstr "Соңғы талпыныстар"
 #: ui/templates/research/dashboard.html:87 ui/templates/student/results.html:75
 #: ui/templates/teacher/groups.html:23
 #: ui/templates/teacher/partials/grading_queue.html:7
+#: ui/templates/teacher/practice/queue.html:33
 #: ui/templates/teacher/student.html:69 ui/templates/teacher/student.html:111
 #: ui/templates/teacher/student.html:161
 msgid "Status"
@@ -10108,6 +10586,9 @@ msgstr "Сабақты жинақтау"
 #: ui/templates/student/micro/editor.html:11
 #: ui/templates/student/micro/protocol.html:10
 #: ui/templates/student/micro/trial_start.html:8
+#: ui/templates/student/portfolio/plan.html:8
+#: ui/templates/student/portfolio/reflection.html:8
+#: ui/templates/student/portfolio/view.html:6
 #: ui/templates/student/practice/results.html:10
 #: ui/templates/student/practice/sheet.html:10
 #: ui/templates/student/practice/stage.html:10
@@ -10161,6 +10642,7 @@ msgstr "Сабақтың күтілетін нәтижелері"
 
 #: ui/templates/student/designer/assemble.html:34
 #: ui/templates/student/micro/editor.html:57
+#: ui/templates/student/portfolio/partials/dashboard.html:164
 #: ui/templates/student/practice/sheet.html:58
 #: ui/templates/student/profile.html:38
 #: ui/templates/teacher/content/course_form.html:39
@@ -10360,7 +10842,7 @@ msgid "Restore the original"
 msgstr "Бастапқы мазмұнды қайтару"
 
 #: ui/templates/student/designer/editor.html:149
-#: ui/templates/teacher/practice/queue.html:46
+#: ui/templates/teacher/practice/queue.html:59
 msgid "Lesson"
 msgstr "Сабақ"
 
@@ -10544,11 +11026,6 @@ msgstr ""
 #: ui/templates/student/designer/partials/templates.html:49
 msgid "My version"
 msgstr "Менің нұсқам"
-
-#: ui/templates/student/designer/partials/templates.html:75
-#: ui/templates/student/practice/partials/cards.html:62
-msgid "Not started"
-msgstr "Басталмаған"
 
 #: ui/templates/student/designer/partials/templates.html:76
 msgid "Open the template"
@@ -10960,6 +11437,7 @@ msgid "Details"
 msgstr "Мәліметтер"
 
 #: ui/templates/student/icpai_results.html:14
+#: ui/templates/student/portfolio/partials/dashboard.html:47
 msgid "ICPAI — professional readiness results"
 msgstr "ICPAI – кәсіби даярлық нәтижелері"
 
@@ -11035,6 +11513,7 @@ msgstr ""
 
 #: ui/templates/student/icpai_results.html:53
 #: ui/templates/student/icpai_results.html:79
+#: ui/templates/student/portfolio/partials/dashboard.html:64
 #, python-format
 msgid "Dynamics by stages, %%"
 msgstr "Кезеңдер бойынша даму динамикасы, %%"
@@ -11057,7 +11536,7 @@ msgstr ""
 #: ui/templates/student/practice/partials/nav.html:10
 #: ui/templates/student/practice/sheet.html:24
 #: ui/templates/teacher/practice/detail.html:17
-#: ui/templates/teacher/practice/queue.html:46
+#: ui/templates/teacher/practice/queue.html:59
 msgid "Practice"
 msgstr "Практика"
 
@@ -11078,14 +11557,18 @@ msgstr "Мұғалім әлі бағаламады"
 #: ui/templates/student/micro/protocol.html:74
 #: ui/templates/student/micro/report_pdf.html:33
 #: ui/templates/student/micro/trial_start.html:21
+#: ui/templates/student/portfolio/partials/dashboard.html:152
+#: ui/templates/student/portfolio/partials/sheet.html:46
+#: ui/templates/student/portfolio/pdf.html:59
 #: ui/templates/teacher/practice/micro.html:7
 #: ui/templates/teacher/practice/micro.html:16
-#: ui/templates/teacher/practice/queue.html:37
+#: ui/templates/teacher/practice/queue.html:50
 #, python-format
 msgid "Trial %(n)s"
 msgstr "%(n)s-сынақ"
 
 #: ui/templates/student/icpai_results.html:128
+#: ui/templates/student/portfolio/partials/dashboard.html:153
 msgid "No grades yet."
 msgstr "Бағалар әлі жоқ."
 
@@ -11139,6 +11622,8 @@ msgstr "Таймер"
 #: ui/templates/student/micro/editor.html:169
 #: ui/templates/student/micro/protocol.html:19
 #: ui/templates/student/micro/report_pdf.html:33
+#: ui/templates/student/portfolio/partials/sheet.html:46
+#: ui/templates/student/portfolio/pdf.html:59
 #: ui/templates/student/practice/report_pdf.html:23
 #: ui/templates/student/practice/results.html:55
 #: ui/templates/student/practice/step.html:19
@@ -11201,7 +11686,9 @@ msgstr "Микросабақ жинақталды"
 msgid ""
 "The authorial microlesson improved over several trials and the professional "
 "trial portfolio are kept together."
-msgstr "Бірнеше сынақ нәтижесінде жетілдірілген жеке авторлық микросабақ және кәсіби сынақ портфолиосы бірге сақталды."
+msgstr ""
+"Бірнеше сынақ нәтижесінде жетілдірілген жеке авторлық микросабақ және кәсіби "
+"сынақ портфолиосы бірге сақталды."
 
 #: ui/templates/student/micro/editor.html:35
 #: ui/templates/student/micro/report_pdf.html:20
@@ -11209,14 +11696,22 @@ msgid "The microlesson's initial details"
 msgstr "Микросабақтың бастапқы мәліметтері"
 
 #: ui/templates/student/micro/editor.html:42
+#: ui/templates/student/portfolio/partials/sheet.html:16
+#: ui/templates/student/portfolio/pdf.html:29
 msgid "Student's full name"
 msgstr "Студенттің аты-жөні"
 
 #: ui/templates/student/micro/editor.html:43
+#: ui/templates/student/portfolio/partials/dashboard.html:162
+#: ui/templates/student/portfolio/partials/sheet.html:17
+#: ui/templates/student/portfolio/pdf.html:30
 msgid "Education programme"
 msgstr "Білім беру бағдарламасы"
 
 #: ui/templates/student/micro/editor.html:44
+#: ui/templates/student/portfolio/partials/dashboard.html:163
+#: ui/templates/student/portfolio/partials/sheet.html:19
+#: ui/templates/student/portfolio/pdf.html:32
 msgid "Study year"
 msgstr "Оқу курсы"
 
@@ -11307,7 +11802,10 @@ msgid ""
 "It only checks the structure and marks it «CORRECT» / «WRONG». The AI "
 "assistant does not correct an error itself: you look at the content marked "
 "wrong, change it and send it to be checked again."
-msgstr "Тек құрылымды тексереді және «ДҰРЫС» / «БҰРЫС» деп белгілейді. ЖИ-ассистент қатені өзі түзетпейді: қате деп белгіленген мазмұнды өз бетіңізше қарап, өзгертіп, қайта тексеруге жібересіз."
+msgstr ""
+"Тек құрылымды тексереді және «ДҰРЫС» / «БҰРЫС» деп белгілейді. ЖИ-ассистент "
+"қатені өзі түзетпейді: қате деп белгіленген мазмұнды өз бетіңізше қарап, "
+"өзгертіп, қайта тексеруге жібересіз."
 
 #: ui/templates/student/micro/editor.html:134
 #, python-format
@@ -11319,6 +11817,7 @@ msgid "the content has changed since"
 msgstr "содан бері мазмұн өзгерді"
 
 #: ui/templates/student/micro/editor.html:138
+#: ui/templates/student/portfolio/partials/dashboard.html:178
 msgid "Check again"
 msgstr "Қайта тексеру"
 
@@ -11327,6 +11826,7 @@ msgid "Send for checking"
 msgstr "Тексеруге жіберу"
 
 #: ui/templates/student/micro/editor.html:139
+#: ui/templates/student/portfolio/partials/dashboard.html:178
 msgid "Checking…"
 msgstr "Тексерілуде…"
 
@@ -11341,7 +11841,9 @@ msgstr "Сынақ барлық кезең ✓ ДҰРЫС болғанда аш�
 #: ui/templates/student/micro/editor.html:155
 msgid ""
 "One microlesson may be tried out several times; each trial is kept apart."
-msgstr "Бір микросабақты бірнеше мәрте сынақтан өткізуге болады; әр сынақ жеке сақталады."
+msgstr ""
+"Бір микросабақты бірнеше мәрте сынақтан өткізуге болады; әр сынақ жеке "
+"сақталады."
 
 #: ui/templates/student/micro/editor.html:161
 msgid "the initial version"
@@ -11369,7 +11871,10 @@ msgid ""
 "When the trials you need are done, the last version, its four stages, the "
 "history of the trials, the AI student's answers, your changes and the grades "
 "are gathered together."
-msgstr "Қажетті сынақтар аяқталғаннан кейін соңғы авторлық нұсқа, төрт кезеңнің мазмұны, сынақтар тарихы, ЖИ-оқушының жауаптары, енгізілген өзгерістер және бағалау нәтижелері біріктіріледі."
+msgstr ""
+"Қажетті сынақтар аяқталғаннан кейін соңғы авторлық нұсқа, төрт кезеңнің "
+"мазмұны, сынақтар тарихы, ЖИ-оқушының жауаптары, енгізілген өзгерістер және "
+"бағалау нәтижелері біріктіріледі."
 
 #: ui/templates/student/micro/editor.html:178
 msgid "Assemble the microlesson?"
@@ -11392,7 +11897,9 @@ msgstr "Әзірге сынақ жоқ."
 msgid ""
 "In section 5 the lesson was developed with the help of AI, and in section 6 "
 "the student conducts the MICROLESSON ON THEIR OWN and improves it."
-msgstr "5-бөлімде ЖИ көмегімен сабақ әзірленді, ал 6-бөлімде студент МИКРОСАБАҚТЫ ӨЗІ өткізіп, жетілдіреді."
+msgstr ""
+"5-бөлімде ЖИ көмегімен сабақ әзірленді, ал 6-бөлімде студент МИКРОСАБАҚТЫ "
+"ӨЗІ өткізіп, жетілдіреді."
 
 #: ui/templates/student/micro/partials/entry.html:12
 msgid "Analyse the answer"
@@ -11432,7 +11939,11 @@ msgid ""
 "part of it and adapt it to an independent 10-minute microlesson. The "
 "microlesson covers one concrete learning aim, not the whole content of the "
 "topic."
-msgstr "5-бөлімде әзірлеген авторлық сабағыңызды таңдаңыз. Сол сабақтың бір мазмұндық бөлігін алып, 10 минуттық дербес микросабаққа бейімдейсіз. Микросабақта тақырыптың толық мазмұны емес, нақты бір оқу мақсаты қамтылуы тиіс."
+msgstr ""
+"5-бөлімде әзірлеген авторлық сабағыңызды таңдаңыз. Сол сабақтың бір "
+"мазмұндық бөлігін алып, 10 минуттық дербес микросабаққа бейімдейсіз. "
+"Микросабақта тақырыптың толық мазмұны емес, нақты бір оқу мақсаты қамтылуы "
+"тиіс."
 
 #: ui/templates/student/micro/partials/entry.html:42
 #: ui/templates/student/practice/partials/cards.html:42
@@ -11455,7 +11966,9 @@ msgstr "бос"
 msgid ""
 "Only one microlesson is made. Later corrections are kept as its updated "
 "versions."
-msgstr "Тек бір микросабақ жасалады. Кейінгі түзетулер жаңа микросабақ құрмайды, оның жаңартылған нұсқасы ретінде тіркеледі."
+msgstr ""
+"Тек бір микросабақ жасалады. Кейінгі түзетулер жаңа микросабақ құрмайды, "
+"оның жаңартылған нұсқасы ретінде тіркеледі."
 
 #: ui/templates/student/micro/partials/entry.html:69
 msgid "Create the microlesson?"
@@ -11465,7 +11978,9 @@ msgstr "Микросабақты құру керек пе?"
 msgid ""
 "One microlesson is made from the chosen part; it cannot be made again from "
 "another part."
-msgstr "Таңдалған бөліктен бір микросабақ құрылады; оны басқа бөліктен қайта құруға болмайды."
+msgstr ""
+"Таңдалған бөліктен бір микросабақ құрылады; оны басқа бөліктен қайта құруға "
+"болмайды."
 
 #: ui/templates/student/micro/partials/entry.html:69
 msgid "Create"
@@ -11527,7 +12042,10 @@ msgid ""
 "The AI assistant's «Correct / Wrong» check applies only to preparing the "
 "content; the professional trial is graded apart by the protocol and the "
 "criteria."
-msgstr "ЖИ-ассистенттің «Дұрыс/Бұрыс» тексеруі микросабақтың мазмұндық дайындық кезеңіне ғана қолданылады. Ал кәсіби сынақ нәтижесі сабақ өткізу хаттамасы мен критерийлер негізінде бөлек бағаланады."
+msgstr ""
+"ЖИ-ассистенттің «Дұрыс/Бұрыс» тексеруі микросабақтың мазмұндық дайындық "
+"кезеңіне ғана қолданылады. Ал кәсіби сынақ нәтижесі сабақ өткізу хаттамасы "
+"мен критерийлер негізінде бөлек бағаланады."
 
 #: ui/templates/student/micro/report_pdf.html:19
 msgid ""
@@ -11546,7 +12064,9 @@ msgstr "Сынақты бастау: 10 минуттық микросабақ т
 #: ui/templates/student/micro/trial_start.html:44
 msgid ""
 "The teacher's explanation: you explain the topic to the virtual student."
-msgstr "Мұғалімнің түсіндірмесі: виртуалды оқушыға химиялық тақырыпты өзіңіз түсіндіресіз."
+msgstr ""
+"Мұғалімнің түсіндірмесі: виртуалды оқушыға химиялық тақырыпты өзіңіз "
+"түсіндіресіз."
 
 #: ui/templates/student/micro/trial_start.html:44
 msgid "Asking a question: you ask the AI student your question."
@@ -11554,17 +12074,22 @@ msgstr "Сұрақ қою: ЖИ-оқушыға өз сұрағыңызды қо�
 
 #: ui/templates/student/micro/trial_start.html:44
 msgid "The AI student's answer: fully correct, partly correct or wrong."
-msgstr "ЖИ-оқушының жауабы: толық дұрыс, ішінара дұрыс немесе қате болуы мүмкін."
+msgstr ""
+"ЖИ-оқушының жауабы: толық дұрыс, ішінара дұрыс немесе қате болуы мүмкін."
 
 #: ui/templates/student/micro/trial_start.html:44
 msgid ""
 "The teacher's pedagogical action: an extra explanation, a leading question "
 "or checking again."
-msgstr "Мұғалімнің педагогикалық әрекеті: қосымша түсіндірме, жетелеуші сұрақ немесе білімді қайта тексеру."
+msgstr ""
+"Мұғалімнің педагогикалық әрекеті: қосымша түсіндірме, жетелеуші сұрақ немесе "
+"білімді қайта тексеру."
 
 #: ui/templates/student/micro/trial_start.html:44
 msgid "Finishing: the dialogue is gathered into the trial protocol."
-msgstr "Микросабақты аяқтау: түсіндірмелер, сұрақтар, жауаптар мен әрекеттер сынақ хаттамасына жинақталады."
+msgstr ""
+"Микросабақты аяқтау: түсіндірмелер, сұрақтар, жауаптар мен әрекеттер сынақ "
+"хаттамасына жинақталады."
 
 #: ui/templates/student/partials/benchmark_card.html:13
 msgid "Before the first stage · one attempt · not graded"
@@ -11777,6 +12302,8 @@ msgstr ""
 "Бағалануда… Ашық жауаптарды AI тексереді, әдетте бір минуттан аз уақыт."
 
 #: ui/templates/student/partials/practice_result.html:3
+#: ui/templates/student/portfolio/partials/sheet.html:67
+#: ui/templates/student/portfolio/pdf.html:80
 msgid "Result"
 msgstr "Нәтиже"
 
@@ -11923,6 +12450,295 @@ msgstr "тексеруді күтуде"
 #: ui/templates/student/partials/stage_tile.html:2
 msgid "open"
 msgstr "ашық"
+
+#: ui/templates/student/portfolio/partials/dashboard.html:14
+msgid "The professional development map of a future chemistry teacher"
+msgstr "Болашақ химия мұғалімінің кәсіби даму картасы"
+
+#: ui/templates/student/portfolio/partials/dashboard.html:15
+msgid ""
+"In this module the teacher's feedback, the assessment results, the student's "
+"reflection and the works done are gathered in one system."
+msgstr "Бұл модульде оқытушының кері байланысы, бағалау нәтижелері, студенттің рефлексиясы және орындалған жұмыстары бір жүйеде жинақталады."
+
+#: ui/templates/student/portfolio/partials/dashboard.html:24
+msgid "My professional works"
+msgstr "Менің кәсіби жұмыстарым"
+
+#: ui/templates/student/portfolio/partials/dashboard.html:38
+msgid "View the work"
+msgstr "Жұмысты қарау"
+
+#: ui/templates/student/portfolio/partials/dashboard.html:79
+#, python-format
+msgid "Component result (%%) = points earned / maximum points × 100."
+msgstr "Компонент нәтижесі (%%) = жинақталған балл / ең жоғары мүмкін балл × 100."
+
+#: ui/templates/student/portfolio/partials/dashboard.html:85
+#: ui/templates/student/portfolio/reflection.html:33
+#: ui/templates/teacher/practice/portfolio.html:19
+msgid "The teacher's professional feedback"
+msgstr "Оқытушының кәсіби кері байланысы"
+
+#: ui/templates/student/portfolio/partials/dashboard.html:97
+#: ui/templates/student/portfolio/partials/sheet.html:55
+#: ui/templates/student/portfolio/pdf.html:68
+#: ui/templates/student/portfolio/reflection.html:36
+#: ui/templates/teacher/practice/portfolio.html:24
+#: ui/templates/teacher/practice/portfolio.html:39
+msgid "Strengths of the work"
+msgstr "Жұмыстың күшті жақтары"
+
+#: ui/templates/student/portfolio/partials/dashboard.html:98
+#: ui/templates/student/portfolio/partials/sheet.html:56
+#: ui/templates/student/portfolio/pdf.html:69
+#: ui/templates/student/portfolio/reflection.html:37
+#: ui/templates/teacher/practice/portfolio.html:25
+#: ui/templates/teacher/practice/portfolio.html:40
+msgid "Parts that need improving"
+msgstr "Жетілдіруді қажет ететін тұстар"
+
+#: ui/templates/student/portfolio/partials/dashboard.html:99
+#: ui/templates/student/portfolio/partials/sheet.html:57
+#: ui/templates/student/portfolio/pdf.html:70
+#: ui/templates/student/portfolio/reflection.html:38
+#: ui/templates/teacher/practice/portfolio.html:26
+msgid "Professional recommendations"
+msgstr "Кәсіби ұсыныстар"
+
+#: ui/templates/student/portfolio/partials/dashboard.html:103
+msgid "The portfolio is with the teacher. The feedback appears here."
+msgstr "Портфолио оқытушыда. Пікір осында шығады."
+
+#: ui/templates/student/portfolio/partials/dashboard.html:103
+#: ui/templates/student/portfolio/partials/sheet.html:59
+#: ui/templates/student/portfolio/pdf.html:72
+#: ui/templates/student/portfolio/reflection.html:39
+msgid "The teacher gives feedback after the portfolio is submitted."
+msgstr "Портфолио ұсынылғаннан кейін оқытушы пікір береді."
+
+#: ui/templates/student/portfolio/partials/dashboard.html:113
+#: ui/templates/student/portfolio/reflection.html:7
+#: ui/templates/student/portfolio/reflection.html:9
+#: ui/templates/student/portfolio/reflection.html:16
+msgid "My professional reflection"
+msgstr "Менің кәсіби рефлексиям"
+
+#: ui/templates/student/portfolio/partials/dashboard.html:114
+msgid "Fill in"
+msgstr "Толтыру"
+
+#: ui/templates/student/portfolio/partials/dashboard.html:124
+msgid ""
+"The AI assistant does not write the reflection. You draw the conclusion from "
+"your learning experience, your works and the teacher's feedback."
+msgstr "ЖИ-ассистент дайын рефлексия мәтінін жазбайды. Оқу тәжірибеңізге, жұмыстарыңызға және оқытушының кері байланысына сүйеніп, қорытындыны өзіңіз жасайсыз."
+
+#: ui/templates/student/portfolio/partials/dashboard.html:130
+#: ui/templates/student/portfolio/plan.html:7
+#: ui/templates/student/portfolio/plan.html:9
+msgid "My professional development trajectory"
+msgstr "Менің кәсіби даму траекториям"
+
+#: ui/templates/student/portfolio/partials/dashboard.html:131
+msgid "Open the map"
+msgstr "Картаны ашу"
+
+#: ui/templates/student/portfolio/partials/dashboard.html:135
+#: ui/templates/student/portfolio/partials/sheet.html:67
+#: ui/templates/student/portfolio/pdf.html:80
+#: ui/templates/student/portfolio/plan.html:22
+msgid "Direction to develop"
+msgstr "Дамытылатын бағыт"
+
+#: ui/templates/student/portfolio/partials/dashboard.html:135
+#: ui/templates/student/portfolio/partials/sheet.html:67
+#: ui/templates/student/portfolio/pdf.html:80
+#: ui/templates/student/portfolio/plan.html:22
+#: ui/templates/student/portfolio/plan.html:27
+msgid "Planned action"
+msgstr "Жоспарланған әрекет"
+
+#: ui/templates/student/portfolio/partials/dashboard.html:149
+msgid "Integration of the results of sections 5 and 6"
+msgstr "5 және 6-бөлім нәтижелерінің интеграциясы"
+
+#: ui/templates/student/portfolio/partials/dashboard.html:155
+msgid ""
+"The grades of sections 5 and 6 are kept apart; they are not combined with "
+"the diagnostic percents, which appear in the results automatically."
+msgstr "5 және 6-бөлім нәтижелері жеке сақталады, диагностикалық пайыздармен біріктірілмейді; олар нәтижелер бөлімінде автоматты түрде көрсетіледі."
+
+#: ui/templates/student/portfolio/partials/dashboard.html:160
+msgid "Assemble my professional portfolio"
+msgstr "Менің кәсіби портфолиомды жинақтау"
+
+#: ui/templates/student/portfolio/partials/dashboard.html:167
+msgid "The reflection: seven answers"
+msgstr "Рефлексия: жеті жауап"
+
+#: ui/templates/student/portfolio/partials/dashboard.html:167
+msgid "The development map: five directions"
+msgstr "Даму картасы: бес бағыт"
+
+#: ui/templates/student/portfolio/partials/dashboard.html:167
+msgid "The final (III) diagnostics"
+msgstr "Қорытынды (III) диагностика"
+
+#: ui/templates/student/portfolio/partials/dashboard.html:175
+msgid ""
+"The AI assistant does not write the conclusion for you; it only checks that "
+"the reflection and the map are complete and consistent."
+msgstr "ЖИ-ассистент сіздің орныңызға қорытынды жазбайды, тек рефлексия мен картаның толықтығын және сәйкестігін тексереді."
+
+#: ui/templates/student/portfolio/partials/dashboard.html:178
+msgid "Check the completeness"
+msgstr "Толықтығын тексеру"
+
+#: ui/templates/student/portfolio/partials/dashboard.html:183
+msgid "The structure of the final portfolio"
+msgstr "Қорытынды портфолионың құрылымы"
+
+#: ui/templates/student/portfolio/partials/dashboard.html:186
+#, python-format
+msgid "Assembled: version %(n)s, %(t)s"
+msgstr "Жинақталды: %(n)s-нұсқа, %(t)s"
+
+#: ui/templates/student/portfolio/partials/dashboard.html:186
+msgid "changed since — assemble again"
+msgstr "содан бері өзгерді — қайта жинақтаңыз"
+
+#: ui/templates/student/portfolio/partials/dashboard.html:189
+msgid "Assemble the portfolio"
+msgstr "Портфолионы жинақтау"
+
+#: ui/templates/student/portfolio/partials/dashboard.html:192
+#: ui/templates/student/portfolio/view.html:14
+msgid "Save as PDF"
+msgstr "PDF форматында сақтау"
+
+#: ui/templates/student/portfolio/partials/dashboard.html:193
+#: ui/templates/student/portfolio/view.html:5
+msgid "View the portfolio"
+msgstr "Портфолионы қарау"
+
+#: ui/templates/student/portfolio/partials/dashboard.html:196
+msgid "Submit the portfolio to the teacher?"
+msgstr "Портфолионы оқытушыға ұсыну керек пе?"
+
+#: ui/templates/student/portfolio/partials/dashboard.html:196
+msgid "Until the teacher's feedback the portfolio cannot be changed."
+msgstr "Оқытушы пікір бергенше портфолионы өзгертуге болмайды."
+
+#: ui/templates/student/portfolio/partials/dashboard.html:196
+msgid "Submit"
+msgstr "Ұсыну"
+
+#: ui/templates/student/portfolio/partials/dashboard.html:197
+msgid "Submit to the teacher"
+msgstr "Оқытушыға ұсыну"
+
+#: ui/templates/student/portfolio/partials/sheet.html:10
+#: ui/templates/student/portfolio/pdf.html:23
+#, python-format
+msgid "Version %(n)s · %(t)s"
+msgstr "%(n)s-нұсқа · %(t)s"
+
+#: ui/templates/student/portfolio/partials/sheet.html:21
+#: ui/templates/student/portfolio/pdf.html:34
+msgid "Aim of the portfolio"
+msgstr "Портфолионың мақсаты"
+
+#: ui/templates/student/portfolio/partials/sheet.html:21
+#: ui/templates/student/portfolio/pdf.html:34
+msgid ""
+"To gather the results of mastering chemistry subject knowledge, digital "
+"technologies, pedagogical design methods and professional reflection."
+msgstr "Химиялық пәндік білімді, цифрлық технологияларды, педагогикалық жобалау әдістерін және кәсіби рефлексияны меңгеру нәтижелерін жинақтау."
+
+#: ui/templates/student/portfolio/partials/sheet.html:27
+#: ui/templates/student/portfolio/pdf.html:40
+msgid ""
+"The grades of sections 5 and 6 are not combined with these percents and are "
+"kept separately."
+msgstr "5-бөлімдегі практиканың және 6-бөлімдегі микросабақтың бағалары олармен біріктірілмей, жеке сақталады."
+
+#: ui/templates/student/portfolio/partials/sheet.html:36
+#: ui/templates/student/portfolio/pdf.html:49
+#, python-format
+msgid "%(n)s stages redesigned"
+msgstr "%(n)s кезең қайта құрастырылды"
+
+#: ui/templates/student/portfolio/partials/sheet.html:46
+#: ui/templates/student/portfolio/pdf.html:59
+#, python-format
+msgid "%(n)s turn"
+msgid_plural "%(n)s turns"
+msgstr[0] "%(n)s кезек"
+msgstr[1] "%(n)s кезек"
+
+#: ui/templates/student/portfolio/partials/sheet.html:48
+#: ui/templates/student/portfolio/pdf.html:61
+#, python-format
+msgid "Trials with the AI student in all: %(n)s"
+msgstr "ЖИ-оқушымен барлық сынақтар: %(n)s"
+
+#: ui/templates/student/portfolio/partials/sheet.html:72
+#: ui/templates/student/portfolio/pdf.html:85
+msgid ""
+"The main pedagogical product of the module — the digital professional "
+"portfolio of the future chemistry teacher formed on the basis of the "
+"authorial ICPAI model, and the personal development trajectory."
+msgstr "Модульдің негізгі педагогикалық өнімі – болашақ химия мұғалімінің ICPAI авторлық моделі негізінде қалыптастырылған цифрлық кәсіби портфолиосы және жеке даму траекториясы."
+
+#: ui/templates/student/portfolio/plan.html:14
+msgid "Personal development map"
+msgstr "Жеке даму картасы"
+
+#: ui/templates/student/portfolio/plan.html:15
+msgid ""
+"On the basis of the diagnostic results, the practical works, the microlesson "
+"trials and the teacher's feedback, make your own professional development "
+"plan."
+msgstr "Диагностикалық нәтижелер, практикалық жұмыстар, микросабақ сынақтары және оқытушының пікірлері негізінде өзіңізге арналған кәсіби даму жоспарын қалыптастырыңыз."
+
+#: ui/templates/student/portfolio/plan.html:20
+#: ui/templates/student/portfolio/plan.html:32
+msgid "Set the professional development goal"
+msgstr "Кәсіби даму мақсатын белгілеу"
+
+#: ui/templates/student/portfolio/plan.html:38
+#: ui/templates/student/portfolio/plan.html:51
+msgid "Update the development result"
+msgstr "Даму нәтижесін жаңарту"
+
+#: ui/templates/student/portfolio/plan.html:39
+msgid "The works done towards the goals set are recorded."
+msgstr "Белгіленген мақсаттар бойынша орындалған жұмыстар тіркеледі."
+
+#: ui/templates/student/portfolio/plan.html:46
+msgid "What was done"
+msgstr "Не орындалды"
+
+#: ui/templates/student/portfolio/plan.html:49
+msgid "Set the goals first."
+msgstr "Алдымен мақсаттарды белгілеңіз."
+
+#: ui/templates/student/portfolio/reflection.html:17
+msgid ""
+"You fill in this part yourself. The AI assistant does not write the "
+"reflection: draw your conclusion from your learning experience, the works "
+"you did and the teacher's feedback."
+msgstr "Бұл бөлімді өздігіңізден толтырасыз. ЖИ-ассистент дайын рефлексия мәтінін жазбайды: оқу тәжірибеңізге, орындаған жұмыстарыңызға және оқытушының кері байланысына сүйене отырып, қорытынды жасаңыз."
+
+#: ui/templates/student/portfolio/reflection.html:30
+msgid "Save the reflection"
+msgstr "Рефлексияны сақтау"
+
+#: ui/templates/student/portfolio/view.html:7
+#: ui/templates/teacher/practice/portfolio.html:8
+msgid "Professional portfolio"
+msgstr "Кәсіби портфолио"
 
 #: ui/templates/student/practice/partials/cards.html:8
 msgid "Developing the authorial lesson and trying it out"
@@ -12556,7 +13372,7 @@ msgstr ""
 "Дайын болғанда осында шығады. Әзірге бөлім орындалды деп саналады, келесі "
 "бөлім ашық."
 
-#: ui/templates/student/section.html:133
+#: ui/templates/student/section.html:136
 msgid "Its tasks will appear here in the next versions of the platform."
 msgstr ""
 "Бөлімнің тапсырмалары платформаның келесі нұсқаларында осында пайда болады."
@@ -13201,10 +14017,10 @@ msgid "AI: %(p)s%%"
 msgstr "AI: %(p)s%%"
 
 #: ui/templates/teacher/dashboard.html:64
-#: ui/templates/teacher/practice/queue.html:32
-#: ui/templates/teacher/practice/queue.html:41
-#: ui/templates/teacher/practice/queue.html:46
-#: ui/templates/teacher/practice/queue.html:55
+#: ui/templates/teacher/practice/queue.html:45
+#: ui/templates/teacher/practice/queue.html:54
+#: ui/templates/teacher/practice/queue.html:59
+#: ui/templates/teacher/practice/queue.html:68
 msgid "Grade"
 msgstr "Бағалау"
 
@@ -13823,11 +14639,42 @@ msgstr "6-бөлім микросабақтары"
 msgid ""
 "Each trial's result is kept apart so the student's professional progress can "
 "be compared."
-msgstr "Әр сынақтың нәтижесі жеке сақталып, студенттің кәсіби ілгерілеуін салыстыруға мүмкіндік береді."
+msgstr ""
+"Әр сынақтың нәтижесі жеке сақталып, студенттің кәсіби ілгерілеуін "
+"салыстыруға мүмкіндік береді."
+
+#: ui/templates/teacher/practice/portfolio.html:9
+#: ui/templates/teacher/practice/portfolio.html:13
+#: ui/templates/teacher/practice/queue.html:22
+msgid "Section 7 portfolios"
+msgstr "7-бөлім портфолиолары"
+
+#: ui/templates/teacher/practice/portfolio.html:22
+msgid "The teacher's opinion"
+msgstr "Оқытушының пікірі"
+
+#: ui/templates/teacher/practice/portfolio.html:27
+msgid "Status of the work"
+msgstr "Жұмыстың мәртебесі"
+
+#: ui/templates/teacher/practice/portfolio.html:32
+msgid "Save the feedback"
+msgstr "Пікірді сақтау"
+
+#: ui/templates/teacher/practice/portfolio.html:33
+msgid ""
+"The feedback is shown in the student's cabinet and goes to the portfolio. "
+"«Accepted» completes section 7; otherwise the student corrects and submits "
+"again."
+msgstr "Оқытушының кері байланысы студенттің жеке кабинетінде көрсетіледі және кәсіби портфолиосына енгізіледі. «Қабылданды» 7-бөлімді аяқтайды; әйтпесе студент түзетіп, қайта ұсынады."
 
 #: ui/templates/teacher/practice/queue.html:14
 msgid "Microlesson trials"
 msgstr "Микросабақ сынақтары"
+
+#: ui/templates/teacher/practice/queue.html:14
+msgid "Professional portfolios"
+msgstr "Кәсіби портфолиолар"
 
 #: ui/templates/teacher/practice/queue.html:14
 msgid "Digital research practices"
@@ -13835,31 +14682,43 @@ msgstr "Цифрлық-зерттеушілік практикалар"
 
 #: ui/templates/teacher/practice/queue.html:15
 msgid ""
+"The teacher's professional feedback on the submitted portfolios; «Accepted» "
+"completes section 7."
+msgstr "Ұсынылған портфолиоларға оқытушының кәсіби кері байланысы; «Қабылданды» 7-бөлімді аяқтайды."
+
+#: ui/templates/teacher/practice/queue.html:15
+msgid ""
 "The 10-point grade (five criteria × 2 points). It is kept apart from the "
 "ICPAI component percents and does not open sections."
-msgstr "10 балдық бағалау (5 критерий × 2 балл). ICPAI компоненттерінің пайыздарынан бөлек сақталады және бөлімдерді ашпайды."
+msgstr ""
+"10 балдық бағалау (5 критерий × 2 балл). ICPAI компоненттерінің пайыздарынан "
+"бөлек сақталады және бөлімдерді ашпайды."
 
 #: ui/templates/teacher/practice/queue.html:19
 msgid "Section"
 msgstr "Бөлім"
 
-#: ui/templates/teacher/practice/queue.html:24
+#: ui/templates/teacher/practice/queue.html:25
 msgid "To grade"
 msgstr "Бағалау керек"
 
-#: ui/templates/teacher/practice/queue.html:32
+#: ui/templates/teacher/practice/queue.html:40
+msgid "Give feedback"
+msgstr "Пікір беру"
+
+#: ui/templates/teacher/practice/queue.html:45
 msgid "Trial"
 msgstr "Сынақ"
 
-#: ui/templates/teacher/practice/queue.html:46
+#: ui/templates/teacher/practice/queue.html:59
 msgid "Gathered"
 msgstr "Жинақталды"
 
-#: ui/templates/teacher/practice/queue.html:63
+#: ui/templates/teacher/practice/queue.html:76
 msgid "Nothing here yet"
 msgstr "Әзірге ештеңе жоқ"
 
-#: ui/templates/teacher/practice/queue.html:63
+#: ui/templates/teacher/practice/queue.html:76
 msgid "Works appear when students finish their trials."
 msgstr "Студенттер сынақты аяқтағанда жұмыстар осында шығады."
 
@@ -14022,6 +14881,9 @@ msgstr "Практикалық жұмыс 3"
 #: ui/views.py:24
 msgid "Conditions"
 msgstr "Шарты"
+
+#~ msgid "Sections 5–6 works"
+#~ msgstr "5–6-бөлім жұмыстары"
 
 #~ msgid "No practices here yet"
 #~ msgstr "Әзірге практикалар жоқ"

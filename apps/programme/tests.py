@@ -265,7 +265,7 @@ class StudentPageTests(Base):
         self.assertContains(r, reverse("student:section", args=[1]))
 
     def test_an_open_section_not_built_yet(self):
-        Section.objects.filter(pk=self.section(2).pk).update(kind="portfolio")  # a kind not built yet
+        Section.objects.filter(pk=self.section(2).pk).update(kind="independent")  # a kind not built yet
         self.pass_stages(4)
         r = self.client.get(reverse("student:section", args=[2]))
         self.assertTemplateUsed(r, "student/section.html")
@@ -1202,3 +1202,142 @@ class MicrolessonTests(Base):
         self.assertTrue(self.client.get(self.url("micro_pdf")).content.startswith(b"%PDF"))
         self.enrollment()
         self.assertEqual(SectionProgress.objects.get(section__number=6).percent, Decimal("100.00"))
+
+
+@override_settings(AI_TUTOR_ENABLED=True)
+class PortfolioTests(DiagnosticsBase):
+    """Section 7: the works gathered, the reflection, the development map, the AI completeness check, assemble,
+    submit, the teacher's feedback (Accepted / Needs more work), the section's percent."""
+
+    def setUp(self):
+        super().setUp()
+        import json
+
+        from apps.ai.services import client as ai_client
+        from apps.ai.tests import FakeClient, answer
+
+        from .services import portfolio as portfolio_services
+
+        self.ps = portfolio_services
+        items = dict.fromkeys(("q1", "q2", "q3", "q4", "q5", "q6", "q7", "chemistry", "digital", "design", "micro",
+                               "reflection"), "ok")  # fmt: skip
+        self.fake = FakeClient(answer(json.dumps({"items": {**items, "q3": "wrong"}})))
+        patcher = mock.patch.object(ai_client, "get_client", return_value=self.fake)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        for phase in ("I", "II", "III"):
+            self.take(phase)
+        self.teacher = User.objects.create_user("ta", "ta@example.kz", "x", role=User.Role.TEACHER)
+        CourseTeacher.objects.create(course=self.course, teacher=self.teacher)
+        services.unlock_section(self.penr, self.section(7), self.teacher)
+        self.client.force_login(self.student)
+
+    def fill(self):
+        self.ps.save_reflection(self.penr, {str(n): f"Менің жауабым {n}: тәжірибе жинадым." for n in range(1, 8)})
+        self.ps.save_plan(self.penr, {k: {"action": "Әдебиет оқу", "expected": "Білімім тереңдейді"}
+                                      for k in ("chemistry", "digital", "design", "micro", "reflection")})  # fmt: skip
+
+    def percent(self):
+        self.enrollment()
+        return SectionProgress.objects.get(section__number=7).percent
+
+    def test_the_works_are_gathered_and_the_page_shows_them(self):
+        from .portfolio_selectors import works
+
+        cards = works(self.penr)
+        self.assertEqual(len(cards), 8)
+        self.assertEqual(cards[1]["status"]["tone"], "ok")  # I, II, III taken
+        r = self.client.get(reverse("student:section", args=[7]))
+        self.assertTemplateUsed(r, "student/portfolio/partials/dashboard.html")
+        self.assertContains(r, reverse("student:portfolio_reflection"))
+
+    def test_reflection_and_plan_by_the_pages_and_the_percent(self):
+        self.assertEqual(self.percent(), Decimal("0.00"))
+        data = {f"q{n}": "Жауап, толық сөйлем." for n in range(1, 8)}
+        self.assertRedirects(
+            self.client.post(reverse("student:portfolio_reflection"), data), reverse("student:section", args=[7])
+        )
+        self.assertEqual(self.percent(), Decimal("25.00"))
+        plan = {
+            f"{k}_{f}": "Мазмұн"
+            for k in ("chemistry", "digital", "design", "micro", "reflection")
+            for f in ("action", "expected")
+        }
+        self.client.post(reverse("student:portfolio_plan"), {"action": "goals", **plan})
+        self.assertEqual(self.percent(), Decimal("50.00"))
+        self.client.post(
+            reverse("student:portfolio_plan"), {"action": "results", "micro_done": "on", "micro_result": "Өткіздім"}
+        )
+        from .models import DevelopmentPlanItem
+
+        self.assertTrue(DevelopmentPlanItem.objects.get(direction="micro").done)
+
+    def test_assemble_needs_everything_and_submit_needs_the_latest(self):
+        portfolio = self.ps.portfolio_of(self.penr)
+        with self.assertRaises(self.ps.PortfolioError):
+            self.ps.assemble(portfolio)
+        self.fill()
+        version = self.ps.assemble(portfolio)
+        self.assertEqual(len(version.snapshot["reflection"]), 7)
+        self.assertEqual(version.snapshot["icpai"][0]["phases"]["III"], 100.0)
+        self.ps.save_reflection(self.penr, {str(n): "Өзгерген жауап, толық сөйлем." for n in range(1, 8)})
+        with self.assertRaises(self.ps.PortfolioError):
+            self.ps.submit(portfolio)  # changed since: assemble again
+        self.ps.assemble(portfolio)
+        self.ps.submit(portfolio)
+        portfolio.refresh_from_db()
+        self.assertEqual(portfolio.status, "submitted")
+        with self.assertRaises(self.ps.PortfolioError):
+            self.ps.save_reflection(self.penr, {})  # with the teacher: locked
+        self.assertEqual(self.percent(), Decimal("75.00"))  # not accepted yet — the section does not pass
+
+    def test_the_ai_checks_only_the_completeness(self):
+        self.fill()
+        r = self.client.post(reverse("student:portfolio_check"))
+        portfolio = self.ps.portfolio_of(self.penr)
+        self.assertEqual(portfolio.ai_check["items"]["q3"], "wrong")
+        system = self.fake.calls[0]["system"]
+        self.assertIn("never write", system)
+        self.assertIn("<student_text>", system)
+        self.assertEqual(r.status_code, 302)
+        r = self.client.get(reverse("student:portfolio_reflection"))
+        self.assertContains(r, "✕")
+
+    def test_teacher_feedback_needs_more_then_accepted(self):
+        from apps.feedback.models import Notification
+
+        self.fill()
+        portfolio = self.ps.portfolio_of(self.penr)
+        self.ps.assemble(portfolio)
+        self.ps.submit(portfolio)
+        self.client.force_login(self.teacher)
+        self.assertContains(
+            self.client.get(reverse("teacher:practice_queue") + "?what=portfolio"),
+            reverse("teacher:portfolio", args=[portfolio.pk]),
+        )
+        url = reverse("teacher:portfolio", args=[portfolio.pk])
+        self.assertContains(self.client.get(url), "Менің жауабым 1")
+        self.client.post(url, {"chemistry": "Жақсы", "improvements": "Рефлексияны тереңдету", "status": "needs_more"})
+        portfolio.refresh_from_db()
+        self.assertEqual(portfolio.status, "needs_more")
+        self.assertTrue(Notification.objects.filter(user=self.student, kind="comment").exists())
+        self.ps.save_reflection(
+            self.penr, {str(n): "Толықтырылған жауап, толық сөйлем." for n in range(1, 8)}
+        )  # open again
+        self.ps.assemble(portfolio)
+        self.ps.submit(portfolio)
+        self.client.post(url, {"strengths": "Жүйелі", "status": "accepted"})
+        portfolio.refresh_from_db()
+        self.assertEqual((portfolio.status, portfolio.feedbacks.count()), ("accepted", 2))
+        self.assertEqual(self.percent(), Decimal("100.00"))
+        other = User.objects.create_user("tb", "tb@example.kz", "x", role=User.Role.TEACHER)
+        self.client.force_login(other)
+        self.assertEqual(self.client.get(url).status_code, 404)
+
+    def test_view_and_pdf(self):
+        self.fill()
+        self.client.post(reverse("student:portfolio_assemble"))
+        r = self.client.get(reverse("student:portfolio_view"))
+        self.assertTemplateUsed(r, "student/portfolio/partials/sheet.html")
+        self.assertContains(r, "Менің жауабым 7")
+        self.assertTrue(self.client.get(reverse("student:portfolio_pdf")).content.startswith(b"%PDF"))

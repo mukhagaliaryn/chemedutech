@@ -11,6 +11,9 @@ from apps.courses import selectors as course_selectors
 from apps.pedagogy import frames
 from apps.pedagogy import services as pedagogy
 from apps.pedagogy.models import Lesson, Review, Trial
+from apps.programme import services as programme_services
+from apps.programme.models import FEEDBACK_DIRECTIONS, PARTS, Portfolio, PortfolioFeedback
+from apps.programme.services import portfolio as portfolio_services
 
 from .views import teacher_only
 
@@ -27,6 +30,12 @@ def _practices(request):
     )
 
 
+def _portfolios(request):
+    return Portfolio.objects.filter(
+        enrollment__student__in=course_selectors.teacher_students(request.user), submitted_at__isnull=False
+    ).select_related("enrollment__student__student_profile__group")
+
+
 def _micro_trials(request):
     return Trial.objects.filter(
         mode=Trial.Mode.DIALOG,
@@ -40,12 +49,24 @@ def _micro_trials(request):
 def queue(request):
     """Section 5 practices or section 6 microlesson trials: «To grade» first, then «Graded»."""
     show = request.GET.get("show", "new")
-    what = "micro" if request.GET.get("what") == "micro" else "practice"
-    practices, trials = _practices(request), _micro_trials(request)
+    what = request.GET.get("what") if request.GET.get("what") in ("micro", "portfolio") else "practice"
+    practices, trials, portfolios = _practices(request), _micro_trials(request), _portfolios(request)
+    waiting = portfolios.filter(status=Portfolio.Status.SUBMITTED)
     counts = {
         "practice": practices.filter(reviews__isnull=True).count(),
         "micro": trials.filter(reviews__isnull=True).count(),
+        "portfolio": waiting.count(),
     }
+    if what == "portfolio":
+        rows = (
+            waiting
+            if show != "graded"
+            else portfolios.exclude(status=Portfolio.Status.SUBMITTED).filter(feedbacks__isnull=False).distinct()
+        ).order_by("-submitted_at")[:300]
+        graded = portfolios.filter(feedbacks__isnull=False).distinct().count()
+        return render(request, "teacher/practice/queue.html", {
+            "rows": rows, "show": show, "what": what, "counts": counts, "new": counts[what], "graded": graded,
+        })  # fmt: skip
     items = trials if what == "micro" else practices
     graded = items.filter(reviews__isnull=False).count()
     if what == "micro":
@@ -124,4 +145,31 @@ def micro(request, trial_pk):
         "number": pedagogy.trial_number(trial), "seconds": pedagogy.elapsed_s(trial),
         "criteria": [{"number": n, "label": label, "points": review.scores.get(str(n)) if review else None}
                      for n, label in Review.MICRO_CRITERIA],
+    })  # fmt: skip
+
+
+@teacher_only
+def portfolio(request, pk):
+    """A submitted portfolio (@S7 III): its latest version in ten parts and the teacher's professional feedback —
+    four directions, strengths, parts to improve, recommendations, the status."""
+    item = get_object_or_404(_portfolios(request), pk=pk)
+    if request.method == "POST":
+        try:
+            portfolio_services.give_feedback(item, request.user, request.POST)
+        except portfolio_services.PortfolioError as exc:
+            messages.error(
+                request,
+                _("Choose the status of the work.")
+                if str(exc) == "status"
+                else _("The portfolio is not waiting for feedback."),
+            )
+            return redirect("teacher:portfolio", item.pk)
+        programme_services.refresh(item.enrollment.student)
+        messages.success(request, _("The feedback is saved and shown to the student."))
+        return redirect(f"{reverse('teacher:practice_queue')}?what=portfolio")
+    version = portfolio_services.latest_version(item)
+    return render(request, "teacher/practice/portfolio.html", {
+        "portfolio": item, "version": version, "data": version.snapshot if version else {}, "parts": PARTS,
+        "feedback_directions": FEEDBACK_DIRECTIONS, "feedbacks": list(item.feedbacks.select_related("teacher")),
+        "statuses": PortfolioFeedback.Status.choices, "waiting": item.status == Portfolio.Status.SUBMITTED,
     })  # fmt: skip

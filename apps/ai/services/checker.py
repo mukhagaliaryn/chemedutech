@@ -28,3 +28,19 @@ def check(user, *, context_type: str, context_id: int, context: str, client=None
     }
     message.save(update_fields=["structured"])
     return message
+
+
+def check_portfolio(user, *, context_type: str, context_id: int, context: str, client=None):
+    """Check the reflection and the development map of a portfolio: {items: {"q1": "ok", …, "micro": "wrong"}}."""
+    system = f"{checker.PORTFOLIO_SYSTEM}\n\n<context>\nInterface language: {language()}.\n{context}\n</context>"
+    message = ask_structured(
+        user, mode=Mode.CHECKER, prompt_version=checker.PORTFOLIO_VERSION, system=system,
+        request="Check the portfolio.", schema=checker.PORTFOLIO_SCHEMA, context_type=context_type,
+        context_id=context_id, intent="check_portfolio", client=client,
+    )  # fmt: skip
+    items = message.structured.get("items")
+    if not isinstance(items, dict):
+        raise AIUnavailable("bad structured answer")
+    message.structured = {"items": {k: ("ok" if items.get(k) == "ok" else "wrong") for k in checker.PORTFOLIO_ITEMS}}
+    message.save(update_fields=["structured"])
+    return message

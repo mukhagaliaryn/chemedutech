@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import designer, micro, practice, sections, views
+from . import designer, micro, portfolio, practice, sections, views
 
 app_name = "student"
 
@@ -58,6 +58,15 @@ urlpatterns = [
     path(MICRO + "assemble/", micro.micro_assemble, name="micro_assemble"),
     path(MICRO + "pdf/", micro.micro_pdf, name="micro_pdf"),
     path(MICRO + "<int:order>/save/", micro.micro_stage_save, name="micro_stage_save"),
+    path("me/portfolio/", portfolio.portfolio, name="portfolio"),
+    path("me/portfolio/reflection/", portfolio.reflection, name="portfolio_reflection"),
+    path("me/portfolio/plan/", portfolio.plan, name="portfolio_plan"),
+    path("me/portfolio/details/", portfolio.details, name="portfolio_details"),
+    path("me/portfolio/check/", portfolio.check, name="portfolio_check"),
+    path("me/portfolio/assemble/", portfolio.assemble, name="portfolio_assemble"),
+    path("me/portfolio/submit/", portfolio.submit, name="portfolio_submit"),
+    path("me/portfolio/view/", portfolio.view, name="portfolio_view"),
+    path("me/portfolio/pdf/", portfolio.pdf, name="portfolio_pdf"),
     path("me/icpai/", sections.results, name="icpai"),
     path("me/search/", views.search, name="search"),
     path("me/results/", views.results, name="results"),

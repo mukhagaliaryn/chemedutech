@@ -10,6 +10,7 @@ from .course import CourseProvider
 from .designer import DesignerProvider
 from .diagnostic import DiagnosticProvider
 from .micro import MicrolessonProvider
+from .portfolio import PortfolioProvider
 from .practice import ResearchPracticeProvider
 from .video import VideoProvider
 
@@ -20,6 +21,7 @@ PROVIDERS: dict[str, Provider] = {
     Section.Kind.DESIGNER: DesignerProvider(),
     Section.Kind.RESEARCH_PRACTICE: ResearchPracticeProvider(),
     Section.Kind.MICROLESSON: MicrolessonProvider(),
+    Section.Kind.PORTFOLIO: PortfolioProvider(),
 }
 
 

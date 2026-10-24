@@ -1,0 +1,41 @@
+{% extends "layouts/student.html" %}
+{% load i18n %}
+{% comment %}«My professional reflection» (guide @S7 IV): the student answers seven questions alone — the AI writes no
+reflection; the teacher's latest feedback beside; the AI completeness marks (✓ / ✕) when current; «Save the
+reflection».{% endcomment %}
+{% block title %}{% translate "My professional reflection" %} · ChemEduTech{% endblock %}
+{% block crumb %}{{ programme.title }} · {% blocktranslate with n=section.number %}Section {{ n }}{% endblocktranslate %}{% endblock %}
+{% block page_title %}{% translate "My professional reflection" %}{% endblock %}
+{% block main_class %}max-w-[1280px]{% endblock %}
+{% block content %}
+<a class="link inline-flex items-center gap-1.5 text-sm font-semibold" href="{% url 'student:section' section.number %}">{% include "components/icons.html#arrow-left" %}{{ section.number }}. {{ section.title }}</a>
+<div class="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_340px]">
+  <form method="post" class="card flex flex-col gap-4" aria-labelledby="rf-title">{% csrf_token %}
+    <div>
+      <h1 id="rf-title" class="text-[22px] leading-7 font-extrabold">{% translate "My professional reflection" %}</h1>
+      <p class="mt-1 text-[14px] text-ink-soft">{% translate "You fill in this part yourself. The AI assistant does not write the reflection: draw your conclusion from your learning experience, the works you did and the teacher's feedback." %}</p>
+    </div>
+    {% for r in rows %}
+      <label class="tone-{% if forloop.counter > 6 %}7{% else %}{{ forloop.counter }}{% endif %} flex flex-col gap-2 rounded-lg border border-line p-4 focus-within:border-(--tone)">
+        <span class="flex items-start gap-3">
+          <span class="num grid size-8 shrink-0 place-items-center rounded-full bg-(--tone) text-[14px] font-extrabold text-white">{{ forloop.counter }}</span>
+          <span class="min-w-0 flex-1 pt-1 text-[14.5px] leading-[21px] font-extrabold">{{ r.question }}</span>
+          {% if r.mark == "ok" %}<span class="shrink-0 rounded-[8px] bg-success-600 px-2 py-1 text-[11px] font-extrabold text-white">✓</span>{% elif r.mark == "wrong" %}<span class="shrink-0 rounded-[8px] bg-danger-600 px-2 py-1 text-[11px] font-extrabold text-white">✕</span>{% endif %}
+        </span>
+        <textarea name="q{{ r.key }}" rows="3" maxlength="6000" class="input" {% if not portfolio.editable %}disabled{% endif %}
+                  x-data @input="$el.style.height = 'auto'; $el.style.height = $el.scrollHeight + 'px'">{{ r.answer }}</textarea>
+      </label>
+    {% endfor %}
+    {% if portfolio.editable %}<div class="flex justify-end"><button type="submit" class="btn btn-primary h-[46px] px-6 font-bold">{% include "components/icons.html#save" %}{% translate "Save the reflection" %}</button></div>{% endif %}
+  </form>
+  <aside class="card flex flex-col gap-3 lg:sticky lg:top-20">
+    <h2 class="text-[15px] font-extrabold">{% translate "The teacher's professional feedback" %}</h2>
+    {% if feedback %}
+      <span class="badge {% if feedback.status == 'accepted' %}badge-success{% else %}badge-warning{% endif %} w-fit text-[11px] font-bold">{{ feedback.get_status_display }}</span>
+      {% if feedback.strengths %}<p class="text-[13px]"><span class="font-bold text-success-700">{% translate "Strengths of the work" %}:</span> {{ feedback.strengths }}</p>{% endif %}
+      {% if feedback.improvements %}<p class="text-[13px]"><span class="font-bold text-warning-700">{% translate "Parts that need improving" %}:</span> {{ feedback.improvements }}</p>{% endif %}
+      {% if feedback.recommendations %}<p class="text-[13px]"><span class="font-bold text-primary-700">{% translate "Professional recommendations" %}:</span> {{ feedback.recommendations }}</p>{% endif %}
+    {% else %}<p class="text-[13px] text-ink-faint">{% translate "The teacher gives feedback after the portfolio is submitted." %}</p>{% endif %}
+  </aside>
+</div>
+{% endblock %}

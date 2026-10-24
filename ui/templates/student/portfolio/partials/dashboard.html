@@ -1,0 +1,204 @@
+{% load i18n %}{% comment %}
+Section 7 on its section page (guide @S7; picture image24 «ICPAI PROFESSIONAL PORTFOLIO»): the banner; «My
+professional works» (the eight components as cards, gathered automatically); «ICPAI — professional readiness results»
+(rings of the latest stage, the I/II/III bars); «The teacher's professional feedback»; «My professional reflection»
+and «My professional development trajectory» (previews, links to fill them in); «Integration of the results of
+sections 5 and 6» (apart); «Assemble the portfolio» (what is ready, the AI completeness check, assemble, view, PDF,
+submit to the teacher). Context: student.portfolio.portfolio_context; section.
+{% endcomment %}
+<section class="relative overflow-hidden rounded-xl bg-[linear-gradient(120deg,var(--color-primary-900),var(--color-primary-600)_60%,var(--color-stage-lab))] px-[clamp(20px,3vw,32px)] py-6 text-white" aria-labelledby="pf-title">
+  <svg aria-hidden="true" class="pointer-events-none absolute -top-6 -right-4 h-52 opacity-15" viewBox="0 0 200 160"><g fill="none" stroke="#fff" stroke-width="2"><rect x="40" y="30" width="70" height="90" rx="8"/><path d="M52 52h46M52 66h46M52 80h30"/><circle cx="150" cy="60" r="26" class="spin-slow" stroke-dasharray="6 6"/><path d="M140 60l7 7 14-15"/><path class="dash-flow" stroke-dasharray="5 5" d="M110 75h14"/></g></svg>
+  <div class="relative flex flex-wrap items-center justify-between gap-4">
+    <div class="max-w-[780px]">
+      <p class="text-[12px] font-extrabold tracking-wide text-white/75 uppercase">ICPAI PROFESSIONAL PORTFOLIO</p>
+      <h2 id="pf-title" class="mt-1 text-[clamp(20px,2.4vw,26px)] leading-tight font-extrabold">{% translate "The professional development map of a future chemistry teacher" %}</h2>
+      <p class="mt-2 text-[14px] leading-[21px] text-white/85">{% translate "In this module the teacher's feedback, the assessment results, the student's reflection and the works done are gathered in one system." %}</p>
+    </div>
+    <span class="inline-flex h-9 items-center gap-2 rounded-full bg-white px-4 text-sm font-extrabold {% if portfolio.status == 'accepted' %}text-success-700{% elif portfolio.status == 'submitted' %}text-primary-700{% elif portfolio.status == 'draft' %}text-ink{% else %}text-warning-700{% endif %}">{% include "components/icons.html#award" with size=15 %}{{ portfolio.get_status_display }}</span>
+  </div>
+</section>
+
+{# ---- I.1 My professional works ---- #}
+<section class="card flex flex-col gap-3" aria-labelledby="works-title">
+  <h2 id="works-title" class="flex items-center gap-2 text-[16px] font-extrabold">{% include "components/icons.html#book" with size=18 %}{% translate "My professional works" %}</h2>
+  <ul class="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+    {% for w in works %}
+      <li class="tone-{{ forloop.counter }} group flex flex-col gap-2.5 rounded-lg border border-line p-3.5 transition-all hover:-translate-y-0.5 hover:border-(--tone) hover:shadow-lift" data-reveal>
+        <div class="flex items-start gap-3">
+          <span class="grid size-10 shrink-0 place-items-center rounded-[12px] bg-(--tone-50) text-(--tone)">{% include "components/icons.html#"|add:w.icon with size=18 %}</span>
+          <p class="min-w-0 text-[13px] leading-[17px] font-bold">{{ w.title }}</p>
+        </div>
+        <p class="flex flex-wrap items-center gap-1.5 text-[11.5px]">
+          <span class="inline-flex h-5 items-center rounded-full px-2 font-bold {% if w.status.tone == 'ok' %}bg-success-50 text-success-700{% elif w.status.tone == 'progress' %}bg-warning-50 text-warning-700{% else %}bg-surface-sunken text-ink-faint{% endif %}">{{ w.status.label }}</span>
+          {% if w.date %}<span class="num text-ink-faint">{{ w.date|date:"d.m.Y" }}</span>{% endif %}
+          {% if w.grade %}<span class="num ml-auto font-extrabold">{{ w.grade }}</span>{% endif %}
+        </p>
+        {% if w.detail %}<p class="text-[12px] text-ink-soft">{{ w.kind }} · {{ w.detail }}</p>{% else %}<p class="text-[12px] text-ink-soft">{{ w.kind }}</p>{% endif %}
+        {% if w.comment %}<p class="line-clamp-2 rounded-[8px] bg-canvas px-2.5 py-1.5 text-[11.5px] leading-4 text-ink-soft italic">«{{ w.comment }}»</p>{% endif %}
+        {% if w.url %}<a class="mt-auto inline-flex items-center gap-1 self-start text-[12.5px] font-bold text-(--tone) hover:underline" href="{{ w.url }}">{% translate "View the work" %}{% include "components/icons.html#arrow-right" with size=13 %}</a>{% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+</section>
+
+<div class="grid items-start gap-4 xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+  {# ---- II ICPAI results ---- #}
+  <section class="card flex flex-col gap-4" aria-labelledby="icpai-title">
+    <div class="flex items-center justify-between gap-2">
+      <h2 id="icpai-title" class="flex items-center gap-2 text-[16px] font-extrabold">{% include "components/icons.html#chart" with size=18 %}{% translate "ICPAI — professional readiness results" %}</h2>
+      <a class="link text-[12.5px] font-bold" href="{% url 'student:icpai' %}">{% translate "Results" %} →</a>
+    </div>
+    <ul class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      {% for r in dynamics %}
+        <li class="flex flex-col items-center gap-1.5 text-center">
+          {% with v=r.latest|default:0 %}{% if r.latest is not None %}{% with t=r.latest|floatformat:0|add:"%" %}
+            {% if r.component == "motivational" %}{% include "components/ring.html" with value=v size=76 stroke=8 text=t color="stroke-warning-500" track="stroke-warning-50" %}
+            {% elif r.component == "cognitive" %}{% include "components/ring.html" with value=v size=76 stroke=8 text=t color="stroke-primary-600" track="stroke-primary-100" %}
+            {% elif r.component == "activity" %}{% include "components/ring.html" with value=v size=76 stroke=8 text=t color="stroke-stage-lab" track="stroke-stage-lab-50" %}
+            {% else %}{% include "components/ring.html" with value=v size=76 stroke=8 text=t color="stroke-stage-video" track="stroke-stage-video-50" %}{% endif %}
+          {% endwith %}{% else %}{% include "components/ring.html" with value=0 size=76 stroke=8 text="—" %}{% endif %}{% endwith %}
+          <span class="text-[12px] leading-4 font-bold">{{ forloop.counter }}. {{ r.label }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+    <div class="flex flex-col gap-2">
+      <div class="flex items-center justify-between"><p class="text-[13px] font-bold">{% translate "Dynamics by stages, %" %}</p>
+        <p class="flex gap-3 text-[11.5px] font-semibold text-ink-soft" aria-hidden="true"><span class="inline-flex items-center gap-1"><span class="size-2.5 rounded-[3px] bg-primary-300"></span>I</span><span class="inline-flex items-center gap-1"><span class="size-2.5 rounded-[3px] bg-stage-lab"></span>II</span><span class="inline-flex items-center gap-1"><span class="size-2.5 rounded-[3px] bg-stage-video"></span>III</span></p></div>
+      <div class="grid grid-cols-4 gap-3 border-b border-line" aria-hidden="true">
+        {% for r in dynamics %}
+          <div class="flex h-[150px] items-end justify-center gap-1">
+            {% for p in phases %}{% with v=r.phases|get:p %}
+              <div class="flex h-full w-full max-w-[22px] flex-col items-center justify-end gap-0.5">
+                <span class="num text-[10px] font-bold text-ink-soft">{% if v is not None %}{{ v|floatformat:0 }}{% endif %}</span>
+                <span class="bar-grow block w-full rounded-t-[6px] {% if p == 'I' %}bg-primary-300{% elif p == 'II' %}bg-stage-lab{% else %}bg-stage-video{% endif %}" style="height: {% if v is not None %}{{ v|stringformat:'.1f' }}{% else %}0{% endif %}%"></span>
+              </div>
+            {% endwith %}{% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+      <div class="grid grid-cols-4 gap-3 text-center text-[11.5px] font-bold" aria-hidden="true">{% for r in dynamics %}<span class="truncate">{{ r.label }}</span>{% endfor %}</div>
+      <p class="text-caption text-ink-faint">{% translate "Component result (%) = points earned / maximum points × 100." %}</p>
+    </div>
+  </section>
+
+  {# ---- III the teacher's feedback ---- #}
+  <section class="card flex flex-col gap-3" aria-labelledby="fb-title">
+    <h2 id="fb-title" class="flex items-center gap-2 text-[16px] font-extrabold">{% include "components/icons.html#message" with size=18 %}{% translate "The teacher's professional feedback" %}</h2>
+    {% if feedback %}
+      <div class="flex items-center gap-3">
+        {% include "components/avatar.html" with person=feedback.teacher size="md" %}
+        <div class="min-w-0"><p class="text-[14px] font-bold">{{ feedback.teacher.get_full_name|default:feedback.teacher.username }}</p><p class="num text-[12px] text-ink-faint">{{ feedback.created_at|date:"d.m.Y" }}</p></div>
+        <span class="badge {% if feedback.status == 'accepted' %}badge-success{% else %}badge-warning{% endif %} ml-auto text-[11px] font-bold">{{ feedback.get_status_display }}</span>
+      </div>
+      <ul class="flex flex-col gap-2">
+        {% for d in feedback_rows %}
+          <li class="rounded-lg bg-canvas px-3 py-2"><p class="text-[12.5px] font-extrabold">{{ d.label }}</p><p class="mt-0.5 text-[12.5px] leading-[18px] text-ink-soft">{{ d.text|default:"—" }}</p></li>
+        {% endfor %}
+      </ul>
+      {% if feedback.strengths %}<p class="text-[12.5px]"><span class="font-bold text-success-700">{% translate "Strengths of the work" %}:</span> {{ feedback.strengths }}</p>{% endif %}
+      {% if feedback.improvements %}<p class="text-[12.5px]"><span class="font-bold text-warning-700">{% translate "Parts that need improving" %}:</span> {{ feedback.improvements }}</p>{% endif %}
+      {% if feedback.recommendations %}<p class="text-[12.5px]"><span class="font-bold text-primary-700">{% translate "Professional recommendations" %}:</span> {{ feedback.recommendations }}</p>{% endif %}
+    {% else %}
+      <div class="flex flex-col items-center gap-2 rounded-lg bg-canvas px-4 py-8 text-center">
+        <span class="grid size-12 place-items-center rounded-full bg-primary-50 text-primary-600">{% include "components/icons.html#message" with size=22 %}</span>
+        <p class="text-[13px] text-ink-soft">{% if portfolio.status == "submitted" %}{% translate "The portfolio is with the teacher. The feedback appears here." %}{% else %}{% translate "The teacher gives feedback after the portfolio is submitted." %}{% endif %}</p>
+      </div>
+    {% endif %}
+  </section>
+</div>
+
+<div class="grid items-start gap-4 lg:grid-cols-2">
+  {# ---- IV my reflection ---- #}
+  <section class="card flex flex-col gap-3" aria-labelledby="rf-title">
+    <div class="flex items-center justify-between gap-2">
+      <h2 id="rf-title" class="flex items-center gap-2 text-[16px] font-extrabold">{% include "components/icons.html#user" with size=18 %}{% translate "My professional reflection" %}</h2>
+      {% if portfolio.editable %}<a class="btn btn-secondary btn-sm" href="{% url 'student:portfolio_reflection' %}">{% include "components/icons.html#edit" %}{% translate "Fill in" %}</a>{% endif %}
+    </div>
+    <ol class="grid gap-2 sm:grid-cols-2">
+      {% for r in reflection %}
+        <li class="tone-{% if forloop.counter > 6 %}7{% else %}{{ forloop.counter }}{% endif %} rounded-lg bg-(--tone-50) px-3 py-2.5">
+          <p class="flex items-start gap-2 text-[12.5px] leading-[17px] font-extrabold text-(--tone)"><span class="num">{{ forloop.counter }}.</span>{{ r.question }}</p>
+          <p class="mt-1 line-clamp-3 text-[12.5px] leading-[18px] {% if r.answer %}text-ink{% else %}text-ink-faint{% endif %}">{{ r.answer|default:"—" }}</p>
+        </li>
+      {% endfor %}
+    </ol>
+    <p class="text-caption text-ink-faint">{% translate "The AI assistant does not write the reflection. You draw the conclusion from your learning experience, your works and the teacher's feedback." %}</p>
+  </section>
+
+  {# ---- V my development trajectory ---- #}
+  <section class="card flex flex-col gap-3" aria-labelledby="pl-title">
+    <div class="flex items-center justify-between gap-2">
+      <h2 id="pl-title" class="flex items-center gap-2 text-[16px] font-extrabold">{% include "components/icons.html#activity" with size=18 %}{% translate "My professional development trajectory" %}</h2>
+      <a class="btn btn-secondary btn-sm" href="{% url 'student:portfolio_plan' %}">{% include "components/icons.html#edit" %}{% translate "Open the map" %}</a>
+    </div>
+    <div class="table-wrap">
+      <table class="table text-[12.5px]">
+        <thead><tr><th scope="col">{% translate "Direction to develop" %}</th><th scope="col">{% translate "Planned action" %}</th><th scope="col">{% translate "Expected result" %}</th></tr></thead>
+        <tbody>
+          {% for r in plan %}
+            <tr><td class="font-bold"><span class="inline-flex items-center gap-1.5">{% if r.item.done %}<span class="text-success-600">{% include "components/icons.html#check" with size=13 %}</span>{% endif %}{{ r.label }}</span></td><td>{{ r.item.action|default:"—"|truncatechars:80 }}</td><td>{{ r.item.expected|default:"—"|truncatechars:80 }}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<div class="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
+  {# ---- integration of sections 5 and 6 ---- #}
+  <section class="card flex flex-col gap-3" aria-labelledby="int-title">
+    <h2 id="int-title" class="flex items-center gap-2 text-[16px] font-extrabold">{% include "components/icons.html#grid" with size=18 %}{% translate "Integration of the results of sections 5 and 6" %}</h2>
+    <ul class="flex flex-col gap-2 text-[13px]">
+      {% for g in practice_grades %}<li class="flex items-center justify-between gap-2 rounded-lg bg-canvas px-3 py-2"><span><span class="tpl-{{ g.lesson.source_template.code }} mr-1.5 inline-flex h-5 items-center rounded-full px-2 text-[11px] font-bold text-white">5 · №{{ g.lesson.source_template.number }}</span>{{ g.lesson.title|truncatechars:40 }}</span><span class="num font-extrabold">{% if g.review %}{{ g.review.total }}/10{% else %}—{% endif %}</span></li>{% endfor %}
+      {% for t in micro_grades %}<li class="flex items-center justify-between gap-2 rounded-lg bg-canvas px-3 py-2"><span><span class="mr-1.5 inline-flex h-5 items-center rounded-full bg-stage-video px-2 text-[11px] font-bold text-white">6</span>{% blocktranslate with n=t.number %}Trial {{ n }}{% endblocktranslate %}</span><span class="num font-extrabold">{% if t.review %}{{ t.review.total }}/10{% else %}—{% endif %}</span></li>{% endfor %}
+      {% if not practice_grades and not micro_grades %}<li class="text-ink-faint">{% translate "No grades yet." %}</li>{% endif %}
+    </ul>
+    <p class="text-[12px] leading-[17px] text-ink-soft">{% translate "The grades of sections 5 and 6 are kept apart; they are not combined with the diagnostic percents, which appear in the results automatically." %}</p>
+  </section>
+
+  {# ---- VI assemble the portfolio ---- #}
+  <section id="assemble" class="card flex scroll-mt-24 flex-col gap-4" aria-labelledby="as-title">
+    <h2 id="as-title" class="flex items-center gap-2 text-[16px] font-extrabold">{% include "components/icons.html#award" with size=18 %}{% translate "Assemble my professional portfolio" %}</h2>
+    <form method="post" action="{% url 'student:portfolio_details' %}" class="grid gap-3 sm:grid-cols-[1fr_1fr_auto] sm:items-end">{% csrf_token %}
+      <label class="flex flex-col gap-1"><span class="text-[12.5px] font-bold">{% translate "Education programme" %}</span><input class="input" name="programme_name" maxlength="255" value="{{ portfolio.programme_name }}" {% if not portfolio.editable %}disabled{% endif %}></label>
+      <label class="flex flex-col gap-1"><span class="text-[12.5px] font-bold">{% translate "Study year" %}</span><input class="input" name="study_year" maxlength="64" value="{{ portfolio.study_year }}" {% if not portfolio.editable %}disabled{% endif %}></label>
+      {% if portfolio.editable %}<button type="submit" class="btn btn-secondary">{% include "components/icons.html#save" %}{% translate "Save" %}</button>{% endif %}
+    </form>
+    <ul class="grid gap-2 text-[13px] sm:grid-cols-3">
+      {% translate "The reflection: seven answers" as c1 %}{% translate "The development map: five directions" as c2 %}{% translate "The final (III) diagnostics" as c3 %}
+      <li class="flex items-center gap-2 rounded-lg {% if state.reflection %}bg-success-50 text-success-700{% else %}bg-warning-50 text-warning-700{% endif %} px-3 py-2 font-semibold">{% if state.reflection %}{% include "components/icons.html#check" with size=15 %}{% else %}{% include "components/icons.html#warn" with size=15 %}{% endif %}{{ c1 }}</li>
+      <li class="flex items-center gap-2 rounded-lg {% if state.plan %}bg-success-50 text-success-700{% else %}bg-warning-50 text-warning-700{% endif %} px-3 py-2 font-semibold">{% if state.plan %}{% include "components/icons.html#check" with size=15 %}{% else %}{% include "components/icons.html#warn" with size=15 %}{% endif %}{{ c2 }}</li>
+      <li class="flex items-center gap-2 rounded-lg {% if state.diagnostics %}bg-success-50 text-success-700{% else %}bg-warning-50 text-warning-700{% endif %} px-3 py-2 font-semibold">{% if state.diagnostics %}{% include "components/icons.html#check" with size=15 %}{% else %}{% include "components/icons.html#warn" with size=15 %}{% endif %}{{ c3 }}</li>
+    </ul>
+    {% if portfolio.editable %}
+      <div class="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-primary-100 bg-primary-50/50 px-4 py-3">
+        <p class="flex items-start gap-2 text-[12.5px] leading-[18px]"><span class="mt-0.5 text-primary-600">{% include "components/icons.html#check-square" with size=15 %}</span>
+          <span>{% translate "The AI assistant does not write the conclusion for you; it only checks that the reflection and the map are complete and consistent." %}
+            {% if check.items %}<span class="mt-1 flex flex-wrap gap-1">{% for k, v in check.items.items %}<span class="inline-flex h-5 items-center rounded-[6px] px-1.5 text-[10.5px] font-extrabold {% if v == 'ok' %}bg-success-600 text-white{% else %}bg-danger-600 text-white{% endif %}">{% if v == "ok" %}✓{% else %}✕{% endif %} {{ k }}</span>{% endfor %}</span>{% endif %}</span></p>
+        <form method="post" action="{% url 'student:portfolio_check' %}" x-data="{ busy: false }" @submit="busy = true">{% csrf_token %}
+          <button type="submit" class="btn btn-secondary btn-sm" :disabled="busy" {% if not ai_enabled %}disabled{% endif %}><span x-show="!busy">{% if check.items %}{% translate "Check again" %}{% else %}{% translate "Check the completeness" %}{% endif %}</span><span x-show="busy" x-cloak>{% translate "Checking…" %}</span></button>
+        </form>
+      </div>
+    {% endif %}
+    <details class="rounded-lg border border-line">
+      <summary class="cursor-pointer px-4 py-2.5 text-[13px] font-bold">{% translate "The structure of the final portfolio" %}</summary>
+      <ol class="grid gap-1 px-4 pb-3 text-[12.5px] sm:grid-cols-2">{% for p in parts %}<li class="flex gap-2"><span class="num font-extrabold text-primary-600">{{ forloop.counter }}.</span>{{ p }}</li>{% endfor %}</ol>
+    </details>
+    {% if version %}<p class="text-[12.5px] text-ink-soft">{% blocktranslate with n=version.number t=version.created_at|date:"d.m.Y H:i" %}Assembled: version {{ n }}, {{ t }}{% endblocktranslate %}{% if not current and portfolio.editable %} · <span class="font-bold text-warning-700">{% translate "changed since — assemble again" %}</span>{% endif %}</p>{% endif %}
+    <div class="flex flex-wrap gap-2">
+      {% if portfolio.editable %}
+        <form method="post" action="{% url 'student:portfolio_assemble' %}">{% csrf_token %}<button type="submit" class="btn btn-primary" {% if not state.ready %}disabled{% endif %}>{% include "components/icons.html#check-square" %}{% translate "Assemble the portfolio" %}</button></form>
+      {% endif %}
+      {% if version %}
+        <a class="btn bg-danger-600 text-white hover:bg-danger-700" href="{% url 'student:portfolio_pdf' %}">{% include "components/icons.html#download" %}{% translate "Save as PDF" %}</a>
+        <a class="btn btn-secondary" href="{% url 'student:portfolio_view' %}">{% include "components/icons.html#eye" %}{% translate "View the portfolio" %}</a>
+        {% if portfolio.editable %}
+          <form method="post" action="{% url 'student:portfolio_submit' %}">{% csrf_token %}
+            {% translate "Submit the portfolio to the teacher?" as s_title %}{% translate "Until the teacher's feedback the portfolio cannot be changed." as s_text %}{% translate "Submit" as s_label %}
+            <button type="submit" class="btn bg-success-600 text-white hover:bg-success-700" {% if not current %}disabled{% endif %} data-confirm="{{ s_title }}" data-confirm-text="{{ s_text }}" data-confirm-label="{{ s_label }}" data-confirm-variant="success" data-confirm-icon="send">{% include "components/icons.html#send" %}{% translate "Submit to the teacher" %}</button>
+          </form>
+        {% endif %}
+      {% endif %}
+    </div>
+  </section>
+</div>

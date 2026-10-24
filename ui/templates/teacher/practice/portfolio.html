@@ -1,0 +1,44 @@
+{% extends "layouts/teacher.html" %}
+{% load i18n %}
+{% comment %}A submitted portfolio for the teacher (guide @S7 III; STEP-37): the latest assembled version in its ten
+parts and «The teacher's professional feedback» — four directions (what each looks at), strengths, parts that need
+improving, professional recommendations, the status (Accepted / Needs more work / Needs revising); earlier
+feedback below.{% endcomment %}
+{% block title %}{% translate "Professional portfolio" %} · {{ data.student.name }} · ChemEduTech{% endblock %}
+{% block crumb %}{% translate "Section 7 portfolios" %}{% endblock %}
+{% block page_title %}{{ data.student.name }}{% endblock %}
+{% block main_class %}max-w-[1440px]{% endblock %}
+{% block content %}
+<a class="link inline-flex items-center gap-1.5 text-sm font-semibold" href="{% url 'teacher:practice_queue' %}?what=portfolio">{% include "components/icons.html#arrow-left" %}{% translate "Section 7 portfolios" %}</a>
+<div class="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_420px]">
+  <div class="min-w-0">{% if version %}{% include "student/portfolio/partials/sheet.html" %}{% endif %}</div>
+  <div class="flex flex-col gap-4 xl:sticky xl:top-20">
+    {% if waiting %}
+      <form method="post" class="card flex flex-col gap-3" aria-labelledby="fb-title">{% csrf_token %}
+        <h2 id="fb-title" class="text-[17px] font-extrabold">{% translate "The teacher's professional feedback" %}</h2>
+        {% for key, label, help in feedback_directions %}
+          <label class="flex flex-col gap-1"><span class="text-[13px] font-extrabold">{{ forloop.counter }}. {{ label }}</span><span class="text-[11.5px] leading-4 text-ink-faint">{{ help }}</span>
+            <textarea name="{{ key }}" rows="2" class="input" placeholder="{% translate "The teacher's opinion" %}"></textarea></label>
+        {% endfor %}
+        <label class="flex flex-col gap-1"><span class="text-[13px] font-bold text-success-700">{% translate "Strengths of the work" %}</span><textarea name="strengths" rows="2" class="input"></textarea></label>
+        <label class="flex flex-col gap-1"><span class="text-[13px] font-bold text-warning-700">{% translate "Parts that need improving" %}</span><textarea name="improvements" rows="2" class="input"></textarea></label>
+        <label class="flex flex-col gap-1"><span class="text-[13px] font-bold text-primary-700">{% translate "Professional recommendations" %}</span><textarea name="recommendations" rows="2" class="input"></textarea></label>
+        <fieldset class="flex flex-col gap-1.5"><legend class="mb-1 text-[13px] font-bold">{% translate "Status of the work" %}</legend>
+          {% for value, label in statuses %}
+            <label class="flex cursor-pointer items-center gap-2.5 rounded-lg border border-line px-3 py-2 text-[13.5px] font-semibold has-checked:border-primary-600 has-checked:bg-primary-50"><input type="radio" name="status" value="{{ value }}" required class="accent-primary-600">{{ label }}</label>
+          {% endfor %}
+        </fieldset>
+        <button type="submit" class="btn btn-primary">{% include "components/icons.html#send" %}{% translate "Save the feedback" %}</button>
+        <p class="text-caption text-ink-faint">{% translate "The feedback is shown in the student's cabinet and goes to the portfolio. «Accepted» completes section 7; otherwise the student corrects and submits again." %}</p>
+      </form>
+    {% endif %}
+    {% for f in feedbacks %}
+      <section class="card flex flex-col gap-1.5 text-[13px]">
+        <p class="flex items-center justify-between gap-2"><span class="font-bold">{{ f.teacher.get_full_name|default:f.teacher.username }} · {{ f.created_at|date:"d.m.Y" }}</span><span class="badge {% if f.status == 'accepted' %}badge-success{% else %}badge-warning{% endif %} text-[11px] font-bold">{{ f.get_status_display }}</span></p>
+        {% if f.strengths %}<p><span class="font-semibold">{% translate "Strengths of the work" %}:</span> {{ f.strengths }}</p>{% endif %}
+        {% if f.improvements %}<p><span class="font-semibold">{% translate "Parts that need improving" %}:</span> {{ f.improvements }}</p>{% endif %}
+      </section>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -24,6 +24,7 @@ urlpatterns = [
     path("practice/", practice.queue, name="practice_queue"),
     path("practice/<int:pk>/", practice.detail, name="practice"),
     path("practice/micro/<int:trial_pk>/", practice.micro, name="micro"),
+    path("practice/portfolio/<int:pk>/", practice.portfolio, name="portfolio"),
     path("grading/<int:pk>/", grading.detail, name="grading_detail"),
     path("comments/", grading.comment, name="comment"),
     path("courses/", content.courses, name="courses"),

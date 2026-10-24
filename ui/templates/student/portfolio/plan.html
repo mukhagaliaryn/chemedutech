@@ -1,0 +1,52 @@
+{% extends "layouts/student.html" %}
+{% load i18n %}
+{% comment %}«My professional development trajectory» (guide @S7 V): the personal development map of five directions —
+«Set the professional development goal» (planned action, expected result) and «Update the development result» (done,
+what was done); the works beside as a basis.{% endcomment %}
+{% block title %}{% translate "My professional development trajectory" %} · ChemEduTech{% endblock %}
+{% block crumb %}{{ programme.title }} · {% blocktranslate with n=section.number %}Section {{ n }}{% endblocktranslate %}{% endblock %}
+{% block page_title %}{% translate "My professional development trajectory" %}{% endblock %}
+{% block main_class %}max-w-[1320px]{% endblock %}
+{% block content %}
+<a class="link inline-flex items-center gap-1.5 text-sm font-semibold" href="{% url 'student:section' section.number %}">{% include "components/icons.html#arrow-left" %}{{ section.number }}. {{ section.title }}</a>
+<section class="card flex flex-col gap-2">
+  <h1 class="text-[22px] leading-7 font-extrabold">{% translate "Personal development map" %}</h1>
+  <p class="max-w-[860px] text-[14px] text-ink-soft">{% translate "On the basis of the diagnostic results, the practical works, the microlesson trials and the teacher's feedback, make your own professional development plan." %}</p>
+</section>
+
+<form method="post" class="card flex flex-col gap-4" aria-labelledby="goals-title">{% csrf_token %}
+  <input type="hidden" name="action" value="goals">
+  <h2 id="goals-title" class="text-[17px] font-extrabold">{% translate "Set the professional development goal" %}</h2>
+  <div class="grid gap-3">
+    <div class="hidden grid-cols-[220px_1fr_1fr] gap-3 px-1 text-[12px] font-extrabold tracking-wide text-ink-faint uppercase md:grid"><span>{% translate "Direction to develop" %}</span><span>{% translate "Planned action" %}</span><span>{% translate "Expected result" %}</span></div>
+    {% for r in rows %}
+      <div class="tone-{{ forloop.counter }} grid gap-3 rounded-lg border border-line p-3 md:grid-cols-[220px_1fr_1fr] md:items-start">
+        <span class="flex items-center gap-2.5 pt-1 text-[14px] font-extrabold"><span class="num grid size-8 shrink-0 place-items-center rounded-full bg-(--tone) text-[13px] text-white">{{ forloop.counter }}</span>{{ r.label }}
+          {% if r.mark == "ok" %}<span class="rounded-[6px] bg-success-600 px-1.5 text-[10.5px] text-white">✓</span>{% elif r.mark == "wrong" %}<span class="rounded-[6px] bg-danger-600 px-1.5 text-[10.5px] text-white">✕</span>{% endif %}</span>
+        <label class="flex flex-col gap-1"><span class="text-[12px] font-bold md:sr-only">{% translate "Planned action" %}</span><textarea class="input" rows="2" name="{{ r.direction }}_action" maxlength="6000" {% if not portfolio.editable %}disabled{% endif %}>{{ r.item.action }}</textarea></label>
+        <label class="flex flex-col gap-1"><span class="text-[12px] font-bold md:sr-only">{% translate "Expected result" %}</span><textarea class="input" rows="2" name="{{ r.direction }}_expected" maxlength="6000" {% if not portfolio.editable %}disabled{% endif %}>{{ r.item.expected }}</textarea></label>
+      </div>
+    {% endfor %}
+  </div>
+  {% if portfolio.editable %}<div class="flex justify-end"><button type="submit" class="btn btn-primary">{% include "components/icons.html#award" %}{% translate "Set the professional development goal" %}</button></div>{% endif %}
+</form>
+
+<form method="post" class="card flex flex-col gap-4" aria-labelledby="res-title">{% csrf_token %}
+  <input type="hidden" name="action" value="results">
+  <div>
+    <h2 id="res-title" class="text-[17px] font-extrabold">{% translate "Update the development result" %}</h2>
+    <p class="mt-1 text-[13px] text-ink-soft">{% translate "The works done towards the goals set are recorded." %}</p>
+  </div>
+  <div class="grid gap-2">
+    {% for r in rows %}{% if r.item %}
+      <div class="tone-{{ forloop.counter }} grid gap-3 rounded-lg bg-(--tone-50) p-3 md:grid-cols-[220px_auto_1fr] md:items-center">
+        <span class="text-[13.5px] font-extrabold text-(--tone)">{{ r.label }}</span>
+        <label class="inline-flex cursor-pointer items-center gap-2 text-[13px] font-semibold"><input type="checkbox" name="{{ r.direction }}_done" class="size-4 accent-success-600" {% if r.item.done %}checked{% endif %}>{% translate "Done" %}</label>
+        <input class="input" name="{{ r.direction }}_result" maxlength="6000" value="{{ r.item.result }}" placeholder="{% translate 'What was done' %}" aria-label="{% translate 'What was done' %}: {{ r.label }}">
+      </div>
+    {% endif %}{% empty %}{% endfor %}
+    {% if not rows.0.item %}<p class="text-[13px] text-ink-faint">{% translate "Set the goals first." %}</p>{% endif %}
+  </div>
+  {% if rows.0.item %}<div class="flex justify-end"><button type="submit" class="btn btn-secondary">{% include "components/icons.html#refresh" %}{% translate "Update the development result" %}</button></div>{% endif %}
+</form>
+{% endblock %}

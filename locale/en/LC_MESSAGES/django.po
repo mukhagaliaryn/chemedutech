@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 22:05+0500\n"
+"POT-Creation-Date: 2026-10-24 22:28+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -165,8 +165,9 @@ msgstr ""
 #: ui/templates/research/dashboard.html:85
 #: ui/templates/teacher/gradebook.html:35 ui/templates/teacher/group.html:118
 #: ui/templates/teacher/group.html:187
-#: ui/templates/teacher/practice/queue.html:32
-#: ui/templates/teacher/practice/queue.html:46
+#: ui/templates/teacher/practice/queue.html:33
+#: ui/templates/teacher/practice/queue.html:45
+#: ui/templates/teacher/practice/queue.html:59
 #: ui/templates/teacher/students.html:29 ui/templates/ui/styleguide.html:140
 #: ui/views.py:21
 msgid "Student"
@@ -336,7 +337,8 @@ msgstr ""
 
 #: apps/ai/models/conversation.py:57 apps/pedagogy/models/lesson.py:162
 #: apps/programme/models/diagnostics.py:73
-#: apps/programme/models/progress.py:116 apps/progress/models/progress.py:172
+#: apps/programme/models/portfolio.py:222 apps/programme/models/progress.py:116
+#: apps/progress/models/progress.py:172
 msgid "at"
 msgstr ""
 
@@ -507,7 +509,9 @@ msgstr ""
 #: apps/certificates/models/certificate.py:43 apps/courses/models/course.py:38
 #: apps/courses/models/enrollment.py:52 apps/feedback/models/comment.py:19
 #: apps/labs/models/attempt.py:23 apps/practice/models/submission.py:21
-#: apps/programme/models/diagnostics.py:61 apps/programme/models/progress.py:56
+#: apps/programme/models/diagnostics.py:61
+#: apps/programme/models/portfolio.py:70 apps/programme/models/portfolio.py:157
+#: apps/programme/models/portfolio.py:178 apps/programme/models/progress.py:56
 #: apps/programme/models/progress.py:100 apps/programme/models/video.py:41
 #: apps/progress/models/activity.py:14 apps/progress/models/progress.py:22
 #: apps/progress/models/progress.py:76 apps/progress/models/progress.py:98
@@ -622,7 +626,7 @@ msgstr ""
 msgid "answer"
 msgstr ""
 
-#: apps/assessments/models/attempt.py:85
+#: apps/assessments/models/attempt.py:85 apps/programme/models/portfolio.py:159
 msgid "answers"
 msgstr ""
 
@@ -983,7 +987,7 @@ msgstr ""
 #: apps/courses/models/structure.py:35 apps/pedagogy/models/lesson.py:95
 #: apps/pedagogy/models/lesson.py:128 apps/pedagogy/models/template.py:12
 #: apps/pedagogy/models/template.py:42 apps/pedagogy/models/trial.py:98
-#: apps/programme/models/programme.py:49
+#: apps/programme/models/portfolio.py:96 apps/programme/models/programme.py:49
 msgid "number"
 msgstr ""
 
@@ -1031,7 +1035,8 @@ msgid "Core"
 msgstr ""
 
 #: apps/core/models.py:9 apps/pedagogy/models/lesson.py:103
-#: apps/pedagogy/models/review.py:47 apps/programme/models/video.py:47
+#: apps/pedagogy/models/review.py:47 apps/programme/models/portfolio.py:185
+#: apps/programme/models/video.py:47
 msgid "updated at"
 msgstr ""
 
@@ -1250,8 +1255,9 @@ msgstr ""
 
 #: apps/courses/models/course.py:36 apps/courses/models/enrollment.py:46
 #: apps/labs/models/attempt.py:39 apps/pedagogy/models/lesson.py:61
-#: apps/practice/models/submission.py:28 apps/programme/models/progress.py:61
-#: apps/progress/models/progress.py:27 apps/progress/models/progress.py:81
+#: apps/practice/models/submission.py:28 apps/programme/models/portfolio.py:74
+#: apps/programme/models/progress.py:61 apps/progress/models/progress.py:27
+#: apps/progress/models/progress.py:81
 msgid "status"
 msgstr ""
 
@@ -1323,6 +1329,7 @@ msgstr ""
 
 #: apps/courses/models/course.py:108 apps/courses/models/course.py:135
 #: apps/pedagogy/models/review.py:41 apps/practice/models/submission.py:137
+#: apps/programme/models/portfolio.py:129
 #: ui/templates/feedback/partials/comment.html:7
 msgid "teacher"
 msgstr ""
@@ -4245,6 +4252,13 @@ msgid ""
 msgstr ""
 
 #: apps/labs/models/attempt.py:10 apps/programme/models/progress.py:52
+#: apps/programme/portfolio_selectors.py:66
+#: apps/programme/portfolio_selectors.py:83
+#: apps/programme/portfolio_selectors.py:97
+#: apps/programme/portfolio_selectors.py:109
+#: apps/programme/portfolio_selectors.py:122
+#: apps/programme/portfolio_selectors.py:135
+#: apps/programme/portfolio_selectors.py:149
 #: apps/progress/models/progress.py:17 apps/progress/models/progress.py:72
 #: apps/student/cabinet.py:94 apps/student/learning.py:97
 #: ui/templates/components/stage_stepper.html:24
@@ -4255,7 +4269,7 @@ msgid "In progress"
 msgstr ""
 
 #: apps/labs/models/attempt.py:11 ui/templates/assessments/result.html:86
-#: ui/templates/teacher/practice/queue.html:32
+#: ui/templates/teacher/practice/queue.html:45
 #: ui/templates/teacher/student.html:140
 msgid "Finished"
 msgstr ""
@@ -4483,7 +4497,9 @@ msgstr ""
 msgid "The journal opens at the «%(step)s» step."
 msgstr ""
 
-#: apps/labs/views.py:48
+#: apps/labs/views.py:48 apps/programme/portfolio_selectors.py:109
+#: apps/programme/portfolio_selectors.py:135
+#: ui/templates/student/portfolio/plan.html:45
 msgid "Done"
 msgstr ""
 
@@ -5028,7 +5044,8 @@ msgstr ""
 msgid "specialties"
 msgstr ""
 
-#: apps/pedagogy/apps.py:8
+#: apps/pedagogy/apps.py:8 apps/programme/models/portfolio.py:22
+#: apps/programme/models/portfolio.py:31
 msgid "Pedagogical design"
 msgstr ""
 
@@ -5095,6 +5112,11 @@ msgstr ""
 
 #: apps/pedagogy/frames.py:69 ui/templates/student/micro/editor.html:53
 #: ui/templates/student/micro/report_pdf.html:25
+#: ui/templates/student/portfolio/partials/dashboard.html:135
+#: ui/templates/student/portfolio/partials/sheet.html:67
+#: ui/templates/student/portfolio/pdf.html:80
+#: ui/templates/student/portfolio/plan.html:22
+#: ui/templates/student/portfolio/plan.html:28
 msgid "Expected result"
 msgstr ""
 
@@ -5438,6 +5460,7 @@ msgid "Template copy"
 msgstr ""
 
 #: apps/pedagogy/models/lesson.py:16 apps/programme/models/programme.py:41
+#: apps/programme/portfolio_selectors.py:119
 #: ui/templates/student/practice/results.html:11
 #: ui/templates/student/practice/sheet.html:11
 #: ui/templates/student/practice/stage.html:11
@@ -5445,6 +5468,7 @@ msgid "Digital research practice"
 msgstr ""
 
 #: apps/pedagogy/models/lesson.py:17 apps/programme/models/programme.py:42
+#: apps/programme/portfolio_selectors.py:147
 #: ui/templates/student/icpai_results.html:120
 #: ui/templates/student/micro/dialog.html:9
 #: ui/templates/student/micro/dialog.html:71
@@ -5452,11 +5476,12 @@ msgstr ""
 #: ui/templates/student/micro/protocol.html:14
 #: ui/templates/student/micro/trial_start.html:7
 #: ui/templates/student/micro/trial_start.html:12
-#: ui/templates/teacher/practice/queue.html:32
+#: ui/templates/teacher/practice/queue.html:45
 msgid "Microlesson"
 msgstr ""
 
 #: apps/pedagogy/models/lesson.py:21 apps/pedagogy/models/lesson.py:123
+#: apps/programme/portfolio_selectors.py:149
 #: ui/templates/student/micro/partials/entry.html:28
 msgid "Assembled"
 msgstr ""
@@ -5581,7 +5606,7 @@ msgstr ""
 msgid "reason"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:130
+#: apps/pedagogy/models/lesson.py:130 apps/programme/models/portfolio.py:97
 msgid "snapshot"
 msgstr ""
 
@@ -5627,12 +5652,12 @@ msgstr ""
 msgid "Final version assembled"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:160 apps/programme/models/progress.py:105
-#: apps/progress/models/progress.py:161
+#: apps/pedagogy/models/lesson.py:160 apps/programme/models/portfolio.py:212
+#: apps/programme/models/progress.py:105 apps/progress/models/progress.py:161
 msgid "action"
 msgstr ""
 
-#: apps/pedagogy/models/lesson.py:161
+#: apps/pedagogy/models/lesson.py:161 apps/programme/models/portfolio.py:213
 msgid "data"
 msgstr ""
 
@@ -5783,7 +5808,7 @@ msgstr ""
 msgid "Low level"
 msgstr ""
 
-#: apps/pedagogy/models/trial.py:18
+#: apps/pedagogy/models/trial.py:18 apps/programme/models/portfolio.py:123
 msgid "version"
 msgstr ""
 
@@ -6136,6 +6161,7 @@ msgid "%(n)s of %(total)s steps are in the right place."
 msgstr ""
 
 #: apps/practice/models/submission.py:14
+#: ui/templates/teacher/practice/queue.html:33
 msgid "Submitted"
 msgstr ""
 
@@ -6144,7 +6170,7 @@ msgid "Being graded"
 msgstr ""
 
 #: apps/practice/models/submission.py:16
-#: ui/templates/teacher/practice/queue.html:25
+#: ui/templates/teacher/practice/queue.html:26
 msgid "Graded"
 msgstr ""
 
@@ -6156,7 +6182,7 @@ msgstr ""
 msgid "Returned"
 msgstr ""
 
-#: apps/practice/models/submission.py:27
+#: apps/practice/models/submission.py:27 apps/programme/models/portfolio.py:75
 msgid "submitted at"
 msgstr ""
 
@@ -6528,6 +6554,306 @@ msgstr ""
 msgid "diagnostic results"
 msgstr ""
 
+#: apps/programme/models/portfolio.py:9
+msgid "What professional knowledge and skills have I gained?"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:10
+msgid ""
+"What pedagogical decisions did I make on my own while developing the "
+"authorial lesson?"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:11
+msgid "What difficulties did I meet in the digital research practice?"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:12
+msgid ""
+"What changes did I notice when conducting the microlesson the first time and "
+"again?"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:13
+msgid "Which of the teacher's suggestions did I take into account?"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:14
+msgid "Which professional skills do I still need to improve?"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:15
+msgid "What is my next professional goal as a future chemistry teacher?"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:20 apps/programme/models/portfolio.py:29
+msgid "Chemistry subject knowledge"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:21 apps/programme/models/portfolio.py:34
+msgid "Using digital technologies"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:23
+#, fuzzy
+#| msgid "Thank you, the test is done"
+msgid "Conducting a microlesson"
+msgstr "Test complete. Thanks!"
+
+#: apps/programme/models/portfolio.py:24
+msgid "Professional reflection"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:30
+msgid ""
+"The student's correct use of chemical concepts, laws, reaction equations and "
+"scientific explanations."
+msgstr ""
+
+#: apps/programme/models/portfolio.py:32
+msgid ""
+"The student's skills of defining the lesson aim, organising tasks, choosing "
+"teaching methods and developing assessment criteria."
+msgstr ""
+
+#: apps/programme/models/portfolio.py:35
+msgid ""
+"The student's use of virtual labs, digital models and interactive tools in "
+"line with the learning aim."
+msgstr ""
+
+#: apps/programme/models/portfolio.py:36
+msgid "Professional activity and reflection"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:37
+msgid ""
+"The student's skills of conducting a microlesson, answering students' "
+"questions, making pedagogical decisions and improving their own work."
+msgstr ""
+
+#: apps/programme/models/portfolio.py:44
+#, fuzzy
+#| msgid "Thank you, the test is done"
+msgid "Basic details of the student"
+msgstr "Test complete. Thanks!"
+
+#: apps/programme/models/portfolio.py:45
+msgid "Professional readiness results by the ICPAI model"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:46
+msgid "The register of theoretical, practical and lab works"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:47
+msgid "The collection of authorial lessons"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:48
+msgid "Results of the digital research practice"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:49
+msgid "Microlessons and the protocols of the professional trial"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:50
+#, fuzzy
+#| msgid "The teacher opened a stage for you"
+msgid "The teacher's expert feedback"
+msgstr "The teacher opened a stage"
+
+#: apps/programme/models/portfolio.py:51
+#, fuzzy
+#| msgid "Thank you, the test is done"
+msgid "The student's professional reflection"
+msgstr "Test complete. Thanks!"
+
+#: apps/programme/models/portfolio.py:52
+msgid "The personal professional development map"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:53
+msgid "The final professional portfolio"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:63
+msgid "Being prepared"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:64 apps/programme/models/portfolio.py:205
+msgid "Submitted to the teacher"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:65 apps/programme/models/portfolio.py:115
+msgid "Accepted"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:66 apps/programme/models/portfolio.py:116
+msgid "Needs more work"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:67 apps/programme/models/portfolio.py:117
+msgid "Needs revising"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:72
+msgid "education programme"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:73
+msgid "study year"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:76 apps/programme/models/portfolio.py:207
+msgid "AI completeness check"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:79 apps/programme/models/portfolio.py:94
+#: apps/programme/models/portfolio.py:120
+#: apps/programme/models/portfolio.py:210
+msgid "portfolio"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:80
+msgid "portfolios"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:98
+msgid "assembled at"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:102
+msgid "portfolio version"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:103
+msgid "portfolio versions"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:131
+msgid "chemistry subject knowledge"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:132 ui/templates/core/about.html:274
+msgid "pedagogical design"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:133
+msgid "using digital technologies"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:134
+msgid "professional activity and reflection"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:135
+msgid "strengths of the work"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:136
+msgid "parts that need improving"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:137
+msgid "professional recommendations"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:138
+msgid "status of the work"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:139
+msgid "given at"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:143
+msgid "teacher's feedback on a portfolio"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:144
+msgid "teachers' feedback on portfolios"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:159
+msgid "{\"1\": \"…\", … \"7\": \"…\"}"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:160
+msgid "saved at"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:163
+msgid "professional reflection"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:164
+msgid "professional reflections"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:180
+msgid "direction"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:181
+msgid "planned action"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:182
+msgid "expected result"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:183
+msgid "done"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:184
+msgid "result"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:189
+msgid "development plan item"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:190
+msgid "development plan items"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:201
+#: apps/programme/portfolio_selectors.py:165
+msgid "Reflection saved"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:202
+msgid "Development goals set"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:203
+msgid "Development results updated"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:204
+msgid "Portfolio assembled"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:206
+msgid "Teacher's feedback"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:220 apps/programme/models/progress.py:113
+#: apps/progress/models/progress.py:168
+msgid "by"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:226
+msgid "portfolio event"
+msgstr ""
+
+#: apps/programme/models/portfolio.py:227
+msgid "portfolio events"
+msgstr ""
+
 #: apps/programme/models/programme.py:20
 msgid "The course of section 1; its students take part in the programme"
 msgstr ""
@@ -6548,6 +6874,7 @@ msgid "Course"
 msgstr ""
 
 #: apps/programme/models/programme.py:38
+#: apps/programme/portfolio_selectors.py:81
 msgid "Diagnostics"
 msgstr ""
 
@@ -6632,9 +6959,12 @@ msgid "Available"
 msgstr ""
 
 #: apps/programme/models/progress.py:53 apps/programme/models/progress.py:95
-#: apps/progress/models/progress.py:19 apps/progress/models/progress.py:143
-#: apps/student/cabinet.py:80 ui/templates/components/stage_stepper.html:22
+#: apps/programme/portfolio_selectors.py:66 apps/progress/models/progress.py:19
+#: apps/progress/models/progress.py:143 apps/student/cabinet.py:80
+#: ui/templates/components/stage_stepper.html:22
 #: ui/templates/student/partials/section_state.html:4
+#: ui/templates/student/portfolio/partials/sheet.html:31
+#: ui/templates/student/portfolio/pdf.html:44
 #: ui/templates/student/results.html:92 ui/templates/student/topic.html:37
 #: ui/templates/teacher/group.html:198 ui/templates/teacher/student.html:82
 msgid "Passed"
@@ -6680,10 +7010,6 @@ msgstr ""
 msgid "Percent changed"
 msgstr ""
 
-#: apps/programme/models/progress.py:113 apps/progress/models/progress.py:168
-msgid "by"
-msgstr ""
-
 #: apps/programme/models/progress.py:114
 msgid "Empty when it follows from the student's work"
 msgstr ""
@@ -6720,8 +7046,113 @@ msgstr ""
 msgid "video watching"
 msgstr ""
 
+#: apps/programme/portfolio_selectors.py:37
+#: ui/templates/student/designer/partials/templates.html:75
+#: ui/templates/student/practice/partials/cards.html:62
+msgid "Not started"
+msgstr ""
+
+#: apps/programme/portfolio_selectors.py:63
+msgid "Lectures learnt and practical and lab works done in general chemistry"
+msgstr ""
+
+#: apps/programme/portfolio_selectors.py:64
+msgid "Theoretical, practical and lab works"
+msgstr ""
+
+#: apps/programme/portfolio_selectors.py:68
+#, python-format
+msgid "%(a)s of %(b)s topics completed"
+msgstr ""
+
+#: apps/programme/portfolio_selectors.py:80
+msgid ""
+"Results of the initial, formative and final diagnostics of professional "
+"readiness"
+msgstr ""
+
+#: apps/programme/portfolio_selectors.py:83
+msgid "Taken"
+msgstr ""
+
+#: apps/programme/portfolio_selectors.py:94
+msgid "Authorial pedagogical design samples"
+msgstr ""
+
+#: apps/programme/portfolio_selectors.py:94
+#, fuzzy
+#| msgid "Your answers"
+msgid "Authorial lessons"
+msgstr "Answers"
+
+#: apps/programme/portfolio_selectors.py:97
+msgid "Final versions"
+msgstr ""
+
+#: apps/programme/portfolio_selectors.py:98
+#, python-format
+msgid "%(n)s final versions"
+msgstr ""
+
+#: apps/programme/portfolio_selectors.py:107
+msgid "Tasks developed with the AI assistant and corrected by the student"
+msgstr ""
+
+#: apps/programme/portfolio_selectors.py:107 ui/templates/core/about.html:144
+msgid "Tasks"
+msgstr ""
+
+#: apps/programme/portfolio_selectors.py:110
+#, python-format
+msgid "%(a)s stages redesigned, %(b)s AI suggestions reworked"
+msgstr ""
+
+#: apps/programme/portfolio_selectors.py:119
+msgid "Lessons developed in the digital research practice"
+msgstr ""
+
+#: apps/programme/portfolio_selectors.py:122
+msgid "Results gathered"
+msgstr ""
+
+#: apps/programme/portfolio_selectors.py:124
+#, python-format
+msgid "%(n)s practices"
+msgstr ""
+
+#: apps/programme/portfolio_selectors.py:133
+msgid "Protocols of the pedagogical trials with the AI student"
+msgstr ""
+
+#: apps/programme/portfolio_selectors.py:133
+msgid "Trial protocols"
+msgstr ""
+
+#: apps/programme/portfolio_selectors.py:136
+#: apps/programme/portfolio_selectors.py:151
+#, python-format
+msgid "%(n)s trials"
+msgstr ""
+
+#: apps/programme/portfolio_selectors.py:147
+msgid "The initial and improved versions of the microlesson"
+msgstr ""
+
+#: apps/programme/portfolio_selectors.py:161
+msgid "The teacher's expert feedback and the student's professional reflection"
+msgstr ""
+
+#: apps/programme/portfolio_selectors.py:162
+msgid "Feedback and reflection"
+msgstr ""
+
 #: apps/programme/services/diagnostics.py:70
 msgid "This diagnostic test is not open."
+msgstr ""
+
+#: apps/programme/services/portfolio.py:294
+#, python-format
+msgid "Portfolio: %(status)s"
 msgstr ""
 
 #: apps/programme/tests.py:239 ui/templates/student/dashboard.html:68
@@ -6729,7 +7160,7 @@ msgstr ""
 msgid "Key figures"
 msgstr ""
 
-#: apps/programme/tests.py:273 ui/templates/student/section.html:133
+#: apps/programme/tests.py:273 ui/templates/student/section.html:136
 msgid "The section is in development"
 msgstr ""
 
@@ -7078,8 +7509,9 @@ msgstr[1] ""
 #: ui/templates/teacher/dashboard.html:80 ui/templates/teacher/group.html:79
 #: ui/templates/teacher/group.html:124 ui/templates/teacher/group.html:208
 #: ui/templates/teacher/partials/groups_table.html:15
-#: ui/templates/teacher/practice/queue.html:41
-#: ui/templates/teacher/practice/queue.html:55
+#: ui/templates/teacher/practice/queue.html:40
+#: ui/templates/teacher/practice/queue.html:54
+#: ui/templates/teacher/practice/queue.html:68
 #: ui/templates/teacher/student.html:82 ui/templates/teacher/students.html:32
 msgid "Open"
 msgstr ""
@@ -7257,14 +7689,16 @@ msgstr ""
 msgid "Choose a part of your lesson."
 msgstr ""
 
-#: apps/student/micro.py:177 ui/templates/ai/partials/thread.html:44
+#: apps/student/micro.py:177 apps/student/portfolio.py:160
+#: ui/templates/ai/partials/thread.html:44
 #: ui/templates/student/designer/partials/turn.html:49
 #: ui/templates/student/micro/partials/messages.html:32
 #: ui/templates/student/practice/step.html:39
 msgid "Today's AI requests are used up. They renew tomorrow."
 msgstr ""
 
-#: apps/student/micro.py:179 ui/templates/ai/partials/thread.html:44
+#: apps/student/micro.py:179 apps/student/portfolio.py:162
+#: ui/templates/ai/partials/thread.html:44
 msgid "The AI assistant did not answer this time. Try again in a minute."
 msgstr ""
 
@@ -7284,6 +7718,42 @@ msgstr ""
 
 #: apps/student/micro.py:306
 msgid "The microlesson is assembled into your professional trial portfolio."
+msgstr ""
+
+#: apps/student/portfolio.py:92 apps/student/portfolio.py:128
+#: apps/student/portfolio.py:148 apps/student/portfolio.py:164
+#: apps/student/portfolio.py:177 apps/student/portfolio.py:198
+msgid "The portfolio is with the teacher now and cannot be changed."
+msgstr ""
+
+#: apps/student/portfolio.py:94
+msgid "The reflection is saved to your portfolio."
+msgstr ""
+
+#: apps/student/portfolio.py:120
+msgid "The development results are updated."
+msgstr ""
+
+#: apps/student/portfolio.py:126
+msgid "The professional development goals are set."
+msgstr ""
+
+#: apps/student/portfolio.py:179
+msgid ""
+"Fill in the reflection and the development map first; the final diagnostics "
+"must be taken."
+msgstr ""
+
+#: apps/student/portfolio.py:182
+msgid "The portfolio is assembled."
+msgstr ""
+
+#: apps/student/portfolio.py:196
+msgid "Assemble the portfolio again — it has changed since."
+msgstr ""
+
+#: apps/student/portfolio.py:202
+msgid "The portfolio is submitted to the teacher."
 msgstr ""
 
 #: apps/student/practice.py:33
@@ -7336,19 +7806,19 @@ msgid ""
 "The trial is finished; the results are gathered into your research portfolio."
 msgstr ""
 
-#: apps/student/sections.py:236
+#: apps/student/sections.py:238
 msgid "Explain the section"
 msgstr ""
 
-#: apps/student/sections.py:237
+#: apps/student/sections.py:239
 msgid "Let the AI explain"
 msgstr ""
 
-#: apps/student/sections.py:238
+#: apps/student/sections.py:240
 msgid "The AI assistant of the ICPAI programme"
 msgstr ""
 
-#: apps/student/sections.py:239
+#: apps/student/sections.py:241
 #, fuzzy
 #| msgid "Thank you, the test is done"
 msgid "Ask about this section…"
@@ -7561,8 +8031,8 @@ msgstr ""
 msgid "The work is returned to the student; the attempt is given back."
 msgstr ""
 
-#: apps/teacher/grading.py:133 apps/teacher/practice.py:76
-#: apps/teacher/practice.py:110
+#: apps/teacher/grading.py:133 apps/teacher/practice.py:97
+#: apps/teacher/practice.py:131
 msgid "The grade is saved."
 msgstr ""
 
@@ -7601,9 +8071,25 @@ msgstr ""
 msgid "experiment %(n)s"
 msgstr ""
 
-#: apps/teacher/practice.py:74 apps/teacher/practice.py:108
+#: apps/teacher/practice.py:95 apps/teacher/practice.py:129
 msgid "Give every criterion 0, 1 or 2 points."
 msgstr ""
+
+#: apps/teacher/practice.py:162
+#, fuzzy
+#| msgid "Thank you, the test is done"
+msgid "Choose the status of the work."
+msgstr "Test complete. Thanks!"
+
+#: apps/teacher/practice.py:164
+msgid "The portfolio is not waiting for feedback."
+msgstr ""
+
+#: apps/teacher/practice.py:168
+#, fuzzy
+#| msgid "Thank you, the test is done"
+msgid "The feedback is saved and shown to the student."
+msgstr "Test complete. Thanks!"
 
 #: apps/teacher/views.py:112
 msgid "The group is saved."
@@ -8490,10 +8976,6 @@ msgstr ""
 msgid "«Methods of teaching chemistry»"
 msgstr ""
 
-#: ui/templates/core/about.html:144
-msgid "Tasks"
-msgstr ""
-
 #: ui/templates/core/about.html:147
 msgid ""
 "To master the scientific and pedagogical foundations of the informatisation "
@@ -8596,10 +9078,6 @@ msgid "grounding the design of authorial tasks for teaching chemistry"
 msgstr ""
 
 #: ui/templates/core/about.html:274
-msgid "pedagogical design"
-msgstr ""
-
-#: ui/templates/core/about.html:274
 msgid ""
 "Setting the lesson aim and method, building research tasks, teaching, "
 "assessment and reflection"
@@ -8617,6 +9095,8 @@ msgstr ""
 
 #: ui/templates/core/about.html:286 ui/templates/research/analytics.html:216
 #: ui/templates/student/icpai_results.html:81
+#: ui/templates/student/portfolio/partials/sheet.html:25
+#: ui/templates/student/portfolio/pdf.html:38
 msgid "Component"
 msgstr ""
 
@@ -8934,6 +9414,7 @@ msgstr ""
 #: ui/templates/partials/shell/sidebar_student.html:35
 #: ui/templates/student/icpai_results.html:8
 #: ui/templates/student/icpai_results.html:10
+#: ui/templates/student/portfolio/partials/dashboard.html:48
 #: ui/templates/student/practice/partials/nav.html:33
 #: ui/templates/student/practice/results.html:46
 #: ui/templates/student/search.html:11
@@ -9017,7 +9498,7 @@ msgstr ""
 #: ui/templates/partials/shell/sidebar_teacher.html:20
 #: ui/templates/teacher/practice/queue.html:7
 #: ui/templates/teacher/practice/queue.html:9
-msgid "Sections 5–6 works"
+msgid "ICPAI works"
 msgstr ""
 
 #: ui/templates/partials/shell/sidebar_teacher.html:21
@@ -9324,18 +9805,24 @@ msgstr ""
 #: ui/templates/research/analytics.html:218
 #: ui/templates/student/icpai_results.html:55
 #: ui/templates/student/icpai_results.html:82
+#: ui/templates/student/portfolio/partials/sheet.html:25
+#: ui/templates/student/portfolio/pdf.html:38
 msgid "Stage I"
 msgstr ""
 
 #: ui/templates/research/analytics.html:219
 #: ui/templates/student/icpai_results.html:56
 #: ui/templates/student/icpai_results.html:83
+#: ui/templates/student/portfolio/partials/sheet.html:25
+#: ui/templates/student/portfolio/pdf.html:38
 msgid "Stage II"
 msgstr ""
 
 #: ui/templates/research/analytics.html:220
 #: ui/templates/student/icpai_results.html:57
 #: ui/templates/student/icpai_results.html:84
+#: ui/templates/student/portfolio/partials/sheet.html:25
+#: ui/templates/student/portfolio/pdf.html:38
 msgid "Stage III"
 msgstr ""
 
@@ -9389,6 +9876,8 @@ msgid "Experiment"
 msgstr ""
 
 #: ui/templates/research/dashboard.html:38
+#: ui/templates/student/portfolio/partials/sheet.html:18
+#: ui/templates/student/portfolio/pdf.html:31
 msgid "Study group"
 msgstr ""
 
@@ -9426,6 +9915,7 @@ msgstr ""
 #: ui/templates/research/dashboard.html:87 ui/templates/student/results.html:75
 #: ui/templates/teacher/groups.html:23
 #: ui/templates/teacher/partials/grading_queue.html:7
+#: ui/templates/teacher/practice/queue.html:33
 #: ui/templates/teacher/student.html:69 ui/templates/teacher/student.html:111
 #: ui/templates/teacher/student.html:161
 msgid "Status"
@@ -9845,6 +10335,9 @@ msgstr ""
 #: ui/templates/student/micro/editor.html:11
 #: ui/templates/student/micro/protocol.html:10
 #: ui/templates/student/micro/trial_start.html:8
+#: ui/templates/student/portfolio/plan.html:8
+#: ui/templates/student/portfolio/reflection.html:8
+#: ui/templates/student/portfolio/view.html:6
 #: ui/templates/student/practice/results.html:10
 #: ui/templates/student/practice/sheet.html:10
 #: ui/templates/student/practice/stage.html:10
@@ -9897,6 +10390,7 @@ msgstr ""
 
 #: ui/templates/student/designer/assemble.html:34
 #: ui/templates/student/micro/editor.html:57
+#: ui/templates/student/portfolio/partials/dashboard.html:164
 #: ui/templates/student/practice/sheet.html:58
 #: ui/templates/student/profile.html:38
 #: ui/templates/teacher/content/course_form.html:39
@@ -10098,7 +10592,7 @@ msgid "Restore the original"
 msgstr ""
 
 #: ui/templates/student/designer/editor.html:149
-#: ui/templates/teacher/practice/queue.html:46
+#: ui/templates/teacher/practice/queue.html:59
 msgid "Lesson"
 msgstr ""
 
@@ -10282,11 +10776,6 @@ msgstr ""
 
 #: ui/templates/student/designer/partials/templates.html:49
 msgid "My version"
-msgstr ""
-
-#: ui/templates/student/designer/partials/templates.html:75
-#: ui/templates/student/practice/partials/cards.html:62
-msgid "Not started"
 msgstr ""
 
 #: ui/templates/student/designer/partials/templates.html:76
@@ -10682,6 +11171,7 @@ msgid "Details"
 msgstr ""
 
 #: ui/templates/student/icpai_results.html:14
+#: ui/templates/student/portfolio/partials/dashboard.html:47
 msgid "ICPAI — professional readiness results"
 msgstr ""
 
@@ -10746,6 +11236,7 @@ msgstr ""
 
 #: ui/templates/student/icpai_results.html:53
 #: ui/templates/student/icpai_results.html:79
+#: ui/templates/student/portfolio/partials/dashboard.html:64
 #, python-format
 msgid "Dynamics by stages, %%"
 msgstr ""
@@ -10766,7 +11257,7 @@ msgstr ""
 #: ui/templates/student/practice/partials/nav.html:10
 #: ui/templates/student/practice/sheet.html:24
 #: ui/templates/teacher/practice/detail.html:17
-#: ui/templates/teacher/practice/queue.html:46
+#: ui/templates/teacher/practice/queue.html:59
 msgid "Practice"
 msgstr ""
 
@@ -10787,14 +11278,18 @@ msgstr ""
 #: ui/templates/student/micro/protocol.html:74
 #: ui/templates/student/micro/report_pdf.html:33
 #: ui/templates/student/micro/trial_start.html:21
+#: ui/templates/student/portfolio/partials/dashboard.html:152
+#: ui/templates/student/portfolio/partials/sheet.html:46
+#: ui/templates/student/portfolio/pdf.html:59
 #: ui/templates/teacher/practice/micro.html:7
 #: ui/templates/teacher/practice/micro.html:16
-#: ui/templates/teacher/practice/queue.html:37
+#: ui/templates/teacher/practice/queue.html:50
 #, python-format
 msgid "Trial %(n)s"
 msgstr ""
 
 #: ui/templates/student/icpai_results.html:128
+#: ui/templates/student/portfolio/partials/dashboard.html:153
 msgid "No grades yet."
 msgstr ""
 
@@ -10844,6 +11339,8 @@ msgstr ""
 #: ui/templates/student/micro/editor.html:169
 #: ui/templates/student/micro/protocol.html:19
 #: ui/templates/student/micro/report_pdf.html:33
+#: ui/templates/student/portfolio/partials/sheet.html:46
+#: ui/templates/student/portfolio/pdf.html:59
 #: ui/templates/student/practice/report_pdf.html:23
 #: ui/templates/student/practice/results.html:55
 #: ui/templates/student/practice/step.html:19
@@ -10926,14 +11423,22 @@ msgid "The microlesson's initial details"
 msgstr ""
 
 #: ui/templates/student/micro/editor.html:42
+#: ui/templates/student/portfolio/partials/sheet.html:16
+#: ui/templates/student/portfolio/pdf.html:29
 msgid "Student's full name"
 msgstr ""
 
 #: ui/templates/student/micro/editor.html:43
+#: ui/templates/student/portfolio/partials/dashboard.html:162
+#: ui/templates/student/portfolio/partials/sheet.html:17
+#: ui/templates/student/portfolio/pdf.html:30
 msgid "Education programme"
 msgstr ""
 
 #: ui/templates/student/micro/editor.html:44
+#: ui/templates/student/portfolio/partials/dashboard.html:163
+#: ui/templates/student/portfolio/partials/sheet.html:19
+#: ui/templates/student/portfolio/pdf.html:32
 msgid "Study year"
 msgstr ""
 
@@ -11040,6 +11545,7 @@ msgid "the content has changed since"
 msgstr ""
 
 #: ui/templates/student/micro/editor.html:138
+#: ui/templates/student/portfolio/partials/dashboard.html:178
 msgid "Check again"
 msgstr ""
 
@@ -11048,6 +11554,7 @@ msgid "Send for checking"
 msgstr ""
 
 #: ui/templates/student/micro/editor.html:139
+#: ui/templates/student/portfolio/partials/dashboard.html:178
 msgid "Checking…"
 msgstr ""
 
@@ -11505,6 +12012,8 @@ msgid ""
 msgstr ""
 
 #: ui/templates/student/partials/practice_result.html:3
+#: ui/templates/student/portfolio/partials/sheet.html:67
+#: ui/templates/student/portfolio/pdf.html:80
 msgid "Result"
 msgstr ""
 
@@ -11649,6 +12158,300 @@ msgstr ""
 
 #: ui/templates/student/partials/stage_tile.html:2
 msgid "open"
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:14
+msgid "The professional development map of a future chemistry teacher"
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:15
+msgid ""
+"In this module the teacher's feedback, the assessment results, the student's "
+"reflection and the works done are gathered in one system."
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:24
+msgid "My professional works"
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:38
+msgid "View the work"
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:79
+#, python-format
+msgid "Component result (%%) = points earned / maximum points × 100."
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:85
+#: ui/templates/student/portfolio/reflection.html:33
+#: ui/templates/teacher/practice/portfolio.html:19
+#, fuzzy
+#| msgid "The teacher opened a stage for you"
+msgid "The teacher's professional feedback"
+msgstr "The teacher opened a stage"
+
+#: ui/templates/student/portfolio/partials/dashboard.html:97
+#: ui/templates/student/portfolio/partials/sheet.html:55
+#: ui/templates/student/portfolio/pdf.html:68
+#: ui/templates/student/portfolio/reflection.html:36
+#: ui/templates/teacher/practice/portfolio.html:24
+#: ui/templates/teacher/practice/portfolio.html:39
+msgid "Strengths of the work"
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:98
+#: ui/templates/student/portfolio/partials/sheet.html:56
+#: ui/templates/student/portfolio/pdf.html:69
+#: ui/templates/student/portfolio/reflection.html:37
+#: ui/templates/teacher/practice/portfolio.html:25
+#: ui/templates/teacher/practice/portfolio.html:40
+msgid "Parts that need improving"
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:99
+#: ui/templates/student/portfolio/partials/sheet.html:57
+#: ui/templates/student/portfolio/pdf.html:70
+#: ui/templates/student/portfolio/reflection.html:38
+#: ui/templates/teacher/practice/portfolio.html:26
+msgid "Professional recommendations"
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:103
+msgid "The portfolio is with the teacher. The feedback appears here."
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:103
+#: ui/templates/student/portfolio/partials/sheet.html:59
+#: ui/templates/student/portfolio/pdf.html:72
+#: ui/templates/student/portfolio/reflection.html:39
+msgid "The teacher gives feedback after the portfolio is submitted."
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:113
+#: ui/templates/student/portfolio/reflection.html:7
+#: ui/templates/student/portfolio/reflection.html:9
+#: ui/templates/student/portfolio/reflection.html:16
+msgid "My professional reflection"
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:114
+msgid "Fill in"
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:124
+msgid ""
+"The AI assistant does not write the reflection. You draw the conclusion from "
+"your learning experience, your works and the teacher's feedback."
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:130
+#: ui/templates/student/portfolio/plan.html:7
+#: ui/templates/student/portfolio/plan.html:9
+msgid "My professional development trajectory"
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:131
+msgid "Open the map"
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:135
+#: ui/templates/student/portfolio/partials/sheet.html:67
+#: ui/templates/student/portfolio/pdf.html:80
+#: ui/templates/student/portfolio/plan.html:22
+msgid "Direction to develop"
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:135
+#: ui/templates/student/portfolio/partials/sheet.html:67
+#: ui/templates/student/portfolio/pdf.html:80
+#: ui/templates/student/portfolio/plan.html:22
+#: ui/templates/student/portfolio/plan.html:27
+msgid "Planned action"
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:149
+msgid "Integration of the results of sections 5 and 6"
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:155
+msgid ""
+"The grades of sections 5 and 6 are kept apart; they are not combined with "
+"the diagnostic percents, which appear in the results automatically."
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:160
+msgid "Assemble my professional portfolio"
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:167
+msgid "The reflection: seven answers"
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:167
+msgid "The development map: five directions"
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:167
+msgid "The final (III) diagnostics"
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:175
+msgid ""
+"The AI assistant does not write the conclusion for you; it only checks that "
+"the reflection and the map are complete and consistent."
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:178
+msgid "Check the completeness"
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:183
+msgid "The structure of the final portfolio"
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:186
+#, python-format
+msgid "Assembled: version %(n)s, %(t)s"
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:186
+msgid "changed since — assemble again"
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:189
+msgid "Assemble the portfolio"
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:192
+#: ui/templates/student/portfolio/view.html:14
+msgid "Save as PDF"
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:193
+#: ui/templates/student/portfolio/view.html:5
+msgid "View the portfolio"
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:196
+msgid "Submit the portfolio to the teacher?"
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:196
+msgid "Until the teacher's feedback the portfolio cannot be changed."
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:196
+msgid "Submit"
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/dashboard.html:197
+msgid "Submit to the teacher"
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/sheet.html:10
+#: ui/templates/student/portfolio/pdf.html:23
+#, python-format
+msgid "Version %(n)s · %(t)s"
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/sheet.html:21
+#: ui/templates/student/portfolio/pdf.html:34
+msgid "Aim of the portfolio"
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/sheet.html:21
+#: ui/templates/student/portfolio/pdf.html:34
+msgid ""
+"To gather the results of mastering chemistry subject knowledge, digital "
+"technologies, pedagogical design methods and professional reflection."
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/sheet.html:27
+#: ui/templates/student/portfolio/pdf.html:40
+msgid ""
+"The grades of sections 5 and 6 are not combined with these percents and are "
+"kept separately."
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/sheet.html:36
+#: ui/templates/student/portfolio/pdf.html:49
+#, python-format
+msgid "%(n)s stages redesigned"
+msgstr ""
+
+#: ui/templates/student/portfolio/partials/sheet.html:46
+#: ui/templates/student/portfolio/pdf.html:59
+#, python-format
+msgid "%(n)s turn"
+msgid_plural "%(n)s turns"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ui/templates/student/portfolio/partials/sheet.html:48
+#: ui/templates/student/portfolio/pdf.html:61
+#, fuzzy, python-format
+#| msgid "Your answer"
+msgid "Trials with the AI student in all: %(n)s"
+msgstr "Answer"
+
+#: ui/templates/student/portfolio/partials/sheet.html:72
+#: ui/templates/student/portfolio/pdf.html:85
+msgid ""
+"The main pedagogical product of the module — the digital professional "
+"portfolio of the future chemistry teacher formed on the basis of the "
+"authorial ICPAI model, and the personal development trajectory."
+msgstr ""
+
+#: ui/templates/student/portfolio/plan.html:14
+msgid "Personal development map"
+msgstr ""
+
+#: ui/templates/student/portfolio/plan.html:15
+msgid ""
+"On the basis of the diagnostic results, the practical works, the microlesson "
+"trials and the teacher's feedback, make your own professional development "
+"plan."
+msgstr ""
+
+#: ui/templates/student/portfolio/plan.html:20
+#: ui/templates/student/portfolio/plan.html:32
+msgid "Set the professional development goal"
+msgstr ""
+
+#: ui/templates/student/portfolio/plan.html:38
+#: ui/templates/student/portfolio/plan.html:51
+msgid "Update the development result"
+msgstr ""
+
+#: ui/templates/student/portfolio/plan.html:39
+msgid "The works done towards the goals set are recorded."
+msgstr ""
+
+#: ui/templates/student/portfolio/plan.html:46
+msgid "What was done"
+msgstr ""
+
+#: ui/templates/student/portfolio/plan.html:49
+msgid "Set the goals first."
+msgstr ""
+
+#: ui/templates/student/portfolio/reflection.html:17
+msgid ""
+"You fill in this part yourself. The AI assistant does not write the "
+"reflection: draw your conclusion from your learning experience, the works "
+"you did and the teacher's feedback."
+msgstr ""
+
+#: ui/templates/student/portfolio/reflection.html:30
+#, fuzzy
+#| msgid "Thank you, the test is done"
+msgid "Save the reflection"
+msgstr "Test complete. Thanks!"
+
+#: ui/templates/student/portfolio/view.html:7
+#: ui/templates/teacher/practice/portfolio.html:8
+msgid "Professional portfolio"
 msgstr ""
 
 #: ui/templates/student/practice/partials/cards.html:8
@@ -12266,7 +13069,7 @@ msgid ""
 "the next one is open."
 msgstr ""
 
-#: ui/templates/student/section.html:133
+#: ui/templates/student/section.html:136
 msgid "Its tasks will appear here in the next versions of the platform."
 msgstr ""
 
@@ -12880,10 +13683,10 @@ msgid "AI: %(p)s%%"
 msgstr ""
 
 #: ui/templates/teacher/dashboard.html:64
-#: ui/templates/teacher/practice/queue.html:32
-#: ui/templates/teacher/practice/queue.html:41
-#: ui/templates/teacher/practice/queue.html:46
-#: ui/templates/teacher/practice/queue.html:55
+#: ui/templates/teacher/practice/queue.html:45
+#: ui/templates/teacher/practice/queue.html:54
+#: ui/templates/teacher/practice/queue.html:59
+#: ui/templates/teacher/practice/queue.html:68
 msgid "Grade"
 msgstr ""
 
@@ -13491,12 +14294,49 @@ msgid ""
 "be compared."
 msgstr ""
 
+#: ui/templates/teacher/practice/portfolio.html:9
+#: ui/templates/teacher/practice/portfolio.html:13
+#: ui/templates/teacher/practice/queue.html:22
+msgid "Section 7 portfolios"
+msgstr ""
+
+#: ui/templates/teacher/practice/portfolio.html:22
+#, fuzzy
+#| msgid "The teacher opened a stage for you"
+msgid "The teacher's opinion"
+msgstr "The teacher opened a stage"
+
+#: ui/templates/teacher/practice/portfolio.html:27
+msgid "Status of the work"
+msgstr ""
+
+#: ui/templates/teacher/practice/portfolio.html:32
+msgid "Save the feedback"
+msgstr ""
+
+#: ui/templates/teacher/practice/portfolio.html:33
+msgid ""
+"The feedback is shown in the student's cabinet and goes to the portfolio. "
+"«Accepted» completes section 7; otherwise the student corrects and submits "
+"again."
+msgstr ""
+
 #: ui/templates/teacher/practice/queue.html:14
 msgid "Microlesson trials"
 msgstr ""
 
 #: ui/templates/teacher/practice/queue.html:14
+msgid "Professional portfolios"
+msgstr ""
+
+#: ui/templates/teacher/practice/queue.html:14
 msgid "Digital research practices"
+msgstr ""
+
+#: ui/templates/teacher/practice/queue.html:15
+msgid ""
+"The teacher's professional feedback on the submitted portfolios; «Accepted» "
+"completes section 7."
 msgstr ""
 
 #: ui/templates/teacher/practice/queue.html:15
@@ -13509,25 +14349,29 @@ msgstr ""
 msgid "Section"
 msgstr ""
 
-#: ui/templates/teacher/practice/queue.html:24
+#: ui/templates/teacher/practice/queue.html:25
 #, fuzzy
 #| msgid "Your work is graded"
 msgid "To grade"
 msgstr "Work graded"
 
-#: ui/templates/teacher/practice/queue.html:32
+#: ui/templates/teacher/practice/queue.html:40
+msgid "Give feedback"
+msgstr ""
+
+#: ui/templates/teacher/practice/queue.html:45
 msgid "Trial"
 msgstr ""
 
-#: ui/templates/teacher/practice/queue.html:46
+#: ui/templates/teacher/practice/queue.html:59
 msgid "Gathered"
 msgstr ""
 
-#: ui/templates/teacher/practice/queue.html:63
+#: ui/templates/teacher/practice/queue.html:76
 msgid "Nothing here yet"
 msgstr ""
 
-#: ui/templates/teacher/practice/queue.html:63
+#: ui/templates/teacher/practice/queue.html:76
 #, fuzzy
 #| msgid "Grades appear when you open the first topic."
 msgid "Works appear when students finish their trials."

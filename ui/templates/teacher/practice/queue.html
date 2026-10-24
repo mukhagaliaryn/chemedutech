@@ -3,21 +3,22 @@
 {% comment %}The works of sections 5 and 6 (guide @S5 VII, @S6 VI; STEP-35/36): the finished digital research
 practices and the finished microlesson trials (each trial graded apart) of the teacher's students — «To grade» and
 «Graded» — with the 10-point grade, kept apart from ICPAI.{% endcomment %}
-{% block title %}{% translate "Sections 5–6 works" %} · ChemEduTech{% endblock %}
+{% block title %}{% translate "ICPAI works" %} · ChemEduTech{% endblock %}
 {% block crumb %}ICPAI{% endblock %}
-{% block page_title %}{% translate "Sections 5–6 works" %}{% endblock %}
+{% block page_title %}{% translate "ICPAI works" %}{% endblock %}
 {% block main_class %}max-w-[1200px]{% endblock %}
 {% block content %}
 <div class="flex flex-wrap items-end justify-between gap-3">
   <div>
-    <h1 class="text-[26px] leading-8 font-extrabold">{% if what == "micro" %}{% translate "Microlesson trials" %}{% else %}{% translate "Digital research practices" %}{% endif %}</h1>
-    <p class="mt-1 max-w-[720px] text-ink-soft">{% translate "The 10-point grade (five criteria × 2 points). It is kept apart from the ICPAI component percents and does not open sections." %}</p>
+    <h1 class="text-[26px] leading-8 font-extrabold">{% if what == "micro" %}{% translate "Microlesson trials" %}{% elif what == "portfolio" %}{% translate "Professional portfolios" %}{% else %}{% translate "Digital research practices" %}{% endif %}</h1>
+    <p class="mt-1 max-w-[720px] text-ink-soft">{% if what == "portfolio" %}{% translate "The teacher's professional feedback on the submitted portfolios; «Accepted» completes section 7." %}{% else %}{% translate "The 10-point grade (five criteria × 2 points). It is kept apart from the ICPAI component percents and does not open sections." %}{% endif %}</p>
   </div>
 </div>
 <div class="flex flex-wrap items-center justify-between gap-3">
   <div class="flex gap-1.5" role="tablist" aria-label="{% translate 'Section' %}">
     <a role="tab" href="?what=practice" class="inline-flex h-10 items-center gap-2 rounded-[12px] px-4 text-sm font-bold {% if what == 'practice' %}bg-primary-900 text-white{% else %}bg-surface text-ink-soft ring-1 ring-line{% endif %}">{% translate "Section 5 practices" %}{% if counts.practice %}<span class="num rounded-full bg-warning-500 px-2 text-[12px] text-ink">{{ counts.practice }}</span>{% endif %}</a>
     <a role="tab" href="?what=micro" class="inline-flex h-10 items-center gap-2 rounded-[12px] px-4 text-sm font-bold {% if what == 'micro' %}bg-primary-900 text-white{% else %}bg-surface text-ink-soft ring-1 ring-line{% endif %}">{% translate "Section 6 microlessons" %}{% if counts.micro %}<span class="num rounded-full bg-warning-500 px-2 text-[12px] text-ink">{{ counts.micro }}</span>{% endif %}</a>
+    <a role="tab" href="?what=portfolio" class="inline-flex h-10 items-center gap-2 rounded-[12px] px-4 text-sm font-bold {% if what == 'portfolio' %}bg-primary-900 text-white{% else %}bg-surface text-ink-soft ring-1 ring-line{% endif %}">{% translate "Section 7 portfolios" %}{% if counts.portfolio %}<span class="num rounded-full bg-warning-500 px-2 text-[12px] text-ink">{{ counts.portfolio }}</span>{% endif %}</a>
   </div>
   <div class="flex gap-1.5" role="tablist">
     <a role="tab" href="?what={{ what }}&amp;show=new" class="inline-flex h-9 items-center gap-2 rounded-full border px-4 text-sm font-bold {% if show != 'graded' %}border-primary-600 bg-primary-50 text-primary-700{% else %}border-line bg-surface text-ink-soft{% endif %}">{% translate "To grade" %}<span class="num rounded-full bg-white px-2 text-[12px]">{{ new }}</span></a>
@@ -27,7 +28,19 @@ practices and the finished microlesson trials (each trial graded apart) of the t
 {% if rows %}
   <div class="table-wrap">
     <table class="table">
-      {% if what == "micro" %}
+      {% if what == "portfolio" %}
+        <thead><tr><th scope="col">{% translate "Student" %}</th><th scope="col">{% translate "Status" %}</th><th scope="col">{% translate "Submitted" %}</th><th></th></tr></thead>
+        <tbody>
+          {% for p in rows %}{% with st=p.enrollment.student %}
+            <tr>
+              <td><span class="flex items-center gap-2.5">{% include "components/avatar.html" with person=st size="sm" %}<span><span class="block font-semibold">{{ st.get_full_name|default:st.username }}</span><span class="text-caption text-ink-faint">{{ st.student_profile.group|default:"" }}</span></span></span></td>
+              <td><span class="badge {% if p.status == 'accepted' %}badge-success{% elif p.status == 'submitted' %}badge-info{% else %}badge-warning{% endif %} text-[11px] font-bold">{{ p.get_status_display }}</span></td>
+              <td class="num text-ink-soft">{{ p.submitted_at|date:"d.m.Y H:i" }}</td>
+              <td class="text-right"><a class="btn {% if p.status == 'submitted' %}btn-primary{% else %}btn-secondary{% endif %} btn-sm" href="{% url 'teacher:portfolio' p.pk %}">{% if p.status == "submitted" %}{% translate "Give feedback" %}{% else %}{% translate "Open" %}{% endif %}</a></td>
+            </tr>
+          {% endwith %}{% endfor %}
+        </tbody>
+      {% elif what == "micro" %}
         <thead><tr><th scope="col">{% translate "Student" %}</th><th scope="col">{% translate "Trial" %}</th><th scope="col">{% translate "Microlesson" %}</th><th scope="col">{% translate "Finished" %}</th><th scope="col" class="text-right">{% translate "Grade" %}</th><th></th></tr></thead>
         <tbody>
           {% for r in rows %}{% with t=r.trial %}

@@ -1,0 +1,17 @@
+{% extends "layouts/student.html" %}
+{% load i18n %}
+{% comment %}«View the portfolio» (guide @S7 VI): the assembled version in its ten parts, the versions, PDF.{% endcomment %}
+{% block title %}{% translate "View the portfolio" %} · ChemEduTech{% endblock %}
+{% block crumb %}{{ programme.title }} · {% blocktranslate with n=section.number %}Section {{ n }}{% endblocktranslate %}{% endblock %}
+{% block page_title %}{% translate "Professional portfolio" %}{% endblock %}
+{% block main_class %}max-w-[1200px]{% endblock %}
+{% block content %}
+<div class="flex flex-wrap items-center justify-between gap-3 print:hidden">
+  <a class="link inline-flex items-center gap-1.5 text-sm font-semibold" href="{% url 'student:section' section.number %}">{% include "components/icons.html#arrow-left" %}{{ section.number }}. {{ section.title }}</a>
+  <div class="flex flex-wrap gap-2">
+    {% for v in versions %}<a href="?v={{ v.number }}" class="inline-flex h-8 items-center rounded-full border px-3 text-[12.5px] font-bold {% if v.pk == version.pk %}border-primary-600 bg-primary-50 text-primary-700{% else %}border-line text-ink-soft{% endif %}">v{{ v.number }} · {{ v.created_at|date:"d.m H:i" }}</a>{% endfor %}
+    <a class="btn bg-danger-600 text-white hover:bg-danger-700" href="{% url 'student:portfolio_pdf' %}?v={{ version.number }}">{% include "components/icons.html#download" %}{% translate "Save as PDF" %}</a>
+  </div>
+</div>
+{% include "student/portfolio/partials/sheet.html" %}
+{% endblock %}
