@@ -1,0 +1,45 @@
+{% extends "layouts/student.html" %}
+{% load i18n %}
+{% comment %}
+The assembled lesson (guide @S4-ASSEMBLE 1, 5; picture image17): the steps, the versions (assembled / final), PDF and
+print, the way on — «Try it out with the AI student» after assembling; the final version is closed and kept for the
+portfolio. The sheet itself: student/designer/partials/plan_sheet.html.
+{% endcomment %}
+{% block title %}{% translate "Short-term lesson plan" %} · {{ lesson.title }} · ChemEduTech{% endblock %}
+{% block crumb %}{{ programme.title }} · {% blocktranslate with n=section.number %}Section {{ n }}{% endblocktranslate %}{% endblock %}
+{% block page_title %}{% translate "Assembled lesson" %}{% endblock %}
+{% block main_class %}max-w-[1320px]{% endblock %}
+{% block content %}
+<div class="print:hidden">{% if version.reason == "final" %}{% include "student/designer/partials/flow.html" with step=5 %}{% else %}{% include "student/designer/partials/flow.html" with step=2 %}{% endif %}</div>
+
+{% if version.reason == "final" %}
+  <section class="relative flex flex-wrap items-center gap-4 overflow-hidden rounded-xl bg-[linear-gradient(120deg,var(--color-success-700),var(--color-stage-lab))] px-6 py-5 text-white print:hidden">
+    <span class="pulse-ring absolute left-6 size-14 rounded-full border-2 border-white/40" aria-hidden="true"></span>
+    <span class="relative grid size-14 shrink-0 place-items-center rounded-full bg-white/20">{% include "components/icons.html#award" with size=28 %}</span>
+    <div class="relative min-w-0 flex-[1_1_320px]">
+      <p class="text-[18px] font-extrabold">{% translate "Your authorial lesson is ready" %}</p>
+      <p class="text-sm text-white/85">{% translate "The final version is saved and goes to your digital portfolio. It can no longer be changed." %}</p>
+    </div>
+  </section>
+{% endif %}
+
+<div class="flex flex-wrap items-center justify-between gap-3 print:hidden">
+  <div class="flex flex-wrap items-center gap-1.5" role="group" aria-label="{% translate 'Versions' %}">
+    {% for v in versions %}
+      <a href="?v={{ v.number }}" class="inline-flex h-8 items-center gap-1.5 rounded-full border px-3 text-[12.5px] font-bold {% if v.pk == version.pk %}border-primary-600 bg-primary-50 text-primary-700{% else %}border-line bg-surface text-ink-soft hover:border-primary-600{% endif %}">
+        v{{ v.number }} · {{ v.get_reason_display }}<span class="font-semibold text-ink-faint">{{ v.created_at|date:"d.m H:i" }}</span>
+      </a>
+    {% endfor %}
+  </div>
+  <div class="flex flex-wrap gap-2">
+    <a class="btn btn-secondary" href="{% url 'student:lesson_plan_pdf' section.number lesson.pk %}?v={{ version.number }}">{% include "components/icons.html#download" %}PDF</a>
+    <button type="button" class="btn btn-secondary" onclick="window.print()">{% include "components/icons.html#copy" %}{% translate "Print" %}</button>
+    {% if lesson.status != "final" %}
+      <a class="btn btn-secondary" href="{% url 'student:lesson' section.number lesson.pk %}">{% include "components/icons.html#edit" %}{% translate "Back to the stages" %}</a>
+      <a class="btn btn-primary" href="{% url 'student:lesson_trial' section.number lesson.pk %}">{% include "components/icons.html#user" %}{% translate "Try it out with the AI student" %}</a>
+    {% endif %}
+  </div>
+</div>
+
+{% include "student/designer/partials/plan_sheet.html" %}
+{% endblock %}

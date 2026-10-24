@@ -1,0 +1,64 @@
+{% load i18n %}{% comment %}
+The window «See the AI student's answer» (guide @S4-ASSEMBLE 4; picture image19): the task (the stage as assembled),
+the AI student's answer at the trial's level, the student's possible error, the difficulty, the AI assistant's
+methodical suggestion and «Revise» (back to the stage's editor). The HTMX answer of lesson_trial_turn.
+{% endcomment %}
+<div class="tone-{{ stage.order }} flex flex-col gap-4"{% if fresh %} data-fresh{% endif %}>
+  <header class="flex items-start gap-3 pr-10">
+    <span class="num grid size-10 shrink-0 place-items-center rounded-full bg-(--tone) text-[16px] font-extrabold text-white">{{ stage.order }}</span>
+    <div class="min-w-0">
+      <p class="text-[12px] font-bold tracking-wide text-(--tone) uppercase">{% blocktranslate with n=stage.order %}Stage {{ n }}{% endblocktranslate %} · {{ stage.start }}–{{ stage.end }} {% translate "min" %}</p>
+      <h2 id="turn-title" class="text-[19px] leading-6 font-extrabold">{{ stage.title }}</h2>
+    </div>
+  </header>
+
+  <section class="rounded-lg border border-line p-4">
+    <h3 class="text-[12.5px] font-extrabold tracking-wide text-ink-soft uppercase">{% translate "Task" %}</h3>
+    {% if task %}<div class="prose-lesson mt-1.5 max-h-48 overflow-y-auto pr-1 text-ink">{{ task|rich }}</div>
+    {% else %}<p class="mt-1.5 text-sm text-ink-faint">{% translate "This stage has no task for the students — the AI student works from the teacher's actions." %}</p>{% endif %}
+  </section>
+
+  {% if turn %}
+    <section class="flex items-start gap-3">
+      {% include "student/designer/partials/ai_student.html" with level=trial.level size=60 %}
+      <div class="min-w-0 flex-1 rounded-[18px] rounded-tl-[6px] border border-primary-100 bg-primary-50/60 px-4 py-3">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h3 class="text-[13px] font-extrabold text-primary-700">{% translate "The AI student's answer" %} <span class="font-semibold text-ink-soft">({{ trial.get_level_display|lower }})</span></h3>
+          <span class="badge {% if turn.answer_type == 'correct' %}badge-success{% elif turn.answer_type == 'partial' %}badge-warning{% else %}badge-danger{% endif %} text-[11px] font-bold">{{ turn.get_answer_type_display }}</span>
+        </div>
+        <p class="mt-1.5 text-[14px] leading-[22px] whitespace-pre-line">{{ turn.answer }}</p>
+      </div>
+    </section>
+    <div class="grid gap-3 md:grid-cols-2">
+      <section class="flex gap-3 rounded-lg border border-danger-600/25 bg-danger-50 p-4">
+        <span class="grid size-8 shrink-0 place-items-center rounded-full bg-danger-600 text-white">{% include "components/icons.html#x" with size=15 %}</span>
+        <div><h3 class="text-[13px] font-extrabold text-danger-700">{% translate "The student's possible error" %}</h3><p class="mt-1 text-[13.5px] leading-[20px]">{{ turn.possible_error|default:"—" }}</p></div>
+      </section>
+      <section class="flex gap-3 rounded-lg border border-primary-600/20 bg-primary-50 p-4">
+        <span class="grid size-8 shrink-0 place-items-center rounded-full bg-primary-600 text-white">{% include "components/icons.html#help" with size=15 %}</span>
+        <div><h3 class="text-[13px] font-extrabold text-primary-700">{% translate "Where it was difficult" %}</h3><p class="mt-1 text-[13.5px] leading-[20px]">{{ turn.difficulty|default:"—" }}</p></div>
+      </section>
+    </div>
+    <section class="flex gap-3 rounded-lg border border-success-600/25 bg-success-50 p-4">
+      <span class="grid size-8 shrink-0 place-items-center rounded-full bg-success-600 text-white">{% include "components/icons.html#check" with size=15 %}</span>
+      <div><h3 class="text-[13px] font-extrabold text-success-700">{% translate "The AI assistant's methodical suggestion" %}</h3><p class="mt-1 text-[13.5px] leading-[20px]">{{ turn.suggestion|default:"—" }}</p></div>
+    </section>
+  {% elif error %}
+    <div class="flex items-start gap-2.5 rounded-lg bg-warning-50 px-4 py-3 text-sm text-warning-700" role="alert">
+      {% include "components/icons.html#warn" with size=16 %}
+      <span>{% if error == "limit" %}{% translate "Today's AI requests are used up. They renew tomorrow." %}{% elif error == "off" %}{% translate "Available when the AI assistant is connected." %}{% else %}{% translate "The AI student did not answer this time. Try again in a minute." %}{% endif %}</span>
+    </div>
+  {% endif %}
+
+  <footer class="flex flex-wrap items-center justify-between gap-2 border-t border-line pt-4">
+    <p class="max-w-[420px] text-caption text-ink-faint">{% translate "A simulation for checking the task in advance — check its conclusions yourself." %}</p>
+    <div class="flex gap-2">
+      {% if not turn %}
+        <button type="button" class="btn btn-secondary" hx-post="{% url 'student:lesson_trial_turn' section.number lesson.pk trial.pk stage.order %}" hx-target="#turn-body">{% include "components/icons.html#retry" %}{% translate "Try again" %}</button>
+      {% endif %}
+      {% if lesson.status != "final" %}
+        <a class="btn btn-primary" href="{% url 'student:lesson_stage' section.number lesson.pk stage.order %}">{% include "components/icons.html#edit" %}{% translate "Revise" %}</a>
+      {% endif %}
+    </div>
+  </footer>
+</div>

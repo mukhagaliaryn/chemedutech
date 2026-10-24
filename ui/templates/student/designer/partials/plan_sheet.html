@@ -1,0 +1,66 @@
+{% load i18n %}{% comment %}
+The assembled lesson as the short-term lesson plan (guide @S4-ASSEMBLE 1; picture image17): the dark header, the
+subject / target group / topic / duration cards, the aim and expected results, the authorial model, the table of the
+stages (stage and time · teacher's actions · students' actions · assessment and feedback · resources) and the product.
+plan — LessonVersion.snapshot; rows — pedagogy.selectors.plan_rows. Printable (print: classes).
+{% endcomment %}
+<article class="overflow-hidden rounded-xl border border-line bg-surface shadow-lift print:rounded-none print:border-0 print:shadow-none" aria-labelledby="plan-title">
+  <header class="relative overflow-hidden bg-primary-900 px-[clamp(20px,3vw,32px)] py-6 text-white print:py-4">
+    <svg aria-hidden="true" class="pointer-events-none absolute -right-8 -bottom-12 h-44 opacity-10 print:hidden" viewBox="0 0 200 120"><g fill="none" stroke="#fff" stroke-width="2"><path d="M30 60l18-10 18 10v20l-18 10-18-10z"/><path d="M66 70l40 20"/><path d="M106 90l18-10 18 10v20l-18 10-18-10z"/><circle cx="170" cy="40" r="22"/></g></svg>
+    <h2 id="plan-title" class="relative text-[clamp(20px,2.4vw,26px)] font-extrabold tracking-wide uppercase">{% translate "Short-term lesson plan" %}</h2>
+    <p class="relative mt-1 text-[15px] text-white/80">{% translate "Authorial lesson" %}: {{ plan.title }}</p>
+  </header>
+  <div class="flex flex-col gap-3 p-[clamp(14px,2.4vw,24px)]">
+    <dl class="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <div class="rounded-lg border border-line px-4 py-3"><dt class="text-[11.5px] font-extrabold tracking-wide text-stage-lab uppercase">{% translate "Subject" %}</dt><dd class="mt-1 text-sm font-bold">{{ plan.subject|default:"—" }}</dd></div>
+      <div class="rounded-lg border border-line px-4 py-3"><dt class="text-[11.5px] font-extrabold tracking-wide text-stage-lab uppercase">{% translate "Target group" %}</dt><dd class="mt-1 text-sm font-bold">{{ plan.grade|default:"—" }}</dd></div>
+      <div class="rounded-lg border border-line px-4 py-3"><dt class="text-[11.5px] font-extrabold tracking-wide text-stage-lab uppercase">{% translate "Lesson topic" %}</dt><dd class="mt-1 text-sm font-bold">{{ plan.topic }}</dd></div>
+      <div class="rounded-lg border border-line px-4 py-3"><dt class="text-[11.5px] font-extrabold tracking-wide text-stage-lab uppercase">{% translate "Duration" %}</dt><dd class="mt-1 text-sm font-bold">{% blocktranslate with n=plan.duration_min %}{{ n }} min{% endblocktranslate %}</dd></div>
+    </dl>
+    <div class="grid gap-4 rounded-lg border border-line px-4 py-3.5 md:grid-cols-2">
+      <div><h3 class="text-[11.5px] font-extrabold tracking-wide text-stage-lab uppercase">{% translate "Lesson aim" %}</h3><p class="mt-1 text-sm leading-[21px]">{{ plan.aim }}</p></div>
+      <div><h3 class="text-[11.5px] font-extrabold tracking-wide text-stage-lab uppercase">{% translate "Expected results" %}</h3><div class="prose-lesson mt-1 text-sm">{{ plan.outcomes|rich }}</div></div>
+    </div>
+    {% if plan.template %}
+      <p class="rounded-lg border border-warning-500/40 bg-warning-50 px-4 py-3 text-sm"><span class="font-extrabold tracking-wide text-warning-700 uppercase">{% translate "Authorial model" %}:</span> <span class="font-bold">«{{ plan.template.name }}»</span>{% if plan.template.technology %} · {{ plan.template.technology }}{% endif %}</p>
+    {% endif %}
+    <div class="overflow-x-auto">
+      <table class="w-full min-w-[880px] border-separate border-spacing-1 text-left text-[13px] leading-[19px]">
+        <thead>
+          <tr class="text-[11.5px] tracking-wide text-white uppercase">
+            <th scope="col" class="w-[13%] rounded-[8px] bg-stage-lab px-3 py-2.5 font-extrabold">{% translate "Stage / time" %}</th>
+            <th scope="col" class="w-[23%] rounded-[8px] bg-stage-lab px-3 py-2.5 font-extrabold">{% translate "Teacher's actions" %}</th>
+            <th scope="col" class="w-[26%] rounded-[8px] bg-stage-lab px-3 py-2.5 font-extrabold">{% translate "Students' actions" %}</th>
+            <th scope="col" class="w-[20%] rounded-[8px] bg-stage-lab px-3 py-2.5 font-extrabold">{% translate "Assessment / feedback" %}</th>
+            <th scope="col" class="w-[18%] rounded-[8px] bg-stage-lab px-3 py-2.5 font-extrabold">{% translate "Resources" %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in rows %}
+            <tr class="tone-{{ forloop.counter }} align-top break-inside-avoid">
+              <th scope="row" class="rounded-[8px] border border-line px-3 py-2.5 {% if forloop.counter|divisibleby:2 %}bg-stage-lab-50/60{% else %}bg-surface{% endif %}">
+                <span class="block font-extrabold text-(--tone)">{{ row.order }}. {{ row.title }}</span>
+                <span class="num mt-0.5 block text-[12px] font-bold text-stage-lab">{{ row.start }}–{{ row.end }} {% translate "min" %}</span>
+                {% if row.redesigned %}<span class="mt-1.5 inline-block rounded-full bg-success-50 px-2 py-0.5 text-[10.5px] font-bold text-success-700">{% translate "Redesigned" %}</span>{% endif %}
+              </th>
+              {% for column, keys in columns %}
+                <td class="rounded-[8px] border border-line px-3 py-2.5 {% if forloop.parentloop.counter|divisibleby:2 %}bg-stage-lab-50/60{% else %}bg-surface{% endif %}">
+                  {% with items=row.cells|get:column %}
+                    {% for item in items %}
+                      {% if item.label %}<p class="mt-2 text-[11px] font-extrabold tracking-wide text-(--tone) uppercase first:mt-0">{{ item.label }}</p>{% endif %}
+                      <div class="prose-lesson text-[13px] leading-[19px]">{{ item.html|rich }}</div>
+                    {% empty %}<span class="text-ink-faint">—</span>
+                    {% endfor %}
+                  {% endwith %}
+                </td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if plan.template.product %}
+      <p class="rounded-lg bg-stage-lab-50 px-4 py-3 text-[13px]"><span class="font-extrabold text-stage-lab">{% translate "Main pedagogical product of the authorial lesson" %}:</span> {{ plan.template.product }}</p>
+    {% endif %}
+  </div>
+</article>

@@ -1,0 +1,118 @@
+{% extends "layouts/student.html" %}
+{% load i18n static %}
+{% comment %}
+«Assemble the lesson» (guide @S4-ASSEMBLE 1): the lesson's name, topic, aim and expected results (editable), the
+check before assembling (details, every stage has content, the minutes add up to the lesson), the stages at a glance,
+what the assembled lesson contains (the guide's eight points) and the button that freezes a version.
+{% endcomment %}
+{% block title %}{% translate "Assemble the lesson" %} · {{ lesson.title }} · ChemEduTech{% endblock %}
+{% block crumb %}{{ programme.title }} · {% blocktranslate with n=section.number %}Section {{ n }}{% endblocktranslate %}{% endblock %}
+{% block page_title %}{% translate "Assemble the lesson" %}{% endblock %}
+{% block main_class %}max-w-[1320px]{% endblock %}
+{% block content %}
+{% include "student/designer/partials/flow.html" with step=2 %}
+
+<div class="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_380px]">
+  {# ---- the lesson's details ---- #}
+  <form id="details-form" method="post" class="card flex flex-col gap-4" aria-labelledby="details-title">{% csrf_token %}
+    <div class="flex items-center gap-3">
+      <span class="tile tile-lg bg-primary-50 text-primary-700">{% include "components/icons.html#book" with size=22 %}</span>
+      <div>
+        <h1 id="details-title" class="text-[20px] leading-7 font-extrabold">{% translate "About the lesson" %}</h1>
+        <p class="text-sm text-ink-soft">{% translate "The name, topic, aim and expected results of your authorial lesson." %}</p>
+      </div>
+    </div>
+    <label class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Name of the authorial lesson" %}</span>
+      <input class="input" name="title" maxlength="255" value="{{ lesson.title }}" required {% if lesson.status == 'final' %}disabled{% endif %}></label>
+    <label class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Lesson topic" %}</span>
+      <input class="input" name="topic" maxlength="255" value="{{ lesson.topic }}" required {% if lesson.status == 'final' %}disabled{% endif %}></label>
+    <label class="flex flex-col gap-1.5"><span class="text-[13px] font-bold">{% translate "Lesson aim" %}</span>
+      <textarea class="input" name="aim" rows="3" required {% if lesson.status == 'final' %}disabled{% endif %}>{{ lesson.aim }}</textarea></label>
+    <div class="flex flex-col gap-1.5" x-data><span class="text-[13px] font-bold">{% translate "Expected results of the lesson" %}</span>
+      <textarea name="outcomes" rows="4" class="input" x-rich.answer{% if lesson.status == 'final' %}="true"{% endif %} data-rt="long" aria-label="{% translate 'Expected results of the lesson' %}">{{ lesson.outcomes }}</textarea></div>
+    {% if lesson.status != "final" %}
+      <div class="flex justify-end"><button type="submit" name="action" value="save" class="btn btn-secondary">{% include "components/icons.html#save" %}{% translate "Save" %}</button></div>
+    {% endif %}
+  </form>
+
+  {# ---- ready? ---- #}
+  <aside class="flex flex-col gap-4 lg:sticky lg:top-20" aria-labelledby="ready-title">
+    <section class="card flex flex-col gap-4 overflow-hidden p-0">
+      <div class="relative overflow-hidden bg-[linear-gradient(130deg,var(--color-primary-900),var(--color-primary-600)_60%,var(--color-stage-lab))] px-5 py-5 text-white">
+        <svg aria-hidden="true" class="spin-slow absolute -top-10 -right-10 size-40 opacity-15" viewBox="0 0 100 100"><g fill="none" stroke="#fff" stroke-width="2"><circle cx="50" cy="50" r="44"/><circle cx="50" cy="50" r="28" stroke-dasharray="4 6"/></g></svg>
+        <h2 id="ready-title" class="relative text-[17px] font-extrabold">{% blocktranslate with n=lesson.duration_min %}A {{ n }}-minute authorial lesson{% endblocktranslate %}</h2>
+        <div class="relative mt-3 flex h-3 gap-[3px] overflow-hidden rounded-full bg-white/15" aria-hidden="true">
+          {% for row in stages %}<span class="tone-{{ forloop.counter }} block h-full bg-(--tone)" style="width: {{ row.share|stringformat:'.2f' }}%"></span>{% endfor %}
+        </div>
+        <p class="relative mt-2 flex justify-between text-[12.5px] font-semibold text-white/80"><span>{% blocktranslate count n=stages|length %}{{ n }} stage{% plural %}{{ n }} stages{% endblocktranslate %}</span><span class="num">{{ minutes_total }} / {{ lesson.duration_min }} {% translate "min" %}</span></p>
+      </div>
+      <ul class="flex flex-col gap-2.5 px-5">
+        <li class="flex items-start gap-2.5 text-sm">
+          {% if details_problem %}<span class="mt-0.5 text-warning-500">{% include "components/icons.html#warn" with size=16 %}</span>{% else %}<span class="mt-0.5 text-success-600">{% include "components/icons.html#check" with size=16 %}</span>{% endif %}
+          <span>{% translate "The name, topic and aim are filled in" %}</span>
+        </li>
+        <li class="flex items-start gap-2.5 text-sm">
+          {% if empty_stages %}<span class="mt-0.5 text-warning-500">{% include "components/icons.html#warn" with size=16 %}</span>{% else %}<span class="mt-0.5 text-success-600">{% include "components/icons.html#check" with size=16 %}</span>{% endif %}
+          <span>{% translate "Every stage has content" %}
+            {% for p in problems %}{% if p.code == "empty_stage" %}<a class="link mt-1 block text-[13px] font-semibold" href="{% url 'student:lesson_stage' section.number lesson.pk p.order %}">{{ p.order }}. {{ p.title }} →</a>{% endif %}{% endfor %}
+          </span>
+        </li>
+        <li class="flex items-start gap-2.5 text-sm">
+          {% if minutes_problem %}<span class="mt-0.5 text-warning-500">{% include "components/icons.html#warn" with size=16 %}</span>{% else %}<span class="mt-0.5 text-success-600">{% include "components/icons.html#check" with size=16 %}</span>{% endif %}
+          <span>{% blocktranslate with n=lesson.duration_min %}The stages take {{ n }} minutes{% endblocktranslate %}{% if minutes_problem %} <span class="num font-bold text-warning-700">({{ minutes_total }})</span>{% endif %}</span>
+        </li>
+        <li class="flex items-start gap-2.5 text-sm">
+          {% if edited_count %}<span class="mt-0.5 text-success-600">{% include "components/icons.html#check" with size=16 %}</span>{% else %}<span class="mt-0.5 text-ink-faint">{% include "components/icons.html#info" with size=16 %}</span>{% endif %}
+          <span>{% blocktranslate with a=edited_count b=stages|length %}{{ a }} of {{ b }} stages redesigned{% endblocktranslate %}{% if not edited_count %}<span class="block text-[12.5px] text-ink-soft">{% translate "Redesign at least one stage with the AI assistant — the section counts only such lessons." %}</span>{% endif %}</span>
+        </li>
+      </ul>
+      <div class="flex flex-col gap-2 border-t border-line px-5 pt-4 pb-5">
+        {% if lesson.status == "final" %}
+          <a class="btn btn-primary" href="{% url 'student:lesson_plan' section.number lesson.pk %}">{% include "components/icons.html#award" %}{% translate "Final version" %}</a>
+        {% else %}
+          <button type="submit" form="details-form" name="action" value="assemble" class="btn btn-primary h-[48px] text-[15px] font-bold" {% if blocked %}disabled{% endif %}>
+            {% include "components/icons.html#check-square" %}{% translate "Assemble the lesson" %}
+          </button>
+          {% if version %}<a class="btn btn-ghost btn-sm" href="{% url 'student:lesson_plan' section.number lesson.pk %}">{% blocktranslate with n=version.number %}See the assembled lesson (version {{ n }}){% endblocktranslate %}</a>{% endif %}
+        {% endif %}
+        <a class="btn btn-ghost btn-sm" href="{% url 'student:lesson' section.number lesson.pk %}">{% include "components/icons.html#arrow-left" %}{% translate "Back to the stages" %}</a>
+      </div>
+    </section>
+  </aside>
+</div>
+
+{# ---- the stages at a glance ---- #}
+<section class="card flex flex-col gap-3" aria-labelledby="glance-title">
+  <h2 id="glance-title" class="text-[17px] font-extrabold">{% translate "Lesson structure" %}</h2>
+  <ol class="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-3">
+    {% for row in stages %}{% with s=row.stage %}
+      <li class="tone-{{ forloop.counter }}">
+        <a href="{% url 'student:lesson_stage' section.number lesson.pk s.order %}" class="flex items-center gap-3 rounded-lg border border-line px-3 py-3 transition-colors hover:border-(--tone) hover:bg-(--tone-50)">
+          <span class="num grid size-9 shrink-0 place-items-center rounded-full bg-(--tone) text-[15px] font-extrabold text-white">{{ s.order }}</span>
+          <span class="min-w-0 flex-1"><span class="block truncate text-sm font-bold">{{ s.title }}</span><span class="num text-[12px] font-semibold text-(--tone)">{{ row.start }}–{{ row.end }} {% translate "min" %}</span></span>
+          {% if s.edited %}<span class="badge badge-success text-[11px]">{% translate "Redesigned" %}</span>{% elif not s.fields.values|join:"" %}<span class="badge badge-warning text-[11px]">{% translate "Empty" %}</span>{% else %}<span class="text-[11.5px] font-semibold text-ink-faint">{% translate "Template" %}</span>{% endif %}
+        </a>
+      </li>
+    {% endwith %}{% endfor %}
+  </ol>
+</section>
+
+{# ---- what the assembled lesson contains (the guide's eight points) ---- #}
+<section class="card flex flex-col gap-3" aria-labelledby="contains-title">
+  <h2 id="contains-title" class="text-[17px] font-extrabold">{% translate "The assembled lesson brings together:" %}</h2>
+  <ol class="grid gap-2 text-sm sm:grid-cols-2">
+    {% translate "The name, topic, aim and expected results of the authorial lesson." as c1 %}
+    {% translate "The stages of the lesson and their duration." as c2 %}
+    {% translate "The teacher's actions at each stage." as c3 %}
+    {% translate "The tasks the students do." as c4 %}
+    {% translate "Virtual lab experiments and research work." as c5 %}
+    {% translate "The digital tools and authorial methods used." as c6 %}
+    {% translate "Assessment criteria and ways of feedback." as c7 %}
+    {% translate "The final product of the lesson and its reflection tasks." as c8 %}
+    {% for c in c1|add:"|"|add:c2|add:"|"|add:c3|add:"|"|add:c4|add:"|"|add:c5|add:"|"|add:c6|add:"|"|add:c7|add:"|"|add:c8|split:"|" %}
+      <li class="flex items-start gap-3 rounded-lg bg-canvas px-3.5 py-2.5"><span class="num grid size-6 shrink-0 place-items-center rounded-full bg-primary-600 text-[12px] font-extrabold text-white">{{ forloop.counter }}</span><span class="pt-0.5">{{ c }}</span></li>
+    {% endfor %}
+  </ol>
+</section>
+{% endblock %}
+{% block scripts %}{% rich_text_assets %}{% endblock %}

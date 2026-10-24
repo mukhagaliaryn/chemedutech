@@ -1,11 +1,13 @@
 """Section 4 — the pedagogical design constructor (guide @S4, @S4-L1…L3, @S4-AI; pictures image12–18; STEP-33):
 the authorial templates → a template page → «Create my version» → the editor: the lesson structure, the chosen stage
-(«Clear the content», the student's own fields), the AI assistant with the stage's quick requests."""
+(«Clear the content», the student's own fields), the AI assistant with the stage's quick requests. Then (guide
+@S4-ASSEMBLE; STEP-34) «Assemble the lesson» → the plan (image17, PDF) → the trial with the AI student → «Trial results»
+→ «Assemble the final version»."""
 
 import json
 
 from django.contrib import messages
-from django.http import Http404, JsonResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.middleware.csrf import get_token
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -18,9 +20,19 @@ from apps.core.html import html_to_text
 from apps.core.permissions import STUDENT, role_required
 from apps.pedagogy import selectors as pedagogy_selectors
 from apps.pedagogy import services as pedagogy
-from apps.pedagogy.models import Lesson, LessonStage, LessonTemplate
+from apps.pedagogy.models import Lesson, LessonStage, LessonTemplate, Trial
 from apps.programme import services as programme
 from apps.programme.models import Section
+
+# the AI student's levels with the guide's descriptions (@S4-ASSEMBLE 2)
+TRIAL_LEVELS = [
+    (Trial.Level.HIGH, _("Fully understands the task, gives scientific evidence and draws complex conclusions.")),
+    (Trial.Level.MEDIUM, _("Knows the basic concepts but needs extra explanation in some tasks.")),
+    (
+        Trial.Level.LOW,
+        _("May make mistakes in explaining chemical concepts, needs guiding questions and extra support."),
+    ),
+]
 
 # the AI assistant's help on a stage (guide @S4-AI 3 and image18 «Көмек түрін таңдаңыз»; the author's note at
 # @S4-L1: every numbered part is explained by the AI assistant, even how to choose its title)
@@ -261,3 +273,213 @@ def lesson_stage_ai(request, number, pk, order):
     except ai.AIUnavailable as exc:
         error = "" if str(exc) == "empty" else "failed"
     return render(request, "ai/partials/thread.html", _ai_panel(request, section, lesson, stage, error))
+
+
+# --- «Assemble the lesson», the AI student, «Assemble the final version» (guide @S4-ASSEMBLE; STEP-34) ----------
+
+
+def _lesson_context(enrollment, section, lesson) -> dict:
+    return {"programme": enrollment.programme, "section": section, "lesson": lesson, "template": lesson.source_template}
+
+
+@role_required(STUDENT)
+def lesson_assemble(request, number, pk):
+    """Before «Assemble the lesson»: the lesson's name, topic, aim and expected results (editable), what is still
+    missing (empty stages, the minutes), the stages at a glance; the button assembles a version."""
+    enrollment, section, lesson = _lesson(request, number, pk)
+    if request.method == "POST":
+        if lesson.status == Lesson.Status.FINAL:
+            messages.error(request, _("The final version cannot be changed."))
+            return redirect("student:lesson_plan", section.number, lesson.pk)
+        post = request.POST
+        pedagogy.save_details(
+            lesson, title=post.get("title", ""), topic=post.get("topic", ""), aim=post.get("aim", ""),
+            outcomes=post.get("outcomes", ""),
+        )  # fmt: skip
+        if post.get("action") == "assemble":
+            try:
+                pedagogy.assemble(lesson)
+            except pedagogy.LessonError:
+                messages.error(request, _("The lesson cannot be assembled yet — see what is missing."))
+            else:
+                messages.success(request, _("The lesson is assembled."))
+                return redirect("student:lesson_plan", section.number, lesson.pk)
+        else:
+            messages.success(request, _("Saved"))
+        return redirect("student:lesson_assemble", section.number, lesson.pk)
+    stages = list(lesson.stages.all())
+    problems = pedagogy.problems(lesson)
+    codes = {p["code"] for p in problems}
+    context = _lesson_context(enrollment, section, lesson)
+    context.update({
+        "problems": problems,
+        "details_problem": "details" in codes,
+        "empty_stages": "empty_stage" in codes,
+        "minutes_problem": "minutes" in codes,
+        "blocked": bool(codes - {"details"}),  # the details are saved by the same button
+        "stages": pedagogy_selectors.timeline(stages),
+        "edited_count": sum(1 for s in stages if s.edited),
+        "minutes_total": sum(s.minutes for s in stages),
+        "version": pedagogy.assembled_version(lesson),
+    })  # fmt: skip
+    return render(request, "student/designer/assemble.html", context)
+
+
+def _plan_version(lesson, request):
+    """The version shown: ?v=N, else the final one, else the latest assembled one."""
+    versions = lesson.versions.order_by("-number")
+    if request.GET.get("v", "").isdigit():
+        return get_object_or_404(versions, number=int(request.GET["v"]))
+    return versions.filter(reason="final").first() or versions.first()
+
+
+def _plan_context(lesson, version) -> dict:
+    return {
+        "version": version,
+        "plan": version.snapshot,
+        "rows": pedagogy_selectors.plan_rows(version.snapshot),
+        "columns": pedagogy_selectors.PLAN_COLUMNS,
+    }
+
+
+@role_required(STUDENT)
+def lesson_plan(request, number, pk):
+    """The assembled lesson as the short-term lesson plan (image17), with PDF, print and the way to the trial."""
+    enrollment, section, lesson = _lesson(request, number, pk)
+    version = _plan_version(lesson, request)
+    if version is None:
+        return redirect("student:lesson_assemble", section.number, lesson.pk)
+    context = _lesson_context(enrollment, section, lesson)
+    context.update(_plan_context(lesson, version))
+    context.update({"versions": list(lesson.versions.order_by("-number")), "trial": lesson.trials.first()})
+    return render(request, "student/designer/plan.html", context)
+
+
+@role_required(STUDENT)
+def lesson_plan_pdf(request, number, pk):
+    from weasyprint import HTML
+
+    _enrollment, _section_obj, lesson = _lesson(request, number, pk)
+    version = _plan_version(lesson, request)
+    if version is None:
+        raise Http404
+    html = render(request, "student/designer/plan_pdf.html", {"lesson": lesson, **_plan_context(lesson, version)})
+    data = HTML(string=html.content.decode(), base_url=request.build_absolute_uri("/")).write_pdf()
+    response = HttpResponse(data, content_type="application/pdf")
+    response["Content-Disposition"] = f'attachment; filename="lesson-{lesson.pk}-v{version.number}.pdf"'
+    return response
+
+
+def _trial(lesson, request, trial_pk=None):
+    trials = lesson.trials.select_related("version")
+    if trial_pk:
+        return get_object_or_404(trials, pk=trial_pk)
+    pick = request.GET.get("trial", "")
+    return get_object_or_404(trials, pk=int(pick)) if pick.isdigit() else trials.first()
+
+
+@role_required(STUDENT)
+def lesson_trial(request, number, pk):
+    """«Try it out with the AI student»: the level (high / medium / low), then every stage of the assembled lesson
+    with «See the AI student's answer»; the guide's warning that this is a simulation."""
+    enrollment, section, lesson = _lesson(request, number, pk)
+    if pedagogy.assembled_version(lesson) is None:
+        return redirect("student:lesson_assemble", section.number, lesson.pk)
+    trial = _trial(lesson, request)
+    stages = trial.version.snapshot["stages"] if trial else []
+    made = {t.stage_order: t for t in trial.turns.all()} if trial else {}
+    turns = {s["order"]: made.get(s["order"]) for s in stages}  # None where not made: the template filter «get»
+    context = _lesson_context(enrollment, section, lesson)
+    context.update({
+        "trial": trial,
+        "trials": list(lesson.trials.all()),
+        "turns": turns,
+        "stages": stages,
+        "done": len(made),
+        "progress": round(len(made) * 100 / len(stages)) if stages else 0,
+        "levels": TRIAL_LEVELS,
+        "ai_enabled": ai.enabled(),
+        "remaining": ai.remaining_today(request.user),
+    })  # fmt: skip
+    return render(request, "student/designer/trial.html", context)
+
+
+@require_POST
+@role_required(STUDENT)
+def lesson_trial_start(request, number, pk):
+    _enrollment, section, lesson = _lesson(request, number, pk)
+    try:
+        trial = pedagogy.start_trial(lesson, request.POST.get("level", ""))
+    except pedagogy.LessonError:
+        messages.error(request, _("Choose the AI student's level."))
+        return redirect("student:lesson_trial", section.number, lesson.pk)
+    return redirect(f"{reverse('student:lesson_trial', args=[section.number, lesson.pk])}?trial={trial.pk}")
+
+
+@role_required(STUDENT)
+def lesson_trial_turn(request, number, pk, trial_pk, order):
+    """HTMX: the window «See the AI student's answer» of one stage — made by the AI on the first POST, then shown."""
+    _enrollment, section, lesson = _lesson(request, number, pk)
+    trial = _trial(lesson, request, trial_pk)
+    try:
+        stage = pedagogy.stage_of(trial, order)
+    except pedagogy.LessonError:
+        raise Http404 from None
+    turn, error = trial.turns.filter(stage_order=order).first(), ""
+    if turn is None and request.method == "POST":
+        try:
+            turn = pedagogy.run_turn(trial, order)
+        except ai.LimitReached:
+            error = "limit"
+        except ai.AIUnavailable as exc:
+            error = "off" if str(exc) == "disabled" else "failed"
+    fresh = request.method == "POST" and turn is not None and not error
+    context = {"section": section, "lesson": lesson, "trial": trial, "stage": stage, "turn": turn, "error": error}
+    context["fresh"] = fresh
+    context["task"] = turn.task if turn else pedagogy.task_html(stage)
+    return render(request, "student/designer/partials/turn.html", context)
+
+
+@role_required(STUDENT)
+def lesson_results(request, number, pk):
+    """«Trial results»: by stage — the difficulties, the possible errors, the methodical suggestions and the stages
+    revised since; «Assemble the final version» once a trial is finished."""
+    enrollment, section, lesson = _lesson(request, number, pk)
+    trial = _trial(lesson, request)
+    if trial is None:
+        return redirect("student:lesson_trial", section.number, lesson.pk)
+    turns = {t.stage_order: t for t in trial.turns.all()}
+    kinds = [t.answer_type for t in turns.values()]
+    revised = pedagogy_selectors.changed_since(lesson, trial.version.snapshot)
+    context = _lesson_context(enrollment, section, lesson)
+    context.update({
+        "trial": trial,
+        "rows": [{"stage": s, "turn": turns.get(s["order"]), "revised": s["order"] in revised}
+                 for s in trial.version.snapshot["stages"]],
+        "revised_count": len(revised),
+        "counts": {k: kinds.count(k) for k in ("correct", "partial", "wrong")},
+        "overall": round((kinds.count("correct") + kinds.count("partial") / 2) * 100 / len(kinds)) if kinds else None,
+        "finished": pedagogy.finished_trial(lesson),
+        "problems": pedagogy.problems(lesson),
+    })  # fmt: skip
+    return render(request, "student/designer/results.html", context)
+
+
+@require_POST
+@role_required(STUDENT)
+def lesson_finalize(request, number, pk):
+    """«Assemble the final version»: the lesson is frozen, closed and counts for section 4."""
+    _enrollment, section, lesson = _lesson(request, number, pk)
+    try:
+        pedagogy.finalize(lesson)
+    except pedagogy.LessonError as exc:
+        messages.error(
+            request,
+            _("First try the lesson out with the AI student.")
+            if str(exc) == "no_trial"
+            else _("The lesson cannot be assembled yet — see what is missing."),
+        )
+        return redirect("student:lesson_results", section.number, lesson.pk)
+    programme.refresh(request.user)
+    messages.success(request, _("The final version is assembled and saved to your portfolio."))
+    return redirect("student:lesson_plan", section.number, lesson.pk)

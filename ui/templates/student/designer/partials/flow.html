@@ -1,0 +1,23 @@
+{% load i18n %}{% comment %}
+The way of a lesson after the editor (guide @S4-ASSEMBLE; picture image19 top): stages → assemble → the AI student →
+trial results → the final version. step — 1…5 (the current page); lesson, section. A step is a link once reachable.
+{% endcomment %}
+{% with v=lesson.versions.exists t=lesson.trials.exists f=lesson.status %}
+<nav aria-label="{% translate 'Lesson design steps' %}" class="overflow-x-auto">
+  <ol class="flex min-w-max items-center gap-1.5">
+    {% url 'student:lesson' section.number lesson.pk as u1 %}{% url 'student:lesson_assemble' section.number lesson.pk as u2 %}
+    {% url 'student:lesson_trial' section.number lesson.pk as u3 %}{% url 'student:lesson_results' section.number lesson.pk as u4 %}
+    {% url 'student:lesson_plan' section.number lesson.pk as u5 %}
+    {% translate "Stages" as l1 %}{% translate "Assemble the lesson" as l2 %}{% translate "The AI student" as l3 %}{% translate "Trial results" as l4 %}{% translate "Final version" as l5 %}
+    <li>{% include "student/designer/partials/flow_step.html" with n=1 label=l1 url=u1 open=True done=v current=step tone="tone-1" %}</li>
+    <li aria-hidden="true" class="text-ink-faint">{% include "components/icons.html#chevron-right" with size=14 %}</li>
+    <li>{% include "student/designer/partials/flow_step.html" with n=2 label=l2 url=u2 open=True done=v current=step tone="tone-4" %}</li>
+    <li aria-hidden="true" class="text-ink-faint">{% include "components/icons.html#chevron-right" with size=14 %}</li>
+    <li>{% include "student/designer/partials/flow_step.html" with n=3 label=l3 url=u3 open=v done=t current=step tone="tone-3" %}</li>
+    <li aria-hidden="true" class="text-ink-faint">{% include "components/icons.html#chevron-right" with size=14 %}</li>
+    <li>{% include "student/designer/partials/flow_step.html" with n=4 label=l4 url=u4 open=t done=lesson.trials.first.finished_at current=step tone="tone-2" %}</li>
+    <li aria-hidden="true" class="text-ink-faint">{% include "components/icons.html#chevron-right" with size=14 %}</li>
+    <li>{% if f == "final" %}{% include "student/designer/partials/flow_step.html" with n=5 label=l5 url=u5 open=True done=True current=step tone="tone-5" %}{% else %}{% include "student/designer/partials/flow_step.html" with n=5 label=l5 url=u4 open=False done=False current=step tone="tone-5" %}{% endif %}</li>
+  </ol>
+</nav>
+{% endwith %}

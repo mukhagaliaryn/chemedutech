@@ -33,15 +33,21 @@ def get_client() -> anthropic.Anthropic:
     )
 
 
-def call(system: str, messages: list[dict], *, max_tokens: int = 2000, client=None) -> Reply:
+def call(
+    system: str, messages: list[dict], *, max_tokens: int = 2000, schema: dict | None = None, client=None
+) -> Reply:
+    """One request. With ``schema`` the answer is JSON of that schema (structured outputs)."""
     client = client or get_client()
     model = settings.AI_TUTOR_MODEL
+    output_config = {"effort": settings.AI_TUTOR_EFFORT}
+    if schema:
+        output_config["format"] = {"type": "json_schema", "schema": schema}
     params = {
         "model": model,
         "max_tokens": max_tokens,
         "system": system,
         "messages": messages,
-        "output_config": {"effort": settings.AI_TUTOR_EFFORT},
+        "output_config": output_config,
     }
     started = time.monotonic()
     try:

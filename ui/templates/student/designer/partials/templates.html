@@ -66,8 +66,11 @@ designer — pedagogy.selectors.template_cards; section.
           </div>
           <div class="flex flex-wrap items-center justify-between gap-2 border-t border-line pt-3">
             {% if lesson %}
-              <span class="text-[13px] font-semibold {% if card.edited %}text-success-700{% else %}text-ink-soft{% endif %}">{% blocktranslate with a=card.edited b=card.stage_count %}{{ a }} of {{ b }} stages redesigned{% endblocktranslate %}</span>
-              <a class="btn btn-primary btn-sm" href="{% url 'student:lesson' section.number lesson.pk %}">{% translate "Continue" %}{% include "components/icons.html#arrow-right" %}</a>
+              <span class="flex flex-col gap-1">
+                {% if lesson.status != "draft" %}<span class="badge {% if lesson.status == 'final' %}badge-success{% else %}badge-info{% endif %} w-fit text-[11px] font-bold">{{ lesson.get_status_display }}</span>{% endif %}
+                <span class="text-[13px] font-semibold {% if card.edited %}text-success-700{% else %}text-ink-soft{% endif %}">{% blocktranslate with a=card.edited b=card.stage_count %}{{ a }} of {{ b }} stages redesigned{% endblocktranslate %}</span>
+              </span>
+              {% if lesson.status == "final" %}<a class="btn btn-secondary btn-sm" href="{% url 'student:lesson_plan' section.number lesson.pk %}">{% include "components/icons.html#award" %}{% translate "Open" %}</a>{% else %}<a class="btn btn-primary btn-sm" href="{% url 'student:lesson' section.number lesson.pk %}">{% translate "Continue" %}{% include "components/icons.html#arrow-right" %}</a>{% endif %}
             {% else %}
               <span class="text-[13px] text-ink-faint">{% translate "Not started" %}</span>
               <a class="btn btn-secondary btn-sm" href="{% url 'student:lesson_template' section.number t.code %}">{% translate "Open the template" %}{% include "components/icons.html#arrow-right" %}</a>

@@ -5,7 +5,8 @@ The lesson designer's editor (guide @S4-AI; picture image18). Left (a strip on t
 six stages with their minutes (redesigned ones marked). Middle — the chosen stage: the template's content with «Clear
 the content» (the original leaves the editor, an empty work area opens), then the student's fields with an editor,
 saved by themselves (static/js/designer.js), and «Restore the original». Right — the AI assistant with the stage's
-quick requests; its answers can be copied or added to the editor. Bottom — the lesson's minutes and redesigned stages.
+quick requests; its answers can be copied or added to the editor. Bottom — the lesson's minutes and redesigned stages
+and «Assemble the lesson» (student/designer/assemble.html).
 {% endcomment %}
 {% block title %}{{ stage.order }}. {{ stage.title }} · {{ lesson.title }} · ChemEduTech{% endblock %}
 {% block crumb %}{{ programme.title }} · {% blocktranslate with n=section.number %}Section {{ n }}{% endblocktranslate %}{% endblock %}
@@ -22,6 +23,8 @@ quick requests; its answers can be copied or added to the editor. Bottom — the
     </nav>
     <span class="badge {% if lesson.status == 'final' %}badge-success{% else %}badge-info{% endif %} font-bold">{{ lesson.get_status_display }}</span>
   </div>
+
+  {% if lesson.versions.exists %}{% include "student/designer/partials/flow.html" with step=1 %}{% endif %}
 
   <div class="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(340px,400px)] 2xl:grid-cols-[272px_minmax(0,1fr)_410px]">
 
@@ -146,7 +149,14 @@ quick requests; its answers can be copied or added to the editor. Bottom — the
       <span class="inline-flex items-center gap-2 font-semibold">{% include "components/icons.html#clock" with size=16 %}{% translate "Lesson" %}: <span class="num font-extrabold" :class="total === {{ lesson.duration_min }} ? 'text-success-700' : 'text-warning-700'" x-text="total">{{ editor_opts.total }}</span> / {{ lesson.duration_min }} {% translate "min" %}</span>
       <span class="inline-flex items-center gap-2 font-semibold">{% include "components/icons.html#edit" with size=16 %}{% translate "Redesigned stages" %}: <span class="num font-extrabold" x-text="{{ edited_others }} + (edited ? 1 : 0)">{{ edited_others|add:stage.edited }}</span> / {{ stages|length }}</span>
     </div>
-    <p x-show="total !== {{ lesson.duration_min }}" x-cloak class="text-[13px] font-semibold text-warning-700">{% blocktranslate with n=lesson.duration_min %}The stages should take {{ n }} minutes in total.{% endblocktranslate %}</p>
+    <div class="flex flex-wrap items-center gap-3">
+      <p x-show="total !== {{ lesson.duration_min }}" x-cloak class="text-[13px] font-semibold text-warning-700">{% blocktranslate with n=lesson.duration_min %}The stages should take {{ n }} minutes in total.{% endblocktranslate %}</p>
+      {% if lesson.status == "final" %}
+        <a class="btn btn-primary" href="{% url 'student:lesson_plan' section.number lesson.pk %}">{% include "components/icons.html#award" %}{% translate "Final version" %}</a>
+      {% else %}
+        <a class="btn btn-primary" href="{% url 'student:lesson_assemble' section.number lesson.pk %}" @click="if (state === 'dirty') save()">{% include "components/icons.html#check-square" %}{% translate "Assemble the lesson" %}</a>
+      {% endif %}
+    </div>
   </div>
 
   {# a short notice: «the suggestion is in the editor», «clear the content first» #}

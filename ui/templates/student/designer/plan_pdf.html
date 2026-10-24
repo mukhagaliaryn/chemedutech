@@ -1,0 +1,58 @@
+{% load i18n %}<!doctype html>{% comment %}
+The assembled lesson as a PDF (WeasyPrint, landscape A4): the same sheet as student/designer/partials/plan_sheet.html
+(picture image17) in plain CSS — WeasyPrint does not read the Tailwind build.
+{% endcomment %}
+<html lang="{{ LANGUAGE_CODE|default:'kk' }}"><head><meta charset="utf-8"><title>{{ plan.title }}</title>
+<style>
+  @page { size: A4 landscape; margin: 12mm; }
+  body { font-family: "Inter", "DejaVu Sans", sans-serif; font-size: 9.5pt; color: #13213b; line-height: 1.4; }
+  .head { background: #15336b; color: #fff; border-radius: 10px; padding: 12px 18px; }
+  .head h1 { margin: 0; font-size: 17pt; text-transform: uppercase; letter-spacing: .03em; }
+  .head p { margin: 2px 0 0; color: #c9d6f0; }
+  .cards { display: flex; gap: 8px; margin-top: 10px; }
+  .card { flex: 1; border: 1px solid #d7deea; border-radius: 8px; padding: 7px 10px; }
+  .k { color: #0b7a7a; font-size: 7.5pt; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
+  .v { font-weight: 700; margin-top: 2px; }
+  .model { margin-top: 8px; background: #fff6dd; border: 1px solid #f0d58a; border-radius: 8px; padding: 6px 10px; }
+  table { width: 100%; border-collapse: separate; border-spacing: 3px; margin-top: 8px; }
+  th.h { background: #0b7a7a; color: #fff; font-size: 7.5pt; text-transform: uppercase; text-align: left; padding: 6px 8px; border-radius: 6px; }
+  td, th.s { border: 1px solid #d7deea; border-radius: 6px; padding: 6px 8px; vertical-align: top; text-align: left; }
+  thead { display: table-header-group; }
+  tr:nth-child(even) td, tr:nth-child(even) th.s { background: #eef7f7; }
+  th.s b { color: #15336b; } th.s span { display: block; color: #0b7a7a; font-weight: 700; font-size: 8.5pt; }
+  .lbl { color: #0b7a7a; font-size: 7pt; font-weight: 800; text-transform: uppercase; margin: 4px 0 1px; }
+  p { margin: 0 0 3px; } ul, ol { margin: 2px 0 4px; padding-left: 14px; }
+  .product { margin-top: 8px; background: #e3f4f4; border-radius: 8px; padding: 6px 10px; }
+</style></head>
+<body>
+  <div class="head"><h1>{% translate "Short-term lesson plan" %}</h1><p>{% translate "Authorial lesson" %}: {{ plan.title }} · v{{ version.number }} ({{ version.get_reason_display }})</p></div>
+  <div class="cards">
+    <div class="card"><div class="k">{% translate "Subject" %}</div><div class="v">{{ plan.subject|default:"—" }}</div></div>
+    <div class="card"><div class="k">{% translate "Target group" %}</div><div class="v">{{ plan.grade|default:"—" }}</div></div>
+    <div class="card" style="flex: 2"><div class="k">{% translate "Lesson topic" %}</div><div class="v">{{ plan.topic }}</div></div>
+    <div class="card"><div class="k">{% translate "Duration" %}</div><div class="v">{% blocktranslate with n=plan.duration_min %}{{ n }} min{% endblocktranslate %}</div></div>
+  </div>
+  <div class="cards">
+    <div class="card"><div class="k">{% translate "Lesson aim" %}</div><div>{{ plan.aim }}</div></div>
+    <div class="card"><div class="k">{% translate "Expected results" %}</div><div>{{ plan.outcomes|rich }}</div></div>
+  </div>
+  {% if plan.template %}<div class="model"><b>{% translate "Authorial model" %}:</b> «{{ plan.template.name }}»{% if plan.template.technology %} · {{ plan.template.technology }}{% endif %}</div>{% endif %}
+  <table>
+    <thead><tr>
+      <th class="h" style="width: 13%">{% translate "Stage / time" %}</th><th class="h" style="width: 23%">{% translate "Teacher's actions" %}</th>
+      <th class="h" style="width: 26%">{% translate "Students' actions" %}</th><th class="h" style="width: 20%">{% translate "Assessment / feedback" %}</th>
+      <th class="h" style="width: 18%">{% translate "Resources" %}</th>
+    </tr></thead>
+    <tbody>
+      {% for row in rows %}
+        <tr>
+          <th class="s"><b>{{ row.order }}. {{ row.title }}</b><span>{{ row.start }}–{{ row.end }} {% translate "min" %}</span></th>
+          {% for column, keys in columns %}
+            <td>{% with items=row.cells|get:column %}{% for item in items %}{% if item.label %}<div class="lbl">{{ item.label }}</div>{% endif %}{{ item.html|rich }}{% empty %}—{% endfor %}{% endwith %}</td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% if plan.template.product %}<div class="product"><b>{% translate "Main pedagogical product of the authorial lesson" %}:</b> {{ plan.template.product }}</div>{% endif %}
+</body></html>

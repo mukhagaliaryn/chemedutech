@@ -7,7 +7,8 @@ from .base import Provider, share
 
 class DesignerProvider(Provider):
     """Section 4 — the lesson design constructor (guide @S4): the share of the authorial templates the student has
-    taken to the end: at least one stage redesigned and the final version assembled (each template ≈ 33 %)."""
+    taken to the end: at least one stage redesigned and the final version assembled — which needs a finished trial
+    with the AI student (each template ≈ 33 %)."""
 
     def percent(self, enrollment, section) -> Decimal:
         templates = LessonTemplate.objects.filter(is_active=True)

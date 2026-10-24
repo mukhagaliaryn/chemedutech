@@ -1,0 +1,7 @@
+{% comment %}One step of student/designer/partials/flow.html: n, label, url, open, done, current, tone.{% endcomment %}
+{% if open and current != n %}<a href="{{ url }}"{% else %}<span{% endif %}
+  class="{{ tone }} flex items-center gap-2 rounded-full border py-1.5 pr-3.5 pl-1.5 text-[13px] font-bold transition-colors {% if current == n %}border-(--tone) bg-(--tone-50) text-(--tone){% elif open %}border-line bg-surface hover:border-(--tone){% else %}border-line bg-surface-sunken/60 text-ink-faint{% endif %}"
+  {% if current == n %}aria-current="step"{% endif %}>
+  <span class="num grid size-6 place-items-center rounded-full text-[12px] font-extrabold {% if done %}bg-success-600 text-white{% elif current == n or open %}bg-(--tone) text-white{% else %}bg-surface text-ink-faint{% endif %}">{% if done and current != n %}✓{% else %}{{ n }}{% endif %}</span>
+  {{ label }}
+{% if open and current != n %}</a>{% else %}</span>{% endif %}

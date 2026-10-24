@@ -19,7 +19,7 @@ or narrows the content column (default max-w-[1280px]).
          :data-open="nav.toString()" :data-collapsed="rail.toString()"
          class="fixed inset-y-0 left-0 z-[61] w-[264px] -translate-x-full transition-[transform,width] duration-250 ease-out
                 data-[open=true]:translate-x-0 data-[open=true]:shadow-modal
-                lg:sticky lg:top-0 lg:z-auto lg:h-screen lg:shrink-0 lg:translate-x-0 lg:data-[collapsed=true]:w-[84px]">
+                lg:sticky lg:top-0 lg:z-auto lg:h-screen lg:shrink-0 lg:translate-x-0 lg:data-[collapsed=true]:w-[84px] print:hidden">
     <div class="h-full max-lg:overflow-y-auto lg:in-data-[collapsed=false]:overflow-y-auto">{% block sidebar %}{% endblock %}</div>
     <button type="button" class="close-btn absolute top-5 -right-12 lg:hidden" x-show="nav" x-cloak @click="nav = false" aria-label="{% translate 'Close menu' %}">
       {% include "components/icons.html#x" %}
@@ -27,7 +27,7 @@ or narrows the content column (default max-w-[1280px]).
   </aside>
 
   <div class="flex min-w-0 flex-1 flex-col">
-    <header class="sticky top-0 z-40 flex h-[72px] items-center gap-3 border-b border-line bg-white/90 px-[clamp(16px,2.4vw,32px)] backdrop-blur-md sm:gap-4">
+    <header class="sticky top-0 z-40 flex h-[72px] print:hidden items-center gap-3 border-b border-line bg-white/90 px-[clamp(16px,2.4vw,32px)] backdrop-blur-md sm:gap-4">
       <button type="button" class="btn btn-secondary btn-icon btn-sm lg:hidden" @click="nav = true"
               aria-controls="cabinet-nav" :aria-expanded="nav.toString()" aria-label="{% translate 'Menu' %}">
         {% include "components/icons.html#menu" %}

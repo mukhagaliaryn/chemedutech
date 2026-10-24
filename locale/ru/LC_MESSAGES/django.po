@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ChemEduTech\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 20:48+0500\n"
+"POT-Creation-Date: 2026-10-24 21:12+0500\n"
 "PO-Revision-Date: 2026-10-16 21:00+0500\n"
 "Last-Translator: ChemEduTech\n"
 "Language-Team: ChemEduTech\n"
@@ -270,7 +270,8 @@ msgstr "модель"
 
 #: apps/ai/models/conversation.py:27 apps/core/models.py:8
 #: apps/feedback/models/comment.py:32 apps/feedback/models/notification.py:28
-#: apps/pedagogy/models/lesson.py:99 apps/practice/models/submission.py:107
+#: apps/pedagogy/models/lesson.py:99 apps/pedagogy/models/trial.py:53
+#: apps/practice/models/submission.py:107
 #: apps/practice/models/submission.py:143
 msgid "created at"
 msgstr "создано"
@@ -327,13 +328,13 @@ msgstr "задержка, мс"
 msgid "error"
 msgstr "ошибка"
 
-#: apps/ai/models/conversation.py:57 apps/pedagogy/models/lesson.py:128
+#: apps/ai/models/conversation.py:57 apps/pedagogy/models/lesson.py:130
 #: apps/programme/models/diagnostics.py:73
 #: apps/programme/models/progress.py:116 apps/progress/models/progress.py:172
 msgid "at"
 msgstr "время"
 
-#: apps/ai/models/conversation.py:61
+#: apps/ai/models/conversation.py:61 apps/pedagogy/models/trial.py:52
 msgid "AI message"
 msgstr "Сообщение ИИ"
 
@@ -500,11 +501,12 @@ msgid "attempt number"
 msgstr "номер попытки"
 
 #: apps/assessments/models/attempt.py:35 apps/labs/models/attempt.py:40
-#: apps/progress/models/progress.py:36
+#: apps/pedagogy/models/trial.py:21 apps/progress/models/progress.py:36
 msgid "started at"
 msgstr "начато"
 
 #: apps/assessments/models/attempt.py:36 apps/labs/models/attempt.py:41
+#: apps/pedagogy/models/trial.py:22
 msgid "finished at"
 msgstr "завершено"
 
@@ -1076,9 +1078,9 @@ msgstr "Курсы"
 #: apps/courses/models/content.py:17 apps/courses/models/content.py:53
 #: apps/courses/models/content.py:107 apps/courses/models/content.py:151
 #: apps/courses/models/structure.py:113 apps/feedback/models/comment.py:22
-#: apps/labs/models/attempt.py:32 apps/pedagogy/models/lesson.py:124
-#: apps/practice/models/submission.py:24 apps/practice/models/task.py:22
-#: apps/programme/models/diagnostics.py:31
+#: apps/labs/models/attempt.py:32 apps/pedagogy/models/lesson.py:126
+#: apps/pedagogy/models/trial.py:44 apps/practice/models/submission.py:24
+#: apps/practice/models/task.py:22 apps/programme/models/diagnostics.py:31
 #: apps/programme/models/diagnostics.py:64 apps/progress/models/progress.py:25
 #: apps/progress/models/progress.py:156
 msgid "stage"
@@ -4665,9 +4667,16 @@ msgstr "Объём"
 #: apps/labs/views.py:61 ui/templates/student/course_map.html:76
 #: ui/templates/student/dashboard.html:110
 #: ui/templates/student/dashboard.html:112
-#: ui/templates/student/designer/editor.html:47
-#: ui/templates/student/designer/editor.html:71
-#: ui/templates/student/designer/editor.html:146
+#: ui/templates/student/designer/assemble.html:47
+#: ui/templates/student/designer/assemble.html:92
+#: ui/templates/student/designer/editor.html:50
+#: ui/templates/student/designer/editor.html:74
+#: ui/templates/student/designer/editor.html:149
+#: ui/templates/student/designer/partials/plan_sheet.html:43
+#: ui/templates/student/designer/partials/turn.html:10
+#: ui/templates/student/designer/plan_pdf.html:49
+#: ui/templates/student/designer/results.html:42
+#: ui/templates/student/designer/trial.html:82
 #: ui/templates/student/partials/kind_pill.html:4
 #: ui/templates/student/topic.html:10
 msgid "min"
@@ -4908,6 +4917,7 @@ msgstr "Показать панель"
 #: apps/labs/views.py:123 ui/templates/components/alert.html:10
 #: ui/templates/components/toast.html:16 ui/templates/layouts/learn.html:49
 #: ui/templates/layouts/site.html:45
+#: ui/templates/student/designer/trial.html:113
 #: ui/templates/student/partials/quiz_panel.html:93
 #: ui/templates/teacher/dashboard.html:101 ui/templates/teacher/group.html:77
 #: ui/templates/teacher/group.html:233 ui/templates/teacher/group.html:250
@@ -5148,6 +5158,8 @@ msgid "Pedagogical design"
 msgstr "Педагогическое проектирование"
 
 #: apps/pedagogy/frames.py:22
+#: ui/templates/student/designer/partials/plan_sheet.html:32
+#: ui/templates/student/designer/plan_pdf.html:42
 msgid "Teacher's actions"
 msgstr "Действия учителя"
 
@@ -5184,6 +5196,10 @@ msgid "Tried out"
 msgstr "Апробирован"
 
 #: apps/pedagogy/models/lesson.py:21 apps/pedagogy/models/lesson.py:93
+#: ui/templates/student/designer/assemble.html:71
+#: ui/templates/student/designer/editor.html:155
+#: ui/templates/student/designer/partials/flow.html:11
+#: ui/templates/student/designer/results.html:72
 msgid "Final version"
 msgstr "Итоговая версия"
 
@@ -5225,7 +5241,8 @@ msgid "HTML"
 msgstr "HTML"
 
 #: apps/pedagogy/models/lesson.py:46 apps/pedagogy/models/lesson.py:64
-#: apps/pedagogy/models/lesson.py:95 apps/pedagogy/models/lesson.py:122
+#: apps/pedagogy/models/lesson.py:95 apps/pedagogy/models/lesson.py:124
+#: apps/pedagogy/models/trial.py:15
 msgid "lesson"
 msgstr "урок"
 
@@ -5305,20 +5322,28 @@ msgstr "Предложение ИИ добавлено в редактор"
 msgid "Lesson details saved"
 msgstr "Сведения об уроке сохранены"
 
-#: apps/pedagogy/models/lesson.py:126 apps/programme/models/progress.py:105
+#: apps/pedagogy/models/lesson.py:121
+msgid "Lesson assembled"
+msgstr "Урок собран"
+
+#: apps/pedagogy/models/lesson.py:122
+msgid "Final version assembled"
+msgstr "Итоговая версия собрана"
+
+#: apps/pedagogy/models/lesson.py:128 apps/programme/models/progress.py:105
 #: apps/progress/models/progress.py:161
 msgid "action"
 msgstr "действие"
 
-#: apps/pedagogy/models/lesson.py:127
+#: apps/pedagogy/models/lesson.py:129
 msgid "data"
 msgstr "данные"
 
-#: apps/pedagogy/models/lesson.py:132
+#: apps/pedagogy/models/lesson.py:134
 msgid "lesson event"
 msgstr "событие урока"
 
-#: apps/pedagogy/models/lesson.py:133
+#: apps/pedagogy/models/lesson.py:135
 msgid "lesson events"
 msgstr "события урока"
 
@@ -5369,6 +5394,86 @@ msgstr "этап шаблона"
 #: apps/pedagogy/models/template.py:50
 msgid "template stages"
 msgstr "этапы шаблона"
+
+#: apps/pedagogy/models/trial.py:10 ui/templates/student/designer/trial.html:46
+msgid "High level"
+msgstr "Высокий уровень"
+
+#: apps/pedagogy/models/trial.py:11 ui/templates/student/designer/trial.html:46
+msgid "Medium level"
+msgstr "Средний уровень"
+
+#: apps/pedagogy/models/trial.py:12 ui/templates/student/designer/trial.html:46
+msgid "Low level"
+msgstr "Низкий уровень"
+
+#: apps/pedagogy/models/trial.py:18
+msgid "version"
+msgstr "версия"
+
+#: apps/pedagogy/models/trial.py:20
+msgid "AI student's level"
+msgstr "Уровень ИИ-ученика"
+
+#: apps/pedagogy/models/trial.py:26
+msgid "trial with the AI student"
+msgstr "апробация с ИИ-учеником"
+
+#: apps/pedagogy/models/trial.py:27
+msgid "trials with the AI student"
+msgstr "апробации с ИИ-учеником"
+
+#: apps/pedagogy/models/trial.py:39 ui/templates/assessments/result.html:50
+msgid "Correct"
+msgstr "Верно"
+
+#: apps/pedagogy/models/trial.py:40
+msgid "Partly correct"
+msgstr "Частично верно"
+
+#: apps/pedagogy/models/trial.py:41 ui/templates/assessments/result.html:50
+msgid "Wrong"
+msgstr "Неверно"
+
+#: apps/pedagogy/models/trial.py:43
+msgid "trial"
+msgstr "апробация"
+
+#: apps/pedagogy/models/trial.py:45
+msgid "stage title"
+msgstr "название этапа"
+
+#: apps/pedagogy/models/trial.py:46 apps/practice/models/task.py:54
+msgid "task"
+msgstr "задание"
+
+#: apps/pedagogy/models/trial.py:46
+msgid "HTML, the stage as assembled"
+msgstr "HTML, этап в собранном виде"
+
+#: apps/pedagogy/models/trial.py:47 apps/pedagogy/models/trial.py:57
+msgid "AI student's answer"
+msgstr "Ответ ИИ-ученика"
+
+#: apps/pedagogy/models/trial.py:48
+msgid "answer type"
+msgstr "тип ответа"
+
+#: apps/pedagogy/models/trial.py:49
+msgid "possible error"
+msgstr "возможная ошибка"
+
+#: apps/pedagogy/models/trial.py:50
+msgid "difficulty"
+msgstr "трудность"
+
+#: apps/pedagogy/models/trial.py:51
+msgid "methodical suggestion"
+msgstr "методическая рекомендация"
+
+#: apps/pedagogy/models/trial.py:58
+msgid "AI student's answers"
+msgstr "Ответы ИИ-ученика"
 
 #: apps/practice/admin.py:49 apps/practice/models/task.py:73
 msgid "answer fields"
@@ -5752,10 +5857,6 @@ msgstr "Упорядочивание"
 #: apps/practice/models/task.py:52
 msgid "Open answer (graded by AI)"
 msgstr "Открытый ответ (оценивает AI)"
-
-#: apps/practice/models/task.py:54
-msgid "task"
-msgstr "задание"
 
 #: apps/practice/models/task.py:56
 msgid "label"
@@ -6495,6 +6596,7 @@ msgstr[2] "%(a)s / %(b)s опытов"
 msgstr[3] "%(a)s / %(b)s опытов"
 
 #: apps/student/cabinet.py:95 ui/templates/labs/run.html:282
+#: ui/templates/student/designer/partials/templates.html:73
 #: ui/templates/student/home.html:63 ui/templates/student/results.html:92
 #: ui/templates/student/topic.html:43
 #: ui/templates/teacher/content/course.html:32
@@ -6564,73 +6666,112 @@ msgstr "Практика · попытка %(n)s"
 msgid "Week %(n)s"
 msgstr "%(n)s-я неделя"
 
-#: apps/student/designer.py:28
+#: apps/student/designer.py:29
+msgid ""
+"Fully understands the task, gives scientific evidence and draws complex "
+"conclusions."
+msgstr "Полностью понимает задание, приводит научные доказательства и делает сложные выводы."
+
+#: apps/student/designer.py:30
+msgid "Knows the basic concepts but needs extra explanation in some tasks."
+msgstr "Владеет основными понятиями, но в некоторых заданиях нуждается в дополнительном объяснении."
+
+#: apps/student/designer.py:33
+msgid ""
+"May make mistakes in explaining chemical concepts, needs guiding questions "
+"and extra support."
+msgstr "Может ошибаться в объяснении химических понятий, нуждается в наводящих вопросах и дополнительной поддержке."
+
+#: apps/student/designer.py:40
 msgid "Explain the stage"
 msgstr "Объяснить этап"
 
-#: apps/student/designer.py:29
+#: apps/student/designer.py:41
 msgid "Suggest a virtual experiment idea"
 msgstr "Предложить идею виртуального опыта"
 
-#: apps/student/designer.py:30
+#: apps/student/designer.py:42
 msgid "Develop research questions"
 msgstr "Разработать исследовательские вопросы"
 
-#: apps/student/designer.py:31
+#: apps/student/designer.py:43
 msgid "Build assessment descriptors"
 msgstr "Составить дескрипторы оценивания"
 
-#: apps/student/designer.py:32
+#: apps/student/designer.py:44
 msgid "Check the scientific content"
 msgstr "Проверить научное содержание"
 
-#: apps/student/designer.py:33
+#: apps/student/designer.py:45
 msgid "A virtual student's sample answer"
 msgstr "Образец ответа виртуального ученика"
 
-#: apps/student/designer.py:34
+#: apps/student/designer.py:46
 msgid "Analyse the fit to the time"
 msgstr "Проанализировать соответствие времени"
 
-#: apps/student/designer.py:35
+#: apps/student/designer.py:47
 msgid "Suggest alternative teaching methods"
 msgstr "Предложить альтернативные методы"
 
-#: apps/student/designer.py:114
+#: apps/student/designer.py:126
 msgid "AI-assistant"
 msgstr "ИИ-ассистент"
 
-#: apps/student/designer.py:115
+#: apps/student/designer.py:127
 msgid "How can I help?"
 msgstr "Чем помочь?"
 
-#: apps/student/designer.py:116
+#: apps/student/designer.py:128
 msgid "Ask about this stage…"
 msgstr "Вопрос об этом этапе…"
 
-#: apps/student/designer.py:150
+#: apps/student/designer.py:162
 msgid "Saving…"
 msgstr "Сохранение…"
 
-#: apps/student/designer.py:151 ui/templates/student/designer/editor.html:117
+#: apps/student/designer.py:163 apps/student/designer.py:308
+#: ui/templates/student/designer/editor.html:120
 msgid "Saved"
 msgstr "Сохранено"
 
-#: apps/student/designer.py:152
+#: apps/student/designer.py:164
 msgid "Not saved — check the connection"
 msgstr "Не сохранено — проверьте соединение"
 
-#: apps/student/designer.py:153
+#: apps/student/designer.py:165
 msgid "To write the stage anew, first clear its content."
 msgstr "Чтобы написать этап заново, сначала очистите его содержание."
 
-#: apps/student/designer.py:154
+#: apps/student/designer.py:166
 msgid "The suggestion is in the editor — rework it in your own words."
 msgstr "Предложение в редакторе — переработайте его своими словами."
 
-#: apps/student/designer.py:170 apps/student/designer.py:181
+#: apps/student/designer.py:182 apps/student/designer.py:193
+#: apps/student/designer.py:292
 msgid "The final version cannot be changed."
 msgstr "Итоговую версию изменить нельзя."
+
+#: apps/student/designer.py:303 apps/student/designer.py:478
+#: ui/templates/student/designer/results.html:83
+msgid "The lesson cannot be assembled yet — see what is missing."
+msgstr "Урок пока нельзя собрать — посмотрите, чего не хватает."
+
+#: apps/student/designer.py:305
+msgid "The lesson is assembled."
+msgstr "Урок собран."
+
+#: apps/student/designer.py:412
+msgid "Choose the AI student's level."
+msgstr "Выберите уровень ИИ-ученика."
+
+#: apps/student/designer.py:476
+msgid "First try the lesson out with the AI student."
+msgstr "Сначала апробируйте урок с ИИ-учеником."
+
+#: apps/student/designer.py:482
+msgid "The final version is assembled and saved to your portfolio."
+msgstr "Итоговая версия собрана и сохранена в портфолио."
 
 #: apps/student/sections.py:230
 msgid "Explain the section"
@@ -7073,6 +7214,7 @@ msgid "Topics"
 msgstr "Темы"
 
 #: config/settings/base.py:321
+#: ui/templates/student/designer/partials/flow.html:11
 msgid "Stages"
 msgstr "Этапы"
 
@@ -7450,6 +7592,8 @@ msgid ""
 msgstr "Здесь ИИ-ассистент объяснит цель раздела и с чего начать."
 
 #: ui/templates/ai/partials/panel.html:26
+#: ui/templates/student/designer/partials/turn.html:49
+#: ui/templates/student/designer/trial.html:76
 msgid "Available when the AI assistant is connected."
 msgstr "Будет доступно после подключения ИИ-ассистента."
 
@@ -7497,6 +7641,7 @@ msgstr ""
 "остаётся вашей."
 
 #: ui/templates/ai/partials/thread.html:44
+#: ui/templates/student/designer/partials/turn.html:49
 msgid "Today's AI requests are used up. They renew tomorrow."
 msgstr "Запросы к ИИ на сегодня закончились. Завтра они обновятся."
 
@@ -7509,13 +7654,14 @@ msgid "AI can be wrong — check the chemistry yourself."
 msgstr "ИИ может ошибаться — проверяйте химию сами."
 
 #: ui/templates/ai/partials/thread.html:50
+#: ui/templates/student/designer/trial.html:95
 #, python-format
 msgid "%(n)s requests left today"
 msgstr "Сегодня осталось запросов: %(n)s"
 
 #: ui/templates/assessments/result.html:8 ui/templates/assessments/take.html:8
 #: ui/templates/student/benchmark.html:12
-#: ui/templates/student/designer/editor.html:19
+#: ui/templates/student/designer/editor.html:20
 #: ui/templates/student/designer/template.html:13
 #: ui/templates/student/diagnostic.html:14
 msgid "Breadcrumbs"
@@ -7566,14 +7712,6 @@ msgstr "Пересдать тест"
 #: ui/templates/assessments/result.html:42
 msgid "Your answers"
 msgstr "Ответы"
-
-#: ui/templates/assessments/result.html:50
-msgid "Correct"
-msgstr "Верно"
-
-#: ui/templates/assessments/result.html:50
-msgid "Wrong"
-msgstr "Неверно"
 
 #: ui/templates/assessments/result.html:52
 #, python-format
@@ -7730,6 +7868,7 @@ msgstr ""
 #: ui/templates/components/confirm.html:19
 #: ui/templates/components/modal.html:19
 #: ui/templates/feedback/partials/thread.html:18
+#: ui/templates/student/designer/trial.html:54
 #: ui/templates/teacher/content/course_form.html:40
 #: ui/templates/teacher/content/question.html:60
 #: ui/templates/teacher/content/simple_form.html:17
@@ -7751,6 +7890,8 @@ msgstr "Знакомство с платформой"
 
 #: ui/templates/core/about.html:13 ui/templates/core/about.html:16
 #: ui/templates/core/about.html:34 ui/templates/layouts/site.html:21
+#: ui/templates/student/designer/partials/plan_sheet.html:22
+#: ui/templates/student/designer/plan_pdf.html:37
 msgid "Expected results"
 msgstr "Ожидаемые результаты"
 
@@ -8337,7 +8478,7 @@ msgstr "%(a)s из %(b)s этапов"
 
 #: ui/templates/partials/shell/sidebar_student.html:53
 #: ui/templates/student/courses.html:27
-#: ui/templates/student/designer/partials/templates.html:70
+#: ui/templates/student/designer/partials/templates.html:73
 #: ui/templates/student/home.html:42 ui/templates/student/topic.html:20
 #: ui/templates/student/topic.html:43
 msgid "Continue"
@@ -8999,6 +9140,7 @@ msgid "Topics %(a)s–%(b)s"
 msgstr "Темы %(a)s–%(b)s"
 
 #: ui/templates/student/course_map.html:76
+#: ui/templates/student/designer/assemble.html:47
 #: ui/templates/student/designer/partials/templates.html:65
 #, python-format
 msgid "%(n)s stage"
@@ -9229,8 +9371,21 @@ msgstr[1] "ещё %(n)s комментария"
 msgstr[2] "ещё %(n)s комментариев"
 msgstr[3] "ещё %(n)s комментариев"
 
-#: ui/templates/student/designer/editor.html:11
+#: ui/templates/student/designer/assemble.html:8
+#: ui/templates/student/designer/assemble.html:10
+#: ui/templates/student/designer/assemble.html:74
+#: ui/templates/student/designer/editor.html:157
+#: ui/templates/student/designer/partials/flow.html:11
+#: ui/templates/student/designer/results.html:83
+msgid "Assemble the lesson"
+msgstr "Собрать урок"
+
+#: ui/templates/student/designer/assemble.html:9
+#: ui/templates/student/designer/editor.html:12
+#: ui/templates/student/designer/plan.html:9
+#: ui/templates/student/designer/results.html:9
 #: ui/templates/student/designer/template.html:10
+#: ui/templates/student/designer/trial.html:10
 #: ui/templates/student/diagnostic.html:10 ui/templates/student/section.html:10
 #: ui/templates/student/section.html:16
 #: ui/templates/student/section_locked.html:6
@@ -9239,33 +9394,161 @@ msgstr[3] "ещё %(n)s комментариев"
 msgid "Section %(n)s"
 msgstr "Раздел %(n)s"
 
-#: ui/templates/student/designer/editor.html:12
-msgid "Pedagogical constructor"
-msgstr "Педагогический конструктор"
+#: ui/templates/student/designer/assemble.html:21
+msgid "About the lesson"
+msgstr "Об уроке"
 
-#: ui/templates/student/designer/editor.html:21
-msgid "Template"
-msgstr "Шаблон"
+#: ui/templates/student/designer/assemble.html:22
+msgid "The name, topic, aim and expected results of your authorial lesson."
+msgstr "Название, тема, цель и ожидаемые результаты вашего авторского урока."
 
-#: ui/templates/student/designer/editor.html:30
+#: ui/templates/student/designer/assemble.html:25
+msgid "Name of the authorial lesson"
+msgstr "Название авторского урока"
+
+#: ui/templates/student/designer/assemble.html:27
+#: ui/templates/student/designer/partials/plan_sheet.html:17
+#: ui/templates/student/designer/plan_pdf.html:32
+#: ui/templates/student/designer/template.html:25
+msgid "Lesson topic"
+msgstr "Тема урока"
+
+#: ui/templates/student/designer/assemble.html:29
+#: ui/templates/student/designer/partials/plan_sheet.html:21
+#: ui/templates/student/designer/plan_pdf.html:36
+#: ui/templates/student/designer/template.html:39
+msgid "Lesson aim"
+msgstr "Цель урока"
+
+#: ui/templates/student/designer/assemble.html:31
+#: ui/templates/student/designer/assemble.html:32
+#: ui/templates/student/designer/template.html:125
+msgid "Expected results of the lesson"
+msgstr "Ожидаемые результаты урока"
+
+#: ui/templates/student/designer/assemble.html:34
+#: ui/templates/student/profile.html:38
+#: ui/templates/teacher/content/course_form.html:39
+#: ui/templates/teacher/content/item.html:60
+#: ui/templates/teacher/content/question.html:58
+#: ui/templates/teacher/content/simple_form.html:16
+#: ui/templates/teacher/content/stage.html:51
+#: ui/templates/teacher/group_form.html:25
+msgid "Save"
+msgstr "Сохранить"
+
+#: ui/templates/student/designer/assemble.html:43
+#, python-format
+msgid "A %(n)s-minute authorial lesson"
+msgstr "Авторский урок на %(n)s минут"
+
+#: ui/templates/student/designer/assemble.html:52
+msgid "The name, topic and aim are filled in"
+msgstr "Название, тема и цель заполнены"
+
+#: ui/templates/student/designer/assemble.html:56
+msgid "Every stage has content"
+msgstr "У каждого этапа есть содержание"
+
+#: ui/templates/student/designer/assemble.html:62
+#, python-format
+msgid "The stages take %(n)s minutes"
+msgstr "Этапы занимают %(n)s минут"
+
+#: ui/templates/student/designer/assemble.html:66
+#: ui/templates/student/designer/partials/templates.html:71
+#, python-format
+msgid "%(a)s of %(b)s stages redesigned"
+msgstr "Переработано этапов: %(a)s из %(b)s"
+
+#: ui/templates/student/designer/assemble.html:66
+msgid ""
+"Redesign at least one stage with the AI assistant — the section counts only "
+"such lessons."
+msgstr "Переработайте хотя бы один этап с ИИ-ассистентом — раздел засчитывает только такие уроки."
+
+#: ui/templates/student/designer/assemble.html:76
+#, python-format
+msgid "See the assembled lesson (version %(n)s)"
+msgstr "Собранный урок (версия %(n)s)"
+
+#: ui/templates/student/designer/assemble.html:78
+#: ui/templates/student/designer/plan.html:38
+msgid "Back to the stages"
+msgstr "Вернуться к этапам"
+
+#: ui/templates/student/designer/assemble.html:86
+#: ui/templates/student/designer/editor.html:33
 msgid "Lesson structure"
 msgstr "Структура урока"
 
-#: ui/templates/student/designer/editor.html:50
-#: ui/templates/student/designer/editor.html:52
+#: ui/templates/student/designer/assemble.html:93
+#: ui/templates/student/designer/editor.html:53
+#: ui/templates/student/designer/editor.html:55
+#: ui/templates/student/designer/partials/plan_sheet.html:44
 msgid "Redesigned"
 msgstr "Переработан"
 
-#: ui/templates/student/designer/editor.html:54
+#: ui/templates/student/designer/assemble.html:93
+msgid "Empty"
+msgstr "Пусто"
+
+#: ui/templates/student/designer/assemble.html:93
+#: ui/templates/student/designer/editor.html:22
+msgid "Template"
+msgstr "Шаблон"
+
+#: ui/templates/student/designer/assemble.html:102
+msgid "The assembled lesson brings together:"
+msgstr "В собранном уроке систематизируются:"
+
+#: ui/templates/student/designer/assemble.html:104
+msgid "The name, topic, aim and expected results of the authorial lesson."
+msgstr "Название, тема, цель и ожидаемые результаты авторского урока."
+
+#: ui/templates/student/designer/assemble.html:105
+msgid "The stages of the lesson and their duration."
+msgstr "Этапы урока и их длительность."
+
+#: ui/templates/student/designer/assemble.html:106
+msgid "The teacher's actions at each stage."
+msgstr "Действия учителя на каждом этапе."
+
+#: ui/templates/student/designer/assemble.html:107
+msgid "The tasks the students do."
+msgstr "Задания, которые выполняют ученики."
+
+#: ui/templates/student/designer/assemble.html:108
+msgid "Virtual lab experiments and research work."
+msgstr "Виртуальные лабораторные опыты и исследовательские работы."
+
+#: ui/templates/student/designer/assemble.html:109
+msgid "The digital tools and authorial methods used."
+msgstr "Используемые цифровые инструменты и авторские методы."
+
+#: ui/templates/student/designer/assemble.html:110
+msgid "Assessment criteria and ways of feedback."
+msgstr "Критерии оценивания и способы обратной связи."
+
+#: ui/templates/student/designer/assemble.html:111
+msgid "The final product of the lesson and its reflection tasks."
+msgstr "Итоговый продукт урока и рефлексивные задания."
+
+#: ui/templates/student/designer/editor.html:13
+msgid "Pedagogical constructor"
+msgstr "Педагогический конструктор"
+
+#: ui/templates/student/designer/editor.html:57
 msgid "Cleared"
 msgstr "Очищен"
 
-#: ui/templates/student/designer/editor.html:68
+#: ui/templates/student/designer/editor.html:71
+#: ui/templates/student/designer/partials/turn.html:10
 #, python-format
 msgid "Stage %(n)s"
 msgstr "Этап %(n)s"
 
-#: ui/templates/student/designer/editor.html:79
+#: ui/templates/student/designer/editor.html:82
 #: ui/templates/student/designer/template.html:45
 msgid ""
 "When a part is chosen, its original content is removed completely and an "
@@ -9274,11 +9557,11 @@ msgstr ""
 "При выборе части её исходное содержание полностью удаляется и открывается "
 "пустой редактор для нового содержания."
 
-#: ui/templates/student/designer/editor.html:82
+#: ui/templates/student/designer/editor.html:85
 msgid "Clear the content?"
 msgstr "Очистить содержание?"
 
-#: ui/templates/student/designer/editor.html:82
+#: ui/templates/student/designer/editor.html:85
 msgid ""
 "The template's content of this stage leaves the editor and empty fields "
 "open. The AI assistant helps you write the stage anew."
@@ -9286,67 +9569,152 @@ msgstr ""
 "Исходное содержание этапа уходит из редактора, открываются пустые поля. ИИ-"
 "ассистент помогает написать этап заново."
 
-#: ui/templates/student/designer/editor.html:82
+#: ui/templates/student/designer/editor.html:85
 #: ui/templates/student/partials/practice_field.html:47
 msgid "Clear"
 msgstr "Очистить"
 
-#: ui/templates/student/designer/editor.html:83
+#: ui/templates/student/designer/editor.html:86
 msgid "Clear the content"
 msgstr "Очистить содержание"
 
-#: ui/templates/student/designer/editor.html:87
+#: ui/templates/student/designer/editor.html:90
 msgid "The template's content"
 msgstr "Исходное содержание шаблона"
 
-#: ui/templates/student/designer/editor.html:99
+#: ui/templates/student/designer/editor.html:102
 msgid "Stage title"
 msgstr "Название этапа"
 
-#: ui/templates/student/designer/editor.html:101
+#: ui/templates/student/designer/editor.html:104
 msgid "Minutes"
 msgstr "Минуты"
 
-#: ui/templates/student/designer/editor.html:109
+#: ui/templates/student/designer/editor.html:112
 msgid "AI suggestions go here"
 msgstr "Предложения ИИ попадут сюда"
 
-#: ui/templates/student/designer/editor.html:111
+#: ui/templates/student/designer/editor.html:114
 msgid "Write your authorial task…"
 msgstr "Напишите своё авторское задание…"
 
-#: ui/templates/student/designer/editor.html:118
+#: ui/templates/student/designer/editor.html:121
 msgid "Retry"
 msgstr "Повторить"
 
-#: ui/templates/student/designer/editor.html:122
+#: ui/templates/student/designer/editor.html:125
 msgid "Restore the template's content?"
 msgstr "Вернуть исходное содержание?"
 
-#: ui/templates/student/designer/editor.html:122
+#: ui/templates/student/designer/editor.html:125
 msgid "What you wrote in this stage is replaced by the template's content."
 msgstr "Написанное в этапе заменится содержанием шаблона."
 
-#: ui/templates/student/designer/editor.html:122
+#: ui/templates/student/designer/editor.html:125
 msgid "Restore"
 msgstr "Вернуть"
 
-#: ui/templates/student/designer/editor.html:123
+#: ui/templates/student/designer/editor.html:126
 msgid "Restore the original"
 msgstr "Вернуть исходное"
 
-#: ui/templates/student/designer/editor.html:146
+#: ui/templates/student/designer/editor.html:149
 msgid "Lesson"
 msgstr "Урок"
 
-#: ui/templates/student/designer/editor.html:147
+#: ui/templates/student/designer/editor.html:150
 msgid "Redesigned stages"
 msgstr "Переработанные этапы"
 
-#: ui/templates/student/designer/editor.html:149
+#: ui/templates/student/designer/editor.html:153
 #, python-format
 msgid "The stages should take %(n)s minutes in total."
 msgstr "Этапы в сумме должны занимать %(n)s минут."
+
+#: ui/templates/student/designer/partials/flow.html:6
+msgid "Lesson design steps"
+msgstr "Шаги проектирования урока"
+
+#: ui/templates/student/designer/partials/flow.html:11
+#: ui/templates/student/designer/results.html:21
+#: ui/templates/student/designer/trial.html:66
+msgid "The AI student"
+msgstr "ИИ-ученик"
+
+#: ui/templates/student/designer/partials/flow.html:11
+#: ui/templates/student/designer/results.html:8
+#: ui/templates/student/designer/results.html:10
+#: ui/templates/student/designer/trial.html:97
+msgid "Trial results"
+msgstr "Результаты апробации"
+
+#: ui/templates/student/designer/partials/plan_sheet.html:10
+#: ui/templates/student/designer/plan.html:8
+#: ui/templates/student/designer/plan_pdf.html:28
+msgid "Short-term lesson plan"
+msgstr "Краткосрочный план урока"
+
+#: ui/templates/student/designer/partials/plan_sheet.html:11
+#: ui/templates/student/designer/plan_pdf.html:28
+msgid "Authorial lesson"
+msgstr "Авторский урок"
+
+#: ui/templates/student/designer/partials/plan_sheet.html:15
+#: ui/templates/student/designer/plan_pdf.html:30
+#: ui/templates/student/designer/template.html:26
+msgid "Subject"
+msgstr "Предмет"
+
+#: ui/templates/student/designer/partials/plan_sheet.html:16
+#: ui/templates/student/designer/plan_pdf.html:31
+msgid "Target group"
+msgstr "Целевая группа"
+
+#: ui/templates/student/designer/partials/plan_sheet.html:18
+#: ui/templates/student/designer/plan_pdf.html:33
+#: ui/templates/teacher/student.html:111
+msgid "Duration"
+msgstr "Длительность"
+
+#: ui/templates/student/designer/partials/plan_sheet.html:18
+#: ui/templates/student/designer/partials/templates.html:58
+#: ui/templates/student/designer/plan_pdf.html:33
+#: ui/templates/student/designer/template.html:28
+#: ui/templates/student/designer/template.html:99
+#, python-format
+msgid "%(n)s min"
+msgstr "%(n)s мин"
+
+#: ui/templates/student/designer/partials/plan_sheet.html:25
+#: ui/templates/student/designer/plan_pdf.html:39
+msgid "Authorial model"
+msgstr "Авторская модель"
+
+#: ui/templates/student/designer/partials/plan_sheet.html:31
+#: ui/templates/student/designer/plan_pdf.html:42
+msgid "Stage / time"
+msgstr "Этап / время"
+
+#: ui/templates/student/designer/partials/plan_sheet.html:33
+#: ui/templates/student/designer/plan_pdf.html:43
+msgid "Students' actions"
+msgstr "Действия учеников"
+
+#: ui/templates/student/designer/partials/plan_sheet.html:34
+#: ui/templates/student/designer/plan_pdf.html:43
+msgid "Assessment / feedback"
+msgstr "Оценивание / обратная связь"
+
+#: ui/templates/student/designer/partials/plan_sheet.html:35
+#: ui/templates/student/designer/plan_pdf.html:44
+msgid "Resources"
+msgstr "Ресурсы"
+
+#: ui/templates/student/designer/partials/plan_sheet.html:63
+#: ui/templates/student/designer/plan_pdf.html:57
+#: ui/templates/student/designer/template.html:130
+msgid "Main pedagogical product of the authorial lesson"
+msgstr "Основной педагогический продукт авторского урока"
 
 #: ui/templates/student/designer/partials/templates.html:8
 msgid "How the AI assistant helps to change any part"
@@ -9408,38 +9776,184 @@ msgstr ""
 msgid "My version"
 msgstr "Моя версия"
 
-#: ui/templates/student/designer/partials/templates.html:58
-#: ui/templates/student/designer/template.html:28
-#: ui/templates/student/designer/template.html:99
-#, python-format
-msgid "%(n)s min"
-msgstr "%(n)s мин"
-
-#: ui/templates/student/designer/partials/templates.html:69
-#, python-format
-msgid "%(a)s of %(b)s stages redesigned"
-msgstr "Переработано этапов: %(a)s из %(b)s"
-
-#: ui/templates/student/designer/partials/templates.html:72
+#: ui/templates/student/designer/partials/templates.html:75
 msgid "Not started"
 msgstr "Не начат"
 
-#: ui/templates/student/designer/partials/templates.html:73
+#: ui/templates/student/designer/partials/templates.html:76
 msgid "Open the template"
 msgstr "Открыть шаблон"
+
+#: ui/templates/student/designer/partials/turn.html:16
+msgid "Task"
+msgstr "Задание"
+
+#: ui/templates/student/designer/partials/turn.html:18
+msgid ""
+"This stage has no task for the students — the AI student works from the "
+"teacher's actions."
+msgstr "На этом этапе нет задания для учеников — ИИ-ученик опирается на действия учителя."
+
+#: ui/templates/student/designer/partials/turn.html:26
+msgid "The AI student's answer"
+msgstr "Ответ ИИ-ученика"
+
+#: ui/templates/student/designer/partials/turn.html:35
+msgid "The student's possible error"
+msgstr "Возможная ошибка ученика"
+
+#: ui/templates/student/designer/partials/turn.html:39
+msgid "Where it was difficult"
+msgstr "Где возникла трудность"
+
+#: ui/templates/student/designer/partials/turn.html:44
+msgid "The AI assistant's methodical suggestion"
+msgstr "Методическая рекомендация ИИ-ассистента"
+
+#: ui/templates/student/designer/partials/turn.html:49
+msgid "The AI student did not answer this time. Try again in a minute."
+msgstr "ИИ-ученик не ответил. Повторите через минуту."
+
+#: ui/templates/student/designer/partials/turn.html:54
+msgid ""
+"A simulation for checking the task in advance — check its conclusions "
+"yourself."
+msgstr "Симуляция для предварительной проверки задания — проверьте её выводы сами."
+
+#: ui/templates/student/designer/partials/turn.html:57
+msgid "Try again"
+msgstr "Повторить"
+
+#: ui/templates/student/designer/partials/turn.html:60
+#: ui/templates/student/designer/results.html:56
+msgid "Revise"
+msgstr "Доработать"
+
+#: ui/templates/student/designer/plan.html:10
+msgid "Assembled lesson"
+msgstr "Собранный урок"
+
+#: ui/templates/student/designer/plan.html:20
+msgid "Your authorial lesson is ready"
+msgstr "Ваш авторский урок готов"
+
+#: ui/templates/student/designer/plan.html:21
+msgid ""
+"The final version is saved and goes to your digital portfolio. It can no "
+"longer be changed."
+msgstr "Итоговая версия сохранена и входит в ваше цифровое портфолио. Изменить её больше нельзя."
+
+#: ui/templates/student/designer/plan.html:27
+msgid "Versions"
+msgstr "Версии"
+
+#: ui/templates/student/designer/plan.html:36
+msgid "Print"
+msgstr "Печать"
+
+#: ui/templates/student/designer/plan.html:39
+#: ui/templates/student/designer/trial.html:9
+#: ui/templates/student/designer/trial.html:11
+#: ui/templates/student/designer/trial.html:25
+msgid "Try it out with the AI student"
+msgstr "Апробация с ИИ-учеником"
+
+#: ui/templates/student/designer/results.html:20
+msgid "Trial results (all stages)"
+msgstr "Результаты апробации (по всем этапам)"
+
+#: ui/templates/student/designer/results.html:21
+#: ui/templates/student/designer/trial.html:67
+#, python-format
+msgid "Assembled lesson, version %(n)s"
+msgstr "Собранный урок, версия %(n)s"
+
+#: ui/templates/student/designer/results.html:24
+msgid "The AI student's answers"
+msgstr "Ответы ИИ-ученика"
+
+#: ui/templates/student/designer/results.html:27
+msgid "Clear tasks"
+msgstr "Понятные задания"
+
+#: ui/templates/student/designer/results.html:28
+msgid "Need improving"
+msgstr "Нужно доработать"
+
+#: ui/templates/student/designer/results.html:29
+msgid "Possible error"
+msgstr "Возможная ошибка"
+
+#: ui/templates/student/designer/results.html:32
+msgid "Overall assessment"
+msgstr "Общая оценка"
+
+#: ui/templates/student/designer/results.html:32
+msgid "a simulation, not a grade"
+msgstr "симуляция, не оценка"
+
+#: ui/templates/student/designer/results.html:44
+msgid "Revised"
+msgstr "Доработан"
+
+#: ui/templates/student/designer/results.html:48
+msgid "Possible difficulties"
+msgstr "Возможные трудности"
+
+#: ui/templates/student/designer/results.html:49
+msgid "Scientific remarks"
+msgstr "Научные замечания"
+
+#: ui/templates/student/designer/results.html:50
+msgid "Methodical suggestions"
+msgstr "Методические рекомендации"
+
+#: ui/templates/student/designer/results.html:53
+msgid "The AI student has not done this stage yet."
+msgstr "ИИ-ученик ещё не выполнил этот этап."
+
+#: ui/templates/student/designer/results.html:67
+#: ui/templates/student/designer/results.html:77
+msgid "Assemble the final version"
+msgstr "Собрать итоговую версию"
+
+#: ui/templates/student/designer/results.html:68
+msgid ""
+"After the trial with the AI student, analyse your pedagogical decisions and "
+"make the necessary corrections. Then the final version of your authorial "
+"lesson is formed and goes to your digital portfolio."
+msgstr "После апробации с ИИ-учеником проанализируйте свои педагогические решения и внесите исправления. Затем формируется итоговая версия авторского урока и входит в цифровое портфолио."
+
+#: ui/templates/student/designer/results.html:69
+#, python-format
+msgid "%(n)s stage revised after the trial"
+msgid_plural "%(n)s stages revised after the trial"
+msgstr[0] "После апробации доработан %(n)s этап"
+msgstr[1] "После апробации доработано %(n)s этапа"
+msgstr[2] "После апробации доработано %(n)s этапов"
+msgstr[3] "После апробации доработано %(n)s этапа"
+
+#: ui/templates/student/designer/results.html:75
+msgid "Assemble the final version?"
+msgstr "Собрать итоговую версию?"
+
+#: ui/templates/student/designer/results.html:75
+msgid "The lesson is saved as your final version and can no longer be changed."
+msgstr "Урок сохранится как итоговая версия, изменить его будет нельзя."
+
+#: ui/templates/student/designer/results.html:75
+msgid "Assemble"
+msgstr "Собрать"
+
+#: ui/templates/student/designer/results.html:82
+#: ui/templates/student/designer/trial.html:99
+msgid "The results open when the AI student has done every stage."
+msgstr "Результаты откроются, когда ИИ-ученик выполнит все этапы."
 
 #: ui/templates/student/designer/template.html:11
 #: ui/templates/student/designer/template.html:22
 msgid "Authorial lesson template"
 msgstr "Авторский шаблон урока"
-
-#: ui/templates/student/designer/template.html:25
-msgid "Lesson topic"
-msgstr "Тема урока"
-
-#: ui/templates/student/designer/template.html:26
-msgid "Subject"
-msgstr "Предмет"
 
 #: ui/templates/student/designer/template.html:27
 msgid "School grade"
@@ -9448,10 +9962,6 @@ msgstr "Класс"
 #: ui/templates/student/designer/template.html:28
 msgid "Lesson duration"
 msgstr "Длительность урока"
-
-#: ui/templates/student/designer/template.html:39
-msgid "Lesson aim"
-msgstr "Цель урока"
 
 #: ui/templates/student/designer/template.html:44
 msgid "Your version of this lesson"
@@ -9493,13 +10003,66 @@ msgstr "Свернуть"
 msgid "Read in full"
 msgstr "Читать полностью"
 
-#: ui/templates/student/designer/template.html:125
-msgid "Expected results of the lesson"
-msgstr "Ожидаемые результаты урока"
+#: ui/templates/student/designer/trial.html:26
+msgid ""
+"The AI student imitates a real student: it answers the tasks you designed, "
+"asks questions, solves chemistry problems, analyses the given results of "
+"virtual experiments and draws its own conclusion."
+msgstr "ИИ-ученик имитирует настоящего ученика: отвечает на ваши задания, задаёт вопросы, решает химические задачи, анализирует данные виртуальных опытов и формулирует собственный вывод."
 
-#: ui/templates/student/designer/template.html:130
-msgid "Main pedagogical product of the authorial lesson"
-msgstr "Основной педагогический продукт авторского урока"
+#: ui/templates/student/designer/trial.html:27
+msgid ""
+"The main feature of the AI student is that it does not show only ready "
+"correct answers."
+msgstr "Главная особенность ИИ-ученика — он показывает не только готовые правильные ответы."
+
+#: ui/templates/student/designer/trial.html:34
+msgid "An important requirement:"
+msgstr "Важное требование:"
+
+#: ui/templates/student/designer/trial.html:34
+msgid ""
+"the AI student does not replace the result of a real university or school "
+"student. Its answers are a simulation for checking the authorial task in "
+"advance. Therefore the possible errors and methodical conclusions shown by "
+"the system must be checked scientifically, and the real pedagogical "
+"effectiveness of the lesson is assessed later by trying it out with real "
+"learners."
+msgstr "ИИ-ученик не заменяет результат реального студента или школьника. Его ответы — симуляция для предварительной проверки авторского задания. Поэтому показанные системой возможные ошибки и методические выводы нужно проверять научно, а реальная педагогическая эффективность урока оценивается позже при апробации с настоящими учащимися."
+
+#: ui/templates/student/designer/trial.html:40
+msgid "Choose the AI student's level"
+msgstr "Выберите уровень ИИ-ученика"
+
+#: ui/templates/student/designer/trial.html:52
+msgid ""
+"This way you can see in advance how clear your authorial tasks are to "
+"students of different readiness."
+msgstr "Так вы заранее оцените, насколько понятны ваши задания ученикам разного уровня подготовки."
+
+#: ui/templates/student/designer/trial.html:55
+msgid "Start the trial"
+msgstr "Начать апробацию"
+
+#: ui/templates/student/designer/trial.html:72
+msgid "Stages done by the AI student"
+msgstr "Этапы, выполненные ИИ-учеником"
+
+#: ui/templates/student/designer/trial.html:73
+msgid "Try with another level"
+msgstr "Апробировать с другим уровнем"
+
+#: ui/templates/student/designer/trial.html:89
+msgid "See the AI student's answer"
+msgstr "Ответ ИИ-ученика"
+
+#: ui/templates/student/designer/trial.html:104
+msgid "Earlier trials:"
+msgstr "Прежние апробации:"
+
+#: ui/templates/student/designer/trial.html:121
+msgid "The AI student is doing the task…"
+msgstr "ИИ-ученик выполняет задание…"
 
 #: ui/templates/student/diagnostic.html:19
 msgid "Diagnostic stages"
@@ -10093,16 +10656,6 @@ msgstr "открыт"
 #: ui/templates/student/profile.html:24
 msgid "Personal data"
 msgstr "Личные данные"
-
-#: ui/templates/student/profile.html:38
-#: ui/templates/teacher/content/course_form.html:39
-#: ui/templates/teacher/content/item.html:60
-#: ui/templates/teacher/content/question.html:58
-#: ui/templates/teacher/content/simple_form.html:16
-#: ui/templates/teacher/content/stage.html:51
-#: ui/templates/teacher/group_form.html:25
-msgid "Save"
-msgstr "Сохранить"
 
 #: ui/templates/student/profile.html:45
 msgid "Study"
@@ -11616,10 +12169,6 @@ msgstr "попытки закончились"
 msgid "Open for the student"
 msgstr "Открыть студенту"
 
-#: ui/templates/teacher/student.html:111
-msgid "Duration"
-msgstr "Длительность"
-
 #: ui/templates/teacher/student.html:125
 msgid "Log"
 msgstr "Журнал"
@@ -12132,9 +12681,6 @@ msgstr "Условие"
 #~ "после курса; показывается только общий процент. Не меняйте вопросы после "
 #~ "того, как студенты начали его проходить — изменённый тест делает «до» и "
 #~ "«после» несравнимыми."
-
-#~ msgid "Manage groups"
-#~ msgstr "Управление группами"
 
 #~ msgid ""
 #~ "topic scores of completed topics; in-progress topics are shown greyed"

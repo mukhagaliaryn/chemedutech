@@ -1,0 +1,126 @@
+{% extends "layouts/student.html" %}
+{% load i18n static %}
+{% comment %}
+«Try it out with the AI student» (guide @S4-ASSEMBLE 2–4; picture image19): what the AI student does, the three
+readiness levels (high / medium / low), then the stages of the assembled lesson, each with «See the AI student's
+answer» (a window: student/designer/partials/turn.html, made by the AI on the first click), the trial's progress and
+the way to «Trial results». The guide's requirement — the AI student is a simulation — is always shown.
+{% endcomment %}
+{% block title %}{% translate "Try it out with the AI student" %} · {{ lesson.title }} · ChemEduTech{% endblock %}
+{% block crumb %}{{ programme.title }} · {% blocktranslate with n=section.number %}Section {{ n }}{% endblocktranslate %}{% endblock %}
+{% block page_title %}{% translate "Try it out with the AI student" %}{% endblock %}
+{% block main_class %}max-w-[1320px]{% endblock %}
+{% block content %}
+{% include "student/designer/partials/flow.html" with step=3 %}
+
+<section class="relative overflow-hidden rounded-xl bg-[linear-gradient(125deg,var(--color-ai-900),var(--color-stage-video)_55%,var(--color-primary-600))] p-[clamp(20px,3vw,32px)] text-white" aria-labelledby="trial-title">
+  <svg aria-hidden="true" class="pointer-events-none absolute inset-0 h-full w-full opacity-10" viewBox="0 0 800 200" preserveAspectRatio="xMidYMid slice"><g fill="none" stroke="#fff" stroke-width="1.5"><path d="M40 50l20-12 20 12v24l-20 12-20-12z"/><path d="M80 62l50 26"/><circle cx="700" cy="60" r="34"/><circle cx="700" cy="60" r="12"/><path d="M560 160l20-12 20 12v24l-20 12-20-12z"/></g></svg>
+  <div class="relative flex flex-wrap items-center gap-5">
+    <div class="flex -space-x-3">
+      {% include "student/designer/partials/ai_student.html" with level="high" size=56 %}
+      {% include "student/designer/partials/ai_student.html" with level="medium" size=56 %}
+      {% include "student/designer/partials/ai_student.html" with level="low" size=56 %}
+    </div>
+    <div class="min-w-0 flex-[1_1_420px]">
+      <h1 id="trial-title" class="text-[clamp(20px,2.4vw,26px)] leading-tight font-extrabold">{% translate "Try it out with the AI student" %}</h1>
+      <p class="mt-1.5 max-w-[760px] text-[14.5px] leading-[22px] text-white/85">{% translate "The AI student imitates a real student: it answers the tasks you designed, asks questions, solves chemistry problems, analyses the given results of virtual experiments and draws its own conclusion." %}</p>
+      <p class="mt-1 text-[13.5px] font-bold text-mint">{% translate "The main feature of the AI student is that it does not show only ready correct answers." %}</p>
+    </div>
+  </div>
+</section>
+
+<p class="flex items-start gap-3 rounded-lg border border-warning-500/40 bg-warning-50 px-4 py-3 text-[13.5px] leading-[20px] text-warning-700" role="note">
+  <span class="mt-0.5 shrink-0">{% include "components/icons.html#warn" with size=17 %}</span>
+  <span><strong>{% translate "An important requirement:" %}</strong> {% translate "the AI student does not replace the result of a real university or school student. Its answers are a simulation for checking the authorial task in advance. Therefore the possible errors and methodical conclusions shown by the system must be checked scientifically, and the real pedagogical effectiveness of the lesson is assessed later by trying it out with real learners." %}</span>
+</p>
+
+<div x-data="{ choose: {{ trial|yesno:'false,true' }} }" class="flex flex-col gap-4">
+  {# ---- the level ---- #}
+  <form method="post" action="{% url 'student:lesson_trial_start' section.number lesson.pk %}" x-show="choose" x-cloak class="card flex flex-col gap-4" aria-labelledby="level-title">{% csrf_token %}
+    <h2 id="level-title" class="text-[17px] font-extrabold">{% translate "Choose the AI student's level" %}</h2>
+    <div class="grid gap-3 md:grid-cols-3" role="radiogroup">
+      {% for value, text in levels %}
+        <label class="group relative flex cursor-pointer flex-col items-center gap-3 rounded-lg border-2 border-line p-5 text-center transition-all hover:-translate-y-0.5 hover:shadow-lift has-checked:border-stage-video has-checked:bg-ai-50/50">
+          <input type="radio" name="level" value="{{ value }}" class="sr-only" {% if value == "medium" %}checked{% endif %}>
+          <span class="transition-transform group-has-checked:scale-110">{% include "student/designer/partials/ai_student.html" with level=value size=72 %}</span>
+          <span class="text-[15px] font-extrabold">{% if value == "high" %}{% translate "High level" %}{% elif value == "medium" %}{% translate "Medium level" %}{% else %}{% translate "Low level" %}{% endif %}</span>
+          <span class="text-[13px] leading-[19px] text-ink-soft">{{ text }}</span>
+          <span class="absolute top-3 right-3 hidden size-6 place-items-center rounded-full bg-stage-video text-white group-has-checked:grid">{% include "components/icons.html#check" with size=13 %}</span>
+        </label>
+      {% endfor %}
+    </div>
+    <p class="text-[13px] text-ink-soft">{% translate "This way you can see in advance how clear your authorial tasks are to students of different readiness." %}</p>
+    <div class="flex flex-wrap justify-end gap-2">
+      {% if trial %}<button type="button" class="btn btn-ghost" @click="choose = false">{% translate "Cancel" %}</button>{% endif %}
+      <button type="submit" class="btn btn-primary h-[46px] px-[22px] text-[15px] font-bold" {% if lesson.status == "final" %}disabled{% endif %}>{% include "components/icons.html#play" %}{% translate "Start the trial" %}</button>
+    </div>
+  </form>
+
+  {# ---- the trial ---- #}
+  {% if trial %}
+    <section x-show="!choose" class="card flex flex-col gap-4" aria-labelledby="stages-title">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          {% include "student/designer/partials/ai_student.html" with level=trial.level size=48 %}
+          <div>
+            <h2 id="stages-title" class="text-[17px] font-extrabold">{% translate "The AI student" %}: {{ trial.get_level_display|lower }}</h2>
+            <p class="text-[13px] text-ink-soft">{% blocktranslate with n=trial.version.number %}Assembled lesson, version {{ n }}{% endblocktranslate %} · {{ trial.started_at|date:"d.m.Y H:i" }}</p>
+          </div>
+        </div>
+        <div class="flex flex-wrap items-center gap-3">
+          <span class="num text-sm font-bold">{{ done }} / {{ stages|length }}</span>
+          <div class="progress w-32 {% if trial.finished_at %}progress-success{% endif %}" role="progressbar" aria-valuenow="{{ done }}" aria-valuemin="0" aria-valuemax="{{ stages|length }}" aria-label="{% translate 'Stages done by the AI student' %}"><span style="width: {{ progress }}%"></span></div>
+          {% if lesson.status != "final" %}<button type="button" class="btn btn-secondary btn-sm" @click="choose = true">{% include "components/icons.html#refresh" %}{% translate "Try with another level" %}</button>{% endif %}
+        </div>
+      </div>
+      {% if not ai_enabled %}{% translate "Available when the AI assistant is connected." as l_off %}{% include "components/alert.html" with variant="info" text=l_off %}{% endif %}
+      <ol class="flex flex-col gap-2.5">
+        {% for s in stages %}{% with turn=turns|get:s.order %}
+          <li class="tone-{{ forloop.counter }} flex flex-wrap items-center gap-4 rounded-lg border border-line p-3.5 transition-colors hover:border-(--tone)" data-reveal>
+            <span class="num grid size-10 shrink-0 place-items-center rounded-full bg-(--tone) text-[16px] font-extrabold text-white">{{ s.order }}</span>
+            <div class="min-w-0 flex-[1_1_300px]">
+              <p class="text-[15px] font-bold">{{ s.title }} <span class="num ml-1 text-[12.5px] font-semibold text-(--tone)">{{ s.start }}–{{ s.end }} {% translate "min" %}</span></p>
+              {% if turn %}<p class="mt-0.5 line-clamp-2 text-[13px] leading-[19px] text-ink-soft">«{{ turn.answer|truncatechars:180 }}»</p>{% endif %}
+            </div>
+            {% if turn %}<span class="badge {% if turn.answer_type == 'correct' %}badge-success{% elif turn.answer_type == 'partial' %}badge-warning{% else %}badge-danger{% endif %} text-[11px] font-bold">{{ turn.get_answer_type_display }}</span>{% endif %}
+            <button type="button" class="btn {% if turn %}btn-secondary{% else %}btn-primary{% endif %} btn-sm"
+                    {% if turn %}hx-get{% else %}hx-post{% endif %}="{% url 'student:lesson_trial_turn' section.number lesson.pk trial.pk s.order %}" hx-target="#turn-body"
+                    hx-on::before-request="openTurn()" {% if not turn and not ai_enabled %}disabled{% endif %}>
+              {% include "components/icons.html#eye" %}{% translate "See the AI student's answer" %}
+            </button>
+          </li>
+        {% endwith %}{% endfor %}
+      </ol>
+      <div class="flex flex-wrap items-center justify-between gap-3 border-t border-line pt-4">
+        <p class="text-[13px] text-ink-faint">{% blocktranslate with n=remaining %}{{ n }} requests left today{% endblocktranslate %}</p>
+        {% if trial.finished_at %}
+          <a class="btn btn-primary" href="{% url 'student:lesson_results' section.number lesson.pk %}?trial={{ trial.pk }}">{% include "components/icons.html#chart" %}{% translate "Trial results" %}</a>
+        {% else %}
+          <span class="text-[13px] font-semibold text-ink-soft">{% translate "The results open when the AI student has done every stage." %}</span>
+        {% endif %}
+      </div>
+    </section>
+    {% if trials|length > 1 %}
+      <p class="flex flex-wrap items-center gap-2 text-[13px] text-ink-soft" x-show="!choose">{% translate "Earlier trials:" %}
+        {% for t in trials %}{% if t.pk != trial.pk %}<a class="link font-semibold" href="?trial={{ t.pk }}">{{ t.get_level_display }} · {{ t.started_at|date:"d.m H:i" }}</a>{% endif %}{% endfor %}
+      </p>
+    {% endif %}
+  {% endif %}
+</div>
+
+{# ---- the window «See the AI student's answer» ---- #}
+<dialog id="turn-dialog" class="dialog max-w-[780px]" aria-labelledby="turn-title">
+  <button type="button" class="close-btn absolute top-4 right-4" onclick="this.closest('dialog').close()" aria-label="{% translate 'Close' %}">{% include "components/icons.html#x" %}</button>
+  <div id="turn-body" aria-live="polite"></div>
+  <template id="turn-loading">
+    <div class="flex flex-col items-center gap-4 py-10 text-center">
+      <span class="relative grid size-20 place-items-center">
+        <span class="pulse-ring absolute inset-0 rounded-full border-2 border-stage-video/40"></span>
+        {% include "student/designer/partials/ai_student.html" with level=trial.level size=72 %}
+      </span>
+      <p class="flex items-center gap-2 text-[15px] font-bold text-stage-video"><span class="typing flex gap-1"><span class="size-1.5 rounded-full bg-stage-video"></span><span class="size-1.5 rounded-full bg-stage-video"></span><span class="size-1.5 rounded-full bg-stage-video"></span></span>{% translate "The AI student is doing the task…" %}</p>
+    </div>
+  </template>
+</dialog>
+{% endblock %}
+{% block scripts %}<script defer src="{% static 'js/designer.js' %}"></script>{% endblock %}

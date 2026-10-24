@@ -1,4 +1,7 @@
-from django.test import TestCase
+import json
+from unittest import mock
+
+from django.test import TestCase, override_settings
 
 from apps.organizations.testing import make_student
 
@@ -120,3 +123,135 @@ class LessonServiceTests(TestCase):
         cards = selectors.template_cards(self.student)
         self.assertEqual([(c["template"].code, c["lesson"], c["edited"]) for c in cards],
                          [("chem_design", lesson, 1), ("chem_circuit", None, 0)])  # fmt: skip
+
+
+SIM = {
+    "answer": "Қысым артса, NH₃ көбейеді.",
+    "answer_type": "partial",
+    "possible_error": "Катализатор шығымды арттырады деп ойлайды.",
+    "difficulty": "Тепе-теңдік пен жылдамдықтың айырмасы.",
+    "suggestion": "Жылдамдық пен шығымды бөлек сұраңыз.",
+}
+
+
+@override_settings(AI_TUTOR_ENABLED=True)
+class AssemblyTests(TestCase):
+    def setUp(self):
+        from apps.ai.services import client as ai_client
+        from apps.ai.tests import FakeClient, answer
+
+        self.fake = FakeClient(answer(json.dumps(SIM)))
+        patcher = mock.patch.object(ai_client, "get_client", return_value=self.fake)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        self.student = make_student("s1")
+        self.lesson = services.start(self.student, make_template())
+
+    def redesign(self, order=3):
+        stage = services.clear(self.lesson.stages.get(order=order))
+        return services.save(
+            stage, title="Дәлел", minutes=stage.minutes, fields={"experiment": "<p>N<sub>2</sub>O<sub>4</sub></p>"}
+        )
+
+    def trial(self, level="low"):
+        services.assemble(self.lesson)
+        return services.start_trial(self.lesson, level)
+
+    def test_problems_block_the_assembly(self):
+        self.assertEqual(services.problems(self.lesson), [])
+        stage = services.clear(self.lesson.stages.get(order=2))
+        services.save(stage, title="Бос", minutes=9, fields={})
+        codes = [p["code"] for p in services.problems(self.lesson)]
+        self.assertEqual(codes, ["empty_stage", "minutes"])
+        with self.assertRaises(services.LessonError):
+            services.assemble(self.lesson)
+
+    def test_details_are_saved_once_and_cleaned(self):
+        services.save_details(
+            self.lesson, title=" Менің сабағым ", topic="pH", aim="Мақсат", outcomes="<p>a<script>x</script></p>"
+        )
+        services.save_details(self.lesson, title="Менің сабағым", topic="pH", aim="Мақсат", outcomes="<p>a</p>")
+        self.lesson.refresh_from_db()
+        self.assertEqual((self.lesson.title, self.lesson.outcomes), ("Менің сабағым", "<p>a</p>"))
+        self.assertEqual(LessonEvent.objects.filter(action=E.DETAILS_SAVED).count(), 1)
+
+    def test_assemble_freezes_a_version(self):
+        self.redesign()
+        version = services.assemble(self.lesson)
+        self.lesson.refresh_from_db()
+        self.assertEqual((version.number, version.reason, self.lesson.status), (1, "assemble", "assembled"))
+        stage = version.snapshot["stages"][2]
+        self.assertEqual((stage["title"], stage["start"], stage["end"], stage["redesigned"]), ("Дәлел", 12, 23, True))
+        self.assertEqual(version.snapshot["subject"], "Химия")
+        services.save(self.lesson.stages.get(order=3), title="Кейін", minutes=11, fields={"result": "<p>x</p>"})
+        version.refresh_from_db()
+        self.assertEqual(version.snapshot["stages"][2]["title"], "Дәлел")  # versions do not change
+        self.assertEqual(services.assemble(self.lesson).number, 2)
+
+    def test_a_trial_needs_an_assembled_lesson_and_a_level(self):
+        with self.assertRaises(services.LessonError):
+            services.start_trial(self.lesson, "low")
+        services.assemble(self.lesson)
+        with self.assertRaises(services.LessonError):
+            services.start_trial(self.lesson, "genius")
+
+    def test_the_ai_student_answers_a_stage_once(self):
+        self.redesign()
+        trial = self.trial()
+        turn = services.run_turn(trial, 3)
+        self.assertEqual((turn.answer_type, turn.difficulty, turn.stage_title), ("partial", SIM["difficulty"], "Дәлел"))
+        self.assertIn("N<sub>2</sub>O<sub>4</sub>", turn.task)
+        self.assertEqual(services.run_turn(trial, 3), turn)
+        self.assertEqual(len(self.fake.calls), 1)
+        call = self.fake.calls[0]
+        self.assertEqual(call["output_config"]["format"]["type"], "json_schema")
+        self.assertIn("Readiness level: low.", call["system"])
+        self.assertIn("<student_text>", call["system"])
+        self.assertIn("N₂O₄", call["system"])
+
+    def test_every_stage_done_finishes_the_trial(self):
+        trial = self.trial()
+        for order in range(1, 7):
+            services.run_turn(trial, order)
+        trial.refresh_from_db()
+        self.lesson.refresh_from_db()
+        self.assertIsNotNone(trial.finished_at)
+        self.assertEqual(self.lesson.status, "tested")
+        self.assertEqual(services.finished_trial(self.lesson), trial)
+
+    def test_a_failed_ai_student_leaves_no_answer_but_a_log(self):
+        from apps.ai import services as ai
+        from apps.ai.models import AIMessage
+        from apps.ai.tests import answer
+
+        self.fake.replies = [answer("not json")]
+        trial = self.trial()
+        with self.assertRaises(ai.AIUnavailable):
+            services.run_turn(trial, 1)
+        self.assertFalse(trial.turns.exists())
+        self.assertTrue(AIMessage.objects.filter(conversation__mode="student_sim", error__gt="").exists())
+
+    def test_final_version_needs_a_finished_trial_and_closes_the_lesson(self):
+        trial = self.trial()
+        with self.assertRaises(services.LessonError):
+            services.finalize(self.lesson)
+        for order in range(1, 7):
+            services.run_turn(trial, order)
+        self.redesign(2)  # revised after the trial
+        self.assertEqual(selectors.changed_since(self.lesson, trial.version.snapshot), {2})
+        version = services.finalize(self.lesson)
+        self.lesson.refresh_from_db()
+        self.assertEqual((version.reason, version.number, self.lesson.status), ("final", 2, "final"))
+        self.assertEqual(version.snapshot["stages"][1]["title"], "Дәлел")
+        with self.assertRaises(services.LessonError):
+            services.save(self.lesson.stages.get(order=2), title="x", minutes=7, fields={})
+        with self.assertRaises(services.LessonError):
+            services.start_trial(self.lesson, "high")
+
+    def test_plan_rows_put_the_fields_in_the_columns(self):
+        self.redesign()
+        rows = selectors.plan_rows(services.assemble(self.lesson).snapshot)
+        self.assertEqual(rows[2]["cells"]["students"][0]["html"], "<p>N<sub>2</sub>O<sub>4</sub></p>")
+        self.assertTrue(rows[2]["cells"]["students"][0]["label"])  # two fields share the column
+        self.assertEqual(rows[2]["cells"]["teacher"], [])
+        self.assertEqual(rows[0]["cells"]["teacher"][0]["label"], "")

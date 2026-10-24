@@ -118,6 +118,8 @@ class LessonEvent(models.Model):
         SAVED = "saved", _("Stage saved")
         AI_INSERTED = "ai_inserted", _("AI suggestion added to the editor")
         DETAILS_SAVED = "details_saved", _("Lesson details saved")
+        ASSEMBLED = "assembled", _("Lesson assembled")
+        FINAL = "final", _("Final version assembled")
 
     lesson = models.ForeignKey(Lesson, on_delete=models.PROTECT, related_name="events", verbose_name=_("lesson"))
     stage = models.ForeignKey(

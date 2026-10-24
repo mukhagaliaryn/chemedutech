@@ -8,6 +8,7 @@
  * The title, the minutes and the fields (x-model; CKEditor via x-rich) are saved 1.5 s after the last change and
  * when the page is left. «Add to the editor» in the AI panel sends «ai-insert» {id, html}: the HTML goes to the
  * field last focused, and the message id is sent with the next save (logged as the student's decision).
+ * Below: the trial page's answer window (openTurn).
  */
 document.addEventListener("alpine:init", () => {
   window.Alpine.data("stageEditor", (opts) => ({
@@ -88,4 +89,18 @@ document.addEventListener("alpine:init", () => {
       this.noticeTimer = setTimeout(() => (this.notice = ""), 3500);
     },
   }));
+});
+
+// The window «See the AI student's answer» (student/designer/trial.html): opened with a waiting state before the
+// HTMX request; closing it after a new answer reloads the page so the stage list shows the answer.
+window.openTurn = () => {
+  const dialog = document.getElementById("turn-dialog");
+  document.getElementById("turn-body").innerHTML = document.getElementById("turn-loading").innerHTML;
+  if (!dialog.open) dialog.showModal();
+};
+document.addEventListener("DOMContentLoaded", () => {
+  const dialog = document.getElementById("turn-dialog");
+  dialog?.addEventListener("close", () => {
+    if (document.querySelector("#turn-body [data-fresh]")) window.location.reload();
+  });
 });

@@ -60,3 +60,35 @@ def stage_fields(stage: LessonStage) -> list[dict]:
         {"key": f.key, "label": f.label, "icon": f.icon, "html": stage.fields.get(f.key, "")}
         for f in frames.fields_of(stage.lesson.frame)
     ]
+
+
+# the columns of the assembled lesson's table (picture image17 «Қысқа мерзімді сабақ жоспары») → the frame's fields
+PLAN_COLUMNS = (
+    ("teacher", ("teacher_action",)),
+    ("students", ("student_task", "experiment")),
+    ("assessment", ("assessment", "result")),
+    ("resources", ("methods",)),
+)
+
+
+def plan_rows(snapshot: dict) -> list[dict]:
+    """The stages of a lesson version as table rows: each column a list of (field label, html) — the label is shown
+    only where a column holds more than one field."""
+    labels = {f.key: f.label for f in frames.fields_of(snapshot.get("frame", "template"))}
+    rows = []
+    for stage in snapshot["stages"]:
+        cells = {}
+        for column, keys in PLAN_COLUMNS:
+            cells[column] = [
+                {"label": labels[k] if len(keys) > 1 else "", "html": stage["fields"].get(k, "")}
+                for k in keys
+                if stage["fields"].get(k)
+            ]
+        rows.append({**stage, "cells": cells})
+    return rows
+
+
+def changed_since(lesson: Lesson, snapshot: dict) -> set[int]:
+    """The stages whose content differs from a version — «revised tasks» after a trial."""
+    then = {s["order"]: (s["title"], s["minutes"], s["fields"]) for s in snapshot["stages"]}
+    return {s.order for s in lesson.stages.all() if then.get(s.order) != (s.title, s.minutes, s.fields)}

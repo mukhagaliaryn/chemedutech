@@ -806,3 +806,130 @@ class DesignerPageTests(Base):
         lesson.stages.filter(order=1).update(edited=True)
         self.enrollment()
         self.assertEqual(SectionProgress.objects.get(section__number=4).percent, Decimal("33.33"))
+
+
+SIM_TEXT = {
+    "difficulty": "Тепе-теңдік пен жылдамдықтың айырмасы.",
+    "suggestion": "Жылдамдық пен шығымды бөлек сұраңыз.",
+}
+
+
+@override_settings(AI_TUTOR_ENABLED=True)
+class DesignerFlowTests(Base):
+    """Section 4 after the editor: assemble → the plan (PDF) → the AI student → trial results → the final version."""
+
+    def setUp(self):
+        super().setUp()
+        import json
+
+        from apps.ai.services import client as ai_client
+        from apps.ai.tests import FakeClient, answer
+        from apps.pedagogy.tests import SIM, make_template
+
+        self.fake = FakeClient(answer(json.dumps(SIM)))
+        patcher = mock.patch.object(ai_client, "get_client", return_value=self.fake)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        self.template = make_template()
+        teacher = User.objects.create_user("t", "t@example.kz", "x", role=User.Role.TEACHER)
+        services.unlock_section(self.enrollment(), self.section(4), teacher)
+        self.client.force_login(self.student)
+        self.client.post(reverse("student:lesson_start", args=[4, "chem_design"]))
+        from apps.pedagogy.models import Lesson
+
+        self.lesson = Lesson.objects.get(owner=self.student)
+
+    def url(self, name, *args):
+        return reverse(f"student:{name}", args=[4, self.lesson.pk, *args])
+
+    def details(self, action="assemble"):
+        return {
+            "title": "Менің сабағым",
+            "topic": "Тепе-теңдік",
+            "aim": "Мақсат",
+            "outcomes": "<p>Нәтиже</p>",
+            "action": action,
+        }
+
+    def assemble(self):
+        return self.client.post(self.url("lesson_assemble"), self.details())
+
+    def test_assemble_page_then_the_plan(self):
+        r = self.client.get(self.url("lesson_assemble"))
+        self.assertTemplateUsed(r, "student/designer/assemble.html")
+        self.assertFalse(r.context["blocked"])
+        self.assertRedirects(self.assemble(), self.url("lesson_plan"))
+        r = self.client.get(self.url("lesson_plan"))
+        self.assertTemplateUsed(r, "student/designer/partials/plan_sheet.html")
+        self.assertContains(r, "Менің сабағым")
+        self.assertContains(r, "Мұғалім 3")
+        self.assertContains(r, self.url("lesson_trial"))
+
+    def test_an_unready_lesson_is_not_assembled(self):
+        stage = self.lesson.stages.get(order=1)
+        self.client.post(self.url("lesson_stage_clear", 1))
+        body = {"title": stage.title, "minutes": 9, "fields": {"result": "<p>x</p>"}}
+        self.client.post(self.url("lesson_stage_save", 1), body, content_type="application/json")
+        r = self.client.get(self.url("lesson_assemble"))
+        self.assertTrue(r.context["minutes_problem"] and r.context["blocked"])
+        self.assertRedirects(self.assemble(), self.url("lesson_assemble"))
+        self.assertFalse(self.lesson.versions.exists())
+        self.assertRedirects(self.client.get(self.url("lesson_trial")), self.url("lesson_assemble"))
+
+    def test_plan_pdf(self):
+        self.assemble()
+        r = self.client.get(self.url("lesson_plan_pdf"))
+        self.assertEqual(r["Content-Type"], "application/pdf")
+        self.assertTrue(r.content.startswith(b"%PDF"))
+
+    def test_trial_with_the_ai_student_then_results_and_the_final_version(self):
+        self.assemble()
+        self.assertContains(self.client.get(self.url("lesson_trial")), 'value="medium"')
+        r = self.client.post(self.url("lesson_trial_start"), {"level": "high"})
+        trial = self.lesson.trials.get()
+        self.assertRedirects(r, f"{self.url('lesson_trial')}?trial={trial.pk}")
+        r = self.client.post(self.url("lesson_trial_turn", trial.pk, 2))
+        self.assertTemplateUsed(r, "student/designer/partials/turn.html")
+        self.assertContains(r, SIM_TEXT["difficulty"])
+        self.assertContains(r, self.url("lesson_stage", 2))  # «Revise»
+        self.assertContains(self.client.get(self.url("lesson_trial_turn", trial.pk, 2)), SIM_TEXT["suggestion"])
+        self.assertEqual(len(self.fake.calls), 1)
+        self.assertEqual(self.client.post(self.url("lesson_finalize")).status_code, 302)
+        self.lesson.refresh_from_db()
+        self.assertNotEqual(self.lesson.status, "final")  # the trial is not finished
+        for order in range(1, 7):
+            self.client.post(self.url("lesson_trial_turn", trial.pk, order))
+        r = self.client.get(self.url("lesson_results"))
+        self.assertEqual(r.context["counts"], {"correct": 0, "partial": 6, "wrong": 0})
+        self.assertEqual(r.context["overall"], 50)
+        self.assertRedirects(self.client.post(self.url("lesson_finalize")), self.url("lesson_plan"))
+        self.lesson.refresh_from_db()
+        self.assertEqual(self.lesson.status, "final")
+        r = self.client.get(self.url("lesson_plan"))
+        self.assertEqual(r.context["version"].reason, "final")
+
+    def test_the_ai_student_off_or_out_of_requests(self):
+        self.assemble()
+        self.client.post(self.url("lesson_trial_start"), {"level": "low"})
+        trial = self.lesson.trials.get()
+        with override_settings(AI_TUTOR_ENABLED=False):
+            r = self.client.post(self.url("lesson_trial_turn", trial.pk, 1))
+        self.assertEqual(r.context["error"], "off")
+        with override_settings(AI_TUTOR_DAILY_REQUESTS=0):
+            r = self.client.post(self.url("lesson_trial_turn", trial.pk, 1))
+        self.assertEqual(r.context["error"], "limit")
+        self.assertFalse(trial.turns.exists())
+        self.assertEqual(self.client.post(self.url("lesson_trial_turn", trial.pk, 9)).status_code, 404)
+
+    def test_another_students_trial_is_404(self):
+        from apps.pedagogy import services as pedagogy
+
+        other = pedagogy.start(make_student("s2", group=self.group), self.template)
+        pedagogy.assemble(other)
+        trial = pedagogy.start_trial(other, "low")
+        url = reverse("student:lesson_trial_turn", args=[4, other.pk, trial.pk, 1])
+        self.assertEqual(self.client.post(url).status_code, 404)
+        self.assemble()
+        mine = reverse("student:lesson_trial_turn", args=[4, self.lesson.pk, trial.pk, 1])
+        self.assertEqual(self.client.post(mine).status_code, 404)
+        self.assertEqual(self.fake.calls, [])

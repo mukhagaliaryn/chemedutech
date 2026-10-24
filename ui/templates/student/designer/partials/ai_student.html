@@ -1,0 +1,12 @@
+{% comment %}The AI student's avatar (picture image19): a school student with a robot's ear-light, tinted by level —
+level (high | medium | low), size (px, default 56).{% endcomment %}
+<svg viewBox="0 0 64 64" width="{{ size|default:56 }}" height="{{ size|default:56 }}" aria-hidden="true" class="shrink-0">
+  <circle cx="32" cy="32" r="31" fill="{% if level == 'high' %}#e7f6ef{% elif level == 'low' %}#fdecea{% else %}#eaf0fc{% endif %}"/>
+  <path d="M14 60c2-11 9-16 18-16s16 5 18 16" fill="{% if level == 'high' %}#0c7f57{% elif level == 'low' %}#d1342f{% else %}#1f5fd1{% endif %}"/>
+  <path d="M26 44l6 6 6-6" fill="#fff"/>
+  <circle cx="32" cy="29" r="12" fill="#f3c9a3"/>
+  <path d="M20 27c0-9 6-13 12-13s12 4 12 12c-3-3-7-5-12-5s-9 3-12 6z" fill="#3b2a20"/>
+  <circle cx="27.5" cy="30" r="1.6" fill="#13213b"/><circle cx="36.5" cy="30" r="1.6" fill="#13213b"/>
+  <path d="M28 35c2.4 1.8 5.6 1.8 8 0" fill="none" stroke="#13213b" stroke-width="1.6" stroke-linecap="round"/>
+  <rect x="42.5" y="25" width="4" height="8" rx="2" fill="#7b4fd6"/><circle cx="44.5" cy="23" r="1.8" fill="#5fd3b8" class="glow"/>
+</svg>

@@ -1,3 +1,35 @@
+from .assembly import (
+    assemble,
+    assembled_version,
+    finalize,
+    finished_trial,
+    problems,
+    run_turn,
+    save_details,
+    snapshot,
+    stage_of,
+    start_trial,
+    task_html,
+)
 from .lessons import LessonError, clean, clear, restore, save, start, template_fields
 
-__all__ = ["LessonError", "clean", "clear", "restore", "save", "start", "template_fields"]
+__all__ = [
+    "LessonError",
+    "assemble",
+    "assembled_version",
+    "clean",
+    "clear",
+    "finalize",
+    "finished_trial",
+    "problems",
+    "restore",
+    "run_turn",
+    "save",
+    "save_details",
+    "snapshot",
+    "stage_of",
+    "start",
+    "start_trial",
+    "task_html",
+    "template_fields",
+]

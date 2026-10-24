@@ -1,0 +1,85 @@
+{% extends "layouts/student.html" %}
+{% load i18n %}
+{% comment %}
+«Trial results» (guide @S4-ASSEMBLE 5; picture image19 bottom): the counts of the AI student's answers (clear tasks,
+need improving, possible errors, overall), by stage — the possible difficulty, the scientific remark (the possible
+error), the methodical suggestion and whether the stage has been revised since; «Assemble the final version».
+{% endcomment %}
+{% block title %}{% translate "Trial results" %} · {{ lesson.title }} · ChemEduTech{% endblock %}
+{% block crumb %}{{ programme.title }} · {% blocktranslate with n=section.number %}Section {{ n }}{% endblocktranslate %}{% endblock %}
+{% block page_title %}{% translate "Trial results" %}{% endblock %}
+{% block main_class %}max-w-[1320px]{% endblock %}
+{% block content %}
+{% include "student/designer/partials/flow.html" with step=4 %}
+
+<section class="card flex flex-col gap-5" aria-labelledby="sum-title">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <div class="flex items-center gap-3">
+      {% include "student/designer/partials/ai_student.html" with level=trial.level size=52 %}
+      <div>
+        <h1 id="sum-title" class="text-[20px] leading-7 font-extrabold">{% translate "Trial results (all stages)" %}</h1>
+        <p class="text-[13px] text-ink-soft">{% translate "The AI student" %}: {{ trial.get_level_display|lower }} · {% blocktranslate with n=trial.version.number %}Assembled lesson, version {{ n }}{% endblocktranslate %}</p>
+      </div>
+    </div>
+    <a class="btn btn-secondary btn-sm" href="{% url 'student:lesson_trial' section.number lesson.pk %}?trial={{ trial.pk }}">{% include "components/icons.html#eye" %}{% translate "The AI student's answers" %}</a>
+  </div>
+  <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+    <li class="flex items-center gap-3 rounded-lg bg-success-50 p-4"><span class="grid size-11 place-items-center rounded-full bg-success-600 text-white">{% include "components/icons.html#check" with size=20 %}</span><span><span class="num block text-[26px] leading-none font-extrabold">{{ counts.correct }}</span><span class="text-[13px] font-semibold text-success-700">{% translate "Clear tasks" %}</span></span></li>
+    <li class="flex items-center gap-3 rounded-lg bg-warning-50 p-4"><span class="grid size-11 place-items-center rounded-full bg-warning-500 text-white">{% include "components/icons.html#alert" with size=20 %}</span><span><span class="num block text-[26px] leading-none font-extrabold">{{ counts.partial }}</span><span class="text-[13px] font-semibold text-warning-700">{% translate "Need improving" %}</span></span></li>
+    <li class="flex items-center gap-3 rounded-lg bg-danger-50 p-4"><span class="grid size-11 place-items-center rounded-full bg-danger-600 text-white">{% include "components/icons.html#x" with size=20 %}</span><span><span class="num block text-[26px] leading-none font-extrabold">{{ counts.wrong }}</span><span class="text-[13px] font-semibold text-danger-700">{% translate "Possible error" %}</span></span></li>
+    <li class="flex items-center gap-3 rounded-lg bg-primary-50 p-4">
+      {% if overall is not None %}{% with t=overall|stringformat:"d"|add:"%" %}{% include "components/ring.html" with value=overall size=52 stroke=6 text=t %}{% endwith %}{% endif %}
+      <span class="text-[13px] font-semibold text-primary-700">{% translate "Overall assessment" %}<span class="block text-[11.5px] font-normal text-ink-soft">{% translate "a simulation, not a grade" %}</span></span>
+    </li>
+  </ul>
+</section>
+
+<ol class="flex flex-col gap-3">
+  {% for r in rows %}{% with s=r.stage t=r.turn %}
+    <li class="tone-{{ forloop.counter }} card flex flex-col gap-3 p-0 overflow-hidden" data-reveal>
+      <div class="flex flex-wrap items-center gap-3 border-b border-(--tone)/15 bg-(--tone-50) px-5 py-3">
+        <span class="num grid size-9 shrink-0 place-items-center rounded-full bg-(--tone) text-[15px] font-extrabold text-white">{{ s.order }}</span>
+        <h2 class="min-w-0 flex-1 text-[15.5px] font-extrabold">{{ s.title }} <span class="num ml-1 text-[12.5px] font-semibold text-(--tone)">{{ s.start }}–{{ s.end }} {% translate "min" %}</span></h2>
+        {% if t %}<span class="badge {% if t.answer_type == 'correct' %}badge-success{% elif t.answer_type == 'partial' %}badge-warning{% else %}badge-danger{% endif %} text-[11px] font-bold">{{ t.get_answer_type_display }}</span>{% endif %}
+        {% if r.revised %}<span class="badge badge-info text-[11px] font-bold">{% include "components/icons.html#edit" with size=12 %}{% translate "Revised" %}</span>{% endif %}
+      </div>
+      {% if t %}
+        <div class="grid gap-3 px-5 md:grid-cols-3">
+          <div class="rounded-lg bg-primary-50/70 p-3.5"><h3 class="flex items-center gap-1.5 text-[12.5px] font-extrabold text-primary-700">{% include "components/icons.html#help" with size=14 %}{% translate "Possible difficulties" %}</h3><p class="mt-1 text-[13px] leading-[19px]">{{ t.difficulty|default:"—" }}</p></div>
+          <div class="rounded-lg bg-danger-50/70 p-3.5"><h3 class="flex items-center gap-1.5 text-[12.5px] font-extrabold text-danger-700">{% include "components/icons.html#x" with size=14 %}{% translate "Scientific remarks" %}</h3><p class="mt-1 text-[13px] leading-[19px]">{{ t.possible_error|default:"—" }}</p></div>
+          <div class="rounded-lg bg-success-50/70 p-3.5"><h3 class="flex items-center gap-1.5 text-[12.5px] font-extrabold text-success-700">{% include "components/icons.html#check" with size=14 %}{% translate "Methodical suggestions" %}</h3><p class="mt-1 text-[13px] leading-[19px]">{{ t.suggestion|default:"—" }}</p></div>
+        </div>
+      {% else %}
+        <p class="px-5 text-sm text-ink-faint">{% translate "The AI student has not done this stage yet." %}</p>
+      {% endif %}
+      <div class="flex justify-end px-5 pb-4">
+        {% if lesson.status != "final" %}<a class="btn btn-secondary btn-sm" href="{% url 'student:lesson_stage' section.number lesson.pk s.order %}">{% include "components/icons.html#edit" %}{% translate "Revise" %}</a>{% endif %}
+      </div>
+    </li>
+  {% endwith %}{% endfor %}
+</ol>
+
+{# ---- «Assemble the final version» ---- #}
+<section class="relative overflow-hidden rounded-xl border border-line bg-surface p-[clamp(20px,3vw,28px)] shadow-lift" aria-labelledby="final-title">
+  <div class="flex flex-wrap items-center gap-5">
+    <span class="grid size-14 shrink-0 place-items-center rounded-[18px] bg-[linear-gradient(135deg,var(--color-success-600),var(--color-stage-lab))] text-white">{% include "components/icons.html#award" with size=26 %}</span>
+    <div class="min-w-0 flex-[1_1_380px]">
+      <h2 id="final-title" class="text-[18px] font-extrabold">{% translate "Assemble the final version" %}</h2>
+      <p class="mt-1 text-[14px] leading-[21px] text-ink-soft">{% translate "After the trial with the AI student, analyse your pedagogical decisions and make the necessary corrections. Then the final version of your authorial lesson is formed and goes to your digital portfolio." %}</p>
+      <p class="mt-1.5 text-[13px] font-semibold {% if revised_count %}text-success-700{% else %}text-ink-faint{% endif %}">{% blocktranslate count n=revised_count %}{{ n }} stage revised after the trial{% plural %}{{ n }} stages revised after the trial{% endblocktranslate %}</p>
+    </div>
+    {% if lesson.status == "final" %}
+      <a class="btn btn-primary" href="{% url 'student:lesson_plan' section.number lesson.pk %}">{% include "components/icons.html#award" %}{% translate "Final version" %}</a>
+    {% else %}
+      <form method="post" action="{% url 'student:lesson_finalize' section.number lesson.pk %}">{% csrf_token %}
+        {% translate "Assemble the final version?" as f_title %}{% translate "The lesson is saved as your final version and can no longer be changed." as f_text %}{% translate "Assemble" as f_label %}
+        <button type="submit" class="btn btn-primary h-[48px] px-6 text-[15px] font-bold" data-confirm="{{ f_title }}" data-confirm-text="{{ f_text }}" data-confirm-label="{{ f_label }}" data-confirm-variant="success" data-confirm-icon="check" {% if not finished or problems %}disabled{% endif %}>
+          {% include "components/icons.html#check-square" %}{% translate "Assemble the final version" %}
+        </button>
+      </form>
+    {% endif %}
+  </div>
+  {% if not finished %}<p class="mt-3 text-[13px] text-warning-700">{% translate "The results open when the AI student has done every stage." %}</p>
+  {% elif problems and lesson.status != "final" %}<p class="mt-3 text-[13px] text-warning-700">{% translate "The lesson cannot be assembled yet — see what is missing." %} <a class="link font-bold" href="{% url 'student:lesson_assemble' section.number lesson.pk %}">{% translate "Assemble the lesson" %} →</a></p>{% endif %}
+</section>
+{% endblock %}
