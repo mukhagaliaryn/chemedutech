@@ -16,6 +16,7 @@ from apps.assessments.models import QuizAttempt
 from apps.courses.models import Course
 from apps.organizations.models import AcademicGroup, Department, Faculty, University
 from apps.practice.models import AIGrade
+from apps.programme.models import SectionProgress
 from apps.progress.models import StageProgress
 
 
@@ -65,6 +66,20 @@ class SeedDemoTests(TestCase):
         self.assertFalse(User.objects.filter(username__startswith="student").exists())
         self.assertEqual(AcademicGroup.objects.count(), 2)  # the groups stay
         self.assertTrue(User.objects.filter(username="real").exists())  # only the demo students go
+
+    def test_add_chats_fills_every_open_section_once(self):
+        self.run_demo()
+        sections = SectionProgress.objects.filter(enrollment__student__username__startswith="student").exclude(
+            opened_at=None
+        )
+        call_command("seed_demo", add_chats=True, verbosity=0)
+        chats = AIConversation.objects.filter(mode="assistant", context_type="section")
+        self.assertEqual(chats.count(), sections.count())
+        self.assertTrue(all(c.messages.count() >= 4 for c in chats))
+        self.assertEqual(set(chats.values_list("model", flat=True)), {"demo"})
+        before = AIMessage.objects.count()
+        call_command("seed_demo", add_chats=True, verbosity=0)  # nothing more the second time
+        self.assertEqual(AIMessage.objects.count(), before)
 
     def test_wipe_removes_every_student_but_keeps_teachers(self):
         self.run_demo("--wipe-students", "--yes")

@@ -8,6 +8,8 @@ experiment.
     seed_demo --delete           remove the demo students and their data (the groups stay)
     seed_demo --wipe-students    remove EVERY student account and its data first (teachers, admins and
                                  organisations stay); asks for confirmation unless --yes
+    seed_demo --add-chats        add the «Let the AI explain» chats to the section pages of the existing demo
+                                 students where they have none or a short one (logins and passwords stay)
 
 The logins and passwords go to an Excel file (``--excel``, default demo_students.xlsx, ignored by git).
 Runs only with DEBUG (a local database) unless --allow-prod.
@@ -24,6 +26,8 @@ from django.utils import timezone, translation
 
 from apps.accounts.models import User
 from apps.accounts.services.registration import register_student
+from apps.ai import services as ai
+from apps.ai.models import Mode
 from apps.certificates.models import Certificate
 from apps.courses.models import Course, Enrollment
 from apps.courses.services import assign_group, sync_student_enrollments
@@ -33,6 +37,7 @@ from apps.programme import services as programme
 from apps.programme.models import ProgrammeEnrollment, SectionProgress
 from apps.progress.models import CourseResult
 
+from ._demo import texts
 from ._demo.clock import Clock
 from ._demo.course import CourseWalk, course_stages
 from ._demo.icpai import IcpaiWalk, portfolio_status
@@ -59,6 +64,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument("--delete", action="store_true", help="Remove the demo students (the groups stay).")
+        parser.add_argument("--add-chats", action="store_true", help="Add section chats to the existing demo students.")
         parser.add_argument("--wipe-students", action="store_true", help="Remove every student and their data.")
         parser.add_argument("--yes", action="store_true", help="Do not ask before --wipe-students.")
         parser.add_argument("--seed", type=int, default=2026, help="Random seed of names, levels and answers.")
@@ -73,6 +79,9 @@ class Command(BaseCommand):
             self.wipe(yes)
         if delete:
             self.delete()
+            return
+        if options.get("add_chats"):
+            self.add_chats(seed)
             return
         self.create(seed, Path(excel), per_group)
 
@@ -95,6 +104,44 @@ class Command(BaseCommand):
             count = users.count()
             purge(users)
         self.stdout.write(self.style.SUCCESS(f"Removed {count} demo students and their data."))
+
+    # --- the section pages' chats of the existing demo students ------------------------------------
+
+    def add_chats(self, seed):
+        """Every open section of every demo student gets an «explain the section» request (when missing) and one or
+        two questions of the student's own, dated after the student opened the section (or after the last message)."""
+        rng = random.Random(seed + 7)
+        limit = timezone.now() - timedelta(minutes=30)
+        added = 0
+        for user in demo_users().order_by("username"):
+            pe = ProgrammeEnrollment.objects.filter(student=user).first()
+            if pe is None:
+                continue
+            rows = SectionProgress.objects.filter(enrollment=pe).exclude(opened_at=None).select_related("section")
+            for row in rows.order_by("section__number"):
+                section = row.section
+                conversation = ai.conversation_for(user, Mode.ASSISTANT, "section", section.pk)
+                if conversation and conversation.messages.count() >= 4:
+                    continue
+                last = conversation.messages.order_by("-created_at").first() if conversation else None
+                start = (last.created_at if last else row.opened_at) + timedelta(minutes=rng.randint(2, 20))
+                if start >= limit:
+                    start = limit - timedelta(minutes=rng.randint(20, 120))
+                clock, tutor = Clock(start, rng, limit), DemoTutor()
+                with translation.override("kk"), tutor.active(), clock.running(), transaction.atomic():
+                    if conversation is None:
+                        purpose = section.purpose.split(". ")[0].rstrip(".") + "."
+                        tutor.next(texts.SECTION_EXPLAIN.format(title=section.title, purpose=purpose))
+                        ai.ask(user, context_type="section", context_id=section.pk, context=section.purpose,
+                               intent="explain_section")  # fmt: skip
+                        clock.tick(1, 4)
+                    for question, answer in rng.sample(texts.SECTION_QA[section.number], k=rng.randint(1, 2)):
+                        tutor.next(answer)
+                        ai.ask(user, context_type="section", context_id=section.pk, context=section.purpose,
+                               text=question)  # fmt: skip
+                        clock.tick(1, 5)
+                added += 1
+        self.stdout.write(self.style.SUCCESS(f"Section chats added or extended: {added}."))
 
     # --- creating --------------------------------------------------------------------------------
 
