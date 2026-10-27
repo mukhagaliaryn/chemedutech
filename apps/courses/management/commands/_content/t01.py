@@ -369,7 +369,8 @@ VIDEO_TITLE = "Бейнедәріс. Сутегі, оттегі, су және �
 STAGES = [
     {"kind": Stage.Kind.THEORY, "title": THEORY_TITLE, "content": {"body": THEORY.strip()},
      "checkpoint": ("1-тақырып. Дәрістің бекіту тесті", THEORY_CHECKPOINT)},
-    {"kind": Stage.Kind.VIDEO, "title": VIDEO_TITLE, "content": {},  # the YouTube link comes later
+    {"kind": Stage.Kind.VIDEO, "title": VIDEO_TITLE,
+     "content": {"provider": "youtube", "url": "https://youtu.be/98_rORhVcVs"},
      "checkpoint": ("1-тақырып. Бейнедәрістің бекіту тесті", VIDEO_CHECKPOINT)},
     {"kind": Stage.Kind.LAB, "title": "Зертханалық жұмыс. Сутегі мен оттегіні алу және зерттеу",
      "content": {"lab_key": "t01"}},

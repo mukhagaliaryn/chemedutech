@@ -8,6 +8,9 @@ PROGRAMME = {"slug": "icpai", "title": "ICPAI"}
 
 COURSE_SLUG = "chemistry"  # section 1 — the course built by seed_course
 
+# section number → the YouTube link of its video (@S3 «ЖИ ВИДЕО ОРНАЛАСАДЫ»; the link from the user, 2026-10-27)
+SECTION_VIDEOS = {3: "https://youtu.be/s-v6g0NGifI"}
+
 # (number, kind, title, purpose, guide anchor)
 SECTIONS = [
     (

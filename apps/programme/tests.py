@@ -341,10 +341,10 @@ class SeedTests(TestCase):
     def test_seed_course_renames_the_legacy_title_only(self):
         call_command("seed_course", topics=[1], verbosity=0)
         course = Course.objects.get(slug="chemistry")
-        self.assertEqual(course.title, "Жалпы химия")
+        self.assertEqual(course.title, "Химия")
         Course.objects.filter(pk=course.pk).update(title="Бейорганикалық химия")
         call_command("seed_course", topics=[1], verbosity=0)
-        self.assertEqual(Course.objects.get(pk=course.pk).title, "Жалпы химия")
+        self.assertEqual(Course.objects.get(pk=course.pk).title, "Химия")
         Course.objects.filter(pk=course.pk).update(title="Менің курсым")
         call_command("seed_course", topics=[1], verbosity=0)
         self.assertEqual(Course.objects.get(pk=course.pk).title, "Менің курсым")
@@ -550,7 +550,13 @@ class DiagnosticsSeedTests(TestCase):
         call_command("seed_icpai", verbosity=0)
         self.assertEqual(DiagnosticTest.objects.count(), 3)
         video = SectionVideo.objects.get(section__number=3)
-        self.assertEqual((video.url, video.youtube_id), ("", ""))
+        self.assertEqual(video.youtube_id, "s-v6g0NGifI")  # the link from the seed
+        SectionVideo.objects.filter(pk=video.pk).update(url="https://youtu.be/dQw4w9WgXcQ")
+        call_command("seed_icpai", verbosity=0)  # a link set in the admin is kept
+        self.assertEqual(SectionVideo.objects.get(pk=video.pk).youtube_id, "dQw4w9WgXcQ")
+        SectionVideo.objects.filter(pk=video.pk).update(url="")
+        call_command("seed_icpai", verbosity=0)  # an empty one is filled
+        self.assertEqual(SectionVideo.objects.get(pk=video.pk).youtube_id, "s-v6g0NGifI")
 
 
 # --- section 3 — the video (D72) --------------------------------------------------------------------

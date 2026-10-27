@@ -17,7 +17,16 @@ from apps.assessments.models import Quiz
 from apps.courses.models import Course, Module, Stage, Topic
 from apps.courses.services import ensure_stage_content
 
-from ._content import CONTENT, COURSE, LEGACY_TITLES, MODULE_1_TOPICS, MODULES, TOPIC_COUNT, TOPICS
+from ._content import (
+    CONTENT,
+    COURSE,
+    LEGACY_MODULE_TITLES,
+    LEGACY_TITLES,
+    MODULE_1_TOPICS,
+    MODULES,
+    TOPIC_COUNT,
+    TOPICS,
+)
 from ._seed_quizzes import sync_quiz
 
 
@@ -55,7 +64,8 @@ class Command(BaseCommand):
         modules = {}
         for order, title in MODULES:
             module, made = Module.objects.get_or_create(course=course, order=order, defaults={"title": title})
-            if replace and not made and not self.only and module.title != title:
+            renew = (replace and not self.only) or module.title in LEGACY_MODULE_TITLES
+            if not made and renew and module.title != title:
                 module.title = title
                 module.save(update_fields=["title", "updated_at"])
             modules[order] = module
@@ -85,6 +95,10 @@ class Command(BaseCommand):
         # a placeholder (no stages yet) takes the content; a built topic changes only with --replace (of its number)
         blank = not topic.stages.exists()
         touch = self.replace and (not self.only or n in self.only)
+        # the plan of modules may change (topics 6–8 moved to module 2): a placeholder in scope follows it
+        if blank and (not self.only or n in self.only) and (topic.module_id, topic.order) != (module.pk, order):
+            topic.module, topic.order = module, order
+            topic.save(update_fields=["module", "order", "updated_at"])
         if (blank or touch) and (topic.title, topic.summary) != (title, summary):
             topic.title, topic.summary = title, summary
             topic.save(update_fields=["title", "summary", "updated_at"])

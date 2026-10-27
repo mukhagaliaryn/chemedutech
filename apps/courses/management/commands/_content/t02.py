@@ -332,7 +332,8 @@ TOPIC_TEST = [
 STAGES = [
     {"kind": Stage.Kind.THEORY, "title": f"Дәріс. {TITLE}", "content": {"body": THEORY.strip()},
      "checkpoint": ("2-тақырып. Дәрістің бекіту тесті", THEORY_CHECKPOINT)},
-    {"kind": Stage.Kind.VIDEO, "title": f"Бейнедәріс. {TITLE}", "content": {},
+    {"kind": Stage.Kind.VIDEO, "title": f"Бейнедәріс. {TITLE}",
+     "content": {"provider": "youtube", "url": "https://youtu.be/fWmtYnRHB6s"},
      "checkpoint": ("2-тақырып. Бейнедәрістің бекіту тесті", VIDEO_CHECKPOINT)},
     {"kind": Stage.Kind.LAB, "title": "Зертханалық жұмыс. Галогендердің тотықтырғыштық белсенділігі және галогенид "
                                       "иондарын анықтау", "content": {"lab_key": "t02"}},

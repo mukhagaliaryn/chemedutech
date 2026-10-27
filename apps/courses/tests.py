@@ -185,6 +185,34 @@ class CoursePageTests(TestCase):
         self.assertEqual(topic2.title, "Тағы өзгертілді")
         self.assertEqual(self.course.title, "Мұғалімнің курсы")
 
+    def test_methodology_topic_moves_from_its_old_placeholder_into_module_two(self):
+        """Topics 6–10 (no lab, no practice) go to module 2; a placeholder seeded under the old plan
+        (topics 1–8 in module 1) follows it when its content comes in."""
+        topic = Topic.objects.get(module__course=self.course, number=6)
+        Topic.objects.filter(pk=topic.pk).update(module=self.course.modules.get(order=1), order=6)
+
+        call_command("seed_course", topics=[6], verbosity=0)
+        topic.refresh_from_db()
+        self.assertEqual((topic.module.order, topic.order, topic.is_published), (2, 1, True))
+        self.assertEqual(
+            list(topic.stages.order_by("order").values_list("kind", flat=True)), ["theory", "video", "test"]
+        )
+        self.assertEqual(topic.stages.get(kind="test").test_content.quiz.questions.count(), 10)
+        self.assertNotIn("Экрандағы әрекет", topic.stages.get(kind="theory").theory_content.body)
+        video = topic.stages.get(kind="video").video_content
+        self.assertEqual((video.provider, video.youtube_id), ("youtube", "m1gT2aBxmHE"))
+
+    def test_modules_under_an_old_seed_title_are_renamed_and_edited_ones_kept(self):
+        first, second = self.course.modules.order_by("order")
+        first.title = "Периодтық кестедегі s- және p-элементтердің жалпы сипаттамасы"
+        first.save()
+        second.title = "Мұғалім өзгерткен модуль"
+        second.save()
+        call_command("seed_course", topics=[1], verbosity=0)
+        first.refresh_from_db()
+        second.refresh_from_db()
+        self.assertEqual((first.title, second.title), ("Теориялық бөлім", "Мұғалім өзгерткен модуль"))
+
     def test_replace_keeps_attempted_quizzes_and_stage_kinds(self):
         topic = Topic.objects.get(module__course=self.course, number=1)
         test_stage = topic.stages.get(kind="test")

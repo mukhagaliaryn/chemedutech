@@ -5,7 +5,8 @@ Run after seed_course. Safe on every deploy: missing sections are added; existin
 pass marks an administrator may have edited, unless --replace (then titles, kinds, texts and anchors come
 from _icpai/ again). A diagnostic test somebody has taken keeps its questions (research data); only its texts
 are rewritten by --replace. The lesson templates are created once and rewritten by --replace (the students' lessons
-are copies and do not change). The video section gets an empty video (its YouTube link is set in the admin). Student enrolments are made lazily when students open their cabinet.
+are copies and do not change). The video section gets its YouTube link from _icpai.SECTION_VIDEOS when it has none
+(a link set in the admin is kept unless --replace). Student enrolments are made lazily when students open their cabinet.
 """
 
 from django.core.management.base import BaseCommand, CommandError
@@ -16,7 +17,7 @@ from apps.courses.models import Course
 from apps.pedagogy.models import LessonTemplate, TemplateStage
 from apps.programme.models import DiagnosticTest, Programme, Section, SectionVideo
 
-from ._icpai import COURSE_SLUG, PROGRAMME, SECTIONS
+from ._icpai import COURSE_SLUG, PROGRAMME, SECTION_VIDEOS, SECTIONS
 from ._icpai.diagnostics import DIAGNOSTICS
 from ._icpai.lessons import TEMPLATES
 
@@ -45,9 +46,11 @@ class Command(BaseCommand):
                     setattr(section, field, value)
                 section.save()
         for video_section in programme.sections.filter(kind=Section.Kind.VIDEO):
-            SectionVideo.objects.get_or_create(
-                section=video_section
-            )  # the place of the video; the link is set in the admin
+            video, _made = SectionVideo.objects.get_or_create(section=video_section)
+            url = SECTION_VIDEOS.get(video_section.number, "")
+            if url and video.url != url and (replace or not video.url):
+                video.url = url
+                video.save(update_fields=["url", "updated_at"])
         section = programme.sections.filter(kind=Section.Kind.DIAGNOSTIC).order_by("number").first()
         notes = self.seed_diagnostics(section, replace) if section else []
         self.seed_templates(replace)

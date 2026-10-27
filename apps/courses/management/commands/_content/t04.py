@@ -260,7 +260,8 @@ TOPIC_TEST = [
 STAGES = [
     {"kind": Stage.Kind.THEORY, "title": f"Дәріс. {TITLE}", "content": {"body": THEORY.strip()},
      "checkpoint": ("4-тақырып. Дәрістің бекіту тесті", THEORY_CHECKPOINT)},
-    {"kind": Stage.Kind.VIDEO, "title": f"Бейнедәріс. {TITLE}", "content": {},
+    {"kind": Stage.Kind.VIDEO, "title": f"Бейнедәріс. {TITLE}",
+     "content": {"provider": "youtube", "url": "https://youtu.be/rRa1_ck06bc"},
      "checkpoint": ("4-тақырып. Бейнедәрістің бекіту тесті", VIDEO_CHECKPOINT)},
     {"kind": Stage.Kind.LAB, "title": "Зертханалық жұмыс. Аммоний және фосфат иондарын сапалық анықтау",
      "content": {"lab_key": "t04"}},

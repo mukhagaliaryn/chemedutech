@@ -6,7 +6,7 @@ from django.urls import reverse
 
 from apps.accounts.models import User
 from apps.assessments.models import Question, QuizAttempt
-from apps.courses.models import Course, Enrollment, Stage
+from apps.courses.models import Course, Enrollment, Stage, VideoContent
 from apps.courses.services import enroll
 from apps.organizations.testing import make_student
 from apps.progress import services as progress
@@ -210,6 +210,7 @@ class VideoAndTestStageTests(StudentFlowBase):
         self.assertEqual(self.client.get(self.url(self.video)).context["quiz_open"], True)
 
     def test_video_without_a_source_can_be_skipped(self):
+        VideoContent.objects.filter(stage=self.video).update(url="")  # the seed has the link; a video still to come
         self.pass_theory()
         r = self.client.get(self.url(self.video))
         self.assertContains(r, self.url(self.video, "student:material_done"))
