@@ -100,9 +100,13 @@ class DashboardTests(TeacherBase):
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r.context["students"], 2)
         self.assertEqual(r.context["active_week"], 1)
-        reasons = {row["student"].username: reason for row, reason in r.context["attention"]}
-        self.assertIn("3", reasons["s1"])  # failed the quiz 3 times
-        self.assertIn("10", reasons["s2"])  # 10 days inactive
+        attention = {item["row"]["student"].username: item for item in r.context["attention"]}
+        self.assertIn("3", " ".join(attention["s1"]["reasons"]))  # failed the quiz 3 times
+        self.assertEqual(attention["s1"]["counts"].get("failed"), 1)
+        self.assertIn("10", " ".join(attention["s2"]["reasons"]))  # 10 days inactive
+        self.assertEqual(attention["s2"]["counts"], {"inactive": 1})
+        self.assertEqual(r.context["attention_kinds"]["inactive"], 1)
+        self.assertNotContains(r, "AI could not grade")
         self.assertEqual([g["group"] for g in r.context["groups"]], [self.g1])
         self.assertContains(r, "Хим-23-1")
 
@@ -112,8 +116,9 @@ class DashboardTests(TeacherBase):
         practice = next(s for s in self.stages if s.kind == "practice")
         sub = PracticeSubmission.objects.create(enrollment=self.e1, stage=practice, attempt_no=1, status="needs_review")
         r = self.client.get(reverse("teacher:dashboard"))
-        self.assertEqual(r.context["queue_count"], 1)
-        self.assertContains(r, reverse("teacher:grading_detail", args=[sub.pk]))
+        self.assertEqual(r.context["queue_count"], 1)  # the KPI and the «Practice works» button count it
+        self.assertContains(r, reverse("teacher:grading"))
+        self.assertNotContains(r, reverse("teacher:grading_detail", args=[sub.pk]))  # the queue card is gone
 
 
 class GroupTests(TeacherBase):

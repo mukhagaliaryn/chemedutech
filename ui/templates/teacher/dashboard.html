@@ -2,8 +2,8 @@
 {% load i18n %}
 {% comment %}
 Teacher home (mockup «Мұғалім · Басты бет»): greeting with the day's numbers, «Create a group» (dialog) and the
-grading queue button; 4 KPI cards (sparklines from real daily data); the check queue; students who need
-attention; my groups.
+grading queue button; 4 KPI cards (sparklines from real daily data); the ICPAI block; students who need attention —
+one row per student with their reasons by kind and a filter (2026-10-27); my groups as cards.
 {% endcomment %}
 {% block title %}{% translate "Home" %} · ChemEduTech{% endblock %}
 {% block crumb %}{% translate "Teacher cabinet" %}{% endblock %}
@@ -53,47 +53,92 @@ attention; my groups.
 
 {% if icpai %}{% include "teacher/icpai/partials/dashboard.html" %}{% endif %}
 
-<div class="grid items-start gap-4 grid-cols-[repeat(auto-fit,minmax(min(380px,100%),1fr))]">
-  <section aria-labelledby="queue" class="card flex flex-col gap-1">
-    <div class="mb-2 flex items-center justify-between gap-3"><h2 id="queue" class="text-[17px] font-extrabold">{% translate "AI could not grade" %}</h2><a class="link text-sm font-bold" href="{% url 'teacher:grading' %}">{% translate "All works" %}</a></div>
-    {% for s in queue %}
-      <a href="{% url 'teacher:grading_detail' s.pk %}" class="row-link text-ink">
-        {% include "components/avatar.html" with person=s.enrollment.student shape="square" tone="neutral" %}
-        <span class="flex min-w-0 flex-1 flex-col leading-5">
-          <span class="truncate text-sm font-bold">{{ s.enrollment.student.full_name }}{% if s.enrollment.group %} · {{ s.enrollment.group }}{% endif %}</span>
-          <span class="truncate text-caption font-normal text-ink-soft">{{ s.stage.topic.number }}. {{ s.stage.title }}{% if s.percent is not None %} · {% blocktranslate with p=s.percent|floatformat:0 %}AI: {{ p }}%{% endblocktranslate %}{% endif %} · {{ s.submitted_at|ago }}</span>
-        </span>
-        <span class="badge badge-warning font-bold">{% translate "Grade" %}</span>
-      </a>
-    {% empty %}
-      <p class="text-sm text-ink-soft">{% translate "Every practice work is graded by the AI. A work it could not reach after several tries would appear here." %}</p>
-    {% endfor %}
+{% translate "Attempts ran out" as k_exhausted %}{% translate "Failed tests" as k_failed %}{% translate "Safety" as k_safety %}{% translate "Inactive" as k_inactive %}
+<div class="grid items-start gap-4 xl:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)]">
+  {# ---- needs attention: one row per student, the reasons by kind ---- #}
+  <section aria-labelledby="attn" class="card flex flex-col gap-4" x-data="{ kind: 'all', all: false }">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <h2 id="attn" class="text-[17px] font-extrabold">{% translate "Needs attention" %}
+        {% if attention_count %}<span class="num ml-1 rounded-full bg-warning-50 px-2 py-0.5 text-[13px] font-extrabold text-warning-700">{% blocktranslate count n=attention_count %}{{ n }} student{% plural %}{{ n }} students{% endblocktranslate %}</span>{% endif %}
+      </h2>
+    </div>
+    {% if attention %}
+      <div class="flex flex-wrap gap-1.5" role="group" aria-label="{% translate 'Show' %}">
+        <button type="button" class="chip h-9" :aria-pressed="(kind === 'all').toString()" @click="kind = 'all'">{% translate "All" %}<span class="chip-count">{{ attention_count }}</span></button>
+        {% for k, n in attention_kinds.items %}
+          <button type="button" class="chip h-9" :aria-pressed="(kind === '{{ k }}').toString()" @click="kind = '{{ k }}'">{% if k == "exhausted" %}{{ k_exhausted }}{% elif k == "failed" %}{{ k_failed }}{% elif k == "safety" %}{{ k_safety }}{% else %}{{ k_inactive }}{% endif %}<span class="chip-count">{{ n }}</span></button>
+        {% endfor %}
+      </div>
+      <ul class="flex flex-col divide-y divide-line">
+        {% for item in attention %}
+          <li class="py-2.5" data-kinds="{{ item.counts|join:' ' }}" x-data="{ open: false }"
+              x-show="(kind === 'all' || $el.dataset.kinds.split(' ').includes(kind)) && (all || {{ forloop.counter }} <= 6 || kind !== 'all')">
+            <div class="flex items-center gap-3">
+              {% include "components/avatar.html" with person=item.row.student shape="square" tone="neutral" %}
+              <button type="button" class="flex min-w-0 flex-1 flex-col text-left leading-5" @click="open = !open" :aria-expanded="open">
+                <span class="truncate text-sm font-bold">{{ item.row.student.full_name }}{% if item.row.student.student_profile.group %} <span class="font-semibold text-ink-faint">· {{ item.row.student.student_profile.group }}</span>{% endif %}</span>
+                <span class="mt-1 flex flex-wrap gap-1">
+                  {% for k, n in item.counts.items %}
+                    <span class="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11.5px] font-bold {% if k == 'safety' %}bg-danger-50 text-danger-600{% elif k == 'inactive' %}bg-surface-sunken text-ink-soft{% else %}bg-warning-50 text-warning-700{% endif %}">{% if k == "exhausted" %}{{ k_exhausted }}{% elif k == "failed" %}{{ k_failed }}{% elif k == "safety" %}{{ k_safety }}{% else %}{{ k_inactive }}{% endif %} · {{ n }}</span>
+                  {% endfor %}
+                </span>
+              </button>
+              <span class="transition-transform text-ink-faint" :class="open && 'rotate-180'">{% include "components/icons.html#chevron-down" with size=16 %}</span>
+              <a class="btn btn-secondary btn-sm" href="{% url 'teacher:student' item.row.student.pk %}?course={{ item.row.enrollment.course.slug }}">{% translate "Open" %}</a>
+            </div>
+            <ul x-show="open" x-cloak x-transition.opacity class="mt-2 ml-[52px] flex flex-col gap-1 rounded-lg bg-canvas p-3 text-[12.5px] leading-[18px] text-ink-soft">
+              {% for reason in item.reasons|slice:":12" %}<li>• {{ reason }}</li>{% endfor %}
+              {% if item.reasons|length > 12 %}<li class="font-semibold">{% blocktranslate count n=item.reasons|length|add:"-12" %}and {{ n }} more{% plural %}and {{ n }} more{% endblocktranslate %}</li>{% endif %}
+            </ul>
+          </li>
+        {% endfor %}
+      </ul>
+      {% if attention_count > 6 %}
+        <button type="button" class="btn btn-secondary btn-sm self-start" x-show="kind === 'all'" @click="all = !all"
+                x-text="all ? '{% translate "Show fewer" %}' : '{% blocktranslate count n=attention_count|add:"-6" %}Show {{ n }} more{% plural %}Show {{ n }} more{% endblocktranslate %}'">{% translate "Show more" %}</button>
+      {% endif %}
+    {% else %}
+      <div class="flex items-center gap-3 rounded-lg bg-success-50 p-4 text-sm text-success-700">{% include "components/icons.html#check" with size=18 %}{% translate "No one is stuck: no repeated fails, risky lab attempts or long breaks." %}</div>
+    {% endif %}
   </section>
 
-  <section aria-labelledby="attn" class="card flex flex-col gap-1">
-    <h2 id="attn" class="mb-2 text-[17px] font-extrabold">{% translate "Needs attention" %}{% if attention_count > attention|length %} <span class="num font-medium text-ink-faint">· {{ attention_count }}</span>{% endif %}</h2>
-    {% for row, reason in attention %}
-      <div class="row-link">
-        <span class="tile bg-warning-50 text-warning-700">{% include "components/icons.html#warn" %}</span>
-        <span class="flex min-w-0 flex-1 flex-col leading-5">
-          <span class="truncate text-sm font-bold">{{ row.student.full_name }}{% if row.student.student_profile.group %} · {{ row.student.student_profile.group }}{% endif %}</span>
-          <span class="text-caption font-normal text-ink-soft">{{ reason }}</span>
-        </span>
-        <a class="btn btn-secondary btn-sm" href="{% url 'teacher:student' row.student.pk %}?course={{ row.enrollment.course.slug }}">{% translate "Open" %}{% include "components/icons.html#chevron-right" %}</a>
-      </div>
+  {# ---- my groups: a card per group ---- #}
+  <section aria-labelledby="groups" class="card flex flex-col gap-4">
+    <div class="flex items-center justify-between gap-3">
+      <h2 id="groups" class="text-[17px] font-extrabold">{% translate "My groups" %}</h2>
+      <a class="link inline-flex items-center gap-1 text-sm font-bold" href="{% url 'teacher:groups' %}">{% translate "All groups" %}{% include "components/icons.html#chevron-right" with size=16 %}</a>
+    </div>
+    {% for g in groups %}
+      <article class="relative flex flex-col gap-4 rounded-xl border border-line p-4 transition-[box-shadow,border-color] hover:border-primary-600 hover:shadow-lift">
+        <div class="flex items-start gap-3">
+          <span class="num grid size-12 shrink-0 place-items-center rounded-[14px] bg-primary-900 text-[13px] font-extrabold text-white">{{ g.group.name|slice:"-4:" }}</span>
+          <div class="min-w-0 flex-1 leading-5">
+            <h3 class="flex flex-wrap items-center gap-2 text-[16px] font-extrabold"><a class="after:absolute after:inset-0" href="{% url 'teacher:group' g.group.pk %}">{{ g.group.name }}</a>{% include "teacher/partials/cohort.html" with cohort=g.group.research_cohort %}</h3>
+            <p class="truncate text-caption text-ink-faint">{% blocktranslate with y=g.group.study_year %}year {{ y }}{% endblocktranslate %}{% if g.group.specialty %} · {{ g.group.specialty }}{% endif %}</p>
+          </div>
+          <button type="button" class="relative z-10 inline-flex items-center gap-1.5 rounded-full bg-canvas px-3 py-1.5 text-[12px] font-extrabold tracking-[0.06em] text-ink-soft ring-1 ring-line hover:text-primary-600" data-copy="{{ g.group.join_code }}" data-copied-label="{% translate 'Copied ✓' %}" title="{% translate 'Join code' %}">{% include "components/icons.html#copy" with size=13 %}<span data-copy-label>{{ g.group.join_code }}</span></button>
+        </div>
+        <dl class="grid grid-cols-2 gap-2">
+          <div class="rounded-[12px] bg-canvas px-3 py-2"><dt class="text-[11.5px] font-semibold text-ink-soft">{% translate "Students" %}</dt><dd class="num text-[18px] font-extrabold">{{ g.students }}</dd></div>
+          <div class="rounded-[12px] bg-canvas px-3 py-2"><dt class="text-[11.5px] font-semibold text-ink-soft">{% translate "Course completed" %}</dt><dd class="num text-[18px] font-extrabold">{{ g.completed }}<span class="text-[13px] text-ink-faint">/{{ g.students }}</span></dd></div>
+          <div class="rounded-[12px] bg-canvas px-3 py-2"><dt class="text-[11.5px] font-semibold text-ink-soft">{% translate "Average score" %}</dt><dd class="num text-[18px] font-extrabold">{% if g.score is not None %}{{ g.score|floatformat:1 }}{% else %}—{% endif %}</dd></div>
+          <div class="rounded-[12px] bg-canvas px-3 py-2"><dt class="text-[11.5px] font-semibold text-ink-soft">{% translate "ICPAI finished" %}</dt><dd class="num text-[18px] font-extrabold">{{ g.icpai_done }}<span class="text-[13px] text-ink-faint">/{{ g.students }}</span></dd></div>
+        </dl>
+        {% if g.progress is not None %}
+          <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
+            <span class="text-[12px] font-semibold text-ink-soft">{% translate "Progress" %}</span>
+            <span class="progress min-w-[120px] flex-1"><span style="width: {{ g.progress|stringformat:'s' }}%"></span></span>
+            <span class="num w-10 text-right text-caption font-bold">{{ g.progress|floatformat:0 }}%</span>
+            {% if g.attention %}<span class="relative z-10 rounded-full bg-warning-50 px-2 py-0.5 text-[11.5px] font-bold text-warning-700">{% blocktranslate count n=g.attention %}{{ n }} needs attention{% plural %}{{ n }} need attention{% endblocktranslate %}</span>{% endif %}
+          </div>
+        {% endif %}
+      </article>
     {% empty %}
-      <p class="text-sm text-ink-soft">{% translate "No one is stuck: no repeated fails, risky lab attempts or long breaks." %}</p>
+      {% translate "No groups yet" as l_title %}{% translate "A group gets a join code; students enter it when signing up." as l_text %}{% translate "Create a group" as l_action %}{% url 'teacher:group_new' as new_url %}
+      {% include "components/empty_state.html" with title=l_title text=l_text icon="users" action_url=new_url action_label=l_action %}
     {% endfor %}
   </section>
 </div>
-
-<section aria-labelledby="groups" class="overflow-hidden rounded-card border border-line bg-surface">
-  <div class="flex items-center justify-between gap-3 border-b border-surface-sunken px-6 py-5">
-    <h2 id="groups" class="text-[17px] font-extrabold">{% translate "My groups" %}</h2>
-    <a class="link inline-flex items-center gap-1 text-sm font-bold" href="{% url 'teacher:groups' %}">{% translate "All groups" %}{% include "components/icons.html#chevron-right" with size=16 %}</a>
-  </div>
-  {% include "teacher/partials/groups_table.html" %}
-</section>
 
 <dialog id="new-group" class="dialog max-w-[560px]" aria-labelledby="new-group-title">
   <form method="post" action="{% url 'teacher:group_new' %}" class="flex flex-col gap-4">

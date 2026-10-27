@@ -1,0 +1,40 @@
+{% comment %}
+The cover of an ICPAI section (student home cards, the section page header): the section's tone as a gradient and a
+line drawing of what the section is about, gently floating (still under prefers-reduced-motion).
+kind — Section.kind; number — the section number (the tone); class — size and rounding of the box; big — the
+section page header (a larger drawing).
+{% endcomment %}
+<div class="cover tone-{{ number }} {{ class }}" aria-hidden="true">
+  <span class="cover-dot size-28 -top-10 -left-8"></span>
+  <span class="cover-dot size-20 -right-6 -bottom-8"></span>
+  <svg viewBox="0 0 160 96" class="cover-art {% if big %}h-[88%]{% else %}h-[78%]{% endif %}" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    {% if kind == "course" %}
+      <path d="M30 26c14-6 28-6 42 2v52c-14-8-28-8-42-2z"/><path d="M114 26c-14-6-28-6-42 2v52c14-8 28-8 42-2z"/>
+      <g class="cover-float"><path d="M128 18v16l12 22a6 6 0 0 1-5 9h-22a6 6 0 0 1-5-9l12-22V18"/><path d="M124 18h12"/><path d="M114 52h24" stroke-width="2"/></g>
+    {% elif kind == "diagnostic" %}
+      <path d="M24 78h72"/><rect x="30" y="54" width="12" height="24" rx="3"/><rect x="50" y="40" width="12" height="38" rx="3"/><rect x="70" y="26" width="12" height="52" rx="3"/>
+      <g class="cover-float"><path d="M104 66a22 22 0 1 1 44 0"/><path d="M126 66l10-14" /><circle cx="126" cy="66" r="3" fill="currentColor"/></g>
+    {% elif kind == "video" %}
+      <rect x="22" y="18" width="88" height="56" rx="8"/><path d="M50 80h32"/><path d="M66 74v6"/>
+      <g class="cover-float"><circle cx="66" cy="46" r="16"/><path d="M61 38l12 8-12 8z" fill="currentColor"/></g>
+      <path d="M118 30l18-8v48l-18-8" class="cover-float cover-float-2"/>
+    {% elif kind == "designer" %}
+      <rect x="22" y="16" width="70" height="64" rx="8"/><path d="M34 32h46M34 46h30M34 60h38"/>
+      <g class="cover-float"><rect x="100" y="22" width="34" height="22" rx="5"/><rect x="108" y="52" width="34" height="22" rx="5"/><path d="M117 44v8"/></g>
+    {% elif kind == "research_practice" %}
+      <path d="M22 80h96M22 80V20"/><path d="M30 68l18-18 16 10 22-26" class="dash"/><circle cx="48" cy="50" r="3" fill="currentColor"/><circle cx="64" cy="60" r="3" fill="currentColor"/><circle cx="86" cy="34" r="3" fill="currentColor"/>
+      <g class="cover-float"><circle cx="122" cy="40" r="16"/><path d="M134 52l12 12"/></g>
+    {% elif kind == "microlesson" %}
+      <rect x="20" y="16" width="84" height="54" rx="6"/><path d="M62 70l-12 14M62 70l12 14"/><path d="M32 34h40M32 46h28"/>
+      <g class="cover-float"><circle cx="128" cy="44" r="18"/><path d="M128 34v10l7 5"/><path d="M122 22h12"/></g>
+    {% elif kind == "portfolio" %}
+      <path d="M22 30h30l8 8h46a6 6 0 0 1 6 6v34a6 6 0 0 1-6 6H22a6 6 0 0 1-6-6V36a6 6 0 0 1 6-6z"/>
+      <g class="cover-float"><path d="M130 18l6 13 14 2-10 10 3 14-13-7-13 7 3-14-10-10 14-2z"/></g>
+    {% elif kind == "independent" %}
+      <g class="cover-float"><path d="M62 16a24 24 0 0 0-14 43c3 3 4 6 4 10h20c0-4 1-7 4-10a24 24 0 0 0-14-43z"/><path d="M54 76h16M56 84h12"/></g>
+      <path d="M100 70c8-24 22-42 40-50-4 18-22 34-46 44" /><path d="M104 66l-8 14 14-6" class="cover-float cover-float-2"/>
+    {% else %}
+      <circle cx="80" cy="48" r="26"/><path d="M70 48h20M80 38v20"/>
+    {% endif %}
+  </svg>
+</div>

@@ -1,10 +1,13 @@
 """Reads for the programme pages (no recalculation here — services.refresh does that)."""
 
 from django.urls import reverse
+from django.utils.translation import gettext as _
 
 from apps.assessments.models import Component
+from apps.pedagogy.models import Lesson, LessonTemplate, Trial
+from apps.progress.models import CourseResult
 
-from .models import DiagnosticResult, Programme, ProgrammeEnrollment, Section, SectionProgress
+from .models import DiagnosticResult, Portfolio, Programme, ProgrammeEnrollment, Section, SectionProgress, VideoWatch
 from .providers import provider_for
 from .providers.course import course_enrollment
 from .services import diagnostics
@@ -24,6 +27,7 @@ __all__ = [
     "matrix",
     "programme_of_course",
     "section_by_number",
+    "section_facts",
     "section_rows",
 ]
 
@@ -62,6 +66,47 @@ def section_rows(enrollment) -> list[dict]:
             }
         )
     return rows
+
+
+def section_facts(enrollment) -> dict[int, list[tuple[str, str]]]:
+    """Two short figures per section for the student's home cards: {number: [(value, label), …]}."""
+    student = enrollment.student_id
+    sections = {s.kind: s.number for s in enrollment.programme.sections.all()}
+    templates = LessonTemplate.objects.filter(is_active=True).count()
+    lessons = Lesson.objects.filter(owner_id=student)
+    final = Lesson.Status.FINAL
+    facts: dict[int, list[tuple[str, str]]] = {}
+
+    def put(kind, *items):
+        if kind in sections:
+            facts[sections[kind]] = [item for item in items if item]
+
+    course = course_enrollment(enrollment)
+    result = CourseResult.objects.filter(enrollment=course).first() if course else None
+    if result:
+        score = f"{result.current_percent:.0f}" if result.current_percent is not None else "—"
+        put("course", (f"{result.topics_completed}/{result.topics_total}", _("topics")), (score, _("score")))
+    diagnostic = diagnostic_section(enrollment.programme)
+    if diagnostic:
+        tests = len(diagnostics.tests_of(diagnostic))
+        put("diagnostic", (f"{len(diagnostics.done_phases(enrollment))}/{tests}", _("tests taken")))
+    watch = VideoWatch.objects.filter(enrollment=enrollment).first()
+    put("video", (f"{watch.percent if watch else 0}%", _("watched")))
+    copies = lessons.filter(kind=Lesson.Kind.TEMPLATE_COPY)
+    put("designer", (f"{copies.filter(status=final).count()}/{templates}", _("lessons")),
+        (str(Trial.objects.filter(lesson__in=copies).count()), _("trials")))  # fmt: skip
+    practices = lessons.filter(kind=Lesson.Kind.RESEARCH_PRACTICE)
+    put("research_practice", (f"{practices.filter(status=final).count()}/{templates}", _("practices")),
+        (str(Trial.objects.filter(lesson__in=practices).count()), _("trials")))  # fmt: skip
+    micro = lessons.filter(kind=Lesson.Kind.MICROLESSON).first()
+    put("microlesson", (str(micro.trials.count() if micro else 0), _("trials")),
+        (_("assembled") if micro and micro.status == final else "—", _("microlesson")))  # fmt: skip
+    folio = Portfolio.objects.filter(enrollment=enrollment).first()
+    put("portfolio", (folio.get_status_display() if folio else "—", _("portfolio")))
+    own = lessons.filter(kind=Lesson.Kind.INDEPENDENT)
+    put("independent", (str(own.filter(status=final).count()), _("lessons confirmed")),
+        (str(Trial.objects.filter(lesson__in=own).count()), _("trials")))  # fmt: skip
+    return facts
 
 
 def current_section(rows) -> dict | None:

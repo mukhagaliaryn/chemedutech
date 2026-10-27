@@ -49,6 +49,9 @@ def _course_block(enrollment) -> dict | None:
 def home_context(user, enrollment) -> dict:
     """The programme home: the guide (sections with «what it does»), their state and «Continue»."""
     rows = programme_selectors.section_rows(enrollment)
+    facts = programme_selectors.section_facts(enrollment)
+    for row in rows:
+        row["facts"] = facts.get(row["section"].number, [])
     current = programme_selectors.current_section(rows)
     course = _course_block(enrollment)
     return {

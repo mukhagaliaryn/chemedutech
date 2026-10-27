@@ -2177,3 +2177,189 @@
     font-weight: 700;
   }
 }
+
+/* ---- ICPAI covers, the floating AI assistant, the platform's own video controls (2026-10-27) -----------------
+   .cover — a section's tone as a gradient with a white line drawing (components/section_cover.html);
+   .ai-fab — the round «Let the AI explain» button at the bottom right, opening .ai-dialog in the middle;
+   .vp-* — the controls drawn over a YouTube video so that nothing in the player leads away to youtube.com. */
+@layer components {
+  .cover {
+    position: relative;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    color: #fff;
+    background:
+      radial-gradient(circle at 85% 15%, color-mix(in srgb, #fff 22%, transparent), transparent 45%),
+      linear-gradient(135deg, var(--tone), color-mix(in srgb, var(--tone) 55%, var(--color-primary-900)));
+  }
+  .cover-dot {
+    position: absolute;
+    border-radius: 9999px;
+    background: color-mix(in srgb, #fff 12%, transparent);
+  }
+  .cover-art {
+    position: relative;
+    width: auto;
+    max-width: 92%;
+    filter: drop-shadow(0 6px 14px rgb(0 0 0 / 0.18));
+  }
+  .cover-float {
+    animation: float 6s ease-in-out infinite;
+    transform-box: fill-box;
+  }
+  .cover-float-2 {
+    animation-duration: 7.5s;
+    animation-delay: 1.1s;
+  }
+  .cover .dash {
+    stroke-dasharray: 5 7;
+    animation: dash-flow 1.6s linear infinite;
+  }
+
+  .ai-fab {
+    position: fixed;
+    right: clamp(16px, 2.5vw, 28px);
+    bottom: clamp(16px, 2.5vw, 28px);
+    z-index: 40;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    height: 58px;
+    padding: 0 22px 0 8px;
+    border-radius: 9999px;
+    color: #fff;
+    font-weight: 800;
+    background: linear-gradient(120deg, #5b34b0, var(--color-primary-600) 70%, #0b7a7a);
+    box-shadow: 0 14px 34px rgb(91 52 176 / 0.38);
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+  .ai-fab:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 40px rgb(91 52 176 / 0.45);
+  }
+  .ai-fab:focus-visible {
+    outline: 3px solid var(--color-primary-200);
+    outline-offset: 3px;
+  }
+  .ai-fab-icon {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 9999px;
+    background: rgb(255 255 255 / 0.18);
+  }
+  .ai-fab-icon::before,
+  .ai-fab-icon::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: 2px solid rgb(255 255 255 / 0.55);
+    animation: pulse-ring 3s cubic-bezier(0.2, 0.7, 0.2, 1) infinite;
+  }
+  .ai-fab-icon::after {
+    animation-delay: 1.5s;
+  }
+  .ai-fab-icon svg {
+    animation: ai-spin 6s ease-in-out infinite;
+  }
+  @keyframes ai-spin {
+    0%,
+    70%,
+    100% {
+      transform: rotate(0) scale(1);
+    }
+    80% {
+      transform: rotate(90deg) scale(1.15);
+    }
+  }
+  .ai-dialog {
+    max-width: 640px;
+    padding: 0;
+    overflow: hidden;
+    background: transparent;
+  }
+  .ai-dialog > section {
+    max-height: min(82vh, 760px);
+  }
+
+  .vp {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background: var(--color-ink);
+  }
+  .vp-frame {
+    position: absolute;
+    inset: 0;
+  }
+  .vp-frame iframe {
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* the player's own links (title, logo, «Watch on YouTube») cannot be clicked */
+  }
+  .vp-shield {
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
+  }
+  .vp-poster {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: radial-gradient(circle at 50% 50%, rgb(13 33 73 / 0.15), rgb(13 33 73 / 0.55));
+  }
+  .vp-bar {
+    position: absolute;
+    inset: auto 0 0 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 28px 16px 12px;
+    color: #fff;
+    background: linear-gradient(to top, rgb(0 0 0 / 0.72), transparent);
+    transition: opacity 0.25s ease;
+  }
+  .vp-btn {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 9999px;
+    transition: background 0.15s ease;
+  }
+  .vp-btn:hover,
+  .vp-btn:focus-visible {
+    background: rgb(255 255 255 / 0.18);
+  }
+  .vp-track {
+    position: relative;
+    flex: 1;
+    height: 6px;
+    border-radius: 9999px;
+    background: rgb(255 255 255 / 0.28);
+    cursor: pointer;
+  }
+  .vp-track > span {
+    position: absolute;
+    inset: 0 auto 0 0;
+    border-radius: inherit;
+    background: var(--color-primary-200);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cover-float,
+  .cover .dash,
+  .ai-fab-icon::before,
+  .ai-fab-icon::after,
+  .ai-fab-icon svg {
+    animation: none !important;
+  }
+}

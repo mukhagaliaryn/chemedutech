@@ -3,7 +3,8 @@
 {% comment %}
 Student home in the ICPAI programme (docs/icpai/SPEC.md §4.0, guide @S0-RULES, picture image10): the personal
 key figures are left out; instead — «Continue» with the current section and the guide to the platform: every
-section with its «what it does» text (verbatim from the guide), its state and percent. The course's pre-test
+section as a card with its cover, its «what it does» text (verbatim from the guide, two lines — the full text is on
+the section page), two figures of the student's work there (programme selectors.section_facts), its state and percent. The course's pre-test
 card stays (research, STEP-22).
 {% endcomment %}
 {% block title %}{% translate "Home" %} · ChemEduTech{% endblock %}
@@ -50,17 +51,33 @@ card stays (research, STEP-22).
     <h2 id="guide-title" class="text-[20px] font-extrabold">{% translate "Guide to using the platform" %}</h2>
     <p class="mt-1 text-sm text-ink-soft">{% blocktranslate with p=current.section.pass_percent|default:80 %}Sections open one after another: the next one opens when the previous one is {{ p }}% done.{% endblocktranslate %}</p>
   </div>
-  <ol class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(min(280px,100%),1fr))]">
+  <ol class="grid gap-5 grid-cols-[repeat(auto-fill,minmax(min(250px,100%),1fr))]">
     {% for r in rows %}
-      <li class="flex flex-col gap-3 rounded-lg border p-5 {% if r.status == 'locked' %}border-line bg-surface-sunken/60{% elif r.section.pk == current.section.pk %}border-primary-600 bg-surface shadow-[0_10px_30px_rgba(31,95,209,.12)]{% else %}border-line bg-surface{% endif %}">
-        <div class="flex items-center gap-3">
-          <span class="num grid size-9 shrink-0 place-items-center rounded-[12px] text-[15px] font-extrabold {% if r.status == 'passed' %}bg-success-600 text-white{% elif r.status == 'locked' %}bg-surface text-ink-faint{% else %}bg-primary-600 text-white{% endif %}">{{ r.section.number }}</span>
-          <h3 class="min-w-0 flex-1 text-[15px] leading-5 font-bold">{{ r.section.title }}</h3>
+      <li class="group/card relative flex flex-col overflow-hidden rounded-xl border bg-surface transition-[transform,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-lift {% if r.section.pk == current.section.pk %}border-primary-600 ring-2 ring-primary-100{% else %}border-line{% endif %}">
+        <div class="relative h-[120px]">
+          {% include "components/section_cover.html" with kind=r.section.kind number=r.section.number class="absolute inset-0" %}
+          <span class="num absolute top-3 left-3 grid size-9 place-items-center rounded-[12px] bg-white/90 text-[15px] font-extrabold text-ink shadow-[0_4px_12px_rgb(0_0_0/0.12)]">{{ r.section.number }}</span>
+          {% if r.status == "locked" %}<span class="absolute inset-0 grid place-items-center bg-ink/45 text-white backdrop-blur-[1px]">{% include "components/icons.html#lock" with size=22 %}</span>{% endif %}
+          <span class="absolute top-3 right-3">{% with p=r.percent|floatformat:0 %}{% include "components/ring.html" with value=r.percent size=48 stroke=5 text=p color="stroke-white" track="stroke-white/30" inverse=True %}{% endwith %}</span>
         </div>
-        <p class="flex-1 text-[13px] leading-5 whitespace-pre-line text-ink-soft">{{ r.section.purpose }}</p>
-        <div class="flex items-center justify-between gap-3">
-          {% include "student/partials/section_state.html" with row=r %}
-          <a class="link text-sm font-bold" href="{{ r.url }}">{% if r.status == "locked" %}{% translate "Details" %}{% else %}{% translate "Open" %}{% endif %} →</a>
+        <div class="flex flex-1 flex-col gap-2.5 p-4">
+          <h3 class="text-[15px] leading-5 font-extrabold">{{ r.section.title }}</h3>
+          <p class="line-clamp-2 text-[13px] leading-5 text-ink-soft" title="{{ r.section.purpose }}">{{ r.section.purpose }}</p>
+          {% if r.facts %}
+            <dl class="mt-auto grid gap-2 {% if r.facts|length > 1 %}grid-cols-2{% endif %}">
+              {% for value, label in r.facts %}
+                <div class="tone-{{ r.section.number }} rounded-[10px] bg-(--tone-50) px-3 py-2">
+                  <dt class="sr-only">{{ label }}</dt>
+                  <dd class="num truncate text-[15px] leading-5 font-extrabold text-(--tone)">{{ value }}</dd>
+                  <dd class="truncate text-[11.5px] font-semibold text-ink-soft">{{ label }}</dd>
+                </div>
+              {% endfor %}
+            </dl>
+          {% endif %}
+          <div class="flex items-center justify-between gap-3 border-t border-line pt-3 {% if not r.facts %}mt-auto{% endif %}">
+            {% include "student/partials/section_state.html" with row=r %}
+            <a class="link text-sm font-bold after:absolute after:inset-0" href="{{ r.url }}">{% if r.status == "locked" %}{% translate "Details" %}{% else %}{% translate "Open" %}{% endif %} →</a>
+          </div>
         </div>
       </li>
     {% endfor %}

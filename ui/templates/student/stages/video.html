@@ -2,16 +2,18 @@
 {% if content.has_source %}
   <div x-data="videoTracker({ provider: '{{ content.provider }}', id: '{{ content.youtube_id|default:content.vimeo_id }}', url: '{{ urls.watch }}', min: {{ content.min_watch_percent }}, done: {% if sp.material_done_at or place.preview %}true{% else %}false{% endif %}, start: {{ sp.material_percent|default:0 }} })"
        class="flex flex-col gap-4">
-    <div class="relative aspect-video overflow-hidden rounded-lg bg-ink">
-      {% if content.provider == "file" %}
-        <video x-ref="video" class="size-full" controls preload="metadata" src="{{ content.file.url }}"></video>
-      {% elif content.provider == "vimeo" %}
-        <iframe x-ref="vimeo" class="size-full" src="https://player.vimeo.com/video/{{ content.vimeo_id }}?api=1&dnt=1" title="{{ stage.title }}"
-                allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
-      {% else %}
-        <div x-ref="youtube" class="size-full"></div>
-      {% endif %}
-    </div>
+    {% if content.provider == "youtube" %}
+      {% include "components/video_youtube.html" with video_id=content.youtube_id title=stage.title %}
+    {% else %}
+      <div class="relative aspect-video overflow-hidden rounded-lg bg-ink">
+        {% if content.provider == "file" %}
+          <video x-ref="video" class="size-full" controls preload="metadata" src="{{ content.file.url }}"></video>
+        {% else %}
+          <iframe x-ref="vimeo" class="size-full" src="https://player.vimeo.com/video/{{ content.vimeo_id }}?api=1&dnt=1" title="{{ stage.title }}"
+                  allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+        {% endif %}
+      </div>
+    {% endif %}
     {% if content.provider == "youtube" %}
       <div x-show="failed !== null" x-cloak class="alert alert-warning" role="alert">
         <span class="alert-icon">{% include "components/icons.html#warn" with size=18 %}</span>

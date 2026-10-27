@@ -1,0 +1,15 @@
+{% load i18n %}{% comment %}
+«Let the AI explain» as a floating button at the bottom right of the page: it opens the AI assistant panel
+(ai/partials/panel.html, same context) in a dialog in the middle of the screen; Esc or ✕ closes it and the
+conversation stays. label — the button's text (default «Let the AI explain»).
+{% endcomment %}
+<button type="button" class="ai-fab" data-open-modal="ai-dialog" aria-haspopup="dialog">
+  <span class="ai-fab-icon">{% include "components/icons.html#sparkle" with size=20 %}</span>
+  <span class="hidden sm:inline">{{ label|default:_("Let the AI explain") }}</span>
+</button>
+<dialog id="ai-dialog" class="dialog ai-dialog" aria-label="{{ label|default:_('Let the AI explain') }}">
+  <form method="dialog" class="absolute top-3.5 right-3.5 z-10">
+    <button type="submit" class="grid size-9 place-items-center rounded-full bg-white/15 text-white ring-1 ring-white/30 transition-colors hover:bg-white/25" aria-label="{% translate 'Close' %}">{% include "components/icons.html#x" with size=18 %}</button>
+  </form>
+  {% include "ai/partials/panel.html" with enabled=ai_enabled %}
+</dialog>

@@ -109,6 +109,8 @@
     }));
 
     // Counts the seconds actually played (a jump forward is not counted) and reports the percentage.
+    // A YouTube video plays with the platform's own controls (components/video_youtube.html): the player's own
+    // controls, title and links are off, so nothing leads away to youtube.com.
     Alpine.data("videoTracker", (opts) => ({
       percent: opts.start || 0,
       done: opts.done,
@@ -117,6 +119,14 @@
       last: null,
       duration: 0,
       sent: opts.start || 0,
+      player: null,
+      ready: false,
+      started: false,
+      playing: false,
+      ended: false,
+      muted: false,
+      current: 0,
+      idle: false,
 
       init() {
         if (opts.provider === "file") this.bindFile();
@@ -128,6 +138,49 @@
       destroy() {
         clearInterval(this.timer);
         clearInterval(this.poll);
+        clearTimeout(this.sleep);
+      },
+      // --- the platform's controls over a YouTube video ---
+      clock(seconds) {
+        const s = Math.max(0, Math.floor(seconds || 0));
+        return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+      },
+      toggle() {
+        if (!this.player || !this.ready) return;
+        if (this.playing) this.player.pauseVideo();
+        else this.player.playVideo();
+        this.wake();
+      },
+      seek(event) {
+        if (!this.player || !this.duration) return;
+        const box = event.currentTarget.getBoundingClientRect();
+        this.jump(((event.clientX - box.left) / box.width) * this.duration);
+      },
+      skip(seconds) {
+        if (this.player) this.jump(this.player.getCurrentTime() + seconds);
+      },
+      jump(t) {
+        const to = Math.max(0, Math.min(this.duration, t));
+        this.last = null; // a jump is not watching
+        this.player.seekTo(to, true);
+        this.current = to;
+        this.wake();
+      },
+      toggleMute() {
+        if (!this.player) return;
+        if (this.player.isMuted()) this.player.unMute();
+        else this.player.mute();
+        this.muted = !this.muted;
+      },
+      fullscreen() {
+        const box = this.$refs.box;
+        if (document.fullscreenElement) document.exitFullscreen();
+        else if (box.requestFullscreen) box.requestFullscreen();
+      },
+      wake() {
+        this.idle = false;
+        clearTimeout(this.sleep);
+        this.sleep = setTimeout(() => (this.idle = true), 2500);
       },
       tick(t, duration) {
         if (duration > 0) this.duration = duration;
@@ -183,19 +236,41 @@
         const start = () => {
           const player = new YT.Player(this.$refs.youtube, {
             videoId: opts.id,
-            // origin: the API's postMessage channel must name this page's origin.
-            playerVars: { rel: 0, enablejsapi: 1, origin: window.location.origin },
+            // origin: the API's postMessage channel must name this page's origin. controls: 0 — the platform draws
+            // its own; the player's links are not clickable (.vp-frame iframe { pointer-events: none }).
+            playerVars: {
+              rel: 0, enablejsapi: 1, origin: window.location.origin, controls: 0, disablekb: 1, fs: 0,
+              iv_load_policy: 3, playsinline: 1, modestbranding: 1,
+            },
             events: {
+              onReady: () => {
+                this.player = player;
+                this.ready = true;
+                this.duration = player.getDuration() || 0;
+                this.muted = player.isMuted();
+              },
               onError: (e) => {
                 this.failed = e.data; // 2 bad id · 5 html5 · 100 removed · 101/150 embedding disabled · 153 no referrer
               },
               onStateChange: (e) => {
                 clearInterval(this.poll);
-                if (e.data === YT.PlayerState.PLAYING) {
-                  this.poll = setInterval(() => this.tick(player.getCurrentTime(), player.getDuration()), 1000);
+                this.playing = e.data === YT.PlayerState.PLAYING;
+                if (this.playing) {
+                  this.started = true;
+                  this.ended = false;
+                  this.wake();
+                  this.poll = setInterval(() => {
+                    this.current = player.getCurrentTime();
+                    this.tick(this.current, player.getDuration());
+                  }, 500);
                 } else {
                   this.last = null;
-                  if (e.data === YT.PlayerState.ENDED) this.report();
+                  this.idle = false;
+                  if (e.data === YT.PlayerState.ENDED) {
+                    this.report();
+                    this.ended = true;
+                    this.started = false; // the poster hides YouTube's end screen of suggestions
+                  }
                 }
               },
             },

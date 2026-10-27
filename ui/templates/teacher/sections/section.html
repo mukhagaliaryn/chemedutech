@@ -1,5 +1,5 @@
 {% extends "layouts/teacher.html" %}
-{% load i18n %}
+{% load i18n static %}
 {% comment %}
 An ICPAI section for the teacher (STEP-41), opened from the sidebar: the header (number, title, the guide's purpose,
 the share of the active group's students who passed), the figures, the section's own block (teacher/sections/
@@ -103,3 +103,4 @@ section 8 dates) and every student's progress in the section. Context: apps/teac
   {% endif %}
 </section>
 {% endblock %}
+{% block scripts %}{% if section.kind == "video" and video.youtube_id %}<script defer src="{% static 'js/stage.js' %}"></script>{% endif %}{% endblock %}

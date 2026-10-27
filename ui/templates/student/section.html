@@ -1,8 +1,9 @@
 {% extends "layouts/student.html" %}
 {% load i18n static %}
 {% comment %}
-An ICPAI section (docs/icpai/SPEC.md §4.0): its purpose (the guide's «what it does»), its state and percent,
-«Let the AI explain» — the AI assistant panel (ai/partials/panel.html; D73) — and
+An ICPAI section (docs/icpai/SPEC.md §4.0): a header with its purpose (the guide's «what it does»), its state, the
+percent and the section's cover; «Let the AI explain» — a floating button opening the AI assistant panel in a dialog
+(ai/partials/launcher.html; D73) — and
 the section's own content — section 1 leads to the course, section 4 shows the lesson templates, section 5 the practices, section 6 the microlesson, section 7 the portfolio, section 8 the independent lessons; kinds not built yet
 say so.
 {% endcomment %}
@@ -10,28 +11,32 @@ say so.
 {% block crumb %}{{ programme.title }} · {% blocktranslate with n=section.number %}Section {{ n }}{% endblocktranslate %}{% endblock %}
 {% block page_title %}{{ section.title }}{% endblock %}
 {% block content %}
-<section aria-labelledby="section-title" class="card flex flex-wrap items-center gap-5">
-  <span class="num grid size-[60px] shrink-0 place-items-center rounded-[20px] text-[24px] font-extrabold {% if row.status == 'passed' %}bg-success-600 text-white{% else %}bg-primary-900 text-white{% endif %}">{{ section.number }}</span>
-  <div class="min-w-0 flex-[1_1_320px]">
-    <p class="text-[13px] font-semibold text-ink-faint">{% blocktranslate with n=section.number %}Section {{ n }}{% endblocktranslate %}</p>
-    <h1 id="section-title" class="text-[clamp(22px,2.4vw,28px)] leading-[1.25] font-extrabold tracking-[-0.02em]">{{ section.title }}</h1>
-    <div class="mt-2 flex flex-wrap items-center gap-2">
+<section aria-labelledby="section-title" class="grid overflow-hidden rounded-card border border-line bg-surface md:grid-cols-[minmax(0,1fr)_minmax(240px,34%)]">
+  <div class="flex flex-col gap-4 p-[clamp(20px,2.6vw,32px)]">
+    <div class="flex flex-wrap items-center gap-3">
+      <span class="tone-{{ section.number }} num grid size-11 shrink-0 place-items-center rounded-[14px] bg-(--tone) text-[18px] font-extrabold text-white">{{ section.number }}</span>
+      <p class="text-[13px] font-bold tracking-[0.06em] text-ink-faint uppercase">{{ programme.title }} · {% blocktranslate with n=section.number %}Section {{ n }}{% endblocktranslate %}</p>
+    </div>
+    <h1 id="section-title" class="text-[clamp(24px,2.6vw,32px)] leading-[1.2] font-extrabold tracking-[-0.02em]">{{ section.title }}</h1>
+    <div class="flex flex-wrap items-center gap-2">
       {% include "student/partials/section_state.html" %}
       {% if row.status != "passed" %}<span class="text-caption text-ink-soft">{% blocktranslate with p=section.pass_percent %}The next section opens at {{ p }}%.{% endblocktranslate %}</span>{% endif %}
     </div>
+    <div x-data="{ more: false, clamped: false }" x-init="$nextTick(() => clamped = $refs.purpose.scrollHeight > $refs.purpose.clientHeight + 1)"
+         class="flex flex-col gap-1.5 border-t border-line pt-4">
+      <h2 class="text-[13px] font-extrabold tracking-[0.04em] text-ink-soft uppercase">{% translate "What the section does" %}</h2>
+      <p x-ref="purpose" class="text-[15px] leading-[25px] whitespace-pre-line" :class="more || 'line-clamp-4'">{{ section.purpose }}</p>
+      <button type="button" class="link self-start text-sm font-bold" x-show="clamped || more" x-cloak @click="more = !more" x-text="more ? '{% translate "Less" %}' : '{% translate "Read in full" %}'">{% translate "Read in full" %}</button>
+    </div>
   </div>
-  {% blocktranslate with p=row.percent|floatformat:0 asvar done %}{{ p }}% done{% endblocktranslate %}
-  {% include "components/ring.html" with value=row.percent size=72 stroke=8 label=done %}
+  <div class="relative min-h-[200px]">
+    {% include "components/section_cover.html" with kind=section.kind number=section.number big=True class="absolute inset-0" %}
+    <div class="absolute right-4 bottom-4 rounded-full bg-white/15 p-1.5 ring-1 ring-white/30 backdrop-blur-sm">
+      {% blocktranslate with p=row.percent|floatformat:0 asvar done %}{{ p }}% done{% endblocktranslate %}
+      {% include "components/ring.html" with value=row.percent size=76 stroke=8 label=done color="stroke-white" track="stroke-white/25" inverse=True %}
+    </div>
+  </div>
 </section>
-
-<div class="grid grid-cols-1 items-start gap-4 lg:grid-cols-[1fr_1.15fr]">
-  <section aria-labelledby="purpose-title" class="card flex flex-col gap-3">
-    <h2 id="purpose-title" class="text-[17px] font-bold">{% translate "What the section does" %}</h2>
-    <p class="text-[15px] leading-[25px] whitespace-pre-line">{{ section.purpose }}</p>
-  </section>
-
-  {% include "ai/partials/panel.html" with enabled=ai_enabled %}
-</div>
 
 {% if section.kind == "course" %}
   {% if course_block %}
@@ -90,7 +95,7 @@ say so.
     {% if video %}
       <div x-data="videoTracker({ provider: 'youtube', id: '{{ video.youtube_id }}', url: '{% url 'student:section_watch' section.number %}', min: {{ section.pass_percent }}, done: {% if row.status == 'passed' %}true{% else %}false{% endif %}, start: {{ watched }} })"
            class="flex flex-col gap-4">
-        <div class="relative aspect-video overflow-hidden rounded-lg bg-ink"><div x-ref="youtube" class="size-full"></div></div>
+        {% include "components/video_youtube.html" with video_id=video.youtube_id title=section.title %}
         <div x-show="failed !== null" x-cloak class="alert alert-warning" role="alert">
           <span class="alert-icon">{% include "components/icons.html#warn" with size=18 %}</span>
           <div class="flex flex-1 flex-wrap items-center justify-between gap-3">
@@ -139,5 +144,6 @@ say so.
   {% translate "The section is in development" as l_title %}{% translate "Its tasks will appear here in the next versions of the platform." as l_text %}
   {% include "components/empty_state.html" with title=l_title text=l_text icon="clock" %}
 {% endif %}
+{% include "ai/partials/launcher.html" %}
 {% endblock %}
 {% block scripts %}{% if section.kind == "video" and video %}<script defer src="{% static 'js/stage.js' %}"></script>{% endif %}{% endblock %}

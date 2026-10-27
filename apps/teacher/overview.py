@@ -10,10 +10,11 @@ from django.utils.translation import ngettext
 
 from apps.assessments import selectors as quiz_selectors
 from apps.courses import selectors as course_selectors
-from apps.courses.models import Stage
+from apps.courses.models import Enrollment, Stage
 from apps.labs import selectors as lab_selectors
 from apps.labs.engine import get_lab
 from apps.practice import selectors as practice_selectors
+from apps.programme.models import ProgrammeEnrollment
 from apps.progress import selectors as progress_selectors
 from apps.progress.models import StageProgress
 from apps.progress.services import lab_experiments
@@ -73,27 +74,33 @@ def lab_title(attempt) -> str:
     return f"{spec.number}. {spec.title}" if spec else attempt.experiment_key
 
 
-def _attention(ids, progress, plans_by_enrollment, inactive) -> dict[int, list[str]]:
-    """{enrollment_id: [reason, …]} — what the teacher should look at (ARCHITECTURE §8 «struggling students»)."""
+# the kinds of attention reasons (the dashboard groups a student's reasons by kind)
+EXHAUSTED, FAILED, SAFETY, INACTIVE = "exhausted", "failed", "safety", "inactive"
+
+
+def _attention(ids, progress, plans_by_enrollment, inactive) -> dict[int, list[tuple[str, str]]]:
+    """{enrollment_id: [(kind, reason), …]} — what the teacher should look at (ARCHITECTURE §8 «struggling
+    students»)."""
     reasons = {pk: [] for pk in ids}
     for pk, by_stage in progress.items():
         for stage in plans_by_enrollment[pk].stages:
             sp = by_stage.get(stage.pk)
             if sp and sp.needs_attention:
-                reasons[pk].append(_("«%(stage)s»: passed only because the attempts ran out") % {"stage": stage.title})
+                text = _("«%(stage)s»: passed only because the attempts ran out") % {"stage": stage.title}
+                reasons[pk].append((EXHAUSTED, text))
     for row in quiz_selectors.repeated_failures(ids):
-        reasons[row["enrollment_id"]].append(
+        reasons[row["enrollment_id"]].append((FAILED,
             ngettext("Failed «%(quiz)s» %(n)s time", "Failed «%(quiz)s» %(n)s times", row["n"])
             % {"quiz": row["quiz__title"], "n": row["n"]}
-        )
+        ))  # fmt: skip
     for attempt in lab_selectors.risky_attempts(ids):
-        reasons[attempt.enrollment_id].append(
+        reasons[attempt.enrollment_id].append((SAFETY,
             ngettext("%(n)s safety warning in «%(exp)s»", "%(n)s safety warnings in «%(exp)s»", attempt.safety_warnings)
             % {"n": attempt.safety_warnings, "exp": lab_title(attempt)}
-        )
+        ))  # fmt: skip
     for pk, days in inactive.items():
         if days is not None and days >= INACTIVE_DAYS:
-            reasons[pk].append(ngettext("%(n)s day inactive", "%(n)s days inactive", days) % {"n": days})
+            reasons[pk].append((INACTIVE, ngettext("%(n)s day inactive", "%(n)s days inactive", days) % {"n": days}))
     return reasons
 
 
@@ -159,10 +166,25 @@ def student_rows(enrollments, now=None) -> list[dict]:
                 "errors": errors.get(e.pk),
                 "last": last.get(e.pk),
                 "inactive_days": inactive[e.pk],
-                "attention": attention[e.pk],
+                "attention": [text for _kind, text in attention[e.pk]],
+                "attention_kinds": [kind for kind, _text in attention[e.pk]],
             }
         )
     return rows
+
+
+def attention_students(rows) -> list[dict]:
+    """The dashboard's «Needs attention»: one item per student — their reasons and how many of each kind — the
+    students with the most reasons first."""
+    items = []
+    for r in rows:
+        if not r["attention"]:
+            continue
+        counts = {}
+        for kind in r["attention_kinds"]:
+            counts[kind] = counts.get(kind, 0) + 1
+        items.append({"row": r, "reasons": r["attention"], "counts": counts, "total": len(r["attention"])})
+    return sorted(items, key=lambda i: (-i["total"], i["row"]["student"].full_name))
 
 
 def filter_rows(rows, q="", show=""):
@@ -202,6 +224,9 @@ def group_summaries(groups, rows) -> list[dict]:
                 "courses": [link.course for link in g.course_links.select_related("course")],
                 "progress": mean(r["share"] for r in members),
                 "score": mean(r["score"] for r in members),
+                "completed": sum(1 for r in members if r["enrollment"].status == Enrollment.Status.COMPLETED),
+                "attention": sum(1 for r in members if r["attention"]),
+                "icpai_done": ProgrammeEnrollment.objects.filter(group=g, completed_at__isnull=False).count(),
             }
         )
     return summaries
@@ -222,7 +247,11 @@ def dashboard(user) -> dict:
             first_topic = plan.stages[0].topic
             same = [e.pk for e in enrollments if e.course_id == main_course.pk]
             first_topic_share = Decimal(progress_selectors.completed_topic_counts(same, first_topic)) / len(same) * 100
-    attention = [(r, reason) for r in rows for reason in r["attention"]]
+    attention = attention_students(rows)
+    kinds = {}
+    for item in attention:
+        for kind in item["counts"]:
+            kinds[kind] = kinds.get(kind, 0) + 1
     groups = course_selectors.teacher_groups(user).filter(is_active=True).order_by("name")
     active_series = progress_selectors.active_students_by_day(ids, 7)
     return {
@@ -239,8 +268,9 @@ def dashboard(user) -> dict:
         "queue": queue[:5],
         "queue_count": len(queue),
         "queue_oldest_days": (now - queue[0].submitted_at).days if queue else None,
-        "attention": attention[:6],
+        "attention": attention,
         "attention_count": len(attention),
+        "attention_kinds": kinds,  # kind → students
         "groups": group_summaries(groups, rows),
     }
 

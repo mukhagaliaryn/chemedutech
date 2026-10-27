@@ -1,0 +1,37 @@
+{% load i18n %}{% comment %}
+A YouTube video with the platform's own controls (inside a videoTracker, ui/static/js/stage.js): the player is
+loaded without its controls and cannot be clicked, so its title, logo and «Watch on YouTube» lead nowhere — the
+student stays on the platform. Before the start and after the end the video's own picture covers the player (its
+title bar and suggestions stay hidden). Play / pause (also a click on the picture or Space), the time, a seek bar,
+sound and full screen. video_id — the YouTube id; title — the accessible name of the video.
+{% endcomment %}
+<div class="vp aspect-video" x-ref="box" @mousemove="wake()" @keydown.space.prevent="toggle()" @keydown.k.prevent="toggle()" tabindex="-1">
+  <div class="vp-frame"><div x-ref="youtube" class="size-full"></div></div>
+  <button type="button" class="vp-shield" @click="toggle()" :aria-label="playing ? '{% translate "Pause" %}' : '{% translate "Play" %}'"></button>
+  <div class="vp-poster pointer-events-none" x-show="!started" x-transition.opacity.duration.300ms>
+    <img src="https://i.ytimg.com/vi/{{ video_id }}/hqdefault.jpg" alt="" class="absolute inset-0 size-full object-cover" loading="lazy">
+    <span class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgb(13_33_73/0.2),rgb(13_33_73/0.6))]"></span>
+    <span class="pulse relative grid size-20 place-items-center rounded-full bg-white text-primary-600 shadow-[0_12px_30px_rgb(0_0_0/0.3)]">
+      <span x-show="!ended">{% include "components/icons.html#play" with size=30 icon_class="translate-x-0.5" %}</span>
+      <span x-show="ended" x-cloak>{% include "components/icons.html#retry" with size=30 %}</span>
+    </span>
+  </div>
+  <div class="vp-bar" :class="playing && idle && 'opacity-0'" x-show="ready" x-cloak>
+    <button type="button" class="vp-btn" @click="toggle()" :aria-label="playing ? '{% translate "Pause" %}' : '{% translate "Play" %}'">
+      <span x-show="!playing">{% include "components/icons.html#play" with size=18 %}</span>
+      <span x-show="playing" x-cloak>{% include "components/icons.html#pause" with size=18 %}</span>
+    </button>
+    <span class="num w-[92px] shrink-0 text-[13px] font-semibold tabular-nums" x-text="`${clock(current)} / ${clock(duration)}`">0:00 / 0:00</span>
+    <div class="vp-track" @click="seek($event)" role="slider" aria-label="{% translate 'Position in the video' %}" tabindex="0"
+         :aria-valuenow="Math.round(current)" aria-valuemin="0" :aria-valuemax="Math.round(duration)" :aria-valuetext="clock(current)"
+         @keydown.right.prevent="skip(5)" @keydown.left.prevent="skip(-5)">
+      <span :style="`width: ${duration ? (current / duration) * 100 : 0}%`"></span>
+    </div>
+    <button type="button" class="vp-btn" @click="toggleMute()" :aria-label="muted ? '{% translate "Sound on" %}' : '{% translate "Sound off" %}'">
+      <span x-show="!muted">{% include "components/icons.html#volume" with size=18 %}</span>
+      <span x-show="muted" x-cloak>{% include "components/icons.html#volume-x" with size=18 %}</span>
+    </button>
+    <button type="button" class="vp-btn" @click="fullscreen()" aria-label="{% translate 'Full screen' %}">{% include "components/icons.html#maximize" with size=18 %}</button>
+  </div>
+</div>
+<span class="sr-only">{{ title }}</span>

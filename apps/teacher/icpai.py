@@ -37,6 +37,10 @@ DETAIL_LABELS = {
 }  # fmt: skip
 
 
+# the review queue of each section (teacher/practice.waiting_counts keys)
+QUEUE_SECTIONS = {"practice": 5, "micro": 6, "portfolio": 7, "independent": 8}
+
+
 def _programme(user) -> Programme | None:
     return (
         Programme.objects.filter(course__in=course_selectors.teacher_courses(user), is_active=True)
@@ -72,6 +76,25 @@ def dashboard_block(request) -> dict | None:
             mean = sum(float(m.percent) for m in marks if m) / len(students)
             cells.append({"section": section, "passed": passed, "mean": mean, "share": passed * 100 / len(students)})
         group_rows.append({"group": group, "students": len(students), "cells": cells})
+    queues = [
+        {"what": what, "n": n, "url": practice.section_url(request, what)}
+        for what, n in practice.waiting_counts(request).items()
+    ]
+    waiting = {QUEUE_SECTIONS[q["what"]]: q for q in queues}
+    students = [s for group in groups for s in by_group.get(group.pk, [])]
+    cards = []
+    for i, section in enumerate(sections):
+        marks = [progress[s.pk][i]["progress"] for s in students]
+        passed = sum(1 for m in marks if m and m.status == S.PASSED)
+        cards.append({
+            "section": section, "passed": passed, "students": len(students),
+            "share": passed * 100 / len(students) if students else 0,
+            "mean": sum(float(m.percent) for m in marks if m) / len(students) if students else 0,
+            "waiting": waiting.get(section.number),
+        })  # fmt: skip
+    finished = sum(
+        1 for s in students if all(c["progress"] and c["progress"].status == S.PASSED for c in progress[s.pk])
+    )
     today = timezone.localdate()
     deadlines = (
         SectionSchedule.objects.filter(group__in=groups, section__programme=programme)
@@ -83,10 +106,11 @@ def dashboard_block(request) -> dict | None:
         "programme": programme,
         "sections": sections,
         "group_rows": group_rows,
-        "queues": [
-            {"what": what, "n": n, "url": practice.section_url(request, what)}
-            for what, n in practice.waiting_counts(request).items()
-        ],
+        "cards": cards,
+        "students": len(students),
+        "finished": finished,
+        "waiting_total": sum(q["n"] for q in queues),
+        "queues": queues,
         "deadlines": list(deadlines),
         "today": today,
     }

@@ -607,6 +607,20 @@ class VideoSectionTests(Base):
         self.assertContains(r, "dQw4w9WgXcQ")
         self.assertContains(r, reverse("student:section_watch", args=[3]))
         self.assertContains(r, "js/stage.js")
+        self.assertContains(r, "vp-shield")  # the platform's own controls over the player
+        self.assertContains(r, 'data-open-modal="ai-dialog"')  # «Let the AI explain» as the floating button
+
+    def test_the_teacher_watches_it_on_the_platform(self):
+        SectionVideo.objects.create(section=self.video_section, url="https://youtu.be/dQw4w9WgXcQ")
+        teacher = User.objects.create_user("ta", "ta@example.kz", "x", role=User.Role.TEACHER)
+        CourseTeacher.objects.create(course=self.course, teacher=teacher)
+        self.client.force_login(teacher)
+        r = self.client.get(reverse("teacher:section", args=[3]))
+        self.assertContains(r, 'data-open-modal="section-video"')
+        self.assertContains(r, "videoTracker({ provider: 'youtube', id: 'dQw4w9WgXcQ'")
+        self.assertContains(r, "js/stage.js")
+        self.assertNotContains(r, 'href="https://youtu.be/')  # no link away to YouTube
+        self.assertNotContains(r, "youtube.com/watch")
 
     def test_locked_or_wrong_section(self):
         SectionVideo.objects.create(section=self.video_section, url="https://youtu.be/dQw4w9WgXcQ")
