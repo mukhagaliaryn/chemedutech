@@ -27,8 +27,8 @@ def pdf(request, code):
     certificate = selectors.by_code(code)
     if certificate is None or not _may_download(request.user, certificate):
         raise Http404
-    if not certificate.pdf:
-        services.render_pdf(certificate)  # the background task has not run yet
+    if not certificate.pdf or not certificate.pdf.storage.exists(certificate.pdf.name):
+        services.render_pdf(certificate)  # the background task has not run yet, or the file was lost
     return FileResponse(
         certificate.pdf.open("rb"), filename=f"{certificate.number}.pdf", content_type="application/pdf"
     )

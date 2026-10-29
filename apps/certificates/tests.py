@@ -123,6 +123,17 @@ class CertificateTests(TestCase):
         self.client.force_login(teacher)
         self.assertEqual(self.client.get(url).status_code, 200)
 
+    def test_pdf_file_lost(self):
+        """The record points to a file that is no longer on disk — the PDF is made again."""
+        self.pass_course(self.enrollment)
+        cert = services.render_pdf(services.issue_for(self.enrollment))
+        cert.pdf.storage.delete(cert.pdf.name)
+        self.client.force_login(self.student)
+        r = self.client.get(reverse("certificates:pdf", args=[cert.verification_code]))
+        self.assertEqual(b"".join(r.streaming_content)[:4], b"%PDF")
+        cert.refresh_from_db()
+        self.assertTrue(cert.pdf.storage.exists(cert.pdf.name))
+
     def test_student_page(self):
         self.pass_course(self.enrollment)
         cert = services.issue_for(self.enrollment)
