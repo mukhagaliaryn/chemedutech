@@ -48,9 +48,9 @@ def feedback_rows(feedback) -> list[dict]:
     ]
 
 
-def portfolio_context(enrollment, user) -> dict:
+def portfolio_context(enrollment, user, portfolio=None) -> dict:
     """The section page's part (image24)."""
-    portfolio = portfolio_services.portfolio_of(enrollment)
+    portfolio = portfolio or portfolio_services.portfolio_of(enrollment)
     answers = portfolio_selectors.reflection_answers(enrollment)
     feedback = portfolio.feedbacks.select_related("teacher").first()
     return {
@@ -80,6 +80,16 @@ def portfolio(request):
     return redirect("student:section", section.number)
 
 
+def reflection_context(enrollment, section, portfolio) -> dict:
+    answers = portfolio_selectors.reflection_answers(enrollment)
+    return {
+        "programme": enrollment.programme, "section": section, "portfolio": portfolio,
+        "rows": [{"key": k, "question": q, "answer": answers.get(k, ""),
+                  "mark": _check_rows(portfolio)["items"].get(f"q{k}")} for k, q in QUESTIONS],
+        "feedback": portfolio.feedbacks.first(),
+    }  # fmt: skip
+
+
 @role_required(STUDENT)
 def reflection(request):
     """«My professional reflection» (@S7 IV): seven questions, «Save the reflection»; the AI writes none."""
@@ -94,13 +104,16 @@ def reflection(request):
             messages.success(request, _("The reflection is saved to your portfolio."))
             return redirect("student:section", section.number)
         return redirect("student:portfolio_reflection")
-    answers = portfolio_selectors.reflection_answers(enrollment)
-    return render(request, "student/portfolio/reflection.html", {
+    return render(request, "student/portfolio/reflection.html", reflection_context(enrollment, section, portfolio))
+
+
+def plan_context(enrollment, section, portfolio) -> dict:
+    marks = _check_rows(portfolio)["items"]
+    return {
         "programme": enrollment.programme, "section": section, "portfolio": portfolio,
-        "rows": [{"key": k, "question": q, "answer": answers.get(k, ""),
-                  "mark": _check_rows(portfolio)["items"].get(f"q{k}")} for k, q in QUESTIONS],
-        "feedback": portfolio.feedbacks.first(),
-    })  # fmt: skip
+        "rows": [{**r, "mark": marks.get(r["direction"])} for r in portfolio_selectors.plan_rows(enrollment)],
+        "works": portfolio_selectors.works(enrollment),
+    }  # fmt: skip
 
 
 @role_required(STUDENT)
@@ -127,12 +140,7 @@ def plan(request):
         except portfolio_services.PortfolioError:
             messages.error(request, _("The portfolio is with the teacher now and cannot be changed."))
         return redirect("student:portfolio_plan")
-    marks = _check_rows(portfolio)["items"]
-    return render(request, "student/portfolio/plan.html", {
-        "programme": enrollment.programme, "section": section, "portfolio": portfolio,
-        "rows": [{**r, "mark": marks.get(r["direction"])} for r in portfolio_selectors.plan_rows(enrollment)],
-        "works": portfolio_selectors.works(enrollment),
-    })  # fmt: skip
+    return render(request, "student/portfolio/plan.html", plan_context(enrollment, section, portfolio))
 
 
 @require_POST
@@ -214,6 +222,14 @@ def sheet_context(version) -> dict:
     return {"version": version, "data": version.snapshot, "parts": PARTS, "feedback_directions": FEEDBACK_DIRECTIONS}
 
 
+def view_context(enrollment, section, portfolio, version) -> dict:
+    return {
+        "programme": enrollment.programme, "section": section, "portfolio": portfolio,
+        "versions": list(portfolio.versions.order_by("-number")), "current": portfolio_services.is_current(portfolio),
+        **sheet_context(version),
+    }  # fmt: skip
+
+
 @role_required(STUDENT)
 def view(request):
     """«View the portfolio»: the assembled version in its ten parts."""
@@ -222,11 +238,7 @@ def view(request):
     version = _version(portfolio, request)
     if version is None:
         return redirect("student:section", section.number)
-    return render(request, "student/portfolio/view.html", {
-        "programme": enrollment.programme, "section": section, "portfolio": portfolio,
-        "versions": list(portfolio.versions.order_by("-number")), "current": portfolio_services.is_current(portfolio),
-        **sheet_context(version),
-    })  # fmt: skip
+    return render(request, "student/portfolio/view.html", view_context(enrollment, section, portfolio, version))
 
 
 @role_required(STUDENT)

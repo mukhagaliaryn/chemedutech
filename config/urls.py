@@ -19,6 +19,7 @@ urlpatterns = [
     path("certificates/", include("apps.certificates.urls")),
     path("quiz/", include("apps.assessments.urls")),
     path("research/", RedirectView.as_view(pattern_name="research:dashboard", permanent=False, query_string=True)),
+    path("teacher/preview/", include("apps.student.preview.urls", namespace="student_preview")),
     path("teacher/", include("apps.research.urls")),
     path("teacher/", include("apps.teacher.urls")),
     path("ui/", include("ui.urls")),

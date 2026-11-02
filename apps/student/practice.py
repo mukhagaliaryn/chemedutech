@@ -116,6 +116,18 @@ def practice_start(request, number, code):
     return redirect("student:practice", section.number, lesson.pk)
 
 
+def sheet_context(enrollment, section, lesson) -> dict:
+    context = _base(enrollment, section, lesson)
+    context.update({"grades": pedagogy.practice.GRADES, "problems": pedagogy.sheet_problems(lesson)})
+    if lesson.source_lesson:
+        version = lesson.source_lesson.versions.order_by("-number").first()
+        context["source_rows"] = pedagogy_selectors.timeline(list(lesson.source_lesson.stages.all()))
+        context["source_version"] = version
+        designer = Section.objects.filter(programme=enrollment.programme, kind=Section.Kind.DESIGNER).first()
+        context["designer_number"] = designer.number if designer else None
+    return context
+
+
 @role_required(STUDENT)
 def practice(request, number, pk):
     """Part I of the sheet: the lesson's details; the structure of the eight stages; the section 4 lesson as source."""
@@ -128,15 +140,7 @@ def practice(request, number, pk):
         else:
             messages.success(request, _("Saved"))
         return redirect("student:practice", section.number, lesson.pk)
-    context = _base(enrollment, section, lesson)
-    context.update({"grades": pedagogy.practice.GRADES, "problems": pedagogy.sheet_problems(lesson)})
-    if lesson.source_lesson:
-        version = lesson.source_lesson.versions.order_by("-number").first()
-        context["source_rows"] = pedagogy_selectors.timeline(list(lesson.source_lesson.stages.all()))
-        context["source_version"] = version
-        designer = Section.objects.filter(programme=enrollment.programme, kind=Section.Kind.DESIGNER).first()
-        context["designer_number"] = designer.number if designer else None
-    return render(request, "student/practice/sheet.html", context)
+    return render(request, "student/practice/sheet.html", sheet_context(enrollment, section, lesson))
 
 
 def _ai_panel(request, section, lesson, stage, error="") -> dict:
@@ -156,11 +160,7 @@ def _ai_panel(request, section, lesson, stage, error="") -> dict:
     }
 
 
-@role_required(STUDENT)
-def practice_stage(request, number, pk, order):
-    """Part II: one of the eight stages — its minutes and aim, its fields (saved by themselves), the AI assistant."""
-    enrollment, section, lesson = _practice(request, number, pk)
-    stage = get_object_or_404(LessonStage, lesson=lesson, order=order)
+def stage_page_context(request, enrollment, section, lesson, stage) -> dict:
     spec = frames.stage_spec(FRAME, stage.key)
     fields = pedagogy_selectors.stage_fields(stage)
     context = _base(enrollment, section, lesson)
@@ -189,6 +189,15 @@ def practice_stage(request, number, pk, order):
         },
     })  # fmt: skip
     context.update(_ai_panel(request, section, lesson, stage))
+    return context
+
+
+@role_required(STUDENT)
+def practice_stage(request, number, pk, order):
+    """Part II: one of the eight stages — its minutes and aim, its fields (saved by themselves), the AI assistant."""
+    enrollment, section, lesson = _practice(request, number, pk)
+    stage = get_object_or_404(LessonStage, lesson=lesson, order=order)
+    context = stage_page_context(request, enrollment, section, lesson, stage)
     return render(request, "student/practice/stage.html", context)
 
 
@@ -251,6 +260,16 @@ def practice_stage_ai(request, number, pk, order):
 # --- IV «Try the lesson out» — stage by stage --------------------------------------------------------------------
 
 
+def trial_start_context(enrollment, section, lesson) -> dict:
+    context = _base(enrollment, section, lesson)
+    context.update({
+        "levels": TRIAL_LEVELS,
+        "grades": pedagogy.practice.GRADES,
+        "problems": pedagogy.sheet_problems(lesson),
+    })  # fmt: skip
+    return context
+
+
 @role_required(STUDENT)
 def practice_trial(request, number, pk):
     """The class and the AI student's level (GET), then the trial starts (POST); an unfinished trial goes on."""
@@ -274,17 +293,33 @@ def practice_trial(request, number, pk):
         order = pedagogy.current_order(trial)
         if order:
             return redirect("student:practice_step", section.number, lesson.pk, trial.pk, order)
-    context = _base(enrollment, section, lesson)
-    context.update({
-        "levels": TRIAL_LEVELS,
-        "grades": pedagogy.practice.GRADES,
-        "problems": pedagogy.sheet_problems(lesson),
-    })  # fmt: skip
-    return render(request, "student/practice/trial_start.html", context)
+    return render(request, "student/practice/trial_start.html", trial_start_context(enrollment, section, lesson))
 
 
 def _trial(lesson, trial_pk) -> Trial:
     return get_object_or_404(lesson.trials.select_related("version"), pk=trial_pk, mode=Trial.Mode.STEPWISE)
+
+
+def step_context(request, enrollment, section, lesson, trial, stage, turn, error="") -> dict:
+    stages = trial.version.snapshot["stages"]
+    current = pedagogy.current_order(trial)
+    done = {t.stage_order: t for t in trial.turns.filter(analysed_at__isnull=False)}
+    context = _base(enrollment, section, lesson)
+    context.update({
+        "trial": trial,
+        "stage": stage,
+        "spec": frames.stage_spec(FRAME, stage.get("key", "")),
+        "stage_fields": frames.stage_spec(FRAME, stage.get("key", "")).fields,
+        "trial_stages": [{**s, "done": s["order"] in done, "open": current is None or s["order"] <= current}
+                         for s in stages],
+        "turn": turn,
+        "prefill": pedagogy.prefill(stage),
+        "error": error,
+        "ai_enabled": ai.enabled(),
+        "remaining": ai.remaining_today(request.user),
+        "is_last": stage["order"] == stages[-1]["order"],
+    })  # fmt: skip
+    return context
 
 
 @role_required(STUDENT)
@@ -328,23 +363,15 @@ def practice_step(request, number, pk, trial_pk, order):
         except pedagogy.LessonError as exc:
             error = str(exc)
         turn = trial.turns.filter(stage_order=order).first()
-    done = {t.stage_order: t for t in trial.turns.filter(analysed_at__isnull=False)}
-    context = _base(enrollment, section, lesson)
-    context.update({
-        "trial": trial,
-        "stage": stage,
-        "spec": frames.stage_spec(FRAME, stage.get("key", "")),
-        "stage_fields": frames.stage_spec(FRAME, stage.get("key", "")).fields,
-        "trial_stages": [{**s, "done": s["order"] in done, "open": current is None or s["order"] <= current}
-                         for s in stages],
-        "turn": turn,
-        "prefill": pedagogy.prefill(stage),
-        "error": error,
-        "ai_enabled": ai.enabled(),
-        "remaining": ai.remaining_today(request.user),
-        "is_last": order == stages[-1]["order"],
-    })  # fmt: skip
+    context = step_context(request, enrollment, section, lesson, trial, stage, turn, error)
     return render(request, "student/practice/step.html", context)
+
+
+def results_context(enrollment, section, lesson, trial) -> dict:
+    context = _base(enrollment, section, lesson)
+    context.update(_report(lesson, trial))
+    context["open_stage"] = pedagogy.current_order(trial)
+    return context
 
 
 @role_required(STUDENT)
@@ -355,10 +382,7 @@ def practice_results(request, number, pk):
     trial = lesson.trials.filter(mode=Trial.Mode.STEPWISE).select_related("version").first()
     if trial is None:
         return redirect("student:practice_trial", section.number, lesson.pk)
-    context = _base(enrollment, section, lesson)
-    context.update(_report(lesson, trial))
-    context["open_stage"] = pedagogy.current_order(trial)
-    return render(request, "student/practice/results.html", context)
+    return render(request, "student/practice/results.html", results_context(enrollment, section, lesson, trial))
 
 
 def _report(lesson, trial) -> dict:

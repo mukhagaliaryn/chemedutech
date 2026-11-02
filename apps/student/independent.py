@@ -74,9 +74,13 @@ def _trial_rows(user) -> list[dict]:
 
 
 def independent_context(enrollment, section, user) -> dict:
+    schedules.notify_task_once(user)
+    return home_context(enrollment, section, user)
+
+
+def home_context(enrollment, section, user) -> dict:
     """The section page's part: the next professional stage, the deadlines, the lessons (cycles), the notifications,
     the trial results and their dynamics."""
-    schedules.notify_task_once(user)
     dynamics = programme_selectors.component_dynamics(enrollment)
     latest = [r for r in dynamics if r["latest"] is not None]
     weakest = min(latest, key=lambda r: r["latest"])["component"] if latest else None
@@ -112,7 +116,7 @@ def start(request):
     return redirect("student:independent", lesson.pk)
 
 
-def _editor_context(request, enrollment, section, lesson, stage) -> dict:
+def editor_context(request, enrollment, section, lesson, stage) -> dict:
     stages = pedagogy_selectors.timeline(list(lesson.stages.all()))
     reviews = list(lesson.expert_reviews.filter(kind=ExpertReview.Kind.DRAFT)[:5])
     context = {
@@ -159,7 +163,7 @@ def lesson(request, pk, order=None):
     elif lesson.stages.exists():
         stage = lesson.stages.order_by("order").first()
     return render(
-        request, "student/independent/editor.html", _editor_context(request, enrollment, section, lesson, stage)
+        request, "student/independent/editor.html", editor_context(request, enrollment, section, lesson, stage)
     )
 
 
@@ -258,6 +262,20 @@ def trial_start(request, pk):
     return redirect("student:independent_step", lesson.pk, trial.pk, 1)
 
 
+def step_context(request, enrollment, section, lesson, trial, stage, turn, error="") -> dict:
+    stages = trial.version.snapshot["stages"]
+    current = pedagogy.current_order(trial)
+    done = {t.stage_order for t in trial.turns.filter(analysed_at__isnull=False)}
+    return {
+        "programme": enrollment.programme, "section": section, "lesson": lesson, "trial": trial, "stage": stage,
+        "spec": None, "stage_fields": frames.FREE,
+        "trial_stages": [{**s, "done": s["order"] in done, "open": current is None or s["order"] <= current} for s in stages],
+        "turn": turn, "prefill": pedagogy.prefill(stage), "error": error, "ai_enabled": ai.enabled(),
+        "remaining": ai.remaining_today(request.user), "is_last": stage["order"] == stages[-1]["order"],
+        "step_url": "student:independent_step", "results_url": reverse("student:independent_trial", args=[lesson.pk, trial.pk]),
+    }  # fmt: skip
+
+
 @role_required(STUDENT)
 def step(request, pk, trial_pk, order):
     """One stage of the trial — the same six steps as section 5 (student/practice/step.html)."""
@@ -297,15 +315,19 @@ def step(request, pk, trial_pk, order):
         except pedagogy.LessonError as exc:
             error = str(exc)
         turn = trial.turns.filter(stage_order=order).first()
-    done = {t.stage_order for t in trial.turns.filter(analysed_at__isnull=False)}
-    return render(request, "student/practice/step.html", {
-        "programme": enrollment.programme, "section": section, "lesson": lesson, "trial": trial, "stage": stage,
-        "spec": None, "stage_fields": frames.FREE,
-        "trial_stages": [{**s, "done": s["order"] in done, "open": current is None or s["order"] <= current} for s in stages],
-        "turn": turn, "prefill": pedagogy.prefill(stage), "error": error, "ai_enabled": ai.enabled(),
-        "remaining": ai.remaining_today(request.user), "is_last": order == stages[-1]["order"],
-        "step_url": "student:independent_step", "results_url": reverse("student:independent_trial", args=[lesson.pk, trial.pk]),
-    })  # fmt: skip
+    context = step_context(request, enrollment, section, lesson, trial, stage, turn, error)
+    return render(request, "student/practice/step.html", context)
+
+
+def trial_context(enrollment, section, lesson, trial) -> dict:
+    review = trial.expert_reviews.first()
+    grade = Review.objects.filter(trial=trial).first()
+    return {
+        "programme": enrollment.programme, "section": section, "lesson": lesson, "trial": trial,
+        "turns": list(trial.turns.order_by("stage_order")), "review": review, "grade": grade,
+        "directions": ExpertReview.TRIAL_DIRECTIONS, "open_stage": pedagogy.current_order(trial) if not trial.finished_at else None,
+        "ai_enabled": ai.enabled(), "steps": STEPS,
+    }  # fmt: skip
 
 
 @role_required(STUDENT)
@@ -315,14 +337,7 @@ def trial(request, pk, trial_pk):
     lesson."""
     enrollment, section, lesson = _lesson(request, pk)
     trial = get_object_or_404(lesson.trials.select_related("version", "recorded_by"), pk=trial_pk)
-    review = trial.expert_reviews.first()
-    grade = Review.objects.filter(trial=trial).first()
-    return render(request, "student/independent/trial.html", {
-        "programme": enrollment.programme, "section": section, "lesson": lesson, "trial": trial,
-        "turns": list(trial.turns.order_by("stage_order")), "review": review, "grade": grade,
-        "directions": ExpertReview.TRIAL_DIRECTIONS, "open_stage": pedagogy.current_order(trial) if not trial.finished_at else None,
-        "ai_enabled": ai.enabled(), "steps": STEPS,
-    })  # fmt: skip
+    return render(request, "student/independent/trial.html", trial_context(enrollment, section, lesson, trial))
 
 
 @require_POST

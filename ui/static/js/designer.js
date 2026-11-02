@@ -58,8 +58,10 @@ document.addEventListener("alpine:init", () => {
         if (!response.ok) throw new Error(String(response.status));
         const data = await response.json();
         if (this.inserted === inserted) this.inserted = null;
-        this.total = data.minutes_total;
-        this.edited = data.edited;
+        if (!data.preview) {
+          this.total = data.minutes_total;
+          this.edited = data.edited;
+        }
         if (this.state === "saving") this.state = "saved";
       } catch {
         this.state = "failed";

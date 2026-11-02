@@ -51,6 +51,7 @@ the section's teacher page; then «Work» and «Analysis». Collapses like the s
           <span class="nav-tip" role="tooltip">{{ r.section.number }}. {{ r.section.title }}</span>
         </a>
       {% endfor %}
+      {% translate "Preview" as l %}{% include "components/nav_item.html" with url_name="student_preview:dashboard" match="student_preview:" icon="eye" label=l %}
     </nav>
   {% endif %}
 

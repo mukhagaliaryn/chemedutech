@@ -2,7 +2,7 @@
 {% load i18n static %}
 {% comment %}
 An ICPAI section for the teacher (STEP-41), opened from the sidebar: the header (number, title, the guide's purpose,
-the share of the active group's students who passed), the figures, the section's own block (teacher/sections/
+«Preview» — the section as a student sees it, the share of the active group's students who passed), the figures, the section's own block (teacher/sections/
 partials/<kind>.html: the course, the diagnostics, the video, the template lessons or the review queue with the
 section 8 dates) and every student's progress in the section. Context: apps/teacher/sections.py section.
 {% endcomment %}
@@ -25,6 +25,7 @@ section 8 dates) and every student's progress in the section. Context: apps/teac
       <p class="mt-1.5 text-[14px] leading-[22px] whitespace-pre-line text-ink-soft">{{ section.purpose }}</p>
     </details>
   </div>
+  <a class="btn btn-secondary relative" href="{% url 'student_preview:section' section.number %}">{% include "components/icons.html#eye" %}{% translate "Preview" %}</a>
   {% blocktranslate with a=figures.passed b=figures.total asvar state %}passed {{ a }} of {{ b }}{% endblocktranslate %}
   <span class="relative flex flex-col items-center gap-1">
     {% include "components/ring.html" with value=figures.share size=76 stroke=8 label=state color="stroke-success-600" track="stroke-success-50" %}

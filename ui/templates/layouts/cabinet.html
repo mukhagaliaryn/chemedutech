@@ -70,6 +70,7 @@ or narrows the content column (default max-w-[1280px]).
         </div>
       </div>
     </header>
+    {% block notice %}{% endblock %}
 
     <main id="main" class="mx-auto flex w-full flex-col gap-5 px-[clamp(16px,3vw,40px)] pt-7 pb-14 {% block main_class %}max-w-[1280px]{% endblock %}">
       {% block content %}{% endblock %}

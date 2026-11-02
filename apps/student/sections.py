@@ -121,6 +121,23 @@ def _diagnostic(request, number, phase):
     return enrollment, section, test
 
 
+def diagnostic_context(enrollment, section, test, rows) -> dict:
+    row = next(r for r in rows if r["test"].pk == test.pk)
+    following = next((r for r in rows if r["test"].phase > test.phase), None)
+    summary = row["summary"]
+    return {
+        "programme": enrollment.programme,
+        "section": section,
+        "test": test,
+        "row": row,
+        "rows": rows,
+        "next_row": following,
+        "interpretation": test.levels.get(summary["level"], "") if summary else "",
+        "level_label": Level(summary["level"]).label if summary else "",
+        "question_count": test.quiz.questions.filter(is_active=True).count(),
+    }
+
+
 @role_required(STUDENT)
 def diagnostic(request, number, phase):
     """Intro (the guide's stage name, title, aim) → the single attempt (the usual test page, no answers shown) →
@@ -137,24 +154,7 @@ def diagnostic(request, number, phase):
             request, "assessments/take.html", take_context(test.quiz, attempt, submit_url, back_url, section.title)
         )
     rows = programme_selectors.diagnostic_rows(enrollment, section)
-    row = next(r for r in rows if r["test"].pk == test.pk)
-    following = next((r for r in rows if r["test"].phase > test.phase), None)
-    summary = row["summary"]
-    return render(
-        request,
-        "student/diagnostic.html",
-        {
-            "programme": enrollment.programme,
-            "section": section,
-            "test": test,
-            "row": row,
-            "rows": rows,
-            "next_row": following,
-            "interpretation": test.levels.get(summary["level"], "") if summary else "",
-            "level_label": Level(summary["level"]).label if summary else "",
-            "question_count": test.quiz.questions.filter(is_active=True).count(),
-        },
-    )
+    return render(request, "student/diagnostic.html", diagnostic_context(enrollment, section, test, rows))
 
 
 @require_POST
@@ -184,27 +184,29 @@ def diagnostic_submit(request, number, phase, attempt_id):
 # --- «Results» (guide @S7 II, SPEC §3.3): ICPAI components × stages -----------------------------------------
 
 
+def results_context(enrollment, user, stages=None) -> dict:
+    section = programme_selectors.diagnostic_section(enrollment.programme)
+    rows = programme_selectors.component_dynamics(enrollment)
+    if stages is None:
+        stages = programme_selectors.diagnostic_rows(enrollment, section) if section else []
+    return {
+        "programme": enrollment.programme,
+        "rows": rows,
+        "phases": ("I", "II", "III"),
+        "taken": any(v is not None for r in rows for v in r["phases"].values()),
+        "section": section,
+        "stages": stages,
+        "practice_grades": practice.practice_grades(user),
+        "micro_grades": micro.micro_grades(user),
+    }
+
+
 @role_required(STUDENT)
 def results(request):
     enrollment = programme.refresh(request.user)
     if enrollment is None:
         raise Http404
-    section = programme_selectors.diagnostic_section(enrollment.programme)
-    rows = programme_selectors.component_dynamics(enrollment)
-    return render(
-        request,
-        "student/icpai_results.html",
-        {
-            "programme": enrollment.programme,
-            "rows": rows,
-            "phases": ("I", "II", "III"),
-            "taken": any(v is not None for r in rows for v in r["phases"].values()),
-            "section": section,
-            "stages": programme_selectors.diagnostic_rows(enrollment, section) if section else [],
-            "practice_grades": practice.practice_grades(request.user),
-            "micro_grades": micro.micro_grades(request.user),
-        },
-    )
+    return render(request, "student/icpai_results.html", results_context(enrollment, request.user))
 
 
 # --- section 3: the video (guide @S3; D72) ----------------------------------------------------------------

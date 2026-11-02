@@ -47,6 +47,7 @@
         <legend class="mb-3 p-0 text-[17px] leading-[26px] font-semibold">
           <span class="sr-only">{% blocktranslate with n=forloop.counter %}Question {{ n }}{% endblocktranslate %}. </span>
           {{ q.text|sanitize }}
+          {% if preview and q.component %}<span class="mt-2 block"><span class="badge badge-info text-[11px] font-bold">{{ q.get_component_display }}</span></span>{% endif %}
         </legend>
         {% if q.kind == "single" or q.kind == "multiple" %}
           {% if q.kind == "multiple" %}<p class="-mt-2 text-body-sm text-ink-soft">{% translate "Choose all correct options." %}</p>{% endif %}
@@ -54,6 +55,7 @@
             <label class="flex cursor-pointer items-center gap-3 rounded-md border border-line px-4 py-3.5 has-checked:border-2 has-checked:border-primary-600 has-checked:bg-primary-50 has-checked:px-[15px] has-checked:py-[13px]">
               <input type="{% if q.kind == 'single' %}radio{% else %}checkbox{% endif %}" name="q{{ q.pk }}" value="{{ opt.choice.pk }}" class="size-[18px] shrink-0">
               <span>{{ opt.choice.text|sanitize }}</span>
+              {% if preview and opt.choice.is_correct %}<span class="badge badge-success ml-auto shrink-0 text-[11px] font-bold">{% include "components/icons.html#check" with size=12 %}{% translate "Correct answer" %}</span>{% endif %}
             </label>
           {% endfor %}
         {% elif q.kind == "numeric" %}

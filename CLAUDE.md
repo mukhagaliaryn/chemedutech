@@ -30,6 +30,8 @@ the AI never writes a lesson stage, a reflection or a portfolio for the student 
   `Accept-Language` (see ARCHITECTURE §9.5).
 - A topic's stages are an ordered list of any length and any mix of kinds (typically 1 theory, 1 video, 1 lab,
   several practice works, 1 test). Never assume a single stage of a kind; gating follows list order.
+- The teacher's preview of the ICPAI sections (`apps/student/preview/`): the student's own pages on unsaved samples, never a write.
+  A new student page or route needs its entry in `preview/urls.py` `PAGES`, or it answers «not saved» there.
 - Practice works are auto-graded: exact fields by checkers (`assessments/chem.py` for formulas/equations),
   open answers by AI (`practice/services/ai_grading.py`, Anthropic SDK) — the AI grade is final, a teacher may change it. Never compare answers 1:1 as raw strings.
   Tests must mock the Anthropic client — no network in tests.

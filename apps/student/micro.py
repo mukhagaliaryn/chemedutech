@@ -110,19 +110,7 @@ def _stage_opts(request, section, stage) -> dict:
     }  # fmt: skip
 
 
-@role_required(STUDENT)
-def micro(request, number):
-    """The sheet: part I (POST saves it), the source part, the four stages with the checker's marks, the checker's
-    seven criteria, the trials and the way on."""
-    enrollment, section, lesson = _micro(request, number)
-    if request.method == "POST":
-        try:
-            pedagogy.save_micro_details(lesson, request.POST)
-        except pedagogy.LessonError:
-            messages.error(request, _("The final version cannot be changed."))
-        else:
-            messages.success(request, _("Saved"))
-        return redirect("student:micro", section.number)
+def editor_context(request, enrollment, section, lesson) -> dict:
     stages = list(lesson.stages.all())
     state = pedagogy.check_state(lesson)
     check = state["check"]
@@ -136,7 +124,7 @@ def micro(request, number):
             "opts": _stage_opts(request, section, stage), "opts_id": f"opts-{stage.order}",
             "verdict": check.stages.get(str(stage.order)) if check else None,
         })  # fmt: skip
-    return render(request, "student/micro/editor.html", {
+    return {
         "programme": enrollment.programme, "section": section, "lesson": lesson, "rows": rows, "state": state,
         "criteria": [{"key": k, "label": label, "verdict": check.criteria.get(k) if check else None}
                      for k, label in Check.CRITERIA],
@@ -144,7 +132,23 @@ def micro(request, number):
         "grades": pedagogy.practice.GRADES, "trials": _trials(lesson), "locked": lesson.status == Lesson.Status.FINAL,
         "open_trial": lesson.trials.filter(mode=Trial.Mode.DIALOG, finished_at__isnull=True).first(),
         "ai_enabled": ai.enabled(), "remaining": ai.remaining_today(request.user),
-    })  # fmt: skip
+    }  # fmt: skip
+
+
+@role_required(STUDENT)
+def micro(request, number):
+    """The sheet: part I (POST saves it), the source part, the four stages with the checker's marks, the checker's
+    seven criteria, the trials and the way on."""
+    enrollment, section, lesson = _micro(request, number)
+    if request.method == "POST":
+        try:
+            pedagogy.save_micro_details(lesson, request.POST)
+        except pedagogy.LessonError:
+            messages.error(request, _("The final version cannot be changed."))
+        else:
+            messages.success(request, _("Saved"))
+        return redirect("student:micro", section.number)
+    return render(request, "student/micro/editor.html", editor_context(request, enrollment, section, lesson))
 
 
 @require_POST
@@ -182,6 +186,13 @@ def micro_check(request, number):
     return redirect(f"{reverse('student:micro', args=[section.number])}#checker")
 
 
+def trial_start_context(enrollment, section, lesson) -> dict:
+    return {
+        "programme": enrollment.programme, "section": section, "lesson": lesson, "levels": TRIAL_LEVELS,
+        "grades": pedagogy.practice.GRADES, "state": pedagogy.check_state(lesson), "trials": _trials(lesson),
+    }  # fmt: skip
+
+
 @role_required(STUDENT)
 def micro_trial(request, number):
     """«Try it out»: the class and the AI student's level (GET), the trial starts (POST)."""
@@ -203,10 +214,7 @@ def micro_trial(request, number):
             )
             return redirect("student:micro_trial", section.number)
         return redirect("student:micro_dialog", section.number, trial.pk)
-    return render(request, "student/micro/trial_start.html", {
-        "programme": enrollment.programme, "section": section, "lesson": lesson, "levels": TRIAL_LEVELS,
-        "grades": pedagogy.practice.GRADES, "state": pedagogy.check_state(lesson), "trials": _trials(lesson),
-    })  # fmt: skip
+    return render(request, "student/micro/trial_start.html", trial_start_context(enrollment, section, lesson))
 
 
 def _dialog_context(request, section, lesson, trial, error="") -> dict:
@@ -217,6 +225,15 @@ def _dialog_context(request, section, lesson, trial, error="") -> dict:
         "left": max(0, pedagogy.DURATION_S - seconds), "stage": pedagogy.stage_at(seconds),
         "kinds": TrialMessage.Kind.choices, "ai_enabled": ai.enabled(),
     }  # fmt: skip
+
+
+def dialog_page_context(request, enrollment, section, lesson, trial) -> dict:
+    context = _dialog_context(request, section, lesson, trial)
+    context.update({
+        "programme": enrollment.programme, "number": pedagogy.trial_number(trial),
+        "rows": [{"stage": s, "spec": frames.stage_spec(FRAME, s["key"])} for s in trial.version.snapshot["stages"]],
+    })  # fmt: skip
+    return context
 
 
 @role_required(STUDENT)
@@ -230,12 +247,7 @@ def micro_dialog(request, number, trial_pk):
         pedagogy.finish_dialog(trial)
     if trial.finished_at:
         return redirect("student:micro_protocol", section.number, trial.pk)
-    context = _dialog_context(request, section, lesson, trial)
-    context.update({
-        "programme": enrollment.programme, "number": pedagogy.trial_number(trial),
-        "rows": [{"stage": s, "spec": frames.stage_spec(FRAME, s["key"])} for s in trial.version.snapshot["stages"]],
-    })  # fmt: skip
-    return render(request, "student/micro/dialog.html", context)
+    return render(request, "student/micro/dialog.html", dialog_page_context(request, enrollment, section, lesson, trial))
 
 
 @require_POST
@@ -272,6 +284,19 @@ def micro_finish(request, number, trial_pk):
     return redirect("student:micro_protocol", section.number, trial.pk)
 
 
+def protocol_context(enrollment, section, lesson, trial) -> dict:
+    review = Review.objects.filter(trial=trial).first()
+    trials = _trials(lesson)
+    return {
+        "programme": enrollment.programme, "section": section, "lesson": lesson, "trial": trial,
+        "number": next((t["number"] for t in trials if t["trial"].pk == trial.pk), 1),
+        "messages_": list(trial.messages.order_by("number")), "seconds": pedagogy.elapsed_s(trial),
+        "stages": trial.version.snapshot["stages"], "review": review, "trials": trials,
+        "score_rows": [{"number": n, "label": label, "points": review.scores.get(str(n)) if review else None}
+                       for n, label in Review.MICRO_CRITERIA],
+    }  # fmt: skip
+
+
 @role_required(STUDENT)
 def micro_protocol(request, number, trial_pk):
     """The trial protocol (@S6 IV 6): the explanations, questions, the AI student's answers and the student's
@@ -280,16 +305,7 @@ def micro_protocol(request, number, trial_pk):
     trial = get_object_or_404(lesson.trials, pk=trial_pk, mode=Trial.Mode.DIALOG)
     if trial.finished_at is None:
         return redirect("student:micro_dialog", section.number, trial.pk)
-    review = Review.objects.filter(trial=trial).first()
-    trials = _trials(lesson)
-    return render(request, "student/micro/protocol.html", {
-        "programme": enrollment.programme, "section": section, "lesson": lesson, "trial": trial,
-        "number": next((t["number"] for t in trials if t["trial"].pk == trial.pk), 1),
-        "messages_": list(trial.messages.order_by("number")), "seconds": pedagogy.elapsed_s(trial),
-        "stages": trial.version.snapshot["stages"], "review": review, "trials": trials,
-        "score_rows": [{"number": n, "label": label, "points": review.scores.get(str(n)) if review else None}
-                       for n, label in Review.MICRO_CRITERIA],
-    })  # fmt: skip
+    return render(request, "student/micro/protocol.html", protocol_context(enrollment, section, lesson, trial))
 
 
 @require_POST

@@ -23,7 +23,16 @@ When AI is off the panel says so and the page works on without it.
   {% if not enabled %}
     <div class="flex flex-col gap-2 p-5">
       <p class="text-sm text-ink-soft">{% translate "The AI assistant will explain the section here: its aim and how to start." %}</p>
-      <p class="text-caption text-ink-faint">{% translate "Available when the AI assistant is connected." %}</p>
+      {% if preview %}
+        {% if quick %}
+          <ul class="flex flex-col gap-1.5" aria-label="{% translate 'Quick requests' %}">
+            {% for intent, label, icon in quick %}<li class="flex items-center gap-2 text-[13px] font-semibold text-ink-soft">{% include "components/icons.html#"|add:icon with size=15 %}{{ label }}</li>{% endfor %}
+          </ul>
+        {% endif %}
+        <p class="text-caption text-ink-faint">{% translate "Preview: the AI does not answer here." %}</p>
+      {% else %}
+        <p class="text-caption text-ink-faint">{% translate "Available when the AI assistant is connected." %}</p>
+      {% endif %}
     </div>
   {% else %}
     {% include "ai/partials/thread.html" %}

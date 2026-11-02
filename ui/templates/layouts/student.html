@@ -1,7 +1,9 @@
 {% extends "layouts/cabinet.html" %}
 {% load i18n %}
-{% comment %}Student cabinet (/me/, notifications): white sidebar of the «Студент» mockups.{% endcomment %}
-{% block sidebar %}{% include "partials/shell/sidebar_student.html" %}{% endblock %}
-{% block search_action %}{% url 'student:search' %}{% endblock %}
+{% comment %}Student cabinet (/me/, notifications): white sidebar of the «Студент» mockups. The teacher's preview of the
+ICPAI sections (apps/student/preview, context ``preview``) runs on the same pages with its own rail and a notice.{% endcomment %}
+{% block sidebar %}{% if preview %}{% include "partials/shell/sidebar_preview.html" %}{% else %}{% include "partials/shell/sidebar_student.html" %}{% endif %}{% endblock %}
+{% block search_action %}{% if preview %}{% url 'teacher:search' %}{% else %}{% url 'student:search' %}{% endif %}{% endblock %}
 {% block search_placeholder %}{% translate "Topic or material" %}{% endblock %}
-{% block user_meta %}{% translate "Student" %}{% if user.student_profile.group %} · {{ user.student_profile.group }}{% endif %}{% endblock %}
+{% block user_meta %}{% if preview %}{% translate "Teacher" %}{% else %}{% translate "Student" %}{% if user.student_profile.group %} · {{ user.student_profile.group }}{% endif %}{% endif %}{% endblock %}
+{% block notice %}{% if preview %}<div class="border-b border-warning-500/40 bg-warning-50 px-4 py-2 text-center text-[13px] text-warning-700 print:hidden">{% translate "Preview: everything is open and nothing is recorded." %}</div>{% endif %}{% endblock %}

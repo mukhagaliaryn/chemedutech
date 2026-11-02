@@ -71,6 +71,12 @@ none in the guide — only the level is shown), the way on to the next stage.
     {% if row.state == "locked" %}
       {% translate "This stage opens after the previous one." as l_locked %}{% include "components/alert.html" with variant="info" text=l_locked %}
     {% else %}
+      {% if level_texts %}
+        <div class="flex flex-col gap-2 rounded-lg bg-canvas px-5 py-4">
+          <p class="text-caption font-semibold text-ink-faint">{% translate "What a student reads after the test" %}</p>
+          {% for l in level_texts %}<p class="text-[15px] leading-6"><span class="font-bold">{{ l.label }}.</span> {{ l.text }}</p>{% endfor %}
+        </div>
+      {% endif %}
       <form method="post" action="{% url 'student:diagnostic_start' section.number test.phase %}" class="flex justify-end">{% csrf_token %}
         <button type="submit" class="btn btn-primary h-[46px] px-[22px] text-[15px] font-bold">{% translate "Start the test" %}{% include "components/icons.html#arrow-right" %}</button>
       </form>

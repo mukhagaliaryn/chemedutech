@@ -1,0 +1,33 @@
+{% load i18n %}{% comment %}
+The rail of the teacher's preview of the ICPAI sections (apps/student/preview): the way back to the cabinet and the
+8 sections, all open, with «Results» — the teacher moves between them freely. preview_rows; section (the open one).
+{% endcomment %}
+<div class="nav-dark flex h-full flex-col gap-2 overflow-y-auto bg-primary-950 px-3.5 py-5">
+  <div class="flex h-11 shrink-0 items-center justify-between gap-2 in-data-[collapsed=true]:h-auto in-data-[collapsed=true]:flex-col">
+    <a href="{% url 'teacher:dashboard' %}" class="flex min-w-0 items-center gap-2.5 overflow-hidden text-[17px] font-extrabold whitespace-nowrap text-white">
+      {% include "partials/logo.html" with size=32 inverse=True %}
+      <span class="nav-label flex flex-col leading-[18px]">ChemEduTech<span class="text-[11px] font-semibold text-primary-300">{% translate "Preview" %}</span></span>
+    </a>
+    {% include "partials/shell/collapse_button.html" with dark=True %}
+  </div>
+
+  <nav class="flex flex-col gap-1" aria-label="{% translate 'Teacher menu' %}">
+    {% translate "To the teacher's cabinet" as l %}
+    <a href="{% if section %}{% url 'teacher:section' section.number %}{% else %}{% url 'teacher:dashboard' %}{% endif %}" class="nav-item">
+      {% include "components/icons.html#arrow-left" with size=20 %}<span class="nav-label min-w-0 flex-1 truncate">{{ l }}</span>
+      <span class="nav-tip" role="tooltip">{{ l }}</span>
+    </a>
+  </nav>
+
+  <p class="nav-section nav-hide">{% translate "ICPAI programme" %}</p>
+  <nav class="flex flex-col gap-0.5" aria-label="{% translate 'Programme sections' %}">
+    {% for r in preview_rows %}
+      <a href="{{ r.url }}" class="nav-item h-10 tone-{{ r.section.number }}"{% if r.section.pk == section.pk %} aria-current="page"{% endif %} title="{{ r.section.number }}. {{ r.section.title }}">
+        <span class="num grid size-6 shrink-0 place-items-center rounded-[8px] bg-(--tone) text-[12px] font-extrabold text-white">{{ r.section.number }}</span>
+        <span class="nav-label min-w-0 flex-1 truncate">{{ r.section.title }}</span>
+        <span class="nav-tip" role="tooltip">{{ r.section.number }}. {{ r.section.title }}</span>
+      </a>
+    {% endfor %}
+    {% translate "Results" as l %}{% include "components/nav_item.html" with url_name="student_preview:icpai" icon="activity" label=l %}
+  </nav>
+</div>

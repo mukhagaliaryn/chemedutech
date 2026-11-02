@@ -74,26 +74,27 @@ def designer_context(user) -> dict:
     return {"designer": pedagogy_selectors.template_cards(user)}
 
 
+def template_context(enrollment, section, template, user) -> dict:
+    stages = list(template.stages.all())
+    return {
+        "programme": enrollment.programme,
+        "section": section,
+        "template": template,
+        "timeline": pedagogy_selectors.timeline(stages),
+        "stage_blocks": [(s, pedagogy_selectors.template_blocks(s)) for s in stages],
+        "lesson": pedagogy_selectors.lesson_of(user, template),
+        "others": [t for t in pedagogy_selectors.templates() if t.pk != template.pk],
+    }
+
+
 @role_required(STUDENT)
 def template(request, number, code):
     """An authorial template in full (image12): header, aim, the 45-minute bar, the six stages with their blocks,
     the expected results and the product; «Create my version» / «Open my version»."""
     enrollment, section = _section(request, number)
     template = get_object_or_404(pedagogy_selectors.templates(), code=code)
-    stages = list(template.stages.all())
-    return render(
-        request,
-        "student/designer/template.html",
-        {
-            "programme": enrollment.programme,
-            "section": section,
-            "template": template,
-            "timeline": pedagogy_selectors.timeline(stages),
-            "stage_blocks": [(s, pedagogy_selectors.template_blocks(s)) for s in stages],
-            "lesson": pedagogy_selectors.lesson_of(request.user, template),
-            "others": [t for t in pedagogy_selectors.templates() if t.pk != template.pk],
-        },
-    )
+    context = template_context(enrollment, section, template, request.user)
+    return render(request, "student/designer/template.html", context)
 
 
 @require_POST
@@ -129,11 +130,7 @@ def _ai_panel(request, section, lesson, stage, error="") -> dict:
     }
 
 
-@role_required(STUDENT)
-def lesson_stage(request, number, pk, order):
-    """The editor (image18): the lesson structure on the left, the chosen stage in the middle, the AI on the right."""
-    enrollment, section, lesson = _lesson(request, number, pk)
-    stage = _stage(lesson, order)
+def editor_context(request, enrollment, section, lesson, stage) -> dict:
     stages = list(lesson.stages.all())
     fields = pedagogy_selectors.stage_fields(stage)
     context = {
@@ -168,6 +165,14 @@ def lesson_stage(request, number, pk, order):
         },
     }
     context.update(_ai_panel(request, section, lesson, stage))
+    return context
+
+
+@role_required(STUDENT)
+def lesson_stage(request, number, pk, order):
+    """The editor (image18): the lesson structure on the left, the chosen stage in the middle, the AI on the right."""
+    enrollment, section, lesson = _lesson(request, number, pk)
+    context = editor_context(request, enrollment, section, lesson, _stage(lesson, order))
     return render(request, "student/designer/editor.html", context)
 
 
@@ -282,6 +287,25 @@ def _lesson_context(enrollment, section, lesson) -> dict:
     return {"programme": enrollment.programme, "section": section, "lesson": lesson, "template": lesson.source_template}
 
 
+def assemble_context(enrollment, section, lesson) -> dict:
+    stages = list(lesson.stages.all())
+    problems = pedagogy.problems(lesson)
+    codes = {p["code"] for p in problems}
+    context = _lesson_context(enrollment, section, lesson)
+    context.update({
+        "problems": problems,
+        "details_problem": "details" in codes,
+        "empty_stages": "empty_stage" in codes,
+        "minutes_problem": "minutes" in codes,
+        "blocked": bool(codes - {"details"}),  # the details are saved by the same button
+        "stages": pedagogy_selectors.timeline(stages),
+        "edited_count": sum(1 for s in stages if s.edited),
+        "minutes_total": sum(s.minutes for s in stages),
+        "version": pedagogy.assembled_version(lesson),
+    })  # fmt: skip
+    return context
+
+
 @role_required(STUDENT)
 def lesson_assemble(request, number, pk):
     """Before «Assemble the lesson»: the lesson's name, topic, aim and expected results (editable), what is still
@@ -307,22 +331,7 @@ def lesson_assemble(request, number, pk):
         else:
             messages.success(request, _("Saved"))
         return redirect("student:lesson_assemble", section.number, lesson.pk)
-    stages = list(lesson.stages.all())
-    problems = pedagogy.problems(lesson)
-    codes = {p["code"] for p in problems}
-    context = _lesson_context(enrollment, section, lesson)
-    context.update({
-        "problems": problems,
-        "details_problem": "details" in codes,
-        "empty_stages": "empty_stage" in codes,
-        "minutes_problem": "minutes" in codes,
-        "blocked": bool(codes - {"details"}),  # the details are saved by the same button
-        "stages": pedagogy_selectors.timeline(stages),
-        "edited_count": sum(1 for s in stages if s.edited),
-        "minutes_total": sum(s.minutes for s in stages),
-        "version": pedagogy.assembled_version(lesson),
-    })  # fmt: skip
-    return render(request, "student/designer/assemble.html", context)
+    return render(request, "student/designer/assemble.html", assemble_context(enrollment, section, lesson))
 
 
 def _plan_version(lesson, request):
@@ -342,6 +351,13 @@ def _plan_context(lesson, version) -> dict:
     }
 
 
+def plan_page_context(enrollment, section, lesson, version) -> dict:
+    context = _lesson_context(enrollment, section, lesson)
+    context.update(_plan_context(lesson, version))
+    context.update({"versions": list(lesson.versions.order_by("-number")), "trial": lesson.trials.first()})
+    return context
+
+
 @role_required(STUDENT)
 def lesson_plan(request, number, pk):
     """The assembled lesson as the short-term lesson plan (image17), with PDF, print and the way to the trial."""
@@ -349,10 +365,7 @@ def lesson_plan(request, number, pk):
     version = _plan_version(lesson, request)
     if version is None:
         return redirect("student:lesson_assemble", section.number, lesson.pk)
-    context = _lesson_context(enrollment, section, lesson)
-    context.update(_plan_context(lesson, version))
-    context.update({"versions": list(lesson.versions.order_by("-number")), "trial": lesson.trials.first()})
-    return render(request, "student/designer/plan.html", context)
+    return render(request, "student/designer/plan.html", plan_page_context(enrollment, section, lesson, version))
 
 
 @role_required(STUDENT)
@@ -378,14 +391,7 @@ def _trial(lesson, request, trial_pk=None):
     return get_object_or_404(trials, pk=int(pick)) if pick.isdigit() else trials.first()
 
 
-@role_required(STUDENT)
-def lesson_trial(request, number, pk):
-    """«Try it out with the AI student»: the level (high / medium / low), then every stage of the assembled lesson
-    with «See the AI student's answer»; the guide's warning that this is a simulation."""
-    enrollment, section, lesson = _lesson(request, number, pk)
-    if pedagogy.assembled_version(lesson) is None:
-        return redirect("student:lesson_assemble", section.number, lesson.pk)
-    trial = _trial(lesson, request)
+def trial_context(request, enrollment, section, lesson, trial) -> dict:
     stages = trial.version.snapshot["stages"] if trial else []
     made = {t.stage_order: t for t in trial.turns.all()} if trial else {}
     turns = {s["order"]: made.get(s["order"]) for s in stages}  # None where not made: the template filter «get»
@@ -401,6 +407,17 @@ def lesson_trial(request, number, pk):
         "ai_enabled": ai.enabled(),
         "remaining": ai.remaining_today(request.user),
     })  # fmt: skip
+    return context
+
+
+@role_required(STUDENT)
+def lesson_trial(request, number, pk):
+    """«Try it out with the AI student»: the level (high / medium / low), then every stage of the assembled lesson
+    with «See the AI student's answer»; the guide's warning that this is a simulation."""
+    enrollment, section, lesson = _lesson(request, number, pk)
+    if pedagogy.assembled_version(lesson) is None:
+        return redirect("student:lesson_assemble", section.number, lesson.pk)
+    context = trial_context(request, enrollment, section, lesson, _trial(lesson, request))
     return render(request, "student/designer/trial.html", context)
 
 
@@ -440,14 +457,7 @@ def lesson_trial_turn(request, number, pk, trial_pk, order):
     return render(request, "student/designer/partials/turn.html", context)
 
 
-@role_required(STUDENT)
-def lesson_results(request, number, pk):
-    """«Trial results»: by stage — the difficulties, the possible errors, the methodical suggestions and the stages
-    revised since; «Assemble the final version» once a trial is finished."""
-    enrollment, section, lesson = _lesson(request, number, pk)
-    trial = _trial(lesson, request)
-    if trial is None:
-        return redirect("student:lesson_trial", section.number, lesson.pk)
+def results_context(enrollment, section, lesson, trial) -> dict:
     turns = {t.stage_order: t for t in trial.turns.all()}
     kinds = [t.answer_type for t in turns.values()]
     revised = pedagogy_selectors.changed_since(lesson, trial.version.snapshot)
@@ -462,7 +472,18 @@ def lesson_results(request, number, pk):
         "finished": pedagogy.finished_trial(lesson),
         "problems": pedagogy.problems(lesson),
     })  # fmt: skip
-    return render(request, "student/designer/results.html", context)
+    return context
+
+
+@role_required(STUDENT)
+def lesson_results(request, number, pk):
+    """«Trial results»: by stage — the difficulties, the possible errors, the methodical suggestions and the stages
+    revised since; «Assemble the final version» once a trial is finished."""
+    enrollment, section, lesson = _lesson(request, number, pk)
+    trial = _trial(lesson, request)
+    if trial is None:
+        return redirect("student:lesson_trial", section.number, lesson.pk)
+    return render(request, "student/designer/results.html", results_context(enrollment, section, lesson, trial))
 
 
 @require_POST
