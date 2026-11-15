@@ -30,7 +30,7 @@ LOCKED = SectionProgress.Status.LOCKED
 
 
 def _course_block(enrollment) -> dict | None:
-    """Section 1: the course enrolment's stages done and where to continue."""
+    """Section 1: the course enrolment's stages done, where to continue and the gradebook of every stage."""
     course_enrollment = programme_selectors.course_enrollment(enrollment)
     if course_enrollment is None:
         return None
@@ -43,6 +43,7 @@ def _course_block(enrollment) -> dict | None:
         "total": total,
         "card": cabinet.continue_card(place),
         "course_url": reverse("student:course", args=[course_enrollment.course.slug]),
+        "grades": cabinet.gradebook(course_enrollment),  # the full results: every stage of every opened topic
     }
 
 

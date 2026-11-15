@@ -4,6 +4,7 @@ from datetime import timedelta
 from decimal import Decimal
 
 from django.db.models import Avg, F, Max
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.formats import date_format
 from django.utils.translation import gettext as _
@@ -334,9 +335,18 @@ def topic_table(place, topic, quiz_counts, practice_counts) -> list[dict]:
                 "attempts": _attempts(place, s, quiz_counts, practice_counts),
                 "score": sp.score_percent if sp else None,
                 "needs_attention": bool(sp and sp.needs_attention),
+                "material": _material(s, sp),
+                "time": duration(sp.time_spent_s) if sp and sp.time_spent_s else "",
             }
         )
     return rows
+
+
+def _material(stage, sp) -> dict | None:
+    """Theory read / video watched: {percent, done_at} for the gradebook tables, None for other kinds."""
+    if stage.kind not in ("theory", "video"):
+        return None
+    return {"percent": sp.material_percent if sp else 0, "done_at": sp.material_done_at if sp else None}
 
 
 def scale(current_letter=None) -> list[dict]:
@@ -369,6 +379,11 @@ def gradebook(enrollment) -> dict:
                 closed.append(t["topic"])
             else:
                 t["table"] = topic_table(place, t["topic"], quiz_counts, practice_counts)
+                for row in t["table"]:
+                    if row["status"] != S.LOCKED:
+                        row["url"] = reverse(
+                            "student:stage", args=[place.course.slug, t["topic"].number, row["stage"].pk]
+                        )
                 score = t["result"].score_percent if t["result"] else None
                 t["grade"] = grade_for(score) if score is not None else None
                 topics.append(t)

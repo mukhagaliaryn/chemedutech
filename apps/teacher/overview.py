@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from datetime import timedelta
 from decimal import Decimal
 
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.utils.translation import ngettext
@@ -295,16 +296,27 @@ def student_page(enrollment) -> dict:
     place = cabinet.place_of(enrollment)
     quiz_counts = quiz_selectors.attempt_counts(enrollment)
     practice_counts = practice_selectors.submission_counts(enrollment)
+    quiz_attempts = list(quiz_selectors.finished_attempts(enrollment))
+    submissions = list(practice_selectors.submissions_of(enrollment))
+    lab_attempts = list(lab_selectors.attempts_of(enrollment))
+    student = enrollment.student
+    links = _stage_links(student, quiz_attempts, submissions, lab_attempts)
     topics = []
     for m in learning.course_map(place):
         for t in m["topics"]:
             t["module"] = m["module"]
             t["table"] = cabinet.topic_table(place, t["topic"], quiz_counts, practice_counts)
+            for r in t["table"]:
+                quiz = cabinet._quiz_of(r["stage"])
+                r["detail_url"] = links.get(("quiz", quiz.pk) if quiz else None) or links.get(r["stage"].pk)
             topics.append(t)
     row = student_rows([enrollment])[0]
-    lab_attempts = list(lab_selectors.attempts_of(enrollment))
     for a in lab_attempts:
         a.title = lab_title(a)
+    for a in quiz_attempts:
+        a.url = reverse("teacher:student_quiz", args=[student.pk, a.pk])
+    for x in submissions:
+        x.url = reverse("teacher:grading_detail", args=[x.pk])
     result = progress_selectors.course_result(enrollment)
     return {
         "row": row,
@@ -313,9 +325,41 @@ def student_page(enrollment) -> dict:
         "time_spent": cabinet.duration(progress_selectors.time_spent_s(enrollment)),
         "events": progress_selectors.events_of(enrollment),
         "lab_attempts": lab_attempts,
-        "quiz_attempts": quiz_selectors.finished_attempts(enrollment),
-        "submissions": practice_selectors.submissions_of(enrollment),
+        "quiz_attempts": quiz_attempts,
+        "submissions": submissions,
+        "benchmark": _benchmark(enrollment),
     }
+
+
+def _stage_links(student, quiz_attempts, submissions, lab_attempts) -> dict:
+    """Where a stage row of the teacher's student page leads: the latest quiz attempt (keyed ("quiz", quiz id)),
+    the latest practice work or the lab attempts table (keyed by stage id). Lists are newest first."""
+    links = {}
+    for a in quiz_attempts:
+        links.setdefault(("quiz", a.quiz_id), reverse("teacher:student_quiz", args=[student.pk, a.pk]))
+    for x in submissions:
+        links.setdefault(x.stage_id, reverse("teacher:grading_detail", args=[x.pk]))
+    for a in lab_attempts:
+        links.setdefault(a.stage_id, "#lab")
+    return links
+
+
+def _benchmark(enrollment) -> list[dict]:
+    """The course's pre/post knowledge test for one student: [{phase, label, state, attempt, url}] or []."""
+    from apps.progress.services import benchmark
+
+    summary = benchmark.summary(enrollment)
+    if not summary:
+        return []
+    rows = []
+    for phase, label in ((benchmark.PRE, _("Initial knowledge test")), (benchmark.POST, _("Final knowledge test"))):
+        attempt = summary[f"{phase.lower()}_attempt"]
+        done = bool(attempt and attempt.is_finished)
+        rows.append({
+            "phase": phase, "label": label, "state": summary[phase.lower()], "attempt": attempt if done else None,
+            "url": reverse("teacher:student_quiz", args=[enrollment.student_id, attempt.pk]) if done else "",
+        })  # fmt: skip
+    return rows
 
 
 # --- gradebook ---------------------------------------------------------------------------

@@ -2,7 +2,7 @@
 <section class="card flex flex-col gap-3" aria-labelledby="dg-title">
   <div class="flex flex-wrap items-baseline justify-between gap-2">
     <h2 id="dg-title" class="text-[17px] font-extrabold">{% translate "ICPAI components by stage" %}</h2>
-    <a class="link text-sm font-bold" href="{% url 'research:export_diagnostics' %}">{% include "components/icons.html#download" with size=15 %} CSV</a>
+    <a class="link text-sm font-bold" href="{% url 'research:export_diagnostics' %}" title="{% translate 'Every diagnostic result of all groups (research data)' %}">{% include "components/icons.html#download" with size=15 %} {% translate "Research CSV" %}</a>
   </div>
   <div class="overflow-x-auto">
     <table class="w-full min-w-[520px] text-[13.5px]">

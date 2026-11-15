@@ -10,6 +10,7 @@ from django.contrib import messages
 from django.db.models import Avg, Count, Max
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
 from django.utils.dateparse import parse_date
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext as _
@@ -29,7 +30,7 @@ from apps.programme.models import (
 )
 from apps.programme.services import schedule as schedule_services
 
-from . import icpai, practice, scope
+from . import export, icpai, practice, scope
 from .views import teacher_only
 
 S = SectionProgress.Status
@@ -62,11 +63,14 @@ def _figures(section, students, progress) -> dict:
 
 def _course(request, section, students, rows) -> dict:
     from apps.courses.models import Enrollment
+    from apps.progress import selectors as progress_selectors
 
     course = section.programme.course
     enrolled = {e.student_id: e for e in Enrollment.objects.filter(course=course, student__in=students)}
+    results = progress_selectors.course_results_by_enrollment([e.pk for e in enrolled.values()])
     for r in rows:
         r["enrollment"] = enrolled.get(r["student"].pk)
+        r["result"] = results.get(r["enrollment"].pk) if r["enrollment"] else None
     return {"course": course}
 
 
@@ -75,6 +79,13 @@ def _diagnostic(request, section, students, rows) -> dict:
     for r in rows:
         mine = summaries.get(r["student"].pk, {})
         r["phases"] = [{"phase": p, "summary": mine.get(p)} for p in PHASES]
+    per_student = defaultdict(dict)  # the export: {student: {(phase, component): percent}}
+    for student_id, phase, component, percent in DiagnosticResult.objects.filter(
+        enrollment__programme=section.programme, enrollment__student__in=students
+    ).values_list("enrollment__student", "phase", "component", "percent"):
+        per_student[student_id][(phase, component)] = percent
+    for r in rows:
+        r["components"] = per_student.get(r["student"].pk, {})
     means = defaultdict(dict)
     for row in (
         DiagnosticResult.objects.filter(enrollment__programme=section.programme, enrollment__student__in=students)
@@ -178,6 +189,7 @@ def section(request, number):
     item = get_object_or_404(programme.sections, number=number)
     if request.method == "POST" and item.kind == Section.Kind.INDEPENDENT:
         return _save_schedule(request, item)
+    group = scope.tab_group(request)
     students = scope.student_list(request)
     joined = {e.student_id: e for e in ProgrammeEnrollment.objects.filter(programme=programme, student__in=students)}
     progress = {
@@ -189,10 +201,19 @@ def section(request, number):
     rows = [{"student": s, "joined": joined.get(s.pk), "progress": progress.get(s.pk)} for s in students]
     builder = BUILDERS.get(item.kind, _queue)
     extra = builder(request, item, students, rows)
+    fmt = request.GET.get("format")
+    if fmt in ("csv", "xlsx"):
+        return export.response(fmt, export.section_table(item, rows, extra), _export_name(item, group))
     return render(request, "teacher/sections/section.html", {
         "programme": programme, "section": item, "rows": rows, "figures": _figures(item, students, progress),
-        "group": scope.active_group(request), "waiting": extra.get("new") if builder is _queue else None, **extra,
+        "group": group, "groups": scope.groups(request), "waiting": extra.get("new") if builder is _queue else None,
+        **extra,
     })  # fmt: skip
+
+
+def _export_name(section, group) -> str:
+    stamp = timezone.localdate().isoformat()
+    return f"section{section.number}_{group.name if group else 'all'}_{stamp}"
 
 
 def _save_schedule(request, item):

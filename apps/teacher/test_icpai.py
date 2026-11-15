@@ -171,7 +171,7 @@ class SectionPageTests(Base):
         for number in range(1, 9):
             r, students = self.students_on(number)
             self.assertTemplateUsed(r, "teacher/sections/section.html")
-            self.assertEqual(students, {self.student, self.other})
+            self.assertEqual(students, {self.student})  # one group at a time (STEP-47): the first, «Хим-23-1»
         self.assertContains(r, 'aria-current="page"', count=1)
         for number in range(1, 9):
             self.assertContains(r, reverse("teacher:section", args=[number]))
@@ -183,9 +183,9 @@ class SectionPageTests(Base):
         self.client.post(reverse("teacher:set_group"), {"group": self.other_group.pk, "next": page})
         _r, students = self.students_on(2)
         self.assertEqual(students, {self.other})
-        self.client.post(reverse("teacher:set_group"), {"group": "999999", "next": page})  # not theirs: all groups
+        self.client.post(reverse("teacher:set_group"), {"group": "999999", "next": page})  # not theirs: the first
         _r, students = self.students_on(2)
-        self.assertEqual(students, {self.student, self.other})
+        self.assertEqual(students, {self.student})
         r = self.client.post(reverse("teacher:set_group"), {"group": "", "next": "https://evil.example/"})
         self.assertEqual(r["Location"], "/teacher/")
 

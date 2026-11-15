@@ -1,0 +1,8 @@
+{% load i18n %}{% comment %}The teacher's grade of a lesson or a trial: points by criterion (of 2) and the comment. Needs review, scores
+([{label, points}], teacher/section_student._scores).{% endcomment %}
+{% if scores %}
+  <ul class="grid gap-1.5 text-[13px] md:grid-cols-2">
+    {% for s in scores %}<li class="flex items-start gap-2 rounded-md bg-canvas px-3 py-2"><span class="num w-9 shrink-0 font-extrabold {% if s.points == 2 %}text-success-700{% elif s.points == 0 %}text-danger-700{% endif %}">{{ s.points }}/2</span><span class="text-ink-soft">{{ s.label }}</span></li>{% endfor %}
+  </ul>
+{% endif %}
+{% if review.comment %}<p class="rounded-md border-l-4 border-(--tone) bg-canvas px-3 py-2 text-sm whitespace-pre-line"><span class="font-semibold">{% translate "The teacher's comment" %}:</span> {{ review.comment }}</p>{% endif %}

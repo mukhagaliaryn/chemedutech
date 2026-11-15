@@ -52,6 +52,24 @@ say so.
         {% if course_block.card %}<a class="btn btn-primary" href="{{ course_block.card.url }}">{% translate "Continue learning" %}{% include "components/icons.html#arrow-right" %}</a>{% endif %}
       </div>
     </section>
+    {% with g=course_block.grades %}{% if g %}
+    <section aria-labelledby="grades-title" class="flex flex-col gap-4">
+      <div class="flex flex-wrap items-baseline justify-between gap-3">
+        <h2 id="grades-title" class="text-[19px] font-extrabold">{% translate "My results" %}</h2>
+        <a class="link text-sm font-bold" href="{% url 'student:results' %}?course={{ course_block.course.slug }}">{% translate "Gradebook" %} →</a>
+      </div>
+      <div class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4">
+        {% translate "Current course score" as l1 %}
+        {% if g.result.current_percent is not None %}{% blocktranslate with s=g.result.current_percent|floatformat:1 l=g.grade.letter asvar v1 %}{{ s }} · {{ l }}{% endblocktranslate %}{% include "components/stat_card.html" with label=l1 value=v1 icon="award" %}
+        {% else %}{% translate "Shown after the first topic is completed" as n1 %}{% include "components/stat_card.html" with label=l1 value="—" note=n1 icon="award" %}{% endif %}
+        {% translate "Required stages done" as l2 %}{% blocktranslate with a=course_block.done b=course_block.total asvar v2 %}{{ a }} / {{ b }}{% endblocktranslate %}
+        {% include "components/stat_card.html" with label=l2 value=v2 bar=course_block.done|percent_of:course_block.total icon="check" %}
+        {% translate "Topics completed" as l3 %}{% blocktranslate with a=g.result.topics_completed|default:0 b=g.result.topics_total|default:0 asvar v3 %}{{ a }} / {{ b }}{% endblocktranslate %}
+        {% include "components/stat_card.html" with label=l3 value=v3 icon="list" %}
+      </div>
+      {% include "student/partials/grade_topics.html" with topics=g.topics closed=g.closed %}
+    </section>
+    {% endif %}{% endwith %}
   {% else %}
     {% translate "Not enrolled in the course" as l_title %}{% translate "Section 1 is the course; the teacher adds the group to it." as l_text %}
     {% include "components/empty_state.html" with title=l_title text=l_text icon="book" %}

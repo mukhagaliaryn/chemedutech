@@ -1,5 +1,6 @@
 """The teacher's active group (STEP-41): chosen in the sidebar, kept in the session; the ICPAI section pages, the
-sidebar's rings and counters show that group's students (or every student of the teacher's courses and groups)."""
+sidebar's rings and counters show that group's students (or every student of the teacher's courses and groups).
+The section pages always show one group (tabs; ``tab_group``)."""
 
 from django.contrib.auth import get_user_model
 
@@ -28,6 +29,22 @@ def set_group(request, value) -> None:
         request.session[SESSION_KEY] = group.pk
     else:
         request.session.pop(SESSION_KEY, None)
+    for cached in ("_teacher_student_ids", "_teacher_programme"):
+        if hasattr(request, cached):
+            delattr(request, cached)
+
+
+def tab_group(request):
+    """The ICPAI section pages show one group at a time (tabs, STEP-47): ``?group=<pk>`` picks it and becomes the
+    active group (the sidebar follows); without a choice — the active group, else the first group."""
+    value = request.GET.get("group")
+    if value and any(str(g.pk) == value for g in groups(request)):
+        set_group(request, value)
+    group = active_group(request)
+    if group is None and groups(request):
+        group = groups(request)[0]
+        set_group(request, group.pk)
+    return group
 
 
 def students(request):

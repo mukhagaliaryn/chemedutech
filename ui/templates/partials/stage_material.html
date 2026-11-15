@@ -1,0 +1,4 @@
+{% load i18n %}{% comment %}
+How much of a theory / video stage's material the student has gone through (StageProgress.material_*), a caption line
+under the stage title in the student's gradebook and the teacher's student page. Needs m = row.material, kind.
+{% endcomment %}{% if m %}<span class="block text-caption font-normal text-ink-soft">{% if kind == "video" %}{% blocktranslate with p=m.percent %}Video watched: {{ p }}%{% endblocktranslate %}{% elif m.done_at %}{% translate "Material read" %}{% else %}{% translate "Material not read yet" %}{% endif %}{% if m.done_at %} · {{ m.done_at|date:"j E, H:i" }}{% endif %}</span>{% endif %}

@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import content, gradebook, grading, icpai, practice, sections, views
+from . import content, gradebook, grading, icpai, practice, section_student, sections, views
 
 app_name = "teacher"
 
@@ -22,6 +22,7 @@ urlpatterns = [
     path("groups/<int:pk>/courses/<int:link_pk>/post-test/", views.group_posttest, name="group_posttest"),
     path("grading/", grading.queue, name="grading"),
     path("sections/<int:number>/", sections.section, name="section"),
+    path("sections/<int:number>/students/<int:pk>/", section_student.student, name="section_student"),
     path("active-group/", sections.set_group, name="set_group"),
     path("practice/", practice.queue, name="practice_queue"),
     path("practice/<int:pk>/", practice.detail, name="practice"),
@@ -58,6 +59,7 @@ urlpatterns = [
     path("students/<int:pk>/stages/<int:stage_pk>/unlock/", views.unlock_stage, name="unlock_stage"),
     path("students/<int:pk>/sections/<int:number>/unlock/", views.unlock_section, name="unlock_section"),
     path("students/<int:pk>/lab/<int:attempt_pk>/", views.lab_log, name="lab_log"),
+    path("students/<int:pk>/quizzes/<int:attempt_pk>/", views.student_quiz, name="student_quiz"),
     path("students/<int:pk>/lessons/<int:lesson_pk>/", icpai.lesson, name="student_lesson"),
     path("students/<int:pk>/trials/<int:trial_pk>/", icpai.trial, name="student_trial"),
     path("students/<int:pk>/ai/<int:conversation_pk>/", icpai.conversation, name="student_ai"),

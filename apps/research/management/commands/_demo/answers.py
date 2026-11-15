@@ -11,28 +11,31 @@ from apps.core.html import html_to_text
 
 
 def quiz_answers(questions, accuracy, rng) -> dict:
-    answers = {}
-    for q in questions:
-        right = rng.random() < accuracy
-        choices = list(q.choices.all())
-        if q.kind == "single":
-            good = [c for c in choices if c.is_correct]
-            bad = [c for c in choices if not c.is_correct]
-            pick = good if right or not bad else bad
-            answers[q.pk] = rng.choice(pick).pk
-        elif q.kind == "multiple":
-            good = [c.pk for c in choices if c.is_correct]
-            if right or len(good) < 2:
-                answers[q.pk] = good if right else [c.pk for c in choices if not c.is_correct][:1]
-            else:
-                answers[q.pk] = good[:-1]
-        elif q.kind == "numeric":
-            value = q.numeric_answer or Decimal(1)
-            answers[q.pk] = str(value if right else value * Decimal("1.5"))
-        else:
-            accepted = q.accepted_answers or [""]
-            answers[q.pk] = accepted[0] if right else "білмеймін"
-    return answers
+    return {q.pk: answer_question(q, rng.random() < accuracy, rng) for q in questions}
+
+
+def quiz_answers_exact(questions, right_ids, rng) -> dict:
+    """Right exactly on the questions in ``right_ids``, a plausible mistake on the others (no partial credit)."""
+    return {q.pk: answer_question(q, q.pk in right_ids, rng) for q in questions}
+
+
+def answer_question(q, right: bool, rng):
+    choices = list(q.choices.all())
+    if q.kind == "single":
+        good = [c for c in choices if c.is_correct]
+        bad = [c for c in choices if not c.is_correct]
+        pick = good if right or not bad else bad
+        return rng.choice(pick).pk
+    if q.kind == "multiple":
+        good = [c.pk for c in choices if c.is_correct]
+        if right:
+            return good
+        return [c.pk for c in choices if not c.is_correct][:1] or good[:-1]
+    if q.kind == "numeric":
+        value = q.numeric_answer or Decimal(1)
+        return str(value if right else value * Decimal("1.5"))
+    accepted = q.accepted_answers or [""]
+    return accepted[0] if right else "білмеймін"
 
 
 # --- practice --------------------------------------------------------------------------------------

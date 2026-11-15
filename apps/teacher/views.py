@@ -488,6 +488,38 @@ def unlock_section(request, pk, number):
 
 
 @teacher_only
+def student_quiz(request, pk, attempt_pk):
+    """One finished quiz attempt of a student (a stage quiz or the pre/post test): every answer with the key. Read-only."""
+    from apps.assessments import selectors as quiz_selectors
+    from apps.assessments.models import QuizAttempt
+
+    student = _student(request, pk)
+    enrollments = course_selectors.teacher_enrollments(request.user).filter(student=student)
+    attempt = get_object_or_404(
+        QuizAttempt.objects.select_related("quiz", "enrollment__course").exclude(finished_at=None),
+        pk=attempt_pk, user=student, enrollment__in=enrollments,
+    )  # fmt: skip
+    quiz = attempt.quiz
+    stage = (
+        Stage.objects.filter(
+            Q(checkpoint_quiz=quiz) | Q(test_content__quiz=quiz), topic__module__course=attempt.enrollment.course
+        )
+        .select_related("topic")
+        .first()
+    )
+    history = list(
+        QuizAttempt.objects.filter(user=student, quiz=quiz, phase=attempt.phase, enrollment=attempt.enrollment)
+        .exclude(finished_at=None)
+        .order_by("attempt_no")
+    )
+    return render(request, "teacher/quiz_attempt.html", {
+        "student": student, "attempt": attempt, "quiz": quiz, "stage": stage, "history": history,
+        "rows": quiz_selectors.review_rows(attempt),
+        "counted": quiz_selectors.counted_attempt(student, quiz) if not attempt.phase else None,
+    })  # fmt: skip
+
+
+@teacher_only
 def lab_log(request, pk, attempt_pk):
     student = _student(request, pk)
     enrollments = course_selectors.teacher_enrollments(request.user).filter(student=student)

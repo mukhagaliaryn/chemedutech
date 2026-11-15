@@ -26,8 +26,6 @@ from django.utils import timezone, translation
 
 from apps.accounts.models import User
 from apps.accounts.services.registration import register_student
-from apps.ai import services as ai
-from apps.ai.models import Mode
 from apps.certificates.models import Certificate
 from apps.courses.models import Course, Enrollment
 from apps.courses.services import assign_group, sync_student_enrollments
@@ -37,7 +35,7 @@ from apps.programme import services as programme
 from apps.programme.models import ProgrammeEnrollment, SectionProgress
 from apps.progress.models import CourseResult
 
-from ._demo import texts
+from ._demo.chats import add_section_chats
 from ._demo.clock import Clock
 from ._demo.course import CourseWalk, course_stages
 from ._demo.icpai import IcpaiWalk, portfolio_status
@@ -45,7 +43,7 @@ from ._demo.people import LEVEL_NAMES, make_students
 from ._demo.purge import purge
 from ._demo.tutor import DemoTutor
 
-DEMO_USERNAMES = r"^student[0-9]{2}$"
+DEMO_USERNAMES = r"^student[0-9]{2,3}$"  # student01…student60, seed_control: student61…
 # (name, research cohort): an existing group of that name is used, a missing one is created
 GROUPS = (("1504-14", "control"), ("1507-14", "experimental"))
 COURSE_SLUG = "chemistry"
@@ -108,39 +106,7 @@ class Command(BaseCommand):
     # --- the section pages' chats of the existing demo students ------------------------------------
 
     def add_chats(self, seed):
-        """Every open section of every demo student gets an «explain the section» request (when missing) and one or
-        two questions of the student's own, dated after the student opened the section (or after the last message)."""
-        rng = random.Random(seed + 7)
-        limit = timezone.now() - timedelta(minutes=30)
-        added = 0
-        for user in demo_users().order_by("username"):
-            pe = ProgrammeEnrollment.objects.filter(student=user).first()
-            if pe is None:
-                continue
-            rows = SectionProgress.objects.filter(enrollment=pe).exclude(opened_at=None).select_related("section")
-            for row in rows.order_by("section__number"):
-                section = row.section
-                conversation = ai.conversation_for(user, Mode.ASSISTANT, "section", section.pk)
-                if conversation and conversation.messages.count() >= 4:
-                    continue
-                last = conversation.messages.order_by("-created_at").first() if conversation else None
-                start = (last.created_at if last else row.opened_at) + timedelta(minutes=rng.randint(2, 20))
-                if start >= limit:
-                    start = limit - timedelta(minutes=rng.randint(20, 120))
-                clock, tutor = Clock(start, rng, limit), DemoTutor()
-                with translation.override("kk"), tutor.active(), clock.running(), transaction.atomic():
-                    if conversation is None:
-                        purpose = section.purpose.split(". ")[0].rstrip(".") + "."
-                        tutor.next(texts.SECTION_EXPLAIN.format(title=section.title, purpose=purpose))
-                        ai.ask(user, context_type="section", context_id=section.pk, context=section.purpose,
-                               intent="explain_section")  # fmt: skip
-                        clock.tick(1, 4)
-                    for question, answer in rng.sample(texts.SECTION_QA[section.number], k=rng.randint(1, 2)):
-                        tutor.next(answer)
-                        ai.ask(user, context_type="section", context_id=section.pk, context=section.purpose,
-                               text=question)  # fmt: skip
-                        clock.tick(1, 5)
-                added += 1
+        added = add_section_chats(demo_users().order_by("username"), random.Random(seed + 7))
         self.stdout.write(self.style.SUCCESS(f"Section chats added or extended: {added}."))
 
     # --- creating --------------------------------------------------------------------------------

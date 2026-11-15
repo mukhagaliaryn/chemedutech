@@ -45,7 +45,7 @@ def teacher_programme(context):
         name = match.view_name if match else ""
         nav["current"] = (
             match.kwargs.get("number")
-            if name == "teacher:section"
+            if name in ("teacher:section", "teacher:section_student")
             else next((r["section"].number for r in nav["rows"] if r["section"].kind == DETAIL_KINDS.get(name)), None)
         )
     return nav

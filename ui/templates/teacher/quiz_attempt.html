@@ -1,0 +1,55 @@
+{% extends "layouts/teacher.html" %}
+{% load i18n %}
+{% comment %}
+One finished quiz attempt of a student, read-only (teacher.views.student_quiz): a stage's checkpoint quiz or topic test,
+or the course's pre/post knowledge test. The score, the attempts of the same quiz (links), every answer with the key.
+{% endcomment %}
+{% block title %}{{ quiz.title }} · {{ student.full_name }} · ChemEduTech{% endblock %}
+{% block crumb %}{% translate "Groups and students" %}{% endblock %}
+{% block page_title %}{{ quiz.title }}{% endblock %}
+{% block content %}
+<p class="text-sm text-ink-soft">
+  <a href="{% url 'teacher:student' student.pk %}?course={{ attempt.enrollment.course.slug }}{% if attempt.phase %}#benchmark{% else %}#stages{% endif %}">{{ student.full_name }}</a> /
+  {% if stage %}{% blocktranslate with n=stage.topic.number %}Topic {{ n }}{% endblocktranslate %} · {{ stage.title }}{% else %}{{ attempt.get_phase_display }}{% endif %}
+</p>
+<header>
+  <p class="text-body-sm font-medium text-ink-soft">{{ quiz.get_kind_display }}{% if attempt.phase %} · {{ attempt.get_phase_display }}{% endif %} · {% blocktranslate with n=attempt.attempt_no %}attempt {{ n }}{% endblocktranslate %}</p>
+  <h1 class="text-h1">{{ quiz.title }}</h1>
+</header>
+
+<section class="flex max-w-[840px] flex-wrap items-center gap-4 rounded-lg px-6 py-5 {% if attempt.passed %}bg-success-50{% else %}bg-danger-50{% endif %}">
+  <span class="num text-stat {% if attempt.passed %}text-success-700{% else %}text-danger-700{% endif %}">{{ attempt.percent|floatformat:0 }}%</span>
+  <div class="min-w-0 flex-[1_1_280px] text-sm">
+    {% if attempt.phase %}<p class="font-semibold">{% translate "Knowledge test (research): it does not count for the course score." %}</p>
+    {% elif attempt.passed %}<p class="font-semibold text-success-700">{% translate "Test passed" %}</p>
+    {% else %}<p class="font-semibold text-danger-700">{% blocktranslate with p=quiz.pass_percent %}Below the pass mark ({{ p }}%){% endblocktranslate %}</p>{% endif %}
+    <p class="mt-1 text-ink-soft">
+      {% blocktranslate with s=attempt.score|floatformat:"-2" m=attempt.max_score|floatformat:"-2" %}{{ s }} of {{ m }} points.{% endblocktranslate %}
+      {% translate "Started" %} {{ attempt.started_at|date:"j E Y, H:i" }} · {% translate "Finished" %} {{ attempt.finished_at|date:"j E Y, H:i" }}
+    </p>
+  </div>
+</section>
+
+{% include "assessments/partials/answers.html" with teacher=True %}
+
+{% if history|length > 1 %}
+<section class="flex max-w-[840px] flex-col gap-3" aria-labelledby="history-title">
+  <h2 id="history-title" class="text-h3">{% translate "Attempts" %}</h2>
+  <div class="overflow-x-auto rounded-lg border border-line bg-surface">
+    <table class="table num">
+      <thead><tr><th scope="col">№</th><th scope="col">{% translate "Finished" %}</th><th scope="col" class="text-right">%</th><th scope="col"></th></tr></thead>
+      <tbody>
+        {% for h in history %}
+          <tr{% if h.pk == attempt.pk %} class="bg-primary-50" aria-current="true"{% endif %}>
+            <td>{% if h.pk == attempt.pk %}{{ h.attempt_no }}{% else %}<a class="link" href="{% url 'teacher:student_quiz' student.pk h.pk %}">{{ h.attempt_no }}</a>{% endif %}</td>
+            <td>{{ h.finished_at|date:"d.m.Y H:i" }}</td>
+            <td class="text-right">{{ h.percent|floatformat:0 }}</td>
+            <td>{% if counted and h.pk == counted.pk %}{% translate "Counts for the grade" as l_counts %}{% include "components/badge.html" with variant="info" label=l_counts %}{% endif %}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endif %}
+{% endblock %}
