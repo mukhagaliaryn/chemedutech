@@ -7,7 +7,7 @@ from django.core.management import call_command
 from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.translation import gettext
+from django.utils.translation import gettext, override
 
 from apps.accounts.models import User
 from apps.assessments.models import QuizAttempt
@@ -146,8 +146,21 @@ class GroupTests(TeacherBase):
     def test_csv(self):
         r = self.client.get(reverse("teacher:group", args=[self.g1.pk]), {"format": "csv"})
         text = r.content.decode("utf-8-sig").splitlines()
-        self.assertTrue(text[0].startswith("student,username,email,group,course"))
+        with override("kk"):
+            self.assertTrue(text[0].startswith(",".join([gettext("Student"), gettext("Login"), gettext("Email")])))
         self.assertEqual(len(text), 3)
+
+    def test_excel(self):
+        import io
+        import zipfile
+
+        r = self.client.get(reverse("teacher:group", args=[self.g1.pk]), {"format": "xlsx"})
+        self.assertEqual(r.status_code, 200)
+        self.assertIn(".xlsx", r["Content-Disposition"])
+        sheet = zipfile.ZipFile(io.BytesIO(r.content)).read("xl/worksheets/sheet1.xml").decode()
+        with override("kk"):
+            self.assertIn(f">{gettext('Student')}<", sheet)
+        self.assertEqual(sheet.count("<row "), 3)  # the header + two students
 
     def test_create_group(self):
         r = self.client.post(

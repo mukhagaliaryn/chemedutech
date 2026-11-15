@@ -4,11 +4,8 @@ Thin views: every object is looked up through courses.selectors.teaching, so a t
 another teacher's group or student (404). Writes go through courses.services / progress.services.
 """
 
-import csv
-
 from django.contrib import messages
 from django.db.models import Q
-from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
@@ -157,8 +154,11 @@ def group(request, pk):
         "attention": len(overview.filter_rows(rows, "", "attention")),
         "inactive": len(overview.filter_rows(rows, "", "inactive")),
     }
-    if request.GET.get("format") == "csv":
-        return _group_csv(group, course, rows)
+    fmt = request.GET.get("format")
+    if fmt in ("csv", "xlsx"):
+        from .export import response
+
+        return response(fmt, _group_table(group, course, rows), f"group_{group.pk}_{timezone.localdate().isoformat()}")
     sections, matrix = _sections_matrix(course, shown)
     found = programme_selectors.programme_of_course(course)
     if found and matrix:
@@ -201,28 +201,25 @@ def _sections_matrix(course, rows):
     return programme_selectors.matrix(found, [r["student"] for r in rows])
 
 
-def _group_csv(group, course, rows):
-    response = HttpResponse(content_type="text/csv; charset=utf-8")
-    stamp = timezone.localdate().isoformat()
-    response["Content-Disposition"] = f'attachment; filename="group_{group.pk}_{stamp}.csv"'
-    response.write("﻿")
-    writer = csv.writer(response)
-    writer.writerow(
-        ["student", "username", "email", "group", "course", "now", "stages_passed", "stages_total", "current_score",
-         "order_errors", "safety_warnings", "wrong_choices", "last_activity", "attention"]
-    )  # fmt: skip
+def _group_table(group, course, rows) -> list[list]:
+    """The group page's students table as plain rows for CSV / Excel (numbers stay numbers)."""
+    table = [
+        [_("Student"), _("Login"), _("Email"), _("Group"), _("Course"), _("Current stage"), _("Stages passed"),
+         _("Stages total"), _("Current score"), _("Order errors"), _("Safety warnings"), _("Wrong choices"),
+         _("Last activity"), _("Needs attention")]
+    ]  # fmt: skip
     for r in rows:
         errors = r["errors"] or {}
-        writer.writerow(
+        table.append(
             [
                 r["student"].full_name, r["student"].username, r["student"].email, group.name,
-                course.slug if course else "", r["position"]["text"], r["passed"], r["total"],
+                course.title if course else "", r["position"]["text"], r["passed"], r["total"],
                 r["score"] if r["score"] is not None else "", errors.get("order", 0), errors.get("safety", 0),
-                errors.get("wrong", 0), timezone.localtime(r["last"]).isoformat() if r["last"] else "",
-                "; ".join(r["attention"]),
+                errors.get("wrong", 0), timezone.localtime(r["last"]).strftime("%Y-%m-%d %H:%M") if r["last"] else "",
+                "; ".join(str(a) for a in r["attention"]),
             ]
         )  # fmt: skip
-    return response
+    return table
 
 
 @require_POST

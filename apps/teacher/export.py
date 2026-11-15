@@ -64,9 +64,9 @@ def _columns(section, extra):
 
         return [_("Course"), _("Course score"), _("Letter grade")], course
     if kind == Section.Kind.DIAGNOSTIC:
-        head = []
+        head, points, maximum, level = [], _("points"), _("maximum"), _("level")
         for p in PHASES:
-            head += [f"{p}: {_('points')}", f"{p}: {_('maximum')}", f"{p}: %", f"{p}: {_('level')}"]
+            head += [f"{p}: {points}", f"{p}: {maximum}", f"{p}: %", f"{p}: {level}"]
         head += [f"{p} · {label}, %" for p in PHASES for _c, label in COMPONENT_LABELS]
 
         def diagnostic(r):

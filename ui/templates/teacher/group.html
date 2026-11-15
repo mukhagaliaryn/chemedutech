@@ -109,7 +109,10 @@ the student drawer). Every destructive or irreversible action asks in the shared
     <a class="chip h-11" href="{% querystring show='attention' %}"{% if show == "attention" %} aria-current="page"{% endif %}>{% translate "Needs attention" %}<span class="chip-count">{{ counts.attention }}</span></a>
     <a class="chip h-11" href="{% querystring show='inactive' %}"{% if show == "inactive" %} aria-current="page"{% endif %}>{% translate "Inactive" %}<span class="chip-count">{{ counts.inactive }}</span></a>
   </nav>
-  {% if course %}<a class="btn btn-secondary ml-auto" href="{% querystring format='csv' %}" title="{% translate 'Download the table as CSV' %}">{% include "components/icons.html#download" %}CSV</a>{% endif %}
+  {% if course %}<span class="ml-auto flex flex-wrap gap-2">
+    <a class="btn btn-secondary" href="{% querystring format='csv' %}" title="{% translate 'Download the table as CSV' %}">{% include "components/icons.html#download" %}CSV</a>
+    <a class="btn btn-secondary" href="{% querystring format='xlsx' %}" title="{% translate 'Download the table as Excel' %}">{% include "components/icons.html#download" %}Excel</a>
+  </span>{% endif %}
 </div>
 
 <section aria-label="{% translate 'Students' %}" class="table-wrap" x-data="{ drawer: false }" @keydown.escape.window="drawer = false">
